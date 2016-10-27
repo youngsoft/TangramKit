@@ -1,0 +1,585 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		18061D781D6C99B4002E0E59 /* RLTest4ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18061D771D6C99B4002E0E59 /* RLTest4ViewController.swift */; };
+		18061D7A1D6CA549002E0E59 /* AllTest1TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18061D791D6CA549002E0E59 /* AllTest1TableViewCell.swift */; };
+		18061D7C1D6CA567002E0E59 /* AllTest2TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18061D7B1D6CA567002E0E59 /* AllTest2TableViewCell.swift */; };
+		18061D7E1D6CA58B002E0E59 /* AllTest1TableViewHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18061D7D1D6CA58B002E0E59 /* AllTest1TableViewHeaderFooterView.swift */; };
+		1818889F1DC2071200F5FDDA /* logo1.png in Resources */ = {isa = PBXBuildFile; fileRef = 1818889E1DC2071200F5FDDA /* logo1.png */; };
+		181888A11DC2077000F5FDDA /* logo2.png in Resources */ = {isa = PBXBuildFile; fileRef = 181888A01DC2077000F5FDDA /* logo2.png */; };
+		182191661D3C789C00208CD0 /* LLTest4ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182191651D3C789C00208CD0 /* LLTest4ViewController.swift */; };
+		182191681D3C7E3100208CD0 /* LLTest5ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182191671D3C7E3100208CD0 /* LLTest5ViewController.swift */; };
+		1821916A1D3C80E900208CD0 /* LLTest6ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182191691D3C80E900208CD0 /* LLTest6ViewController.swift */; };
+		1821916C1D3C8A9000208CD0 /* LLTest7ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1821916B1D3C8A9000208CD0 /* LLTest7ViewController.swift */; };
+		1821916F1D3CA5E600208CD0 /* FLTest1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1821916D1D3CA5E600208CD0 /* FLTest1ViewController.swift */; };
+		182191701D3CA5E600208CD0 /* FLTest2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1821916E1D3CA5E600208CD0 /* FLTest2ViewController.swift */; };
+		182191741D3CAFC300208CD0 /* RLTest1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182191711D3CAFC300208CD0 /* RLTest1ViewController.swift */; };
+		182191751D3CAFC300208CD0 /* RLTest2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182191721D3CAFC300208CD0 /* RLTest2ViewController.swift */; };
+		182191761D3CAFC300208CD0 /* RLTest3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182191731D3CAFC300208CD0 /* RLTest3ViewController.swift */; };
+		182191781D3CB86300208CD0 /* TLTest1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182191771D3CB86300208CD0 /* TLTest1ViewController.swift */; };
+		1821917A1D3CB87400208CD0 /* TLTest2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182191791D3CB87400208CD0 /* TLTest2ViewController.swift */; };
+		1821917C1D3CB88900208CD0 /* TLTest3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1821917B1D3CB88900208CD0 /* TLTest3ViewController.swift */; };
+		182316FA1DAC9C7B00611DD6 /* AllTest3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182316F91DAC9C7B00611DD6 /* AllTest3ViewController.swift */; };
+		184D64301D6452AF0003449A /* FOLTest2DataModel.plist in Resources */ = {isa = PBXBuildFile; fileRef = 184D642F1D6452AF0003449A /* FOLTest2DataModel.plist */; };
+		1866CDD51D6C25F100755949 /* FOLTest4ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1866CDD41D6C25F100755949 /* FOLTest4ViewController.swift */; };
+		1866CDD71D6C260000755949 /* FOLTest5ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1866CDD61D6C260000755949 /* FOLTest5ViewController.swift */; };
+		1866CDD91D6C260E00755949 /* FOLTest6ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1866CDD81D6C260E00755949 /* FOLTest6ViewController.swift */; };
+		1866CDDB1D6C275100755949 /* FOLTest4DataModel.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1866CDDA1D6C275100755949 /* FOLTest4DataModel.plist */; };
+		186B95B41DB5A31900C33F06 /* TangramKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186B95B31DB5A31900C33F06 /* TangramKit.swift */; };
+		18834AB51D3D32840047AE7D /* FLLTest2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18834AB31D3D32840047AE7D /* FLLTest2ViewController.swift */; };
+		18834AB81D3D32B30047AE7D /* FLLTest3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18834AB71D3D32B30047AE7D /* FLLTest3ViewController.swift */; };
+		18834ABA1D3D32E10047AE7D /* FLLTest4ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18834AB91D3D32E10047AE7D /* FLLTest4ViewController.swift */; };
+		188D7B3A1DB4A3AC00FE8156 /* AllTest5ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188D7B391DB4A3AC00FE8156 /* AllTest5ViewController.swift */; };
+		188D7B3C1DB4A3C300FE8156 /* AllTest6ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188D7B3B1DB4A3C300FE8156 /* AllTest6ViewController.swift */; };
+		188E086E1D37927E00E982F1 /* TGDimeAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188E086D1D37927E00E982F1 /* TGDimeAdapter.swift */; };
+		188E08781D379E8D00E982F1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 188E08731D379E8D00E982F1 /* LaunchScreen.storyboard */; };
+		188E08791D379E8D00E982F1 /* LaunchScreen.strings in Resources */ = {isa = PBXBuildFile; fileRef = 188E08761D379E8D00E982F1 /* LaunchScreen.strings */; };
+		188E087C1D379F2D00E982F1 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 188E087A1D379F2D00E982F1 /* Localizable.strings */; };
+		188E087E1D379FA700E982F1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188E087D1D379FA700E982F1 /* ViewController.swift */; };
+		188E08801D37AE8800E982F1 /* LLTest1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188E087F1D37AE8800E982F1 /* LLTest1ViewController.swift */; };
+		18AD478E1D38B6210014ED34 /* LLTest2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AD478D1D38B6210014ED34 /* LLTest2ViewController.swift */; };
+		18AD47901D38CA6F0014ED34 /* LLTest3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AD478F1D38CA6F0014ED34 /* LLTest3ViewController.swift */; };
+		18D2FC791D3D0CC20051B235 /* AllTest1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D2FC741D3D0CC20051B235 /* AllTest1ViewController.swift */; };
+		18D2FC7A1D3D0CC20051B235 /* FOLTest1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D2FC751D3D0CC20051B235 /* FOLTest1ViewController.swift */; };
+		18D2FC7B1D3D0CC20051B235 /* FOLTest2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D2FC761D3D0CC20051B235 /* FOLTest2ViewController.swift */; };
+		18D2FC7C1D3D0CC20051B235 /* FOLTest3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D2FC771D3D0CC20051B235 /* FOLTest3ViewController.swift */; };
+		18D2FC7D1D3D0CC20051B235 /* FLLTest1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D2FC781D3D0CC20051B235 /* FLLTest1ViewController.swift */; };
+		18DB434C1D1986230052D770 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB43211D1986230052D770 /* AppDelegate.swift */; };
+		18DB434D1D1986230052D770 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18DB43221D1986230052D770 /* LaunchScreen.storyboard */; };
+		18DB43551D1986230052D770 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18DB432C1D1986230052D770 /* Images.xcassets */; };
+		18DB43581D1986230052D770 /* TGLayoutSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB43301D1986230052D770 /* TGLayoutSize.swift */; };
+		18DB435A1D1986230052D770 /* TGLayoutPos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB43321D1986230052D770 /* TGLayoutPos.swift */; };
+		18DB435B1D1986230052D770 /* TGLayoutSizeClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB43331D1986230052D770 /* TGLayoutSizeClass.swift */; };
+		18DB435C1D1986230052D770 /* TGBaseLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB43341D1986230052D770 /* TGBaseLayout.swift */; };
+		18DB435D1D1986230052D770 /* TGFloatLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB43351D1986230052D770 /* TGFloatLayout.swift */; };
+		18DB435E1D1986230052D770 /* TGFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB43361D1986230052D770 /* TGFlowLayout.swift */; };
+		18DB435F1D1986230052D770 /* TGFrameLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB43371D1986230052D770 /* TGFrameLayout.swift */; };
+		18DB43601D1986230052D770 /* TGLinearLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB43381D1986230052D770 /* TGLinearLayout.swift */; };
+		18DB43611D1986230052D770 /* TGRelativeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB43391D1986230052D770 /* TGRelativeLayout.swift */; };
+		18DB43621D1986230052D770 /* TGTableLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB433A1D1986230052D770 /* TGTableLayout.swift */; };
+		A538CEBC1D41F85C00D51976 /* AllTest4ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A538CEBB1D41F85C00D51976 /* AllTest4ViewController.swift */; };
+		A5D3AE641D45B98F0062BFFD /* AllTest2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D3AE631D45B98F0062BFFD /* AllTest2ViewController.swift */; };
+		A5D3AE671D45BACD0062BFFD /* AllTestDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D3AE661D45BACD0062BFFD /* AllTestDataModel.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		18061D771D6C99B4002E0E59 /* RLTest4ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLTest4ViewController.swift; sourceTree = "<group>"; };
+		18061D791D6CA549002E0E59 /* AllTest1TableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllTest1TableViewCell.swift; sourceTree = "<group>"; };
+		18061D7B1D6CA567002E0E59 /* AllTest2TableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllTest2TableViewCell.swift; sourceTree = "<group>"; };
+		18061D7D1D6CA58B002E0E59 /* AllTest1TableViewHeaderFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllTest1TableViewHeaderFooterView.swift; sourceTree = "<group>"; };
+		1818889E1DC2071200F5FDDA /* logo1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo1.png; sourceTree = "<group>"; };
+		181888A01DC2077000F5FDDA /* logo2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo2.png; sourceTree = "<group>"; };
+		182191651D3C789C00208CD0 /* LLTest4ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLTest4ViewController.swift; sourceTree = "<group>"; };
+		182191671D3C7E3100208CD0 /* LLTest5ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLTest5ViewController.swift; sourceTree = "<group>"; };
+		182191691D3C80E900208CD0 /* LLTest6ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLTest6ViewController.swift; sourceTree = "<group>"; };
+		1821916B1D3C8A9000208CD0 /* LLTest7ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLTest7ViewController.swift; sourceTree = "<group>"; };
+		1821916D1D3CA5E600208CD0 /* FLTest1ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLTest1ViewController.swift; sourceTree = "<group>"; };
+		1821916E1D3CA5E600208CD0 /* FLTest2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLTest2ViewController.swift; sourceTree = "<group>"; };
+		182191711D3CAFC300208CD0 /* RLTest1ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLTest1ViewController.swift; sourceTree = "<group>"; };
+		182191721D3CAFC300208CD0 /* RLTest2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLTest2ViewController.swift; sourceTree = "<group>"; };
+		182191731D3CAFC300208CD0 /* RLTest3ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLTest3ViewController.swift; sourceTree = "<group>"; };
+		182191771D3CB86300208CD0 /* TLTest1ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TLTest1ViewController.swift; sourceTree = "<group>"; };
+		182191791D3CB87400208CD0 /* TLTest2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TLTest2ViewController.swift; sourceTree = "<group>"; };
+		1821917B1D3CB88900208CD0 /* TLTest3ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TLTest3ViewController.swift; sourceTree = "<group>"; };
+		182316F91DAC9C7B00611DD6 /* AllTest3ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllTest3ViewController.swift; sourceTree = "<group>"; };
+		18270C241C954B3C00CBCC92 /* TangramKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TangramKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		184D642F1D6452AF0003449A /* FOLTest2DataModel.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = FOLTest2DataModel.plist; sourceTree = "<group>"; };
+		1866CDD41D6C25F100755949 /* FOLTest4ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FOLTest4ViewController.swift; sourceTree = "<group>"; };
+		1866CDD61D6C260000755949 /* FOLTest5ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FOLTest5ViewController.swift; sourceTree = "<group>"; };
+		1866CDD81D6C260E00755949 /* FOLTest6ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FOLTest6ViewController.swift; sourceTree = "<group>"; };
+		1866CDDA1D6C275100755949 /* FOLTest4DataModel.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = FOLTest4DataModel.plist; sourceTree = "<group>"; };
+		186B95B31DB5A31900C33F06 /* TangramKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TangramKit.swift; sourceTree = "<group>"; };
+		18834AB31D3D32840047AE7D /* FLLTest2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLLTest2ViewController.swift; sourceTree = "<group>"; };
+		18834AB71D3D32B30047AE7D /* FLLTest3ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLLTest3ViewController.swift; sourceTree = "<group>"; };
+		18834AB91D3D32E10047AE7D /* FLLTest4ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLLTest4ViewController.swift; sourceTree = "<group>"; };
+		188D7B391DB4A3AC00FE8156 /* AllTest5ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllTest5ViewController.swift; sourceTree = "<group>"; };
+		188D7B3B1DB4A3C300FE8156 /* AllTest6ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllTest6ViewController.swift; sourceTree = "<group>"; };
+		188E086D1D37927E00E982F1 /* TGDimeAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGDimeAdapter.swift; sourceTree = "<group>"; };
+		188E08711D379E6C00E982F1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		188E08741D379E8D00E982F1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		188E08771D379E8D00E982F1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = LaunchScreen.strings; sourceTree = "<group>"; };
+		188E087B1D379F2D00E982F1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = Localizable.strings; sourceTree = "<group>"; };
+		188E087D1D379FA700E982F1 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		188E087F1D37AE8800E982F1 /* LLTest1ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLTest1ViewController.swift; sourceTree = "<group>"; };
+		18AD478D1D38B6210014ED34 /* LLTest2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLTest2ViewController.swift; sourceTree = "<group>"; };
+		18AD478F1D38CA6F0014ED34 /* LLTest3ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLTest3ViewController.swift; sourceTree = "<group>"; };
+		18D2FC741D3D0CC20051B235 /* AllTest1ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllTest1ViewController.swift; sourceTree = "<group>"; };
+		18D2FC751D3D0CC20051B235 /* FOLTest1ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FOLTest1ViewController.swift; sourceTree = "<group>"; };
+		18D2FC761D3D0CC20051B235 /* FOLTest2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FOLTest2ViewController.swift; sourceTree = "<group>"; };
+		18D2FC771D3D0CC20051B235 /* FOLTest3ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FOLTest3ViewController.swift; sourceTree = "<group>"; };
+		18D2FC781D3D0CC20051B235 /* FLLTest1ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLLTest1ViewController.swift; sourceTree = "<group>"; };
+		18DB43211D1986230052D770 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		18DB43231D1986230052D770 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		18DB432C1D1986230052D770 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		18DB432D1D1986230052D770 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		18DB43301D1986230052D770 /* TGLayoutSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGLayoutSize.swift; sourceTree = "<group>"; };
+		18DB43321D1986230052D770 /* TGLayoutPos.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGLayoutPos.swift; sourceTree = "<group>"; };
+		18DB43331D1986230052D770 /* TGLayoutSizeClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGLayoutSizeClass.swift; sourceTree = "<group>"; };
+		18DB43341D1986230052D770 /* TGBaseLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGBaseLayout.swift; sourceTree = "<group>"; };
+		18DB43351D1986230052D770 /* TGFloatLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGFloatLayout.swift; sourceTree = "<group>"; };
+		18DB43361D1986230052D770 /* TGFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGFlowLayout.swift; sourceTree = "<group>"; };
+		18DB43371D1986230052D770 /* TGFrameLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGFrameLayout.swift; sourceTree = "<group>"; };
+		18DB43381D1986230052D770 /* TGLinearLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGLinearLayout.swift; sourceTree = "<group>"; };
+		18DB43391D1986230052D770 /* TGRelativeLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGRelativeLayout.swift; sourceTree = "<group>"; };
+		18DB433A1D1986230052D770 /* TGTableLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGTableLayout.swift; sourceTree = "<group>"; };
+		A538CEBB1D41F85C00D51976 /* AllTest4ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllTest4ViewController.swift; sourceTree = "<group>"; };
+		A5D3AE631D45B98F0062BFFD /* AllTest2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllTest2ViewController.swift; sourceTree = "<group>"; };
+		A5D3AE661D45BACD0062BFFD /* AllTestDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllTestDataModel.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		18270C211C954B3C00CBCC92 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		18270C1B1C954B3C00CBCC92 = {
+			isa = PBXGroup;
+			children = (
+				18DB431A1D1986230052D770 /* TangramKit */,
+				18270C251C954B3C00CBCC92 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		18270C251C954B3C00CBCC92 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				18270C241C954B3C00CBCC92 /* TangramKit.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		184D642E1D64527C0003449A /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				181888A01DC2077000F5FDDA /* logo2.png */,
+				1818889E1DC2071200F5FDDA /* logo1.png */,
+				184D642F1D6452AF0003449A /* FOLTest2DataModel.plist */,
+				1866CDDA1D6C275100755949 /* FOLTest4DataModel.plist */,
+				18DB432C1D1986230052D770 /* Images.xcassets */,
+				18DB432D1D1986230052D770 /* Info.plist */,
+			);
+			name = "Support Files";
+			sourceTree = "<group>";
+		};
+		188E08721D379E8D00E982F1 /* Base.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				188E08731D379E8D00E982F1 /* LaunchScreen.storyboard */,
+			);
+			path = Base.lproj;
+			sourceTree = "<group>";
+		};
+		188E08751D379E8D00E982F1 /* zh-Hans.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				188E087A1D379F2D00E982F1 /* Localizable.strings */,
+				188E08761D379E8D00E982F1 /* LaunchScreen.strings */,
+			);
+			path = "zh-Hans.lproj";
+			sourceTree = "<group>";
+		};
+		18DB431A1D1986230052D770 /* TangramKit */ = {
+			isa = PBXGroup;
+			children = (
+				18DB432E1D1986230052D770 /* Lib */,
+				184D642E1D64527C0003449A /* Support Files */,
+				18DB43211D1986230052D770 /* AppDelegate.swift */,
+				188E087D1D379FA700E982F1 /* ViewController.swift */,
+				188E087F1D37AE8800E982F1 /* LLTest1ViewController.swift */,
+				18AD478D1D38B6210014ED34 /* LLTest2ViewController.swift */,
+				18AD478F1D38CA6F0014ED34 /* LLTest3ViewController.swift */,
+				182191651D3C789C00208CD0 /* LLTest4ViewController.swift */,
+				182191671D3C7E3100208CD0 /* LLTest5ViewController.swift */,
+				182191691D3C80E900208CD0 /* LLTest6ViewController.swift */,
+				1821916B1D3C8A9000208CD0 /* LLTest7ViewController.swift */,
+				1821916D1D3CA5E600208CD0 /* FLTest1ViewController.swift */,
+				1821916E1D3CA5E600208CD0 /* FLTest2ViewController.swift */,
+				182191771D3CB86300208CD0 /* TLTest1ViewController.swift */,
+				182191791D3CB87400208CD0 /* TLTest2ViewController.swift */,
+				1821917B1D3CB88900208CD0 /* TLTest3ViewController.swift */,
+				182191711D3CAFC300208CD0 /* RLTest1ViewController.swift */,
+				182191721D3CAFC300208CD0 /* RLTest2ViewController.swift */,
+				182191731D3CAFC300208CD0 /* RLTest3ViewController.swift */,
+				18061D771D6C99B4002E0E59 /* RLTest4ViewController.swift */,
+				18D2FC781D3D0CC20051B235 /* FLLTest1ViewController.swift */,
+				18834AB31D3D32840047AE7D /* FLLTest2ViewController.swift */,
+				18834AB71D3D32B30047AE7D /* FLLTest3ViewController.swift */,
+				18834AB91D3D32E10047AE7D /* FLLTest4ViewController.swift */,
+				18D2FC751D3D0CC20051B235 /* FOLTest1ViewController.swift */,
+				18D2FC761D3D0CC20051B235 /* FOLTest2ViewController.swift */,
+				18D2FC771D3D0CC20051B235 /* FOLTest3ViewController.swift */,
+				1866CDD41D6C25F100755949 /* FOLTest4ViewController.swift */,
+				1866CDD61D6C260000755949 /* FOLTest5ViewController.swift */,
+				1866CDD81D6C260E00755949 /* FOLTest6ViewController.swift */,
+				A5D3AE651D45BA860062BFFD /* AllTestModel&View */,
+				18D2FC741D3D0CC20051B235 /* AllTest1ViewController.swift */,
+				A5D3AE631D45B98F0062BFFD /* AllTest2ViewController.swift */,
+				182316F91DAC9C7B00611DD6 /* AllTest3ViewController.swift */,
+				A538CEBB1D41F85C00D51976 /* AllTest4ViewController.swift */,
+				188D7B391DB4A3AC00FE8156 /* AllTest5ViewController.swift */,
+				188D7B3B1DB4A3C300FE8156 /* AllTest6ViewController.swift */,
+				188E08721D379E8D00E982F1 /* Base.lproj */,
+				188E08751D379E8D00E982F1 /* zh-Hans.lproj */,
+				18DB43221D1986230052D770 /* LaunchScreen.storyboard */,
+			);
+			path = TangramKit;
+			sourceTree = "<group>";
+		};
+		18DB432E1D1986230052D770 /* Lib */ = {
+			isa = PBXGroup;
+			children = (
+				186B95B31DB5A31900C33F06 /* TangramKit.swift */,
+				18DB43321D1986230052D770 /* TGLayoutPos.swift */,
+				18DB43301D1986230052D770 /* TGLayoutSize.swift */,
+				18DB43331D1986230052D770 /* TGLayoutSizeClass.swift */,
+				18DB43341D1986230052D770 /* TGBaseLayout.swift */,
+				18DB43351D1986230052D770 /* TGFloatLayout.swift */,
+				18DB43361D1986230052D770 /* TGFlowLayout.swift */,
+				18DB43371D1986230052D770 /* TGFrameLayout.swift */,
+				18DB43381D1986230052D770 /* TGLinearLayout.swift */,
+				18DB43391D1986230052D770 /* TGRelativeLayout.swift */,
+				18DB433A1D1986230052D770 /* TGTableLayout.swift */,
+				188E086D1D37927E00E982F1 /* TGDimeAdapter.swift */,
+			);
+			path = Lib;
+			sourceTree = "<group>";
+		};
+		A5D3AE651D45BA860062BFFD /* AllTestModel&View */ = {
+			isa = PBXGroup;
+			children = (
+				A5D3AE661D45BACD0062BFFD /* AllTestDataModel.swift */,
+				18061D791D6CA549002E0E59 /* AllTest1TableViewCell.swift */,
+				18061D7B1D6CA567002E0E59 /* AllTest2TableViewCell.swift */,
+				18061D7D1D6CA58B002E0E59 /* AllTest1TableViewHeaderFooterView.swift */,
+			);
+			name = "AllTestModel&View";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		18270C231C954B3C00CBCC92 /* TangramKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 18270C361C954B3C00CBCC92 /* Build configuration list for PBXNativeTarget "TangramKit" */;
+			buildPhases = (
+				18270C201C954B3C00CBCC92 /* Sources */,
+				18270C211C954B3C00CBCC92 /* Frameworks */,
+				18270C221C954B3C00CBCC92 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TangramKit;
+			productName = TangramKit;
+			productReference = 18270C241C954B3C00CBCC92 /* TangramKit.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		18270C1C1C954B3C00CBCC92 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0730;
+				LastUpgradeCheck = 0800;
+				ORGANIZATIONNAME = youngsoft;
+				TargetAttributes = {
+					18270C231C954B3C00CBCC92 = {
+						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = K6PP2RXZ4T;
+						LastSwiftMigration = 0800;
+					};
+				};
+			};
+			buildConfigurationList = 18270C1F1C954B3C00CBCC92 /* Build configuration list for PBXProject "TangramKit" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				"zh-Hans",
+			);
+			mainGroup = 18270C1B1C954B3C00CBCC92;
+			productRefGroup = 18270C251C954B3C00CBCC92 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				18270C231C954B3C00CBCC92 /* TangramKit */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		18270C221C954B3C00CBCC92 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				188E087C1D379F2D00E982F1 /* Localizable.strings in Resources */,
+				188E08781D379E8D00E982F1 /* LaunchScreen.storyboard in Resources */,
+				18DB43551D1986230052D770 /* Images.xcassets in Resources */,
+				188E08791D379E8D00E982F1 /* LaunchScreen.strings in Resources */,
+				181888A11DC2077000F5FDDA /* logo2.png in Resources */,
+				184D64301D6452AF0003449A /* FOLTest2DataModel.plist in Resources */,
+				18DB434D1D1986230052D770 /* LaunchScreen.storyboard in Resources */,
+				1818889F1DC2071200F5FDDA /* logo1.png in Resources */,
+				1866CDDB1D6C275100755949 /* FOLTest4DataModel.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		18270C201C954B3C00CBCC92 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1821916C1D3C8A9000208CD0 /* LLTest7ViewController.swift in Sources */,
+				182191701D3CA5E600208CD0 /* FLTest2ViewController.swift in Sources */,
+				182191661D3C789C00208CD0 /* LLTest4ViewController.swift in Sources */,
+				188E087E1D379FA700E982F1 /* ViewController.swift in Sources */,
+				1821917A1D3CB87400208CD0 /* TLTest2ViewController.swift in Sources */,
+				18DB435B1D1986230052D770 /* TGLayoutSizeClass.swift in Sources */,
+				18834AB51D3D32840047AE7D /* FLLTest2ViewController.swift in Sources */,
+				18061D7C1D6CA567002E0E59 /* AllTest2TableViewCell.swift in Sources */,
+				1866CDD71D6C260000755949 /* FOLTest5ViewController.swift in Sources */,
+				18D2FC7B1D3D0CC20051B235 /* FOLTest2ViewController.swift in Sources */,
+				18DB434C1D1986230052D770 /* AppDelegate.swift in Sources */,
+				18D2FC7A1D3D0CC20051B235 /* FOLTest1ViewController.swift in Sources */,
+				182191761D3CAFC300208CD0 /* RLTest3ViewController.swift in Sources */,
+				182191741D3CAFC300208CD0 /* RLTest1ViewController.swift in Sources */,
+				182316FA1DAC9C7B00611DD6 /* AllTest3ViewController.swift in Sources */,
+				18DB43581D1986230052D770 /* TGLayoutSize.swift in Sources */,
+				18DB435D1D1986230052D770 /* TGFloatLayout.swift in Sources */,
+				A5D3AE671D45BACD0062BFFD /* AllTestDataModel.swift in Sources */,
+				18061D7E1D6CA58B002E0E59 /* AllTest1TableViewHeaderFooterView.swift in Sources */,
+				18061D781D6C99B4002E0E59 /* RLTest4ViewController.swift in Sources */,
+				18DB43611D1986230052D770 /* TGRelativeLayout.swift in Sources */,
+				18DB435A1D1986230052D770 /* TGLayoutPos.swift in Sources */,
+				186B95B41DB5A31900C33F06 /* TangramKit.swift in Sources */,
+				A5D3AE641D45B98F0062BFFD /* AllTest2ViewController.swift in Sources */,
+				188E086E1D37927E00E982F1 /* TGDimeAdapter.swift in Sources */,
+				18DB43621D1986230052D770 /* TGTableLayout.swift in Sources */,
+				188D7B3A1DB4A3AC00FE8156 /* AllTest5ViewController.swift in Sources */,
+				1821917C1D3CB88900208CD0 /* TLTest3ViewController.swift in Sources */,
+				18D2FC7C1D3D0CC20051B235 /* FOLTest3ViewController.swift in Sources */,
+				1866CDD91D6C260E00755949 /* FOLTest6ViewController.swift in Sources */,
+				18AD478E1D38B6210014ED34 /* LLTest2ViewController.swift in Sources */,
+				1866CDD51D6C25F100755949 /* FOLTest4ViewController.swift in Sources */,
+				18AD47901D38CA6F0014ED34 /* LLTest3ViewController.swift in Sources */,
+				18DB43601D1986230052D770 /* TGLinearLayout.swift in Sources */,
+				18061D7A1D6CA549002E0E59 /* AllTest1TableViewCell.swift in Sources */,
+				188D7B3C1DB4A3C300FE8156 /* AllTest6ViewController.swift in Sources */,
+				A538CEBC1D41F85C00D51976 /* AllTest4ViewController.swift in Sources */,
+				1821916A1D3C80E900208CD0 /* LLTest6ViewController.swift in Sources */,
+				18834AB81D3D32B30047AE7D /* FLLTest3ViewController.swift in Sources */,
+				1821916F1D3CA5E600208CD0 /* FLTest1ViewController.swift in Sources */,
+				18DB435F1D1986230052D770 /* TGFrameLayout.swift in Sources */,
+				182191781D3CB86300208CD0 /* TLTest1ViewController.swift in Sources */,
+				18834ABA1D3D32E10047AE7D /* FLLTest4ViewController.swift in Sources */,
+				18DB435E1D1986230052D770 /* TGFlowLayout.swift in Sources */,
+				188E08801D37AE8800E982F1 /* LLTest1ViewController.swift in Sources */,
+				182191751D3CAFC300208CD0 /* RLTest2ViewController.swift in Sources */,
+				18D2FC7D1D3D0CC20051B235 /* FLLTest1ViewController.swift in Sources */,
+				18D2FC791D3D0CC20051B235 /* AllTest1ViewController.swift in Sources */,
+				182191681D3C7E3100208CD0 /* LLTest5ViewController.swift in Sources */,
+				18DB435C1D1986230052D770 /* TGBaseLayout.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		188E08731D379E8D00E982F1 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				188E08741D379E8D00E982F1 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		188E08761D379E8D00E982F1 /* LaunchScreen.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				188E08771D379E8D00E982F1 /* zh-Hans */,
+			);
+			name = LaunchScreen.strings;
+			sourceTree = "<group>";
+		};
+		188E087A1D379F2D00E982F1 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				188E087B1D379F2D00E982F1 /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		18DB43221D1986230052D770 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				18DB43231D1986230052D770 /* Base */,
+				188E08711D379E6C00E982F1 /* zh-Hans */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		18270C341C954B3C00CBCC92 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		18270C351C954B3C00CBCC92 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		18270C371C954B3C00CBCC92 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = K6PP2RXZ4T;
+				INFOPLIST_FILE = TangramKit/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.bbae.TangramKit;
+				PRODUCT_NAME = TangramKit;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		18270C381C954B3C00CBCC92 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = K6PP2RXZ4T;
+				INFOPLIST_FILE = TangramKit/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.bbae.TangramKit;
+				PRODUCT_NAME = TangramKit;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		18270C1F1C954B3C00CBCC92 /* Build configuration list for PBXProject "TangramKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				18270C341C954B3C00CBCC92 /* Debug */,
+				18270C351C954B3C00CBCC92 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		18270C361C954B3C00CBCC92 /* Build configuration list for PBXNativeTarget "TangramKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				18270C371C954B3C00CBCC92 /* Debug */,
+				18270C381C954B3C00CBCC92 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 18270C1C1C954B3C00CBCC92 /* Project object */;
+}
