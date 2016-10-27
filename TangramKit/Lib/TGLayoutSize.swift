@@ -95,7 +95,7 @@ final public class TGLayoutSize
         }
     }
     
-    //设置尺寸值为比重值或者相对值。比如某个子视图的宽度是父视图宽度的50%则可以设置为：a.tg_width.equal(50%) 或者a.tg_width.equal(TGWeight(0.5))
+    //设置尺寸值为比重值或者相对值。比如某个子视图的宽度是父视图宽度的50%则可以设置为：a.tg_width.equal(50%) 或者a.tg_width.equal(TGWeight(50))
     public func equal(_ weight:TGWeight, increment:CGFloat = 0, multiple:CGFloat = 1)
     {
         _addVal = increment
