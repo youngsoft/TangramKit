@@ -21,17 +21,21 @@ class LLTest1ViewController: UIViewController {
         self.view = rootLayout;
         
         let vertLayout = createVertSubviewLayout()
-        vertLayout.tg_width.equal(.fill);   //宽度和父视图保持一致.
-        vertLayout.tg_height.equal(.wrap)   //高度由子视图决定。
-       //您可以用如下的便捷方式来进行设置。~= 是equal方法的运算符赋值方式。
-       //vertLayout.tg_width ~= .fill
-       //vertLayout.tg_height ~= .wrap
+        vertLayout.tg_size(width:.fill, height: .wrap) //宽度和父视图保持一致，高度由子视图决定
+        //您也可以使用如下方法来分别设置:
+        // vertLayout.tg_width.equal(.fill)
+        // vertLayout.tg_height.equal(.wrap)
+        //您可以用如下的便捷方式来进行设置。~= 是equal方法的运算符赋值方式。
+        //vertLayout.tg_width ~= .fill
+        //vertLayout.tg_height ~= .wrap
         rootLayout.addSubview(vertLayout)
         
         
         let horzLayout = createHorzSubviewLayout()
         horzLayout.tg_width.equal(.wrap)    //宽度由子视图决定
         horzLayout.tg_height.equal(.fill)   //高度填充父视图的剩余高度
+        //您可以用如下方法分别设置
+        //horzLayout.tg_size(width:.wrap, height: .fill) //宽度由子视图决定，高度填充父视图的剩余高度
         rootLayout.addSubview(horzLayout)
         
     }
@@ -78,11 +82,20 @@ extension LLTest1ViewController
         v1.text = NSLocalizedString("Left margin", comment:"")
         v1.textAlignment = .center
         v1.backgroundColor = .red
-        v1.tg_top.equal(10)        //上边边距10 你也可以用运算符进行设置：v1.tg_top ~= 10
-        v1.tg_left.equal(10)       //左边边距10 你也可以用运算符进行设置：v1.tg_left ~= 10
-        v1.tg_width.equal(200)     //宽度200   您也可以用运算符进行设置：v1.tg_width ~= 200
-        v1.tg_height.equal(25)     //高度25    您也可以用运算符进行设置：v1.tg_height ~= 25
+        v1.tg_origin(x:10, y:10)             //设置左边距和上边距都为10
+        v1.tg_size(width: 200, height: 25)   //设置视图的宽度和高度
+        //您也可以用如下方式分别设置:
+        // v1.tg_top.equal(10)        //上边边距10
+        // v1.tg_left.equal(10)       //左边边距10
+        // v1.tg_width.equal(200)     //宽度200
+        // v1.tg_height.equal(25)     //高度25
+        //您也可以采用运算符的方式进行设置：
+        // v1.tg_top ~= 10
+        // v1.tg_left ~= 10
+        // v1.tg_width ~= 200
+        // v1.tg_height ~= 25
         vertLayout.addSubview(v1)
+        
         
         
         let v2 = UILabel()
@@ -92,18 +105,17 @@ extension LLTest1ViewController
         v2.tg_top.equal(10)
         v2.tg_centerX.equal(0)   //水平居中的偏移,如果不等于0则会产生居中偏移
         v2.tg_width.equal(200)
-        v2.tg_height.equal(25)
+        v2.tg_height.equal(25)   //等价于 v2.tg_size(width:200, height:25)
         vertLayout.addSubview(v2)
         
         
         let v3 = UILabel()
         v3.text = NSLocalizedString("Right margin", comment:"")
         v3.textAlignment = .center
-        v3.backgroundColor = UIColor.blue
+        v3.backgroundColor = .blue
         v3.tg_top.equal(10)
         v3.tg_right.equal(10)  //右边边距10,因为这里只设置了右边边距，所以垂直线性布局会将子视图进行右对齐。
-        v3.tg_width.equal(200)
-        v3.tg_height.equal(25)
+        v3.tg_size(width: 200, height: 25)   //设置视图的宽度和高度
         vertLayout.addSubview(v3)
         
         

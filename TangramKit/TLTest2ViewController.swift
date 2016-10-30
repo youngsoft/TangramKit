@@ -53,9 +53,9 @@ class TLTest2ViewController: UIViewController {
         self.rootLayout = rootLayout
 
         //为瀑布流建立3个平均分配的行，每行的列的尺寸由内容决定。
-         _ = rootLayout.tg_addRow(size:TGTableLayout.average, colSize: TGTableLayout.wrap)
-         _ = rootLayout.tg_addRow(size:TGTableLayout.average, colSize: TGTableLayout.wrap)
-         _ = rootLayout.tg_addRow(size:TGTableLayout.average, colSize: TGTableLayout.wrap)
+         _ = rootLayout.tg_addRow(size:TGLayoutSize.average, colSize: TGLayoutSize.wrap)
+         _ = rootLayout.tg_addRow(size:TGLayoutSize.average, colSize: TGLayoutSize.wrap)
+         _ = rootLayout.tg_addRow(size:TGLayoutSize.average, colSize: TGLayoutSize.wrap)
 
     }
    

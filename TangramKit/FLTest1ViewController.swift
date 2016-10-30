@@ -39,8 +39,8 @@ class FLTest1ViewController: UIViewController {
         //全部填充。 all fill subview
         let fill = UILabel()
         fill.backgroundColor = .blue
-        fill.tg_width.equal(.fill)  //你也可以设置为fill.tg_width.equal(frameLayout.tg_width) 效果一致。
-        fill.tg_height.equal(.fill)
+        fill.tg_width.equal(.fill)
+        fill.tg_height.equal(.fill)  //宽度和高度都填充父视图的全部空间
         frameLayout.addSubview(fill)
         
         //左右填充。 width fill subview

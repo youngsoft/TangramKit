@@ -58,7 +58,6 @@ extension LLTest4ViewController
     internal func addWrapContentLayout() -> TGLinearLayout
     {
         let wrapContentLayout = TGLinearLayout(.horz)
-        wrapContentLayout.layer.contentsCenter = CGRect(x: 0.1, y: 0.1, width: 0.5, height: 0.5)
         wrapContentLayout.tg_height.equal(.wrap)
         wrapContentLayout.tg_width.equal(.wrap)
         wrapContentLayout.tg_padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
@@ -69,6 +68,7 @@ extension LLTest4ViewController
          背景图片的话。则可以设置布局视图的layer.contentCenter属性。这个属性的意义请参考CALayer方面的介绍。
          */
         wrapContentLayout.tg_backgroundImage = UIImage(named: "bk2")
+        wrapContentLayout.layer.contentsCenter = CGRect(x: 0.1, y: 0.1, width: 0.5, height: 0.5)
         
         //四周的边线
         wrapContentLayout.tg_boundBorderline = TGLayoutBorderline(color: .green, headIndent:10, tailIndent:30)

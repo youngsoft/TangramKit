@@ -164,19 +164,19 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
 
     //MARK: override method
 
-    override internal func calcLayoutRect(_ size:CGSize, isEstimate:Bool, type :TGSizeClassType) ->(selfSize:CGSize, hasSubLayout:Bool)
+    override internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, type :TGSizeClassType) ->(selfSize:CGSize, hasSubLayout:Bool)
     {
-        var (selfSize, hasSubLayout) = super.calcLayoutRect(size, isEstimate:isEstimate, type:type)
+        var (selfSize, hasSubLayout) = super.tgCalcLayoutRect(size, isEstimate:isEstimate, type:type)
         
         
-        let  sbs = self.getLayoutSubviews()
+        let  sbs = self.tgGetLayoutSubviews()
         
         for sbv in sbs
         {
             if (!isEstimate)
             {
                 sbv.tgFrame.frame = sbv.bounds;
-                self.calcSizeOfWrapContentSubview(sbv)
+                self.tgCalcSizeFromSizeWrapSubview(sbv)
                 
             }
             
@@ -198,18 +198,18 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
         
         if (self.tg_orientation == .vert)
         {
-            selfSize = self.layoutSubviewsForVert(selfSize,sbs:sbs);
+            selfSize = self.tgLayoutSubviewsForVert(selfSize,sbs:sbs);
         }
         else
         {
-            selfSize = self.layoutSubviewsForHorz(selfSize,sbs:sbs);
+            selfSize = self.tgLayoutSubviewsForHorz(selfSize,sbs:sbs);
         }
         
         
         
         
-        selfSize.height = self.validMeasure(self.tg_height,sbv:self,calcSize:selfSize.height,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
-        selfSize.width = self.validMeasure(self.tg_width,sbv:self,calcSize:selfSize.width,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
+        selfSize.height = self.tgValidMeasure(self.tg_height,sbv:self,calcSize:selfSize.height,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
+        selfSize.width = self.tgValidMeasure(self.tg_width,sbv:self,calcSize:selfSize.width,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
         
         
         return (selfSize,hasSubLayout)
@@ -232,7 +232,7 @@ extension TGFloatLayout
     
     
     
-    fileprivate func findRightCandidatePoint(_ leftCandidateRect:CGRect, width:CGFloat, rightBoundary:CGFloat, rightCandidateRects:[CGRect], hasWeight:Bool) ->CGPoint
+    fileprivate func tgFindRightCandidatePoint(_ leftCandidateRect:CGRect, width:CGFloat, rightBoundary:CGFloat, rightCandidateRects:[CGRect], hasWeight:Bool) ->CGPoint
     {
         
         var retPoint = CGPoint(x: rightBoundary,y: CGFloat.greatestFiniteMagnitude)
@@ -271,7 +271,7 @@ extension TGFloatLayout
     }
     
     
-    fileprivate func findBottomCandidatePoint(_ topCandidateRect:CGRect, height:CGFloat, bottomBoundary:CGFloat, bottomCandidateRects:[CGRect], hasWeight:Bool) ->CGPoint
+    fileprivate func tgFindBottomCandidatePoint(_ topCandidateRect:CGRect, height:CGFloat, bottomBoundary:CGFloat, bottomCandidateRects:[CGRect], hasWeight:Bool) ->CGPoint
     {
         
         var  retPoint = CGPoint(x: CGFloat.greatestFiniteMagnitude,y: bottomBoundary)
@@ -308,7 +308,7 @@ extension TGFloatLayout
     }
     
     
-    fileprivate func findLeftCandidatePoint(_ rightCandidateRect:CGRect, width:CGFloat, leftBoundary:CGFloat, leftCandidateRects:[CGRect], hasWeight:Bool) ->CGPoint
+    fileprivate func tgFindLeftCandidatePoint(_ rightCandidateRect:CGRect, width:CGFloat, leftBoundary:CGFloat, leftCandidateRects:[CGRect], hasWeight:Bool) ->CGPoint
     {
         
         var retPoint = CGPoint(x: leftBoundary,y: CGFloat.greatestFiniteMagnitude)
@@ -344,7 +344,7 @@ extension TGFloatLayout
         return retPoint;
     }
     
-    fileprivate func findTopCandidatePoint(_ bottomCandidateRect:CGRect, height:CGFloat, topBoundary:CGFloat, topCandidateRects:[CGRect], hasWeight:Bool) ->CGPoint
+    fileprivate func tgFindTopCandidatePoint(_ bottomCandidateRect:CGRect, height:CGFloat, topBoundary:CGFloat, topCandidateRects:[CGRect], hasWeight:Bool) ->CGPoint
     {
         
         var retPoint = CGPoint(x: CGFloat.greatestFiniteMagnitude, y: topBoundary)
@@ -381,7 +381,7 @@ extension TGFloatLayout
     }
     
     
-    fileprivate func layoutSubviewsForVert(_ selfSize:CGSize, sbs:[UIView]) -> CGSize
+    fileprivate func tgLayoutSubviewsForVert(_ selfSize:CGSize, sbs:[UIView]) -> CGSize
     {
         let padding = self.tg_padding;
         var selfSize = selfSize
@@ -427,12 +427,12 @@ extension TGFloatLayout
                         rect.size.height = sbv.tg_height.measure(selfSize.height - padding.top - padding.bottom)
                     }
                     
-                    rect.size.height = self.validMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
                     rect.size.width = sbv.tg_width.measure(rect.size.height)
                 }
                 
-                rect.size.width = self.validMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+                rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
                 
                 if (leftMargin + rect.size.width + rightMargin > maxContentWidth &&
                     sbv.tg_width.dimeRelaVal !== self.tg_width &&
@@ -522,14 +522,14 @@ extension TGFloatLayout
                 rect.size.width = sbv.tg_width.measure(selfSize.width - padding.left - padding.right)
             }
             
-            rect.size.width = self.validMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
             
             if (sbv.tg_height.dimeRelaVal === sbv.tg_width)
             {
                 rect.size.height = sbv.tg_height.measure(rect.size.width)
             }
             
-            rect.size.height = self.validMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
             if (sbv.tg_width.dimeRelaVal === sbv.tg_height)
             {
@@ -546,16 +546,16 @@ extension TGFloatLayout
                 rect.size.height = sbv.tg_height.measure(sbv.tg_height.dimeRelaVal.view.tgFrame.height)
             }
             
-            rect.size.width = self.validMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
             
             //如果高度是浮动的则需要调整高度。
             if (sbv.tg_height.isFlexHeight)
             {
                 
-                rect.size.height = self.heightFromFlexedHeightView(sbv, width: rect.size.width)
+                rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
             }
             
-            rect.size.height = self.validMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
             if (sbv.tg_reverseFloat)
             {
@@ -571,7 +571,7 @@ extension TGFloatLayout
                     
                     //找到最底部的位置。
                     nextPoint.y = max(rightMaxHeight, leftLastYOffset);
-                    let leftPoint = self.findLeftCandidatePoint(CGRect(x: selfSize.width - padding.right, y: nextPoint.y, width: 0, height: CGFloat.greatestFiniteMagnitude), width:leftMargin + (isWidthWeight ? 0 : rect.size.width) + rightMargin,leftBoundary:padding.left,leftCandidateRects:leftCandidateRects,hasWeight:false)
+                    let leftPoint = self.tgFindLeftCandidatePoint(CGRect(x: selfSize.width - padding.right, y: nextPoint.y, width: 0, height: CGFloat.greatestFiniteMagnitude), width:leftMargin + (isWidthWeight ? 0 : rect.size.width) + rightMargin,leftBoundary:padding.left,leftCandidateRects:leftCandidateRects,hasWeight:false)
                     if (leftPoint.y != CGFloat.greatestFiniteMagnitude)
                     {
                         nextPoint.y = max(rightMaxHeight, leftPoint.y);
@@ -585,7 +585,7 @@ extension TGFloatLayout
                     while i >= 0
                     {
                         let candidateRect = rightCandidateRects[i]
-                        let leftPoint = self.findLeftCandidatePoint(candidateRect,width:leftMargin + (isWidthWeight ? 0 : rect.size.width) + rightMargin,leftBoundary:padding.left, leftCandidateRects:leftCandidateRects,hasWeight:isWidthWeight)
+                        let leftPoint = self.tgFindLeftCandidatePoint(candidateRect,width:leftMargin + (isWidthWeight ? 0 : rect.size.width) + rightMargin,leftBoundary:padding.left, leftCandidateRects:leftCandidateRects,hasWeight:isWidthWeight)
                         if (leftPoint.y != CGFloat.greatestFiniteMagnitude)
                         {
                             nextPoint = CGPoint(x: candidateRect.minX, y: max(nextPoint.y, leftPoint.y));
@@ -607,7 +607,7 @@ extension TGFloatLayout
                         widthWeight = sbv.tg_width.dimeWeightVal.rawValue / 100
                     }
                     
-                    rect.size.width =  self.validMeasure(sbv.tg_width, sbv: sbv, calcSize: (nextPoint.x - leftCandidateXBoundary + sbv.tg_width.addVal) * widthWeight - leftMargin - rightMargin, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.width =  self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: (nextPoint.x - leftCandidateXBoundary + sbv.tg_width.addVal) * widthWeight - leftMargin - rightMargin, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
                     if (sbv.tg_height.dimeRelaVal === sbv.tg_width)
                     {
@@ -617,10 +617,10 @@ extension TGFloatLayout
                     if (sbv.tg_height.isFlexHeight)
                     {
                         
-                        rect.size.height = self.heightFromFlexedHeightView(sbv, width: rect.size.width)
+                        rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
                     }
                     
-                    rect.size.height = self.validMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
                 }
                 
                 
@@ -692,7 +692,7 @@ extension TGFloatLayout
                     //找到最低点。
                     nextPoint.y = max(leftMaxHeight, rightLastYOffset);
                     
-                    let rightPoint = self.findRightCandidatePoint(CGRect(x: padding.left, y: nextPoint.y, width: 0, height: CGFloat.greatestFiniteMagnitude), width:leftMargin + (isWidthWeight ? 0 : rect.size.width) + rightMargin, rightBoundary:rightCandidateXBoundary, rightCandidateRects:rightCandidateRects, hasWeight:false)
+                    let rightPoint = self.tgFindRightCandidatePoint(CGRect(x: padding.left, y: nextPoint.y, width: 0, height: CGFloat.greatestFiniteMagnitude), width:leftMargin + (isWidthWeight ? 0 : rect.size.width) + rightMargin, rightBoundary:rightCandidateXBoundary, rightCandidateRects:rightCandidateRects, hasWeight:false)
                     if (rightPoint.y != CGFloat.greatestFiniteMagnitude)
                     {
                         nextPoint.y = max(leftMaxHeight, rightPoint.y);
@@ -707,7 +707,7 @@ extension TGFloatLayout
                     while i >= 0
                     {
                         let candidateRect = leftCandidateRects[i]
-                        let rightPoint = self.findRightCandidatePoint(candidateRect, width:leftMargin + (isWidthWeight ? 0 : rect.size.width) + rightMargin,rightBoundary:selfSize.width - padding.right,rightCandidateRects:rightCandidateRects,hasWeight:isWidthWeight)
+                        let rightPoint = self.tgFindRightCandidatePoint(candidateRect, width:leftMargin + (isWidthWeight ? 0 : rect.size.width) + rightMargin,rightBoundary:selfSize.width - padding.right,rightCandidateRects:rightCandidateRects,hasWeight:isWidthWeight)
                         if (rightPoint.y != CGFloat.greatestFiniteMagnitude)
                         {
                             nextPoint = CGPoint(x: candidateRect.maxX, y: max(nextPoint.y, rightPoint.y));
@@ -736,7 +736,7 @@ extension TGFloatLayout
                     }
 
                     
-                    rect.size.width =  self.validMeasure(sbv.tg_width, sbv: sbv, calcSize: (rightCandidateXBoundary - nextPoint.x + sbv.tg_width.addVal) * widthWeight - leftMargin - rightMargin, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.width =  self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: (rightCandidateXBoundary - nextPoint.x + sbv.tg_width.addVal) * widthWeight - leftMargin - rightMargin, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
                     if (sbv.tg_height.dimeRelaVal === sbv.tg_width)
                     {
@@ -746,10 +746,10 @@ extension TGFloatLayout
                     if (sbv.tg_height.isFlexHeight)
                     {
                         
-                        rect.size.height = self.heightFromFlexedHeightView(sbv, width: rect.size.width)
+                        rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
                     }
                     
-                    rect.size.height = self.validMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
                 }
                 
@@ -863,7 +863,7 @@ extension TGFloatLayout
         return selfSize;
     }
     
-    fileprivate func layoutSubviewsForHorz(_ selfSize:CGSize, sbs:[UIView]) ->CGSize
+    fileprivate func tgLayoutSubviewsForHorz(_ selfSize:CGSize, sbs:[UIView]) ->CGSize
     {
         
         let padding = self.tg_padding
@@ -897,7 +897,7 @@ extension TGFloatLayout
                     rect.size.height = sbv.tg_height.measure;
                 }
                 
-                rect.size.width = self.validMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+                rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
                 
                 //有可能高度是和他的宽度相等。
                 if (sbv.tg_height.dimeRelaVal === sbv.tg_width)
@@ -913,7 +913,7 @@ extension TGFloatLayout
                         rect.size.width = sbv.tg_width.measure(selfSize.width - padding.left - padding.right)
                     }
                     
-                    rect.size.width = self.validMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
                     
                     rect.size.height = sbv.tg_height.measure(rect.size.width)
@@ -922,10 +922,10 @@ extension TGFloatLayout
                 if (sbv.tg_height.isFlexHeight)
                 {
                     
-                    rect.size.height = self.heightFromFlexedHeightView(sbv, width: rect.size.width)
+                    rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
                 }
                 
-                rect.size.height = self.validMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+                rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
                 
                 if (topMargin + rect.size.height + bottomMargin > maxContentHeight &&
                     sbv.tg_height.dimeRelaVal !== self.tg_height &&
@@ -1019,14 +1019,14 @@ extension TGFloatLayout
 
             }
             
-            rect.size.width = self.validMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
             
             if (sbv.tg_height.dimeRelaVal === sbv.tg_width)
             {
                 rect.size.height = sbv.tg_height.measure(rect.size.width)
             }
             
-            rect.size.height = self.validMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
             if (sbv.tg_width.dimeRelaVal === sbv.tg_height)
             {
@@ -1047,10 +1047,10 @@ extension TGFloatLayout
             //如果高度是浮动的则需要调整高度。
             if (sbv.tg_height.isFlexHeight)
             {
-                rect.size.height = self.heightFromFlexedHeightView(sbv, width: rect.size.width)
+                rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
             }
             
-            rect.size.height = self.validMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
             if (sbv.tg_reverseFloat)
             {
@@ -1065,7 +1065,7 @@ extension TGFloatLayout
                 {
                     //找到最底部的位置。
                     nextPoint.x = max(bottomMaxWidth, topLastXOffset);
-                    let topPoint = self.findTopCandidatePoint(CGRect(x: nextPoint.x, y: selfSize.height - padding.bottom, width: CGFloat.greatestFiniteMagnitude, height: 0), height:topMargin + (isHeightWeight ? 0 : rect.size.height) + bottomMargin,topBoundary:topCandidateYBoundary,topCandidateRects:topCandidateRects,hasWeight:false)
+                    let topPoint = self.tgFindTopCandidatePoint(CGRect(x: nextPoint.x, y: selfSize.height - padding.bottom, width: CGFloat.greatestFiniteMagnitude, height: 0), height:topMargin + (isHeightWeight ? 0 : rect.size.height) + bottomMargin,topBoundary:topCandidateYBoundary,topCandidateRects:topCandidateRects,hasWeight:false)
                     if (topPoint.x != CGFloat.greatestFiniteMagnitude)
                     {
                         nextPoint.x = max(bottomMaxWidth, topPoint.x);
@@ -1079,7 +1079,7 @@ extension TGFloatLayout
                     while i >= 0
                     {
                         let candidateRect = bottomCandidateRects[i]
-                        let topPoint = self.findTopCandidatePoint(candidateRect,height:topMargin + (isHeightWeight ? 0 : rect.size.height) + bottomMargin,topBoundary:padding.top,topCandidateRects:topCandidateRects,hasWeight:isHeightWeight)
+                        let topPoint = self.tgFindTopCandidatePoint(candidateRect,height:topMargin + (isHeightWeight ? 0 : rect.size.height) + bottomMargin,topBoundary:padding.top,topCandidateRects:topCandidateRects,hasWeight:isHeightWeight)
                         if (topPoint.x != CGFloat.greatestFiniteMagnitude)
                         {
                             nextPoint = CGPoint(x: max(nextPoint.x, topPoint.x),y: candidateRect.minY);
@@ -1101,11 +1101,11 @@ extension TGFloatLayout
                         heightWeight = sbv.tg_height.dimeWeightVal.rawValue/100
                     }
                     
-                    rect.size.height =  self.validMeasure(sbv.tg_height, sbv: sbv, calcSize: (nextPoint.y - topCandidateYBoundary + sbv.tg_height.addVal) * heightWeight - topMargin - bottomMargin, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.height =  self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: (nextPoint.y - topCandidateYBoundary + sbv.tg_height.addVal) * heightWeight - topMargin - bottomMargin, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
                     if (sbv.tg_width.dimeRelaVal === sbv.tg_height)
                     {
-                        rect.size.width = self.validMeasure(sbv.tg_width, sbv: sbv, calcSize: sbv.tg_width.measure(rect.size.height), sbvSize: rect.size, selfLayoutSize: selfSize)
+                        rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: sbv.tg_width.measure(rect.size.height), sbvSize: rect.size, selfLayoutSize: selfSize)
                     }
                     
                 }
@@ -1176,7 +1176,7 @@ extension TGFloatLayout
                     //找到最低点。
                     nextPoint.x = max(topMaxWidth, bottomLastXOffset);
                     
-                    let bottomPoint = self.findBottomCandidatePoint(CGRect(x: nextPoint.x, y: padding.top,width: CGFloat.greatestFiniteMagnitude,height: 0),height:topMargin + (isHeightWeight ? 0: rect.size.height) + bottomMargin,bottomBoundary:bottomCandidateYBoundary,bottomCandidateRects:bottomCandidateRects,hasWeight:false)
+                    let bottomPoint = self.tgFindBottomCandidatePoint(CGRect(x: nextPoint.x, y: padding.top,width: CGFloat.greatestFiniteMagnitude,height: 0),height:topMargin + (isHeightWeight ? 0: rect.size.height) + bottomMargin,bottomBoundary:bottomCandidateYBoundary,bottomCandidateRects:bottomCandidateRects,hasWeight:false)
                     if (bottomPoint.x != CGFloat.greatestFiniteMagnitude)
                     {
                         nextPoint.x = max(topMaxWidth, bottomPoint.x);
@@ -1191,7 +1191,7 @@ extension TGFloatLayout
                     while i >= 0
                     {
                         let candidateRect = topCandidateRects[i]
-                        let bottomPoint = self.findBottomCandidatePoint(candidateRect,height:topMargin + (isHeightWeight ? 0: rect.size.height) + bottomMargin, bottomBoundary:selfSize.height - padding.bottom,bottomCandidateRects:bottomCandidateRects, hasWeight:isHeightWeight);
+                        let bottomPoint = self.tgFindBottomCandidatePoint(candidateRect,height:topMargin + (isHeightWeight ? 0: rect.size.height) + bottomMargin, bottomBoundary:selfSize.height - padding.bottom,bottomCandidateRects:bottomCandidateRects, hasWeight:isHeightWeight);
                         if (bottomPoint.x != CGFloat.greatestFiniteMagnitude)
                         {
                             nextPoint = CGPoint(x: max(nextPoint.x, bottomPoint.x),y: candidateRect.maxY);
@@ -1218,11 +1218,11 @@ extension TGFloatLayout
                         heightWeight = sbv.tg_height.dimeWeightVal.rawValue/100
                     }
                     
-                    rect.size.height =  self.validMeasure(sbv.tg_height, sbv: sbv, calcSize: (bottomCandidateYBoundary - nextPoint.y + sbv.tg_height.addVal) * heightWeight - topMargin - bottomMargin, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.height =  self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: (bottomCandidateYBoundary - nextPoint.y + sbv.tg_height.addVal) * heightWeight - topMargin - bottomMargin, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
                     if (sbv.tg_width.dimeRelaVal === sbv.tg_height)
                     {
-                        rect.size.width = self.validMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.height * sbv.tg_width.mutilVal + sbv.tg_width.addVal, sbvSize: rect.size, selfLayoutSize: selfSize)
+                        rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.height * sbv.tg_width.multiVal + sbv.tg_width.addVal, sbvSize: rect.size, selfLayoutSize: selfSize)
                     }
                     
                     

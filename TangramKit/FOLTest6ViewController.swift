@@ -25,7 +25,7 @@ class FOLTest6ViewController: UIViewController {
         rootLayout.backgroundColor = .lightGray
         rootLayout.tg_width.equal(.fill)
         rootLayout.tg_height.equal(.wrap)
-        rootLayout.tg_height.lBound(scrollView.tg_height) //默认虽然高度包裹，但是最小的高度要和滚动视图相等。
+        rootLayout.tg_height.min(scrollView.tg_height) //默认虽然高度包裹，但是最小的高度要和滚动视图相等。
         rootLayout.tg_vspace = 10
         scrollView.addSubview(rootLayout)
         
@@ -346,7 +346,7 @@ extension FOLTest6ViewController
         detailLabel.font = UIFont.boldSystemFont(ofSize: 16)
         detailLabel.adjustsFontSizeToFitWidth = true
         detailLabel.sizeToFit()
-        detailLabel.tg_width.equal(100%)
+        detailLabel.tg_width.equal(.fill)  //等价于tg_width.equal(100%)
         detailLabel.tg_clearFloat = true
         detailLabel.tg_top.equal(5)
         contentLayout.addSubview(detailLabel)

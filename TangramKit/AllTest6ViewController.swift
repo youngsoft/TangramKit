@@ -129,13 +129,13 @@ class AllTest6ViewController: UIViewController {
         
        // 下面是定义在iPad上设备的横屏的界面布局，因为iPad上的SizeClass都是regular，所以这里要区分横竖屏的方法是使用.portrait和.landscape
         let menu1LabelSC = menu1Label.tg_fetchSizeClass(with: .comb(.regular, .regular, .landscape), from: .default)
-        menu1LabelSC.tg_height.uBound(200)
+        menu1LabelSC.tg_height.max(200)
         
         let menu2LabelSC = menu2Label.tg_fetchSizeClass(with: .comb(.regular, .regular, .landscape), from: .default)
-        menu2LabelSC.tg_height.uBound(200)
+        menu2LabelSC.tg_height.max(200)
         
         let menu3LabelSC = menu3Label.tg_fetchSizeClass(with: .comb(.regular, .regular, .landscape), from: .default)
-        menu3LabelSC.tg_height.uBound(200)
+        menu3LabelSC.tg_height.max(200)
 
     }
 

@@ -54,8 +54,7 @@ class FOLTest5ViewController: UIViewController {
         
         
         let rootLayout = TGFloatLayout(.vert)
-        rootLayout.tg_left.equal(0)
-        rootLayout.tg_right.equal(0)  //你可以用rootLayout.tg_width.equal(.fill)代替
+        rootLayout.tg_width.equal(.fill)
         rootLayout.tg_height.equal(.wrap)
         rootLayout.tg_hspace = 5
         rootLayout.tg_vspace = 5

@@ -114,7 +114,7 @@ extension LLTest3ViewController
         actionLayout.tg_vspace = 5   //设置子视图之间的水平和垂直间距。
         contentLayout.addSubview(actionLayout)
         
-        for i:Int in 0..<actions.count
+        for i in 0..<actions.count
         {
             actionLayout.addSubview(createActionButton(actions[i], tag:(i + 1)*100))
         }

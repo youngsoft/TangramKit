@@ -51,11 +51,22 @@ class LLTest2ViewController: UIViewController {
         self.view = scrollView
         
         let contentLayout = TGLinearLayout(.vert)
+        contentLayout.backgroundColor = .cyan
         contentLayout.tg_padding = UIEdgeInsets(top: 10,left: 10,bottom: 10,right: 10) //设置布局内的子视图离自己的边距.
-        //下面设置宽度的代码等价于：tg_left.equal(0) tg_right.equal(0) 等价于 tg_width.equal(scrollView.tg_width) 等价于 tg_width.equal(100%)
-        contentLayout.tg_width.equal(.fill);  //设置视图自身的宽度填充父视图的宽度，也就是宽度和父视图相等。
+        contentLayout.tg_width.equal(.fill);  //设置视图自身的宽度填充父视图的剩余宽度。
+        //您可以用如下的方法设置宽度：
+        //contentLayout.tg_left.equal(0)
+        //contentLayout.tg_right.equal(0)
+        //您还可以用如下的方法设置宽度：
+        //contentLayout.tg_width.equal(scrollView.tg_width)  //contentLayout.tg_width.equal(scrollView)
+        //您还可以用如下的方法设置宽度
+        //contentLayout.tg_width.equal(100%)
+        
         contentLayout.tg_height.equal(.wrap)  //设置布局视图的高度由里面的子视图决定。
-        contentLayout.tg_height.lBound(scrollView.tg_height, increment: 10)  //但是布局视图的最低高度等于scrollView的高度+10
+        contentLayout.tg_height.min(scrollView.tg_height, increment: 10)  //但是布局视图的最低高度等于scrollView的高度+10
+        //您也可以如下的方法设置：
+        //contentLayout.tg_height.min(scrollView, increment: 10)
+        
         scrollView.addSubview(contentLayout)
         self.contentLayout = contentLayout
         
@@ -135,8 +146,7 @@ extension LLTest2ViewController
         numField.borderStyle = .roundedRect
         numField.placeholder = NSLocalizedString("Input the No. here", comment:"")
         numField.tg_top.equal(5)
-        numField.tg_left.equal(0)
-        numField.tg_right.equal(0)  //上两句等价于numField.tg_width.equal(.fill)，这两句同时决定了宽度。
+        numField.tg_width.equal(.fill)
         numField.tg_height.equal(40)
         contentLayout.addSubview(numField)
 
@@ -213,7 +223,7 @@ extension LLTest2ViewController
             ageLabel.textAlignment  = .center
             ageLabel.backgroundColor = .red
             ageLabel.tg_height.equal(30)
-            ageLabel.tg_width.equal(.fill)  //这里面每个子视图的宽度来平均分配父视图的宽度。这样里面所有子视图的宽度都相等。
+            ageLabel.tg_width.equal(.average)  //这里面每个子视图的宽度来平均分配父视图的宽度。这样里面所有子视图的宽度都相等。
             ageSelectLayout.addSubview(ageLabel)
         }
     }
@@ -367,7 +377,6 @@ extension LLTest2ViewController
         }
         
         self.hiddenView.isHidden = !hiddenView.isHidden;
-        self.hiddenView.sizeToFit()
     }
     
 

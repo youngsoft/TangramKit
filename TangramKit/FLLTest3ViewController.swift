@@ -74,7 +74,8 @@ class FLLTest3ViewController: UIViewController {
     }
     
     //创建标签按钮
-    internal func createTagButton(text: String) -> UIButton {
+    internal func createTagButton(text: String) -> UIButton
+    {
         let tagButton = UIButton()
         tagButton.setTitle(text, for: .normal)
         tagButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
@@ -89,11 +90,12 @@ class FLLTest3ViewController: UIViewController {
     }
     
     //创建添加按钮
-    private func createAddButton() -> UIButton {
+    private func createAddButton() -> UIButton
+    {
         let addButton = UIButton()
         addButton.setTitle(NSLocalizedString("add tag", comment: ""), for: .normal)
         addButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-        addButton.setTitleColor(UIColor.blue, for: .normal)
+        addButton.setTitleColor(.blue, for: .normal)
         addButton.layer.cornerRadius = 20
         addButton.layer.borderWidth = 2
         addButton.layer.borderColor = UIColor.red.cgColor
@@ -104,7 +106,9 @@ class FLLTest3ViewController: UIViewController {
 }
 
 extension FLLTest3ViewController {
-    func handleAddTagButton(sender: AnyObject) {
+    
+    func handleAddTagButton(sender: AnyObject)
+    {
         let label = NSLocalizedString("drag me \(self.flowLayout.subviews.count-1)", comment: "")
         self.flowLayout.insertSubview(self.createTagButton(text: label), at: self.flowLayout.subviews.count-1)
     }
@@ -117,8 +121,10 @@ extension FLLTest3ViewController {
         
         //判断当前手指在具体视图的位置。这里要排除self.addButton的位置。
         var sbv2: UIView!
-        for sbv: UIView in self.flowLayout.subviews  {
-            if sbv != sender && sender.tg_useFrame && sbv != self.addButton {
+        for sbv: UIView in self.flowLayout.subviews
+        {
+            if sbv != sender && sender.tg_useFrame && sbv != self.addButton
+            {
                 let rect1 = sbv.frame
                 if rect1.contains(pt) {
                     sbv2 = sbv
@@ -127,7 +133,8 @@ extension FLLTest3ViewController {
             }
         }
         
-        if sbv2 != nil {
+        if sbv2 != nil
+        {
             self.flowLayout.tg_layoutAnimationWithDuration(0.2)
             
             //得到要移动的视图的位置索引。
@@ -162,7 +169,8 @@ extension FLLTest3ViewController {
         sender.center = pt  //因为tg_useFrame设置为了YES所有这里可以直接调整center，从而实现了位置的自定义设置。
     }
     
-    func handleTouchDown(sender: UIButton, event: UIEvent) {
+    func handleTouchDown(sender: UIButton, event: UIEvent)
+    {
         self.oldIndex = self.flowLayout.subviews.index(of: sender)!
         self.currentIndex = self.oldIndex
         self.hasDrag = false

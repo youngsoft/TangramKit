@@ -34,9 +34,11 @@ class FLTest2ViewController: UIViewController {
         /*
 
           对于框架布局里面的子视图来说，如果某个子视图的尺寸依赖于父视图则可以有多少设置的方法，比如某个子视图的高度是父视图高度的一半则如下设置都可以：
+            sbv.tg_height.equal(superview, multiple:0.5)
             sbv.tg_height.equal(superview.tg_height, multiple:0.5)  //父视图比例方式
             sbv.tg_height.equal(.fill, multiple:0.5)      //填充比例方式
             sbv.tg_height.equal(50%)   //比重方式。
+            sbv.tg_height.equal(100%, multiple:0.5)
             sbv.tg_height ~= 50%        //运算符方式。
            
            可以看出设置的方式有非常多的种类，使用灵活。
@@ -45,9 +47,14 @@ class FLTest2ViewController: UIViewController {
         
         let backImageView = UIImageView(image: UIImage(named: "bk1"))
         backImageView.contentMode = UIViewContentMode.scaleToFill
-        //高度是父视图高度的0.5 等价于tg_height.equal(.fill, multiple:0.5) 等价于tg_height.equal(rootLayout.tg_height, multiple:0.5)
-        backImageView.tg_height.equal(50%)
-        backImageView.tg_width.equal(.fill)  //等价于backImageView.tg_width.equal(100%)
+       // backImageView.tg_height.equal(50%)
+        //您也可以采用如下的方法来设置高度：
+        //backImageView.tg_height.equal(rootLayout, multiple:0.5)
+        //backImageView.tg_height.equal(rootLayout.tg_height, multiple:0.5)
+        //backImageView.tg_height.equal(.fill, multiple:0.5)
+        //backImageView.tg_height.equal(50%)
+        //backImageView.tg_height ~= 50%
+        backImageView.tg_width.equal(.fill)  //填充父视图剩余宽度，对于框架布局来说就是全部宽度。
         rootLayout.addSubview(backImageView)
         
         let rightImageView = UIImageView(image: UIImage(named: "user")) //这种方式初始化一个UIImageView会自动计算出视图的尺寸。
@@ -75,7 +82,7 @@ class FLTest2ViewController: UIViewController {
         nickName.sizeToFit();
         nickName.tg_centerX.equal(0)
         //因为上面的headImage的高度是布局视图高度的1/3并且居中。所以我们这里的文字的中心点就要往下偏移图片的高度的一半也就是1/6，右因为文字本身有高度所以中心点还要再往下偏移文字本身高度的一半。所以这里的效果就实现了文字在图片的下面。这里面TGWeight类型的值设置表示用的是相对的偏移值。
-        nickName.tg_centerY.equal((100.0/6)%, offset:(nickName.frame.size.height) / 2)
+        nickName.tg_centerY.equal((100.0/6)%, offset:nickName.frame.height / 2)
         rootLayout.addSubview(nickName)
         
         
@@ -84,7 +91,9 @@ class FLTest2ViewController: UIViewController {
         leftView.tg_bottom.equal(0)  //左下位置
         leftView.tg_width.equal((100.0/3)%)  //左边视图宽度占用1/3
         leftView.tg_height.equal(leftView.tg_width) //高度等于自身的宽度
-        leftView.tg_height.uBound(80) //高度最大只能是80，
+        leftView.tg_height.max(80) //高度最大只能是80，
+        //您也可以使用运算符方式来进行设置:
+       // leftView.tg_height <= 80
         rootLayout.addSubview(leftView)
         
         let centerView = UIImageView(image: UIImage(named: "image2"))
@@ -92,7 +101,7 @@ class FLTest2ViewController: UIViewController {
         centerView.tg_bottom.equal(0) //中下位置
         centerView.tg_width.equal((100.0/3)%)
         centerView.tg_height.equal(centerView.tg_width)  //高度等于自身的宽度
-        centerView.tg_height.uBound(80)
+        centerView.tg_height.max(80)
         rootLayout.addSubview(centerView)
         
         
@@ -101,7 +110,7 @@ class FLTest2ViewController: UIViewController {
         rightView.tg_bottom.equal(0)
         rightView.tg_width.equal((100.0/3)%)
         rightView.tg_height.equal(rightView.tg_width)
-        rightView.tg_height.uBound(80)
+        rightView.tg_height.max(80)
         rootLayout.addSubview(rightView)
     }
     

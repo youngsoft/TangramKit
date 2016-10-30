@@ -90,7 +90,8 @@ class FOLTest1ViewController: UIViewController {
         
         let widthWeightStepper = UIStepper()
         widthWeightStepper.minimumValue = 0
-        widthWeightStepper.maximumValue = 1
+        widthWeightStepper.stepValue = 1
+        widthWeightStepper.maximumValue = 100
         widthWeightStepper.addTarget(self, action: #selector(handleWeightStepper(_:)), for: .valueChanged)
         widthWeightStepper.tg_top.equal(5)
         rootLayout.addSubview(widthWeightStepper)
@@ -112,7 +113,8 @@ class FOLTest1ViewController: UIViewController {
         
         let heightWeightStepper = UIStepper()
         heightWeightStepper.minimumValue = 0
-        heightWeightStepper.maximumValue = 1
+        heightWeightStepper.stepValue = 1
+        heightWeightStepper.maximumValue = 100
         heightWeightStepper.addTarget(self, action: #selector(handleWeightStepper(_:)), for: .valueChanged)
         heightWeightStepper.tg_top.equal(5)
         rootLayout.addSubview(heightWeightStepper)
@@ -129,7 +131,7 @@ class FOLTest1ViewController: UIViewController {
         floatLayout.backgroundColor = UIColor.lightGray
         floatLayout.tg_clearFloat = true  //换行
         floatLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
-        floatLayout.tg_width.equal(.fill)   //高度和宽度都占用剩余空间。
+        floatLayout.tg_width.equal(100%)   //高度和宽度都占用剩余空间。
         floatLayout.tg_height.equal(.fill)
         rootLayout.addSubview(floatLayout)
         self.floatLayout = floatLayout

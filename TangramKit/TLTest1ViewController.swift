@@ -57,7 +57,7 @@ class TLTest1ViewController: UIViewController {
         tableLayout.tg_addCol(colView, inRow:0)
         
         //第二行固定高度为40，每列的宽度都相等。
-        tableLayout.tg_addRow(size:40,colSize:TGTableLayout.average).backgroundColor = UIColor(white: 0.2, alpha: 1)
+        tableLayout.tg_addRow(size:40,colSize:TGLayoutSize.average).backgroundColor = UIColor(white: 0.2, alpha: 1)
         
         colView = UILabel()
         colView.text = "Cell10"
@@ -85,7 +85,7 @@ class TLTest1ViewController: UIViewController {
         tableLayout.tg_addCol(colView, inRow:1)
         
         //第三行固定高度为30，每列的宽度自己设置。行的宽度由所有子视图的宽度包裹。
-        tableLayout.tg_addRow(size:30,colSize:TGTableLayout.wrap).backgroundColor = UIColor(white: 0.3, alpha: 1)
+        tableLayout.tg_addRow(size:30,colSize:TGLayoutSize.wrap).backgroundColor = UIColor(white: 0.3, alpha: 1)
         
         colView = UILabel()
         colView.text = "Cell20"
@@ -102,7 +102,7 @@ class TLTest1ViewController: UIViewController {
         tableLayout.tg_addCol(colView, inRow:2)
         
         //第四行固定高度为30，子视图的宽度自己设置，但是每行的宽度和父视图保持一致。
-        tableLayout.tg_addRow(size:30,colSize:TGTableLayout.fill).backgroundColor = UIColor(white: 0.4, alpha: 1)
+        tableLayout.tg_addRow(size:30,colSize:TGLayoutSize.fill).backgroundColor = UIColor(white: 0.4, alpha: 1)
 
         colView = UILabel()
         colView.text = "Cell30"
@@ -119,7 +119,7 @@ class TLTest1ViewController: UIViewController {
         tableLayout.tg_addCol(colView, inRow:3)
         
         //第五行剩余高度均分。每列的宽度均分,
-        let row4 = tableLayout.tg_addRow(size:TGTableLayout.average, colSize:TGTableLayout.average)
+        let row4 = tableLayout.tg_addRow(size:TGLayoutSize.average, colSize:TGLayoutSize.average)
         //可以设置行的属性.比如padding, 线条颜色，
         row4.tg_padding = UIEdgeInsetsMake(3, 3, 3, 3);
         row4.tg_topBorderline = TGLayoutBorderline(color: UIColor.black, thick: 2)
@@ -138,7 +138,7 @@ class TLTest1ViewController: UIViewController {
         tableLayout.tg_addCol(colView, inRow:4)
         
         //第六行高度由子视图的高度决定，列均分宽度
-        tableLayout.tg_addRow(size:TGTableLayout.wrap, colSize:TGTableLayout.average).backgroundColor = UIColor(white: 0.6, alpha: 1)
+        tableLayout.tg_addRow(size:TGLayoutSize.wrap, colSize:TGLayoutSize.average).backgroundColor = UIColor(white: 0.6, alpha: 1)
         
         colView = UILabel()
         colView.text = "Cell50"

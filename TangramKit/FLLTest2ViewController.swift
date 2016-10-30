@@ -25,7 +25,7 @@ class FLLTest2ViewController: UIViewController {
         rootLayout.tg_vspace = 4
         self.view = rootLayout
         
-        
+        //第一行
         let tempTagTextField = UITextField()
         tempTagTextField.placeholder = "input tag here"
         tempTagTextField.borderStyle = .roundedRect
@@ -39,9 +39,10 @@ class FLLTest2ViewController: UIViewController {
         let addTagButton = UIButton(type: .system)
         addTagButton.setTitle("Add Tag", for: .normal)
         addTagButton.addTarget(self, action: #selector(handleAddTag), for: .touchUpInside)
-        addTagButton.sizeToFit()
+        addTagButton.sizeToFit()             //因为每行2个子视图，这个子视图的宽度是固定的，而上面的兄弟视图占用了剩余的宽度。这样这两个子视图将均分父视图。
         rootLayout.addSubview(addTagButton)
         
+        //第二行
         let stretchSpacingLabel = UILabel()
         stretchSpacingLabel.text = "Stretch Spacing:"
         stretchSpacingLabel.tg_width.equal(.fill)
@@ -52,6 +53,7 @@ class FLLTest2ViewController: UIViewController {
         stretchSpacingSwitch.addTarget(self, action: #selector(handleShrinkMargin), for: .valueChanged)
         rootLayout.addSubview(stretchSpacingSwitch)
         
+        //第三行
         let stretchSizeLabel = UILabel()
         stretchSizeLabel.text = "Stretch Size:"
         stretchSizeLabel.tg_width.equal(.fill)
@@ -62,7 +64,7 @@ class FLLTest2ViewController: UIViewController {
         stretchSizeSwitch.addTarget(self, action: #selector(handleShrinkContent), for: .valueChanged)
         rootLayout.addSubview(stretchSizeSwitch)
         
-        
+        //第四行
         let autoArrangeLabel = UILabel()
         autoArrangeLabel.text = "Auto Arrange:"
         autoArrangeLabel.tg_width.equal(.fill)
@@ -73,9 +75,9 @@ class FLLTest2ViewController: UIViewController {
         autoArrangeSwitch.addTarget(self, action: #selector(handleShrinkAuto), for: .valueChanged)
         rootLayout.addSubview(autoArrangeSwitch)
         
-        
+        //最后一行。
         let flowLayout = TGFlowLayout()
-        flowLayout.backgroundColor = UIColor.lightGray
+        flowLayout.backgroundColor = .lightGray
         flowLayout.tg_space = 10
         flowLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
         flowLayout.tg_width.equal(.fill)
@@ -116,7 +118,7 @@ extension FLLTest2ViewController
         
         //这里可以看到尺寸宽度等于内容宽度并且再增加10，且最小是40，意思是按钮的宽度是等于自身内容的宽度再加10，但最小的宽度是40
         tagButton.tg_width.equal(.wrap, increment:10)
-        tagButton.tg_width.lBound(40)
+        tagButton.tg_width.min(40)
         tagButton.tg_height.equal(.wrap, increment:10) //高度等于自身内容的高度加10
         tagButton.addTarget(self,action:#selector(handleDelTag), for:.touchUpInside )
         self.flowLayout.addSubview(tagButton)

@@ -54,7 +54,7 @@ class TLTest3ViewController: UIViewController {
         
         //添加第一行。行高为50，每列宽由自己确定。
         let firstRowTitles = ["Name","Mon.","Tues.","Wed.","Thur.","Fri.","Sat.","Sun."];
-        let firstRow:TGLinearLayout = tableLayout.tg_addRow(size:50, colSize: TGTableLayout.fill)
+        let firstRow:TGLinearLayout = tableLayout.tg_addRow(size:50, colSize: TGLayoutSize.fill)
         firstRow.tg_notUseIntelligentBorderline = true ////因为智能边界线会影响到里面的所有子布局，包括每行，但是这里我们希望这行不受智能边界线的影响而想自己定义边界线，则将这个属性设置为true。
         firstRow.tg_bottomBorderline = TGLayoutBorderline(color:.blue) //我们自定义第一行的底部边界线为蓝色边界线。
         for i in 0 ..< firstRowTitles.count
@@ -66,7 +66,7 @@ class TLTest3ViewController: UIViewController {
             }
             else
             {
-                cellView.tg_width.equal(100%)  //我们这里定义第一列的宽度为80，而其他的列宽平均分配。
+                cellView.tg_width.equal(.average)  //我们这里定义第一列的宽度为80，而其他的列宽平均分配。
             }
             
             tableLayout.addSubview(cellView)  //表格布局重写了addSubview，表示总是添加到最后一行上。
@@ -78,7 +78,7 @@ class TLTest3ViewController: UIViewController {
         let values = ["", "10","20"]
         for _ in 0 ..< 10
         {
-            let _ = tableLayout.tg_addRow(size:40, colSize: TGTableLayout.fill)
+            let _ = tableLayout.tg_addRow(size:40, colSize: TGLayoutSize.fill)
             
             for j in 0 ..< firstRowTitles.count
             {
@@ -92,7 +92,7 @@ class TLTest3ViewController: UIViewController {
                 else
                 {
                     cellView = self.createCellLayout(value: values[Int(arc4random_uniform(UInt32(values.count)))])
-                    cellView.tg_width.equal(100%)
+                    cellView.tg_width.equal(.average)
                 }
                 
                 tableLayout.addSubview(cellView)
@@ -101,7 +101,7 @@ class TLTest3ViewController: UIViewController {
         }
         
         //最后一行
-        let lastRow = tableLayout.tg_addRow(size:60, colSize: TGTableLayout.fill)
+        let lastRow = tableLayout.tg_addRow(size:60, colSize: TGLayoutSize.fill)
         lastRow.tg_notUseIntelligentBorderline = true
         lastRow.tg_topBorderline = TGLayoutBorderline(color:UIColor.green)
       
@@ -142,6 +142,10 @@ extension TLTest3ViewController
         label.font = .systemFont(ofSize: 14)
         label.tg_width.equal(cellLayout.tg_width)
         label.tg_height.equal(cellLayout.tg_height)
+       // label.tg_width.equal(.fill)
+       // label.tg_height.equal(.fill)
+       // label.tg_width.equal(100%)
+       // label.tg_height.equal(100%)
         cellLayout.addSubview(label)
         
         return cellLayout;

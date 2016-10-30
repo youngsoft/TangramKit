@@ -72,6 +72,8 @@ class LLTest5ViewController: UIViewController {
         v1.numberOfLines = 3
         v1.tg_top.equal(10)
         v1.tg_width.equal(100%)  //等价于v1.tg_width.equal(.fill)
+        //您可以设置为:
+        //v1.tg_width ~= 100%
         v1.tg_height.equal(20%)  // 等价于 v1.tg_height.equal(TGWeight(20)) %这是是将数字转化为TGWeight的运算符。
         rootLayout.addSubview(v1)
         

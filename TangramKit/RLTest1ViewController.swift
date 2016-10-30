@@ -44,7 +44,7 @@ class RLTest1ViewController: UIViewController {
         let greenCircle: UIView = UIView()
         greenCircle.backgroundColor = .green
         greenCircle.tg_width.equal(rootLayout.tg_width, multiple:3/5.0)
-        greenCircle.tg_width.uBound(200)  //宽度是父视图宽度的3/5,且最大只能是200。
+        greenCircle.tg_width.max(200)  //宽度是父视图宽度的3/5,且最大只能是200。
         greenCircle.tg_height.equal(greenCircle.tg_width) //高度和自身宽度相等。
         greenCircle.tg_left.equal(10) //左边距离父视图10
         greenCircle.tg_top.equal(90)  //顶部距离父视图90
@@ -123,6 +123,10 @@ class RLTest1ViewController: UIViewController {
         lineView1.backgroundColor = .red
         lineView1.tg_left.equal(0)
         lineView1.tg_right.equal(0) //和父布局的左右边距为0，这个也同时确定了视图的宽度和父视图一样。
+        //您也可以如下设置：
+        //lineView1.tg_width.equal(.fill)   //填充父视图的剩余宽度
+        //您也可以如下设置：
+        //lineView1.tg_width.equal(100%)
         lineView1.tg_height.equal(2)
         lineView1.tg_centerY.equal(0)
         rootLayout.addSubview(lineView1)

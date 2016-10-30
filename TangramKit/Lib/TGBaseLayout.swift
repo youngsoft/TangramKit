@@ -118,7 +118,6 @@ extension UIView:TGViewSizeClass
         return self.tgCurrentSizeClass.tg_centerY.belong(to:self)
     }
     
-    
     /*
      视图的布局尺寸对象TGLayoutSize,用于设置视图的宽度和高度尺寸。视图可以通过设置frame值来设置自身的尺寸，也可以通过设置tg_width和tg_height来
      设置布局尺寸，通过frame设置的结果会立即生效，而通过tg_width和tg_height设置则会在布局后才生效，如果同时设置了frame值和TGLayoutSize值则TGLayoutSize的设置值优先。
@@ -136,7 +135,7 @@ extension UIView:TGViewSizeClass
      
      其中的equalmultiple参数以及multiply方法可用于设置布局尺寸放大的倍数值。比如A.tg_width.equal(B.tg_width,multiple:2)表示视图A的宽度是视图B的宽度的2倍。
      
-     其中的lBound,uBound方法表示用来设置布局尺寸的最大最小值。比如A.tg_width.lBound(10) A.tg_width.uBound(40)表示宽度的最小是10最大是40。
+     其中的min,max方法表示用来设置布局尺寸的最大最小值。比如A.tg_width.min(10) A.tg_width.max(40)表示宽度的最小是10最大是40。
      
      下面的表格描述了在各种布局下的子视图的布局尺寸对象的equal方法可以设置的值。
      为了表示方便我们把：
@@ -155,9 +154,9 @@ extension UIView:TGViewSizeClass
      
      这里面重点介绍TGWeight，wrap,fill三种类型的值设置。
      其中的TGWeight是指设置的值为相对值，表示占用父视图或者剩余尺寸的比例，具体是父视图空间比例还是剩余空间比例则需要根据布局视图的类型来决定，下面列出了各种布局视图下的TGWeight设置的意义：
-         父视图宽度比例： FR, L-V,
+         父视图宽度比例： FR, L-V,R
          父视图剩余宽度比例：L-H, FL, FO
-         父视图高度比例： FR, L-H
+         父视图高度比例： FR, L-H,R
          父视图剩余高度比例：L-V, FL, FO
      
      假如某个框架布局下面的子视图A，希望其宽度是父视图宽度的50%，那么就可以设置 A.tg_width.equal(50%)
@@ -254,6 +253,65 @@ extension UIView:TGViewSizeClass
 //视图的布局扩展方法。
 extension UIView
 {
+    //设置左上角位置tg_left,tg_top的快捷方法。
+    public func tg_origin(_ point:CGPoint)
+    {
+        self.tg_left.equal(point.x)
+        self.tg_top.equal(point.y)
+    }
+    
+    public func tg_origin(x:TGLayoutPosType, y:TGLayoutPosType)
+    {
+        self.tg_left.tgEqual(val: x)
+        self.tg_top.tgEqual(val: y)
+    }
+    
+    //设置右下角位置tg_right,tg_bottom的快捷方式
+    public func tg_end(_ point:CGPoint)
+    {
+        self.tg_right.equal(point.x)
+        self.tg_bottom.equal(point.y)
+    }
+    
+    public func tg_end(x:TGLayoutPosType, y:TGLayoutPosType)
+    {
+        self.tg_right.tgEqual(val:x)
+        self.tg_bottom.tgEqual(val:y)
+    }
+    
+    //同时设置tg_width和tg_height的简化方法。
+    public func tg_size(_ size: CGSize)
+    {
+        self.tg_width.equal(size.width)
+        self.tg_height.equal(size.height)
+    }
+    
+    public func tg_size(width:TGLayoutSize, height:TGLayoutSize)
+    {
+        self.tg_width.equal(width)
+        self.tg_height.equal(height)
+    }
+    
+    public func tg_size(width:TGLayoutSizeType, height:TGLayoutSize)
+    {
+        self.tg_width.tgEqual(val: width)
+        self.tg_height.equal(height)
+    }
+    
+    public func tg_size(width:TGLayoutSize, height:TGLayoutSizeType)
+    {
+        self.tg_width.equal(width)
+        self.tg_height.tgEqual(val: height)
+    }
+    
+    public func tg_size(width:TGLayoutSizeType, height:TGLayoutSizeType)
+    {
+        self.tg_width.tgEqual(val: width)
+        self.tg_height.tgEqual(val: height)
+    }
+    
+
+    
     /**
      *视图的评估frame值。评估frame值是在布局前评估计算的值，而frame则是视图真正完成布局后的真实值。在调用这个方法前请先调用父布局视图的tg_sizeThatFits方法进行布局视图的尺寸评估，否则此方法返回的值未可知。这个方法主要用于在视图布局前而想得到其在父布局视图中的frame值的场景。
      */
@@ -589,10 +647,10 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             sbv.tgFrame.sizeClass = sbv.tgMatchBestSizeClass(type)
         }
         
-        var (selfSize, hasSubLayout) = self.calcLayoutRect(size, isEstimate: false, type: type)
+        var (selfSize, hasSubLayout) = self.tgCalcLayoutRect(size, isEstimate: false, type: type)
         if hasSubLayout
         {
-            (selfSize,_) = self.calcLayoutRect(CGSize.zero, isEstimate: true, type: type)
+            (selfSize,_) = self.tgCalcLayoutRect(CGSize.zero, isEstimate: true, type: type)
         }
         self.tgFrame.width = selfSize.width
         self.tgFrame.height = selfSize.height
@@ -633,7 +691,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         {
             if self.tg_topBorderline != oldValue
             {
-                _topBorderlineLayer = self.updateBorderLayer(_topBorderlineLayer, borderLineDraw: self.tg_topBorderline)
+                _topBorderlineLayer = self.tgUpdateBorderLayer(_topBorderlineLayer, borderLineDraw: self.tg_topBorderline)
             }
             
         }
@@ -646,7 +704,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         {
             if self.tg_leftBorderline != oldValue
             {
-                _leftBorderlineLayer = self.updateBorderLayer(_leftBorderlineLayer, borderLineDraw: self.tg_leftBorderline)
+                _leftBorderlineLayer = self.tgUpdateBorderLayer(_leftBorderlineLayer, borderLineDraw: self.tg_leftBorderline)
             }
         }
     }
@@ -658,7 +716,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         {
             if self.tg_bottomBorderline != oldValue
             {
-                _bottomBorderlineLayer = self.updateBorderLayer(_bottomBorderlineLayer, borderLineDraw: self.tg_bottomBorderline)
+                _bottomBorderlineLayer = self.tgUpdateBorderLayer(_bottomBorderlineLayer, borderLineDraw: self.tg_bottomBorderline)
             }
         }
     }
@@ -672,7 +730,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             
             if self.tg_rightBorderline != oldValue
             {
-                _rightBorderlineLayer = self.updateBorderLayer(_rightBorderlineLayer, borderLineDraw:self.tg_rightBorderline)
+                _rightBorderlineLayer = self.tgUpdateBorderLayer(_rightBorderlineLayer, borderLineDraw:self.tg_rightBorderline)
             }
             
         }
@@ -854,7 +912,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             }
             
             let oldSelfSize = self.bounds.size
-            let (newSelfSize,_) = self.calcLayoutRect(CGSize.zero,isEstimate: false,type:sizeClassType)
+            let (newSelfSize,_) = self.tgCalcLayoutRect(CGSize.zero,isEstimate: false,type:sizeClassType)
             
             for sbv:UIView in self.subviews
             {
@@ -885,7 +943,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 var isAdjustSelf = true
                 if let supl = self.superview as? TGBaseLayout
                 {
-                    if supl.isNoLayoutSubview(self)
+                    if supl.tgIsNoLayoutSubview(self)
                     {
                         isAdjustSelf = false
                     }
@@ -920,7 +978,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             
             if newSelfSize.width != CGFloat.greatestFiniteMagnitude
             {
-                self.alterScrollViewContentSize(newSelfSize)
+                self.tgAlterScrollViewContentSize(newSelfSize)
             }
             
             self.tg_isLayouting = false
@@ -1080,7 +1138,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 
             #endif
             
-            if (self.setLayoutRectInNoLayoutSuperview(newSuperview))
+            if (self.tgUpdateLayoutRectInNoLayoutSuperview(newSuperview))
             {
                 //有可能父视图不为空，所以这里先把以前父视图的KVO删除。否则会导致程序崩溃
                 
@@ -1145,7 +1203,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             
             if keyPath == "frame" || keyPath == "bounds"
             {
-                let _ = self.setLayoutRectInNoLayoutSuperview(self.superview!)
+                let _ = self.tgUpdateLayoutRectInNoLayoutSuperview(self.superview!)
             }
             return
         }
@@ -1248,7 +1306,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             let delay = DispatchTime.now() + Double(Int64(time * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
             DispatchQueue.main.asyncAfter(deadline: delay, execute: {
                 
-                self.doTargetAction((touches as NSSet).anyObject() as! UITouch)
+                self.tgDoTargetAction((touches as NSSet).anyObject() as! UITouch)
             })
             
             TGBaseLayout._hasBegin = false
@@ -1295,7 +1353,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         super.touchesCancelled(touches,with:event)
     }
     
-    internal func calcLayoutRect(_ size:CGSize, isEstimate:Bool, type:TGSizeClassType) ->(selfSize:CGSize, hasSubLayout:Bool)
+    internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, type:TGSizeClassType) ->(selfSize:CGSize, hasSubLayout:Bool)
     {
         var selfSize:CGSize
         
@@ -1369,7 +1427,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
 
 extension TGBaseLayout
 {
-    fileprivate func doTargetAction(_ touch:UITouch)
+    fileprivate func tgDoTargetAction(_ touch:UITouch)
     {
         
         if self.tg_highlightedOpacity != 0
@@ -1415,7 +1473,7 @@ extension TGBaseLayout
     
 
     
-    fileprivate func updateBorderLayer(_ layer:CAShapeLayer!, borderLineDraw:TGLayoutBorderline!) ->CAShapeLayer!
+    fileprivate func tgUpdateBorderLayer(_ layer:CAShapeLayer!, borderLineDraw:TGLayoutBorderline!) ->CAShapeLayer!
     {
         var retLayer:CAShapeLayer! = layer
         
@@ -1474,7 +1532,7 @@ extension TGBaseLayout
     
 
     
-    internal func heightFromFlexedHeightView(_ sbv:UIView, width:CGFloat) ->CGFloat
+    internal func tgCalcHeightFromHeightWrapView(_ sbv:UIView, width:CGFloat) ->CGFloat
     {
         if let sbvimg = sbv as? UIImageView
         {
@@ -1497,7 +1555,7 @@ extension TGBaseLayout
     }
     
     
-    private func getBoundLimitMeasure(_ boundDime:TGLayoutSize,sbv:UIView, dimeType:TGGravity, sbvSize:CGSize, selfLayoutSize:CGSize,isUBound:Bool) ->CGFloat
+    private func tgGetBoundLimitMeasure(_ boundDime:TGLayoutSize,sbv:UIView, dimeType:TGGravity, sbvSize:CGSize, selfLayoutSize:CGSize,isUBound:Bool) ->CGFloat
     {
         var value = isUBound ? CGFloat.greatestFiniteMagnitude : -CGFloat.greatestFiniteMagnitude;
         
@@ -1524,7 +1582,7 @@ extension TGBaseLayout
                 if (boundDime.dimeRelaVal._type == dimeType)
                 {
                     //约束冲突：无效的边界设置方法
-                    assert(false, "Constraint exception!! \(sbv) has invalid lBound or uBound setting");
+                    assert(false, "Constraint exception!! \(sbv) has invalid min or max setting");
                 }
                 else
                 {
@@ -1556,7 +1614,7 @@ extension TGBaseLayout
         else
         {
             //约束冲突：无效的边界设置方法
-            assert(false, "Constraint exception!! \(sbv) has invalid lBound or uBound setting");
+            assert(false, "Constraint exception!! \(sbv) has invalid min or max setting");
         }
         
         if (value == CGFloat.greatestFiniteMagnitude || value == -CGFloat.greatestFiniteMagnitude)
@@ -1564,17 +1622,17 @@ extension TGBaseLayout
             return value;
         }
         
-        return value * boundDime.mutilVal + boundDime.addVal;
+        return value * boundDime.multiVal + boundDime.addVal;
     }
     
     
     
-    internal func validMeasure(_ dime:TGLayoutSize, sbv:UIView, calcSize:CGFloat, sbvSize:CGSize, selfLayoutSize:CGSize) ->CGFloat
+    internal func tgValidMeasure(_ dime:TGLayoutSize, sbv:UIView, calcSize:CGFloat, sbvSize:CGSize, selfLayoutSize:CGSize) ->CGFloat
     {
         //算出最大最小值。
-        let  minV = self.getBoundLimitMeasure(dime.lBoundVal, sbv:sbv, dimeType:dime._type, sbvSize:sbvSize, selfLayoutSize:selfLayoutSize, isUBound:false)
+        let  minV = self.tgGetBoundLimitMeasure(dime.minVal, sbv:sbv, dimeType:dime._type, sbvSize:sbvSize, selfLayoutSize:selfLayoutSize, isUBound:false)
         
-        let  maxV = self.getBoundLimitMeasure(dime.uBoundVal, sbv:sbv, dimeType:dime._type, sbvSize:sbvSize, selfLayoutSize:selfLayoutSize,isUBound:true)
+        let  maxV = self.tgGetBoundLimitMeasure(dime.maxVal, sbv:sbv, dimeType:dime._type, sbvSize:sbvSize, selfLayoutSize:selfLayoutSize,isUBound:true)
         
         var retCalcSize = calcSize
         retCalcSize = max(minV, retCalcSize);
@@ -1584,7 +1642,7 @@ extension TGBaseLayout
     }
     
     
-    private func getBoundLimitMargin(_ boundPos:TGLayoutPos, sbv:UIView, selfLayoutSize:CGSize) ->CGFloat
+    private func tgGetBoundLimitMargin(_ boundPos:TGLayoutPos, sbv:UIView, selfLayoutSize:CGSize) ->CGFloat
     {
         var value:CGFloat = 0;
         
@@ -1643,7 +1701,7 @@ extension TGBaseLayout
         else
         {
             //约束冲突：无效的边界设置方法
-            assert(false, "Constraint exception!! \(sbv) has invalid lBound or uBound setting");
+            assert(false, "Constraint exception!! \(sbv) has invalid min or max setting");
         }
         
         return value + boundPos.offsetVal;
@@ -1651,11 +1709,11 @@ extension TGBaseLayout
     }
     
     
-    internal func validMargin(_ pos:TGLayoutPos, sbv:UIView, calcPos:CGFloat, selfLayoutSize:CGSize) ->CGFloat
+    internal func tgValidMargin(_ pos:TGLayoutPos, sbv:UIView, calcPos:CGFloat, selfLayoutSize:CGSize) ->CGFloat
     {
         //算出最大最小值
-        let  minV = self.getBoundLimitMargin(pos.lBoundVal, sbv:sbv,selfLayoutSize:selfLayoutSize);
-        let  maxV = self.getBoundLimitMargin(pos.uBoundVal,sbv:sbv,selfLayoutSize:selfLayoutSize);
+        let  minV = self.tgGetBoundLimitMargin(pos.minVal, sbv:sbv,selfLayoutSize:selfLayoutSize);
+        let  maxV = self.tgGetBoundLimitMargin(pos.maxVal,sbv:sbv,selfLayoutSize:selfLayoutSize);
         
         var retCalcPos = calcPos
         retCalcPos = max(minV, retCalcPos);
@@ -1664,20 +1722,43 @@ extension TGBaseLayout
     }
     
     
-    fileprivate func setLayoutRectInNoLayoutSuperview(_ newSuperview:UIView) -> Bool
+    fileprivate func tgUpdateLayoutRectInNoLayoutSuperview(_ newSuperview:UIView) -> Bool
     {
         var isAdjust = false;
         
-        let rectSuper = newSuperview.bounds;
-        var rectSelf = self.frame;
+        let rectSuper = newSuperview.bounds
+        let leftMargin = self.tg_left.realMarginInSize(rectSuper.width)
+        let rightMargin = self.tg_right.realMarginInSize(rectSuper.width)
+        let topMargin = self.tg_top.realMarginInSize(rectSuper.height)
+        let bottomMargin = self.tg_bottom.realMarginInSize(rectSuper.height)
+        var rectSelf = self.frame
         
         //确定左右边距和宽度。
         if (!self.tg_width.isWrap && self.tg_width.hasValue)
         {
-            if self.tg_width.isFill || self.tg_width.dimeRelaVal != nil
+            if self.tg_width.isFill
             {
-                rectSelf.size.width = self.tg_width.measure(rectSuper.size.width)
-                isAdjust = true;
+                rectSelf.size.width = self.tg_width.measure(rectSuper.width - leftMargin - rightMargin)
+                isAdjust = true
+            }
+            else if self.tg_width.dimeRelaVal != nil
+            {
+                if self.tg_width.dimeRelaVal.view === newSuperview
+                {
+                    rectSelf.size.width = self.tg_width.measure(rectSuper.width)
+                }
+                else
+                {
+                    rectSelf.size.width = self.tg_width.measure(self.tg_width.dimeRelaVal.view.tg_estimatedFrame.width)
+                }
+                
+                isAdjust = true
+                
+            }
+            else if self.tg_width.dimeWeightVal != nil
+            {
+                rectSelf.size.width = self.tg_width.measure(rectSuper.width * self.tg_width.dimeWeightVal.rawValue / 100)
+                isAdjust = true
             }
             else
             {
@@ -1685,30 +1766,31 @@ extension TGBaseLayout
             }
         }
         
-        rectSelf.size.width = self.validMeasure(self.tg_width,sbv:self,calcSize:rectSelf.size.width,sbvSize:rectSelf.size,selfLayoutSize:rectSuper.size);
+        rectSelf.size.width = self.tgValidMeasure(self.tg_width,sbv:self,calcSize:rectSelf.width,sbvSize:rectSelf.size,selfLayoutSize:rectSuper.size);
         
         if (self.tg_left.hasValue && self.tg_right.hasValue)
         {
+            
             isAdjust = true;
             self.tg_width.equal(nil)
-            rectSelf.size.width = rectSuper.size.width - self.tg_left.margin - self.tg_right.margin;
-            rectSelf.size.width = self.validMeasure(self.tg_width,sbv:self,calcSize:rectSelf.size.width,sbvSize:rectSelf.size,selfLayoutSize:rectSuper.size);
+            rectSelf.size.width = rectSuper.width - leftMargin - rightMargin
+            rectSelf.size.width = self.tgValidMeasure(self.tg_width,sbv:self,calcSize:rectSelf.width,sbvSize:rectSelf.size,selfLayoutSize:rectSuper.size);
             
-            rectSelf.origin.x = self.tg_left.margin;
+            rectSelf.origin.x = leftMargin
         }
         else if (self.tg_centerX.hasValue)
         {
             isAdjust = true;
-            rectSelf.origin.x = (rectSuper.size.width - rectSelf.size.width)/2 + self.tg_centerX.margin;
+            rectSelf.origin.x = (rectSuper.width - rectSelf.width)/2 + self.tg_centerX.realMarginInSize(rectSuper.width)
         }
         else if (self.tg_left.hasValue)
         {
-            rectSelf.origin.x = self.tg_left.margin;
+            rectSelf.origin.x = leftMargin
         }
         else if (self.tg_right.hasValue)
         {
             isAdjust = true;
-            rectSelf.origin.x  = rectSuper.size.width - rectSelf.size.width - self.tg_right.margin;
+            rectSelf.origin.x  = rectSuper.width - rectSelf.width - rightMargin
         }
         else
         {
@@ -1718,41 +1800,60 @@ extension TGBaseLayout
         
         if (!self.tg_height.isWrap && self.tg_height.hasValue)
         {
-            if  self.tg_height.isFill || self.tg_height.dimeRelaVal != nil
+            if  self.tg_height.isFill
             {
-                rectSelf.size.height = self.tg_height.measure(rectSuper.size.height)
+                rectSelf.size.height = self.tg_height.measure(rectSuper.height - topMargin - bottomMargin)
+                isAdjust = true;
+            }
+            else if self.tg_height.dimeRelaVal != nil
+            {
+                if self.tg_height.dimeRelaVal.view === newSuperview
+                {
+                    rectSelf.size.height = self.tg_height.measure(rectSuper.height)
+                }
+                else
+                {
+                    rectSelf.size.height = self.tg_height.measure(self.tg_height.dimeRelaVal.view.tg_estimatedFrame.height)
+                }
+                
+                isAdjust = true
+
+            }
+            else if self.tg_height.dimeWeightVal != nil
+            {
+                rectSelf.size.height = self.tg_height.measure(rectSuper.height * self.tg_height.dimeWeightVal.rawValue / 100)
                 isAdjust = true;
             }
             else
             {
-                rectSelf.size.height = self.tg_height.measure;
+                rectSelf.size.height = self.tg_height.measure
             }
         }
         
-        rectSelf.size.height = self.validMeasure(self.tg_height,sbv:self,calcSize:rectSelf.size.height,sbvSize:rectSelf.size,selfLayoutSize:rectSuper.size);
+        rectSelf.size.height = self.tgValidMeasure(self.tg_height,sbv:self,calcSize:rectSelf.height,sbvSize:rectSelf.size,selfLayoutSize:rectSuper.size);
         
         if (self.tg_top.hasValue && self.tg_bottom.hasValue)
         {
             isAdjust = true;
             self.tg_height.equal(nil)
-            rectSelf.size.height = rectSuper.size.height - self.tg_top.margin - self.tg_bottom.margin;
-            rectSelf.size.height = self.validMeasure(self.tg_height,sbv:self,calcSize:rectSelf.size.height,sbvSize:rectSelf.size,selfLayoutSize:rectSuper.size);
+            rectSelf.size.height = rectSuper.height - topMargin - topMargin
+            rectSelf.size.height = self.tgValidMeasure(self.tg_height,sbv:self,calcSize:rectSelf.height,sbvSize:rectSelf.size,selfLayoutSize:rectSuper.size)
             
-            rectSelf.origin.y = self.tg_top.margin;
+            rectSelf.origin.y = topMargin
         }
         else if (self.tg_centerY.hasValue)
         {
             isAdjust = true;
-            rectSelf.origin.y = (rectSuper.size.height - rectSelf.size.height)/2 + self.tg_centerY.margin;
+            rectSelf.origin.y = (rectSuper.height - rectSelf.height)/2 + self.tg_centerY.realMarginInSize(rectSuper.height)
         }
         else if (self.tg_top.hasValue)
         {
-            rectSelf.origin.y = self.tg_top.margin;
+            rectSelf.origin.y = topMargin
         }
         else if (self.tg_bottom.hasValue)
         {
             isAdjust = true;
-            rectSelf.origin.y  = rectSuper.size.height - rectSelf.size.height - self.tg_bottom.margin;
+            rectSelf.origin.y  = rectSuper.height - rectSelf.height - bottomMargin
         }
         else
         {
@@ -1772,7 +1873,7 @@ extension TGBaseLayout
     
 
     
-    fileprivate func alterScrollViewContentSize(_ newSize:CGSize)
+    fileprivate func tgAlterScrollViewContentSize(_ newSize:CGSize)
     {
         if let scrolv = self.superview as? UIScrollView , self.tg_adjustScrollViewContentSizeMode == .yes
         {
@@ -1793,18 +1894,18 @@ extension TGBaseLayout
     }
 
     
-    internal func vertGravity(_ vert:TGGravity, selfSize:CGSize, sbv:UIView, rect:CGRect) ->CGRect
+    internal func tgCalcVertGravity(_ vert:TGGravity, selfSize:CGSize, sbv:UIView, rect:CGRect) ->CGRect
     {
         let fixedHeight = self.tg_padding.top + self.tg_padding.bottom;
-        let topMargin =  self.validMargin(sbv.tg_top, sbv: sbv, calcPos: sbv.tg_top.realMarginInSize(selfSize.height - fixedHeight), selfLayoutSize: selfSize)
-        let centerMargin = self.validMargin(sbv.tg_centerY, sbv: sbv, calcPos: sbv.tg_centerY.realMarginInSize(selfSize.height - fixedHeight), selfLayoutSize: selfSize)
-        let bottomMargin = self.validMargin(sbv.tg_bottom, sbv: sbv, calcPos: sbv.tg_bottom.realMarginInSize(selfSize.height - fixedHeight), selfLayoutSize: selfSize)
+        let topMargin =  self.tgValidMargin(sbv.tg_top, sbv: sbv, calcPos: sbv.tg_top.realMarginInSize(selfSize.height - fixedHeight), selfLayoutSize: selfSize)
+        let centerMargin = self.tgValidMargin(sbv.tg_centerY, sbv: sbv, calcPos: sbv.tg_centerY.realMarginInSize(selfSize.height - fixedHeight), selfLayoutSize: selfSize)
+        let bottomMargin = self.tgValidMargin(sbv.tg_bottom, sbv: sbv, calcPos: sbv.tg_bottom.realMarginInSize(selfSize.height - fixedHeight), selfLayoutSize: selfSize)
         
         var retRect = rect
         if vert == TGGravity.vert.fill
         {
             retRect.origin.y = self.tg_padding.top + topMargin;
-            retRect.size.height = self.validMeasure(sbv.tg_height, sbv: sbv, calcSize:selfSize.height - fixedHeight - topMargin - bottomMargin , sbvSize: rect.size, selfLayoutSize: selfSize)
+            retRect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize:selfSize.height - fixedHeight - topMargin - bottomMargin , sbvSize: rect.size, selfLayoutSize: selfSize)
         }
         else if vert == TGGravity.vert.center
         {
@@ -1835,19 +1936,19 @@ extension TGBaseLayout
     
     
     
-    internal func horzGravity(_ horz:TGGravity, selfSize:CGSize, sbv:UIView, rect:CGRect) ->CGRect
+    internal func tgCalcHorzGravity(_ horz:TGGravity, selfSize:CGSize, sbv:UIView, rect:CGRect) ->CGRect
     {
         let fixedWidth = self.tg_padding.left + self.tg_padding.right;
-        let leftMargin =  self.validMargin(sbv.tg_left, sbv: sbv, calcPos: sbv.tg_left.realMarginInSize(selfSize.width - fixedWidth), selfLayoutSize: selfSize)
-        let centerMargin = self.validMargin(sbv.tg_centerX, sbv: sbv, calcPos: sbv.tg_centerX.realMarginInSize(selfSize.width - fixedWidth), selfLayoutSize: selfSize)
-        let rightMargin = self.validMargin(sbv.tg_right, sbv: sbv, calcPos: sbv.tg_right.realMarginInSize(selfSize.width - fixedWidth), selfLayoutSize: selfSize)
+        let leftMargin =  self.tgValidMargin(sbv.tg_left, sbv: sbv, calcPos: sbv.tg_left.realMarginInSize(selfSize.width - fixedWidth), selfLayoutSize: selfSize)
+        let centerMargin = self.tgValidMargin(sbv.tg_centerX, sbv: sbv, calcPos: sbv.tg_centerX.realMarginInSize(selfSize.width - fixedWidth), selfLayoutSize: selfSize)
+        let rightMargin = self.tgValidMargin(sbv.tg_right, sbv: sbv, calcPos: sbv.tg_right.realMarginInSize(selfSize.width - fixedWidth), selfLayoutSize: selfSize)
         
         var retRect = rect
         if horz == TGGravity.horz.fill
         {
             
             retRect.origin.x = self.tg_padding.left + leftMargin;
-            retRect.size.width =  self.validMeasure(sbv.tg_width, sbv: sbv, calcSize:selfSize.width - fixedWidth - leftMargin - rightMargin , sbvSize: rect.size, selfLayoutSize: selfSize)
+            retRect.size.width =  self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize:selfSize.width - fixedWidth - leftMargin - rightMargin , sbvSize: rect.size, selfLayoutSize: selfSize)
         }
         else if horz == TGGravity.horz.center
         {
@@ -1877,37 +1978,25 @@ extension TGBaseLayout
     }
     
     
-    
-    internal func setWrapContentWidthNoLayout(_ wrapContentWidth:Bool)
-    {
-        self.tg_width._dimeVal = nil
-    }
-    
-    internal func setWrapContentHeightNoLayout(_ wrapContentHeight:Bool)
-    {
-        self.tg_height._dimeVal = nil
-        
-    }
-    
-    internal func isNoLayoutSubview(_ sbv:UIView) ->Bool
+    internal func tgIsNoLayoutSubview(_ sbv:UIView) ->Bool
     {
         return ((sbv.isHidden || sbv.tgFrame.sizeClass.isHidden) && !self.tg_layoutHiddenSubviews) || sbv.tg_useFrame;
     }
     
     
-    internal func getLayoutSubviews() ->[UIView]
+    internal func tgGetLayoutSubviews() ->[UIView]
     {
-        return self.getLayoutSubviewsFrom(sbsFrom: self.subviews)
+        return self.tgGetLayoutSubviewsFrom(sbsFrom: self.subviews)
     }
     
     
-    internal func  getLayoutSubviewsFrom(sbsFrom:[UIView])->[UIView]
+    internal func  tgGetLayoutSubviewsFrom(sbsFrom:[UIView])->[UIView]
     {
         var sbs:[UIView] = [UIView]()
         let isReverseLayout = self.tg_reverseLayout;
         for sbv in sbsFrom
         {
-            if self.isNoLayoutSubview(sbv)
+            if self.tgIsNoLayoutSubview(sbv)
             {
                 continue
             }
@@ -1931,7 +2020,7 @@ extension TGBaseLayout
     
     
     
-    internal func calcSizeOfWrapContentSubview(_ sbv:UIView)
+    internal func tgCalcSizeFromSizeWrapSubview(_ sbv:UIView)
     {
         //只有非布局视图才这样处理。
         //如果宽度wrap并且高度wrap的话则直接调用sizeThatFits方法。

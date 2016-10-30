@@ -32,34 +32,35 @@ class RLTest4ViewController: UIViewController {
         
         //添加色块。
         let v1 = UILabel()
-        v1.tg_width.equal(.fill)
+        v1.tg_width.equal(.fill)  //填充父视图的剩余宽度。
         v1.tg_height.equal(80)
         v1.text = NSLocalizedString("Scroll the view please", comment:"")
-        v1.backgroundColor = UIColor.red
+        v1.backgroundColor = .red
         rootLayout.addSubview(v1)
         
         
         let v2 = UIView()
-        v2.tg_width.equal(.fill)
+        v2.tg_width.equal(100%)  //占用父视图宽度的100%
         v2.tg_height.equal(200);
-        v2.backgroundColor = UIColor.blue
+        v2.backgroundColor = .blue
         rootLayout.addSubview(v2)
         
         
         let v3 = UIView()
-        v3.tg_width.equal(.fill)
+        v3.tg_left.equal(0)
+        v3.tg_right.equal(0)    //左右边距为0表示宽度和父视图相等。
         v3.tg_height.equal(800)
         v3.tg_top.equal(v2.tg_bottom)
-        v3.backgroundColor = UIColor.green
+        v3.backgroundColor = .green
         rootLayout.addSubview(v3)
         
         
         //这里最后一个加入的子视图作为滚动时的停靠视图。。
         let v4 = UILabel()
-        v4.tg_width.equal(.fill)
+        v4.tg_width.equal(rootLayout.tg_width)   //和父视图一样宽。
         v4.tg_height.equal(80)
         v4.tg_top.equal(v1.tg_bottom)
-        v4.backgroundColor = UIColor.orange
+        v4.backgroundColor = .orange
         v4.numberOfLines = 0;
         v4.text = NSLocalizedString("This view will Dock to top when scroll", comment:"")
         rootLayout.addSubview(v4)

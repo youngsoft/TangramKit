@@ -312,7 +312,7 @@ extension FOLTest2ViewController
         
         //向上浮动，高度占用剩余的高度，宽度和父布局保持一致。
         let imageView = UIImageView(image:UIImage(named:dataModel.image))
-        imageView.tg_height.equal(100%)
+        imageView.tg_height.equal(.fill)
         imageView.tg_width.equal(itemLayout.tg_width)
         itemLayout.addSubview(imageView)
         
@@ -374,7 +374,7 @@ extension FOLTest2ViewController
         titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
         titleLabel.tg_left.equal(5)
         titleLabel.tg_top.equal(5)
-        titleLabel.tg_width.equal(100%)
+        titleLabel.tg_width.equal(.fill)
         titleLabel.sizeToFit()
         itemLayout.addSubview(titleLabel)
         
@@ -386,7 +386,7 @@ extension FOLTest2ViewController
         subTitleLabel.numberOfLines = 0;
         subTitleLabel.tg_left.equal(5)
         subTitleLabel.tg_clearFloat = true;
-        subTitleLabel.tg_width.equal(100%)
+        subTitleLabel.tg_width.equal(.fill)
         subTitleLabel.tg_height.equal(.wrap)
         subTitleLabel.sizeToFit()
         itemLayout.addSubview(subTitleLabel)

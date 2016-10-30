@@ -47,10 +47,15 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         rootLayout.backgroundColor = .gray
         rootLayout.tg_width.equal(.fill)
         rootLayout.tg_height.equal(.fill)
-        rootLayout.tg_height.lBound(568 - 64)  //这个设置可以用运算符来设置： rootLayout.tg_height >= 504
-        //设置布局视图的高度等于父视图的高度，并且最低高度不能低于568-64.这两个数字的意思是iPhone5的高度减去导航条的高度部分。这句话的意思也就是说明最低不能低于iPhone5的高度，因此在iPhone4上就会出现滚动的效果！！！通过lBound,uBound方法的应用可以很容易实现各种屏幕的完美适配！！。
+        rootLayout.tg_height.min(568 - 64)
+        //这个设置可以用运算符来设置： 
+        //rootLayout.tg_height >= 504
+        
+        //设置布局视图的高度等于父视图的高度，并且最低高度不能低于568-64.这两个数字的意思是iPhone5的高度减去导航条的高度部分。这句话的意思也就是说明最低不能低于iPhone5的高度，因此在iPhone4上就会出现滚动的效果！！！通过min,max方法的应用可以很容易实现各种屏幕的完美适配！！。
         //请您分别测试在iPhone4设备和非iPhone4设备上的情况，看看这个神奇的效果。你不再需要写if条件来做适配处理了。
         scrollView.addSubview(rootLayout)
+        
+        //可以给布局设置触摸事件。
         rootLayout.tg_setTarget(self, action: #selector(handleHideKeyboard), for:.touchUpInside)
         
         
@@ -79,11 +84,11 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         nameField.borderStyle = .roundedRect
         nameField.placeholder = NSLocalizedString("input user name here", comment:"")
         nameField.textAlignment = .center
-        nameField.backgroundColor = UIColor.white
+        nameField.backgroundColor = .white
         nameField.tg_left.equal(10%)
         nameField.tg_right.equal(10%)
-        nameField.tg_top.equal(10%) //高度为40，左右间距为布局的10%, 顶部间距为剩余空间的10%
-        nameField.tg_height.equal(40)
+        nameField.tg_top.equal(10%)
+        nameField.tg_height.equal(40) //高度为40，左右间距为布局的10%, 顶部间距为剩余空间的10%
         rootLayout.addSubview(nameField)
         
         
@@ -98,8 +103,10 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         userDescLabel.sizeToFit()
         userDescLabel.tg_top.equal(10)
         userDescLabel.tg_left.equal(5%)
-        userDescLabel.tg_left.lBound(17)
-        userDescLabel.tg_left.uBound(19)  //最小17最大19
+        userDescLabel.tg_left.min(17)
+        userDescLabel.tg_left.max(19)  //最小17最大19
+       // userDescLabel.tg_left >= 17
+       // userDescLabel.tg_left <= 19
         rootLayout.addSubview(userDescLabel)
         
         
@@ -112,13 +119,13 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         textView.delegate = self
         
         //左右间距为布局的10%，距离底部间距为65%,浮动高度，但高度最高为300，最低为30
-        //高度为.wrap和lBound,uBound的结合能做到一些完美的自动伸缩功能。
+        //高度为.wrap和min,max的结合能做到一些完美的自动伸缩功能。
         textView.tg_left.equal(5%)
         textView.tg_right.equal(5%)
         textView.tg_bottom.equal(65%)
         textView.tg_height.equal(.wrap)
-        textView.tg_height.uBound(300)
-        textView.tg_height.lBound(60)  //虽然高度为.wrap表示高度为动态高度，但是仍然不能超过300的高度以及不能小于60的高度。
+        textView.tg_height.max(300)
+        textView.tg_height.min(60)  //虽然高度为.wrap表示高度为动态高度，但是仍然不能超过300的高度以及不能小于60的高度。
         rootLayout.addSubview(textView)
         
         

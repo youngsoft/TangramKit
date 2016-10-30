@@ -116,9 +116,9 @@ extension AllTest2TableViewCell
         nameLabel.font = UIFont.systemFont(ofSize: 16)
         //_nameLabel的宽度根据内容自适应，但是最大的宽度是父视图的宽度的1倍，再减去5+14+5+14。这里的5是视图之间的间距，14是后面两个图片的宽度。
         //这个设置的意思是_nameLabel的宽可以动态增长，但是不能超过父视图的宽度，并且要保证后面的2个图片视图显示出来。
-        //您可以通过uBound方法设置尺寸的最大上边界。具体参见对uBound的方法的详细介绍。
+        //您可以通过max方法设置尺寸的最大上边界。具体参见对max的方法的详细介绍。
         nameLabel.tg_width.equal(.wrap)
-        nameLabel.tg_width.uBound(userNameLayout.tg_width, increment:-(5 + 14 + 5 + 14))
+        nameLabel.tg_width.max(userNameLayout.tg_width, increment:-(5 + 14 + 5 + 14))
         userNameLayout.addSubview(nameLabel)
         self.nameLabel = nameLabel
         
@@ -146,8 +146,8 @@ extension AllTest2TableViewCell
         priceLabel.font = UIFont.systemFont(ofSize: 14)
         priceLabel.tg_width.equal(.wrap)
         //宽度最宽为100,注意到这里使用了TGDimeAdapter.width表示会根据屏幕的宽度来对100进行缩放。这个100是按iPhone6为标准设置的。具体请参考TGDimeAdapter类。
-        priceLabel.tg_width.uBound(TGDimeAdapter.width(100))
-        priceLabel.tg_width.lBound(TGDimeAdapter.width(50))
+        priceLabel.tg_width.max(TGDimeAdapter.width(100))
+        priceLabel.tg_width.min(TGDimeAdapter.width(50))
         priceLabel.tg_left.equal(10)
         rootLayout.addSubview(priceLabel)
         self.priceLabel = priceLabel
@@ -185,8 +185,8 @@ extension AllTest2TableViewCell
         priceLabel.tg_centerY.equal(rootLayout.tg_centerY)
         //priceLabel的宽度根据内容自适应，但是最大的宽度是100，最小的宽度是50。注意到这里使用了类TGDimeAdapter表示会根据屏幕的宽度来对100进行缩放。这个100是在DEMO中是按iPhone6为标准设置的。具体请参考TGDimeAdapter类的介绍。
         priceLabel.tg_width.equal(.wrap)
-        priceLabel.tg_width.uBound(TGDimeAdapter.width(100))
-        priceLabel.tg_width.lBound(TGDimeAdapter.width(50))
+        priceLabel.tg_width.max(TGDimeAdapter.width(100))
+        priceLabel.tg_width.min(TGDimeAdapter.width(50))
         rootLayout.addSubview(priceLabel)
         self.priceLabel = priceLabel
         
@@ -194,7 +194,7 @@ extension AllTest2TableViewCell
         nameLabel.font = UIFont.systemFont(ofSize: 16)
         //相对布局在后续的版本中会增加对边界的限制方法来实现更加灵活的尺寸限制，这里暂时先设置为140经过测试效果最好。
         nameLabel.tg_width.equal(.wrap)
-        nameLabel.tg_width.uBound(rootLayout.tg_width, increment:TGDimeAdapter.width(-140)) //视图的最大宽度和父视图宽度-140。
+        nameLabel.tg_width.max(rootLayout.tg_width, increment:TGDimeAdapter.width(-140)) //视图的最大宽度和父视图宽度-140。
         nameLabel.tg_left.equal(headImageView.tg_right)
         rootLayout.addSubview(nameLabel)
         self.nameLabel = nameLabel
@@ -262,8 +262,8 @@ extension AllTest2TableViewCell
         //priceLabel的宽度根据内容自适应，但是最大的宽度是100，最小的宽度是50。注意到这里使用了类TGDimeAdapter表示会根据屏幕的宽度来对100进行缩放。这个100是在DEMO中是按iPhone6为标准设置的。具体请参考TGDimeAdapter类的介绍。
         priceLabel.tg_width.equal(.wrap)
         priceLabel.tg_height.equal(.fill)
-        priceLabel.tg_width.uBound(TGDimeAdapter.width(100))
-        priceLabel.tg_width.lBound(TGDimeAdapter.width(50))
+        priceLabel.tg_width.max(TGDimeAdapter.width(100))
+        priceLabel.tg_width.min(TGDimeAdapter.width(50))
         rootLayout.addSubview(priceLabel)
         self.priceLabel = priceLabel
         
@@ -278,9 +278,9 @@ extension AllTest2TableViewCell
         nameLabel.font = UIFont.systemFont(ofSize: 16)
         //_nameLabel的宽度根据内容自适应，但是最大的宽度是父视图的宽度的1倍，再减去5+14+5+14。这里的5是视图之间的间距，14是后面两个图片的宽度。
         //这个设置的意思是_nameLabel的宽可以动态增长，但是不能超过父视图的宽度，并且要保证后面的2个图片视图显示出来。
-        //您可以通过uBound方法设置尺寸的最大上边界。具体参见对uBound的方法的详细介绍。
+        //您可以通过max方法设置尺寸的最大上边界。具体参见对max的方法的详细介绍。
         nameLabel.tg_width.equal(.wrap)
-        nameLabel.tg_width.uBound(userInfoLayout.tg_width, increment:-(5 + 14 + 5 + 14))
+        nameLabel.tg_width.max(userInfoLayout.tg_width, increment:-(5 + 14 + 5 + 14))
         userInfoLayout.addSubview(nameLabel)
         self.nameLabel = nameLabel
         

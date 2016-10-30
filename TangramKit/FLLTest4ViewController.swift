@@ -79,7 +79,7 @@ extension FLLTest4ViewController {
         
         let userNameTextField = UITextField()
         userNameTextField.borderStyle = .roundedRect
-        userNameTextField.tg_width.equal(100%) //这里表示宽度用来占用流式布局每行的剩余宽度，这样就不需要明确的设置宽度了。
+        userNameTextField.tg_width.equal(.fill) //这里表示宽度用来占用流式布局每行的剩余宽度，这样就不需要明确的设置宽度了。
         userNameTextField.tg_height.equal(44)
         userNameTextField.tg_left.equal(20)  //文本输入框距的左边间距为20
         flowLayout.addSubview(userNameTextField)
@@ -87,14 +87,14 @@ extension FLLTest4ViewController {
         //the third line: password
         let passwordLabel = UILabel()
         passwordLabel.text = "Password:"
-        passwordLabel.tg_width.lBound(userNameLabel.tg_width) //注意这里，因为"password"的长度要小于"User name",所以我们这里设定passwordLabel的最小宽度要和userNameLabel相等。这样目的是为了让后面的输入框具有左对齐的效果。
+        passwordLabel.tg_width.min(userNameLabel.tg_width) //注意这里，因为"password"的长度要小于"User name",所以我们这里设定passwordLabel的最小宽度要和userNameLabel相等。这样目的是为了让后面的输入框具有左对齐的效果。
         passwordLabel.tg_top.equal(20)
         passwordLabel.sizeToFit()
         flowLayout.addSubview(passwordLabel)
         
         let passwordTextField = UITextField()
         passwordTextField.borderStyle = .roundedRect
-        passwordTextField.tg_width.equal(100%)  //表示宽度用来占用流式布局每行的剩余宽度，这样就不需要明确的设置宽度了。
+        passwordTextField.tg_width.equal(.fill)  //表示宽度用来占用流式布局每行的剩余宽度，这样就不需要明确的设置宽度了。
         passwordTextField.tg_height.equal(44)
         passwordTextField.tg_top.equal(20)  //距离上行的顶部间距为20,注意这里要和passwordLabel设置的顶部间距一致，否则可能导致无法居中对齐.
         passwordTextField.tg_left.equal(20)
@@ -102,7 +102,7 @@ extension FLLTest4ViewController {
         
         //the fourth line: forgot password.
         let placeHolderView2 = UIView()
-        placeHolderView2.tg_width.equal(100%) //因为流式布局这里面每行两列，所以这里建立一个宽高为0的占位视图。我们可以在流式布局中通过使用占位视图来充满行的数量。
+        placeHolderView2.tg_width.equal(.fill) //因为流式布局这里面每行两列，所以这里建立一个宽高为0的占位视图。我们可以在流式布局中通过使用占位视图来充满行的数量。
         flowLayout.addSubview(placeHolderView2)
         
         let forgetPasswordButton = UIButton.init(type: .system)
@@ -113,7 +113,7 @@ extension FLLTest4ViewController {
         //the fifth line: remember me
         let rememberLabel = UILabel()
         rememberLabel.text = "Remember me:"
-        rememberLabel.tg_width.equal(100%)
+        rememberLabel.tg_width.equal(.fill)
         rememberLabel.sizeToFit()
         flowLayout.addSubview(rememberLabel)
         
@@ -123,10 +123,16 @@ extension FLLTest4ViewController {
         //the sixth line: submit button
         let submitButton = UIButton.init(type: .system)
         submitButton.setTitle("Submit", for: .normal)
-        submitButton.backgroundColor = UIColor.red
+        submitButton.backgroundColor = .red
         submitButton.tg_top.equal(20)
         submitButton.tg_height.equal(44)
         submitButton.tg_width.equal(flowLayout.tg_width, increment: -40)  //宽度等于父视图的宽度再减去40。
+        //你也可以设置如下：
+        //submitButton.tg_width.equal(100%, increment: -40)
+        //或者
+        //submitButton.tg_width.equal(.fill, increment: -40)
+
+        
         flowLayout.addSubview(submitButton)
         
         //第六行因为最后只有一个按钮，所以这里不需要建立占位视图。
@@ -155,7 +161,7 @@ extension FLLTest4ViewController {
         
         let lineView = UIView()
         lineView.tg_width.equal(2)
-        lineView.tg_height.equal(100%)  //高度占用剩余空间
+        lineView.tg_height.equal(.fill)  //高度占用剩余空间
         lineView.backgroundColor = UIColor.red
         flowLayout.addSubview(lineView)
         
@@ -168,10 +174,10 @@ extension FLLTest4ViewController {
             let imageView = UIImageView(image: UIImage(named: images[Int(arc4random_uniform(UInt32(images.count)))]))
             imageView.layer.cornerRadius = 5
             imageView.layer.masksToBounds = true
-            imageView.tg_height.equal(100%)  //每个子视图的高度比重都是100，也就是意味着均分处理。
             imageView.tg_left.equal(10)
             imageView.tg_right.equal(10)
             imageView.tg_top.equal(10)
+            imageView.tg_height.equal(.average)  //每个子视图的高度都一样，也就是意味着均分处理。
             imageView.tg_width.equal(imageView.tg_height) //宽度等于高度，对于水平流式布局来说，子视图的宽度可以等于高度，反之不可以；而对于垂直流式布局来说则高度可以等于宽度，反之则不可以。
             if i % flowLayout.tg_arrangedCount == 0 {
                 imageView.tg_top.equal(60)  //每列的第一个增加缩进量。。

@@ -120,7 +120,7 @@ public enum TGOrientation {
  *比如tg_width.equal(20%) 表示子视图的宽度是父视图的20%的比例。
  *请使用  数字% 方法来使用TGWeight类型的值。
  */
-public struct TGWeight
+public struct TGWeight:Any
 {
     //常用的比重值。
     public static let zeroWeight = TGWeight(0)        //0比重，表示不占用任何位置和尺寸。

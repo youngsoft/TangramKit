@@ -8,6 +8,20 @@
 
 import UIKit
 
+
+//定义行尺寸和列尺寸可以设置的值，对于行列来说可以设置一个具体的值，也可以设置TGLayoutSize中的wrap, fill, average这三个值中的一个。
+public protocol TGTableRowColSizeType:TGLayoutSizeType
+{
+    
+}
+
+extension CGFloat:TGTableRowColSizeType{}
+extension Int:TGTableRowColSizeType{}
+extension Double:TGTableRowColSizeType{}
+extension Float:TGTableRowColSizeType{}
+extension TGLayoutSize:TGTableRowColSizeType{}
+
+
 /**
  *表格布局是一种里面的子视图可以像表格一样多行多列排列的布局视图。子视图添加到表格布局视图前必须先要建立并添加行视图，然后再将子视图添加到行视图里面。
  *如果行视图在表格布局里面是从上到下排列的则表格布局为垂直表格布局，垂直表格布局里面的子视图在行视图里面是从左到右排列的；
@@ -15,18 +29,13 @@ import UIKit
  */
 open class TGTableLayout: TGLinearLayout {
     
-    //定义特殊的尺寸
-    public static let average:CGFloat = 0  //表示尺寸会均分表格的尺寸
-    public static let wrap:CGFloat = -1    //表示尺寸由子视图决定
-    public static let fill:CGFloat = -2    //这个只用于列，表示行的尺寸和表格保持一致
-    
     /**
      *  添加一个新行。对于垂直表格来说每一行是从上往下排列的，而水平表格则每一行是从左往右排列的。
      *
-     *  @param rowSize 为wrap表示由子视图决定本行尺寸，子视图需要自己设置尺寸；为average表示均分尺寸，子视图不需要设置尺寸；大于0表示固定尺寸，子视图不需要设置尺寸;不能设置为fill。
-     *  @param colSize  为fill表示子视图需要自己指定尺寸，整体行尺寸和父视图一样的尺寸；为wrap表示由子视图需要自己设置尺寸，行尺寸包裹所有子视图；为average表示均分尺寸，这时候子视图不必设置尺寸；大于0表示子视图固定尺寸，这时候子视图可以不必设置尺寸。
+     *  @param rowSize 为TGLayoutSize.wrap表示由子视图决定本行尺寸，子视图需要自己设置尺寸；为TGLayoutSize.average表示均分尺寸，子视图不需要设置尺寸；为数值时表示固定尺寸，子视图不需要设置尺寸;不能设置为TGLayoutSize.fill。
+     *  @param colSize  为TGLayoutSize.fill表示子视图需要自己指定尺寸，整体行尺寸和父视图一样的尺寸；为TGLayoutSize.wrap表示由子视图需要自己设置尺寸，行尺寸包裹所有子视图；为TGLayoutSize.average表示均分尺寸，这时候子视图不必设置尺寸；为数值表示子视图固定尺寸，这时候子视图可以不必设置尺寸。
      */
-    public func tg_addRow(size rowSize:CGFloat, colSize:CGFloat) ->TGLinearLayout
+    public func tg_addRow(size rowSize:TGTableRowColSizeType, colSize:TGTableRowColSizeType) ->TGLinearLayout
     {
         return tg_insertRow(size: rowSize, colSize:colSize, rowIndex: self.tg_rowCount)
     }
@@ -34,7 +43,7 @@ open class TGTableLayout: TGLinearLayout {
     /**
      * 在指定的位置插入一个新行
      */
-    public func tg_insertRow(size rowSize: CGFloat, colSize : CGFloat, rowIndex : Int) ->TGLinearLayout
+    public func tg_insertRow(size rowSize: TGTableRowColSizeType, colSize : TGTableRowColSizeType, rowIndex : Int) ->TGLinearLayout
     {
         var ori:TGOrientation = .vert;
         if (self.tg_orientation == .vert)
@@ -111,26 +120,29 @@ open class TGTableLayout: TGLinearLayout {
         let rowView:TGTableRowLayout = self.tg_rowView(at:indexPath.row) as! TGTableRowLayout
         
         //colSize为0表示均分尺寸，为-1表示由子视图决定尺寸，大于0表示固定尺寸。
-        if (rowView.colSize == TGTableLayout.average)
+        if let v = rowView.colSize as? TGLayoutSize
         {
-            if (rowView.tg_orientation == .horz)
+            if v === TGLayoutSize.average
             {
-                colView.tg_width.equal(100%)
-            }
-            else
-            {
-                colView.tg_height.equal(100%)
+                if (rowView.tg_orientation == .horz)
+                {
+                    colView.tg_width.equal(v)
+                }
+                else
+                {
+                    colView.tg_height.equal(v)
+                }
             }
         }
-        else if (rowView.colSize > 0)
+        else
         {
             if (rowView.tg_orientation == .horz)
             {
-                colView.tg_width.equal(rowView.colSize)
+                colView.tg_width.tgEqual(val:rowView.colSize)
             }
             else
             {
-                colView.tg_height.equal(rowView.colSize)
+                colView.tg_height.tgEqual(val:rowView.colSize)
             }
         }
         
@@ -317,54 +329,47 @@ extension IndexPath {
 }
 
 private class TGTableRowLayout: TGLinearLayout,TGTableLayoutViewSizeClass {
-    var rowSize: CGFloat
-    var colSize: CGFloat
+    var rowSize: TGTableRowColSizeType
+    var colSize: TGTableRowColSizeType
     
-    internal init(orientation:TGOrientation,rowSize:CGFloat, colSize:CGFloat)
+    internal init(orientation:TGOrientation,rowSize:TGTableRowColSizeType, colSize:TGTableRowColSizeType)
     {
         self.rowSize = rowSize
         self.colSize = colSize
         super.init(orientation)
         
-        if (rowSize == TGTableLayout.average)
+        if let v = rowSize as? TGLayoutSize
         {
-            if (orientation == .horz)
+            if v === TGLayoutSize.average || v === TGLayoutSize.wrap
             {
-                self.tg_height.equal(100%)
+                if (orientation == .horz)
+                {
+                    self.tg_height.equal(v)
+                }
+                else
+                {
+                    self.tg_width.equal(v)
+                }
             }
             else
             {
-                self.tg_width.equal(100%)
+                assert(false, "Constraint exception !! rowSize can not set to fill or other TGLayoutSize")
             }
-        }
-        else if (rowSize > 0)
-        {
-            if (orientation == .horz)
-            {
-                self.tg_height.equal(rowSize)
-            }
-            else
-            {
-                self.tg_width.equal(rowSize)
-            }
-        }
-        else if (rowSize == TGTableLayout.wrap)
-        {
-            if (orientation == .horz)
-            {
-                self.tg_height.equal(.wrap)
-            }
-            else
-            {
-                self.tg_width.equal(.wrap)
-            }
+            
         }
         else
         {
-            assert(false, "Constraint exception !! rowSize can not set to fill");
+            if (orientation == .horz)
+            {
+                self.tg_height.tgEqual(val:rowSize)
+            }
+            else
+            {
+                self.tg_width.tgEqual(val:rowSize)
+            }
         }
         
-        if (colSize == TGTableLayout.average)
+        if let v = colSize as? TGLayoutSize, v === TGLayoutSize.average || v === TGLayoutSize.fill
         {
             if (orientation == .horz)
             {
@@ -379,22 +384,6 @@ private class TGTableRowLayout: TGLinearLayout,TGTableLayoutViewSizeClass {
                 self.tg_bottom.equal(0);
             }
             
-        }
-        else if (colSize == TGTableLayout.fill)
-        {
-            if (orientation == .horz)
-            {
-                self.tg_width.equal(nil)
-                self.tg_left.equal(0);
-                self.tg_right.equal(0);
-            }
-            else
-            {
-                self.tg_height.equal(nil)
-                self.tg_top.equal(0);
-                self.tg_bottom.equal(0);
-                
-            }
         }
         else
         {

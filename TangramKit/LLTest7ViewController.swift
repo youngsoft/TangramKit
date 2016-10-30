@@ -62,7 +62,7 @@ class LLTest7ViewController: UIViewController {
         let testLayout = TGLinearLayout(.vert)
         testLayout.tg_gravity = TGGravity.horz.fill  //所有子视图水平宽度充满布局，这样就不需要分别设置每个子视图的宽度了。
         testLayout.backgroundColor = .gray
-        testLayout.tg_height.equal(100%)
+        testLayout.tg_height.equal(.fill)   //高度填充父布局的所有剩余空间。
         testLayout.tg_leftPadding = 10
         testLayout.tg_rightPadding = 10
         testLayout.tg_top.equal(5)
