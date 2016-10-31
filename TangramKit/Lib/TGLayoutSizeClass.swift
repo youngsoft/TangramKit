@@ -258,7 +258,7 @@ internal class TGViewSizeClassImpl:NSObject,NSCopying,TGViewSizeClass {
 
 internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeClass
 {
-    var tg_padding:UIEdgeInsets = .zero
+    var tg_padding:UIEdgeInsets = UIEdgeInsets.zero
     var tg_topPadding:CGFloat
         {
         get{
