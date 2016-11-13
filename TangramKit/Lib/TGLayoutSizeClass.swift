@@ -156,7 +156,7 @@ public protocol TGSequentLayoutViewSizeClass:TGLayoutViewSizeClass
  */
 public protocol TGLinearLayoutViewSizeClass:TGSequentLayoutViewSizeClass
 {
-    
+    var tg_shrinkType:TGSubviewsShrinkType{get set}
 }
 
 /**
@@ -359,6 +359,17 @@ internal class TGSequentLayoutViewSizeClassImpl:TGLayoutViewSizeClassImpl,TGSequ
 
 internal class TGLinearLayoutViewSizeClassImpl:TGSequentLayoutViewSizeClassImpl,TGLinearLayoutViewSizeClass
 {
+    var tg_shrinkType: TGSubviewsShrinkType = .average
+    
+    override func copy(with zone: NSZone?) -> Any {
+        
+        let tsc = super.copy(with: zone) as! TGLinearLayoutViewSizeClassImpl
+        
+        tsc.tg_shrinkType = self.tg_shrinkType
+        
+        return tsc
+    }
+
 }
 
 

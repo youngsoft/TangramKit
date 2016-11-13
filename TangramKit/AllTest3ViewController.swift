@@ -201,8 +201,9 @@ extension AllTest3ViewController
         let centerButton = UIButton()
         centerButton.setTitle(NSLocalizedString("touch hide me", comment:""), for: .normal)
         centerButton.addTarget(self, action: #selector(handleHideSelf), for: .touchUpInside)
-        centerButton.backgroundColor = UIColor.red
+        centerButton.backgroundColor = .red
         centerButton.sizeToFit()
+        centerButton.tg_width.equal(.average)
         testLayout.addSubview(centerButton)
         self.hiddenTestButton = centerButton
         
@@ -211,6 +212,7 @@ extension AllTest3ViewController
         rightButton.addTarget(self, action: #selector(handleShowBrother), for: .touchUpInside)
         rightButton.backgroundColor = UIColor.blue
         rightButton.sizeToFit()
+        rightButton.tg_width.equal(.average)
         testLayout.addSubview(rightButton)
     }
     
@@ -329,13 +331,12 @@ extension AllTest3ViewController
         label.font = UIFont.systemFont(ofSize: 14)
         label.adjustsFontSizeToFitWidth = true
         label.sizeToFit()
-        label.tg_right.equal(50%)
-        label.tg_right.min(0) //设置右间距为相对距离，并且最小为0
+        label.tg_width.equal(.fill)
         switchLayout.addSubview(label)
         
         let switchCtrl = UISwitch()
         switchCtrl.addTarget(self, action: action, for: .valueChanged)
-        switchCtrl.tg_left.equal(50%)
+        switchCtrl.tg_right.min(5)
         switchLayout.addSubview(switchCtrl)
         return switchLayout
     }

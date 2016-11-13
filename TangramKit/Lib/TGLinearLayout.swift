@@ -69,6 +69,23 @@ open class TGLinearLayout: TGBaseLayout,TGLinearLayoutViewSizeClass {
         }
     }
     
+    
+    /**
+     *设置当子视图的尺寸或者位置设置为TGWeight类型时，并且有固定尺寸和间距的子视图的总和大于布局视图的高度时，如何压缩那些固定尺寸和间距的视图的方式。默认的值是：.average:表明会平均的缩小每个固定的视图的尺寸。在设置时可以进行压缩类型和压缩方式的或运算方法。具体的方法见TGSubviewsShrinkType中的各种值的定义。
+     */
+    public var tg_shrinkType: TGSubviewsShrinkType
+    {
+        get
+        {
+            return (self.tgCurrentSizeClass as! TGLinearLayoutViewSizeClass).tg_shrinkType
+        }
+        set
+        {
+            (self.tgCurrentSizeClass as! TGLinearLayoutViewSizeClass).tg_shrinkType = newValue
+            setNeedsLayout()
+        }
+    }
+    
     /**
      *均分子视图和间距,布局会根据里面的子视图的数量来平均分配子视图的高度或者宽度以及间距。
      *这个函数只对已经加入布局的视图有效，函数调用后新加入的子视图无效。
@@ -670,7 +687,8 @@ extension TGLinearLayout {
         selfSize.width = self.tgAdjustSelfWidth(sbs, selfSize:selfSize)   //调整自身的宽度
         let floatingWidth = selfSize.width - self.tg_leftPadding - self.tg_rightPadding
         
-        var fixedSbs = [UIView]()
+        var fixedSizeSbs = [UIView]()
+        var fixedSizeHeight:CGFloat = 0
         for sbv in sbs
         {
             
@@ -765,7 +783,7 @@ extension TGLinearLayout {
             if sbv.tg_top.posWeightVal != nil
             {
                 totalWeight += sbv.tg_top.posWeightVal
-                fixedHeight += sbv.tg_top.offsetVal;
+                fixedHeight += Swift.max(sbv.tg_top.offsetVal, sbv.tg_top.minVal.margin)
             }
             else
             {
@@ -777,7 +795,7 @@ extension TGLinearLayout {
             if sbv.tg_bottom.posWeightVal != nil
             {
                 totalWeight += sbv.tg_bottom.posWeightVal
-                fixedHeight += sbv.tg_bottom.offsetVal;
+                fixedHeight += Swift.max(sbv.tg_bottom.offsetVal, sbv.tg_bottom.minVal.margin)
             }
             else
             {
@@ -795,8 +813,14 @@ extension TGLinearLayout {
             }
             else
             {
-                fixedHeight += rect.size.height;
-                fixedSbs.append(sbv)
+                fixedHeight += rect.height
+                
+                //如果最小高度不为自身则可以进行缩小。
+                if !sbv.tg_height.minVal.isWrap
+                {
+                   fixedSizeHeight += rect.height
+                   fixedSizeSbs.append(sbv)
+                }
             }
             
             if sbv != sbs.last
@@ -807,16 +831,44 @@ extension TGLinearLayout {
             sbv.tgFrame.frame = rect;
         }
         
+        
+        //在包裹宽度且总体比重不为0时则，则需要还原最小的宽度，这样就不会使得宽度在横竖屏或者多次计算后越来越宽。
+        if self.tg_height.isWrap && totalWeight != .zeroWeight
+        {
+            var tempSelfHeight = self.tg_topPadding + self.tg_bottomPadding
+            if sbs.count > 1
+            {
+              tempSelfHeight += CGFloat(sbs.count - 1) * self.tg_vspace
+            }
+            
+            selfSize.height = self.tgValidMeasure(self.tg_height,sbv:self,calcSize:tempSelfHeight,sbvSize:selfSize,selfLayoutSize:self.superview!.bounds.size)
+            
+        }
+
+        
         //剩余的可浮动的高度，那些weight不为0的从这个高度来进行分发
         floatingHeight = selfSize.height - fixedHeight - self.tg_topPadding - self.tg_bottomPadding;
         if floatingHeight <= 0 || floatingHeight == -0.0
         {
-            if (fixedSbs.count > 0 && totalWeight != .zeroWeight && floatingHeight < 0 && selfSize.height > 0)
+            if self.tg_shrinkType != .none
             {
-                let averageHeight = floatingHeight / CGFloat(fixedSbs.count);
-                for fsbv in fixedSbs
+                if (fixedSizeSbs.count > 0 && totalWeight != .zeroWeight && floatingHeight < 0 && selfSize.height > 0)
                 {
-                    fsbv.tgFrame.height += averageHeight;
+                    if self.tg_shrinkType == .average
+                    {
+                        let averageHeight = floatingHeight / CGFloat(fixedSizeSbs.count);
+                        for fsbv in fixedSizeSbs
+                        {
+                            fsbv.tgFrame.height += averageHeight;
+                        }
+                    }
+                    else
+                    {
+                        for fsbv in fixedSizeSbs
+                        {
+                            fsbv.tgFrame.height += floatingHeight*(fsbv.tgFrame.height / fixedSizeHeight)
+                        }
+                    }
                 }
             }
             
@@ -894,7 +946,7 @@ extension TGLinearLayout {
         pos += self.tg_bottomPadding;
         
         
-        if self.tg_height.isWrap && totalWeight == .zeroWeight
+        if self.tg_height.isWrap
         {
             selfSize.height = pos
         }
@@ -915,14 +967,15 @@ extension TGLinearLayout {
         var selfSize = selfSize
         
         //计算出固定的子视图宽度的总和以及宽度比例总和
-        var fixedSbs = [UIView]()
+        var fixedSizeSbs = [UIView]()
+        var fixedSizeWidth:CGFloat = 0
         for sbv in sbs
         {
             
             if sbv.tg_left.posWeightVal != nil
             {
                 totalWeight += sbv.tg_left.posWeightVal
-                fixedWidth += sbv.tg_left.offsetVal;
+                fixedWidth += Swift.max(sbv.tg_left.offsetVal, sbv.tg_left.minVal.margin)
             }
             else
             {
@@ -932,7 +985,7 @@ extension TGLinearLayout {
             if sbv.tg_right.posWeightVal != nil
             {
                 totalWeight += sbv.tg_right.posWeightVal
-                fixedWidth += sbv.tg_right.offsetVal;
+                fixedWidth += Swift.max(sbv.tg_right.offsetVal, sbv.tg_right.minVal.margin)
             }
             else
             {
@@ -960,8 +1013,17 @@ extension TGLinearLayout {
                     vWidth = sbv.tg_width.measure(selfSize.width - self.tg_leftPadding - self.tg_rightPadding)
                 }
                 
-                fixedWidth += self.tgValidMeasure(sbv.tg_width,sbv:sbv,calcSize:vWidth,sbvSize:sbv.tgFrame.frame.size,selfLayoutSize:selfSize)
-                fixedSbs.append(sbv)
+                vWidth = self.tgValidMeasure(sbv.tg_width,sbv:sbv,calcSize:vWidth,sbvSize:sbv.tgFrame.frame.size,selfLayoutSize:selfSize)
+                
+                sbv.tgFrame.width = vWidth
+                
+                fixedWidth += vWidth
+                
+                if !sbv.tg_width.minVal.isWrap
+                {
+                   fixedSizeWidth += vWidth
+                   fixedSizeSbs.append(sbv)
+                }
             }
             
             if sbv != sbs.last
@@ -970,16 +1032,41 @@ extension TGLinearLayout {
             }
         }
         
+        //在包裹宽度且总体比重不为0时则，则需要还原最小的宽度，这样就不会使得宽度在横竖屏或者多次计算后越来越宽。
+        if (self.tg_width.isWrap && totalWeight != .zeroWeight)
+        {
+            var tempSelfWidth = self.tg_leftPadding + self.tg_rightPadding
+            if sbs.count > 1
+            {
+             tempSelfWidth += CGFloat(sbs.count - 1) * self.tg_hspace
+            }
+            
+            selfSize.width = self.tgValidMeasure(self.tg_width,sbv:self,calcSize:tempSelfWidth,sbvSize:selfSize,selfLayoutSize:self.superview!.bounds.size)
+        }
+        
         //剩余的可浮动的宽度，那些weight不为0的从这个高度来进行分发
         floatingWidth = selfSize.width - fixedWidth - self.tg_leftPadding - self.tg_rightPadding;
         if floatingWidth <= 0 || floatingWidth == -0.0
         {
-            if (fixedSbs.count > 0 && totalWeight != .zeroWeight && floatingWidth < 0 && selfSize.width > 0)
+            if self.tg_shrinkType != .none
             {
-                let averageWidth = floatingWidth / CGFloat(fixedSbs.count)
-                for fsbv in fixedSbs
+                if (fixedSizeSbs.count > 0 && totalWeight != .zeroWeight && floatingWidth < 0 && selfSize.width > 0)
                 {
-                    fsbv.tgFrame.width += averageWidth;
+                    if self.tg_shrinkType == .average
+                    {
+                        let averageWidth = floatingWidth / CGFloat(fixedSizeSbs.count)
+                        for fsbv in fixedSizeSbs
+                        {
+                            fsbv.tgFrame.width += averageWidth;
+                        }
+                    }
+                    else
+                    {
+                        for fsbv in fixedSizeSbs
+                        {
+                            fsbv.tgFrame.width += floatingWidth*(fsbv.tgFrame.width / fixedSizeWidth)
+                        }
+                    }
                 }
             }
             
@@ -996,21 +1083,12 @@ extension TGLinearLayout {
             var rightMargin = sbv.tg_right.posNumVal ?? 0
             var rect:CGRect =  sbv.tgFrame.frame;
             
-            
-            if sbv.tg_width.dimeNumVal != nil
-            {
-                rect.size.width = sbv.tg_width.measure;
-            }
-            
+        
             if sbv.tg_height.dimeNumVal != nil
             {
                 rect.size.height = sbv.tg_height.measure;
             }
             
-            if (sbv.tg_width.isMatchParent && !self.tg_width.isWrap)
-            {
-                rect.size.width = sbv.tg_width.measure(selfSize.width - self.tg_leftPadding - self.tg_rightPadding)
-            }
             
             if (sbv.tg_height.isMatchParent)
             {
@@ -1161,14 +1239,14 @@ extension TGLinearLayout {
             rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             rect = self.tgCalcVertGravity(mg, selfSize:selfSize, sbv:sbv, rect:rect)
             
-            sbv.tgFrame.frame = rect;
+            sbv.tgFrame.frame = rect
         }
         
         pos += self.tg_rightPadding;
         
-        if self.tg_width.isWrap && totalWeight == .zeroWeight
+        if self.tg_width.isWrap
         {
-            selfSize.width = pos;
+            selfSize.width = pos
         }
         
         return selfSize

@@ -369,13 +369,14 @@ extension TGLayoutSize
                 break
             }
         }
-        else if let v = val as? TGLayoutSize
+        else if var v = val as? TGLayoutSize
         {
             if v === self
             {
-                assert(false, "not set to self")
+                v = TGLayoutSize.wrap
             }
-            else if v === TGLayoutSize.wrap
+            
+            if v === TGLayoutSize.wrap
             {
                 _dimeVal = .wrapV
                 

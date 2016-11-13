@@ -327,7 +327,7 @@ extension UIView
     }
     
     /**
-     *视图在布局视图中布局完成后执行的块，执行完动作后会被重置为nil。通过在tg_layoutCompletedDo的实现中我们可以得到这个视图真实的frame值。还可以设置一些属性，主要是用来实现一些动画特效。
+     *视图在布局视图中布局完成后执行的块，执行完动作后会被重置为nil。通过在tg_layoutCompletedDo的实现中我们可以得到这个视图真实的frame值。还可以设置一些属性，主要是用来实现一些动画特效。这里面layout就是父布局视图，而v就是视图本身，用这两个参数返回的目的是为了防止循环引用的问题.
      */
     public func tg_layoutCompletedDo(_ action:((_ layout:TGBaseLayout, _ view:UIView)->Void)?)
     {
@@ -681,6 +681,18 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         _endLayoutAction = action
     }
 
+    /**
+     *设置布局视图在第一次布局完成之后或者有横竖屏切换时进行处理的动作块。这个block不像tg_beginLayoutDo以及tg_endLayoutDo那样只会执行一次,而是会一直存在
+     *因此需要注意代码块里面的循环引用的问题。这个block调用的时机是第一次布局完成或者每次横竖屏切换时布局完成被调用。
+     *这个方法会在tg_endLayoutDo执行后调用。
+     *layout参数就是布局视图本身
+     *isFirst表明当前是否是第一次布局时调用。
+     *isPortrait表明当前是横屏还是竖屏。
+     */
+    public func tg_rotationToDeviceOrientationDo(_ action:((_ layout:TGBaseLayout, _ isFirst:Bool, _ isPortrait:Bool)->Void)?)
+    {
+        _rotationToDeviceOrientationAction = action
+    }
     
     
     //MARK: borderline
@@ -830,6 +842,13 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     
 //MARK: override Method
     
+    deinit {
+        
+        _endLayoutAction = nil
+        _beginLayoutAction = nil
+        _rotationToDeviceOrientationAction = nil
+    }
+    
     override open func layoutSubviews() {
         
         if !self.autoresizesSubviews
@@ -839,6 +858,9 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         
         _beginLayoutAction?()
         _beginLayoutAction = nil
+        
+        
+        var currentScreenOrientation:Int! = nil
         
         if !self.tg_isLayouting
         {
@@ -893,10 +915,12 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             if UIDeviceOrientationIsPortrait(devori)
             {
                 sizeClassScreenType = .portrait
+                currentScreenOrientation = 1
             }
             else if UIDeviceOrientationIsLandscape(devori)
             {
                 sizeClassScreenType = .landscape
+                currentScreenOrientation = 2
             }
             else
             {
@@ -986,6 +1010,27 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         
         _endLayoutAction?()
         _endLayoutAction = nil
+
+        
+        //执行屏幕旋转的处理逻辑。
+        if (_rotationToDeviceOrientationAction != nil && currentScreenOrientation != nil)
+        {
+            if (_lastScreenOrientation == nil)
+            {
+                _lastScreenOrientation = currentScreenOrientation;
+                _rotationToDeviceOrientationAction!(self,true, currentScreenOrientation == 1);
+            }
+            else
+            {
+                if (_lastScreenOrientation != currentScreenOrientation)
+                {
+                    _lastScreenOrientation = currentScreenOrientation;
+                    _rotationToDeviceOrientationAction!(self, false, currentScreenOrientation == 1);
+                }
+            }
+            
+            _lastScreenOrientation = currentScreenOrientation;
+        }
 
         
         
@@ -1189,7 +1234,6 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         {
             _beginLayoutAction = nil
             _endLayoutAction = nil
-            
         }
         
     }
@@ -1417,7 +1461,11 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     //布局回调处理
     private lazy var _beginLayoutAction:(()->Void)? = nil
     private lazy var _endLayoutAction:(()->Void)? = nil
-
+    
+    
+    //旋转处理。
+    private var _lastScreenOrientation:Int! = nil //为nil为初始状态，为1为竖屏，为2为横屏。内部使用。
+    private lazy var _rotationToDeviceOrientationAction:((_ layout:TGBaseLayout, _ isFirst:Bool, _ isPortrait:Bool)->Void)? = nil
 
     private var _isAddSuperviewKVO:Bool=false;
 
@@ -1570,11 +1618,11 @@ extension TGBaseLayout
             {
                 if (boundDime.dimeRelaVal._type == TGGravity.horz.fill)
                 {
-                    value = selfLayoutSize.width - (boundDime.dimeRelaVal.view == self ? (self.tg_leftPadding - self.tg_rightPadding) : 0);
+                    value = selfLayoutSize.width - (boundDime.dimeRelaVal.view == self ? (self.tg_leftPadding + self.tg_rightPadding) : 0);
                 }
                 else
                 {
-                    value = selfLayoutSize.height - (boundDime.dimeRelaVal.view == self ? (self.tg_topPadding - self.tg_bottomPadding) :0);
+                    value = selfLayoutSize.height - (boundDime.dimeRelaVal.view == self ? (self.tg_topPadding + self.tg_bottomPadding) :0);
                 }
             }
             else if (boundDime.dimeRelaVal.view == sbv)
@@ -1610,6 +1658,17 @@ extension TGBaseLayout
                 }
             }
             
+        }
+        else if (boundDime.isWrap)
+        {
+            if dimeType == TGGravity.horz.fill
+            {
+                value = sbvSize.width
+            }
+            else
+            {
+              value = sbvSize.height
+            }
         }
         else
         {
@@ -1865,6 +1924,10 @@ extension TGBaseLayout
         if (!rectSelf.equalTo(self.frame))
         {
             self.frame = rectSelf;
+        }
+        else if (self.tg_width.isWrap || self.tg_height.isWrap)
+        {
+            self.setNeedsLayout()
         }
         
         return isAdjust;

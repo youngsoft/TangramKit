@@ -11,7 +11,7 @@
 #TangramKit ![logo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKit/logo2.png)
 **start for Swift3.0**
 
-#### TangramKit's objective-C version are Called [MyLayout](https://github.com/youngsoft/MyLinearLayout)
+#### TangramKit's objective-C version are Named [MyLayout](https://github.com/youngsoft/MyLinearLayout)
 ---
 
 ## Thanks to the partners

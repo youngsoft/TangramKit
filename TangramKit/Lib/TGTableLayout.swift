@@ -399,7 +399,7 @@ private class TGTableRowLayout: TGLinearLayout,TGTableLayoutViewSizeClass {
         }
     }
     
-    required private init?(coder aDecoder: NSCoder) {
+    required fileprivate init?(coder aDecoder: NSCoder) {
         self.rowSize = 0
         self.colSize = 0
         super.init(coder:aDecoder)

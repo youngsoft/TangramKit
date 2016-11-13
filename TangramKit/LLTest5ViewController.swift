@@ -81,6 +81,7 @@ class LLTest5ViewController: UIViewController {
         let v2 = UILabel()
         v2.text = NSLocalizedString("width equal to 80% of superview, height equal to 30% of free height of superview", comment:"")
         v2.adjustsFontSizeToFitWidth = true
+        v2.numberOfLines = 0
         v2.textAlignment = .center
         v2.backgroundColor = .green
         v2.tg_top.equal(10)
@@ -107,6 +108,7 @@ class LLTest5ViewController: UIViewController {
         v4.text = NSLocalizedString("width equal to 200, height equal to 50", comment:"")
         v4.textAlignment = .center
         v4.adjustsFontSizeToFitWidth = true
+        v4.numberOfLines = 0
         v4.backgroundColor = .yellow
         v4.tg_top.equal(10)
         v4.tg_width.equal(200)

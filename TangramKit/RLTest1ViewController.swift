@@ -48,11 +48,14 @@ class RLTest1ViewController: UIViewController {
         greenCircle.tg_height.equal(greenCircle.tg_width) //高度和自身宽度相等。
         greenCircle.tg_left.equal(10) //左边距离父视图10
         greenCircle.tg_top.equal(90)  //顶部距离父视图90
-        greenCircle.tg_layoutCompletedDo{(_, view:UIView) in
-            //tg_layoutCompletedDo是在子视图布局完成后给子视图一个机会进行一些特殊设置的block。这里面我们将子视图的半径设置为尺寸的一半，这样就可以实现在任意的屏幕上，这个子视图总是呈现为圆形。tg_layoutCompletedDo只会在布局完成后调用一次，就会被布局系统销毁。
-            view.layer.cornerRadius = view.frame.width / 2
-        }
         rootLayout.addSubview(greenCircle)
+        
+        weak var weakGreenCircle:UIView! = greenCircle
+        rootLayout.tg_rotationToDeviceOrientationDo{(_,_,_) in
+            //tg_rotationToDeviceOrientationDo是在布局视图第一次布局后或者有屏幕旋转时给布局视图一个机会进行一些特殊设置的block。这里面我们将子视图的半径设置为尺寸的一半，这样就可以实现在任意的屏幕上，这个子视图总是呈现为圆形。这里tg_rotationToDeviceOrientationDo和子视图的tg_layoutCompletedDo的区别是前者是针对布局的，后者是针对子视图的。前者是在布局视图第一次完成布局或者后续屏幕有变化时布局视图调用，而后者则是子视图在布局视图完成后调用。
+            //这里不用子视图的tg_layoutCompletedDo原因是，tg_layoutCompletedDo只会在布局后执行一次，无法捕捉屏幕旋转的情况，而因为这里面的子视图的宽度是依赖于父视图的，所以必须要用tg_rotationToDeviceOrientationDo来实现。
+            weakGreenCircle.layer.cornerRadius = weakGreenCircle.frame.width / 2
+        }
 
         
         let walkLabel: UILabel = UILabel()
@@ -153,7 +156,7 @@ class RLTest1ViewController: UIViewController {
         rootLayout.addSubview(bottomHalfCircleView)
         
         let lineView3 = UIView()
-        lineView3.backgroundColor = .green
+        lineView3.backgroundColor = .orange
         lineView3.tg_width.equal(5)
         lineView3.tg_height.equal(50)
         lineView3.tg_bottom.equal(bottomHalfCircleView.tg_top)

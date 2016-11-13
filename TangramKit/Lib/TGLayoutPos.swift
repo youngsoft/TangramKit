@@ -365,9 +365,14 @@ extension TGLayoutPos
     {
         
         var retVal = (self.posNumVal ?? 0) + _offsetVal
-        retVal = Swift.min(_maxVal.posNumVal!, retVal)
-        retVal = Swift.max(_minVal.posNumVal!, retVal)
-        
+        if _maxVal != nil
+        {
+            retVal = Swift.min(_maxVal.posNumVal!, retVal)
+        }
+        if _minVal != nil
+        {
+            retVal = Swift.max(_minVal.posNumVal!, retVal)
+        }
         return retVal
     }
     
