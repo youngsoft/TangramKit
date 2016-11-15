@@ -108,7 +108,7 @@ TangramKit is a simple and easy Swift framework for iOS view layout. The name co
 
 
 ###TGLayoutSize
-`TGLayoutSize` is represent to the size of a view. UIView provides two extension variables:tg_width,tg_height to set view's width and height dimension.
+`TGLayoutSize` is represent to the size of a view. UIView provides two extension variables:tg_width,tg_height to set view's width and height dimension. there are three special TGLayoutSize const object: `.wrap`, `.fill`, `.average` mean: wrap all subviews size, fill in to superview's residual size, average the superview's size.
 
 
 ###TGWeight

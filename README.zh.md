@@ -9,25 +9,17 @@
 ![logo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKit/logo1.png)
 
 #TangramKit ![logo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKit/logo2.png)
-**for Swift3.0**
 
-#### TangramKit的Objective-C版本叫[MyLayout](https://github.com/youngsoft/MyLinearLayout)
+TangramKit是一套在Swift3.0语言上开发的iOS界面视图布局框架。它的名字来源于中国古代的玩具七巧板，寓意着可以用简单的功能来构造出各种千变万化且非常复杂的UI界面。TangramKit的内核是基于对UIView的layoutSubviews方法的重载以及对子视图的bounds和center属性的设置而实现的。TangramKit功能强大而且简单易用，它集成了:iOS Autolayout和SizeClass、android的5大布局体系、HTML/CSS的浮动定位技术以及flex-box和bootstrap框架等市面上主流的平台的界面布局功能，同时提供了一套非常简单和完备的多屏幕尺寸适配的解决方案。TangramKit的objective-C版本的名字叫做：**[MyLayout](https://github.com/youngsoft/MyLinearLayout)**   
 
-#### English : [Introduction](README.md)
-
-##功能介绍
----
-   一套功能强大的iOS界面布局库，他不是在AutoLayout的基础上进行的封装，而是一套基于对frame属性的设置，并通过重载layoutSubview函数来实现对子视图进行布局的布局框架。因此可以无限制的运行在任何版本的iOS系统中。其设计思想以及原理则参考了Android的布局体系和iOS自动布局以及SizeClass的功能，通过提供的：**线性布局TGLinearLayout**、**相对布局TGRelativeLayout**、**框架布局TGFrameLayout**、**表格布局TGTableLayout**、**流式布局TGFlowLayout**、**浮动布局TGFloatLayout**、六个布局类，以及对**SizeClass**的支持，来完成对界面的布局。TangramKit具有功能强大、简单易用、几乎不用设置任何约束、可以完美适配各种尺寸的屏幕等优势。具体的使用方法请看Demo中的演示代码中了解.
+##### English (Simplified): [英文说明](README.md)   
    
-   TangramKit 是[MyLayout](https://github.com/youngsoft/MyLinearLayout)的Swift版本，主要的布局体系以及思想二者保持一致，但是对于方法和属性的设置进行了优化，在TrangramKit中删除了子视图的weight属性，取而代之的是TGWeight类型的属性值设置、同时在swift中添加了.wrap, .fill这两个属性值的设置，而去掉了只有布局视图才有的wrapContentWidth和wrapContentHeight属性等等，总之使用的时候将更加的简单易用。
-   
+> 您可以加入到QQ群：*178573773* 或者添加个人QQ：*156355113* 来跟我讨论或者邮件：*obq0387_cn@sina.com* 联系我。
 
-###你也可以加入到QQ群：*178573773* 或者添加个人QQ：*156355113* 或者邮件：*obq0387_cn@sina.com* 联系我。###
 
 
 
 ## 演示效果图
----
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/layoutdemo1.gif)
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/layoutdemo2.gif)
@@ -39,8 +31,104 @@
 
 
 
+## 应用场景
+举例下面一个应用场景:
+*  有一个容器视图S的宽度是100而高度则是由四个从上到下依次排列的子视图A,B,C,D的高度总和。
+*  视图A的左边距占用父视图宽度的20%，而右边距则占用父视图宽度的30%，高度则等于自身的宽度。
+*  视图B的左边距是40，宽度则占用父视图的剩余宽度，高度是40。
+*  视图C的宽度占用父视图的所有宽度，高度是40。
+*  视图D的右边距是20，宽度是父视图宽度的50%，高度是40。
+
+最终的效果图如下：
+
+![demo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKit/usagedemo.png)
+
+
+```swift
+
+    let S = TGLinearLayout(.vert)
+    S.tg_vspace = 10
+    S.tg_width.equal(100)
+    S.tg_height.equal(.wrap)
+    //you can use S.tg_size(width:100, height:.wrap) to instead
+    
+    let A = UIView()
+    A.tg_left.equal(20%)
+    A.tg_right.equal(30%)
+    A.tg_height.equal(A.tg_width)
+    S.addSubview(A)
+    
+    let B = UIView()
+    B.tg_left.equal(40)
+    B.tg_width.equal(.fill)
+    B.tg_height.equal(40)
+    S.addSubview(B)
+    
+    let C = UIView()
+    C.tg_width.equal(.fill)
+    C.tg_height.equal(40)
+    S.addSubview(C)
+    
+    let D = UIView()
+    D.tg_right.equal(20)
+    D.tg_width.equal(50%)
+    D.tg_height.equal(40)
+    S.addSubview(D)
+    
+
+```
+
+因为TangramKit 重载了运算符：~=、>=、<=、+=、-=、*=、/= 来实现布局尺寸类`TGLayoutSize`和布局位置类`TGLayoutPos`的equal,max,min,add,offset,multiply方法。因此您也可以将代码写成如下方式：
+
+```swift
+ 
+ let S = TGLinearLayout(.vert)
+    S.tg_vspace = 10
+    S.tg_width ~=100
+    S.tg_height ~=.wrap
+    
+    let A = UIView()
+    A.tg_left ~=20%
+    A.tg_right ~=30%
+    A.tg_height ~=A.tg_width
+    S.addSubview(A)
+    
+    let B = UIView()
+    B.tg_left ~=40
+    B.tg_width ~=.fill
+    B.tg_height ~=40
+    S.addSubview(B)
+    
+    let C = UIView()
+    C.tg_width ~=.fill
+    C.tg_height ~=40
+    S.addSubview(C)
+    
+    let D = UIView()
+    D.tg_right ~=20
+    D.tg_width ~=50%
+    D.tg_height ~=40
+    S.addSubview(D)
+
+ ```
+
+
+## 系统结构
+ 
+ ![demo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKit/TangramClass.png)
+ 
+
+### 布局位置类TGLayoutPos
+TGLayoutPos类是用来描述一个视图所在的位置的类。UIView中扩展出了tg_left,tg_top,tg_bottom,tg_right,tg_centerX,tg_centerY这六个变量来实现视图的定位操作。您可以用这些变量的equal方法来设置视图之间的边距和间距。
+
+### 布局尺寸类TGLayoutSize
+TGLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出了tg_width,tg_height这两个变量来实现视图的宽度和高度尺寸的设置。您可以用其中的equal方法来设置视图的宽度和高度。系统提供了三个常量的布局尺寸值：`.wrap`, `.fill`, `.average` 来分别表示尺寸包裹所有子视图，尺寸填充父视图的剩余空间，尺寸均分父视图的剩余空间。
+
+### 布局比重值类TGWeight
+TGWeight类用来设置相对的位置和尺寸的值。相对值表明视图的位置或者尺寸是占用父视图的剩余空间或者父视图空间的比例值。为了方便使用，您可以用重载的运算符%来构建一个TGWeight对象，比如20%就等价于TGWeight(20).
+ 
+
 ### 线性布局TGLinearLayout
----
 线性布局是一种里面的子视图按添加的顺序从上到下或者从左到右依次排列的单列(单行)布局视图，因此里面的子视图是通过添加的顺序建立约束和依赖关系的。 子视图从上到下依次排列的线性布局视图称为垂直线性布局视图，而子视图从左到右依次排列的线性布局视图则称为水平线性布局。
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/ll.png)
@@ -81,11 +169,8 @@ rootLayout.addSubview(D)
 
 ```
 
-**TGLinearLayout的功能等价于Android的LinearLayout和iOS的UIStackView**
-
 
 ### 相对布局TGRelativeLayout
----
 相对布局是一种里面的子视图通过相互之间的约束和依赖来进行布局和定位的布局视图。相对布局里面的子视图的布局位置和添加的顺序无关，而是通过设置子视图的相对依赖关系来进行定位和布局的。
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/rl.png)
@@ -133,11 +218,8 @@ rootLayout.addSubview(E)
 //...F,G
 
 ```
-**TGRelativeLayout的功能等价于Android的RelativeLayout和iOS的AutoLayout**
-
 
 ### 框架布局TGFrameLayout
----
 框架布局是一种里面的子视图停靠在父视图特定方位并且可以重叠的布局视图。框架布局里面的子视图的布局位置和添加的顺序无关，只跟父视图建立布局约束依赖关系。框架布局将垂直方向上分为上、中、下三个方位，而水平方向上则分为左、中、右三个方位，任何一个子视图都只能定位在垂直方向和水平方向上的一个方位上。
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/fl.png)
@@ -177,12 +259,8 @@ rootLayout.addSubview(E)
   
 ```
 
-**TGFrameLayout的功能等价于Android的FrameLayout**
-
-
 
 ### 表格布局TGTableLayout
----
 表格布局是一种里面的子视图可以像表格一样多行多列排列的布局视图。子视图添加到表格布局视图前必须先要建立并添加行视图，然后再将子视图添加到行视图里面。如果行视图在表格布局里面是从上到下排列的则表格布局为垂直表格布局，垂直表格布局里面的子视图在行视图里面是从左到右排列的；如果行视图在表格布局里面是从左到右排列的则表格布局为水平表格布局，水平表格布局里面的子视图在行视图里面是从上到下排列的。
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/tl.png)
@@ -194,7 +272,7 @@ rootLayout.addSubview(E)
   rootLayout.tg_height.equal(.wrap)
   rootLayout.tg_width.equal(500)
   
-  rootLayout.addRow(TGTableLayout.wrap,colSize:TGTableLayout.fill)
+  rootLayout.tg_addRow(size:TGLayoutSize.wrap,colSize:TGLayoutSize.fill)
   
   let A = UIView()
   A.tg_width(50)
@@ -211,7 +289,7 @@ rootLayout.addSubview(E)
   C.tg_height(40)
   rootLayout.addSubview(C)
   
-  rootLayout.addRow(TGTableLayout.wrap,colSize:TGTableLayout.fill)
+  rootLayout.tg_addRow(size:TGTableLayout.wrap,colSize:TGTableLayout.fill)
   
    let D = UIView()
    D.tg_width(180)
@@ -223,11 +301,7 @@ rootLayout.addSubview(E)
   
 ```
 
-**TGTableLayout的功能等价于Android的TableLayout和HTML中的table元素**
-
-
 ### 流式布局TGFlowLayout
----
 流式布局是一种里面的子视图按照添加的顺序依次排列，当遇到某种约束限制后会另起一行再重新排列的多行展示的布局视图。这里的约束限制主要有数量约束限制和内容尺寸约束限制两种，而换行的方向又分为垂直和水平方向，因此流式布局一共有垂直数量约束流式布局、垂直内容约束流式布局、水平数量约束流式布局、水平内容约束流式布局。流式布局主要应用于那些子视图有规律排列的场景，在某种程度上可以作为UICollectionView的替代品。
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/fll.png)
@@ -235,7 +309,7 @@ rootLayout.addSubview(E)
 示例代码:
 
 ```swift
-   let rootLayout = TGFlowLayout(.vert,arrangedCount:3)
+   let rootLayout = TGFlowLayout(.vert,arrangedCount:4)
    rootLayout.tg_height.equal(.wrap)
    rootLayout.tg_width.equal(300)
    rootLayout.tg_averageArrange = true
@@ -252,11 +326,8 @@ rootLayout.addSubview(E)
 
 ```
 
-**TGFlowLayout的功能等价于CSS3中的flexbox**
-
 	
 ### 浮动布局TGFloatLayout
----
 浮动布局是一种里面的子视图按照约定的方向浮动停靠，当尺寸不足以被容纳时会自动寻找最佳的位置进行浮动停靠的布局视图。浮动布局的理念源于HTML/CSS中的浮动定位技术,因此浮动布局可以专门用来实现那些不规则布局或者图文环绕的布局。根据浮动的方向不同，浮动布局可以分为左右浮动布局和上下浮动布局。
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/flo.png)
@@ -302,24 +373,18 @@ rootLayout.addSubview(E)
 
 ```
 
-**TGFloatLayout的功能等价于CSS中的float浮动定位**
-
-
-
  
 ###  SizeClass的支持
----
-TangramKit布局体系为了实现对不同屏幕尺寸的设备进行适配，提供了对SIZECLASS的支持。您可以将SIZECLASS和上述的6种布局搭配使用，以便实现各种设备界面的完美适配。
+TangramKit布局体系为了实现对不同屏幕尺寸的设备进行适配，提供了对SizeClass的支持。您可以将SizeClass和上述的6种布局搭配使用，以便实现各种设备界面的完美适配。
 	
 
 
 ## 使用方法
----
 
 ### 直接拷贝
 1.  将github工程中的Lib文件夹下的所有文件复制到您的工程中。
 
-### CocoaPods安装
+### CocoaPods安装(暂时不支持)
 
 如果您还没有安装cocoapods则请先执行如下命令：
 ```
@@ -341,7 +406,7 @@ pod 'TangramKit', '~> 1.0.0'
 $ pod install
 ```
 
-### MyLayout和TangramKit的差异
+## MyLayout和TangramKit的差异
 
 1.  库的名称由MyLayout变为TangramKit，Tangram的中文意思是七巧板，意思是可以支持千变万化的界面布局。
 2.  所有的类名都以TG开头，所有的方法和属性都以tg_开头。
@@ -353,4 +418,9 @@ $ pod install
 8.  删除了布局视图的wrapContentHeight,wrapContentWidth属性，统一由TGLayoutSize设置为.wrap类型的值。比如原来的A.wrapContentWidth = YES  变为 A.tg_width.equal(.wrap)
 9.  删除了框架布局子视图的marginGravity属性扩展，直接通过TGLayoutPos设置来实现定位。
 10. 删除了子视图的扩展属性flexedHeight，而是直接由TGLayoutSize设置为.wrap来表示。
+
+## License
+
+TangramKit is released under the MIT license. See LICENSE for details.
+
 
