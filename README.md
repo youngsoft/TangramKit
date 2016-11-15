@@ -121,7 +121,6 @@ the subviews arranged in left-to-right order is called horizontal linear layout.
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/ll.png)
 
-Sample code:
 
 ```swift
 
