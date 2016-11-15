@@ -103,18 +103,18 @@ TangramKit is a simple and easy Swift framework for iOS view layout. The name co
 
 ![demo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKit/TangramClass.png)
 
-* ###TGLayoutPos
+###TGLayoutPos
 `TGLayoutPos` is represent to the position of a view. UIView provides six extension variables:tg_left, tg_top, tg_bottom, tg_right, tg_centerX, tg_centerY to set view's margin or space distance between self and others.
 
 
-* ###TGLayoutSize
+###TGLayoutSize
 `TGLayoutSize` is represent to the size of a view. UIView provides two extension variables:tg_width,tg_height to set view's width and height dimension.
 
 
-* ###TGWeight
+###TGWeight
 `TGWeight` is used to set relative position and dimension. TangramKit override operator % to easily construct a TGWeight object. e.g 20% is equal to TGWeight(20).
 
-* ###TGLinearLayout
+###TGLinearLayout
 Linear layout is a single line layout view that the subviews are arranged in sequence according to the added order（from top to bottom or from left to right). So the subviews' origin&size constraints are established by the added order. Subviews arranged in top-to-bottom order is called vertical linear layout view, and 
 the subviews arranged in left-to-right order is called horizontal linear layout.
 
@@ -157,12 +157,12 @@ rootLayout.addSubview(D)
 
 ```
 
-* ###TGRelativeLayout
+
+###TGRelativeLayout
 Relative layout is a layout view that the subviews layout and position through mutual constraints.The subviews in the relative layout are not depended to the adding order but layout and position by setting the subviews' constraints.
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/rl.png)
 
-Sample code:
 
 ```swift
 let rootLayout = TGRelativeLayout()
@@ -206,12 +206,11 @@ rootLayout.addSubview(E)
 
 ```
 
-* ###TGFrameLayout
+###TGFrameLayout
 Frame layout is a layout view that the subviews can be overlapped and gravity in a special location of the superview.The subviews' layout position&size is not depended to the adding order and establish dependency constraint with the superview. Frame layout devided the vertical orientation to top,vertical center and bottom, while horizontal orientation is devided to left,horizontal center and right. Any of the subviews is just gravity in either vertical orientation or horizontal orientation.
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/fl.png)
 
-Sample code:
 
 ```swift
   let rootLayout = TGFrameLayout()
@@ -247,12 +246,11 @@ Sample code:
 ```
 
 
-* ###TGTableLayout
+###TGTableLayout
 Table layout is a layout view that the subviews are multi-row&col arranged like a table. First you must create a rowview and add it to the table layout, then add the subview to the rowview. If the rowviews arranged in top-to-bottom order,the tableview is caled vertical table layout,in which the subviews are arranged from left to right; If the rowviews arranged in in left-to-right order,the tableview is caled horizontal table layout,in which the subviews are arranged from top to bottom.
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/tl.png)
 
-Sample code:
 
 ```swift
   let rootLayout = TGTableLayout(.vert)
@@ -289,15 +287,14 @@ Sample code:
 ```
 
 
-* ###TGFlowLayout
+###TGFlowLayout
 Flow layout is a layout view presents in multi-line that the subviews are arranged in sequence according to the added order, and when meeting with a arranging constraint it will start a new line and rearrange. The constrains mentioned here includes count constraints and size constraints. The orientation of the new line would be vertical and horizontal, so the flow layout is divided into: count constraints vertical flow layout, size constraints vertical flow layout, count constraints horizontal flow layout,  size constraints horizontal flow layout. Flow layout often used in the scenes that the subviews is  arranged regularly, it can be substitutive of UICollectionView to some extent. the TGFlowLayout is almost implement the flex-box function of the HTML/CSS.
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/fll.png)
 
-Sample code:
 
 ```swift
-   let rootLayout = TGFlowLayout(.vert,arrangedCount:3)
+   let rootLayout = TGFlowLayout(.vert,arrangedCount:4)
    rootLayout.tg_height.equal(.wrap)
    rootLayout.tg_width.equal(300)
    rootLayout.tg_averageArrange = true
@@ -315,12 +312,11 @@ Sample code:
 ```
 
 
-* ###TGFloatLayout
+###TGFloatLayout
 Float layout is a layout view that the subviews are floating gravity in the given orientations, when the size is not enough to be hold, it will automatically find the best location to gravity. float layout's conception is reference from the HTML/CSS's floating positioning technology, so the float layout can be designed in implementing irregular layout. According to the different orientation of the floating, float layout can be divided into left-right float layout and up-down float layout.
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/flo.png)
 
-Sample code:
 
 ```swift
      let rootLayout = TGFloatLayout(.vert)
@@ -362,7 +358,7 @@ Sample code:
 ```
 
 
-* ###TGViewSizeClass
+###TGViewSizeClass
 TangramKit provided support to SizeClass in order to fit the different screen sizes of devices. You can combinate the SizeClass with any of the 6 kinds of layout views mentioned above to perfect fit the UI of all equipments.
 
 
