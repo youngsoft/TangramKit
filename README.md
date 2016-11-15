@@ -118,6 +118,7 @@ TangramKit is a simple and easy Swift framework for iOS view layout. The name co
 Linear layout is a single line layout view that the subviews are arranged in sequence according to the added order（from top to bottom or from left to right). So the subviews' origin&size constraints are established by the added order. Subviews arranged in top-to-bottom order is called vertical linear layout view, and 
 the subviews arranged in left-to-right order is called horizontal linear layout.
 
+
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/ll.png)
 
 Sample code:
@@ -156,8 +157,6 @@ D.tg_height.equal(40)
 rootLayout.addSubview(D)
 
 ```
-
-*TGLinearLayout be equivalent to LinearLayout of Android and UIStackView*
 
 
 * ###TGRelativeLayout
@@ -209,9 +208,6 @@ rootLayout.addSubview(E)
 
 ```
 
-*TGRelativeLayout be equivalent to RelativeLayout of Android and AutoLayout*
-
-
 * ###TGFrameLayout
 Frame layout is a layout view that the subviews can be overlapped and gravity in a special location of the superview.The subviews' layout position&size is not depended to the adding order and establish dependency constraint with the superview. Frame layout devided the vertical orientation to top,vertical center and bottom, while horizontal orientation is devided to left,horizontal center and right. Any of the subviews is just gravity in either vertical orientation or horizontal orientation.
 
@@ -251,8 +247,6 @@ Sample code:
   //..E，F,G
   
 ```
-
-*TGFrameLayout be equivalent to FrameLayout of Android*
 
 
 * ###TGTableLayout
@@ -296,8 +290,6 @@ Sample code:
   
 ```
 
-*TGTableLayout be equivalent to TableLayout of Android and table element of HTML*
-
 
 * ###TGFlowLayout
 Flow layout is a layout view presents in multi-line that the subviews are arranged in sequence according to the added order, and when meeting with a arranging constraint it will start a new line and rearrange. The constrains mentioned here includes count constraints and size constraints. The orientation of the new line would be vertical and horizontal, so the flow layout is divided into: count constraints vertical flow layout, size constraints vertical flow layout, count constraints horizontal flow layout,  size constraints horizontal flow layout. Flow layout often used in the scenes that the subviews is  arranged regularly, it can be substitutive of UICollectionView to some extent. the TGFlowLayout is almost implement the flex-box function of the HTML/CSS.
@@ -323,8 +315,6 @@ Sample code:
    
 
 ```
-
-*TGFlowLayout be equivalent to flexbox of CSS3*
 
 
 * ###TGFloatLayout
@@ -373,13 +363,10 @@ Sample code:
 
 ```
 
-*TGFloatLayout be equivalent to float of CSS*
-
 
 * ###TGViewSizeClass
 TangramKit provided support to SizeClass in order to fit the different screen sizes of devices. You can combinate the SizeClass with any of the 6 kinds of layout views mentioned above to perfect fit the UI of all equipments.
 
-*TGViewSizeClass be equivalent to SizeClass of iOS*
 
 
 ## Demo sample
