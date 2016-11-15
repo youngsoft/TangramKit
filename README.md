@@ -8,10 +8,8 @@
 
 ![logo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKit/logo1.png)
 
-#TangramKit ![logo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKit/logo2.png)
+##TangramKit ![logo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKit/logo2.png)
 
-## Introduction
----
 TangramKit is a simple and easy Swift framework for iOS view layout. The name comes from Tangram of China which provides some simple functions to build a variety of complex interface. It integrates the functions including: Autolayout and SizeClass of iOS, five layout classes of Android, float and flex-box and bootstrap of HTML/CSS. The TangramKit's objective-C version are named: **[MyLayout](https://github.com/youngsoft/MyLinearLayout)**
 
 ##### ![cn](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/China.png) Chinese (Simplified): [中文说明](README.zh.md)
@@ -20,7 +18,7 @@ TangramKit is a simple and easy Swift framework for iOS view layout. The name co
 
 
 ## Usage
----
+
 * There is a container view S which width is 100 and height is wrap to all subviews height. there are four subviews A,B,C,D arranged from top to bottom. 
 *  Subview A's left margin is 20% width of S, right margin is 30% width of S, height is equal to width of A. 
 *  Subview B's left margin is 40, width is filled in to residual width of S,height is 40.
@@ -30,7 +28,8 @@ TangramKit is a simple and easy Swift framework for iOS view layout. The name co
 ![demo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKit/usagedemo.png)
 
 
-```
+```swift
+
     let S = TGLinearLayout(.vert)
     S.tg_vspace = 10
     S.tg_width.equal(100)
@@ -63,9 +62,12 @@ TangramKit is a simple and easy Swift framework for iOS view layout. The name co
 
 ```
  
+ 
  TangramKit has override operators: ~=、>=、<=、+=、-=、*=、/= to implement equal、max、min、add、offset、multiply methods of `TGLayoutSize` and `TGLayoutPos` class, so you can instead to:
  
- ```
+ 
+ ```swift
+ 
  let S = TGLinearLayout(.vert)
     S.tg_vspace = 10
     S.tg_width ~=100
@@ -96,8 +98,9 @@ TangramKit is a simple and easy Swift framework for iOS view layout. The name co
 
  ```
 
+
 ##Architecture
----
+
 ![demo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKit/TangramClass.png)
 
 * ###TGLayoutPos
@@ -120,6 +123,7 @@ the subviews arranged in left-to-right order is called horizontal linear layout.
 Sample code:
 
 ```swift
+
 let rootLayout = TGLinearLayout(.vert)
 rootLayout.tg_width.equal(.wrap)
 rootLayout.tg_height.equal(.wrap)
@@ -152,7 +156,6 @@ D.tg_height.equal(40)
 rootLayout.addSubview(D)
 
 ```
-
 
 *TGLinearLayout be equivalent to LinearLayout of Android and UIStackView*
 
@@ -205,10 +208,11 @@ rootLayout.addSubview(E)
 //...F,G
 
 ```
+
 *TGRelativeLayout be equivalent to RelativeLayout of Android and AutoLayout*
 
 
-* ### TGFrameLayout
+* ###TGFrameLayout
 Frame layout is a layout view that the subviews can be overlapped and gravity in a special location of the superview.The subviews' layout position&size is not depended to the adding order and establish dependency constraint with the superview. Frame layout devided the vertical orientation to top,vertical center and bottom, while horizontal orientation is devided to left,horizontal center and right. Any of the subviews is just gravity in either vertical orientation or horizontal orientation.
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/fl.png)
@@ -251,7 +255,7 @@ Sample code:
 *TGFrameLayout be equivalent to FrameLayout of Android*
 
 
-* ### TGTableLayout
+* ###TGTableLayout
 Table layout is a layout view that the subviews are multi-row&col arranged like a table. First you must create a rowview and add it to the table layout, then add the subview to the rowview. If the rowviews arranged in top-to-bottom order,the tableview is caled vertical table layout,in which the subviews are arranged from left to right; If the rowviews arranged in in left-to-right order,the tableview is caled horizontal table layout,in which the subviews are arranged from top to bottom.
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/tl.png)
@@ -295,7 +299,7 @@ Sample code:
 *TGTableLayout be equivalent to TableLayout of Android and table element of HTML*
 
 
-* ### TGFlowLayout
+* ###TGFlowLayout
 Flow layout is a layout view presents in multi-line that the subviews are arranged in sequence according to the added order, and when meeting with a arranging constraint it will start a new line and rearrange. The constrains mentioned here includes count constraints and size constraints. The orientation of the new line would be vertical and horizontal, so the flow layout is divided into: count constraints vertical flow layout, size constraints vertical flow layout, count constraints horizontal flow layout,  size constraints horizontal flow layout. Flow layout often used in the scenes that the subviews is  arranged regularly, it can be substitutive of UICollectionView to some extent. the TGFlowLayout is almost implement the flex-box function of the HTML/CSS.
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/fll.png)
@@ -323,7 +327,7 @@ Sample code:
 *TGFlowLayout be equivalent to flexbox of CSS3*
 
 
-* ### TGFloatLayout
+* ###TGFloatLayout
 Float layout is a layout view that the subviews are floating gravity in the given orientations, when the size is not enough to be hold, it will automatically find the best location to gravity. float layout's conception is reference from the HTML/CSS's floating positioning technology, so the float layout can be designed in implementing irregular layout. According to the different orientation of the floating, float layout can be divided into left-right float layout and up-down float layout.
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/flo.png)
@@ -372,14 +376,13 @@ Sample code:
 *TGFloatLayout be equivalent to float of CSS*
 
 
-* ###  TGViewSizeClass
+* ###TGViewSizeClass
 TangramKit provided support to SizeClass in order to fit the different screen sizes of devices. You can combinate the SizeClass with any of the 6 kinds of layout views mentioned above to perfect fit the UI of all equipments.
 
 *TGViewSizeClass be equivalent to SizeClass of iOS*
 
 
 ## Demo sample
----
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/layoutdemo1.gif)
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/layoutdemo2.gif)
@@ -391,12 +394,12 @@ TangramKit provided support to SizeClass in order to fit the different screen si
 
 
 ##How To Get Started
----
+
  [Download TangramKit](https://github.com/youngsoft/TangramKit/archive/master.zip) 
  
 
 ##Communication
----
+
 
 - If you need help, use Stack Overflow or Baidu. (Tag 'TangramKit')
 - If you'd like to contact me, use *qq:156355113 or weibo:欧阳大哥 or email:obq0387_cn@sina.com*
@@ -405,7 +408,8 @@ TangramKit provided support to SizeClass in order to fit the different screen si
 - If you want to contribute, submit a pull request.
 
 ## Installation
----
+
+
 TangramKit supports multiple methods for installing the library in a project.
 ### Copy to your project
 1.  Copy `Lib` folder from the demo project to your project
@@ -434,18 +438,21 @@ Then, run the following command:
 
 
 ##FAQ
----
+
+
 * If you use TangramKit runtime cause 100% CPU usage said appeared constraint conflict, please check the subview's constraint set.
 
 
 ## License
----
+
+
 
 TangramKit is released under the MIT license. See LICENSE for details.
 
 
 ##Thanks to the partners:
----
+
+
 *闫涛:* [github](https://github.com/taoyan)
        [homepage](http://blog.csdn.net/u013928640)
 *张光凯:* [github](https://github.com/loveNoodles)
