@@ -63,6 +63,8 @@
 		18DB43601D1986230052D770 /* TGLinearLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB43381D1986230052D770 /* TGLinearLayout.swift */; };
 		18DB43611D1986230052D770 /* TGRelativeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB43391D1986230052D770 /* TGRelativeLayout.swift */; };
 		18DB43621D1986230052D770 /* TGTableLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB433A1D1986230052D770 /* TGTableLayout.swift */; };
+		18DF8A5A1DDB5C62009FD703 /* TangramClass.png in Resources */ = {isa = PBXBuildFile; fileRef = 18DF8A591DDB5C62009FD703 /* TangramClass.png */; };
+		18DF8A5C1DDB5C6A009FD703 /* usagedemo.png in Resources */ = {isa = PBXBuildFile; fileRef = 18DF8A5B1DDB5C6A009FD703 /* usagedemo.png */; };
 		A538CEBC1D41F85C00D51976 /* AllTest4ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A538CEBB1D41F85C00D51976 /* AllTest4ViewController.swift */; };
 		A5D3AE641D45B98F0062BFFD /* AllTest2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D3AE631D45B98F0062BFFD /* AllTest2ViewController.swift */; };
 		A5D3AE671D45BACD0062BFFD /* AllTestDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D3AE661D45BACD0062BFFD /* AllTestDataModel.swift */; };
@@ -128,6 +130,8 @@
 		18DB43381D1986230052D770 /* TGLinearLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGLinearLayout.swift; sourceTree = "<group>"; };
 		18DB43391D1986230052D770 /* TGRelativeLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGRelativeLayout.swift; sourceTree = "<group>"; };
 		18DB433A1D1986230052D770 /* TGTableLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGTableLayout.swift; sourceTree = "<group>"; };
+		18DF8A591DDB5C62009FD703 /* TangramClass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TangramClass.png; sourceTree = "<group>"; };
+		18DF8A5B1DDB5C6A009FD703 /* usagedemo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = usagedemo.png; sourceTree = "<group>"; };
 		A538CEBB1D41F85C00D51976 /* AllTest4ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllTest4ViewController.swift; sourceTree = "<group>"; };
 		A5D3AE631D45B98F0062BFFD /* AllTest2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllTest2ViewController.swift; sourceTree = "<group>"; };
 		A5D3AE661D45BACD0062BFFD /* AllTestDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllTestDataModel.swift; sourceTree = "<group>"; };
@@ -163,6 +167,8 @@
 		184D642E1D64527C0003449A /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
+				18DF8A591DDB5C62009FD703 /* TangramClass.png */,
+				18DF8A5B1DDB5C6A009FD703 /* usagedemo.png */,
 				181888A01DC2077000F5FDDA /* logo2.png */,
 				1818889E1DC2071200F5FDDA /* logo1.png */,
 				184D642F1D6452AF0003449A /* FOLTest2DataModel.plist */,
@@ -333,7 +339,9 @@
 				18DB43551D1986230052D770 /* Images.xcassets in Resources */,
 				188E08791D379E8D00E982F1 /* LaunchScreen.strings in Resources */,
 				181888A11DC2077000F5FDDA /* logo2.png in Resources */,
+				18DF8A5A1DDB5C62009FD703 /* TangramClass.png in Resources */,
 				184D64301D6452AF0003449A /* FOLTest2DataModel.plist in Resources */,
+				18DF8A5C1DDB5C6A009FD703 /* usagedemo.png in Resources */,
 				18DB434D1D1986230052D770 /* LaunchScreen.storyboard in Resources */,
 				1818889F1DC2071200F5FDDA /* logo1.png in Resources */,
 				1866CDDB1D6C275100755949 /* FOLTest4DataModel.plist in Resources */,

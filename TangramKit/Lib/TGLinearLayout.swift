@@ -862,12 +862,16 @@ extension TGLinearLayout {
                             fsbv.tgFrame.height += averageHeight;
                         }
                     }
-                    else
+                    else if fixedSizeHeight != 0
                     {
                         for fsbv in fixedSizeSbs
                         {
                             fsbv.tgFrame.height += floatingHeight*(fsbv.tgFrame.height / fixedSizeHeight)
                         }
+                    }
+                    else
+                    {
+                        //do nothing...
                     }
                 }
             }
@@ -1060,12 +1064,16 @@ extension TGLinearLayout {
                             fsbv.tgFrame.width += averageWidth;
                         }
                     }
-                    else
+                    else if fixedSizeWidth != 0
                     {
                         for fsbv in fixedSizeSbs
                         {
                             fsbv.tgFrame.width += floatingWidth*(fsbv.tgFrame.width / fixedSizeWidth)
                         }
+                    }
+                    else
+                    {
+                        //do nothing...
                     }
                 }
             }

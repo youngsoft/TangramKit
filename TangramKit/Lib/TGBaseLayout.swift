@@ -1790,7 +1790,12 @@ extension TGBaseLayout
         let rightMargin = self.tg_right.realMarginInSize(rectSuper.width)
         let topMargin = self.tg_top.realMarginInSize(rectSuper.height)
         let bottomMargin = self.tg_bottom.realMarginInSize(rectSuper.height)
-        var rectSelf = self.frame
+        var rectSelf = self.bounds
+
+        rectSelf.origin.x = self.center.x - rectSelf.size.width * self.layer.anchorPoint.x
+        rectSelf.origin.y = self.center.y - rectSelf.size.height * self.layer.anchorPoint.y
+        
+        let oldSelfRect = rectSelf
         
         //确定左右边距和宽度。
         if (!self.tg_width.isWrap && self.tg_width.hasValue)
@@ -1921,9 +1926,10 @@ extension TGBaseLayout
         
         
         
-        if (!rectSelf.equalTo(self.frame))
+        if (!rectSelf.equalTo(oldSelfRect))
         {
-            self.frame = rectSelf;
+            self.bounds = CGRect(x:self.bounds.origin.x, y:self.bounds.origin.y,width:rectSelf.width, height:rectSelf.height)
+            self.center = CGPoint(x:rectSelf.origin.x + self.layer.anchorPoint.x * rectSelf.width, y:rectSelf.origin.y + self.layer.anchorPoint.y * rectSelf.height)
         }
         else if (self.tg_width.isWrap || self.tg_height.isWrap)
         {
