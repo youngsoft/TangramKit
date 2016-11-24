@@ -274,9 +274,11 @@ extension TGFrameLayout
                 retRect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: retRect.size.width)
             }
             
-            retRect = self.tgCalcVertGravity(vert, selfSize:selfSize, sbv: sbv, rect: retRect)
             
             retRect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: retRect.size.height, sbvSize: retRect.size, selfLayoutSize: selfSize)
+            
+            retRect = self.tgCalcVertGravity(vert, selfSize:selfSize, sbv: sbv, rect: retRect)
+
             
         }
         return retRect
