@@ -25,7 +25,7 @@ class RLTest1ViewController: UIViewController {
         
         let rootLayout: TGRelativeLayout = TGRelativeLayout()
         rootLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
-        rootLayout.backgroundColor = .gray
+        rootLayout.backgroundColor = .white
         self.view = rootLayout
         
         /*
@@ -33,6 +33,8 @@ class RLTest1ViewController: UIViewController {
          */
         let todayLabel: UILabel = UILabel()
         todayLabel.text = "Today"
+        todayLabel.font = CFTool.font(17)
+        todayLabel.textColor = CFTool.color(4)
         todayLabel.sizeToFit()
         todayLabel.tg_centerX.equal(0)  //水平中心点在父布局水平中心点的偏移为0，意味着和父视图水平居中对齐。
         todayLabel.tg_top.equal(20)    //顶部离父视图的边距为20
@@ -41,16 +43,16 @@ class RLTest1ViewController: UIViewController {
         /*
          左上角区域部分
          */
-        let greenCircle: UIView = UIView()
-        greenCircle.backgroundColor = .green
-        greenCircle.tg_width.equal(rootLayout.tg_width, multiple:3/5.0)
-        greenCircle.tg_width.max(200)  //宽度是父视图宽度的3/5,且最大只能是200。
-        greenCircle.tg_height.equal(greenCircle.tg_width) //高度和自身宽度相等。
-        greenCircle.tg_left.equal(10) //左边距离父视图10
-        greenCircle.tg_top.equal(90)  //顶部距离父视图90
-        rootLayout.addSubview(greenCircle)
+        let topLeftCircle: UIView = UIView()
+        topLeftCircle.backgroundColor = CFTool.color(2)
+        topLeftCircle.tg_width.equal(rootLayout.tg_width, multiple:3/5.0)
+        topLeftCircle.tg_width.max(200)  //宽度是父视图宽度的3/5,且最大只能是200。
+        topLeftCircle.tg_height.equal(topLeftCircle.tg_width) //高度和自身宽度相等。
+        topLeftCircle.tg_left.equal(10) //左边距离父视图10
+        topLeftCircle.tg_top.equal(90)  //顶部距离父视图90
+        rootLayout.addSubview(topLeftCircle)
         
-        weak var weakGreenCircle:UIView! = greenCircle
+        weak var weakGreenCircle:UIView! = topLeftCircle
         rootLayout.tg_rotationToDeviceOrientationDo{(_,_,_) in
             //tg_rotationToDeviceOrientationDo是在布局视图第一次布局后或者有屏幕旋转时给布局视图一个机会进行一些特殊设置的block。这里面我们将子视图的半径设置为尺寸的一半，这样就可以实现在任意的屏幕上，这个子视图总是呈现为圆形。这里tg_rotationToDeviceOrientationDo和子视图的tg_layoutCompletedDo的区别是前者是针对布局的，后者是针对子视图的。前者是在布局视图第一次完成布局或者后续屏幕有变化时布局视图调用，而后者则是子视图在布局视图完成后调用。
             //这里不用子视图的tg_layoutCompletedDo原因是，tg_layoutCompletedDo只会在布局后执行一次，无法捕捉屏幕旋转的情况，而因为这里面的子视图的宽度是依赖于父视图的，所以必须要用tg_rotationToDeviceOrientationDo来实现。
@@ -60,25 +62,26 @@ class RLTest1ViewController: UIViewController {
         
         let walkLabel: UILabel = UILabel()
         walkLabel.text = "walk"
-        walkLabel.textColor = .green
+        walkLabel.textColor = CFTool.color(5)
+        walkLabel.font = CFTool.font(15)
         walkLabel.sizeToFit()
-        walkLabel.tg_centerX.equal(greenCircle.tg_centerX)  //水平中心点和greenCircle水平中心点一致，意味着和greenCircle水平居中对齐。
-        walkLabel.tg_bottom.equal(greenCircle.tg_top, offset:5) //底部是greenCircle的顶部再往上偏移5个点。
+        walkLabel.tg_centerX.equal(topLeftCircle.tg_centerX)  //水平中心点和greenCircle水平中心点一致，意味着和greenCircle水平居中对齐。
+        walkLabel.tg_bottom.equal(topLeftCircle.tg_top, offset:5) //底部是greenCircle的顶部再往上偏移5个点。
         rootLayout.addSubview(walkLabel)
         
         let walkSteps: UILabel = UILabel()
         walkSteps.text = "9,362"
-        walkSteps.textColor = .white
-        walkSteps.font = .systemFont(ofSize: 30)
+        walkSteps.font = CFTool.font(15)
+        walkSteps.textColor = CFTool.color(0)
         walkSteps.sizeToFit()
-        walkSteps.tg_centerX.equal(greenCircle.tg_centerX)
-        walkSteps.tg_centerY.equal(greenCircle.tg_centerY) //水平中心点和垂直中心点都和greenCircle一样，意味着二者居中对齐。
+        walkSteps.tg_centerX.equal(topLeftCircle.tg_centerX)
+        walkSteps.tg_centerY.equal(topLeftCircle.tg_centerY) //水平中心点和垂直中心点都和greenCircle一样，意味着二者居中对齐。
         rootLayout.addSubview(walkSteps)
         
         let steps: UILabel = UILabel()
         steps.text = "steps"
-        steps.textColor = .white
-        steps.font = .systemFont(ofSize: 15)
+        steps.textColor = CFTool.color(8)
+        steps.font = CFTool.font(15)
         steps.sizeToFit()
         steps.tg_centerX.equal(walkSteps.tg_centerX) //和walkSteps水平居中对齐。
         steps.tg_top.equal(walkSteps.tg_bottom)  //顶部是walkSteps的底部。
@@ -87,35 +90,35 @@ class RLTest1ViewController: UIViewController {
         /*
          右上角区域部分
          */
-        let bluecircle: UIView = UIView()
-        bluecircle.backgroundColor = .blue
-        bluecircle.layer.cornerRadius = 60
-        bluecircle.tg_top.equal(greenCircle.tg_top, offset:-10)  //顶部和greenCircle顶部对齐，并且往上偏移10个点。
-        bluecircle.tg_right.equal(rootLayout.tg_right, offset:10)//右边和布局视图右对齐，并且往左边偏移10个点.
-        bluecircle.tg_width.equal(120)
-        bluecircle.tg_height.equal(bluecircle.tg_width)
-        bluecircle.tg_layoutCompletedDo{(_, view:UIView) in
+        let topRightCircle: UIView = UIView()
+        topRightCircle.backgroundColor = CFTool.color(3)
+        topRightCircle.tg_top.equal(topLeftCircle.tg_top, offset:-10)  //顶部和greenCircle顶部对齐，并且往上偏移10个点。
+        topRightCircle.tg_right.equal(rootLayout.tg_right, offset:10)//右边和布局视图右对齐，并且往左边偏移10个点.
+        topRightCircle.tg_width.equal(120)
+        topRightCircle.tg_height.equal(topRightCircle.tg_width)
+        topRightCircle.tg_layoutCompletedDo{(_, view:UIView) in
             //tg_layoutCompletedDo是在子视图布局完成后给子视图一个机会进行一些特殊设置的block。这里面我们将子视图的半径设置为尺寸的一半，这样就可以实现在任意的屏幕上，这个子视图总是呈现为圆形。tg_layoutCompletedDo只会在布局完成后调用一次，就会被布局系统销毁。
 
             view.layer.cornerRadius = view.frame.width / 2
         }
-        rootLayout.addSubview(bluecircle)
+        rootLayout.addSubview(topRightCircle)
         
         let cycleLabel: UILabel = UILabel()
         cycleLabel.text = "Cycle"
-        cycleLabel.textColor = .blue
+        cycleLabel.textColor = CFTool.color(6)
+        cycleLabel.font = CFTool.font(15)
         cycleLabel.sizeToFit()
-        cycleLabel.tg_centerX.equal(bluecircle.tg_centerX)
-        cycleLabel.tg_bottom.equal(bluecircle.tg_top, offset:5) //底部在blueCircle的上面，再往下偏移5个点。
+        cycleLabel.tg_centerX.equal(topRightCircle.tg_centerX)
+        cycleLabel.tg_bottom.equal(topRightCircle.tg_top, offset:5) //底部在blueCircle的上面，再往下偏移5个点。
         rootLayout.addSubview(cycleLabel)
         
         let cycleMin: UILabel = UILabel()
         cycleMin.text = "39 Min"
-        cycleMin.textColor = .white
-        cycleMin.font = UIFont.systemFont(ofSize: 18)
+        cycleMin.textColor = CFTool.color(0)
+        cycleMin.font = CFTool.font(15)
         cycleMin.sizeToFit()
-        cycleMin.tg_left.equal(bluecircle.tg_left)
-        cycleMin.tg_centerY.equal(bluecircle.tg_centerY)
+        cycleMin.tg_left.equal(topRightCircle.tg_left)
+        cycleMin.tg_centerY.equal(topRightCircle.tg_centerY)
         rootLayout.addSubview(cycleMin)
         
         
@@ -123,7 +126,7 @@ class RLTest1ViewController: UIViewController {
          中间区域部分
          */
         let lineView1: UIView = UIView()
-        lineView1.backgroundColor = .red
+        lineView1.backgroundColor = CFTool.color(7)
         lineView1.tg_left.equal(0)
         lineView1.tg_right.equal(0) //和父布局的左右边距为0，这个也同时确定了视图的宽度和父视图一样。
         //您也可以如下设置：
@@ -135,7 +138,7 @@ class RLTest1ViewController: UIViewController {
         rootLayout.addSubview(lineView1)
         
         let lineView2: UIView = UIView()
-        lineView2.backgroundColor = .green
+        lineView2.backgroundColor = CFTool.color(8)
         lineView2.tg_width.equal(rootLayout.tg_width,increment:-20)  //宽度等于父视图的宽度减20
         lineView2.tg_height.equal(2)
         lineView2.tg_top.equal(lineView1.tg_bottom, offset:2)
@@ -147,7 +150,7 @@ class RLTest1ViewController: UIViewController {
          左下角区域部分。
          */
         let bottomHalfCircleView = UIView()
-        bottomHalfCircleView.backgroundColor = .white
+        bottomHalfCircleView.backgroundColor = CFTool.color(5)
         bottomHalfCircleView.layer.cornerRadius = 25
         bottomHalfCircleView.tg_width.equal(50)
         bottomHalfCircleView.tg_height.equal(bottomHalfCircleView.tg_width)
@@ -156,7 +159,7 @@ class RLTest1ViewController: UIViewController {
         rootLayout.addSubview(bottomHalfCircleView)
         
         let lineView3 = UIView()
-        lineView3.backgroundColor = .orange
+        lineView3.backgroundColor = CFTool.color(5)
         lineView3.tg_width.equal(5)
         lineView3.tg_height.equal(50)
         lineView3.tg_bottom.equal(bottomHalfCircleView.tg_top)
@@ -165,7 +168,8 @@ class RLTest1ViewController: UIViewController {
         
         let walkLabel2 = UILabel()
         walkLabel2.text = "walk"
-        walkLabel2.textColor = .green
+        walkLabel2.font = CFTool.font(15)
+        walkLabel2.textColor = CFTool.color(11)
         walkLabel2.sizeToFit()
         walkLabel2.tg_left.equal(lineView3.tg_right,offset:15)
         walkLabel2.tg_centerY.equal(lineView3.tg_centerY)
@@ -173,7 +177,8 @@ class RLTest1ViewController: UIViewController {
         
         let walkLabel3 = UILabel()
         walkLabel3.text = "18 Min"
-        walkLabel3.textColor = .white
+        walkLabel3.font = CFTool.font(15)
+        walkLabel3.textColor = CFTool.color(12)
         walkLabel3.sizeToFit()
         walkLabel3.tg_left.equal(walkLabel2.tg_right,offset:5)
         walkLabel3.tg_centerY.equal(walkLabel2.tg_centerY)
@@ -181,7 +186,8 @@ class RLTest1ViewController: UIViewController {
         
         let timeLabel1 = UILabel()
         timeLabel1.text = "9:12"
-        timeLabel1.textColor = .white
+        timeLabel1.font = CFTool.font(14)
+        timeLabel1.textColor = CFTool.color(12)
         timeLabel1.sizeToFit()
         timeLabel1.tg_right.equal(lineView3.tg_left,offset:25)
         timeLabel1.tg_centerY.equal(lineView3.tg_top)
@@ -189,14 +195,15 @@ class RLTest1ViewController: UIViewController {
         
         let timeLabel2 = UILabel()
         timeLabel2.text = "9:30"
-        timeLabel2.textColor = .lightGray
+        timeLabel2.font = CFTool.font(14)
+        timeLabel2.textColor = CFTool.color(12)
         timeLabel2.sizeToFit()
         timeLabel2.tg_right.equal(timeLabel1.tg_right)
         timeLabel2.tg_centerY.equal(lineView3.tg_bottom)
         rootLayout.addSubview(timeLabel2)
         
         let lineView4 = UIView()
-        lineView4.backgroundColor = .white
+        lineView4.backgroundColor = CFTool.color(5)
         lineView4.layer.cornerRadius = 25
         lineView4.tg_width.equal(bottomHalfCircleView.tg_width)
         lineView4.tg_height.equal(lineView4.tg_width, increment:30)
@@ -214,7 +221,8 @@ class RLTest1ViewController: UIViewController {
         
         let homeLabel = UILabel()
         homeLabel.text = "Home"
-        homeLabel.textColor = .white
+        homeLabel.font = CFTool.font(15)
+        homeLabel.textColor = CFTool.color(4)
         homeLabel.sizeToFit()
         homeLabel.tg_left.equal(lineView4.tg_right,offset:10)
         homeLabel.tg_centerY.equal(lineView4.tg_centerY)
@@ -224,8 +232,6 @@ class RLTest1ViewController: UIViewController {
          右下角区域部分。
          */
         let bottomRightImageView = UIImageView(image: UIImage(named: "head1"))
-        bottomRightImageView.backgroundColor = .white
-        bottomRightImageView.sizeToFit()
         bottomRightImageView.tg_right.equal(rootLayout.tg_right)
         bottomRightImageView.tg_bottom.equal(rootLayout.tg_bottom)
         rootLayout.addSubview(bottomRightImageView)

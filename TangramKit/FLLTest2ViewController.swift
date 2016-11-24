@@ -23,6 +23,7 @@ class FLLTest2ViewController: UIViewController {
         let rootLayout = TGFlowLayout(.vert,arrangedCount:2)
         rootLayout.tg_arrangedGravity = TGGravity.vert.center
         rootLayout.tg_vspace = 4
+        rootLayout.tg_hspace = 4
         self.view = rootLayout
         
         //第一行
@@ -39,13 +40,16 @@ class FLLTest2ViewController: UIViewController {
         let addTagButton = UIButton(type: .system)
         addTagButton.setTitle("Add Tag", for: .normal)
         addTagButton.addTarget(self, action: #selector(handleAddTag), for: .touchUpInside)
+        addTagButton.tg_right.equal(2)
         addTagButton.sizeToFit()             //因为每行2个子视图，这个子视图的宽度是固定的，而上面的兄弟视图占用了剩余的宽度。这样这两个子视图将均分父视图。
         rootLayout.addSubview(addTagButton)
         
         //第二行
         let stretchSpacingLabel = UILabel()
         stretchSpacingLabel.text = "Stretch Spacing:"
-        stretchSpacingLabel.tg_width.equal(.fill)
+        stretchSpacingLabel.font = CFTool.font(15)
+        stretchSpacingLabel.tg_left.equal(2)
+        stretchSpacingLabel.tg_width.equal(140)
         stretchSpacingLabel.tg_height.equal(.wrap)
         rootLayout.addSubview(stretchSpacingLabel)
         
@@ -56,7 +60,9 @@ class FLLTest2ViewController: UIViewController {
         //第三行
         let stretchSizeLabel = UILabel()
         stretchSizeLabel.text = "Stretch Size:"
-        stretchSizeLabel.tg_width.equal(.fill)
+        stretchSizeLabel.font = CFTool.font(15)
+        stretchSizeLabel.tg_left.equal(2)
+        stretchSizeLabel.tg_width.equal(140)
         stretchSizeLabel.tg_height.equal(.wrap)
         rootLayout.addSubview(stretchSizeLabel)
         
@@ -67,7 +73,9 @@ class FLLTest2ViewController: UIViewController {
         //第四行
         let autoArrangeLabel = UILabel()
         autoArrangeLabel.text = "Auto Arrange:"
-        autoArrangeLabel.tg_width.equal(.fill)
+        autoArrangeLabel.font = CFTool.font(15)
+        autoArrangeLabel.tg_left.equal(2)
+        autoArrangeLabel.tg_width.equal(140)
         autoArrangeLabel.tg_height.equal(.wrap)
         rootLayout.addSubview(autoArrangeLabel)
         
@@ -77,7 +85,7 @@ class FLLTest2ViewController: UIViewController {
         
         //最后一行。
         let flowLayout = TGFlowLayout()
-        flowLayout.backgroundColor = .lightGray
+        flowLayout.backgroundColor = CFTool.color(0)
         flowLayout.tg_space = 10
         flowLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
         flowLayout.tg_width.equal(.fill)
@@ -112,6 +120,7 @@ extension FLLTest2ViewController
     {
         let tagButton = UIButton()
         tagButton.setTitle(text,for:.normal)
+        tagButton.titleLabel?.font = CFTool.font(15)
         tagButton.layer.cornerRadius = 15;
         tagButton.backgroundColor = UIColor(red: CGFloat(arc4random_uniform(256))/255.0, green: CGFloat(arc4random_uniform(256))/255.0, blue: CGFloat(arc4random_uniform(256))/255.0, alpha: 1)
         

@@ -33,23 +33,24 @@ class FLLTest3ViewController: UIViewController {
         self.view = rootLayout
         
         let tipLabel = UILabel()
-        tipLabel.font = .systemFont(ofSize: 13)
+        tipLabel.font = CFTool.font(13)
         tipLabel.text = NSLocalizedString("  You can drag the following tag to adjust location in layout, MyLayout can use subview's useFrame,noLayout property and layout view's autoresizesSubviews propery to complete some position adjustment and the overall animation features: \n useFrame set to YES indicates subview is not controlled by the layout view but use its own frame to set the location and size instead.\n \n autoresizesSubviews set to NO indicate layout view will not do any layout operation, and will remain in the position and size of all subviews.\n \n noLayout set to YES indicate subview in the layout view just only take up the position and size but not real adjust the position and size when layouting.", comment: "")
+        tipLabel.textColor = CFTool.color(4)
         tipLabel.numberOfLines = 0
         tipLabel.tg_height.equal(.wrap)  //高度动态确定。
         rootLayout.addSubview(tipLabel)
         
         let tip2Label = UILabel()
         tip2Label.text = NSLocalizedString("double click to remove tag", comment: "")
-        tip2Label.font = .systemFont(ofSize: 13)
-        tip2Label.textColor = .lightGray
+        tip2Label.font = CFTool.font(13)
+        tip2Label.textColor = CFTool.color(3)
         tip2Label.textAlignment = .center
         tip2Label.sizeToFit()
         tip2Label.tg_top.equal(3)
         rootLayout.addSubview(tip2Label)
         
         let flowLayout = TGFlowLayout.init(.vert, arrangedCount: 4)
-        flowLayout.backgroundColor = .lightGray
+        flowLayout.backgroundColor = CFTool.color(0)
         flowLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
         flowLayout.tg_space = 10  //流式布局里面的子视图的水平和垂直间距设置为10
         flowLayout.tg_averageArrange = true  //流式布局里面的子视图的宽度将平均分配。
@@ -78,7 +79,7 @@ class FLLTest3ViewController: UIViewController {
     {
         let tagButton = UIButton()
         tagButton.setTitle(text, for: .normal)
-        tagButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        tagButton.titleLabel?.font = CFTool.font(14)
         tagButton.layer.cornerRadius = 20
         tagButton.backgroundColor = UIColor(red: CGFloat(arc4random()%256)/255.0, green: CGFloat(arc4random()%256)/255.0, blue: CGFloat(arc4random()%256)/255.0, alpha: 1.0)
         tagButton.tg_height.equal(44)
@@ -94,11 +95,11 @@ class FLLTest3ViewController: UIViewController {
     {
         let addButton = UIButton()
         addButton.setTitle(NSLocalizedString("add tag", comment: ""), for: .normal)
-        addButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+        addButton.titleLabel?.font = CFTool.font(14)
         addButton.setTitleColor(.blue, for: .normal)
         addButton.layer.cornerRadius = 20
-        addButton.layer.borderWidth = 2
-        addButton.layer.borderColor = UIColor.red.cgColor
+        addButton.layer.borderWidth = 0.5
+        addButton.layer.borderColor = UIColor.lightGray.cgColor
         addButton.tg_height.equal(44)
         addButton.addTarget(self, action: #selector(handleAddTagButton(sender:)), for: .touchUpInside)
         return addButton

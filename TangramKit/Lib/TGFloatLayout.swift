@@ -242,10 +242,10 @@ extension TGFloatLayout
         var i = rightCandidateRects.count - 1
         while i >= 0
         {
-            
+            //CGFloat
             let rightCandidateRect = rightCandidateRects[i]
             //如果有比重则不能相等只能小于。
-            if (hasWeight ? leftCandidateRect.maxX + width < rightCandidateRect.minX : leftCandidateRect.maxX + width <= rightCandidateRect.minX) &&
+            if (hasWeight ? leftCandidateRect.maxX + width < rightCandidateRect.minX : /*leftCandidateRect.maxX + width <= rightCandidateRect.minX*/ _tgCGFloatLessOrEqual(leftCandidateRect.maxX + width, rightCandidateRect.minX)) &&
                 leftCandidateRect.maxY > lastHeight
             {
                 
@@ -260,7 +260,7 @@ extension TGFloatLayout
         
         if retPoint.y == CGFloat.greatestFiniteMagnitude
         {
-            if (hasWeight ? leftCandidateRect.maxX + width < rightBoundary : leftCandidateRect.maxX + width <= rightBoundary ) &&
+            if (hasWeight ? leftCandidateRect.maxX + width < rightBoundary : /*leftCandidateRect.maxX + width <= rightBoundary*/_tgCGFloatLessOrEqual(leftCandidateRect.maxX + width, rightBoundary) ) &&
                 leftCandidateRect.maxY > lastHeight
             {
                 retPoint.y =  max(leftCandidateRect.minY,lastHeight);
@@ -283,7 +283,7 @@ extension TGFloatLayout
             
             let bottomCandidateRect = bottomCandidateRects[i]
             
-            if (hasWeight ? topCandidateRect.maxY + height < bottomCandidateRect.minY : topCandidateRect.maxY + height <= bottomCandidateRect.minY) &&
+            if (hasWeight ? topCandidateRect.maxY + height < bottomCandidateRect.minY : /*topCandidateRect.maxY + height <= bottomCandidateRect.minY*/ _tgCGFloatLessOrEqual(topCandidateRect.maxY + height, bottomCandidateRect.minY) ) &&
                 topCandidateRect.maxX > lastWidth
             {
                 retPoint.x = max(topCandidateRect.minX,lastWidth);
@@ -297,7 +297,7 @@ extension TGFloatLayout
         
         if (retPoint.x == CGFloat.greatestFiniteMagnitude)
         {
-            if ((hasWeight ? topCandidateRect.maxY + height < bottomBoundary : topCandidateRect.maxY + height <= bottomBoundary ) &&
+            if ((hasWeight ? topCandidateRect.maxY + height < bottomBoundary : /*topCandidateRect.maxY + height <= bottomBoundary*/ _tgCGFloatLessOrEqual(topCandidateRect.maxY + height, bottomBoundary) ) &&
                 topCandidateRect.maxX > lastWidth)
             {
                 retPoint.x =  max(topCandidateRect.minX,lastWidth);
@@ -319,7 +319,7 @@ extension TGFloatLayout
         {
             
             let  leftCandidateRect = leftCandidateRects[i]
-            if ((hasWeight ? rightCandidateRect.minX - width > leftCandidateRect.maxX : rightCandidateRect.minX - width >= leftCandidateRect.maxX) &&
+            if ((hasWeight ? rightCandidateRect.minX - width > leftCandidateRect.maxX : /*rightCandidateRect.minX - width >= leftCandidateRect.maxX*/ _tgCGFloatGreatOrEqual(rightCandidateRect.minX - width, leftCandidateRect.maxX)) &&
                 rightCandidateRect.maxY > lastHeight)
             {
                 retPoint.y = max(rightCandidateRect.minY,lastHeight);
@@ -334,7 +334,7 @@ extension TGFloatLayout
         
         if (retPoint.y == CGFloat.greatestFiniteMagnitude)
         {
-            if ((hasWeight ? rightCandidateRect.minX - width > leftBoundary : rightCandidateRect.minX - width >= leftBoundary) &&
+            if ((hasWeight ? rightCandidateRect.minX - width > leftBoundary : /*rightCandidateRect.minX - width >= leftBoundary*/ _tgCGFloatGreatOrEqual(rightCandidateRect.minX - width, leftBoundary)) &&
                 rightCandidateRect.maxY > lastHeight)
             {
                 retPoint.y =  max(rightCandidateRect.minY,lastHeight);
@@ -355,7 +355,7 @@ extension TGFloatLayout
         {
             
             let topCandidateRect = topCandidateRects[i]
-            if ((hasWeight ? bottomCandidateRect.minY - height > topCandidateRect.maxY : bottomCandidateRect.minY - height >= topCandidateRect.maxY) &&
+            if ((hasWeight ? bottomCandidateRect.minY - height > topCandidateRect.maxY : /*bottomCandidateRect.minY - height >= topCandidateRect.maxY*/ _tgCGFloatGreatOrEqual(bottomCandidateRect.minY - height, topCandidateRect.maxY)) &&
                 bottomCandidateRect.maxX > lastWidth)
             {
                 retPoint.x = max(bottomCandidateRect.minX,lastWidth);
@@ -370,7 +370,7 @@ extension TGFloatLayout
         
         if (retPoint.x == CGFloat.greatestFiniteMagnitude)
         {
-            if ((hasWeight ? bottomCandidateRect.minY - height > topBoundary : bottomCandidateRect.minY - height >= topBoundary) &&
+            if ((hasWeight ? bottomCandidateRect.minY - height > topBoundary : /*bottomCandidateRect.minY - height >= topBoundary*/ _tgCGFloatGreatOrEqual(bottomCandidateRect.minY - height, topBoundary)) &&
                 bottomCandidateRect.maxX > lastWidth)
             {
                 retPoint.x =  max(bottomCandidateRect.minX,lastWidth);

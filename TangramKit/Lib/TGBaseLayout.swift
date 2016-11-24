@@ -2493,4 +2493,62 @@ private class TGBorderlineLayerDelegate: NSObject,CALayerDelegate
     
 }
 
+internal func _tgCGFloatEqual(_ f1:CGFloat, _ f2:CGFloat) -> Bool
+{
+    //print("aa\(DBL_EPSILON)")
+    
+   if CGFloat.NativeType.self == Double.self
+   {
+    return abs(f1 - f2) < 1e-6
+
+    }
+    else
+   {
+    return abs(f1 - f2) < 1e-4
+
+    }
+    
+    
+}
+
+internal func _tgCGFloatNotEqual(_ f1:CGFloat, _ f2:CGFloat) -> Bool
+{
+    if CGFloat.NativeType.self == Double.self
+    {
+        return abs(f1 - f2) > 1e-6
+    }
+    else
+    {
+        return abs(f1 - f2) > 1e-4
+    }
+}
+
+internal func _tgCGFloatLessOrEqual(_ f1:CGFloat, _ f2:CGFloat) -> Bool
+{
+    if CGFloat.NativeType.self == Double.self
+    {
+        return f1 < f2 || abs(f1 - f2) < 1e-6
+    }
+    else
+    {
+        return f1 < f2 || abs(f1 - f2) < 1e-4
+        
+    }
+}
+
+internal func _tgCGFloatGreatOrEqual(_ f1:CGFloat, _ f2:CGFloat) -> Bool
+{
+    if CGFloat.NativeType.self == Double.self
+    {
+        return f1 > f2 || abs(f1 - f2) > 1e-6
+    }
+    else
+    {
+        return f1 > f2 || abs(f1 - f2) > 1e-4
+        
+    }
+    
+}
+
+
 

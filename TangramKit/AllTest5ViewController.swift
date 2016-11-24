@@ -21,23 +21,25 @@ class AllTest5ViewController: UIViewController {
         
         
         let v1 = UILabel()
-        v1.backgroundColor = .red
+        v1.backgroundColor = CFTool.color(5)
         v1.numberOfLines = 0;
         v1.text = NSLocalizedString("The red、green、blue subwiews is arranged vertically when run in portrait screen on all the iPhone devices,but horizontal arranged when in landscape screen, the blue subview is not showed on any phone devices except on iPhone6plus.", comment:"");
+        v1.textColor = CFTool.color(4)
+        v1.font = CFTool.font(15)
         v1.tg_height.equal(100%)
         v1.tg_width.equal(100%)
         rootLayout.addSubview(v1)
         
         
         let v2 = UILabel()
-        v2.backgroundColor = .green
+        v2.backgroundColor = CFTool.color(6)
         v2.tg_height.equal(100%)
         v2.tg_width.equal(100%)
         rootLayout.addSubview(v2)
         
         
         let v3 = UILabel()
-        v3.backgroundColor = .blue
+        v3.backgroundColor = CFTool.color(7)
         v3.tg_height.equal(100%)
         v3.tg_width.equal(100%)
         rootLayout.addSubview(v3)

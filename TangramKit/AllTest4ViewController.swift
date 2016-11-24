@@ -23,7 +23,7 @@ class AllTest4ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.view.backgroundColor = .darkGray
+        self.view.backgroundColor = CFTool.color(0)
         
         var sections:[String] = ["品牌推荐",
                                  "时尚风格",
@@ -109,6 +109,8 @@ extension AllTest4ViewController
         let sectionTitleLabel = UILabel()
         sectionTitleLabel.text = sectionTitle
         sectionTitleLabel.adjustsFontSizeToFitWidth = true
+        sectionTitleLabel.textColor = CFTool.color(4)
+        sectionTitleLabel.font = CFTool.font(17)
         sectionTitleLabel.minimumScaleFactor = 0.7
         sectionTitleLabel.lineBreakMode = .byTruncatingMiddle
         sectionTitleLabel.tg_centerY.equal(supplementaryLayout.tg_centerY)  //垂直居中
@@ -151,7 +153,8 @@ extension AllTest4ViewController
         
         let titleLabel = UILabel()
         titleLabel.text = title
-        titleLabel.font = UIFont.systemFont(ofSize: 13)
+        titleLabel.font = CFTool.font(14)
+        titleLabel.textColor = CFTool.color(4)
         titleLabel.textAlignment = NSTextAlignment.center
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.tg_bottom.equal(2)

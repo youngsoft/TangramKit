@@ -49,7 +49,7 @@ class FOLTest4ViewController: UIViewController {
         //添加数据内容布局
         let contentLayout = TGLinearLayout(.vert)
         contentLayout.tg_height.equal(.wrap)
-        contentLayout.backgroundColor = .lightGray
+        contentLayout.backgroundColor = CFTool.color(0)
         contentLayout.tg_gravity = TGGravity.horz.fill
         contentLayout.tg_vspace = 10
         contentLayout.tg_padding = UIEdgeInsetsMake(10, 0, 10, 0);
@@ -89,6 +89,8 @@ extension FOLTest4ViewController
             //添加标题文本。
             let titleLabel = UILabel()
             titleLabel.text = dict["title"] as! String!
+            titleLabel.textColor = CFTool.color(4)
+            titleLabel.font = CFTool.font(16)
             titleLabel.tg_width.equal(100%)  //标题部分占据全部的宽度，独占一行。所以
             titleLabel.tg_bottom.equal(5) //设置底部边距，这样下面的内容都和这个视图距离5个点。
             titleLabel.sizeToFit()
@@ -175,6 +177,8 @@ extension FOLTest4ViewController
             //添加标题文本。
             let titleLabel = UILabel()
             titleLabel.text = dict["title"] as! String!
+            titleLabel.textColor = CFTool.color(4)
+            titleLabel.font = CFTool.font(16)
             titleLabel.tg_width.equal(100%)  //标题部分占据全部的宽度，独占一行。所以
             titleLabel.tg_bottom.equal(5) //设置底部边距，这样下面的内容都和这个视图距离5个点。
             titleLabel.sizeToFit()
@@ -247,12 +251,14 @@ extension FOLTest4ViewController
         
         for i in 0 ..< actions.count
         {
-            let button = UIButton(type:.system)
+            let button = UIButton()
             button.setTitle(actions[i], for:.normal)
-            button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+            button.setTitleColor(CFTool.color(7), for: .normal)
+            button.setTitleColor(CFTool.color(2), for: .selected)
+            button.titleLabel?.font = CFTool.font(14)
             button.layer.cornerRadius = 5;
             button.layer.borderColor = UIColor.lightGray.cgColor
-            button.layer.borderWidth = 1;
+            button.layer.borderWidth = 0.5;
             button.tg_height.equal(44)
             button.tg_width.equal(actionLayout.tg_width, increment:-2.5, multiple:1.0/CGFloat(actions.count))
             button.tag = i + 100;
@@ -270,7 +276,7 @@ extension FOLTest4ViewController
         let sectionLayout = TGLinearLayout(.vert)
         sectionLayout.layer.cornerRadius = 5;
         sectionLayout.layer.borderColor = UIColor.lightGray.cgColor
-        sectionLayout.layer.borderWidth = 1
+        sectionLayout.layer.borderWidth = 0.5
         sectionLayout.tg_gravity = .center
         sectionLayout.tg_setTarget(self,action:#selector(handleSectionViewTap), for:.touchUpInside)
         
@@ -295,11 +301,12 @@ extension FOLTest4ViewController
     {
         let tagButton = UIButton()
         tagButton.setTitle(title,for:.normal)
-        tagButton.setTitleColor(UIColor.black,for:.normal)
+        tagButton.setTitleColor(CFTool.color(9),for:.normal)
         tagButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        tagButton.titleLabel?.font = CFTool.font(14)
         tagButton.layer.cornerRadius = 20;
         tagButton.layer.borderColor = UIColor.lightGray.cgColor
-        tagButton.layer.borderWidth = 1;
+        tagButton.layer.borderWidth = 0.5;
         tagButton.addTarget(self,action:#selector(handleTagViewTap),for:.touchUpInside)
         
         return tagButton;
@@ -337,15 +344,16 @@ extension FOLTest4ViewController
     {
         self.contentLayout.subviews.forEach {$0.removeFromSuperview()}
         
-        sender.backgroundColor = UIColor.red
         if sender.tag == 100
         {
-            sender.superview!.viewWithTag(101)?.backgroundColor = UIColor.clear
+            sender.isSelected = true
+            (sender.superview!.viewWithTag(101) as? UIButton)?.isSelected = false
             self.style1Layout(self.contentLayout)
         }
         else
         {
-            sender.superview!.viewWithTag(100)?.backgroundColor = UIColor.clear
+            sender.isSelected = true
+            (sender.superview!.viewWithTag(100) as? UIButton)?.isSelected = false
             self.style2Layout(self.contentLayout)
         }
         

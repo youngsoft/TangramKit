@@ -21,21 +21,26 @@ class RLTest3ViewController: UIViewController {
         self.view = rootLayout
         
         let layout1 = createLayout1()  //子视图整体水平居中的布局
+        layout1.tg_height.equal(100);
+        layout1.tg_width.equal(.fill);
+        
         let layout2 = createLayout2()  //子视图整体垂直居中的布局
         let layout3 = createLayout3()  //子视图整体居中的布局。
         
-        layout1.backgroundColor = .red
-        layout2.backgroundColor = .green
-        layout3.backgroundColor = .blue
+        layout1.backgroundColor = CFTool.color(0)
+        layout2.backgroundColor = CFTool.color(0)
+        layout3.backgroundColor = CFTool.color(0)
         
         layout1.tg_width.equal(rootLayout.tg_width)
         layout2.tg_width.equal(rootLayout.tg_width)
         layout3.tg_width.equal(rootLayout.tg_width)
         
         //均分三个布局的高度。
+        layout1.tg_height.add(-10)
+        layout2.tg_height.add(-10)
         layout1.tg_height.equal([layout2.tg_height, layout3.tg_height])
-        layout2.tg_top.equal(layout1.tg_bottom)
-        layout3.tg_top.equal(layout2.tg_bottom)
+        layout2.tg_top.equal(layout1.tg_bottom, offset:10)
+        layout3.tg_top.equal(layout2.tg_bottom, offset:10)
         
         rootLayout.addSubview(layout1)
         rootLayout.addSubview(layout2)
@@ -53,24 +58,37 @@ class RLTest3ViewController: UIViewController {
 //MARK: - Layout Construction
 extension RLTest3ViewController
 {
+    func createLabel(_ title: String, backgroundColor color: UIColor) -> UILabel {
+        let v = UILabel()
+        v.backgroundColor = color
+        v.text = title
+        v.font = CFTool.font(17)
+        v.sizeToFit()
+        v.layer.shadowOffset = CGSize(width: CGFloat(3), height: CGFloat(3))
+        v.layer.shadowColor = CFTool.color(4).cgColor
+        v.layer.shadowRadius = 2
+        v.layer.shadowOpacity = 0.3
+        return v
+    }
+    
     //子视图整体水平居中的布局
     func createLayout1() -> TGRelativeLayout {
         let layout = TGRelativeLayout()
         
         let titleLabel = UILabel()
         titleLabel.text = NSLocalizedString("subviews horz centered in superview", comment:"")
+        titleLabel.font = CFTool.font(16)
+        titleLabel.textColor = CFTool.color(4)
         titleLabel.sizeToFit()
         layout.addSubview(titleLabel)
-        
-        let v1 = UIView()
-        v1.backgroundColor = .green
+ 
+        let v1 = self.createLabel("", backgroundColor: CFTool.color(5))
         v1.tg_width.equal(100)
         v1.tg_height.equal(50)
         v1.tg_centerY.equal(0)
         layout.addSubview(v1)
         
-        let v2 = UIView()
-        v2.backgroundColor = .blue
+        let v2 = self.createLabel("", backgroundColor: CFTool.color(6))
         v2.tg_width.equal(50)
         v2.tg_height.equal(50)
         v2.tg_centerY.equal(0)
@@ -89,18 +107,18 @@ extension RLTest3ViewController
         
         let titleLabel = UILabel()
         titleLabel.text = NSLocalizedString("subviews vert centered in superview", comment:"")
+        titleLabel.font = CFTool.font(16)
+        titleLabel.textColor = CFTool.color(4)
         titleLabel.sizeToFit()
         layout.addSubview(titleLabel)
         
-        let v1 = UIView()
-        v1.backgroundColor = .red
+        let v1 = self.createLabel("", backgroundColor: CFTool.color(5))
         v1.tg_width.equal(200)
         v1.tg_height.equal(50)
         v1.tg_centerX.equal(0)
         layout.addSubview(v1)
         
-        let v2 = UIView()
-        v2.backgroundColor = .blue
+        let v2 = self.createLabel("", backgroundColor: CFTool.color(6))
         v2.tg_width.equal(200)
         v2.tg_height.equal(30)
         v2.tg_centerX.equal(0)
@@ -119,47 +137,27 @@ extension RLTest3ViewController
         
         let titleLabel = UILabel()
         titleLabel.text = NSLocalizedString("subviews centered in superview", comment:"")
+        titleLabel.font = CFTool.font(16)
+        titleLabel.textColor = CFTool.color(4)
         titleLabel.sizeToFit()
         layout.addSubview(titleLabel)
         
-        let lb1up = UILabel()
-        lb1up.text = "TopLeft"
-        lb1up.backgroundColor = UIColor.red
-        lb1up.font = UIFont.systemFont(ofSize: 17)
-        lb1up.sizeToFit()
+        let lb1up = self.createLabel("top left", backgroundColor: CFTool.color(5))
         layout.addSubview(lb1up)
         
-        let lb1down = UILabel()
-        lb1down.text = "BottomLeft"
-        lb1down.backgroundColor = UIColor.red
-        lb1down.font = UIFont.systemFont(ofSize: 17)
-        lb1down.sizeToFit()
+        let lb1down = self.createLabel("bottom left", backgroundColor: CFTool.color(6))
         layout.addSubview(lb1down)
         
-        let lb2up = UILabel()
-        lb2up.text = "TopCenter"
-        lb2up.backgroundColor = UIColor.red
-        lb2up.font = UIFont.systemFont(ofSize: 12)
-        lb2up.sizeToFit()
+        let lb2up = self.createLabel("top center", backgroundColor: CFTool.color(7))
         layout.addSubview(lb2up)
         
-        let lb2down = UILabel()
-        lb2down.text = "Center"
-        lb2down.backgroundColor = UIColor.green
-        lb2down.sizeToFit()
+        let lb2down = self.createLabel("center", backgroundColor: CFTool.color(8))
         layout.addSubview(lb2down)
         
-        let lb3up = UILabel()
-        lb3up.text = "TopRight"
-        lb3up.backgroundColor = UIColor.red
-        lb3up.sizeToFit()
+        let lb3up = self.createLabel("top right", backgroundColor: CFTool.color(9))
         layout.addSubview(lb3up)
         
-        let lb3down = UILabel()
-        lb3down.text = "BottomRight"
-        lb3down.backgroundColor = UIColor.green
-        lb3down.font = UIFont.systemFont(ofSize: 16)
-        lb3down.sizeToFit()
+        let lb3down = self.createLabel("bottom right", backgroundColor: CFTool.color(10))
         layout.addSubview(lb3down)
         
         //左，中，右三组视图分别垂直居中显示，并且下面和上面间隔10

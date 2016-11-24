@@ -20,6 +20,10 @@ class LLTest1ViewController: UIViewController {
         rootLayout.backgroundColor = .white
         self.view = rootLayout;
         
+        let vertTitleLabel = self.createSectionLabel(NSLocalizedString("vertical(from top to bottom)",comment:""))
+        vertTitleLabel.tg_top.equal(10)  //顶部距离前面的视图10
+        rootLayout.addSubview(vertTitleLabel);
+        
         let vertLayout = createVertSubviewLayout()
         vertLayout.tg_size(width:.fill, height: .wrap) //宽度和父视图保持一致，高度由子视图决定
         //您也可以使用如下方法来分别设置:
@@ -31,11 +35,16 @@ class LLTest1ViewController: UIViewController {
         rootLayout.addSubview(vertLayout)
         
         
+        let horzTitleLabel = self.createSectionLabel(NSLocalizedString("horizontal(from left to right)",comment:""))
+        horzTitleLabel.tg_top.equal(10)  //顶部距离前面的视图10
+        rootLayout.addSubview(horzTitleLabel);
+
+        
         let horzLayout = createHorzSubviewLayout()
-        horzLayout.tg_width.equal(.wrap)    //宽度由子视图决定
+        horzLayout.tg_width.equal(.fill)    //宽度填充父视图宽度。
         horzLayout.tg_height.equal(.fill)   //高度填充父视图的剩余高度
         //您可以用如下方法分别设置
-        //horzLayout.tg_size(width:.wrap, height: .fill) //宽度由子视图决定，高度填充父视图的剩余高度
+        //horzLayout.tg_size(width:.fill, height: .fill) //宽度由子视图决定，高度填充父视图的剩余高度
         rootLayout.addSubview(horzLayout)
         
     }
@@ -58,6 +67,34 @@ class LLTest1ViewController: UIViewController {
 // MARK: - Layout Construction
 extension LLTest1ViewController
 {
+    
+    func createSectionLabel(_ title:String) ->UILabel
+    {
+        let sectionLabel = UILabel()
+        sectionLabel.text = title;
+        sectionLabel.font = CFTool.font(17)
+        sectionLabel.sizeToFit()             //sizeToFit函数的意思是让视图的尺寸刚好包裹其内容。注意sizeToFit方法必要在设置字体、文字后调用才正确。
+        return sectionLabel
+    }
+    
+    func createLabel(_ title:String, color backgroundColor:UIColor) -> UILabel
+    {
+        let v = UILabel()
+        v.text = title;
+        v.font = CFTool.font(15)
+        v.numberOfLines = 0
+        v.textAlignment = .center
+        v.adjustsFontSizeToFitWidth = true
+        v.backgroundColor =  backgroundColor
+        v.layer.shadowOffset = CGSize(width:3, height:3)
+        v.layer.shadowColor = CFTool.color(4).cgColor
+        v.layer.shadowRadius = 2
+        v.layer.shadowOpacity = 0.3
+        
+        return v
+    }
+
+    
     /**
      * 创建一个垂直的线性子布局。
      */
@@ -65,7 +102,7 @@ extension LLTest1ViewController
     {
         //创建垂直布局视图。
         let vertLayout = TGLinearLayout(.vert)
-        vertLayout.backgroundColor = .lightGray
+        vertLayout.backgroundColor = CFTool.color(0)
         
         /*
          对于垂直线性布局里面的子视图来说:
@@ -78,44 +115,35 @@ extension LLTest1ViewController
          7.tg_centerY的设置没有意义。
          */
         
-        let v1 = UILabel()
-        v1.text = NSLocalizedString("Left margin", comment:"")
-        v1.textAlignment = .center
-        v1.backgroundColor = .red
+        let v1 = self.createLabel(NSLocalizedString("left margin", comment:""), color: CFTool.color(5))
         v1.tg_origin(x:10, y:10)             //设置左边距和上边距都为10
-        v1.tg_size(width: 200, height: 25)   //设置视图的宽度和高度
+        v1.tg_size(width: 200, height: 35)   //设置视图的宽度和高度
         //您也可以用如下方式分别设置:
         // v1.tg_top.equal(10)        //上边边距10
         // v1.tg_left.equal(10)       //左边边距10
         // v1.tg_width.equal(200)     //宽度200
-        // v1.tg_height.equal(25)     //高度25
+        // v1.tg_height.equal(35)     //高度35
         //您也可以采用运算符的方式进行设置：
         // v1.tg_top ~= 10
         // v1.tg_left ~= 10
         // v1.tg_width ~= 200
-        // v1.tg_height ~= 25
+        // v1.tg_height ~= 35
         vertLayout.addSubview(v1)
         
         
         
-        let v2 = UILabel()
-        v2.text = NSLocalizedString("Horz center", comment:"")
-        v2.textAlignment = .center
-        v2.backgroundColor = .green
+        let v2 = self.createLabel(NSLocalizedString("horz center", comment:""), color: CFTool.color(6))
         v2.tg_top.equal(10)
         v2.tg_centerX.equal(0)   //水平居中的偏移,如果不等于0则会产生居中偏移
         v2.tg_width.equal(200)
-        v2.tg_height.equal(25)   //等价于 v2.tg_size(width:200, height:25)
+        v2.tg_height.equal(35)   //等价于 v2.tg_size(width:200, height:35)
         vertLayout.addSubview(v2)
         
         
-        let v3 = UILabel()
-        v3.text = NSLocalizedString("Right margin", comment:"")
-        v3.textAlignment = .center
-        v3.backgroundColor = .blue
+        let v3 = self.createLabel(NSLocalizedString("right margin", comment:""), color: CFTool.color(7))
         v3.tg_top.equal(10)
         v3.tg_right.equal(10)  //右边边距10,因为这里只设置了右边边距，所以垂直线性布局会将子视图进行右对齐。
-        v3.tg_size(width: 200, height: 25)   //设置视图的宽度和高度
+        v3.tg_size(width: 200, height: 35)   //设置视图的宽度和高度
         vertLayout.addSubview(v3)
         
         
@@ -130,16 +158,12 @@ extension LLTest1ViewController
          */
         
         
-        let v4 = UILabel()
-        v4.text = NSLocalizedString("Horz fill", comment:"")
-        v4.textAlignment = .center
-        v4.adjustsFontSizeToFitWidth = true
-        v4.backgroundColor = .orange
+        let v4 = self.createLabel(NSLocalizedString("horz fill", comment:""), color: CFTool.color(8))
         v4.tg_top.equal(10)
         v4.tg_bottom.equal(10) // 注意这里虽然设置了上下的间距，但是对于垂直线性布局来说，同时设置上下间距并不能决定子视图的高度，只是表明子视图离兄弟视图的距离而已
         v4.tg_left.equal(10)
         v4.tg_right.equal(10)  //上面两行代码将左右边距设置为10。对于垂直线性布局来说如果子视图同时设置了左右边距则宽度会自动算出，因此不需要设置tg_width的值了
-        v4.tg_height.equal(25)  //这里仍然要设置子视图的高度。
+        v4.tg_height.equal(35)  //这里仍然要设置子视图的高度。
         vertLayout.addSubview(v4)
         
         
@@ -154,7 +178,7 @@ extension LLTest1ViewController
     {
         //创建水平布局视图。
         let horzLayout = TGLinearLayout(.horz)
-        horzLayout.backgroundColor = .darkGray
+        horzLayout.backgroundColor = CFTool.color(0)
         
         /*
          对于水平线性布局里面的子视图来说:
@@ -168,11 +192,7 @@ extension LLTest1ViewController
          */
         
         
-        let v1 = UILabel()
-        v1.text = NSLocalizedString("Top margin", comment:"")
-        v1.textAlignment = .center
-        v1.numberOfLines = 0
-        v1.backgroundColor = .red
+        let v1 = self.createLabel(NSLocalizedString("top margin", comment:""), color: CFTool.color(5))
         v1.tg_top.equal(10)      //上边边距10
         v1.tg_left.equal(10)     //左边边距10
         v1.tg_width.equal(60)
@@ -181,11 +201,7 @@ extension LLTest1ViewController
         
         
         
-        let v2 = UILabel()
-        v2.text = NSLocalizedString("Vert center", comment:"")
-        v2.textAlignment = .center
-        v2.numberOfLines = 0
-        v2.backgroundColor = .green
+        let v2 = self.createLabel(NSLocalizedString("vert center", comment:""), color: CFTool.color(6))
         v2.tg_left.equal(10)
         v2.tg_centerY.equal(0)   //垂直居中，如果不等于0则会产生居中偏移
         v2.tg_width.equal(60)
@@ -193,11 +209,7 @@ extension LLTest1ViewController
         horzLayout.addSubview(v2)
         
         
-        let v3 = UILabel()
-        v3.text = NSLocalizedString("Bottom margin", comment:"")
-        v3.textAlignment = .center
-        v3.numberOfLines = 0
-        v3.backgroundColor = .blue
+        let v3 = self.createLabel(NSLocalizedString("bottom margin", comment:""), color: CFTool.color(7))
         v3.tg_bottom.equal(10)
         v3.tg_left.equal(10)
         v3.tg_right.equal(5)  //对于水平线性布局来说，同时设置左右间距并不能决定子视图的宽度，因此需要明确的设定宽度。
@@ -206,11 +218,7 @@ extension LLTest1ViewController
         horzLayout.addSubview(v3)
         
         
-        let v4 = UILabel()
-        v4.text = NSLocalizedString("Vert fill", comment:"")
-        v4.textAlignment = .center
-        v4.numberOfLines = 0
-        v4.backgroundColor = .orange
+        let v4 = self.createLabel(NSLocalizedString("vert fill", comment:""), color: CFTool.color(8))
         v4.tg_left.equal(10)
         v4.tg_right.equal(10)
         v4.tg_top.equal(10)

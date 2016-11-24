@@ -12,6 +12,22 @@ class RLTest2ViewController: UIViewController {
 
     weak var hiddenButton: UIButton!
     
+    
+    func createButton(_ title: String, backgroundColor color: UIColor) -> UIButton {
+        let v = UIButton()
+        v.backgroundColor = color
+        v.setTitle(title, for: .normal)
+        v.setTitleColor(CFTool.color(4), for: .normal)
+        v.titleLabel!.font = CFTool.font(14)
+        v.titleLabel!.numberOfLines = 2
+        v.titleLabel!.adjustsFontSizeToFitWidth = true
+        v.layer.shadowOffset = CGSize(width: CGFloat(3), height: CGFloat(3))
+        v.layer.shadowColor = CFTool.color(4).cgColor
+        v.layer.shadowRadius = 2
+        v.layer.shadowOpacity = 0.3
+        return v
+    }
+    
     override func loadView()
     {
         /*
@@ -20,7 +36,7 @@ class RLTest2ViewController: UIViewController {
         
         let rootLayout = TGRelativeLayout()
         rootLayout.tg_padding = UIEdgeInsetsMake(0, 0, 0, 10)
-        rootLayout.backgroundColor = .gray
+        rootLayout.backgroundColor = .white
         self.view = rootLayout
         
         let hiddenSwitch = UISwitch()
@@ -31,42 +47,29 @@ class RLTest2ViewController: UIViewController {
         
         let hiddenSwitchLabel = UILabel()
         hiddenSwitchLabel.text = NSLocalizedString("flex size when subview hidden switch:", comment:"")
+        hiddenSwitchLabel.textColor = CFTool.color(4)
+        hiddenSwitchLabel.font = CFTool.font(15)
         hiddenSwitchLabel.sizeToFit()
         hiddenSwitchLabel.tg_left.equal(10)
         hiddenSwitchLabel.tg_centerY.equal(hiddenSwitch.tg_centerY)
         rootLayout.addSubview(hiddenSwitchLabel)
         
         /**水平平分3个子视图**/
-        let v1 = UIButton()
-        v1.backgroundColor = .red
-        v1.setTitle(NSLocalizedString("average 1/3 width\nturn above switch", comment:""), for: .normal)
-        v1.titleLabel?.numberOfLines = 2
-        v1.titleLabel?.adjustsFontSizeToFitWidth = true
-        v1.titleLabel?.textAlignment = .center
+        let v1 = self.createButton(NSLocalizedString("average 1/3 width\nturn above switch", comment: ""), backgroundColor: CFTool.color(5))
         v1.tg_height.equal(40)
         v1.tg_top.equal(60)
         v1.tg_left.equal(10)
         rootLayout.addSubview(v1)
         
-        let v2 = UIButton()
-        v2.backgroundColor = .red
-        v2.setTitle(NSLocalizedString("average 1/3 width\nhide me", comment:""), for:.normal)
+        let v2 = self.createButton(NSLocalizedString("average 1/3 width\nhide me", comment: ""), backgroundColor: CFTool.color(6))
         v2.addTarget(self, action: #selector(handleHidden), for: .touchUpInside)
-        v2.titleLabel?.numberOfLines = 2
-        v2.titleLabel?.adjustsFontSizeToFitWidth = true
-        v2.titleLabel?.textAlignment = .center
         v2.tg_height.equal(v1.tg_height)
         v2.tg_top.equal(v1.tg_top)
         v2.tg_left.equal(v1.tg_right, offset:10)
         rootLayout.addSubview(v2)
         
-        let v3 = UIButton()
-        v3.backgroundColor = .red
-        v3.setTitle(NSLocalizedString("average 1/3 width\nshow me", comment:""), for: .normal)
+        let v3 = self.createButton(NSLocalizedString("average 1/3 width\nshow me", comment: ""), backgroundColor: CFTool.color(7))
         v3.addTarget(self, action:#selector(handleShow), for: .touchUpInside)
-        v3.titleLabel?.numberOfLines = 2
-        v3.titleLabel?.adjustsFontSizeToFitWidth = true
-        v3.titleLabel?.textAlignment = .center
         v3.tg_height.equal(v1.tg_height)
         v3.tg_top.equal(v1.tg_top)
         v3.tg_left.equal(v2.tg_right, offset:10)
@@ -78,32 +81,20 @@ class RLTest2ViewController: UIViewController {
         v1.tg_width.equal([v2.tg_width,v3.tg_width], increment:-10)
         
         /**某个视图宽度固定其他平分**/
-        let v4 = UILabel()
-        v4.backgroundColor = .green
-        v4.text = NSLocalizedString("width equal to 260", comment:"")
-        v4.adjustsFontSizeToFitWidth = true
-        v4.textAlignment = .center
+        let v4 = self.createButton(NSLocalizedString("width equal to 260", comment: ""), backgroundColor: CFTool.color(5))
         v4.tg_top.equal(v1.tg_bottom, offset:30)
         v4.tg_left.equal(10)
         v4.tg_height.equal(40)
         v4.tg_width.equal(160)  //第一个视图宽度固定
         rootLayout.addSubview(v4)
         
-        let v5 = UILabel()
-        v5.backgroundColor = .green
-        v5.text = NSLocalizedString("1/2 with of free superview", comment:"")
-        v5.adjustsFontSizeToFitWidth = true
-        v5.textAlignment = .center
+        let v5 =  self.createButton(NSLocalizedString("1/2 with of free superview", comment: ""), backgroundColor: CFTool.color(6))
         v5.tg_top.equal(v4.tg_top)
         v5.tg_left.equal(v4.tg_right, offset:10)
         v5.tg_height.equal(v4.tg_height)
         rootLayout.addSubview(v5)
         
-        let v6 = UILabel()
-        v6.backgroundColor = .green
-        v6.text = NSLocalizedString("1/2 with of free superview", comment:"")
-        v6.adjustsFontSizeToFitWidth = true
-        v6.textAlignment = .center
+        let v6 = self.createButton(NSLocalizedString("1/2 with of free superview", comment: ""), backgroundColor: CFTool.color(7))
         v6.tg_top.equal(v4.tg_top)
         v6.tg_left.equal(v5.tg_right, offset:10)
         v6.tg_height.equal(v4.tg_height)
@@ -115,31 +106,19 @@ class RLTest2ViewController: UIViewController {
         v5.tg_width.equal([v4.tg_width, v6.tg_width], increment:-10)
         
         /**子视图按比例平分**/
-        let v7 = UILabel()
-        v7.backgroundColor = UIColor.blue
-        v7.text = NSLocalizedString("20% with of superview", comment:"")
-        v7.adjustsFontSizeToFitWidth = true
-        v7.textAlignment = .center
+        let v7 = self.createButton(NSLocalizedString("20% with of superview", comment: ""), backgroundColor: CFTool.color(5))
         v7.tg_top.equal(v4.tg_bottom, offset:30)
         v7.tg_left.equal(10)
         v7.tg_height.equal(40)
         rootLayout.addSubview(v7)
         
-        let v8 = UILabel()
-        v8.backgroundColor = UIColor.blue
-        v8.text = NSLocalizedString("30% with of superview", comment:"")
-        v8.adjustsFontSizeToFitWidth = true
-        v8.textAlignment = .center
+        let v8 = self.createButton(NSLocalizedString("30% with of superview", comment: ""), backgroundColor: CFTool.color(6))
         v8.tg_top.equal(v7.tg_top)
         v8.tg_left.equal(v7.tg_right, offset:10)
         v8.tg_height.equal(v7.tg_height)
         rootLayout.addSubview(v8)
         
-        let v9 = UILabel()
-        v9.backgroundColor = UIColor.blue
-        v9.text = NSLocalizedString("50% with of superview", comment:"")
-        v9.adjustsFontSizeToFitWidth = true
-        v9.textAlignment = .center
+        let v9 = self.createButton(NSLocalizedString("50% with of superview", comment: ""), backgroundColor: CFTool.color(7))
         v9.tg_top.equal(v7.tg_top)
         v9.tg_left.equal(v8.tg_right, offset:10)
         v9.tg_height.equal(v7.tg_height)
@@ -157,22 +136,20 @@ class RLTest2ViewController: UIViewController {
          下面部分是一个高度均分的实现方法。
          */
         let bottomLayout = TGRelativeLayout()
-        bottomLayout.backgroundColor = UIColor.lightGray
+        bottomLayout.backgroundColor = CFTool.color(0)
         bottomLayout.tg_left.equal(10)
         bottomLayout.tg_right.equal(0)
         bottomLayout.tg_top.equal(v7.tg_bottom, offset:30)
         bottomLayout.tg_bottom.equal(10)
         rootLayout.addSubview(bottomLayout)
         
-        let v10 = UIView()
-        v10.backgroundColor = UIColor.red
+        let v10 = self.createButton("", backgroundColor: CFTool.color(5))
         v10.tg_width.equal(40)
         v10.tg_right.equal(bottomLayout.tg_centerX, offset:50)
         v10.tg_top.equal(10)
         bottomLayout.addSubview(v10)
         
-        let v11 = UIView()
-        v11.backgroundColor = UIColor.red
+        let v11 = self.createButton("", backgroundColor: CFTool.color(6))
         v11.tg_width.equal(v10.tg_width)
         v11.tg_right.equal(v10.tg_right)
         v11.tg_top.equal(v10.tg_bottom, offset:10)
@@ -183,22 +160,19 @@ class RLTest2ViewController: UIViewController {
         v10.tg_height.equal([v11.tg_height], increment:-10)
         
         
-        let v12 = UIView()
-        v12.backgroundColor = UIColor.green
+        let v12 = self.createButton("", backgroundColor: CFTool.color(5))
         v12.tg_width.equal(40)
         v12.tg_left.equal(bottomLayout.tg_centerX, offset:50)
         v12.tg_top.equal(10)
         bottomLayout.addSubview(v12)
         
-        let v13 = UIView()
-        v13.backgroundColor = UIColor.green
+        let v13 = self.createButton("", backgroundColor: CFTool.color(6))
         v13.tg_width.equal(v12.tg_width)
         v13.tg_left.equal(v12.tg_left)
         v13.tg_top.equal(v12.tg_bottom,offset:10)
         bottomLayout.addSubview(v13)
         
-        let v14 = UIView()
-        v14.backgroundColor = UIColor.green
+        let v14 = self.createButton("", backgroundColor: CFTool.color(7))
         v14.tg_width.equal(v12.tg_width)
         v14.tg_left.equal(v12.tg_left)
         v14.tg_top.equal(v13.tg_bottom, offset:10)

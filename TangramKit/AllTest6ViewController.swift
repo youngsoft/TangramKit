@@ -42,7 +42,8 @@ class AllTest6ViewController: UIViewController {
         let menu1Label = UILabel()
         menu1Label.text = NSLocalizedString("Menu1", comment:"")
         menu1Label.textAlignment = .center
-        menu1Label.backgroundColor = .red
+        menu1Label.backgroundColor = CFTool.color(5)
+        menu1Label.font = CFTool.font(16)
         menu1Label.tg_height.equal(menu1Label.tg_width)
         menu1Label.tg_width.equal(menu1Label.tg_height)
         menuLayout.addSubview(menu1Label)
@@ -50,7 +51,8 @@ class AllTest6ViewController: UIViewController {
         let menu2Label = UILabel()
         menu2Label.text = NSLocalizedString("Menu2", comment:"")
         menu2Label.textAlignment = .center
-        menu2Label.backgroundColor = .green
+        menu2Label.backgroundColor = CFTool.color(6)
+        menu2Label.font = CFTool.font(16)
         menu2Label.tg_height.equal(menu2Label.tg_width)
         menu2Label.tg_width.equal(menu2Label.tg_height)
         menuLayout.addSubview(menu2Label)
@@ -58,7 +60,8 @@ class AllTest6ViewController: UIViewController {
         let menu3Label = UILabel()
         menu3Label.text = NSLocalizedString("Menu3", comment:"")
         menu3Label.textAlignment = .center
-        menu3Label.backgroundColor = .blue
+        menu3Label.backgroundColor = CFTool.color(7)
+        menu3Label.font = CFTool.font(16)
         menu3Label.tg_height.equal(menu3Label.tg_width)
         menu3Label.tg_width.equal(menu3Label.tg_height)
         menuLayout.addSubview(menu3Label)
@@ -66,7 +69,7 @@ class AllTest6ViewController: UIViewController {
         
         //下面创建内容部分。
         let contentLayout = TGRelativeLayout()
-        contentLayout.backgroundColor = .gray
+        contentLayout.backgroundColor = CFTool.color(0)
         contentLayout.tg_height.equal(.fill)
         contentLayout.tg_width.equal(.fill)
         contentLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
@@ -76,14 +79,16 @@ class AllTest6ViewController: UIViewController {
         let func1Label = UILabel()
         func1Label.text = NSLocalizedString("Content1", comment:"")
         func1Label.textAlignment = .center;
-        func1Label.backgroundColor = .orange
+        func1Label.backgroundColor = CFTool.color(5)
+        func1Label.font = CFTool.font(16)
         func1Label.tg_height.equal(contentLayout.tg_height,increment:-5, multiple:0.5)
         contentLayout.addSubview(func1Label)
         
         let func2Label = UILabel()
         func2Label.text = NSLocalizedString("Content2", comment:"");
         func2Label.textAlignment = .center;
-        func2Label.backgroundColor = .cyan
+        func2Label.backgroundColor = CFTool.color(6)
+        func2Label.font = CFTool.font(16)
         func2Label.tg_height.equal(contentLayout.tg_height,increment:-5, multiple:0.5)
         contentLayout.addSubview(func2Label)
         
@@ -94,7 +99,8 @@ class AllTest6ViewController: UIViewController {
         func3Label.text = NSLocalizedString("Content3:please run in different iPhone&iPad device and change different screen orientation", comment:"")
         func3Label.numberOfLines = 0
         func3Label.textAlignment = .center
-        func3Label.backgroundColor = .brown
+        func3Label.backgroundColor = CFTool.color(7)
+        func3Label.font = CFTool.font(16)
         func3Label.tg_height.equal(contentLayout.tg_height,increment:-5, multiple:0.5)
         func3Label.tg_width.equal(contentLayout.tg_width);
         func3Label.tg_top.equal(func1Label.tg_bottom, offset:10)

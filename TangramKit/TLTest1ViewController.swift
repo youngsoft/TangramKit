@@ -21,100 +21,79 @@ class TLTest1ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    func createLabel(_ title: String, backgroundColor color: UIColor) -> UILabel {
+        let v = UILabel()
+        v.text = title
+        v.font = CFTool.font(14)
+        v.textAlignment = .center
+        v.backgroundColor = color
+        return v
+    }
+    
     override func loadView() {
         super.loadView()
         
         let tableLayout = TGTableLayout(.vert)
+        tableLayout.backgroundColor = CFTool.color(0)
+        tableLayout.tg_hspace = 2
+        tableLayout.tg_vspace = 2
         tableLayout.tg_width.equal(.fill)
         tableLayout.tg_height.equal(.fill)
         self.view.addSubview(tableLayout)
         
         
         //第一行固定高度固定为30，每列的宽度固定为70
-        tableLayout.tg_addRow(size:30,colSize:70).backgroundColor = UIColor(white: 0.1, alpha: 1)
+        _ = tableLayout.tg_addRow(size:30,colSize:70)
         
-        var colView = UILabel()
-        colView.text = "Cell00"
-        colView.textAlignment = .center
+        var  colView = self.createLabel("Cell00", backgroundColor: CFTool.color(1))
         colView.tg_left.equal(10)
         colView.tg_right.equal(40) //可以使用TGLayoutPos对象来调整间距。
         colView.tg_top.equal(5)
         colView.tg_bottom.equal(5)
-        colView.backgroundColor = .red
         tableLayout.tg_addCol(colView, inRow:0)
         
-        colView = UILabel()
-        colView.text = "Cell01"
-        colView.textAlignment = .center
-        colView.backgroundColor = .green
+        colView = self.createLabel("Cell01", backgroundColor: CFTool.color(2))
         colView.tg_left.equal(20)
         tableLayout.tg_addCol(colView, inRow:0)
         
-        colView = UILabel()
-        colView.text = "Cell02"
-        colView.textAlignment = .center
-        colView.backgroundColor = UIColor.blue
+        colView = self.createLabel("Cell02", backgroundColor: CFTool.color(3))
         tableLayout.tg_addCol(colView, inRow:0)
         
         //第二行固定高度为40，每列的宽度都相等。
-        tableLayout.tg_addRow(size:40,colSize:TGLayoutSize.average).backgroundColor = UIColor(white: 0.2, alpha: 1)
+        _ = tableLayout.tg_addRow(size:40,colSize:TGLayoutSize.average)
         
-        colView = UILabel()
-        colView.text = "Cell10"
-        colView.textAlignment = .center
-        colView.backgroundColor = .red
+        colView = self.createLabel("Cell10", backgroundColor: CFTool.color(1))
         tableLayout.tg_addCol(colView, inRow:1)
         
-        colView = UILabel()
-        colView.text = "Cell11"
-        colView.textAlignment = .center;
-        colView.backgroundColor = .green
+        colView = self.createLabel("Cell11", backgroundColor: CFTool.color(2))
         tableLayout.tg_addCol(colView, inRow:1)
         
         
-        colView = UILabel()
-        colView.text = "Cell12"
-        colView.textAlignment = .center;
-        colView.backgroundColor = .blue
+        colView = self.createLabel("Cell12", backgroundColor: CFTool.color(3))
         tableLayout.tg_addCol(colView, inRow:1)
         
-        colView = UILabel()
-        colView.text = "Cell13";
-        colView.textAlignment = .center
-        colView.backgroundColor = .yellow
+        colView = self.createLabel("Cell13", backgroundColor: CFTool.color(4))
         tableLayout.tg_addCol(colView, inRow:1)
         
         //第三行固定高度为30，每列的宽度自己设置。行的宽度由所有子视图的宽度包裹。
-        tableLayout.tg_addRow(size:30,colSize:TGLayoutSize.wrap).backgroundColor = UIColor(white: 0.3, alpha: 1)
+        _ = tableLayout.tg_addRow(size:30,colSize:TGLayoutSize.wrap)
         
-        colView = UILabel()
-        colView.text = "Cell20"
-        colView.textAlignment = .center
-        colView.backgroundColor = .red
+        colView = self.createLabel("Cell20", backgroundColor: CFTool.color(1))
         colView.tg_width.equal(100)
         tableLayout.tg_addCol(colView, inRow:2)
         
-        colView = UILabel()
-        colView.text = "Cell21";
-        colView.textAlignment = .center;
-        colView.backgroundColor = .green
+        colView = self.createLabel("Cell21", backgroundColor: CFTool.color(2))
         colView.tg_width.equal(200)
         tableLayout.tg_addCol(colView, inRow:2)
         
         //第四行固定高度为30，子视图的宽度自己设置，但是每行的宽度和父视图保持一致。
-        tableLayout.tg_addRow(size:30,colSize:TGLayoutSize.fill).backgroundColor = UIColor(white: 0.4, alpha: 1)
+        _ = tableLayout.tg_addRow(size:30,colSize:TGLayoutSize.fill)
 
-        colView = UILabel()
-        colView.text = "Cell30"
-        colView.textAlignment = .center;
-        colView.backgroundColor = .red
+        colView = self.createLabel("Cell30", backgroundColor: CFTool.color(1))
         colView.tg_width.equal(80)
         tableLayout.tg_addCol(colView, inRow:3)
         
-        colView = UILabel()
-        colView.text = "Cell31"
-        colView.textAlignment = .center
-        colView.backgroundColor = .green
+        colView = self.createLabel("Cell31", backgroundColor: CFTool.color(2))
         colView.tg_width.equal(200)
         tableLayout.tg_addCol(colView, inRow:3)
         
@@ -125,39 +104,24 @@ class TLTest1ViewController: UIViewController {
         row4.tg_topBorderline = TGLayoutBorderline(color: UIColor.black, thick: 2)
         row4.backgroundColor = UIColor(white: 0.5, alpha: 1)
         
-        colView = UILabel()
-        colView.text = "Cell40";
-        colView.textAlignment = .center
-        colView.backgroundColor = .red
+        colView = self.createLabel("Cell40", backgroundColor: CFTool.color(1))
         tableLayout.tg_addCol(colView, inRow:4)
         
-        colView = UILabel()
-        colView.text = "Cell41";
-        colView.textAlignment = .center
-        colView.backgroundColor = .green
+        colView = self.createLabel("Cell41", backgroundColor: CFTool.color(2))
         tableLayout.tg_addCol(colView, inRow:4)
         
         //第六行高度由子视图的高度决定，列均分宽度
-        tableLayout.tg_addRow(size:TGLayoutSize.wrap, colSize:TGLayoutSize.average).backgroundColor = UIColor(white: 0.6, alpha: 1)
+        _ = tableLayout.tg_addRow(size:TGLayoutSize.wrap, colSize:TGLayoutSize.average)
         
-        colView = UILabel()
-        colView.text = "Cell50"
-        colView.textAlignment = .center
-        colView.backgroundColor = .red
+        colView = self.createLabel("Cell50", backgroundColor: CFTool.color(1))
         colView.tg_height.equal(80)
         tableLayout.tg_addCol(colView, inRow:5)
         
-        colView = UILabel()
-        colView.text = "Cell51"
-        colView.textAlignment = .center
-        colView.backgroundColor = .green
+        colView = self.createLabel("Cell51", backgroundColor: CFTool.color(2))
         colView.tg_height.equal(120)
         tableLayout.tg_addCol(colView, inRow:5)
         
-        colView = UILabel()
-        colView.text = "Cell52";
-        colView.textAlignment = .center
-        colView.backgroundColor = .blue
+        colView = self.createLabel("Cell52", backgroundColor: CFTool.color(3))
         colView.tg_height.equal(70)
         tableLayout.tg_addCol(colView, inRow:5)
     

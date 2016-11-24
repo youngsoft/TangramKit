@@ -59,7 +59,7 @@ class FLLTest1ViewController: UIViewController {
         
         
         let flowLayout = TGFlowLayout(.vert,arrangedCount: 3)
-        flowLayout.backgroundColor = .lightGray
+        flowLayout.backgroundColor = CFTool.color(0)
         flowLayout.tg_width.equal(800)
         flowLayout.tg_height.equal(800)
         flowLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
@@ -73,8 +73,8 @@ class FLLTest1ViewController: UIViewController {
         for _ in 0 ..< 60
         {
             let imageView = UIImageView(image:UIImage(named:imageArray[Int(arc4random()%5)]))
-            imageView.layer.borderColor = UIColor.red.cgColor
-            imageView.layer.borderWidth = 1
+            imageView.layer.borderColor = CFTool.color(5).cgColor
+            imageView.layer.borderWidth = 0.5
             self.flowLayout.addSubview(imageView)
         }
         
@@ -89,10 +89,11 @@ extension FLLTest1ViewController
     {
         let button = UIButton(type:.system)
         button.setTitle(title, for: UIControlState())
+        button.titleLabel?.font = CFTool.font(14)
+        button.layer.borderColor = UIColor.lightGray.cgColor
+        button.layer.borderWidth = 0.5
         button.addTarget(self,action:action, for:.touchUpInside)
         button.tg_height.equal(44)
-        button.layer.borderColor = UIColor.lightGray.cgColor
-        button.layer.borderWidth = 1
         return button
     
     }

@@ -37,7 +37,8 @@ class LLTest4ViewController: UIViewController {
         self.view = scrollView
         
         let rootLayout = TGLinearLayout(.vert)
-        rootLayout.backgroundColor = .gray
+        rootLayout.layer.borderWidth = 1
+        rootLayout.layer.borderColor = UIColor.lightGray.cgColor
         rootLayout.tg_height.equal(.wrap)
         rootLayout.tg_width.equal(.wrap)
         rootLayout.tg_padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
@@ -71,11 +72,12 @@ extension LLTest4ViewController
         wrapContentLayout.layer.contentsCenter = CGRect(x: 0.1, y: 0.1, width: 0.5, height: 0.5)
         
         //四周的边线
-        wrapContentLayout.tg_boundBorderline = TGLayoutBorderline(color: .green, headIndent:10, tailIndent:30)
+        wrapContentLayout.tg_boundBorderline = TGLayoutBorderline(color: .red, headIndent:10, tailIndent:30)
         
         
         let actionLayout = TGLinearLayout(.vert)
-        actionLayout.backgroundColor = .blue
+        actionLayout.layer.borderWidth = 1
+        actionLayout.layer.borderColor = CFTool.color(9).cgColor
         actionLayout.tg_padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         actionLayout.tg_vspace = 5
         actionLayout.tg_width.equal(.wrap)
@@ -98,9 +100,13 @@ extension LLTest4ViewController
     internal func addActionButton(_ title: String , tag :NSInteger) -> UIButton
     {
         let button = UIButton(type:.system)
-        button.backgroundColor = .green
         button.addTarget(self ,action:#selector(handleAction), for:.touchUpInside)
         button.setTitle(title ,for:.normal)
+        button.titleLabel!.font = CFTool.font(14)
+        button.backgroundColor = CFTool.color(14)
+        button.layer.cornerRadius = 10
+        button.layer.borderColor = UIColor.lightGray.cgColor
+        button.layer.borderWidth = 0.5
         button.tag = tag
         button.tg_height.equal(50)
         button.tg_width.equal(110)

@@ -375,7 +375,7 @@ extension TGFlowLayout
         {
             let s1 = self.tgCalcSingleLineSize(calcArray, margin:margin)
             let s2 = self.tgCalcSingleLineSize(bestSingleLineArray, margin:margin)
-            if (fabs(selfSize - s1) < fabs(selfSize - s2) && s1 <= selfSize)
+            if (fabs(selfSize - s1) < fabs(selfSize - s2) && /*s1 <= selfSize*/ _tgCGFloatLessOrEqual(s1, selfSize))
             {
                 bestSingleLineArray.setArray(calcArray as [AnyObject])
             }
@@ -392,7 +392,7 @@ extension TGFlowLayout
             calcArray2.add(sbs[i])
             
             let s1 = self.tgCalcSingleLineSize(calcArray2,margin:margin)
-            if (s1 <= selfSize)
+            if (/*s1 <= selfSize*/ _tgCGFloatLessOrEqual(s1, selfSize))
             {
                 let s2 = self.tgCalcSingleLineSize(bestSingleLineArray,margin:margin)
                 if (fabs(selfSize - s1) < fabs(selfSize - s2))
@@ -400,7 +400,7 @@ extension TGFlowLayout
                     bestSingleLineArray.setArray(calcArray2 as [AnyObject])
                 }
                 
-                if (s1 == selfSize)
+                if (/*s1 == selfSize*/ _tgCGFloatEqual(s1, selfSize))
                 {
                     break;
                 }
@@ -506,7 +506,7 @@ extension TGFlowLayout
                 }
             }
             
-            if (amg != TGGravity.none && amg != TGGravity.vert.top) || addXPos != 0 || addXFill != 0
+            if (amg != TGGravity.none && amg != TGGravity.vert.top) || /*addXPos != 0*/_tgCGFloatNotEqual(addXPos, 0)  || /*addXFill != 0*/ _tgCGFloatNotEqual(addXFill, 0)
             {
                 sbv.tgFrame.left += addXPos
                 
@@ -622,7 +622,8 @@ extension TGFlowLayout
                 }
             }
             
-            if (amg != TGGravity.none && amg != TGGravity.horz.left) || addYPos != 0 || addYFill != 0 {
+            if (amg != TGGravity.none && amg != TGGravity.horz.left) || /*addYPos != 0*/ _tgCGFloatNotEqual(addYPos, 0) || /*addYFill != 0*/
+               _tgCGFloatNotEqual(addYFill, 0) {
                 sbv.tgFrame.top += addYPos
                 
                 if self.tg_arrangedCount == 0 && self.tg_averageArrange {
@@ -792,6 +793,12 @@ extension TGFlowLayout
         //最后一行。
         if (rowTotalWeight != 0 && !self.tg_averageArrange)
         {
+            //如果最后一行没有填满则应该减去一个间距的值。
+            if arrangedIndex < arrangedCount
+            {
+                rowTotalFixedWidth -= self.tg_hspace
+            }
+            
             self.tgCalcVertLayoutSingleLineWeight(selfSize:selfSize,totalFloatWidth:selfSize.width - padding.left - padding.right - rowTotalFixedWidth,totalWeight:rowTotalWeight,sbs:sbs,startIndex:sbs.count, count:arrangedIndex)
         }
         
@@ -969,7 +976,7 @@ extension TGFlowLayout
             {
                 //如果过了，则表示当前的剩余空间为0了，所以就按新的一行来算。。
                 var floatWidth = selfSize.width - padding.left - padding.right - rowMaxWidth;
-                if floatWidth <= 0
+                if /*floatWidth <= 0*/ _tgCGFloatLessOrEqual(floatWidth, 0)
                 {
                     floatWidth += rowMaxWidth
                     arrangeIndex = 0
@@ -1203,6 +1210,11 @@ extension TGFlowLayout
         //最后一行。
         if (rowTotalWeight != 0 && !self.tg_averageArrange)
         {
+            if arrangedIndex < arrangedCount
+            {
+                rowTotalFixedHeight -= self.tg_vspace
+            }
+            
             self.tgCalcHorzLayoutSingleLineWeight(selfSize:selfSize,totalFloatHeight:selfSize.height - padding.top - padding.bottom - rowTotalFixedHeight,totalWeight:rowTotalWeight,sbs:sbs,startIndex:sbs.count,count:arrangedIndex)
         }
         
@@ -1351,7 +1363,7 @@ extension TGFlowLayout
             {
                 //如果过了，则表示当前的剩余空间为0了，所以就按新的一行来算。。
                 var floatHeight = selfSize.height - padding.top - padding.bottom - colMaxHeight;
-                if (floatHeight <= 0)
+                if (/*floatHeight <= 0*/ _tgCGFloatLessOrEqual(floatHeight, 0))
                 {
                     floatHeight += colMaxHeight;
                     arrangedIndex = 0;

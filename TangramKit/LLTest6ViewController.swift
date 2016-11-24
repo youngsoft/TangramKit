@@ -46,7 +46,7 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         self.view.addSubview(scrollView)
         
         let rootLayout = TGLinearLayout(.vert)
-        rootLayout.backgroundColor = .gray
+        rootLayout.backgroundColor = .white
         rootLayout.tg_width.equal(.fill)
         rootLayout.tg_height.equal(.fill)
         rootLayout.tg_height.min(568 - 64)
@@ -64,6 +64,10 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         
         let userInfoLabel = UILabel()
         userInfoLabel.text = NSLocalizedString("user info(run in iPhone4 will have scroll effect)",comment:"")
+        userInfoLabel.textColor = CFTool.color(4)
+        userInfoLabel.font = CFTool.font(15)
+        userInfoLabel.adjustsFontSizeToFitWidth = true
+        userInfoLabel.textAlignment = .center
         userInfoLabel.sizeToFit()
         userInfoLabel.tg_top.equal(10)
         userInfoLabel.tg_centerX.equal(0)
@@ -75,7 +79,7 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         //头像
         let headImageView = UIImageView()
         headImageView.image = UIImage(named: "head1")
-        headImageView.backgroundColor = UIColor.white
+        headImageView.backgroundColor  = CFTool.color(1)
         headImageView.sizeToFit()
         headImageView.tg_top.equal(25%)
         headImageView.tg_centerX.equal(0) //距离顶部间隙剩余空间的25%，水平居中对齐。
@@ -87,7 +91,7 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         nameField.borderStyle = .roundedRect
         nameField.placeholder = NSLocalizedString("input user name here", comment:"")
         nameField.textAlignment = .center
-        nameField.backgroundColor = .white
+        nameField.font = CFTool.font(15)
         nameField.tg_left.equal(10%)
         nameField.tg_right.equal(10%)
         nameField.tg_top.equal(10%)
@@ -103,6 +107,8 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
          */
         let userDescLabel = UILabel()
         userDescLabel.text = NSLocalizedString("desc info", comment:"")
+        userDescLabel.textColor = CFTool.color(4)
+        userDescLabel.font = CFTool.font(14)
         userDescLabel.sizeToFit()
         userDescLabel.tg_top.equal(10)
         userDescLabel.tg_left.equal(5%)
@@ -114,10 +120,10 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         
         
         let textView = UITextView()
-        textView.backgroundColor = .white
+        textView.font = CFTool.font(15)
         textView.layer.cornerRadius = 5
-        textView.layer.borderColor = UIColor.gray.cgColor
-        textView.layer.borderWidth = 1
+        textView.layer.borderColor = UIColor.lightGray.cgColor
+        textView.layer.borderWidth = 0.5
         textView.text = NSLocalizedString("please try input text and carriage return continuous to see effect", comment:"")
         textView.delegate = self
         
@@ -135,6 +141,8 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         
         let copyRightLabel = UILabel()
         copyRightLabel.text = NSLocalizedString("copy rights reserved by Youngsoft", comment:"")
+        copyRightLabel.textColor = CFTool.color(4)
+        copyRightLabel.font = CFTool.font(15)
         copyRightLabel.tg_bottom.equal(20) //总是固定在底部20的边距,因为上面的textView用了底部相对间距。
         copyRightLabel.tg_centerX.equal(0)
         copyRightLabel.sizeToFit()
@@ -152,7 +160,7 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
             {
                 let editButton = UIButton(type:.system)
                 editButton.setTitle("Edit", for:.normal)
-                editButton.setTitleColor(.red, for:.normal)
+                editButton.titleLabel!.font = CFTool.font(15)
                 editButton.tg_useFrame = true  //注意这里必须要设置为useFrame为YES，目的是为了不破坏线性布局的概念，而改用直接frame的设置。
                 layout.addSubview(editButton)
                 weakVC.editButton = editButton

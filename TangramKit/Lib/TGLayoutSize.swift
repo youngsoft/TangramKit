@@ -96,6 +96,11 @@ final public class TGLayoutSize
     //设置尺寸的最小边界值。
     public func min(_ dime:TGLayoutSize!, increment:CGFloat = 0, multiple:CGFloat = 1)
     {
+        var dime = dime
+        if dime === self
+        {
+            dime = _minVal
+        }
         _minVal.equal(dime,increment:increment, multiple:multiple)
         setNeedLayout()
     }
@@ -125,6 +130,12 @@ final public class TGLayoutSize
     //设置尺寸的最大边界值。
     public func max(_ dime:TGLayoutSize!, increment:CGFloat = 0, multiple:CGFloat = 1)
     {
+        var dime = dime
+        if dime === self
+        {
+            dime = _maxVal
+        }
+
         _maxVal.equal(dime ,increment:increment, multiple:multiple)
         setNeedLayout()
     }
@@ -424,7 +435,7 @@ extension TGLayoutSize
     
     internal var isFlexHeight:Bool
     {
-        if (_view as? TGBaseLayout) == nil && !_view.tg_width.isWrap && self.isWrap
+        if (_view as? TGBaseLayout) == nil && /*!_view.tg_width.isWrap &&*/ self.isWrap
         {
             return true
         }

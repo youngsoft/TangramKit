@@ -259,6 +259,9 @@ extension TGFrameLayout
         if (sbv.tg_width.dimeRelaVal != nil && sbv.tg_width.dimeRelaVal.view == sbv && sbv.tg_width.dimeRelaVal._type == TGGravity.vert.fill)
         {
             retRect.size.width =   self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: sbv.tg_width.measure(retRect.size.height), sbvSize: retRect.size, selfLayoutSize: selfSize)
+            
+            retRect = self.tgCalcHorzGravity(horz, selfSize:selfSize, sbv: sbv, rect: retRect)
+
         }
         
         //特殊处理高度等于自身宽度的情况。
@@ -270,6 +273,8 @@ extension TGFrameLayout
             {
                 retRect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: retRect.size.width)
             }
+            
+            retRect = self.tgCalcVertGravity(vert, selfSize:selfSize, sbv: sbv, rect: retRect)
             
             retRect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: retRect.size.height, sbvSize: retRect.size, selfLayoutSize: selfSize)
             

@@ -21,6 +21,19 @@ class LLTest5ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    func createLabel(_ title: String, color backgroundColor: UIColor) -> UILabel {
+        let v = UILabel()
+        v.text = title
+        v.adjustsFontSizeToFitWidth = true
+        v.textAlignment = .center
+        v.backgroundColor = backgroundColor
+        v.font = CFTool.font(15)
+        v.layer.shadowOffset = CGSize(width: CGFloat(3), height: CGFloat(3))
+        v.layer.shadowColor = CFTool.color(4).cgColor
+        v.layer.shadowRadius = 2
+        v.layer.shadowOpacity = 0.3
+        return v
+    }
     
     override func loadView() {
         
@@ -60,15 +73,11 @@ class LLTest5ViewController: UIViewController {
 
         
         let rootLayout = TGLinearLayout(.vert)
-        rootLayout.backgroundColor = .gray
+        rootLayout.backgroundColor = CFTool.color(0)
         self.view = rootLayout
         
         
-        let v1 = UILabel()
-        v1.text = NSLocalizedString("width equal to superview, height equal to 20% of free height of superview", comment:"")
-        v1.adjustsFontSizeToFitWidth = true
-        v1.textAlignment = .center
-        v1.backgroundColor = .red
+        let  v1 = self.createLabel(NSLocalizedString("width equal to superview, height equal to 20% of free height of superview", comment: ""), color:CFTool.color(5))
         v1.numberOfLines = 3
         v1.tg_top.equal(10)
         v1.tg_width.equal(100%)  //等价于v1.tg_width.equal(.fill)
@@ -78,12 +87,8 @@ class LLTest5ViewController: UIViewController {
         rootLayout.addSubview(v1)
         
         
-        let v2 = UILabel()
-        v2.text = NSLocalizedString("width equal to 80% of superview, height equal to 30% of free height of superview", comment:"")
-        v2.adjustsFontSizeToFitWidth = true
-        v2.numberOfLines = 0
-        v2.textAlignment = .center
-        v2.backgroundColor = .green
+        let  v2 = self.createLabel(NSLocalizedString("width equal to 80% of superview, height equal to 30% of free height of superview", comment: ""), color:CFTool.color(6))
+        v2.numberOfLines = 2
         v2.tg_top.equal(10)
         v2.tg_centerX.equal(0)
         v2.tg_width.equal(80%)  //父视图的宽度的0.8
@@ -91,12 +96,8 @@ class LLTest5ViewController: UIViewController {
         rootLayout.addSubview(v2)
         
         
-        let v3 = UILabel()
-        v3.text = NSLocalizedString("width equal to superview - 20, height equal to 50% of free height of superview", comment:"")
-        v3.adjustsFontSizeToFitWidth = true
-        v3.textAlignment = .center
+        let  v3 = self.createLabel(NSLocalizedString("width equal to superview - 20, height equal to 50% of free height of superview", comment: ""), color:CFTool.color(7))
         v3.numberOfLines = 0
-        v3.backgroundColor = .blue
         v3.tg_top.equal(10)
         v3.tg_right.equal(0)  //右对齐。
         v3.tg_width.equal(100%, increment:-20)  //等价于v3.tg_width.equal(.fill, increment:-20)
@@ -104,24 +105,16 @@ class LLTest5ViewController: UIViewController {
         rootLayout.addSubview(v3)
         
         
-        let v4 = UILabel()
-        v4.text = NSLocalizedString("width equal to 200, height equal to 50", comment:"")
-        v4.textAlignment = .center
-        v4.adjustsFontSizeToFitWidth = true
-        v4.numberOfLines = 0
-        v4.backgroundColor = .yellow
+        let  v4 = self.createLabel(NSLocalizedString("width equal to 200, height equal to 50", comment: ""), color:CFTool.color(8))
+        v4.numberOfLines = 2
         v4.tg_top.equal(10)
         v4.tg_width.equal(200)
         v4.tg_height.equal(50)
         rootLayout.addSubview(v4)
         
         
-        let v5 = UILabel()
-        v5.text = NSLocalizedString("left margin equal to 20% of superview, right margin equal to 30% of superview, width equal to 50% of superview, top spacing equal to 5% of free height of superview, bottom spacing equal to 10% of free height of superview", comment:"")
+        let  v5 = self.createLabel(NSLocalizedString("left margin equal to 20% of superview, right margin equal to 30% of superview, width equal to 50% of superview, top spacing equal to 5% of free height of superview, bottom spacing equal to 10% of free height of superview", comment: ""), color:CFTool.color(9))
         v5.numberOfLines = 0
-        v5.textAlignment = .center
-        v5.adjustsFontSizeToFitWidth = true
-        v5.backgroundColor = .cyan
         v5.tg_left.equal(20%)
         v5.tg_right.equal(30%)
         v5.tg_top.equal(5%)

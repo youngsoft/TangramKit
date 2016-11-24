@@ -29,6 +29,7 @@ class FLTest2ViewController: UIViewController {
         
         
         let rootLayout = TGFrameLayout()
+        rootLayout.backgroundColor = CFTool.color(15)
         self.view = rootLayout
         
         /*
@@ -47,7 +48,7 @@ class FLTest2ViewController: UIViewController {
         
         let backImageView = UIImageView(image: UIImage(named: "bk1"))
         backImageView.contentMode = UIViewContentMode.scaleToFill
-       // backImageView.tg_height.equal(50%)
+        backImageView.tg_height.equal(50%)
         //您也可以采用如下的方法来设置高度：
         //backImageView.tg_height.equal(rootLayout, multiple:0.5)
         //backImageView.tg_height.equal(rootLayout.tg_height, multiple:0.5)
@@ -65,10 +66,10 @@ class FLTest2ViewController: UIViewController {
         rootLayout.addSubview(rightImageView)
         
         let headImage = UIImageView(image: UIImage(named: "minions1"))
-        headImage.layer.borderColor = UIColor.lightGray.cgColor
-        headImage.layer.cornerRadius = 4
-        headImage.layer.borderWidth = 1
-        headImage.backgroundColor = .white
+        headImage.layer.borderColor = CFTool.color(0).cgColor
+        headImage.layer.masksToBounds = true
+        headImage.layer.cornerRadius = 5
+        headImage.layer.borderWidth = 0.5
         headImage.tg_centerX.equal(0)
         headImage.tg_centerY.equal(0)   //整体在父布局中居中。
         headImage.tg_height.equal((100.0/3)%) //等价于headImage.tg_height.equal(.fill, multiple:1.0/3)
@@ -77,8 +78,8 @@ class FLTest2ViewController: UIViewController {
         
         let nickName = UILabel()
         nickName.text = "欧阳大哥"
-        nickName.font = .systemFont(ofSize: 14)
-        nickName.textColor = .red
+        nickName.textColor = CFTool.color(0)
+        nickName.font = CFTool.font(17)
         nickName.sizeToFit();
         nickName.tg_centerX.equal(0)
         //因为上面的headImage的高度是布局视图高度的1/3并且居中。所以我们这里的文字的中心点就要往下偏移图片的高度的一半也就是1/6，右因为文字本身有高度所以中心点还要再往下偏移文字本身高度的一半。所以这里的效果就实现了文字在图片的下面。这里面TGWeight类型的值设置表示用的是相对的偏移值。

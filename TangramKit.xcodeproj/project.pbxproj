@@ -50,6 +50,8 @@
 		18D2FC7B1D3D0CC20051B235 /* FOLTest2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D2FC761D3D0CC20051B235 /* FOLTest2ViewController.swift */; };
 		18D2FC7C1D3D0CC20051B235 /* FOLTest3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D2FC771D3D0CC20051B235 /* FOLTest3ViewController.swift */; };
 		18D2FC7D1D3D0CC20051B235 /* FLLTest1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D2FC781D3D0CC20051B235 /* FLLTest1ViewController.swift */; };
+		18D5D9011DE0922300DCA69E /* CFTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D5D9001DE0922300DCA69E /* CFTool.swift */; };
+		18D5D9031DE169AE00DCA69E /* AllTest7ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D5D9021DE169AE00DCA69E /* AllTest7ViewController.swift */; };
 		18DB434C1D1986230052D770 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB43211D1986230052D770 /* AppDelegate.swift */; };
 		18DB434D1D1986230052D770 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18DB43221D1986230052D770 /* LaunchScreen.storyboard */; };
 		18DB43551D1986230052D770 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18DB432C1D1986230052D770 /* Images.xcassets */; };
@@ -116,6 +118,8 @@
 		18D2FC761D3D0CC20051B235 /* FOLTest2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FOLTest2ViewController.swift; sourceTree = "<group>"; };
 		18D2FC771D3D0CC20051B235 /* FOLTest3ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FOLTest3ViewController.swift; sourceTree = "<group>"; };
 		18D2FC781D3D0CC20051B235 /* FLLTest1ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLLTest1ViewController.swift; sourceTree = "<group>"; };
+		18D5D9001DE0922300DCA69E /* CFTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CFTool.swift; sourceTree = "<group>"; };
+		18D5D9021DE169AE00DCA69E /* AllTest7ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllTest7ViewController.swift; sourceTree = "<group>"; };
 		18DB43211D1986230052D770 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		18DB43231D1986230052D770 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		18DB432C1D1986230052D770 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -236,9 +240,11 @@
 				A538CEBB1D41F85C00D51976 /* AllTest4ViewController.swift */,
 				188D7B391DB4A3AC00FE8156 /* AllTest5ViewController.swift */,
 				188D7B3B1DB4A3C300FE8156 /* AllTest6ViewController.swift */,
+				18D5D9021DE169AE00DCA69E /* AllTest7ViewController.swift */,
 				188E08721D379E8D00E982F1 /* Base.lproj */,
 				188E08751D379E8D00E982F1 /* zh-Hans.lproj */,
 				18DB43221D1986230052D770 /* LaunchScreen.storyboard */,
+				18D5D9001DE0922300DCA69E /* CFTool.swift */,
 			);
 			path = TangramKit;
 			sourceTree = "<group>";
@@ -363,6 +369,7 @@
 				18DB435B1D1986230052D770 /* TGLayoutSizeClass.swift in Sources */,
 				18834AB51D3D32840047AE7D /* FLLTest2ViewController.swift in Sources */,
 				18061D7C1D6CA567002E0E59 /* AllTest2TableViewCell.swift in Sources */,
+				18D5D9011DE0922300DCA69E /* CFTool.swift in Sources */,
 				1866CDD71D6C260000755949 /* FOLTest5ViewController.swift in Sources */,
 				18D2FC7B1D3D0CC20051B235 /* FOLTest2ViewController.swift in Sources */,
 				18DB434C1D1986230052D770 /* AppDelegate.swift in Sources */,
@@ -400,6 +407,7 @@
 				18834ABA1D3D32E10047AE7D /* FLLTest4ViewController.swift in Sources */,
 				18DB435E1D1986230052D770 /* TGFlowLayout.swift in Sources */,
 				188E08801D37AE8800E982F1 /* LLTest1ViewController.swift in Sources */,
+				18D5D9031DE169AE00DCA69E /* AllTest7ViewController.swift in Sources */,
 				182191751D3CAFC300208CD0 /* RLTest2ViewController.swift in Sources */,
 				18D2FC7D1D3D0CC20051B235 /* FLLTest1ViewController.swift in Sources */,
 				18D2FC791D3D0CC20051B235 /* AllTest1ViewController.swift in Sources */,

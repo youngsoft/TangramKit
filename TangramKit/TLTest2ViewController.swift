@@ -36,7 +36,7 @@ class TLTest2ViewController: UIViewController {
         
         let scrollView = UIScrollView(frame: self.view.bounds)
         scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        scrollView.backgroundColor = .black
+        scrollView.backgroundColor = CFTool.color(5)
         self.view.addSubview(scrollView)
         
         /*
@@ -67,7 +67,7 @@ extension TLTest2ViewController
     func createColLayout(image:String, title:String) ->UIView
     {
         let colLayout = TGLinearLayout(.vert)
-        colLayout.backgroundColor = .white
+        colLayout.backgroundColor = CFTool.color(0)
         colLayout.tg_gravity = TGGravity.horz.fill  //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
         colLayout.tg_height.equal(.wrap)
         colLayout.tg_vspace = 5 //设置布局视图里面子视图之间的垂直间距为5个点。
@@ -81,7 +81,8 @@ extension TLTest2ViewController
         
         let titleLabel = UILabel()
         titleLabel.text = title
-        titleLabel.font = .systemFont(ofSize: 13)
+        titleLabel.font = CFTool.font(14)
+        titleLabel.textColor = CFTool.color(4)
         titleLabel.textAlignment = .center
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.tg_bottom.equal(2)
@@ -123,10 +124,10 @@ extension TLTest2ViewController
             "p1-33",
             "p1-34",
             "p1-35",
-            "p1-36",
             "image1",
             "image2",
-            "image3"
+            "image3",
+            "image4"
         ]
         
         let colLayout = self.createColLayout(image:images[Int(arc4random_uniform(UInt32(images.count)))], title:String(format:NSLocalizedString("cell title:%03ld", comment:""), sTag))

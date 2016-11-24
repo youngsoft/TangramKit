@@ -26,7 +26,7 @@ class FOLTest1ViewController: UIViewController {
         self.view = rootLayout
         
         let adjOriButton = UIButton(type:.system)
-        adjOriButton.setTitle("Adj Dir", for: .normal)
+        adjOriButton.setTitle("Orien", for: .normal)
         adjOriButton.sizeToFit()
         adjOriButton.addTarget(self, action: #selector(handleChangeOrientation), for: .touchUpInside)
         adjOriButton.tg_reverseFloat = true //向右浮动。
@@ -57,6 +57,7 @@ class FOLTest1ViewController: UIViewController {
         
         let reverseFloatTip = UILabel()
         reverseFloatTip.text = "Reverse:"
+        reverseFloatTip.font = CFTool.font(13)
         reverseFloatTip.sizeToFit()
         reverseFloatTip.tg_clearFloat = true  //换行
         reverseFloatTip.tg_top.equal(3)
@@ -71,6 +72,7 @@ class FOLTest1ViewController: UIViewController {
         
         let clearFloatTip = UILabel()
         clearFloatTip.text = "Clear:"
+        clearFloatTip.font = CFTool.font(13)
         clearFloatTip.sizeToFit()
         clearFloatTip.tg_left.equal(40)
         clearFloatTip.tg_top.equal(3)
@@ -83,6 +85,7 @@ class FOLTest1ViewController: UIViewController {
         
         let widthWeightStepperTip = UILabel()
         widthWeightStepperTip.text = "Width Weight:"
+        widthWeightStepperTip.font = CFTool.font(13)
         widthWeightStepperTip.sizeToFit()
         widthWeightStepperTip.tg_top.equal(8)
         widthWeightStepperTip.tg_clearFloat = true  //换行
@@ -106,6 +109,7 @@ class FOLTest1ViewController: UIViewController {
         
         let heightWeightStepperTip = UILabel()
         heightWeightStepperTip.text = "Height Weight:"
+        heightWeightStepperTip.font = CFTool.font(13)
         heightWeightStepperTip.sizeToFit()
         heightWeightStepperTip.tg_top.equal(8)
         heightWeightStepperTip.tg_clearFloat = true  //换行
@@ -128,7 +132,7 @@ class FOLTest1ViewController: UIViewController {
         self.heightWeightLabel = heightWeightLabel
         
         let floatLayout = TGFloatLayout(.vert)
-        floatLayout.backgroundColor = UIColor.lightGray
+        floatLayout.backgroundColor = CFTool.color(0)
         floatLayout.tg_clearFloat = true  //换行
         floatLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
         floatLayout.tg_width.equal(100%)   //高度和宽度都占用剩余空间。

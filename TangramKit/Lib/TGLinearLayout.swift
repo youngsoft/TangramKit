@@ -648,7 +648,7 @@ extension TGLinearLayout {
         temp += tailPos.offsetVal
         
         
-        if 1  <= tempWeight.rawValue/100
+        if /*1  <= tempWeight.rawValue/100*/ _tgCGFloatLessOrEqual(1, tempWeight.rawValue/100)
         {
             temp = 0
         }
@@ -783,7 +783,7 @@ extension TGLinearLayout {
             if sbv.tg_top.posWeightVal != nil
             {
                 totalWeight += sbv.tg_top.posWeightVal
-                fixedHeight += Swift.max(sbv.tg_top.offsetVal, sbv.tg_top.minVal.margin)
+                fixedHeight += sbv.tg_top.offsetVal
             }
             else
             {
@@ -795,7 +795,7 @@ extension TGLinearLayout {
             if sbv.tg_bottom.posWeightVal != nil
             {
                 totalWeight += sbv.tg_bottom.posWeightVal
-                fixedHeight += Swift.max(sbv.tg_bottom.offsetVal, sbv.tg_bottom.minVal.margin)
+                fixedHeight += sbv.tg_bottom.offsetVal
             }
             else
             {
@@ -848,7 +848,7 @@ extension TGLinearLayout {
         
         //剩余的可浮动的高度，那些weight不为0的从这个高度来进行分发
         floatingHeight = selfSize.height - fixedHeight - self.tg_topPadding - self.tg_bottomPadding;
-        if floatingHeight <= 0 || floatingHeight == -0.0
+        if /*floatingHeight <= 0 || floatingHeight == -0.0*/ _tgCGFloatLessOrEqual(floatingHeight, 0)
         {
             if self.tg_shrinkType != .none
             {
@@ -862,7 +862,7 @@ extension TGLinearLayout {
                             fsbv.tgFrame.height += averageHeight;
                         }
                     }
-                    else if fixedSizeHeight != 0
+                    else if /*fixedSizeHeight != 0*/ _tgCGFloatNotEqual(fixedSizeHeight, 0)
                     {
                         for fsbv in fixedSizeSbs
                         {
@@ -892,7 +892,7 @@ extension TGLinearLayout {
             if sbv.tg_top.posWeightVal != nil
             {
                 topMargin = (sbv.tg_top.posWeightVal.rawValue / totalWeight.rawValue) * floatingHeight;
-                if topMargin <= 0 || topMargin == -0.0
+                if /*topMargin <= 0 || topMargin == -0.0*/ _tgCGFloatLessOrEqual(topMargin, 0)
                 {
                     topMargin = 0
                 }
@@ -905,7 +905,7 @@ extension TGLinearLayout {
             if sbv.tg_height.dimeWeightVal != nil
             {
                 var  h:CGFloat = (sbv.tg_height.dimeWeightVal.rawValue / totalWeight.rawValue) * floatingHeight;
-                if h <= 0 || h == -0.0
+                if /*h <= 0 || h == -0.0*/ _tgCGFloatLessOrEqual(h, 0)
                 {
                     h = 0;
                 }
@@ -916,7 +916,7 @@ extension TGLinearLayout {
             else if sbv.tg_height.isFill
             {
                 var  h:CGFloat = (100.0 / totalWeight.rawValue) * floatingHeight;
-                if h <= 0 || h == -0.0
+                if /*h <= 0 || h == -0.0*/ _tgCGFloatLessOrEqual(h, 0)
                 {
                     h = 0;
                 }
@@ -931,7 +931,7 @@ extension TGLinearLayout {
             if sbv.tg_bottom.posWeightVal != nil
             {
                 bottomMargin = (sbv.tg_bottom.posWeightVal.rawValue / totalWeight.rawValue) * floatingHeight;
-                if bottomMargin <= 0 || bottomMargin == -0.0
+                if /*bottomMargin <= 0 || bottomMargin == -0.0*/ _tgCGFloatLessOrEqual(bottomMargin, 0)
                 {
                     bottomMargin = 0;
                 }
@@ -979,7 +979,7 @@ extension TGLinearLayout {
             if sbv.tg_left.posWeightVal != nil
             {
                 totalWeight += sbv.tg_left.posWeightVal
-                fixedWidth += Swift.max(sbv.tg_left.offsetVal, sbv.tg_left.minVal.margin)
+                fixedWidth += sbv.tg_left.offsetVal
             }
             else
             {
@@ -989,7 +989,7 @@ extension TGLinearLayout {
             if sbv.tg_right.posWeightVal != nil
             {
                 totalWeight += sbv.tg_right.posWeightVal
-                fixedWidth += Swift.max(sbv.tg_right.offsetVal, sbv.tg_right.minVal.margin)
+                fixedWidth += sbv.tg_right.offsetVal
             }
             else
             {
@@ -1050,7 +1050,7 @@ extension TGLinearLayout {
         
         //剩余的可浮动的宽度，那些weight不为0的从这个高度来进行分发
         floatingWidth = selfSize.width - fixedWidth - self.tg_leftPadding - self.tg_rightPadding;
-        if floatingWidth <= 0 || floatingWidth == -0.0
+        if /*floatingWidth <= 0 || floatingWidth == -0.0*/ _tgCGFloatLessOrEqual(floatingWidth, 0)
         {
             if self.tg_shrinkType != .none
             {
@@ -1064,7 +1064,7 @@ extension TGLinearLayout {
                             fsbv.tgFrame.width += averageWidth;
                         }
                     }
-                    else if fixedSizeWidth != 0
+                    else if /*fixedSizeWidth != 0*/ _tgCGFloatNotEqual(fixedSizeWidth, 0)
                     {
                         for fsbv in fixedSizeSbs
                         {
@@ -1109,7 +1109,7 @@ extension TGLinearLayout {
             if sbv.tg_left.posWeightVal != nil
             {
                 leftMargin = (sbv.tg_left.posWeightVal.rawValue / totalWeight.rawValue) * floatingWidth;
-                if leftMargin <= 0 || leftMargin == -0.0
+                if /*leftMargin <= 0 || leftMargin == -0.0*/ _tgCGFloatLessOrEqual(leftMargin, 0)
                 {
                     leftMargin = 0
                 }
@@ -1123,7 +1123,7 @@ extension TGLinearLayout {
             if sbv.tg_width.dimeWeightVal != nil
             {
                 var w = (sbv.tg_width.dimeWeightVal.rawValue / totalWeight.rawValue) * floatingWidth;
-                if  w <= 0 || w == -0.0
+                if  /*w <= 0 || w == -0.0*/ _tgCGFloatLessOrEqual(w,0)
                 {
                     w = 0
                 }
@@ -1133,7 +1133,7 @@ extension TGLinearLayout {
             else if sbv.tg_width.isFill
             {
                 var w = (100.0 / totalWeight.rawValue) * floatingWidth;
-                if  w <= 0 || w == -0.0
+                if  /*w <= 0 || w == -0.0*/_tgCGFloatLessOrEqual(w,0)
                 {
                     w = 0
                 }
@@ -1149,7 +1149,7 @@ extension TGLinearLayout {
             if sbv.tg_right.posWeightVal != nil
             {
                 rightMargin = (sbv.tg_right.posWeightVal.rawValue / totalWeight.rawValue) * floatingWidth;
-                if rightMargin <= 0 || rightMargin == -0.0
+                if /*rightMargin <= 0 || rightMargin == -0.0*/ _tgCGFloatLessOrEqual(rightMargin, 0)
                 {
                     rightMargin = 0;
                 }
@@ -1276,7 +1276,7 @@ extension TGLinearLayout {
         let floatingWidth = selfSize.width - self.tg_leftPadding - self.tg_rightPadding
         
         var floatingHeight:CGFloat = selfSize.height - self.tg_topPadding - self.tg_bottomPadding - totalHeight
-        if floatingHeight <= 0
+        if /*floatingHeight <= 0*/ _tgCGFloatLessOrEqual(floatingHeight, 0)
         {
             floatingHeight = 0
         }
@@ -1447,9 +1447,9 @@ extension TGLinearLayout {
         
         var selfSize = selfSize
         floatingWidth = selfSize.width - self.tg_leftPadding - self.tg_rightPadding - totalWidth;
-        if floatingWidth <= 0
+        if /*floatingWidth <= 0*/ _tgCGFloatLessOrEqual(floatingWidth, 0)
         {
-            floatingWidth = 0;
+            floatingWidth = 0
         }
         
         //计算出固定的高度

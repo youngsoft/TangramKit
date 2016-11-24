@@ -81,12 +81,29 @@ class LLTest3ViewController: UIViewController {
 //MARK: - Layout Construction
 extension LLTest3ViewController
 {
+    func createLabel(_ title:String, color backgroundColor:UIColor) -> UILabel
+    {
+        let v = UILabel()
+        v.text = title;
+        v.font = CFTool.font(15)
+        v.adjustsFontSizeToFitWidth = true
+        v.backgroundColor =  backgroundColor
+        v.layer.shadowOffset = CGSize(width:3, height:3)
+        v.layer.shadowColor = CFTool.color(4).cgColor
+        v.layer.shadowRadius = 2
+        v.layer.shadowOpacity = 0.3
+        v.sizeToFit()
+        return v
+    }
+
+    
     //创建垂直线性布局停靠操作动作布局。
     func createVertLayoutGravityActionLayout(in contentLayout:TGLinearLayout)
     {
         let actionTitleLabel = UILabel()
         actionTitleLabel.text = NSLocalizedString("Vertical layout gravity control, you can click the following different button to show the effect:", comment:"");
-        actionTitleLabel.font = UIFont.systemFont(ofSize: 14)
+        actionTitleLabel.font = CFTool.font(15)
+        actionTitleLabel.textColor = CFTool.color(4)
         actionTitleLabel.numberOfLines = 0
         actionTitleLabel.tg_height.equal(.wrap)
         contentLayout.addSubview(actionTitleLabel)
@@ -102,7 +119,7 @@ extension LLTest3ViewController
             NSLocalizedString("horz fill",comment:""),
             NSLocalizedString("screen vert center",comment:""),
             NSLocalizedString("screen horz center",comment:""),
-            NSLocalizedString("adjust spacing",comment:"")
+            NSLocalizedString("space",comment:"")
         ]
         
         //用流式布局创建动作菜单。
@@ -128,7 +145,7 @@ extension LLTest3ViewController
     {
     
         let vertGravityLayout = TGLinearLayout(.vert)
-        vertGravityLayout.backgroundColor = .gray
+        vertGravityLayout.backgroundColor = CFTool.color(0)
         vertGravityLayout.tg_top.equal(10)
         vertGravityLayout.tg_left.equal(20)
         vertGravityLayout.tg_height.equal(200)
@@ -137,32 +154,19 @@ extension LLTest3ViewController
         self.vertGravityLayout = vertGravityLayout
         
         
-        let v1 = UILabel()
-        v1.text = NSLocalizedString("test text1", comment:"")
-        v1.backgroundColor = .red
-        v1.sizeToFit()
+        let v1 = self.createLabel(NSLocalizedString("test text1", comment:""), color: CFTool.color(5))
         vertGravityLayout.addSubview(v1)
         
-        let v2 = UILabel()
-        v2.text = NSLocalizedString("test text2 test text2", comment:"")
-        v2.backgroundColor = .green
-        v2.sizeToFit()
+        let v2 = self.createLabel(NSLocalizedString("test text2 test text2", comment:""), color: CFTool.color(6))
         vertGravityLayout.addSubview(v2)
         
         
-        let v3 = UILabel()
-        v3.text = NSLocalizedString("test text3 test text3 test text3", comment:"")
-        v3.backgroundColor = .blue
-        v3.sizeToFit()
+        let v3 = self.createLabel(NSLocalizedString("test text3 test text3 test text3", comment:""), color: CFTool.color(7))
         vertGravityLayout.addSubview(v3)
         
-        let v4 = UILabel()
-        v4.text = NSLocalizedString("set left and right margin to determine width", comment:"")
-        v4.backgroundColor = .orange
-        v4.adjustsFontSizeToFitWidth = true
+        let v4 = self.createLabel(NSLocalizedString("set left and right margin to determine width", comment:""), color: CFTool.color(8))
         v4.tg_left.equal(20)
         v4.tg_right.equal(30) //这两行代码能决定视图的宽度，自己定义。
-        v4.sizeToFit()
         vertGravityLayout.addSubview(v4)
 
     }
@@ -173,7 +177,8 @@ extension LLTest3ViewController
         
         let actionTitleLabel = UILabel()
         actionTitleLabel.text = NSLocalizedString("Horizontal layout gravity control, you can click the following different button to show the effect:", comment:"")
-        actionTitleLabel.font = UIFont.systemFont(ofSize: 14)
+        actionTitleLabel.font = CFTool.font(15)
+        actionTitleLabel.textColor = CFTool.color(4)
         actionTitleLabel.adjustsFontSizeToFitWidth = true
         actionTitleLabel.numberOfLines = 0
         actionTitleLabel.tg_height.equal(.wrap)
@@ -190,7 +195,7 @@ extension LLTest3ViewController
             NSLocalizedString("vert fill",comment:""),
             NSLocalizedString("screen vert center",comment:""),
             NSLocalizedString("screen horz center",comment:""),
-            NSLocalizedString("adjust spacing",comment:"")
+            NSLocalizedString("space",comment:"")
         ]
         
         
@@ -213,7 +218,7 @@ extension LLTest3ViewController
     {
         
         let horzGravityLayout = TGLinearLayout(.horz)
-        horzGravityLayout.backgroundColor = .gray
+        horzGravityLayout.backgroundColor = CFTool.color(0)
         horzGravityLayout.tg_height.equal(200)
         horzGravityLayout.tg_top.equal(10)
         horzGravityLayout.tg_left.equal(20)
@@ -221,35 +226,26 @@ extension LLTest3ViewController
         contentLayout.addSubview(horzGravityLayout)
         self.horzGravityLayout = horzGravityLayout
         
-        let v1 = UILabel()
-        v1.text = NSLocalizedString("test text1", comment:"")
-        v1.backgroundColor = .red
+        let v1 = self.createLabel(NSLocalizedString("test text1", comment:""), color: CFTool.color(5))
         v1.numberOfLines = 0
         v1.tg_height.equal(.wrap)
         v1.tg_width.equal(60)
         horzGravityLayout.addSubview(v1)
         
-        let v2 = UILabel()
-        v2.text = NSLocalizedString("test text2 test text2", comment:"")
-        v2.backgroundColor = .green
+        let v2 = self.createLabel(NSLocalizedString("test text2 test text2", comment:""), color: CFTool.color(6))
         v2.numberOfLines = 0
         v2.tg_height.equal(.wrap)
         v2.tg_width.equal(60)
         horzGravityLayout.addSubview(v2)
         
         
-        let v3 = UILabel()
-        v3.text = NSLocalizedString("test text3 test text3 test text3", comment:"")
-        v3.backgroundColor = .blue
+        let v3 = self.createLabel(NSLocalizedString("test text3 test text3 test text3", comment:""), color: CFTool.color(7))
         v3.numberOfLines = 0
         v3.tg_height.equal(.wrap)
         v3.tg_width.equal(60)
         horzGravityLayout.addSubview(v3)
         
-        let v4 = UILabel()
-        v4.text = NSLocalizedString("set top and bottom margin to determine height", comment:"")
-        v4.backgroundColor = .orange
-        v4.adjustsFontSizeToFitWidth = true
+        let v4 = self.createLabel(NSLocalizedString("set top and bottom margin to determine height", comment:""), color: CFTool.color(8))
         v4.numberOfLines = 0
         v4.tg_top.equal(20)
         v4.tg_bottom.equal(10)
@@ -264,8 +260,10 @@ extension LLTest3ViewController
         let actionButton = UIButton(type:.system)
         actionButton.setTitle(title  ,for:.normal)
         actionButton.titleLabel!.adjustsFontSizeToFitWidth = true
+        actionButton.titleLabel!.font = CFTool.font(14)
         actionButton.layer.borderColor = UIColor.gray.cgColor;
-        actionButton.layer.borderWidth = 1.0
+        actionButton.layer.borderWidth = 0.5
+        actionButton.layer.cornerRadius = 4
         actionButton.tag = tag
         actionButton.addTarget(self, action: #selector(handleGravity), for:.touchUpInside)
         actionButton.sizeToFit()
@@ -360,6 +358,8 @@ extension LLTest3ViewController
         topLabel.text = NSLocalizedString("title center in the screen", comment:"")
         topLabel.adjustsFontSizeToFitWidth = true
         topLabel.textAlignment = .center
+        topLabel.textColor = CFTool.color(4)
+        topLabel.font = CFTool.font(17)
         topLabel.tg_left.equal(10)
         topLabel.tg_right.equal(10)
         topLabel.sizeToFit()
@@ -379,6 +379,8 @@ extension LLTest3ViewController
     {
         let topLabel = UILabel()
         topLabel.text = NSLocalizedString("title not center in the screen", comment:"")
+        topLabel.textColor = CFTool.color(4)
+        topLabel.font = CFTool.font(17)
         topLabel.adjustsFontSizeToFitWidth = true
         topLabel.textAlignment = .center
         topLabel.sizeToFit()

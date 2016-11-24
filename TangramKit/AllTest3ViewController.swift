@@ -35,7 +35,7 @@ class AllTest3ViewController: UIViewController {
     override func loadView() {
         
         let frameLayout = TGFrameLayout()
-        frameLayout.backgroundColor = UIColor.gray
+        frameLayout.backgroundColor = CFTool.color(0)
         self.view = frameLayout
         self.frameLayout = frameLayout
         
@@ -46,8 +46,10 @@ class AllTest3ViewController: UIViewController {
         frameLayout.addSubview(scrollView)
         
         let button = UIButton()
-        button.backgroundColor = .red
         button.setTitle(NSLocalizedString("Logout", comment:""), for: .normal)
+        button.backgroundColor = CFTool.color(3)
+        button.titleLabel!.font = CFTool.font(16)
+        button.tintColor! = CFTool.color(0)
         button.tg_height.equal(50);
         button.tg_width.equal(.fill)
         button.tg_bottom.equal(0) //按钮定位在框架布局的底部并且宽度填充。
@@ -123,6 +125,8 @@ extension AllTest3ViewController
         
         let headerNameLabel = UILabel()
         headerNameLabel.text = "欧阳大哥"
+        headerNameLabel.font = CFTool.font(17)
+        headerNameLabel.textColor = CFTool.color(4)
         headerNameLabel.sizeToFit()
         headerNameLabel.tg_centerX.equal(0)
         headerNameLabel.tg_top.equal(headerImageView.tg_bottom, offset:10)
@@ -130,7 +134,7 @@ extension AllTest3ViewController
         
         //将tg_useFrame属性设置为true后。即使是布局里面的子视图也不会参与自动布局，而是可以通过最原始的设置frame的值来进行位置定位和尺寸的确定。
         let imageView2 = UIImageView(image: UIImage(named: "user"))
-        imageView2.backgroundColor = UIColor.white
+        imageView2.backgroundColor = .white
         imageView2.frame = CGRect(x:5, y:5, width:30, height:30)
         imageView2.tg_useFrame = true  //设置了这个属性后，这个子视图将不会被布局控制，而是直接用frame设置的为准。
         contentLayout.addSubview(imageView2)
@@ -195,13 +199,14 @@ extension AllTest3ViewController
         
         let leftButton = UIButton()
         leftButton.tg_width.equal(50)
-        leftButton.backgroundColor = UIColor.green
+        leftButton.backgroundColor = CFTool.color(5)
         testLayout.addSubview(leftButton)
         
         let centerButton = UIButton()
         centerButton.setTitle(NSLocalizedString("touch hide me", comment:""), for: .normal)
         centerButton.addTarget(self, action: #selector(handleHideSelf), for: .touchUpInside)
-        centerButton.backgroundColor = .red
+        centerButton.backgroundColor = CFTool.color(6)
+        centerButton.titleLabel!.font = CFTool.font(14)
         centerButton.sizeToFit()
         centerButton.tg_width.equal(.average)
         testLayout.addSubview(centerButton)
@@ -210,7 +215,8 @@ extension AllTest3ViewController
         let rightButton = UIButton()
         rightButton.setTitle(NSLocalizedString("touch show me", comment:""), for: .normal)
         rightButton.addTarget(self, action: #selector(handleShowBrother), for: .touchUpInside)
-        rightButton.backgroundColor = UIColor.blue
+        rightButton.backgroundColor = CFTool.color(7)
+        rightButton.titleLabel!.font = CFTool.font(14)
         rightButton.sizeToFit()
         rightButton.tg_width.equal(.average)
         testLayout.addSubview(rightButton)
@@ -238,7 +244,8 @@ extension AllTest3ViewController
         leftLabel.textAlignment = .right
         leftLabel.lineBreakMode = .byTruncatingMiddle
         leftLabel.textColor = UIColor.white
-        leftLabel.backgroundColor = UIColor.red
+        leftLabel.backgroundColor = CFTool.color(5)
+        leftLabel.font = CFTool.font(14)
         leftLabel.sizeToFit()
         leftLabel.tg_right.equal(50%)
         leftLabel.tg_right.min(0) //右边浮动间距为0.5,最小为0
@@ -252,7 +259,8 @@ extension AllTest3ViewController
         rightLabel.textAlignment = .right
         rightLabel.lineBreakMode = .byTruncatingMiddle
         rightLabel.textColor = UIColor.white
-        rightLabel.backgroundColor = UIColor.blue
+        rightLabel.backgroundColor = CFTool.color(6)
+        rightLabel.font = CFTool.font(14)
         rightLabel.sizeToFit()
         rightLabel.tg_left.equal(50%)
         rightLabel.tg_left.min(0) //左边浮动间距为0.5，最小为0
@@ -283,7 +291,8 @@ extension AllTest3ViewController
         self.shrinkLayout = testLayout
         for i in 0..<10 {
             let label = UILabel()
-            label.backgroundColor = UIColor.blue
+            label.backgroundColor = CFTool.color(i + 1)
+            label.font = CFTool.font(14)
             label.text = "\(i)"
             label.textAlignment = .center
             label.sizeToFit()
@@ -303,14 +312,14 @@ extension AllTest3ViewController
         
         let label = UILabel()
         label.text = title
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.font = CFTool.font(14)
+        label.textColor = CFTool.color(4)
         label.sizeToFit()
         label.tag = 1000
         label.tg_right.equal(50%) //水平线性布局通过相对间距来实现左右分开排列。
         actionLayout.addSubview(label)
         
         let imageView = UIImageView(image: UIImage(named: "next"))
-        imageView.sizeToFit()
         imageView.tg_left.equal(50%)
         actionLayout.addSubview(imageView)
         return actionLayout
@@ -328,7 +337,8 @@ extension AllTest3ViewController
         
         let label = UILabel()
         label.text = title
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.font = CFTool.font(14)
+        label.textColor = CFTool.color(4)
         label.adjustsFontSizeToFitWidth = true
         label.sizeToFit()
         label.tg_width.equal(.fill)
@@ -500,6 +510,12 @@ extension AllTest3ViewController
     }
     
     func handleShowPopMenu(sender: TGBaseLayout) {
+        
+        if self.popmenuLayout != nil &&  self.popmenuLayout.superview != nil
+        {
+            return
+        }
+        
         let rc = sender.convert(sender.bounds, to: self.frameLayout)
         // 计算应该弹出的位置。要转化为框架布局的rect
         let menuLayout = TGLinearLayout(.vert)
@@ -515,6 +531,10 @@ extension AllTest3ViewController
         let containerLayout = TGLinearLayout(.vert)
         containerLayout.backgroundColor = UIColor(red: 0xBF / 255.0, green: 0xBD / 255.0, blue: 0xBF / 255.0, alpha: 1)
         containerLayout.layer.cornerRadius = 4
+        containerLayout.layer.shadowRadius = 5
+        containerLayout.layer.shadowOffset = .zero
+        containerLayout.layer.shadowOpacity = 0.5
+        containerLayout.layer.shadowColor = CFTool.color(4).cgColor
         containerLayout.tg_width.equal(.fill)
         containerLayout.tg_height.equal(.wrap);
         containerLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
@@ -540,13 +560,17 @@ extension AllTest3ViewController
             if i == 5 {
                 button.setTitle(NSLocalizedString("add item", comment:""), for: .normal)
                 button.addTarget(self, action: #selector(self.handleAddMe), for: .touchUpInside)
-                button.backgroundColor = UIColor.red
+                button.backgroundColor = CFTool.color(3)
+                button.layer.cornerRadius = 5
+                button.titleLabel!.font = CFTool.font(14)
             }
             else {
                 button.setTitle(NSLocalizedString("double tap remove:\(i)", comment:""), for: .normal)
                 button.titleLabel!.adjustsFontSizeToFitWidth = true
                 button.addTarget(self, action: #selector(self.handleDelMe), for: .touchDownRepeat)
-                button.backgroundColor = UIColor.blue
+                button.backgroundColor = CFTool.color(2)
+                button.layer.cornerRadius = 5
+                button.titleLabel!.font = CFTool.font(14)
             }
             button.sizeToFit()
             itemLayout.addSubview(button)
@@ -560,9 +584,11 @@ extension AllTest3ViewController
         //设置scrollView的高度，以及最大最小高度。正是这个实现了拉伸限制功能。
         let closeButton = UIButton()
         closeButton.layer.borderColor = UIColor.darkGray.cgColor
-        closeButton.layer.borderWidth = 1
+        closeButton.layer.borderWidth = 0.5
+        closeButton.layer.cornerRadius = 5
         closeButton.setTitle(NSLocalizedString("close pop menu", comment:""), for: .normal)
-        closeButton.setTitleColor(UIColor.red, for: .normal)
+        closeButton.setTitleColor(CFTool.color(4), for: .normal)
+        closeButton.titleLabel!.font = CFTool.font(14)
         closeButton.backgroundColor = UIColor.white
         closeButton.addTarget(self, action: #selector(self.handleClosePopmenu), for: .touchUpInside)
         closeButton.tg_top.equal(5)
@@ -590,7 +616,9 @@ extension AllTest3ViewController
         button.setTitle(NSLocalizedString("double tap remove:\(sender.superview!.subviews.count)", comment:""), for: .normal)
         button.titleLabel!.adjustsFontSizeToFitWidth = true
         button.addTarget(self, action: #selector(self.handleDelMe), for: .touchDownRepeat)
-        button.backgroundColor = UIColor.blue
+        button.backgroundColor = CFTool.color(2)
+        button.layer.cornerRadius = 5
+        button.titleLabel!.font = CFTool.font(14)
         button.sizeToFit()
         
         self.popmenuItemLayout.insertSubview(button, belowSubview: sender)

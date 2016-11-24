@@ -25,7 +25,7 @@ class FLLTest4ViewController: UIViewController {
         self.view = scrollView;
         
         let rootLayout = TGLinearLayout(.vert)
-        rootLayout.backgroundColor = .gray
+        rootLayout.backgroundColor = CFTool.color(11)
         rootLayout.tg_width.equal(.fill)
         rootLayout.tg_height.equal(.wrap)
         rootLayout.tg_vspace = 10
@@ -74,6 +74,8 @@ extension FLLTest4ViewController {
         //the second line: user name
         let userNameLabel = UILabel()
         userNameLabel.text = "User Name:"
+        userNameLabel.textColor = CFTool.color(4)
+        userNameLabel.font = CFTool.font(15)
         userNameLabel.sizeToFit()
         flowLayout.addSubview(userNameLabel)
         
@@ -87,6 +89,8 @@ extension FLLTest4ViewController {
         //the third line: password
         let passwordLabel = UILabel()
         passwordLabel.text = "Password:"
+        passwordLabel.textColor = CFTool.color(4)
+        passwordLabel.font = CFTool.font(15)
         passwordLabel.tg_width.min(userNameLabel.tg_width) //注意这里，因为"password"的长度要小于"User name",所以我们这里设定passwordLabel的最小宽度要和userNameLabel相等。这样目的是为了让后面的输入框具有左对齐的效果。
         passwordLabel.tg_top.equal(20)
         passwordLabel.sizeToFit()
@@ -113,6 +117,8 @@ extension FLLTest4ViewController {
         //the fifth line: remember me
         let rememberLabel = UILabel()
         rememberLabel.text = "Remember me:"
+        rememberLabel.textColor = CFTool.color(4)
+        rememberLabel.font = CFTool.font(15)
         rememberLabel.tg_width.equal(.fill)
         rememberLabel.sizeToFit()
         flowLayout.addSubview(rememberLabel)
@@ -123,7 +129,10 @@ extension FLLTest4ViewController {
         //the sixth line: submit button
         let submitButton = UIButton.init(type: .system)
         submitButton.setTitle("Submit", for: .normal)
-        submitButton.backgroundColor = .red
+        submitButton.titleLabel!.font = CFTool.font(15)
+        submitButton.layer.cornerRadius = 5
+        submitButton.layer.borderColor = CFTool.color(3).cgColor
+        submitButton.layer.borderWidth = 0.5
         submitButton.tg_top.equal(20)
         submitButton.tg_height.equal(44)
         submitButton.tg_width.equal(flowLayout.tg_width, increment: -40)  //宽度等于父视图的宽度再减去40。
@@ -144,7 +153,7 @@ extension FLLTest4ViewController {
     {
         //这个例子建立一个水平流式布局来
         let flowLayout = TGFlowLayout(.horz, arrangedCount: 3)
-        flowLayout.tg_backgroundImage = UIImage(named: "bk1")
+        flowLayout.backgroundColor = CFTool.color(7)
         flowLayout.tg_height.equal(240)
         flowLayout.tg_gravity = [TGGravity.horz.center,TGGravity.vert.bottom]  //子视图整体垂直底部对齐，水平居中对齐。
         flowLayout.tg_arrangedGravity = TGGravity.horz.center //每列子视图水平居中对齐。
@@ -152,7 +161,7 @@ extension FLLTest4ViewController {
         rootLayout.addSubview(flowLayout)
 
         //the first col
-        let headerImageView = UIImageView(image: UIImage(named: "image1"))
+        let headerImageView = UIImageView(image: UIImage(named: "minions4"))
         headerImageView.tg_width.equal(80)
         headerImageView.tg_height.equal(80)
         headerImageView.layer.cornerRadius = 40
@@ -162,14 +171,14 @@ extension FLLTest4ViewController {
         let lineView = UIView()
         lineView.tg_width.equal(2)
         lineView.tg_height.equal(.fill)  //高度占用剩余空间
-        lineView.backgroundColor = UIColor.red
+        lineView.backgroundColor = CFTool.color(2)
         flowLayout.addSubview(lineView)
         
         let placeHoloderView1 = UIView()
         flowLayout.addSubview(placeHoloderView1)
         
         //the second，third, fourth cols
-        let images = ["image2", "image3", "p1-11", "p1"]
+        let images = ["image2", "image3", "image4", "image4"]
         for i in 0 ..< 9 {
             let imageView = UIImageView(image: UIImage(named: images[Int(arc4random_uniform(UInt32(images.count)))]))
             imageView.layer.cornerRadius = 5
@@ -194,7 +203,7 @@ extension FLLTest4ViewController {
     func createFlowLayout3(rootLayout: TGLinearLayout)
     {
         let flowLayout = TGFlowLayout(.vert, arrangedCount: 0)
-        flowLayout.backgroundColor = .white
+        flowLayout.backgroundColor = CFTool.color(0)
         flowLayout.tg_height.equal(.wrap)
         flowLayout.tg_space = 10
         flowLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
@@ -202,39 +211,39 @@ extension FLLTest4ViewController {
         
         //第一行占据全部
         let v1 = UIView()
-        v1.backgroundColor = UIColor.red
+        v1.backgroundColor = CFTool.color(5)
         v1.tg_width.equal(100%)
         v1.tg_height.equal(50)
         flowLayout.addSubview(v1)
         
         //第二行第一个固定，剩余的占据全部
         let v2 = UIView()
-        v2.backgroundColor = UIColor.green
+        v2.backgroundColor = CFTool.color(6)
         v2.tg_width.equal(50)
         v2.tg_height.equal(50)
         flowLayout.addSubview(v2)
         
         let v3 = UIView()
-        v3.backgroundColor = UIColor.blue
+        v3.backgroundColor = CFTool.color(7)
         v3.tg_width.equal(100%)
         v3.tg_height.equal(50)
         flowLayout.addSubview(v3)
         
         //第三行，三个子视图均分。
         let v4 = UIView()
-        v4.backgroundColor = UIColor.orange
+        v4.backgroundColor = CFTool.color(5)
         v4.tg_width.equal((100/3.0)%, increment: -20)  //因为要均分为3部分，而我们设置了水平间距为10.所以我们这里要减去20。也就是减去2个间隔。
         v4.tg_height.equal(50)
         flowLayout.addSubview(v4)
         
         let v5 = UIView()
-        v5.backgroundColor = UIColor.cyan
+        v5.backgroundColor = CFTool.color(6)
         v5.tg_width.equal((100/2.0)%, increment: -10) //因为剩下的要均分为2部分，而我们设置了水平间距为10.所以我们这里要减去10。也就是减去1个间隔。
         v5.tg_height.equal(50)
         flowLayout.addSubview(v5)
         
         let v6 = UIView()
-        v6.backgroundColor = UIColor.magenta
+        v6.backgroundColor = CFTool.color(7)
         v6.tg_width.equal(100%)  //最后一个占用剩余的所有空间。这里没有间距了，所以不需要再减。
         v6.tg_height.equal(50)
         flowLayout.addSubview(v6)

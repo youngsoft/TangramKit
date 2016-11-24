@@ -15,14 +15,17 @@ class ViewController: UITableViewController {
     override  func viewDidLoad() {
         super.viewDidLoad()
 
-        self.title = NSLocalizedString("Category",comment:"");
+        self.title = NSLocalizedString("Category",comment:"")
+        self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName:CFTool.font(15),NSForegroundColorAttributeName:CFTool.color(4)]
+
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "test")
         
         let tipLabel = UILabel(frame:CGRect(x:0, y:0, width:0, height:50))
-        tipLabel.text = "如果您在模拟器中运行时看到的不是中文则请到系统设置里面将语言设置为中文(english ignore this text)";
-        tipLabel.font = UIFont.systemFont(ofSize: 13)
-        tipLabel.numberOfLines = 0;
-        self.tableView.tableHeaderView = tipLabel;
+        tipLabel.text = "如果您在模拟器中运行时看到的不是中文则请到系统设置里面将语言设置为中文(english ignore this text)"
+        tipLabel.font = CFTool.font(16)
+        tipLabel.numberOfLines = 0
+        tipLabel.adjustsFontSizeToFitWidth = true
+        self.tableView.tableHeaderView = tipLabel
         
         
         // Uncomment the following line to preserve selection between presentations
@@ -130,6 +133,9 @@ class ViewController: UITableViewController {
         demoVCList.append(["title":NSLocalizedString("2.SizeClass - Demo2",comment:""),
        "class":AllTest6ViewController.self]
         )
+        demoVCList.append(["title":NSLocalizedString("❁1.Screen perfect fit - Demo1",comment:""),
+                           "class":AllTest7ViewController.self]
+        )
 
         
         
@@ -157,7 +163,9 @@ class ViewController: UITableViewController {
     override  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let  cell = tableView.dequeueReusableCell(withIdentifier: "test", for:indexPath)
         
-        cell.textLabel?.font = UIFont.systemFont(ofSize: 14)
+        cell.textLabel?.adjustsFontSizeToFitWidth = true
+        cell.textLabel?.font = CFTool.font(15)
+        cell.textLabel?.textColor = CFTool.color(4)
         cell.textLabel?.text = self.demoVCList[indexPath.row]["title"] as? String
         
         return cell

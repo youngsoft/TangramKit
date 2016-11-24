@@ -30,7 +30,7 @@ class AllTest1ViewController: UITableViewController {
         
         let imageMessages = ["", "image1", "image2","image3"]
         
-        for _ in 0 ..< 100
+        for _ in 0 ..< 30
         {
             
             var model = AllTest1DataModel()
@@ -100,6 +100,8 @@ class AllTest1ViewController: UITableViewController {
         
         let label1 = UILabel()
         label1.text = NSLocalizedString("add tableHeaderView(please touch me)", comment: "")
+        label1.textColor = CFTool.color(0)
+        label1.font = CFTool.font(17)
         label1.tag = 1000
         label1.textColor = UIColor.white
         label1.font = UIFont.systemFont(ofSize: 17)
@@ -109,7 +111,8 @@ class AllTest1ViewController: UITableViewController {
         
         let label2 = UILabel()
         label2.text = NSLocalizedString(" if you use layout view to realize the dynamic height tableHeaderView, please use frame to set view's width and use wrapContentHeight to set view's height. the layoutIfNeeded method is needed to call before the layout view assignment to the UITableview's tableHeaderView.", comment: "")
-        label2.textColor = UIColor.red
+        label2.textColor = CFTool.color(4)
+        label2.font = CFTool.font(15)
         label2.tg_left.equal(5)
         label2.tg_right.equal(5)
         label2.numberOfLines = 0
@@ -130,17 +133,21 @@ class AllTest1ViewController: UITableViewController {
         tableFooterViewLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
         tableFooterViewLayout.frame = CGRect(x: 0, y: 0, width: self.tableView.bounds.width, height: 80) ////这里明确设定高度。
         tableFooterViewLayout.tg_width.equal(.fill) //这里注意设置宽度和父布局保持一致。
-        tableFooterViewLayout.backgroundColor = .magenta
+        tableFooterViewLayout.backgroundColor = CFTool.color(6)
         tableFooterViewLayout.tg_gravity = [TGGravity.vert.center, TGGravity.horz.fill]
         
         let label3 = UILabel()
         label3.text = NSLocalizedString("add tableFooterView", comment: "")
+        label3.textColor = CFTool.color(4)
+        label3.font = CFTool.font(16)
         label3.textAlignment = .center
         label3.sizeToFit()
         tableFooterViewLayout.addSubview(label3)
         
         let label4 = UILabel()
         label4.text = NSLocalizedString("the layoutIfNeeded is not need to call when you use frame to set layout view's size", comment: "")
+        label4.textColor = CFTool.color(3)
+        label4.font = CFTool.font(14)
         label4.textAlignment = .center
         label4.tg_top.equal(10)
         label4.adjustsFontSizeToFitWidth = true

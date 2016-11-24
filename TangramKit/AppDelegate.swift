@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         TGDimeAdapter.template(CGSize(width: 375, height: 667))
         
         self.window =  UIWindow(frame: UIScreen.main.bounds)
-        self.window!.backgroundColor = UIColor.white
+        self.window!.backgroundColor = .white
         
         let nav = UINavigationController(rootViewController:ViewController(style:.plain))
         nav.navigationBar.isTranslucent = false
@@ -29,8 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.window!.makeKeyAndVisible()
         
-                
-        
+    
         return true
     }
     

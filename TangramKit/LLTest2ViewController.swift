@@ -51,7 +51,6 @@ class LLTest2ViewController: UIViewController {
         self.view = scrollView
         
         let contentLayout = TGLinearLayout(.vert)
-        contentLayout.backgroundColor = .cyan
         contentLayout.tg_padding = UIEdgeInsets(top: 10,left: 10,bottom: 10,right: 10) //设置布局内的子视图离自己的边距.
         contentLayout.tg_width.equal(.fill);  //设置视图自身的宽度填充父视图的剩余宽度。
         //您可以用如下的方法设置宽度：
@@ -138,6 +137,7 @@ extension LLTest2ViewController
     {
         let numTitleLabel = UILabel()
         numTitleLabel.text =  NSLocalizedString("No.:", comment:"")
+        numTitleLabel.font = CFTool.font(15)
         numTitleLabel.tg_left.equal(5) //左边距为5
         numTitleLabel.sizeToFit()      //尺寸由内容决定
         contentLayout.addSubview(numTitleLabel)
@@ -145,6 +145,7 @@ extension LLTest2ViewController
         let numField = UITextField()
         numField.borderStyle = .roundedRect
         numField.placeholder = NSLocalizedString("Input the No. here", comment:"")
+        numField.font = CFTool.font(15)
         numField.tg_top.equal(5)
         numField.tg_width.equal(.fill)
         numField.tg_height.equal(40)
@@ -178,11 +179,14 @@ extension LLTest2ViewController
         
         let userNameLabel = UILabel()
         userNameLabel.text = NSLocalizedString("Name:欧阳大哥", comment:"")
+        userNameLabel.font = CFTool.font(15);
         userNameLabel.sizeToFit()
         nameLayout.addSubview(userNameLabel)
         
         let nickNameLabel = UILabel()
         nickNameLabel.text  = NSLocalizedString("Nickname:醉里挑灯看键", comment:"")
+        nickNameLabel.textColor = CFTool.color(4)
+        nickNameLabel.font = CFTool.font(14);
         nickNameLabel.sizeToFit()
         nameLayout.addSubview(nickNameLabel)
         
@@ -206,6 +210,7 @@ extension LLTest2ViewController
         
         let ageTitleLabel = UILabel()
         ageTitleLabel.text = NSLocalizedString("Age:", comment:"")
+        ageTitleLabel.font = CFTool.font(15)
         ageTitleLabel.sizeToFit()
         ageLayout.addSubview(ageTitleLabel)
         
@@ -221,7 +226,10 @@ extension LLTest2ViewController
             let ageLabel = UILabel()
             ageLabel.text = String(format:"%ld", (i + 2) * 10)
             ageLabel.textAlignment  = .center
-            ageLabel.backgroundColor = .red
+            ageLabel.layer.cornerRadius = 15
+            ageLabel.layer.borderColor = CFTool.color(3).cgColor
+            ageLabel.layer.borderWidth = 0.5
+            ageLabel.font = CFTool.font(13)
             ageLabel.tg_height.equal(30)
             ageLabel.tg_width.equal(.average)  //这里面每个子视图的宽度来平均分配父视图的宽度。这样里面所有子视图的宽度都相等。
             ageSelectLayout.addSubview(ageLabel)
@@ -245,12 +253,15 @@ extension LLTest2ViewController
         
         let addressTitleLabel = UILabel()
         addressTitleLabel.text = NSLocalizedString("Address:", comment:"")
+        addressTitleLabel.font = CFTool.font(15)
         addressTitleLabel.sizeToFit() //这里面虽然也会让视图的尺寸由内容决定，但是却没有自动换行的能力。
         addressLayout.addSubview(addressTitleLabel)
         
         
         let addressLabel = UILabel()
         addressLabel.text = NSLocalizedString("Winterless Building, West Dawang Road, Chaoyang district CBD, Beijing, People's Republic of China", comment:"")
+        addressLabel.textColor = CFTool.color(4)
+        addressLabel.font = CFTool.font(14)
         addressLabel.numberOfLines = 0
         addressLabel.tg_left.equal(10)
         addressLabel.tg_width.equal(.fill)
@@ -276,6 +287,7 @@ extension LLTest2ViewController
         
         let sexLabel = UILabel()
         sexLabel.text = NSLocalizedString("Sex:", comment:"")
+        sexLabel.font = CFTool.font(15)
         sexLabel.sizeToFit()
         sexLabel.tg_centerY.equal(0)  //垂直居中。
         sexLabel.tg_right.equal(50%)  //右边距离占用剩余空间的一半
@@ -296,9 +308,10 @@ extension LLTest2ViewController
     func createSection6(in contentLayout:TGLinearLayout)
     {
         let shrinkLabel = UILabel()
-        shrinkLabel.backgroundColor = .red
         shrinkLabel.clipsToBounds = true  //为了实现文本可缩放，需要将这个标志设置为YES，否则效果无法实现。但要慎重使用这个标志，因为如果设置YES的话会影响性能。
         shrinkLabel.text = NSLocalizedString("This is a can automatically wrap text.To realize this function, you need to set the clear width, and set the flexedHeight to YES and set the numberOfLines to 0.You can try to switch different simulator or different orientation screen to see the effect.", comment:"")
+        shrinkLabel.backgroundColor = CFTool.color(2)
+        shrinkLabel.font = CFTool.font(14)
         shrinkLabel.numberOfLines = 0
         shrinkLabel.tg_top.equal(20)
         shrinkLabel.tg_width.equal(.fill)
@@ -309,6 +322,7 @@ extension LLTest2ViewController
         let button = UIButton(type:.system)
         button.addTarget(self, action: #selector(handleLabelShrink), for:.touchUpInside)
         button.setTitle(NSLocalizedString("Show&Hide the Text", comment:""), for:.normal)
+        button.titleLabel?.font = CFTool.font(16)
         button.tg_centerX.equal(0)
         button.tg_height.equal(60)
         button.sizeToFit()
@@ -324,6 +338,7 @@ extension LLTest2ViewController
         
         let button = UIButton(type:.system)
         button.setTitle(NSLocalizedString("Show more》", comment:"") ,for:.normal)
+        button.titleLabel?.font = CFTool.font(16)
         button.addTarget(self, action: #selector(handleShowMore), for:.touchUpInside)
         button.tg_top.equal(50)
         button.tg_right.equal(0)
@@ -332,7 +347,7 @@ extension LLTest2ViewController
 
         
         let hiddenView = UIView()
-        hiddenView.backgroundColor = .green
+        hiddenView.backgroundColor = CFTool.color(3)
         hiddenView.isHidden = true
         hiddenView.tg_top.equal(20)
         hiddenView.tg_width.equal(.fill)

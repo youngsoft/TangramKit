@@ -41,9 +41,9 @@ class LLTest7ViewController: UIViewController {
         action1Layout.tg_height.equal(.wrap)
         rootLayout.addSubview(action1Layout)
         
-        action1Layout.addSubview(self.createActionButton(NSLocalizedString("average size&spacing no centered", comment:"") ,tag:100))
-        action1Layout.addSubview(self.createActionButton(NSLocalizedString("average size&spacing centered", comment:""), tag:200))
-        action1Layout.addSubview(self.createActionButton(NSLocalizedString("average size,fixed spacing no centered",comment:""), tag:300))
+        action1Layout.addSubview(self.createActionButton(NSLocalizedString("average size&space no centered", comment:"") ,tag:100))
+        action1Layout.addSubview(self.createActionButton(NSLocalizedString("average size&space centered", comment:""), tag:200))
+        action1Layout.addSubview(self.createActionButton(NSLocalizedString("average size no centered",comment:""), tag:300))
         action1Layout.tg_equalizeSubviews(centered: false, withSpace: 5) //均分action1Layout中的所有子视图的宽度,视图之间的间距为5
         
         
@@ -52,16 +52,16 @@ class LLTest7ViewController: UIViewController {
         action2Layout.tg_height.equal(.wrap)
         rootLayout.addSubview(action2Layout)
         
-        action2Layout.addSubview(self.createActionButton(NSLocalizedString("average size,fixed spacing centered",comment:""), tag:400))
-        action2Layout.addSubview(self.createActionButton(NSLocalizedString("average spacing no centered",comment:""), tag:500))
-        action2Layout.addSubview(self.createActionButton(NSLocalizedString("average spacing centered",comment:""), tag:600))
+        action2Layout.addSubview(self.createActionButton(NSLocalizedString("average sizecentered",comment:""), tag:400))
+        action2Layout.addSubview(self.createActionButton(NSLocalizedString("average space no centered",comment:""), tag:500))
+        action2Layout.addSubview(self.createActionButton(NSLocalizedString("average space centered",comment:""), tag:600))
         action2Layout.tg_equalizeSubviews(centered: false, withSpace: 5) //均分action1Layout中的所有子视图的宽度
         
         
     
         let testLayout = TGLinearLayout(.vert)
         testLayout.tg_gravity = TGGravity.horz.fill  //所有子视图水平宽度充满布局，这样就不需要分别设置每个子视图的宽度了。
-        testLayout.backgroundColor = .gray
+        testLayout.backgroundColor = CFTool.color(0)
         testLayout.tg_height.equal(.fill)   //高度填充父布局的所有剩余空间。
         testLayout.tg_leftPadding = 10
         testLayout.tg_rightPadding = 10
@@ -69,20 +69,16 @@ class LLTest7ViewController: UIViewController {
         rootLayout.addSubview(testLayout)
         self.testLayout = testLayout
         
-        let v1 = UIView()
-        v1.backgroundColor = .red
+        let v1 = self.createView(CFTool.color(5))
         v1.tg_height.equal(100)
         self.testLayout.addSubview(v1)
         
         
-        let v2 = UIView()
-        v2.backgroundColor = .green
+        let v2 = self.createView(CFTool.color(6))
         v2.tg_height.equal(50)
         self.testLayout.addSubview(v2)
         
-        
-        let v3 = UIView()
-        v3.backgroundColor = .blue
+        let v3 = self.createView(CFTool.color(7))
         v3.tg_height.equal(70)
         self.testLayout.addSubview(v3)
 
@@ -93,6 +89,17 @@ class LLTest7ViewController: UIViewController {
 //MARK: - Layout Construction
 extension LLTest7ViewController
 {
+    
+    func createView(_ color: UIColor) -> UIView {
+        let v = UIView()
+        v.backgroundColor = color
+        v.layer.shadowOffset = CGSize(width: CGFloat(3), height: CGFloat(3))
+        v.layer.shadowColor = CFTool.color(4).cgColor
+        v.layer.shadowRadius = 2
+        v.layer.shadowOpacity = 0.3
+        return v
+    }
+    
     func createActionButton(_ title :String , tag:NSInteger) -> UIButton
     {
         let button = UIButton(type:.system)
@@ -101,10 +108,12 @@ extension LLTest7ViewController
         button.tag = tag
         button.titleLabel!.numberOfLines = 2
         button.titleLabel!.adjustsFontSizeToFitWidth = true
+        button.titleLabel!.font = CFTool.font(14)
         button.sizeToFit()
         button.tg_height.equal(.wrap, increment:20) //高度等于内容的高度再加20
-        button.layer.borderColor = UIColor.gray.cgColor
-        button.layer.borderWidth = 1
+        button.layer.borderColor = UIColor.lightGray.cgColor
+        button.layer.borderWidth = 0.5
+        button.layer.cornerRadius = 4
         
         return button
     }
