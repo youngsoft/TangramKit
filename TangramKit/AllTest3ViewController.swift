@@ -247,10 +247,8 @@ extension AllTest3ViewController
         leftLabel.backgroundColor = CFTool.color(5)
         leftLabel.font = CFTool.font(14)
         leftLabel.sizeToFit()
-        leftLabel.tg_right.equal(50%)
-        leftLabel.tg_right.min(0) //右边浮动间距为0.5,最小为0
-        leftLabel.tg_width.min(10)
-        leftLabel.tg_width.max(testLayout.tg_width, increment:-10) //宽度最小为10，最大为布局视图的宽度减10
+        leftLabel.tg_right.equal(50%).min(0) //右边浮动间距为0.5,最小为0
+        leftLabel.tg_width.min(10).max(testLayout.tg_width, increment:-10) //宽度最小为10，最大为布局视图的宽度减10
         testLayout.addSubview(leftLabel)
         self.leftFlexedLabel = leftLabel
         
@@ -262,10 +260,8 @@ extension AllTest3ViewController
         rightLabel.backgroundColor = CFTool.color(6)
         rightLabel.font = CFTool.font(14)
         rightLabel.sizeToFit()
-        rightLabel.tg_left.equal(50%)
-        rightLabel.tg_left.min(0) //左边浮动间距为0.5，最小为0
-        rightLabel.tg_width.min(10)
-        rightLabel.tg_width.max(testLayout.tg_width, increment:-10) //宽度最小为10，最大为布局视图的宽度减10
+        rightLabel.tg_left.equal(50%).min(0) //左边浮动间距为0.5，最小为0
+        rightLabel.tg_width.min(10).max(testLayout.tg_width, increment:-10) //宽度最小为10，最大为布局视图的宽度减10
         testLayout.addSubview(rightLabel)
         self.rightFlexedLabel = rightLabel
     }
@@ -578,9 +574,7 @@ extension AllTest3ViewController
         
         //评估出itemLayout的尺寸，注意这里要明确指定itemLayout的宽度，因为弹出菜单的宽度是sender的宽度-20，而itemLayout的父容器又有20的左右内边距，因此这里要减去40.
         let size = itemLayout.tg_sizeThatFits(CGSize(width:rc.width - 40, height:0))
-        scrollView.tg_height.equal(size.height)
-        scrollView.tg_height.min(50)
-        scrollView.tg_height.max(155)
+        scrollView.tg_height.equal(size.height).min(50).max(155)
         //设置scrollView的高度，以及最大最小高度。正是这个实现了拉伸限制功能。
         let closeButton = UIButton()
         closeButton.layer.borderColor = UIColor.darkGray.cgColor

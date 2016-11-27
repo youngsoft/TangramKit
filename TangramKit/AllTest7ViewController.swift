@@ -99,8 +99,7 @@ extension AllTest7ViewController
         label1.numberOfLines = 0
         label1.adjustsFontSizeToFitWidth = true
         label1.tg_height.equal(.wrap)
-        label1.tg_width.equal(.wrap)
-        label1.tg_width.min(label1.tg_width) //并且最小宽度也等于自己，这样设置的话可以保证这个视图永远不会被压缩。您可以注释掉这句看看效果。
+        label1.tg_width.equal(.wrap).min(label1.tg_width) //并且最小宽度也等于自己，这样设置的话可以保证这个视图永远不会被压缩。您可以注释掉这句看看效果。
         label1.sizeToFit()
         contentLayout.addSubview(label1)
         
@@ -496,14 +495,13 @@ extension AllTest7ViewController
         rootLayout.addSubview(scrollView)
         
         let contentLayout = TGLinearLayout(.horz)
-        contentLayout.tg_width.equal(.wrap)
+        contentLayout.tg_width.equal(.wrap).min(scrollView.tg_width) //默认水平线性布局的宽度是wrap的但是最小的宽度和父视图相等，这样对于一些大尺寸屏幕因为能够容纳内容而不会产生滚动。
         contentLayout.backgroundColor = CFTool.color(0)
         contentLayout.tg_height.equal(.fill)
         contentLayout.tg_gravity = TGGravity.vert.fill
         contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
         contentLayout.tg_space = 5
         contentLayout.tg_shrinkType = .none //如果具有固定尺寸的视图的总宽度超过布局视图的总宽度时，不产生固定视图的尺寸的压缩。
-        contentLayout.tg_width.min(scrollView.tg_width) //默认水平线性布局的宽度是wrap的但是最小的宽度和父视图相等，这样对于一些大尺寸屏幕因为能够容纳内容而不会产生滚动。
         scrollView.addSubview(contentLayout)
         
         //第一个子视图。
@@ -521,10 +519,8 @@ extension AllTest7ViewController
         label2.backgroundColor = CFTool.color(6)
         label2.sizeToFit()
         //中间视图的左边间距是0.5,右边间距是0.5。表明中间视图的左右间距占用剩余的空间而达到居中的效果。这样在屏幕尺寸足够时则会产生居中效果，而屏幕尺寸不足时则会缩小间距，但是这里面最左边的最小间距是0而最右边的最小间距是30，这样布局视图因为具有wrapContentWidth属性所以会扩充宽度而达到滚动的效果。
-        label2.tg_left.equal(50%)
-        label2.tg_left.min(0)
-        label2.tg_right.equal(50%)
-        label2.tg_right.min(30)
+        label2.tg_left.equal(50%).min(0)
+        label2.tg_right.equal(50%).min(30)
         contentLayout.addSubview(label2)
         
         //第三个子视图。
@@ -556,12 +552,11 @@ extension AllTest7ViewController
         let contentLayout = TGLinearLayout(.horz)
         contentLayout.backgroundColor = CFTool.color(0)
         contentLayout.tg_height.equal(.fill)
-        contentLayout.tg_width.equal(.wrap)
+        contentLayout.tg_width.equal(.wrap).min(scrollView.tg_width) //默认水平线性布局的宽度是wrap的但是最小的宽度和父视图相等，这样对于一些大尺寸屏幕因为能够容纳内容而不会产生滚动。
         contentLayout.tg_gravity = TGGravity.vert.fill
         contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
         contentLayout.tg_hspace = 5
         contentLayout.tg_shrinkType = .none //如果具有固定尺寸的视图的总宽度超过布局视图的总宽度时，不产生固定视图的尺寸的压缩。
-        contentLayout.tg_width.min(scrollView.tg_width) //默认水平线性布局的宽度是wrap的但是最小的宽度和父视图相等，这样对于一些大尺寸屏幕因为能够容纳内容而不会产生滚动。
         scrollView.addSubview(contentLayout)
       
         //第一个子视图。
@@ -587,8 +582,7 @@ extension AllTest7ViewController
         label3.backgroundColor = CFTool.color(7)
         label3.sizeToFit()
         //最后一个视图的左边距占用剩余的空间，但是最低不能小于30。这样设置的意义是如果布局视图够宽则第三个子视图的左边间距是剩余的空间，这样就保证了第三个子视图总是在最右边。而如果剩余空间不够时，则因为这里最小的宽度是30，而布局视图又是wrap,所以就会扩充布局视图的宽度，而产生滚动效果。这里的最小值30很重要，也就是第三个子视图和其他子视图的最小间距，具体设置多少就要看UI的界面效果图了。
-        label3.tg_left.equal(100%)
-        label3.tg_left.min(30)
+        label3.tg_left.equal(100%).min(30)
         contentLayout.addSubview(label3)
     }
     

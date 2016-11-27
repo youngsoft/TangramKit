@@ -61,8 +61,7 @@ class LLTest2ViewController: UIViewController {
         //您还可以用如下的方法设置宽度
         //contentLayout.tg_width.equal(100%)
         
-        contentLayout.tg_height.equal(.wrap)  //设置布局视图的高度由里面的子视图决定。
-        contentLayout.tg_height.min(scrollView.tg_height, increment: 10)  //但是布局视图的最低高度等于scrollView的高度+10
+        contentLayout.tg_height.equal(.wrap).min(scrollView.tg_height, increment: 10)  //高度由子视图决定，但是布局视图的最低高度等于scrollView的高度+10
         //您也可以如下的方法设置：
         //contentLayout.tg_height.min(scrollView, increment: 10)
         

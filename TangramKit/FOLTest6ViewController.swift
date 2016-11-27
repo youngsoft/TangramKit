@@ -24,8 +24,7 @@ class FOLTest6ViewController: UIViewController {
         let rootLayout = TGLinearLayout(.vert)
         rootLayout.backgroundColor = .lightGray
         rootLayout.tg_width.equal(.fill)
-        rootLayout.tg_height.equal(.wrap)
-        rootLayout.tg_height.min(scrollView.tg_height) //默认虽然高度包裹，但是最小的高度要和滚动视图相等。
+        rootLayout.tg_height.equal(.wrap).min(scrollView.tg_height) //默认虽然高度包裹，但是最小的高度要和滚动视图相等。
         rootLayout.tg_vspace = 10
         scrollView.addSubview(rootLayout)
         

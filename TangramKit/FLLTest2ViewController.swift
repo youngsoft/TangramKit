@@ -126,8 +126,7 @@ extension FLLTest2ViewController
         
         
         //这里可以看到尺寸宽度等于内容宽度并且再增加10，且最小是40，意思是按钮的宽度是等于自身内容的宽度再加10，但最小的宽度是40
-        tagButton.tg_width.equal(.wrap, increment:10)
-        tagButton.tg_width.min(40)
+        tagButton.tg_width.equal(.wrap, increment:10).min(40)
         tagButton.tg_height.equal(.wrap, increment:10) //高度等于自身内容的高度加10
         tagButton.addTarget(self,action:#selector(handleDelTag), for:.touchUpInside )
         self.flowLayout.addSubview(tagButton)

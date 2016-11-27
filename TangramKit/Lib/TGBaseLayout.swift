@@ -143,13 +143,13 @@ extension UIView:TGViewSizeClass
      流式布局简写为FL、垂直流式布局简写为FL-V，水平流式布局简写为FL-H、浮动布局简写为FO、左右浮动布局简写为FO-V、上下浮动布局简写为FO-H、
      路径布局简写为P、全部简写为ALL，不支持为-，
      
-     定义A为操作的视图本身，B为A的兄弟视图，P为A的父视图。
+     定义A为操作的视图本身，B为A的兄弟视图，S为A的父视图。
 +-----------+-------+--------+----+----+----------------+------------+----------+-----------+--------------+--------------+--------------+
-| 对象 \ 值  |CGFloat|TGWeight|wrap|fill|A.tg_width      |A.tg_height |B.tg_width|B.tg_height|P.tg_width    |P.tg_heigh    |[TGLayoutSize]|
+| 对象 \ 值  |CGFloat|TGWeight|wrap|fill|A.tg_width      |A.tg_height |B.tg_width|B.tg_height|S.tg_width    |S.tg_heigh    |[TGLayoutSize]|
 +-----------+-------+--------+----+----+----------------+------------+----------+-----------+-----------------------------+--------------+
-|A.tg_width |ALL    |ALL     |ALL |ALL | -   	        |FR/R/FL-H/FO|FR/R/FO/P | R	        |L/FR/R/FL/FO/P| R	          |R             |
+|A.tg_width |ALL    |ALL     |ALL |ALL | -   	        |FR/R/FL-H/FO|FR/R/FO/P | R	        |ALL           | R	          |R             |
 +-----------+-------+--------+----+----+----------------+------------+----------+--------------------------+--------------+--------------+
-|A.tg_height|ALL    |ALL     |ALL |ALL |FR/R/FL-V/FO/L-V|-           |R	        |FR/R/FO/P  |R             |L/FR/R/FL/FO/P|R             |
+|A.tg_height|ALL    |ALL     |ALL |ALL |FR/R/FL-V/FO/L-V|-           |R	        |FR/R/FO/P  |R             |ALL           |R             |
 +-----------+-------+--------+----+----+----------------+------------+----------+-----------+--------------+-----------------------------+
      
      这里面重点介绍TGWeight，wrap,fill三种类型的值设置。
@@ -1083,7 +1083,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     override open func didAddSubview(_ subview: UIView) {
         super.didAddSubview(subview)
         
-        subview.addObserver(self, forKeyPath:"hidden", options: NSKeyValueObservingOptions.new, context: nil)
+        subview.addObserver(self, forKeyPath:"isHidden", options: NSKeyValueObservingOptions.new, context: nil)
         subview.addObserver(self, forKeyPath:"frame", options: NSKeyValueObservingOptions.new, context: nil)
         subview.addObserver(self, forKeyPath:"center", options: NSKeyValueObservingOptions.new, context: nil)
 
@@ -1093,7 +1093,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         super.willRemoveSubview(subview)
         
         subview.tg_layoutCompletedDo(nil)
-        subview.removeObserver(self, forKeyPath: "hidden")
+        subview.removeObserver(self, forKeyPath: "isHidden")
         subview.removeObserver(self, forKeyPath: "frame")
         subview.removeObserver(self, forKeyPath: "center")
 
@@ -1254,7 +1254,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         
         
         
-        if (keyPath == "frame" || keyPath == "hidden" || keyPath == "center")
+        if (keyPath == "frame" || keyPath == "isHidden" || keyPath == "center")
         {
             
             if !self.tg_isLayouting && self.subviews.contains(object as! UIView)
@@ -1264,7 +1264,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 {
                     setNeedsLayout()
                     
-                    if keyPath == "hidden" && !(change![NSKeyValueChangeKey.newKey] as! Bool)
+                    if keyPath == "isHidden" && !(change![NSKeyValueChangeKey.newKey] as! Bool)
                     {
                         sbv.setNeedsDisplay()
                     }

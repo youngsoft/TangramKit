@@ -144,10 +144,8 @@ extension AllTest2TableViewCell
         priceLabel.textAlignment = .right
         priceLabel.adjustsFontSizeToFitWidth = true
         priceLabel.font = UIFont.systemFont(ofSize: 14)
-        priceLabel.tg_width.equal(.wrap)
+        priceLabel.tg_width.equal(.wrap).max(TGDimeAdapter.width(100)).min(TGDimeAdapter.width(50))
         //宽度最宽为100,注意到这里使用了TGDimeAdapter.width表示会根据屏幕的宽度来对100进行缩放。这个100是按iPhone6为标准设置的。具体请参考TGDimeAdapter类。
-        priceLabel.tg_width.max(TGDimeAdapter.width(100))
-        priceLabel.tg_width.min(TGDimeAdapter.width(50))
         priceLabel.tg_left.equal(10)
         rootLayout.addSubview(priceLabel)
         self.priceLabel = priceLabel
@@ -184,9 +182,7 @@ extension AllTest2TableViewCell
         priceLabel.tg_right.equal(rootLayout.tg_right)
         priceLabel.tg_centerY.equal(rootLayout.tg_centerY)
         //priceLabel的宽度根据内容自适应，但是最大的宽度是100，最小的宽度是50。注意到这里使用了类TGDimeAdapter表示会根据屏幕的宽度来对100进行缩放。这个100是在DEMO中是按iPhone6为标准设置的。具体请参考TGDimeAdapter类的介绍。
-        priceLabel.tg_width.equal(.wrap)
-        priceLabel.tg_width.max(TGDimeAdapter.width(100))
-        priceLabel.tg_width.min(TGDimeAdapter.width(50))
+        priceLabel.tg_width.equal(.wrap).max(TGDimeAdapter.width(100)).min(TGDimeAdapter.width(50))
         rootLayout.addSubview(priceLabel)
         self.priceLabel = priceLabel
         
@@ -260,10 +256,8 @@ extension AllTest2TableViewCell
         priceLabel.tg_left.equal(10)
         
         //priceLabel的宽度根据内容自适应，但是最大的宽度是100，最小的宽度是50。注意到这里使用了类TGDimeAdapter表示会根据屏幕的宽度来对100进行缩放。这个100是在DEMO中是按iPhone6为标准设置的。具体请参考TGDimeAdapter类的介绍。
-        priceLabel.tg_width.equal(.wrap)
+        priceLabel.tg_width.equal(.wrap).max(TGDimeAdapter.width(100)).min(TGDimeAdapter.width(50))
         priceLabel.tg_height.equal(.fill)
-        priceLabel.tg_width.max(TGDimeAdapter.width(100))
-        priceLabel.tg_width.min(TGDimeAdapter.width(50))
         rootLayout.addSubview(priceLabel)
         self.priceLabel = priceLabel
         

@@ -63,57 +63,70 @@ final public class TGLayoutPos
     
 
     //设置位置的值为数值类型，offset是在设置值的基础上的偏移量。
-    public func equal(_ origin:CGFloat, offset:CGFloat = 0)
+    @discardableResult
+    public func equal(_ origin:CGFloat, offset:CGFloat = 0) ->TGLayoutPos
     {
-        self.tgEqual(val: origin, offset: offset)
+        return self.tgEqual(val: origin, offset: offset)
     }
     
     //设置位置的值为比重或者相对数值。
-    public func equal(_ weight:TGWeight, offset:CGFloat = 0)
+    @discardableResult
+    public func equal(_ weight:TGWeight, offset:CGFloat = 0) ->TGLayoutPos
     {
-        self.tgEqual(val: weight, offset: offset)
+        return self.tgEqual(val: weight, offset: offset)
     }
     
     //设置位置的值为数组对象。表示这个位置和数组中的位置整体居中，这个方法只有对视图的扩展属性tg_centerX,tg_centerY并且父布局是相对布局时才有意义。
-    public func equal(_ array:[TGLayoutPos], offset:CGFloat = 0)
+    @discardableResult
+    public func equal(_ array:[TGLayoutPos], offset:CGFloat = 0) ->TGLayoutPos
     {
-        self.tgEqual(val: array, offset: offset)
+        return self.tgEqual(val: array, offset: offset)
     }
     
     //设置位置的值为视图的对应的位置，如果当前是tg_left则等价于 tg_left.equal(view.tg_left)
-    public func equal(_ view: UIView, offset:CGFloat = 0)
+    @discardableResult
+    public func equal(_ view: UIView, offset:CGFloat = 0) ->TGLayoutPos
     {
-        self.tgEqual(val: view, offset: offset)
+        return self.tgEqual(val: view, offset: offset)
     }
     
     //设置位置的值为位置对象，表示相对于其他位置。如果设置为nil则表示清除位置的值的设定。
-    public func equal(_ pos:TGLayoutPos!, offset:CGFloat = 0)
+    @discardableResult
+    public func equal(_ pos:TGLayoutPos!, offset:CGFloat = 0) ->TGLayoutPos
     {
-        self.tgEqual(val: pos, offset: offset)
+        return self.tgEqual(val: pos, offset: offset)
     }
     
     //设置位置值的偏移量，和equal中的offset等价。
-    public func offset(_ val:CGFloat)
+    @discardableResult
+    public func offset(_ val:CGFloat) ->TGLayoutPos
     {
         if _offsetVal != val
         {
             _offsetVal = val
             setNeedLayout()
         }
+        
+        return self
     }
     
     //设置位置值的最小边界值。
-    public func min(_ val:CGFloat, offset:CGFloat = 0)
+    @discardableResult
+    public func min(_ val:CGFloat, offset:CGFloat = 0) ->TGLayoutPos
     {
         _minVal.equal(val, offset:offset)
         setNeedLayout()
+        return self
     }
     
     //设置位置值的最大边界值。
-    public func max(_ val:CGFloat, offset:CGFloat = 0)
+    @discardableResult
+    public func max(_ val:CGFloat, offset:CGFloat = 0) ->TGLayoutPos
     {
         _maxVal.equal(val, offset:offset)
         setNeedLayout()
+        
+        return self
     }
     
     //清除位置设置。
@@ -260,8 +273,8 @@ final public class TGLayoutPos
 
 extension TGLayoutPos
 {
-    
-    internal func tgEqual(val:TGLayoutPosType!, offset:CGFloat = 0)
+    @discardableResult
+    internal func tgEqual(val:TGLayoutPosType!, offset:CGFloat = 0)  ->TGLayoutPos
     {
         _offsetVal = offset
         
@@ -345,6 +358,8 @@ extension TGLayoutPos
         
         
         setNeedLayout()
+        
+        return self
     }
     
     internal func belong(to view:UIView) -> TGLayoutPos
@@ -438,7 +453,7 @@ extension TGLayoutPos:NSCopying
 
 
 //TGLayoutPos的equal方法的快捷方法。比如a.tg_left.equal(10) <==> a.tg_left ~= 10
- func ~=(oprPos:TGLayoutPos, origin:CGFloat)
+func ~=(oprPos:TGLayoutPos, origin:CGFloat)
 {
     oprPos.equal(origin)
 }
@@ -480,6 +495,7 @@ func <=(oprPos:TGLayoutPos, size:CGFloat)
 {
     oprPos.max(size)
 }
+
 
 
 

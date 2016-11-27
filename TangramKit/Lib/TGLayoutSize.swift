@@ -35,38 +35,44 @@ final public class TGLayoutSize
     public static let average = TGLayoutSize(type: .none, hasBound: false) //视图的尺寸会平分父视图的剩余空间。
     
     //设置尺寸值为一个具体的数值。
-    public func equal(_ size:CGFloat, increment:CGFloat = 0, multiple:CGFloat = 1)
+    @discardableResult
+    public func equal(_ size:CGFloat, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
-        tgEqual(val: size, increment: increment, multiple: multiple)
+        return tgEqual(val: size, increment: increment, multiple: multiple)
     }
     
     
     //设置尺寸值为比重值或者相对值。比如某个子视图的宽度是父视图宽度的50%则可以设置为：a.tg_width.equal(50%) 或者a.tg_width.equal(TGWeight(50))
-    public func equal(_ weight:TGWeight, increment:CGFloat = 0, multiple:CGFloat = 1)
+    @discardableResult
+    public func equal(_ weight:TGWeight, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
-        tgEqual(val: weight, increment: increment, multiple: multiple)
+        return tgEqual(val: weight, increment: increment, multiple: multiple)
     }
     
     //设置尺寸值为数组类型，表示这个尺寸和数组中的尺寸对象按比例分配父布局的尺寸，这个设置只有当视图是TGRelativeLayout下的子视图才有意义。
-    public func equal(_ array:[TGLayoutSize], increment:CGFloat = 0, multiple:CGFloat = 1)
+    @discardableResult
+    public func equal(_ array:[TGLayoutSize], increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
-        tgEqual(val: array, increment: increment, multiple: multiple)
+        return tgEqual(val: array, increment: increment, multiple: multiple)
     }
     
     //设置位置的值为视图的对应的尺寸，如果当前是tg_width则等价于 tg_width.equal(view.tg_width)
-    public func equal(_ view:UIView,increment:CGFloat = 0, multiple:CGFloat = 1)
+    @discardableResult
+    public func equal(_ view:UIView,increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
-        tgEqual(val: view, increment: increment, multiple: multiple)
+        return tgEqual(val: view, increment: increment, multiple: multiple)
     }
     
     //设置尺寸值为TGLayoutSize，表示和另外一个对象的尺寸相等。如果设置为nil则表示清除尺寸值的设置。
-    public func equal(_ dime:TGLayoutSize!, increment:CGFloat = 0, multiple:CGFloat = 1)
+    @discardableResult
+    public func equal(_ dime:TGLayoutSize!, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
-        tgEqual(val: dime, increment: increment, multiple: multiple)
+        return tgEqual(val: dime, increment: increment, multiple: multiple)
     }
     
     //设置尺寸在equal设置的基础上添加的值，这个设置和equal方法中的increment的设定等价。
-    public func add(_ val:CGFloat)
+    @discardableResult
+    public func add(_ val:CGFloat) ->TGLayoutSize
     {
         if _addVal != val
         {
@@ -74,27 +80,34 @@ final public class TGLayoutSize
             setNeedLayout()
         }
         
+        return self
     }
     
     //设置尺寸在equal设置的基础上的乘量值，这个设置和equal方法中的multiple的设定等价。
-    public func multiply(_ val:CGFloat)
+    @discardableResult
+    public func multiply(_ val:CGFloat) ->TGLayoutSize
     {
         if _multiVal != val
         {
             _multiVal = val
             setNeedLayout()
         }
+        
+        return self
     }
     
     //设置尺寸的最小边界值。
-    public func min(_ size:CGFloat, increment:CGFloat = 0, multiple:CGFloat = 1)
+    @discardableResult
+    public func min(_ size:CGFloat, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
         _minVal.equal(size, increment:increment, multiple:multiple)
         setNeedLayout()
+        return self
     }
     
     //设置尺寸的最小边界值。
-    public func min(_ dime:TGLayoutSize!, increment:CGFloat = 0, multiple:CGFloat = 1)
+    @discardableResult
+    public func min(_ dime:TGLayoutSize!, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
         var dime = dime
         if dime === self
@@ -103,32 +116,43 @@ final public class TGLayoutSize
         }
         _minVal.equal(dime,increment:increment, multiple:multiple)
         setNeedLayout()
+        
+        return self
     }
     
     //设置尺寸的最小边界值为视图对应的尺寸
-    public func min(_ view:UIView, increment:CGFloat = 0, multiple:CGFloat = 1)
+    @discardableResult
+    public func min(_ view:UIView, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
         _minVal.equal(view,increment:increment, multiple:multiple)
         setNeedLayout()
+        
+        return self
     }
 
     
     //设置尺寸的最大边界值。
-    public func max(_ size:CGFloat, increment:CGFloat = 0, multiple:CGFloat = 1)
+    @discardableResult
+    public func max(_ size:CGFloat, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
         _maxVal.equal(size,increment:increment, multiple:multiple)
         setNeedLayout()
+        return self
     }
     
     //设置尺寸的最大边界值为视图对应的尺寸
-    public func max(_ view:UIView, increment:CGFloat = 0, multiple:CGFloat = 1)
+    @discardableResult
+    public func max(_ view:UIView, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
         _maxVal.equal(view ,increment:increment, multiple:multiple)
         setNeedLayout()
+        
+        return self
     }
     
     //设置尺寸的最大边界值。
-    public func max(_ dime:TGLayoutSize!, increment:CGFloat = 0, multiple:CGFloat = 1)
+    @discardableResult
+    public func max(_ dime:TGLayoutSize!, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
         var dime = dime
         if dime === self
@@ -138,6 +162,8 @@ final public class TGLayoutSize
 
         _maxVal.equal(dime ,increment:increment, multiple:multiple)
         setNeedLayout()
+        
+        return self
     }
     
     //清除所有设置。
@@ -331,8 +357,8 @@ final public class TGLayoutSize
 
 extension TGLayoutSize
 {
-    
-    internal func tgEqual(val:TGLayoutSizeType!, increment:CGFloat = 0, multiple:CGFloat = 1)
+    @discardableResult
+    internal func tgEqual(val:TGLayoutSizeType!, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
         _addVal = increment
         _multiVal = multiple
@@ -419,6 +445,8 @@ extension TGLayoutSize
         }
         
         setNeedLayout()
+        
+        return self
     }
     
     internal func belong(to view: UIView) ->TGLayoutSize

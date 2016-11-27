@@ -48,8 +48,7 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         let rootLayout = TGLinearLayout(.vert)
         rootLayout.backgroundColor = .white
         rootLayout.tg_width.equal(.fill)
-        rootLayout.tg_height.equal(.fill)
-        rootLayout.tg_height.min(568 - 64)
+        rootLayout.tg_height.equal(.fill).min(568 - 64)
         //这个设置可以用运算符来设置： 
         //rootLayout.tg_height >= 504
         
@@ -111,9 +110,7 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         userDescLabel.font = CFTool.font(14)
         userDescLabel.sizeToFit()
         userDescLabel.tg_top.equal(10)
-        userDescLabel.tg_left.equal(5%)
-        userDescLabel.tg_left.min(17)
-        userDescLabel.tg_left.max(19)  //最小17最大19
+        //userDescLabel.tg_left.equal(5%).min(17).max(19)  //最小17最大19
        // userDescLabel.tg_left >= 17
        // userDescLabel.tg_left <= 19
         rootLayout.addSubview(userDescLabel)
@@ -132,9 +129,7 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         textView.tg_left.equal(5%)
         textView.tg_right.equal(5%)
         textView.tg_bottom.equal(65%)
-        textView.tg_height.equal(.wrap)
-        textView.tg_height.max(300)
-        textView.tg_height.min(60)  //虽然高度为.wrap表示高度为动态高度，但是仍然不能超过300的高度以及不能小于60的高度。
+        textView.tg_height.equal(.wrap).max(300).min(60)  //虽然高度为.wrap表示高度为动态高度，但是仍然不能超过300的高度以及不能小于60的高度。
         rootLayout.addSubview(textView)
         
         
