@@ -45,6 +45,8 @@
 		188E08801D37AE8800E982F1 /* LLTest1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188E087F1D37AE8800E982F1 /* LLTest1ViewController.swift */; };
 		18AD478E1D38B6210014ED34 /* LLTest2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AD478D1D38B6210014ED34 /* LLTest2ViewController.swift */; };
 		18AD47901D38CA6F0014ED34 /* LLTest3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AD478F1D38CA6F0014ED34 /* LLTest3ViewController.swift */; };
+		18B152521DEE538000AD7A1C /* TangramKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B152511DEE538000AD7A1C /* TangramKitTests.swift */; };
+		18B152601DEE539200AD7A1C /* TangramKitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B1525F1DEE539200AD7A1C /* TangramKitUITests.swift */; };
 		18D2FC791D3D0CC20051B235 /* AllTest1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D2FC741D3D0CC20051B235 /* AllTest1ViewController.swift */; };
 		18D2FC7A1D3D0CC20051B235 /* FOLTest1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D2FC751D3D0CC20051B235 /* FOLTest1ViewController.swift */; };
 		18D2FC7B1D3D0CC20051B235 /* FOLTest2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D2FC761D3D0CC20051B235 /* FOLTest2ViewController.swift */; };
@@ -71,6 +73,23 @@
 		A5D3AE641D45B98F0062BFFD /* AllTest2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D3AE631D45B98F0062BFFD /* AllTest2ViewController.swift */; };
 		A5D3AE671D45BACD0062BFFD /* AllTestDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D3AE661D45BACD0062BFFD /* AllTestDataModel.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		18B152541DEE538000AD7A1C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 18270C1C1C954B3C00CBCC92 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 18270C231C954B3C00CBCC92;
+			remoteInfo = TangramKit;
+		};
+		18B152621DEE539200AD7A1C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 18270C1C1C954B3C00CBCC92 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 18270C231C954B3C00CBCC92;
+			remoteInfo = TangramKit;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		18061D771D6C99B4002E0E59 /* RLTest4ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLTest4ViewController.swift; sourceTree = "<group>"; };
@@ -113,6 +132,12 @@
 		188E087F1D37AE8800E982F1 /* LLTest1ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLTest1ViewController.swift; sourceTree = "<group>"; };
 		18AD478D1D38B6210014ED34 /* LLTest2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLTest2ViewController.swift; sourceTree = "<group>"; };
 		18AD478F1D38CA6F0014ED34 /* LLTest3ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLTest3ViewController.swift; sourceTree = "<group>"; };
+		18B1524F1DEE538000AD7A1C /* TangramKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TangramKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		18B152511DEE538000AD7A1C /* TangramKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TangramKitTests.swift; sourceTree = "<group>"; };
+		18B152531DEE538000AD7A1C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		18B1525D1DEE539200AD7A1C /* TangramKitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TangramKitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		18B1525F1DEE539200AD7A1C /* TangramKitUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TangramKitUITests.swift; sourceTree = "<group>"; };
+		18B152611DEE539200AD7A1C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		18D2FC741D3D0CC20051B235 /* AllTest1ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllTest1ViewController.swift; sourceTree = "<group>"; };
 		18D2FC751D3D0CC20051B235 /* FOLTest1ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FOLTest1ViewController.swift; sourceTree = "<group>"; };
 		18D2FC761D3D0CC20051B235 /* FOLTest2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FOLTest2ViewController.swift; sourceTree = "<group>"; };
@@ -149,6 +174,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		18B1524C1DEE538000AD7A1C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		18B1525A1DEE539200AD7A1C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -156,6 +195,8 @@
 			isa = PBXGroup;
 			children = (
 				18DB431A1D1986230052D770 /* TangramKit */,
+				18B152501DEE538000AD7A1C /* TangramKitTests */,
+				18B1525E1DEE539200AD7A1C /* TangramKitUITests */,
 				18270C251C954B3C00CBCC92 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -164,6 +205,8 @@
 			isa = PBXGroup;
 			children = (
 				18270C241C954B3C00CBCC92 /* TangramKit.app */,
+				18B1524F1DEE538000AD7A1C /* TangramKitTests.xctest */,
+				18B1525D1DEE539200AD7A1C /* TangramKitUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -171,12 +214,12 @@
 		184D642E1D64527C0003449A /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
+				188E08721D379E8D00E982F1 /* Base.lproj */,
+				188E08751D379E8D00E982F1 /* zh-Hans.lproj */,
 				18DF8A591DDB5C62009FD703 /* TangramClass.png */,
 				18DF8A5B1DDB5C6A009FD703 /* usagedemo.png */,
 				181888A01DC2077000F5FDDA /* logo2.png */,
 				1818889E1DC2071200F5FDDA /* logo1.png */,
-				184D642F1D6452AF0003449A /* FOLTest2DataModel.plist */,
-				1866CDDA1D6C275100755949 /* FOLTest4DataModel.plist */,
 				18DB432C1D1986230052D770 /* Images.xcassets */,
 				18DB432D1D1986230052D770 /* Info.plist */,
 			);
@@ -200,13 +243,9 @@
 			path = "zh-Hans.lproj";
 			sourceTree = "<group>";
 		};
-		18DB431A1D1986230052D770 /* TangramKit */ = {
+		18B152441DEE51B100AD7A1C /* LinearLayoutDemo */ = {
 			isa = PBXGroup;
 			children = (
-				18DB432E1D1986230052D770 /* Lib */,
-				184D642E1D64527C0003449A /* Support Files */,
-				18DB43211D1986230052D770 /* AppDelegate.swift */,
-				188E087D1D379FA700E982F1 /* ViewController.swift */,
 				188E087F1D37AE8800E982F1 /* LLTest1ViewController.swift */,
 				18AD478D1D38B6210014ED34 /* LLTest2ViewController.swift */,
 				18AD478F1D38CA6F0014ED34 /* LLTest3ViewController.swift */,
@@ -214,25 +253,69 @@
 				182191671D3C7E3100208CD0 /* LLTest5ViewController.swift */,
 				182191691D3C80E900208CD0 /* LLTest6ViewController.swift */,
 				1821916B1D3C8A9000208CD0 /* LLTest7ViewController.swift */,
+			);
+			name = LinearLayoutDemo;
+			sourceTree = "<group>";
+		};
+		18B152451DEE51BB00AD7A1C /* FrameLayoutDemo */ = {
+			isa = PBXGroup;
+			children = (
 				1821916D1D3CA5E600208CD0 /* FLTest1ViewController.swift */,
 				1821916E1D3CA5E600208CD0 /* FLTest2ViewController.swift */,
-				182191771D3CB86300208CD0 /* TLTest1ViewController.swift */,
-				182191791D3CB87400208CD0 /* TLTest2ViewController.swift */,
-				1821917B1D3CB88900208CD0 /* TLTest3ViewController.swift */,
+			);
+			name = FrameLayoutDemo;
+			sourceTree = "<group>";
+		};
+		18B152461DEE51C300AD7A1C /* RelativeLayoutDemo */ = {
+			isa = PBXGroup;
+			children = (
 				182191711D3CAFC300208CD0 /* RLTest1ViewController.swift */,
 				182191721D3CAFC300208CD0 /* RLTest2ViewController.swift */,
 				182191731D3CAFC300208CD0 /* RLTest3ViewController.swift */,
 				18061D771D6C99B4002E0E59 /* RLTest4ViewController.swift */,
+			);
+			name = RelativeLayoutDemo;
+			sourceTree = "<group>";
+		};
+		18B152471DEE51CD00AD7A1C /* FlowLayoutDemo */ = {
+			isa = PBXGroup;
+			children = (
 				18D2FC781D3D0CC20051B235 /* FLLTest1ViewController.swift */,
 				18834AB31D3D32840047AE7D /* FLLTest2ViewController.swift */,
 				18834AB71D3D32B30047AE7D /* FLLTest3ViewController.swift */,
 				18834AB91D3D32E10047AE7D /* FLLTest4ViewController.swift */,
+			);
+			name = FlowLayoutDemo;
+			sourceTree = "<group>";
+		};
+		18B152481DEE51D800AD7A1C /* FloatLayoutDemo */ = {
+			isa = PBXGroup;
+			children = (
+				184D642F1D6452AF0003449A /* FOLTest2DataModel.plist */,
+				1866CDDA1D6C275100755949 /* FOLTest4DataModel.plist */,
 				18D2FC751D3D0CC20051B235 /* FOLTest1ViewController.swift */,
 				18D2FC761D3D0CC20051B235 /* FOLTest2ViewController.swift */,
 				18D2FC771D3D0CC20051B235 /* FOLTest3ViewController.swift */,
 				1866CDD41D6C25F100755949 /* FOLTest4ViewController.swift */,
 				1866CDD61D6C260000755949 /* FOLTest5ViewController.swift */,
 				1866CDD81D6C260E00755949 /* FOLTest6ViewController.swift */,
+			);
+			name = FloatLayoutDemo;
+			sourceTree = "<group>";
+		};
+		18B152491DEE51E100AD7A1C /* TableLayoutDemo */ = {
+			isa = PBXGroup;
+			children = (
+				182191771D3CB86300208CD0 /* TLTest1ViewController.swift */,
+				182191791D3CB87400208CD0 /* TLTest2ViewController.swift */,
+				1821917B1D3CB88900208CD0 /* TLTest3ViewController.swift */,
+			);
+			name = TableLayoutDemo;
+			sourceTree = "<group>";
+		};
+		18B1524A1DEE51FC00AD7A1C /* IntegratedDemo */ = {
+			isa = PBXGroup;
+			children = (
 				A5D3AE651D45BA860062BFFD /* AllTestModel&View */,
 				18D2FC741D3D0CC20051B235 /* AllTest1ViewController.swift */,
 				A5D3AE631D45B98F0062BFFD /* AllTest2ViewController.swift */,
@@ -241,8 +324,42 @@
 				188D7B391DB4A3AC00FE8156 /* AllTest5ViewController.swift */,
 				188D7B3B1DB4A3C300FE8156 /* AllTest6ViewController.swift */,
 				18D5D9021DE169AE00DCA69E /* AllTest7ViewController.swift */,
-				188E08721D379E8D00E982F1 /* Base.lproj */,
-				188E08751D379E8D00E982F1 /* zh-Hans.lproj */,
+			);
+			name = IntegratedDemo;
+			sourceTree = "<group>";
+		};
+		18B152501DEE538000AD7A1C /* TangramKitTests */ = {
+			isa = PBXGroup;
+			children = (
+				18B152511DEE538000AD7A1C /* TangramKitTests.swift */,
+				18B152531DEE538000AD7A1C /* Info.plist */,
+			);
+			path = TangramKitTests;
+			sourceTree = "<group>";
+		};
+		18B1525E1DEE539200AD7A1C /* TangramKitUITests */ = {
+			isa = PBXGroup;
+			children = (
+				18B1525F1DEE539200AD7A1C /* TangramKitUITests.swift */,
+				18B152611DEE539200AD7A1C /* Info.plist */,
+			);
+			path = TangramKitUITests;
+			sourceTree = "<group>";
+		};
+		18DB431A1D1986230052D770 /* TangramKit */ = {
+			isa = PBXGroup;
+			children = (
+				18DB432E1D1986230052D770 /* Lib */,
+				18B152441DEE51B100AD7A1C /* LinearLayoutDemo */,
+				18B152451DEE51BB00AD7A1C /* FrameLayoutDemo */,
+				18B152491DEE51E100AD7A1C /* TableLayoutDemo */,
+				18B152461DEE51C300AD7A1C /* RelativeLayoutDemo */,
+				18B152471DEE51CD00AD7A1C /* FlowLayoutDemo */,
+				18B152481DEE51D800AD7A1C /* FloatLayoutDemo */,
+				18B1524A1DEE51FC00AD7A1C /* IntegratedDemo */,
+				184D642E1D64527C0003449A /* Support Files */,
+				18DB43211D1986230052D770 /* AppDelegate.swift */,
+				188E087D1D379FA700E982F1 /* ViewController.swift */,
 				18DB43221D1986230052D770 /* LaunchScreen.storyboard */,
 				18D5D9001DE0922300DCA69E /* CFTool.swift */,
 			);
@@ -299,13 +416,49 @@
 			productReference = 18270C241C954B3C00CBCC92 /* TangramKit.app */;
 			productType = "com.apple.product-type.application";
 		};
+		18B1524E1DEE538000AD7A1C /* TangramKitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 18B152561DEE538000AD7A1C /* Build configuration list for PBXNativeTarget "TangramKitTests" */;
+			buildPhases = (
+				18B1524B1DEE538000AD7A1C /* Sources */,
+				18B1524C1DEE538000AD7A1C /* Frameworks */,
+				18B1524D1DEE538000AD7A1C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				18B152551DEE538000AD7A1C /* PBXTargetDependency */,
+			);
+			name = TangramKitTests;
+			productName = TangramKitTests;
+			productReference = 18B1524F1DEE538000AD7A1C /* TangramKitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		18B1525C1DEE539200AD7A1C /* TangramKitUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 18B152641DEE539200AD7A1C /* Build configuration list for PBXNativeTarget "TangramKitUITests" */;
+			buildPhases = (
+				18B152591DEE539200AD7A1C /* Sources */,
+				18B1525A1DEE539200AD7A1C /* Frameworks */,
+				18B1525B1DEE539200AD7A1C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				18B152631DEE539200AD7A1C /* PBXTargetDependency */,
+			);
+			name = TangramKitUITests;
+			productName = TangramKitUITests;
+			productReference = 18B1525D1DEE539200AD7A1C /* TangramKitUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		18270C1C1C954B3C00CBCC92 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0730;
+				LastSwiftUpdateCheck = 0810;
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = youngsoft;
 				TargetAttributes = {
@@ -313,6 +466,16 @@
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = K6PP2RXZ4T;
 						LastSwiftMigration = 0800;
+					};
+					18B1524E1DEE538000AD7A1C = {
+						CreatedOnToolsVersion = 8.1;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 18270C231C954B3C00CBCC92;
+					};
+					18B1525C1DEE539200AD7A1C = {
+						CreatedOnToolsVersion = 8.1;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 18270C231C954B3C00CBCC92;
 					};
 				};
 			};
@@ -331,6 +494,8 @@
 			projectRoot = "";
 			targets = (
 				18270C231C954B3C00CBCC92 /* TangramKit */,
+				18B1524E1DEE538000AD7A1C /* TangramKitTests */,
+				18B1525C1DEE539200AD7A1C /* TangramKitUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -351,6 +516,20 @@
 				18DB434D1D1986230052D770 /* LaunchScreen.storyboard in Resources */,
 				1818889F1DC2071200F5FDDA /* logo1.png in Resources */,
 				1866CDDB1D6C275100755949 /* FOLTest4DataModel.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		18B1524D1DEE538000AD7A1C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		18B1525B1DEE539200AD7A1C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -416,7 +595,36 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		18B1524B1DEE538000AD7A1C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				18B152521DEE538000AD7A1C /* TangramKitTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		18B152591DEE539200AD7A1C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				18B152601DEE539200AD7A1C /* TangramKitUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		18B152551DEE538000AD7A1C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 18270C231C954B3C00CBCC92 /* TangramKit */;
+			targetProxy = 18B152541DEE538000AD7A1C /* PBXContainerItemProxy */;
+		};
+		18B152631DEE539200AD7A1C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 18270C231C954B3C00CBCC92 /* TangramKit */;
+			targetProxy = 18B152621DEE539200AD7A1C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		188E08731D379E8D00E982F1 /* LaunchScreen.storyboard */ = {
@@ -574,6 +782,80 @@
 			};
 			name = Release;
 		};
+		18B152571DEE538000AD7A1C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				INFOPLIST_FILE = TangramKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.youngsoft.TangramKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TangramKit.app/TangramKit";
+			};
+			name = Debug;
+		};
+		18B152581DEE538000AD7A1C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				INFOPLIST_FILE = TangramKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.youngsoft.TangramKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TangramKit.app/TangramKit";
+			};
+			name = Release;
+		};
+		18B152651DEE539200AD7A1C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				INFOPLIST_FILE = TangramKitUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.youngsoft.TangramKitUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = TangramKit;
+			};
+			name = Debug;
+		};
+		18B152661DEE539200AD7A1C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				INFOPLIST_FILE = TangramKitUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.youngsoft.TangramKitUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = TangramKit;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -594,6 +876,22 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		18B152561DEE538000AD7A1C /* Build configuration list for PBXNativeTarget "TangramKitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				18B152571DEE538000AD7A1C /* Debug */,
+				18B152581DEE538000AD7A1C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		18B152641DEE539200AD7A1C /* Build configuration list for PBXNativeTarget "TangramKitUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				18B152651DEE539200AD7A1C /* Debug */,
+				18B152661DEE539200AD7A1C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
