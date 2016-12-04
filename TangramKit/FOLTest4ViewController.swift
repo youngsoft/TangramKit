@@ -166,13 +166,13 @@ extension FOLTest4ViewController
             floatLayout.tg_padding = UIEdgeInsetsMake(20, 10, 20, 10);
             floatLayout.tg_height.equal(.wrap)
             floatLayout.tg_vspace = 10 //设置浮动布局里面子视图之间的垂直间距。
-            floatLayout.tg_setSubviews(size:FOLTest4ViewController.sTagWidth, minFloatMargin: 8)
+            floatLayout.tg_setSubviews(size:FOLTest4ViewController.sTagWidth, minSpace: 8)
             contentLayout.addSubview(floatLayout)
             
             //在学习DEMO时您可以尝试着把下面两句代码解除注释！然后看看横竖屏的区别，这里面用到了SizeClass。表示横屏时的最小间距是不一样的。
             //当然如果您要改变子视图的尺寸的话，则要将下面的子视图也要实现对SIZECLASS的支持！！！
 //            _ = floatLayout.tg_fetchSizeClass(with:.landscape, from: .default)
-//            floatLayout.tg_setSubviews(size: FOLTest4ViewController.sTagWidth, minFloatMargin: 40, inSizeClass:.landscape)
+//            floatLayout.tg_setSubviews(size: FOLTest4ViewController.sTagWidth, minSpace: 40, inSizeClass:.landscape)
             
             //添加标题文本。
             let titleLabel = UILabel()

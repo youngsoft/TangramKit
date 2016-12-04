@@ -129,6 +129,8 @@ TGWeight类用来设置相对的位置和尺寸的值。相对值表明视图的
  
 
 ### 线性布局TGLinearLayout
+> 等价于iOS的UIStackView和android的LinearLayout布局。
+
 线性布局是一种里面的子视图按添加的顺序从上到下或者从左到右依次排列的单列(单行)布局视图，因此里面的子视图是通过添加的顺序建立约束和依赖关系的。 子视图从上到下依次排列的线性布局视图称为垂直线性布局视图，而子视图从左到右依次排列的线性布局视图则称为水平线性布局。
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/ll.png)
@@ -136,41 +138,57 @@ TGWeight类用来设置相对的位置和尺寸的值。相对值表明视图的
 示例代码:
 
 ```swift
-let rootLayout = TGLinearLayout(.vert)
-rootLayout.tg_width(.wrap)
-rootLayout.tg_height(.wrap)
-rootLayout.tg_vspace = 10
 
-let A = UIView()
-A.tg_left.equal(5)
-A.tg_right.equal(5)
-A.tg_width.equal(100)
-A.tg_height.equal(40)
-rootLayout.addSubview(A)
-
-let B = UIView()
-B.tg_left.equal(20)
-B.tg_width.equal(40)
-B.tg_height.equal(40)
-rootLayout.addSubview(B)
-
-let C = UIView()
-C.tg_right.equal(40)
-C.tg_width.equal(50)
-C.tg_height.equal(40)
-rootLayout.addSubview(C)
-
-let D = UIView()
-D.tg_left.equal(10)
-D.tg_right.equal(10)
-D.tg_width.equal(100)
-D.tg_height.equal(40)
-rootLayout.addSubview(D)
+override func loadView() {
+        
+        
+            super.loadView()
+        
+            let S = TGLinearLayout(.vert)
+            S.tg_width.equal(120)
+            S.tg_height.equal(.wrap)
+            S.tg_vspace = 10
+            
+            let A = UIView()
+            A.tg_left.equal(5)
+            A.tg_right.equal(5)
+            A.tg_width.equal(100)
+            A.tg_height.equal(40)
+            S.addSubview(A)
+            
+            let B = UIView()
+            B.tg_left.equal(20)
+            B.tg_width.equal(40)
+            B.tg_height.equal(40)
+            S.addSubview(B)
+            
+            let C = UIView()
+            C.tg_right.equal(40)
+            C.tg_width.equal(50)
+            C.tg_height.equal(40)
+            S.addSubview(C)
+            
+            let D = UIView()
+            D.tg_left.equal(10)
+            D.tg_right.equal(10)
+            D.tg_width.equal(100)
+            D.tg_height.equal(40)
+            S.addSubview(D)
+            
+            self.view.addSubview(S)
+            S.backgroundColor = .red
+            A.backgroundColor = .green
+            B.backgroundColor = .blue
+            C.backgroundColor = .orange
+            D.backgroundColor = .cyan
+     }
 
 ```
 
 
 ### 相对布局TGRelativeLayout
+> 等价于iOS的AutoLayout 和 Android的RelativeLayout布局。
+
 相对布局是一种里面的子视图通过相互之间的约束和依赖来进行布局和定位的布局视图。相对布局里面的子视图的布局位置和添加的顺序无关，而是通过设置子视图的相对依赖关系来进行定位和布局的。
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/rl.png)
@@ -178,48 +196,59 @@ rootLayout.addSubview(D)
 示例代码:
 
 ```swift
-let rootLayout = TGRelativeLayout()
-rootLayout.tg_width(.wrap)
-rootLayout.tg_height(.wrap)
-
-
-let A = UIView()
-A.tg_left.equal(20)
-A.tg_top.equal(20)
-A.tg_width.equal(40)
-A.tg_height.equal(A.tg_width)
-rootLayout.addSubview(A)
-
-let B = UIView()
-B.tg_left.equal(A.tg_centerX)
-B.tg_top.equal(A.tg_bottom)
-B.tg_width.equal(60)
-B.tg_height.equal(A.tg_height)
-rootLayout.addSubview(B)
-
-let C = UIView()
-C.tg_left.equal(B.tg_right)
-C.tg_width.equal(40)
-C.tg_height.equal(B.tg_height, multiple:0.5)
-rootLayout.addSubview(C)
-
-let D = UIView()
-D.tg_bottom.equal(C.tg_top)
-D.tg_right.equal(20)
-D.tg_height.equal(A.tg_height)
-D.tg_width.equal(D.tg_height)
-rootLayout.addSubview(D)
-
-let E = UIView()
-E.centerYPos.equalTo(0)
-E.tg_height.equal(40)
-E.tg_width.equal(rootLayout.tg_width)
-rootLayout.addSubview(E)
-//...F,G
-
+ override func loadView() {
+        
+        
+            super.loadView()
+        
+        let S = TGRelativeLayout()
+        S.tg_width.equal(170).and().tg_height.equal(280)
+        
+        let A = UIView()
+        A.tg_left.equal(20).and().tg_top.equal(20)
+        A.tg_width.equal(40).and().tg_height.equal(A.tg_width)
+        S.addSubview(A)
+        
+        let B = UIView()
+        B.tg_left.equal(A.tg_centerX).and().tg_top.equal(A.tg_bottom).offset(10)
+        B.tg_width.equal(60).and().tg_height.equal(A.tg_height)
+        S.addSubview(B)
+        
+        let C = UIView()
+        C.tg_left.equal(B.tg_right).offset(10)
+        C.tg_bottom.equal(B.tg_bottom)
+        C.tg_width.equal(40)
+        C.tg_height.equal(B.tg_height, multiple:0.5)
+        S.addSubview(C)
+        
+        let D = UIView()
+        D.tg_bottom.equal(C.tg_top).offset(10)
+        D.tg_right.equal(15)
+        D.tg_height.equal(A.tg_height)
+        D.tg_width.equal(D.tg_height)
+        S.addSubview(D)
+        
+        let E = UIView()
+        E.tg_centerY.equal(0)
+        E.tg_centerX.equal(0)
+        E.tg_height.equal(40)
+        E.tg_width.equal(S.tg_width).add(-20)
+        S.addSubview(E)
+        //...F,G
+        
+            self.view.addSubview(S)
+            S.backgroundColor = .red
+            A.backgroundColor = .green
+            B.backgroundColor = .blue
+            C.backgroundColor = .orange
+            D.backgroundColor = .cyan
+            E.backgroundColor = .magenta
+       }
 ```
 
 ### 框架布局TGFrameLayout
+> 等价于Android的FrameLayout布局。
+
 框架布局是一种里面的子视图停靠在父视图特定方位并且可以重叠的布局视图。框架布局里面的子视图的布局位置和添加的顺序无关，只跟父视图建立布局约束依赖关系。框架布局将垂直方向上分为上、中、下三个方位，而水平方向上则分为左、中、右三个方位，任何一个子视图都只能定位在垂直方向和水平方向上的一个方位上。
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/fl.png)
@@ -227,40 +256,56 @@ rootLayout.addSubview(E)
 示例代码:
 
 ```swift
-  let rootLayout = TGFrameLayout()
-  rootLayout.tg_width(500)
-  rootLayout.tg_height(500)  
-  
-  UIView *A = UIView()
-  A.tg_width(40)
-  A.tg_height(40)
-  rootLayout.addSubview(A)
-  
-  let B = UIView()
-  B.tg_width(40)
-  B.tg_height(40)
-  B.tg_right.equal(0)
-  rootLayout.addSubview(B)
-  
-  let C = UIView()
-  C.tg_width(40)
-  C.tg_height(40)
-  C.tg_centerY.equal(0)
-  rootLayout.addSubview(C)
 
-  let D = UIView()
-  D.tg_width(40)
-  D.tg_height(40)
-  D.tg_centerY.equal(0)
-  D.tg_centerX.equal(0)
-  rootLayout.addSubview(D)
-  
-  //..E，F,G
+override func loadView() {
+        
+        
+        super.loadView()
+        
+        let S = TGFrameLayout()
+        S.tg_width.equal(320)
+        S.tg_height.equal(500)
+        
+        let A = UIView()
+        A.tg_width.equal(40)
+        A.tg_height.equal(40)
+        S.addSubview(A)
+        
+        let B = UIView()
+        B.tg_width.equal(40)
+        B.tg_height.equal(40)
+        B.tg_right.equal(0)
+        S.addSubview(B)
+        
+        let C = UIView()
+        C.tg_width.equal(40)
+        C.tg_height.equal(40)
+        C.tg_centerY.equal(0)
+        S.addSubview(C)
+        
+        let D = UIView()
+        D.tg_width.equal(40)
+        D.tg_height.equal(40)
+        D.tg_centerY.equal(0)
+        D.tg_centerX.equal(0)
+        S.addSubview(D)
+        
+        //..E，F,G
+        
+        self.view.addSubview(S)
+        S.backgroundColor = .red
+        A.backgroundColor = .green
+        B.backgroundColor = .blue
+        C.backgroundColor = .orange
+        D.backgroundColor = .cyan
+}
   
 ```
 
 
 ### 表格布局TGTableLayout
+> 等价于Android的TableLayout布局和HTML的table元素。
+
 表格布局是一种里面的子视图可以像表格一样多行多列排列的布局视图。子视图添加到表格布局视图前必须先要建立并添加行视图，然后再将子视图添加到行视图里面。如果行视图在表格布局里面是从上到下排列的则表格布局为垂直表格布局，垂直表格布局里面的子视图在行视图里面是从左到右排列的；如果行视图在表格布局里面是从左到右排列的则表格布局为水平表格布局，水平表格布局里面的子视图在行视图里面是从上到下排列的。
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/tl.png)
@@ -268,40 +313,58 @@ rootLayout.addSubview(E)
 示例代码:
 
 ```swift
-  let rootLayout = TGTableLayout(.vert)
-  rootLayout.tg_height.equal(.wrap)
-  rootLayout.tg_width.equal(500)
-  
-  rootLayout.tg_addRow(size:TGLayoutSize.wrap,colSize:TGLayoutSize.fill)
-  
-  let A = UIView()
-  A.tg_width(50)
-  A.tg_height(40)
-  rootLayout.addSubview(A)
-  
-  let B = UIView()
-  B.tg_width(100)
-  B.tg_height(40)
-  rootLayout.addSubview(B)
-  
-  let C = UIView()
-  C.tg_width(30)
-  C.tg_height(40)
-  rootLayout.addSubview(C)
-  
-  rootLayout.tg_addRow(size:TGTableLayout.wrap,colSize:TGTableLayout.fill)
-  
-   let D = UIView()
-   D.tg_width(180)
-   D.tg_height(40)
-   rootLayout.addSubview(D)
-  
-  //...E,F  
-  
+
+  override func loadView() {
+        
+        
+        super.loadView()
+        
+        let S = TGTableLayout(.vert)
+        S.tg_height.equal(.wrap)
+        S.tg_width.equal(.wrap)
+        S.tg_vspace = 10
+        S.tg_hspace = 10
+        
+        
+        S.tg_addRow(size:TGLayoutSize.wrap,colSize:TGLayoutSize.wrap)
+        
+        let A = UIView()
+        A.tg_width.equal(50)
+        A.tg_height.equal(40)
+        S.addSubview(A)
+        
+        let B = UIView()
+        B.tg_width.equal(100)
+        B.tg_height.equal(40)
+        S.addSubview(B)
+        
+        let C = UIView()
+        C.tg_width.equal(30)
+        C.tg_height.equal(40)
+        S.addSubview(C)
+        
+        S.tg_addRow(size:TGLayoutSize.wrap,colSize:TGLayoutSize.wrap)
+        
+        let D = UIView()
+        D.tg_width.equal(200)
+        D.tg_height.equal(40)
+        S.addSubview(D)
+        
+        //...E,F  
+        
+        self.view.addSubview(S)
+        S.backgroundColor = .red
+        A.backgroundColor = .green
+        B.backgroundColor = .blue
+        C.backgroundColor = .orange
+        D.backgroundColor = .cyan       
+}  
   
 ```
 
 ### 流式布局TGFlowLayout
+> 等价于CSS3的flex-box。
+
 流式布局是一种里面的子视图按照添加的顺序依次排列，当遇到某种约束限制后会另起一行再重新排列的多行展示的布局视图。这里的约束限制主要有数量约束限制和内容尺寸约束限制两种，而换行的方向又分为垂直和水平方向，因此流式布局一共有垂直数量约束流式布局、垂直内容约束流式布局、水平数量约束流式布局、水平内容约束流式布局。流式布局主要应用于那些子视图有规律排列的场景，在某种程度上可以作为UICollectionView的替代品。
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/fll.png)
@@ -309,25 +372,39 @@ rootLayout.addSubview(E)
 示例代码:
 
 ```swift
-   let rootLayout = TGFlowLayout(.vert,arrangedCount:4)
-   rootLayout.tg_height.equal(.wrap)
-   rootLayout.tg_width.equal(300)
-   rootLayout.tg_averageArrange = true
-   rootLayout.tg_space = 10
-   
-   for _ in 0 ..< 10
-   {
-       let A = UIView()
-       A.tg_height.equal(A.tg_width)
-       rootLayout.addSubview(A)
-   }
-   
+
+    override func loadView() {
+        
+        
+        super.loadView()
+        
+        let S = TGFlowLayout(.vert,arrangedCount:4)
+        S.tg_height.equal(.wrap)
+        S.tg_width.equal(300)
+        S.tg_padding = UIEdgeInsetsMake(10,10,10,10)
+        S.tg_gravity = TGGravity.horz.fill
+        S.tg_space = 10
+        
+        for _ in 0 ..< 10
+        {
+            let A = UIView()
+            A.tg_height.equal(A.tg_width)
+            S.addSubview(A)
+            
+            A.backgroundColor = .green
+        }
+        
+        self.view.addSubview(S)
+        S.backgroundColor = .red
+}   
    
 
 ```
 
 	
 ### 浮动布局TGFloatLayout
+> 等价于css中的float定位。
+
 浮动布局是一种里面的子视图按照约定的方向浮动停靠，当尺寸不足以被容纳时会自动寻找最佳的位置进行浮动停靠的布局视图。浮动布局的理念源于HTML/CSS中的浮动定位技术,因此浮动布局可以专门用来实现那些不规则布局或者图文环绕的布局。根据浮动的方向不同，浮动布局可以分为左右浮动布局和上下浮动布局。
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/flo.png)
@@ -335,48 +412,87 @@ rootLayout.addSubview(E)
 示例代码:
 
 ```swift
-     let rootLayout = TGFloatLayout(.vert)
-     rootLayout.tg_height.equal(.wrap)
-     rootLayout.tg_width.equal(300)
-     
-     let A = UIView()
-     A.tg_height.equal(80)
-     A.tg_width.equal(70)
-     rootLayout.addSubview(A)
-     
-     let B = UIView()
-     B.tg_height.equal(150)
-     B.tg_width.equal(40)
-     rootLayout.addSubview(B)
-     
-     let C = UIView()
-     C.tg_height.equal(70)
-     C.tg_width.equal(40)
-     rootLayout.addSubview(C)
-     
-     let D = UIView()
-     D.tg_height.equal(140)
-     D.tg_width.equal(140)
-     rootLayout.addSubview(D)
-     
-     let E = UIView()
-     E.tg_height.equal(150)
-     E.tg_width.equal(40)
-     E.tg_reverseFloat = true
-     rootLayout.addSubview(E)
-
-     let F = UIView()
-     F.tg_height.equal(140)
-     F.tg_width.equal(60)
-     rootLayout.addSubview(F)
-     
+    override func loadView() {
+        
+        
+        super.loadView()
+        
+        let S = TGFloatLayout(.vert)
+        S.tg_height.equal(.wrap)
+        S.tg_width.equal(300)
+        S.tg_padding = UIEdgeInsetsMake(10,10,10,10)
+        S.tg_space = 10
+        
+        let A = UIView()
+        A.tg_width.equal(80)
+        A.tg_height.equal(70)
+        S.addSubview(A)
+        
+        let B = UIView()
+        B.tg_width.equal(150)
+        B.tg_height.equal(40)
+        S.addSubview(B)
+        
+        let C = UIView()
+        C.tg_width.equal(70)
+        C.tg_height.equal(40)
+        S.addSubview(C)
+        
+        let D = UIView()
+        D.tg_width.equal(100)
+        D.tg_height.equal(140)
+        S.addSubview(D)
+        
+        let E = UIView()
+        E.tg_width.equal(150)
+        E.tg_height.equal(40)
+        E.tg_reverseFloat = true
+        S.addSubview(E)
+        
+        let F = UIView()
+        F.tg_width.equal(120)
+        F.tg_height.equal(60)
+        S.addSubview(F)
+      
+        self.view.addSubview(S)
+        S.backgroundColor = .red
+        A.backgroundColor = .green
+        B.backgroundColor = .blue
+        C.backgroundColor = .orange
+        D.backgroundColor = .black
+        E.backgroundColor = .magenta
+        F.backgroundColor = .white
+}     
 
 ```
 
  
 ###  SizeClass的支持
-TangramKit布局体系为了实现对不同屏幕尺寸的设备进行适配，提供了对SizeClass的支持。您可以将SizeClass和上述的6种布局搭配使用，以便实现各种设备界面的完美适配。
-	
+> 等价于iOS的Size Classes
+
+TangramKit布局体系为了实现对不同屏幕尺寸的设备进行适配，提供了对Size Classes的支持。您可以将Size Classes和上述的6种布局搭配使用，以便实现各种设备界面的完美适配。系统提供1个UIView的扩展方法：
+
+```swift
+
+    public func tg_fetchSizeClass(with type:TGSizeClassType, from srcType:TGSizeClassType! = nil) ->TGViewSizeClass
+
+
+````
+来实现对Size Classes的支持。比如下面的例子：
+
+```swift
+
+//all device
+let rootLayout = TGLinearLayout(.vert)
+        rootLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10);
+        rootLayout.tg_vspace = 10
+        rootLayout.tg_hspace = 10
+        
+//iPhone landscape orientation.
+let lsc = rootLayout.tg_fetchSizeClass(with: .comb(.any, .compact, nil), from:.default) as! TGLinearLayoutViewSizeClass
+        lsc.tg_orientation = .horz
+
+```
 
 
 ## 使用方法

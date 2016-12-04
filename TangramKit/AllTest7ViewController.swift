@@ -26,6 +26,7 @@ class AllTest7ViewController: UIViewController {
          * 这个例子主要是用线性布局来实现一些在各种屏幕尺寸下内容适配的场景，通过各种属性的设置，我们可以不需要写if，else等判断屏幕的条件，而是直接根据属性来设置就能达到我们想要的效果，并且能在各种屏幕尺寸以及横竖屏下的具有完美适配的能力。下面的8个例子是在实践中会遇到的一些需要适配的场景。
          */
         let scrollView = UIScrollView()
+        scrollView.backgroundColor = .white
         self.view = scrollView
         
         let  rootLayout = TGLinearLayout(.vert)
@@ -325,8 +326,7 @@ extension AllTest7ViewController
         button.tintColor! = CFTool.color(0)
         button.backgroundColor = CFTool.color(2)
         button.addTarget(self, action: #selector(self.handleDelButton), for: .touchDownRepeat)
-        button.tg_height.equal(sender.tg_height.dimeNumVal)
-        button.tg_width.equal(sender.tg_width.dimeNumVal)
+        button.tg_height.equal(40)
         sender.superview!.addSubview(button)
     }
     
@@ -346,14 +346,13 @@ extension AllTest7ViewController
         tipLabel.sizeToFit()
         rootLayout.addSubview(tipLabel)
         
-        let  subviewWidth: CGFloat = 60
-        //您可以修改这个宽度值，可以看出不管宽度设置多大都能完美的填充整个屏幕，因为系统会自动调整子视图之间的间距。
-        let contentLayout = TGFloatLayout(.vert)
+        let  subviewWidth: CGFloat = 60 //您可以修改这个宽度值，可以看出不管宽度设置多大都能完美的填充整个屏幕，因为系统会自动调整子视图之间的间距。
+        let contentLayout = TGFlowLayout(.vert, arrangedCount:0)
         contentLayout.backgroundColor = CFTool.color(0)
         contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
         contentLayout.tg_height.equal(.wrap)
-        contentLayout.tg_vspace = 5 //设置浮动布局里面子视图之间的垂直间距。
-        contentLayout.tg_setSubviews(size: subviewWidth, minFloatMargin: 5) //这里面水平间距用浮动间距，浮动间距设置为子视图固定宽度为50，最小的间距为5。注意这里要求所有子视图的宽度都是50。
+        contentLayout.tg_vspace = 5 //设置流式布局里面子视图之间的垂直间距。
+        contentLayout.tg_setSubviews(size: subviewWidth, minSpace: 5, maxSpace:10) //这里面水平间距用浮动间距，浮动间距设置为子视图固定宽度为60，最小的间距为5,最大间距为10。注意这里要求所有子视图的宽度都是60。
         rootLayout.addSubview(contentLayout)
         
         
@@ -365,7 +364,6 @@ extension AllTest7ViewController
         button.backgroundColor = CFTool.color(1)
         button.tintColor! = CFTool.color(0)
         button.addTarget(self, action: #selector(self.handleAddButton), for: .touchUpInside)
-        button.tg_width.equal(subviewWidth)
         button.tg_height.equal(30)
         contentLayout.addSubview(button)
     }
@@ -463,7 +461,7 @@ extension AllTest7ViewController
         contentLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(contentLayout)
         contentLayout.tg_autoArrange = true //自动排列，布局视图会根据里面子视图的尺寸进行智能的排列。
-        contentLayout.tg_averageArrange = true //对于内容填充流式布局来说会拉升所有子视图的尺寸，以便铺满整个布局视图。
+        contentLayout.tg_gravity = TGGravity.horz.fill //对于内容填充流式布局来说会拉升所有子视图的尺寸，以便铺满整个布局视图。
         //添加N个长短不一的子视图。
         for i in 0..<15 {
             let label = UILabel()

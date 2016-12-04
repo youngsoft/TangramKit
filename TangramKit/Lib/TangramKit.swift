@@ -74,6 +74,7 @@ public struct TGGravity : OptionSet{
         public static let center = TGGravity(rawValue:2)         //水平居中
         public static let right = TGGravity(rawValue:4)          //右
         public static let windowCenter = TGGravity(rawValue: 8)  //在窗口水平中居中
+        public static let between = TGGravity(rawValue: 16)      //水平间距拉伸，用于线性布局和流式布局
         public static let fill:TGGravity = [horz.left, horz.center, horz.right]  //水平填充
         public static let mask = TGGravity(rawValue:0xFF00)
     }
@@ -85,6 +86,7 @@ public struct TGGravity : OptionSet{
         public static let center = TGGravity(rawValue:2 << 8)        //垂直居中
         public static let bottom = TGGravity(rawValue:4 << 8)        //下
         public static let windowCenter = TGGravity(rawValue:8 << 8)  //在窗口中垂直居中
+        public static let between = TGGravity(rawValue: 16 << 8)      //垂直间距拉伸，用于线性布局和流式布局
         public static let fill:TGGravity = [vert.top, vert.center, vert.bottom] //垂直填充
         public static let mask = TGGravity(rawValue:0x00FF)
         

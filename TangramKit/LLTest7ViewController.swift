@@ -32,6 +32,7 @@ class LLTest7ViewController: UIViewController {
 
         
         let rootLayout = TGLinearLayout(.vert)
+        rootLayout.backgroundColor = .white
         rootLayout.tg_gravity = TGGravity.horz.fill
         rootLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
         self.view = rootLayout

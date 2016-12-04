@@ -312,6 +312,7 @@ extension LLTest2ViewController
         shrinkLabel.backgroundColor = CFTool.color(2)
         shrinkLabel.font = CFTool.font(14)
         shrinkLabel.numberOfLines = 0
+        shrinkLabel.clipsToBounds = true  //为了实现文本可缩放，需要将这个标志设置为YES，否则效果无法实现。但要慎重使用这个标志，因为如果设置YES的话会影响性能。
         shrinkLabel.tg_top.equal(20)
         shrinkLabel.tg_width.equal(.fill)
         shrinkLabel.tg_height.equal(.wrap) //在宽度确定的情况下高度动态决定。

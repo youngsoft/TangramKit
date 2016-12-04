@@ -32,7 +32,7 @@ class FLLTest1ViewController: UIViewController {
         //添加操作按钮。
         let actionLayout = TGFlowLayout(.vert, arrangedCount: 2)
         actionLayout.tg_height.equal(.wrap)
-        actionLayout.tg_averageArrange = true
+        actionLayout.tg_gravity = TGGravity.horz.fill //所有子视图水平填充，也就是所有子视图的宽度相等。
         actionLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
         actionLayout.tg_hspace = 5
         actionLayout.tg_vspace = 5
@@ -40,10 +40,10 @@ class FLLTest1ViewController: UIViewController {
         
         actionLayout.addSubview(self.createActionButton(NSLocalizedString("adjust orientation", comment:""), action:#selector(handleAdjustOrientation)))
         actionLayout.addSubview(self.createActionButton(NSLocalizedString("adjust arrangedCount", comment:""),action:#selector(handleAdjustArrangedCount)))
-        actionLayout.addSubview(self.createActionButton(NSLocalizedString("average size", comment:""),
-        action:#selector(handleAdjustAverageMeasure)))
-        actionLayout.addSubview(self.createActionButton(NSLocalizedString("adjust gravity", comment:""),
-        action:#selector(handleAdjustGravity)))
+        actionLayout.addSubview(self.createActionButton(NSLocalizedString("adjust vert gravity", comment:""),
+        action:#selector(handleAdjustVertGravity)))
+        actionLayout.addSubview(self.createActionButton(NSLocalizedString("adjust horz gravity", comment:""),
+        action:#selector(handleAdjustHorzGravity)))
         actionLayout.addSubview(self.createActionButton(NSLocalizedString("adjust align", comment:""),
         action:#selector(handleAdjustArrangeGravity)))
         actionLayout.addSubview(self.createActionButton(NSLocalizedString("adjust spacing", comment:""),
@@ -70,7 +70,7 @@ class FLLTest1ViewController: UIViewController {
         
         let imageArray = ["minions1","minions2","minions3","minions4","head1"]
         
-        for _ in 0 ..< 60
+        for _ in 0 ..< 30
         {
             let imageView = UIImageView(image:UIImage(named:imageArray[Int(arc4random()%5)]))
             imageView.layer.borderColor = CFTool.color(5).cgColor
@@ -129,53 +129,76 @@ extension FLLTest1ViewController
 
     }
     
-    func handleAdjustAverageMeasure(_ sender:AnyObject?)
+    func handleAdjustVertGravity(_ sender:AnyObject?)
     {
-        //调整是否均分子视图的尺寸。
-        self.flowLayout.tg_averageArrange = !self.flowLayout.tg_averageArrange;
+        var vertGravity = self.flowLayout.tg_gravity & TGGravity.horz.mask
+        let horzGravity = self.flowLayout.tg_gravity & TGGravity.vert.mask
         
-        if (!self.flowLayout.tg_averageArrange)
-        {
-            //当不均分子视图的尺寸时，就需要子视图自己指定明确的尺寸。
-            for vv in self.flowLayout.subviews
-            {
-                vv.sizeToFit()
-            }
-            
+        switch (vertGravity) {
+        case TGGravity.none:
+            vertGravity = TGGravity.vert.center;
+            break
+        case TGGravity.vert.top:
+            vertGravity = TGGravity.vert.center;
+            break;
+        case TGGravity.vert.center:
+            vertGravity = TGGravity.vert.bottom;
+            break;
+        case TGGravity.vert.bottom:
+            vertGravity = TGGravity.vert.between;
+            break;
+        case TGGravity.vert.between:
+            vertGravity = TGGravity.vert.fill;
+            break;
+        case TGGravity.vert.fill:
+                vertGravity = TGGravity.vert.top;
+                self.flowLayout.subviews.forEach({ (v:UIView) in
+                    v.sizeToFit()
+                })
+           break
+        default:
+            break;
         }
         
+        self.flowLayout.tg_gravity = [horzGravity,vertGravity]
         self.flowLayout.tg_layoutAnimationWithDuration(0.4)
         
     }
+
     
-    func handleAdjustGravity(_ sender:AnyObject?)
+    
+    func handleAdjustHorzGravity(_ sender:AnyObject?)
     {
-        //所有子视图的停靠位置的调整。
-        if (self.flowLayout.tg_gravity == .none)
-        {
-            self.flowLayout.tg_gravity = TGGravity.vert.center
-        }
-        else if (self.flowLayout.tg_gravity == TGGravity.vert.center)
-        {
-            self.flowLayout.tg_gravity = TGGravity.vert.bottom
-        }
-        else if (self.flowLayout.tg_gravity == TGGravity.vert.bottom)
-        {
-            self.flowLayout.tg_gravity = TGGravity.horz.center
-        }
-        else if (self.flowLayout.tg_gravity == TGGravity.horz.center)
-        {
-            self.flowLayout.tg_gravity = TGGravity.horz.right
-        }
-        else if (self.flowLayout.tg_gravity == TGGravity.horz.right)
-        {
-            self.flowLayout.tg_gravity = .center
-        }
-        else if (self.flowLayout.tg_gravity == .center)
-        {
-            self.flowLayout.tg_gravity = .none
+        let vertGravity = self.flowLayout.tg_gravity & TGGravity.horz.mask;
+        var horzGravity = self.flowLayout.tg_gravity & TGGravity.vert.mask;
+        
+        switch (horzGravity) {
+        case TGGravity.none:
+            horzGravity = TGGravity.horz.center;
+            break
+        case TGGravity.horz.left:
+            horzGravity = TGGravity.horz.center;
+            break;
+        case TGGravity.horz.center:
+            horzGravity = TGGravity.horz.right;
+            break;
+        case TGGravity.horz.right:
+            horzGravity = TGGravity.horz.between;
+            break;
+        case TGGravity.horz.between:
+            horzGravity = TGGravity.horz.fill;
+            break;
+        case TGGravity.horz.fill:
+            horzGravity = TGGravity.horz.left;
+            self.flowLayout.subviews.forEach({ (v:UIView) in
+                v.sizeToFit()
+            })
+            break
+        default:
+            break;
         }
         
+        self.flowLayout.tg_gravity = [horzGravity,vertGravity]
         self.flowLayout.tg_layoutAnimationWithDuration(0.4)
 
         
@@ -183,64 +206,64 @@ extension FLLTest1ViewController
     
     func handleAdjustArrangeGravity(_ sender:AnyObject?)
     {
+        var vertArrangeGravity = self.flowLayout.tg_arrangedGravity & TGGravity.horz.mask
+        var horzArrangeGravity = self.flowLayout.tg_arrangedGravity & TGGravity.vert.mask
+        
         //每行的对齐方式的调整。
         if (self.flowLayout.tg_orientation == .vert)
         {
-            let  mg = self.flowLayout.tg_arrangedGravity & TGGravity.horz.mask
             
-            if (mg == .none || mg == TGGravity.vert.top)
+            if (vertArrangeGravity == .none || vertArrangeGravity == TGGravity.vert.top)
             {
-                self.flowLayout.tg_arrangedGravity = [(self.flowLayout.tg_arrangedGravity & TGGravity.vert.mask), TGGravity.vert.center]
+                vertArrangeGravity =  TGGravity.vert.center
             }
-            else if (mg == TGGravity.vert.center)
+            else if (vertArrangeGravity == TGGravity.vert.center)
             {
-                self.flowLayout.tg_arrangedGravity = [(self.flowLayout.tg_arrangedGravity & TGGravity.vert.mask), TGGravity.vert.bottom]
+                vertArrangeGravity =  TGGravity.vert.bottom
+
             }
-            else if (mg  == TGGravity.vert.bottom)
+            else if (vertArrangeGravity  == TGGravity.vert.bottom)
             {
-                self.flowLayout.tg_arrangedGravity = [(self.flowLayout.tg_arrangedGravity & TGGravity.vert.mask), TGGravity.vert.fill]
+                vertArrangeGravity =  TGGravity.vert.fill
             }
-            else if (mg == TGGravity.vert.fill)
+            else if (vertArrangeGravity == TGGravity.vert.fill)
             {
-                self.flowLayout.tg_arrangedGravity = [(self.flowLayout.tg_arrangedGravity & TGGravity.vert.mask), TGGravity.vert.top]
+                vertArrangeGravity = TGGravity.vert.top
                 
-                for vv in self.flowLayout.subviews
-                {
-                    vv.sizeToFit()
-                }
+                self.flowLayout.subviews.forEach({ (v:UIView) in
+                    v.sizeToFit()
+                })
                 
             }
         }
         else
         {
-            let  mg = self.flowLayout.tg_arrangedGravity & TGGravity.vert.mask
             
-            if (mg == .none || mg == TGGravity.horz.left)
+            if (horzArrangeGravity == .none || horzArrangeGravity == TGGravity.horz.left)
             {
-                self.flowLayout.tg_arrangedGravity = [self.flowLayout.tg_arrangedGravity & TGGravity.horz.mask, TGGravity.horz.center]
+                horzArrangeGravity = TGGravity.horz.center
             }
-            else if (mg == TGGravity.horz.center)
+            else if (horzArrangeGravity == TGGravity.horz.center)
             {
-                self.flowLayout.tg_arrangedGravity = [self.flowLayout.tg_arrangedGravity & TGGravity.horz.mask, TGGravity.horz.right]
+                horzArrangeGravity = TGGravity.horz.right
             }
-            else if (mg  == TGGravity.horz.right)
+            else if (horzArrangeGravity  == TGGravity.horz.right)
             {
-                self.flowLayout.tg_arrangedGravity = [self.flowLayout.tg_arrangedGravity & TGGravity.horz.mask, TGGravity.horz.fill]
+                horzArrangeGravity = TGGravity.horz.fill
             }
-            else if (mg == TGGravity.horz.fill)
+            else if (horzArrangeGravity == TGGravity.horz.fill)
             {
-                self.flowLayout.tg_arrangedGravity = [self.flowLayout.tg_arrangedGravity & TGGravity.horz.mask, TGGravity.horz.left]
+                horzArrangeGravity = TGGravity.horz.left
                 
-                for vv in self.flowLayout.subviews
-                {
-                    vv.sizeToFit()
-                }
-                
+                self.flowLayout.subviews.forEach({ (v:UIView) in
+                    v.sizeToFit()
+                })
             }
             
             
         }
         
+        self.flowLayout.tg_arrangedGravity = [vertArrangeGravity, horzArrangeGravity]
         self.flowLayout.tg_layoutAnimationWithDuration(0.4)
     }
     

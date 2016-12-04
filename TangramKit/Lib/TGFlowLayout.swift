@@ -11,17 +11,17 @@ import UIKit
 /**
  *流式布局是一种里面的子视图按照添加的顺序依次排列，当遇到某种约束限制后会另起一行再重新排列的多行多列展示的布局视图。这里的约束限制主要有数量约束限制和内容尺寸约束限制两种，而换行的方向又分为垂直和水平方向，因此流式布局一共有垂直数量约束流式布局、垂直内容约束流式布局、水平数量约束流式布局、水平内容约束流式布局。流式布局主要应用于那些有规律排列的场景，在某种程度上可以作为UICollectionView的替代品。
  1.垂直数量约束流式布局
- tg_orientation为.vert,tg_arrangedCount不为0,支持tg_averageArrange,不支持tg_autoArrange。
+ tg_orientation为.vert,tg_arrangedCount不为0,不支持tg_autoArrange。
  
  2.垂直内容约束流式布局.
- tg_orientation为.vert,tg_arrangedCount为0,支持tg_averageArrange,支持tg_autoArrange。
+ tg_orientation为.vert,tg_arrangedCount为0,支持tg_autoArrange。
  
  
  3.水平数量约束流式布局。
- tg_orientation为.horz,tg_arrangedCount不为0,支持tg_averageArrange,不支持tg_autoArrange。
+ tg_orientation为.horz,tg_arrangedCount不为0,不支持tg_autoArrange。
  
  4.水平内容约束流式布局
- tg_orientation为.horz,tg_arrangedCount为0,支持tg_averageArrange,支持tg_autoArrange。
+ tg_orientation为.horz,tg_arrangedCount为0,支持tg_autoArrange。
  
  流式布局支持子视图的宽度依赖于高度或者高度依赖于宽度,以及高度或者宽度依赖于流式布局本身的高度或者宽度
  */
@@ -74,22 +74,6 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
     }
     
     /**
-     *指定是否均分布局方向上的子视图的宽度或者高度，或者拉伸子视图的尺寸，默认是false。
-     如果是.vert则表示每行的子视图的宽度会被均分，这样子视图不需要指定宽度，但是布局视图必须要指定一个明确的宽度值，如果设置为true则布局的tg_width不能为wrap。
-     如果是.horz则表示每列的子视图的高度会被均分，这样子视图不需要指定高度，但是布局视图必须要指定一个明确的高度值，如果设置为true则布局的tg_height不能为wrap。
-     内容填充约束流式布局下tg_averageArrange设置为true时表示拉伸子视图的宽度或者高度以便填充满整个布局视图。
-     */
-    public var tg_averageArrange:Bool {
-        get {
-            return (self.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_averageArrange
-        }
-        set {
-            (self.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_averageArrange = newValue
-            setNeedsLayout()
-        }
-    }
-    
-    /**
      *子视图自动排列,这个属性只有在内容填充约束流式布局下才有用,默认为false.当设置为YES时则根据子视图的内容自动填充，而不是根据加入的顺序来填充，以便保证不会出现多余空隙的情况。
      *请在将所有子视图添加完毕并且初始布局完成后再设置这个属性，否则如果预先设置这个属性则在后续添加子视图时非常耗性能。
      */
@@ -109,9 +93,12 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
     
     /**
      *流式布局内所有子视图的整体停靠对齐位置设定。
-     *如果视图方向为.vert时且tg_averageArrange为true时则水平方向的停靠失效。
-     *如果视图方向为.horz时且tg_averageArrange为true时则垂直方向的停靠失效。
-     *对于内容填充布局来说如果设置为TGGravity.horz.fill或者TGGravity.vert.fill则表示间距的拉伸
+     *MyMarginGravity_Vert_Top,MyMarginGravity_Vert_Center,MyMarginGravity_Vert_Bottom 表示整体垂直居上，居中，居下
+     *MyMarginGravity_Horz_Left,MyMarginGravity_Horz_Center,MyMarginGravity_Horz_Right 表示整体水平居左，居中，居右
+     *MyMarginGravity_Vert_Between 表示在流式布局里面，每行之间的行间距都被拉伸，以便使里面的子视图垂直方向填充满整个布局视图。
+     *MyMarginGravity_Horz_Between 表示在流式布局里面，每列之间的列间距都被拉伸，以便使里面的子视图水平方向填充满整个布局视图。
+     *MyMarginGravity_Vert_Fill 在垂直流式布局里面表示布局会拉伸每行子视图的高度，以便使里面的子视图垂直方向填充满整个布局视图的高度；在水平数量流式布局里面表示每列的高度都相等并且填充满整个布局视图的高度；在水平内容约束布局里面表示布局会自动拉升每列的高度，以便垂直方向填充满布局视图的高度(这种设置方法代替过期的方法：averageArrange)。
+     *MyMarginGravity_Horz_Fill 在水平流式布局里面表示布局会拉伸每行子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度；在垂直数量流式布局里面表示每行的宽度都相等并且填充满整个布局视图的宽度；在垂直内容约束布局里面表示布局会自动拉升每行的宽度，以便水平方向填充满布局视图的宽度(这种设置方法代替过期的方法：averageArrange)。
      */
     public var tg_gravity:TGGravity {
         get {
@@ -138,6 +125,27 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
         }
     }
     
+    
+    /**
+     *在内容约束流式布局的一些应用场景中我们有时候希望某些子视图的宽度是固定的情况下，子视图的间距是浮动的而不是固定的，这样就可以尽可能的容纳更多的子视图。比如每个子视图的宽度是固定80，那么在小屏幕下每行只能放3个，而我们希望大屏幕每行能放4个或者5个子视图。 因此您可以通过如下方法来设置浮动间距，这个方法会根据您当前布局的orientation方向不同而意义不同：
+     1.如果您的布局方向是.vert表示设置的是子视图的水平间距，其中的size指定的是子视图的宽度，minSpace指定的是最小的水平间距,maxSpace指定的是最大的水平间距，如果指定的subviewSize计算出的间距大于这个值则会调整subviewSize的宽度。
+     2.如果您的布局方向是.horz表示设置的是子视图的垂直间距，其中的size指定的是子视图的高度，minSpace指定的是最小的垂直间距,maxSpace指定的是最大的垂直间距，如果指定的subviewSize计算出的间距大于这个值则会调整subviewSize的高度。
+     3.如果您不想使用浮动间距则请将subviewSize设置为0就可以了。
+     4.这个方法只在内容约束流式布局里面设置才有意义。
+     */
+    public func tg_setSubviews(size:CGFloat, minSpace:CGFloat, maxSpace:CGFloat = .greatestFiniteMagnitude, inSizeClass type:TGSizeClassType = .default)
+    {
+        let sc = self.tg_fetchSizeClass(with: type) as! TGFlowLayoutViewSizeClassImpl
+        sc.tgSubviewSize = size
+        sc.tgMinSpace = minSpace
+        sc.tgMaxSpace = maxSpace
+        
+        self.setNeedsLayout()
+    }
+
+    
+    
+    
     override internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, type:TGSizeClassType) ->(selfSize:CGSize, hasSubLayout:Bool) {
         var (selfSize, hasSubLayout) = super.tgCalcLayoutRect(size, isEstimate: isEstimate, type: type)
         
@@ -159,7 +167,7 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
                 if (sbvl.tg_width.isWrap)
                 {
                     if ((self.tg_orientation == .horz && (self.tg_arrangedGravity & TGGravity.vert.mask) == TGGravity.horz.fill) ||
-                        (self.tg_orientation == .vert && self.tg_averageArrange))
+                        (self.tg_orientation == .vert && ((self.tg_gravity & TGGravity.vert.mask) == TGGravity.horz.fill)))
                     {
                         sbvl.tg_width._dimeVal = nil
                     }
@@ -168,7 +176,7 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
                 if (sbvl.tg_height.isWrap)
                 {
                     if ((self.tg_orientation == .vert && (self.tg_arrangedGravity & TGGravity.horz.mask) == TGGravity.vert.fill) ||
-                        (self.tg_orientation == .horz && self.tg_averageArrange))
+                        (self.tg_orientation == .horz && ((self.tg_gravity & TGGravity.horz.mask) == TGGravity.vert.fill)))
                     {
                         sbvl.tg_height._dimeVal = nil
                     }
@@ -424,13 +432,15 @@ extension TGFlowLayout
     
     
     //计算Vert下每行Gravity对其方式
-    fileprivate func tgCalcVertLayoutSingleLineGravity(_ selfSize:CGSize, rowMaxHeight:CGFloat, rowMaxWidth:CGFloat, mg:TGGravity, amg:TGGravity, sbs:[UIView], startIndex:Int, count:Int) {
+    fileprivate func tgCalcVertLayoutSingleLineGravity(_ selfSize:CGSize, rowMaxHeight:CGFloat, rowMaxWidth:CGFloat, mg:TGGravity, amg:TGGravity, sbs:[UIView], startIndex:Int, count:Int, vertSpace:CGFloat, horzSpace:CGFloat) {
         let padding:UIEdgeInsets = self.tg_padding
         var addXPos:CGFloat = 0
         var addXFill:CGFloat = 0
         
+        let averageArrange = (mg == TGGravity.horz.fill)
+        
         //处理 对其方式
-        if !self.tg_averageArrange || self.tg_arrangedCount == 0 {
+        if !averageArrange || self.tg_arrangedCount == 0 {
             switch mg {
             case TGGravity.horz.center:
                 addXPos = (selfSize.width - padding.left - padding.right - rowMaxWidth)/2
@@ -439,7 +449,7 @@ extension TGFlowLayout
                 //不用考虑左边距，而原来的位置增加了左边距 因此不用考虑
                 addXPos = selfSize.width - padding.left - padding.right - rowMaxWidth
                 break
-            case TGGravity.horz.fill:
+            case TGGravity.horz.between:
                 //总宽减去最大的宽度，再除以数量表示每个应该扩展的空间，对最后一行无效
                 if startIndex != sbs.count && count > 1 {
                     addXFill = (selfSize.width - padding.left - padding.right - rowMaxWidth)/(CGFloat(count) - 1)
@@ -449,7 +459,7 @@ extension TGFlowLayout
                 break
             }
             //处理内容拉伸的情况
-            if self.tg_arrangedCount == 0 && self.tg_averageArrange {
+            if self.tg_arrangedCount == 0 && averageArrange {
                 if startIndex != sbs.count {
                     addXFill = (selfSize.width - padding.left - padding.right - rowMaxWidth)/CGFloat(count)
                 }
@@ -490,13 +500,13 @@ extension TGFlowLayout
                         }
                         
                         //如果有垂直间距则不是第一行就画上
-                        if (self.tg_vspace != 0 && startIndex - count != 0)
+                        if (vertSpace != 0 && startIndex - count != 0)
                         {
                             sbvl.tg_topBorderline = self.tg_intelligentBorderline;
                         }
                         
                         //如果有水平间距则不是第一列就画左
-                        if (self.tg_hspace != 0 && j != startIndex - count)
+                        if (horzSpace != 0 && j != startIndex - count)
                         {
                             sbvl.tg_leftBorderline = self.tg_intelligentBorderline;
                         }
@@ -510,7 +520,7 @@ extension TGFlowLayout
             {
                 sbv.tgFrame.left += addXPos
                 
-                if self.tg_arrangedCount == 0 && self.tg_averageArrange {
+                if self.tg_arrangedCount == 0 && averageArrange {
                     //只拉伸宽度 不拉伸间距
                     sbv.tgFrame.width += addXFill
                     
@@ -543,12 +553,13 @@ extension TGFlowLayout
 
     
     //计算Horz下每行Gravity对其方式
-    fileprivate func tgCalcHorzLayoutSingleLineGravity(_ selfSize:CGSize, colMaxHeight:CGFloat, colMaxWidth:CGFloat, mg:TGGravity, amg:TGGravity, sbs:[UIView], startIndex:Int, count:Int) {
+    fileprivate func tgCalcHorzLayoutSingleLineGravity(_ selfSize:CGSize, colMaxHeight:CGFloat, colMaxWidth:CGFloat, mg:TGGravity, amg:TGGravity, sbs:[UIView], startIndex:Int, count:Int, vertSpace:CGFloat, horzSpace:CGFloat) {
         var addYPos:CGFloat = 0
         var addYFill:CGFloat = 0
         let padding:UIEdgeInsets = self.tg_padding
+        let averageArrange = (mg == TGGravity.vert.fill)
         
-        if !self.tg_averageArrange || self.tg_arrangedCount == 0 {
+        if !averageArrange || self.tg_arrangedCount == 0 {
             switch mg {
             case TGGravity.vert.center:
                 addYPos = (selfSize.height - padding.top - padding.bottom - colMaxHeight)/2
@@ -556,7 +567,7 @@ extension TGFlowLayout
             case TGGravity.vert.bottom:
                 addYPos = selfSize.height - padding.top - padding.bottom - colMaxHeight
                 break
-            case TGGravity.vert.fill:
+            case TGGravity.vert.between:
                 //总高减去最大高度，再除以数量表示每个应该扩展的空气，最后一列无效
                 if startIndex != sbs.count && count > 1 {
                     addYFill = (selfSize.height - padding.top - padding.bottom - colMaxHeight)/(CGFloat(count) - 1)
@@ -567,7 +578,7 @@ extension TGFlowLayout
             }
             
             //处理内容拉伸的情况
-            if self.tg_arrangedCount == 0 && self.tg_averageArrange {
+            if self.tg_arrangedCount == 0 && averageArrange {
                 if startIndex != sbs.count {
                     addYFill = (selfSize.height - padding.top - padding.bottom - colMaxHeight)/CGFloat(count)
                 }
@@ -607,13 +618,13 @@ extension TGFlowLayout
                         }
                         
                         //如果有垂直间距则不是第一行就画上
-                        if (self.tg_vspace != 0 && j != startIndex - count)
+                        if (vertSpace != 0 && j != startIndex - count)
                         {
                             sbvl.tg_topBorderline = self.tg_intelligentBorderline
                         }
                         
                         //如果有水平间距则不是第一列就画左
-                        if (self.tg_hspace != 0 && startIndex - count != 0  )
+                        if (horzSpace != 0 && startIndex - count != 0  )
                         {
                             sbvl.tg_leftBorderline = self.tg_intelligentBorderline;
                         }
@@ -626,7 +637,7 @@ extension TGFlowLayout
                _tgCGFloatNotEqual(addYFill, 0) {
                 sbv.tgFrame.top += addYPos
                 
-                if self.tg_arrangedCount == 0 && self.tg_averageArrange {
+                if self.tg_arrangedCount == 0 && averageArrange {
                     //只拉伸宽度不拉伸间距
                     sbv.tgFrame.height += addYFill
                     
@@ -720,6 +731,11 @@ extension TGFlowLayout
         let mghorz:TGGravity = self.tg_gravity & TGGravity.vert.mask
         let amgvert:TGGravity = self.tg_arrangedGravity & TGGravity.horz.mask
         
+        let horzSpace = self.tg_hspace
+        let vertSpace = self.tg_vspace
+        
+        let averageArrange = (mghorz == TGGravity.horz.fill)
+        
         var arrangedIndex:Int = 0
         var rowTotalWeight:CGFloat = 0
         var rowTotalFixedWidth:CGFloat = 0
@@ -733,7 +749,7 @@ extension TGFlowLayout
             {
                 arrangedIndex = 0;
                 
-                if (rowTotalWeight != 0 && !self.tg_averageArrange)
+                if (rowTotalWeight != 0 && !averageArrange)
                 {
                     self.tgCalcVertLayoutSingleLineWeight(selfSize:selfSize,totalFloatWidth:selfSize.width - padding.left - padding.right - rowTotalFixedWidth,totalWeight:rowTotalWeight,sbs:sbs,startIndex:i,count:arrangedCount)
                 }
@@ -762,7 +778,7 @@ extension TGFlowLayout
             else
             {
                 
-                if (sbv.tg_width.dimeNumVal != nil && !self.tg_averageArrange)
+                if (sbv.tg_width.dimeNumVal != nil && !averageArrange)
                 {
                     rect.size.width = sbv.tg_width.measure;
                 }
@@ -781,7 +797,7 @@ extension TGFlowLayout
             
             if (arrangedIndex != (arrangedCount - 1))
             {
-                rowTotalFixedWidth += self.tg_hspace;
+                rowTotalFixedWidth += horzSpace
             }
             
             sbv.tgFrame.frame = rect;
@@ -791,19 +807,19 @@ extension TGFlowLayout
         }
         
         //最后一行。
-        if (rowTotalWeight != 0 && !self.tg_averageArrange)
+        if (rowTotalWeight != 0 && !averageArrange)
         {
             //如果最后一行没有填满则应该减去一个间距的值。
             if arrangedIndex < arrangedCount
             {
-                rowTotalFixedWidth -= self.tg_hspace
+                rowTotalFixedWidth -= horzSpace
             }
             
             self.tgCalcVertLayoutSingleLineWeight(selfSize:selfSize,totalFloatWidth:selfSize.width - padding.left - padding.right - rowTotalFixedWidth,totalWeight:rowTotalWeight,sbs:sbs,startIndex:sbs.count, count:arrangedIndex)
         }
         
         
-        let averageWidth:CGFloat = (selfSize.width - padding.left - padding.right - (CGFloat(arrangedCount) - 1) * self.tg_hspace) / CGFloat(arrangedCount)
+        let averageWidth:CGFloat = (selfSize.width - padding.left - padding.right - (CGFloat(arrangedCount) - 1) * horzSpace) / CGFloat(arrangedCount)
         
         arrangedIndex = 0
         for i in 0..<sbs.count {
@@ -814,10 +830,10 @@ extension TGFlowLayout
                 arrangedIndex = 0
                 xPos = padding.left
                 yPos += rowMaxHeight
-                yPos += self.tg_vspace
+                yPos += vertSpace
                 
                 //计算每行的gravity情况
-                self .tgCalcVertLayoutSingleLineGravity(selfSize, rowMaxHeight: rowMaxHeight, rowMaxWidth: rowMaxWidth, mg: mghorz, amg: amgvert, sbs: sbs, startIndex: i, count: arrangedCount)
+                self .tgCalcVertLayoutSingleLineGravity(selfSize, rowMaxHeight: rowMaxHeight, rowMaxWidth: rowMaxWidth, mg: mghorz, amg: amgvert, sbs: sbs, startIndex: i, count: arrangedCount, vertSpace: vertSpace, horzSpace: horzSpace)
                 
                 rowMaxHeight = 0
                 rowMaxWidth = 0
@@ -839,7 +855,7 @@ extension TGFlowLayout
             }
             
             
-            if self.tg_averageArrange {
+            if averageArrange {
                 rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: averageWidth - leftMargin - rightMargin, sbvSize: rect.size, selfLayoutSize:selfSize)
             }
             
@@ -876,7 +892,7 @@ extension TGFlowLayout
             xPos += (leftMargin + rect.size.width + rightMargin)
             
             if arrangedIndex != (arrangedCount - 1) {
-                xPos += self.tg_hspace
+                xPos += horzSpace
             }
             
             if rowMaxHeight < (topMargin + bottomMargin + rect.size.height) {
@@ -895,29 +911,57 @@ extension TGFlowLayout
         }
         
         //最后一行 布局
-        self .tgCalcVertLayoutSingleLineGravity(selfSize, rowMaxHeight: rowMaxHeight, rowMaxWidth: rowMaxWidth, mg: mghorz, amg: amgvert, sbs: sbs, startIndex: sbs.count, count: arrangedIndex)
+        self .tgCalcVertLayoutSingleLineGravity(selfSize, rowMaxHeight: rowMaxHeight, rowMaxWidth: rowMaxWidth, mg: mghorz, amg: amgvert, sbs: sbs, startIndex: sbs.count, count: arrangedIndex,vertSpace: vertSpace, horzSpace: horzSpace)
         
         if self.tg_height.isWrap {
             selfSize.height = yPos + padding.bottom + rowMaxHeight
         }
         else {
             var addYPos:CGFloat = 0
+            var between:CGFloat = 0
+            var fill:CGFloat = 0
+            let arranges = floor(CGFloat(sbs.count + arrangedCount - 1) / CGFloat(arrangedCount))
             
             if mgvert == TGGravity.vert.center {
                 addYPos = (selfSize.height - padding.bottom - rowMaxHeight - yPos)/2
             }
-            if mgvert == TGGravity.vert.bottom {
+            else if mgvert == TGGravity.vert.bottom {
                 addYPos = selfSize.height - padding.bottom - rowMaxHeight - yPos
             }
-            if addYPos != 0 {
+            else if (mgvert == TGGravity.vert.fill)
+            {
+                if (arranges > 0)
+                {
+                   fill = (selfSize.height - padding.bottom - rowMaxHeight - yPos) / arranges
+                }
+            }
+            else if (mgvert == TGGravity.vert.between)
+            {
+                
+                if (arranges > 1)
+                {
+                   between = (selfSize.height - padding.bottom - rowMaxHeight - yPos) / (arranges - 1)
+                }
+            }
+            
+
+            
+            if addYPos != 0 || between != 0 || fill != 0
+            {
                 for i in 0..<sbs.count {
                     let sbv:UIView = sbs[i]
+                    
+                    let line = i / arrangedCount
+                    
+                    sbv.tgFrame.height += fill
+                    sbv.tgFrame.top += fill * CGFloat(line)
                     sbv.tgFrame.top += addYPos
+                    sbv.tgFrame.top += between * CGFloat(line)
                 }
             }
         }
         
-        if self.tg_width.isWrap && !self.tg_averageArrange {
+        if self.tg_width.isWrap && !averageArrange {
             selfSize.width = maxWidth + padding.right
         }
         return selfSize
@@ -936,6 +980,33 @@ extension TGFlowLayout
         let mghorz:TGGravity = self.tg_gravity & TGGravity.vert.mask
         let amgvert:TGGravity = self.tg_arrangedGravity & TGGravity.horz.mask
         
+        
+        let vertSpace = self.tg_vspace
+        var horzSpace = self.tg_hspace
+        var subviewSize = (self.tgCurrentSizeClass as! TGFlowLayoutViewSizeClassImpl).tgSubviewSize
+        if (subviewSize != 0)
+        {
+            
+            let minSpace = (self.tgCurrentSizeClass as! TGFlowLayoutViewSizeClassImpl).tgMinSpace
+            let maxSpace = (self.tgCurrentSizeClass as! TGFlowLayoutViewSizeClassImpl).tgMaxSpace
+
+            
+            let rowCount =  floor((selfSize.width - padding.left - padding.right  + minSpace) / (subviewSize + minSpace))
+            if (rowCount > 1)
+            {
+                horzSpace = (selfSize.width - padding.left - padding.right - subviewSize * rowCount)/(rowCount - 1)
+                
+                if (horzSpace > maxSpace)
+                {
+                    horzSpace = maxSpace;
+                    
+                    subviewSize =  (selfSize.width - padding.left - padding.right -  horzSpace * (rowCount - 1)) / rowCount;
+                    
+                }
+            }
+        }
+
+        var arrangeIndexSet = IndexSet()
         var arrangeIndex:Int = 0
         for i in 0..<sbs.count {
             let sbv:UIView = sbs[i]
@@ -947,6 +1018,11 @@ extension TGFlowLayout
             let isWidthWeight = sbv.tg_width.dimeWeightVal != nil || sbv.tg_width.isFill
             let isHeightWeight = sbv.tg_height.dimeWeightVal != nil || sbv.tg_height.isFill
             var rect:CGRect = sbv.tgFrame.frame
+            
+            if subviewSize != 0
+            {
+                rect.size.width = subviewSize
+            }
             
             if sbv.tg_width.dimeNumVal != nil {
                 rect.size.width = sbv.tg_width.measure
@@ -984,7 +1060,7 @@ extension TGFlowLayout
                 
                 if (arrangeIndex != 0)
                 {
-                    floatWidth -= self.tg_hspace
+                    floatWidth -= horzSpace
                 }
                 
                 var widthWeight:CGFloat = 1.0
@@ -1014,18 +1090,20 @@ extension TGFlowLayout
             //计算xPos的值加上leftMargin + rect.size.width + rightMargin + self.tg_hspace 的值要小于整体的宽度。
             var place:CGFloat = xPos + leftMargin + rect.size.width + rightMargin
             if arrangeIndex != 0 {
-                place += self.tg_hspace
+                place += horzSpace
             }
             place += padding.right
             
             //sbv所占据的宽度要超过了视图的整体宽度，因此需要换行。但是如果arrangedIndex为0的话表示这个控件的整行的宽度和布局视图保持一致。
-            if place > selfSize.width {
+            if place - selfSize.width > 0.0001
+            {
                 xPos = padding.left
-                yPos += self.tg_vspace
+                yPos += vertSpace
                 yPos += rowMaxHeight
                 
+                arrangeIndexSet.insert(i - arrangeIndex)
                 //计算每行Gravity情况
-                self .tgCalcVertLayoutSingleLineGravity(selfSize, rowMaxHeight: rowMaxHeight, rowMaxWidth: rowMaxWidth, mg: mghorz, amg: amgvert, sbs: sbs, startIndex: i, count: arrangeIndex)
+                self .tgCalcVertLayoutSingleLineGravity(selfSize, rowMaxHeight: rowMaxHeight, rowMaxWidth: rowMaxWidth, mg: mghorz, amg: amgvert, sbs: sbs, startIndex: i, count: arrangeIndex, vertSpace: vertSpace, horzSpace: horzSpace)
                 
                 //计算单独的sbv的宽度是否大于整体的宽度。如果大于则缩小宽度。
                 if leftMargin + rightMargin + rect.size.width > selfSize.width - padding.left - padding.right
@@ -1045,7 +1123,7 @@ extension TGFlowLayout
             }
             
             if arrangeIndex != 0 {
-                xPos += self.tg_hspace
+                xPos += horzSpace
             }
             
             rect.origin.x = xPos + leftMargin
@@ -1064,25 +1142,59 @@ extension TGFlowLayout
         }
         
         //设置最后一行
-        
-        self .tgCalcVertLayoutSingleLineGravity(selfSize, rowMaxHeight: rowMaxHeight, rowMaxWidth: rowMaxWidth, mg: mghorz, amg: amgvert, sbs: sbs, startIndex:sbs.count, count: arrangeIndex)
+        arrangeIndexSet.insert(sbs.count - arrangeIndex)
+        self .tgCalcVertLayoutSingleLineGravity(selfSize, rowMaxHeight: rowMaxHeight, rowMaxWidth: rowMaxWidth, mg: mghorz, amg: amgvert, sbs: sbs, startIndex:sbs.count, count: arrangeIndex, vertSpace: vertSpace, horzSpace: horzSpace)
         
         if self.tg_height.isWrap {
             selfSize.height = yPos + padding.bottom + rowMaxHeight;
         }
         else {
             var addYPos:CGFloat = 0
+            var between:CGFloat = 0
+            var fill:CGFloat = 0
             
             if mgvert == TGGravity.vert.center {
                 addYPos = (selfSize.height - padding.bottom - rowMaxHeight - yPos)/2
             }
-            if mgvert == TGGravity.vert.bottom {
+            else if mgvert == TGGravity.vert.bottom {
                 addYPos = selfSize.height - padding.bottom - rowMaxHeight - yPos
             }
-            if addYPos != 0 {
+            else if mgvert == TGGravity.vert.fill {
+            
+                if arrangeIndexSet.count > 0
+                {
+                   fill = (selfSize.height - padding.bottom - rowMaxHeight - yPos) / CGFloat(arrangeIndexSet.count)
+                }
+            }
+            else if (mgvert == TGGravity.vert.between)
+            {
+                if arrangeIndexSet.count > 1
+                {
+                   between = (selfSize.height - padding.bottom - rowMaxHeight - yPos) / CGFloat(arrangeIndexSet.count - 1)
+                }
+            }
+                
+            
+            if addYPos != 0 || between != 0  || fill != 0
+            {
+                var line:CGFloat = 0
+                var lastIndex:Int = 0
+                
                 for i in 0..<sbs.count {
                     let sbv:UIView = sbs[i]
                     sbv.tgFrame.top += addYPos
+                    
+                    let index = arrangeIndexSet.integerLessThanOrEqualTo(i)
+                    if lastIndex != index
+                    {
+                        lastIndex = index!
+                        line += 1
+                    }
+                    
+                    sbv.tgFrame.height += fill
+                    sbv.tgFrame.top += fill * line
+                    sbv.tgFrame.top += between * line
+                    
                 }
             }
         }
@@ -1105,6 +1217,10 @@ extension TGFlowLayout
         let mghorz:TGGravity = self.tg_gravity & TGGravity.vert.mask
         let amghorz:TGGravity = self.tg_arrangedGravity & TGGravity.vert.mask
         
+        let vertSpace = self.tg_vspace
+        let horzSpace = self.tg_hspace
+        
+        let averageArrange = (mgvert == TGGravity.vert.fill)
         
         var arrangedIndex:Int = 0
         var rowTotalWeight:CGFloat = 0
@@ -1119,7 +1235,7 @@ extension TGFlowLayout
             {
                 arrangedIndex = 0;
                 
-                if (rowTotalWeight != 0 && !self.tg_averageArrange)
+                if (rowTotalWeight != 0 && !averageArrange)
                 {
                     self.tgCalcHorzLayoutSingleLineWeight(selfSize:selfSize,totalFloatHeight:selfSize.height - padding.top - padding.bottom - rowTotalFixedHeight,totalWeight:rowTotalWeight,sbs:sbs,startIndex:i,count:arrangedCount)
                 }
@@ -1165,7 +1281,7 @@ extension TGFlowLayout
                 let  isFlexedHeight = sbv.tg_height.isFlexHeight
                 
                 
-                if (sbv.tg_height.dimeNumVal != nil && !self.tg_averageArrange)
+                if (sbv.tg_height.dimeNumVal != nil && !averageArrange)
                 {
                     rect.size.height = sbv.tg_height.measure;
                 }
@@ -1192,12 +1308,12 @@ extension TGFlowLayout
                 rowTotalFixedHeight += rect.size.height;
             }
             
-            rowTotalFixedHeight += topMargin + bottomMargin;
+            rowTotalFixedHeight += topMargin + bottomMargin
             
             
             if (arrangedIndex != (arrangedCount - 1))
             {
-                rowTotalFixedHeight += self.tg_vspace;
+                rowTotalFixedHeight += vertSpace
             }
             
             
@@ -1208,18 +1324,18 @@ extension TGFlowLayout
         }
         
         //最后一行。
-        if (rowTotalWeight != 0 && !self.tg_averageArrange)
+        if (rowTotalWeight != 0 && !averageArrange)
         {
             if arrangedIndex < arrangedCount
             {
-                rowTotalFixedHeight -= self.tg_vspace
+                rowTotalFixedHeight -= vertSpace
             }
             
             self.tgCalcHorzLayoutSingleLineWeight(selfSize:selfSize,totalFloatHeight:selfSize.height - padding.top - padding.bottom - rowTotalFixedHeight,totalWeight:rowTotalWeight,sbs:sbs,startIndex:sbs.count,count:arrangedIndex)
         }
         
         
-        let averageHeight:CGFloat = (selfSize.height - padding.top - padding.bottom - (CGFloat(arrangedCount) - 1) * self.tg_vspace) / CGFloat(arrangedCount)
+        let averageHeight:CGFloat = (selfSize.height - padding.top - padding.bottom - (CGFloat(arrangedCount) - 1) * vertSpace) / CGFloat(arrangedCount)
         
         arrangedIndex = 0
         for i in 0..<sbs.count {
@@ -1228,11 +1344,11 @@ extension TGFlowLayout
             if arrangedIndex >= arrangedCount {
                 arrangedIndex = 0
                 xPos += colMaxWidth
-                xPos += self.tg_hspace
+                xPos += horzSpace
                 yPos = padding.top
                 
                 //计算每行Gravity情况
-                self.tgCalcHorzLayoutSingleLineGravity(selfSize, colMaxHeight: colMaxHeight, colMaxWidth: colMaxWidth, mg: mgvert, amg: amghorz, sbs: sbs, startIndex: i, count: arrangedCount)
+                self.tgCalcHorzLayoutSingleLineGravity(selfSize, colMaxHeight: colMaxHeight, colMaxWidth: colMaxWidth, mg: mgvert, amg: amghorz, sbs: sbs, startIndex: i, count: arrangedCount, vertSpace: vertSpace, horzSpace: horzSpace)
                 
                 colMaxWidth = 0
                 colMaxHeight = 0
@@ -1246,7 +1362,7 @@ extension TGFlowLayout
 
             var rect:CGRect = sbv.tgFrame.frame
             
-            if self.tg_averageArrange {
+            if averageArrange {
                 rect.size.height = (averageHeight - topMargin - bottomMargin)
                 
                 if sbv.tg_width.dimeRelaVal === sbv.tg_height {
@@ -1274,7 +1390,7 @@ extension TGFlowLayout
             yPos += topMargin + rect.size.height + bottomMargin
             
             if arrangedIndex != (arrangedCount - 1) {
-                yPos += self.tg_vspace
+                yPos += vertSpace
             }
             
             if colMaxWidth < (leftMargin + rightMargin + rect.size.width) {
@@ -1293,9 +1409,9 @@ extension TGFlowLayout
         }
         
         //最后一列
-        self .tgCalcHorzLayoutSingleLineGravity(selfSize, colMaxHeight: colMaxHeight, colMaxWidth: colMaxWidth, mg: mgvert, amg: amghorz, sbs: sbs, startIndex: sbs.count, count: arrangedIndex)
+        self .tgCalcHorzLayoutSingleLineGravity(selfSize, colMaxHeight: colMaxHeight, colMaxWidth: colMaxWidth, mg: mgvert, amg: amghorz, sbs: sbs, startIndex: sbs.count, count: arrangedIndex, vertSpace: vertSpace, horzSpace: horzSpace)
         
-        if self.tg_height.isWrap && !self.tg_averageArrange {
+        if self.tg_height.isWrap && !averageArrange {
             selfSize.width = maxHeight + padding.bottom
         }
         if self.tg_width.isWrap {
@@ -1303,18 +1419,44 @@ extension TGFlowLayout
         }
         else {
             var addXPos:CGFloat = 0
+            var between:CGFloat = 0
+            var fill:CGFloat = 0
+            let arranges = floor(CGFloat(sbs.count + arrangedCount - 1) / CGFloat(arrangedCount))
+
             
             if mghorz == TGGravity.horz.center {
                 addXPos = (selfSize.width - padding.right - colMaxWidth - xPos) / 2
             }
-            if mghorz == TGGravity.horz.right {
+            else if mghorz == TGGravity.horz.right {
                 addXPos = selfSize.width - padding.right - colMaxWidth - xPos
             }
+            else if (mghorz == TGGravity.horz.fill)
+            {
+                if (arranges > 0)
+                {
+                    fill = (selfSize.width - padding.right - colMaxWidth - xPos) / arranges
+                }
+            }
+            else if (mghorz == TGGravity.horz.between)
+            {
+                if (arranges > 1)
+                {
+                   between = (selfSize.width - padding.left - colMaxWidth - xPos) / (arranges - 1)
+                }
+            }
+
             
-            if addXPos != 0 {
+            
+            if addXPos != 0 || between != 0 || fill != 0 {
                 for i:Int in 0..<sbs.count {
                     let sbv:UIView = sbs[i]
+                    
+                    let line = i / arrangedCount
+                    
+                    sbv.tgFrame.width += fill
+                    sbv.tgFrame.left += fill * CGFloat(line)
                     sbv.tgFrame.left += addXPos
+                    sbv.tgFrame.left += between * CGFloat(line)
                 }
             }
         }
@@ -1332,7 +1474,36 @@ extension TGFlowLayout
         let mgvert:TGGravity = self.tg_gravity & TGGravity.horz.mask
         let mghorz:TGGravity = self.tg_gravity & TGGravity.vert.mask
         let amghorz:TGGravity = self.tg_arrangedGravity & TGGravity.vert.mask
+
         
+        //支持浮动垂直间距。
+        let horzSpace = self.tg_hspace
+        var vertSpace = self.tg_vspace
+        var subviewSize = (self.tgCurrentSizeClass as! TGFlowLayoutViewSizeClassImpl).tgSubviewSize;
+        if (subviewSize != 0)
+        {
+            
+            let minSpace = (self.tgCurrentSizeClass as! TGFlowLayoutViewSizeClassImpl).tgMinSpace
+            let maxSpace = (self.tgCurrentSizeClass as! TGFlowLayoutViewSizeClassImpl).tgMaxSpace
+
+            let rowCount =  floor((selfSize.height - padding.top - padding.bottom  + minSpace) / (subviewSize + minSpace))
+            if (rowCount > 1)
+            {
+                vertSpace = (selfSize.height - padding.top - padding.bottom - subviewSize * rowCount)/(rowCount - 1)
+                
+                if (vertSpace > maxSpace)
+                {
+                    vertSpace = maxSpace
+                    
+                    subviewSize =  (selfSize.height - padding.top - padding.bottom -  vertSpace * (rowCount - 1)) / rowCount
+                    
+                }
+
+            }
+        }
+        
+
+        var arrangeIndexSet = IndexSet()
         var arrangedIndex:Int = 0
         for i in 0..<sbs.count {
             let sbv:UIView = sbs[i]
@@ -1349,6 +1520,13 @@ extension TGFlowLayout
             if sbv.tg_width.dimeNumVal != nil {
                 rect.size.width = sbv.tg_width.measure
             }
+            
+            
+            if subviewSize != 0
+            {
+                rect.size.height = subviewSize
+            }
+            
             if sbv.tg_height.dimeNumVal != nil {
                 rect.size.height = sbv.tg_height.measure
             }
@@ -1371,7 +1549,7 @@ extension TGFlowLayout
                 
                 if (arrangedIndex != 0)
                 {
-                    floatHeight -= self.tg_vspace;
+                    floatHeight -= vertSpace
                 }
                 
                 var heightWeight:CGFloat = 1.0
@@ -1419,18 +1597,20 @@ extension TGFlowLayout
             //计算yPos的值加上topMargin + rect.size.height + bottomMargin + self.tg_vspace 的值要小于整体的宽度。
             var place:CGFloat = yPos + topMargin + rect.size.height + bottomMargin
             if arrangedIndex != 0 {
-                place += self.tg_vspace
+                place += vertSpace
             }
             place += padding.bottom
             
             //sbv所占据的宽度要超过了视图的整体宽度，因此需要换行。但是如果arrangedIndex为0的话表示这个控件的整行的宽度和布局视图保持一致。
-            if place > selfSize.height {
+            if place - selfSize.height > 0.0001
+            {
                 yPos = padding.top
-                xPos += self.tg_hspace
+                xPos += horzSpace
                 xPos += colMaxWidth
                 
                 //计算每行Gravity情况
-                self.tgCalcHorzLayoutSingleLineGravity(selfSize, colMaxHeight: colMaxHeight, colMaxWidth: colMaxWidth, mg: mgvert, amg: amghorz, sbs: sbs, startIndex: i, count: arrangedIndex)
+                arrangeIndexSet.insert(i - arrangedIndex)
+                self.tgCalcHorzLayoutSingleLineGravity(selfSize, colMaxHeight: colMaxHeight, colMaxWidth: colMaxWidth, mg: mgvert, amg: amghorz, sbs: sbs, startIndex: i, count: arrangedIndex, vertSpace: vertSpace, horzSpace: horzSpace)
                 
                 //计算单独的sbv的高度是否大于整体的高度。如果大于则缩小高度。
                 if (topMargin + bottomMargin + rect.size.height > selfSize.height - padding.top - padding.bottom)
@@ -1445,7 +1625,7 @@ extension TGFlowLayout
             }
             
             if arrangedIndex != 0 {
-                yPos += self.tg_vspace
+                yPos += vertSpace
             }
             rect.origin.x = xPos + leftMargin
             rect.origin.y = yPos + topMargin
@@ -1464,13 +1644,17 @@ extension TGFlowLayout
         }
         
         //最后一行
-        self.tgCalcHorzLayoutSingleLineGravity(selfSize, colMaxHeight: colMaxHeight, colMaxWidth: colMaxWidth, mg: mgvert, amg: amghorz, sbs: sbs, startIndex: sbs.count, count: arrangedIndex)
+        arrangeIndexSet.insert(sbs.count - arrangedIndex)
+        self.tgCalcHorzLayoutSingleLineGravity(selfSize, colMaxHeight: colMaxHeight, colMaxWidth: colMaxWidth, mg: mgvert, amg: amghorz, sbs: sbs, startIndex: sbs.count, count: arrangedIndex, vertSpace: vertSpace, horzSpace: horzSpace)
         
         if self.tg_width.isWrap {
             selfSize.width = xPos + padding.right + colMaxWidth
         }
         else {
             var addXPos:CGFloat = 0
+            var between:CGFloat = 0
+            var fill:CGFloat = 0
+            
             if (mghorz == TGGravity.horz.center)
             {
                 addXPos = (selfSize.width - padding.right - colMaxWidth - xPos) / 2;
@@ -1479,12 +1663,41 @@ extension TGFlowLayout
             {
                 addXPos = selfSize.width - padding.right - colMaxWidth - xPos;
             }
-            
-            if (addXPos != 0)
+            else if (mghorz == TGGravity.horz.fill)
             {
+                if (arrangeIndexSet.count > 0)
+                {
+                   fill = (selfSize.width - padding.right - colMaxWidth - xPos) / CGFloat(arrangeIndexSet.count)
+                }
+            }
+            else if (mghorz == TGGravity.horz.between)
+            {
+                if (arrangeIndexSet.count > 1)
+                {
+                  between = (selfSize.width - padding.right - colMaxWidth - xPos) / CGFloat(arrangeIndexSet.count - 1)
+                }
+            }
+
+            
+            if (addXPos != 0 || between != 0 || fill != 0)
+            {
+                var line:CGFloat = 0
+                var lastIndex:Int = 0
+                
                 for i in 0..<sbs.count {
                     let sbv:UIView = sbs[i]
                     sbv.tgFrame.left += addXPos
+                    
+                    let index = arrangeIndexSet.integerLessThanOrEqualTo(i)
+                    if lastIndex != index
+                    {
+                        lastIndex = index!
+                        line += 1
+                    }
+                    
+                    sbv.tgFrame.width += fill
+                    sbv.tgFrame.left += fill * line
+                    sbv.tgFrame.left += between * line
                 }
             }
         }

@@ -166,6 +166,13 @@ final public class TGLayoutSize
         return self
     }
     
+    //返回视图，用于链式语法
+    @discardableResult
+    public func and() ->UIView
+    {
+        return _view
+    }
+    
     //清除所有设置。
     public func clear()
     {

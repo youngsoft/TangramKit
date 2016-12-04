@@ -940,23 +940,25 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             
             for sbv:UIView in self.subviews
             {
+                let tgsbvFrame = sbv.tgFrame
                 let ptOrigin = sbv.bounds.origin
-                if sbv.tgFrame.left != CGFloat.greatestFiniteMagnitude && sbv.tgFrame.top != CGFloat.greatestFiniteMagnitude && !sbv.tg_noLayout
+                if tgsbvFrame.left != CGFloat.greatestFiniteMagnitude && tgsbvFrame.top != CGFloat.greatestFiniteMagnitude && !sbv.tg_noLayout
                 {
-                    sbv.bounds = CGRect(origin: ptOrigin, size: sbv.tgFrame.frame.size)
-                    sbv.center = CGPoint(x: sbv.tgFrame.left + sbv.layer.anchorPoint.x * sbv.tgFrame.width, y: sbv.tgFrame.top + sbv.layer.anchorPoint.y * sbv.tgFrame.height)
+                    sbv.center = CGPoint(x: tgsbvFrame.left + sbv.layer.anchorPoint.x * tgsbvFrame.width, y: tgsbvFrame.top + sbv.layer.anchorPoint.y * tgsbvFrame.height)
+                    sbv.bounds = CGRect(origin: ptOrigin, size: tgsbvFrame.frame.size)
+                    
                 }
                 
-                if sbv.tgFrame.sizeClass!.isHidden
+                if tgsbvFrame.sizeClass!.isHidden
                 {
-                    sbv.bounds = CGRect(origin: ptOrigin, size: CGSize.zero)
+                    sbv.bounds = CGRect(origin: ptOrigin, size: .zero)
                 }
                 
-                (sbv.tgFrame.sizeClass as! TGViewSizeClassImpl).tgLayoutCompletedAction?(self,sbv)
-                (sbv.tgFrame.sizeClass as! TGViewSizeClassImpl).tgLayoutCompletedAction = nil
+                (tgsbvFrame.sizeClass as! TGViewSizeClassImpl).tgLayoutCompletedAction?(self,sbv)
+                (tgsbvFrame.sizeClass as! TGViewSizeClassImpl).tgLayoutCompletedAction = nil
                 
-                sbv.tgFrame.sizeClass = sbv.tgDefaultSizeClass
-                sbv.tgFrame.reset()
+                tgsbvFrame.sizeClass = sbv.tgDefaultSizeClass
+                tgsbvFrame.reset()
                 
             }
             self.tgFrame.sizeClass = self.tgDefaultSizeClass
@@ -1083,9 +1085,9 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     override open func didAddSubview(_ subview: UIView) {
         super.didAddSubview(subview)
         
-        subview.addObserver(self, forKeyPath:"isHidden", options: NSKeyValueObservingOptions.new, context: nil)
-        subview.addObserver(self, forKeyPath:"frame", options: NSKeyValueObservingOptions.new, context: nil)
-        subview.addObserver(self, forKeyPath:"center", options: NSKeyValueObservingOptions.new, context: nil)
+        subview.addObserver(self, forKeyPath:"isHidden", options: [.new, .old], context: nil)
+        subview.addObserver(self, forKeyPath:"frame", options: [.new, .old], context: nil)
+        subview.addObserver(self, forKeyPath:"center", options: [.new, .old], context: nil)
 
     }
     
@@ -1105,25 +1107,6 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         
         super.willMove(toSuperview: newSuperview)
         
-        #if DEBUG
-            
-            if (self.wrapContentHeight && self.tg_height.dimeVal != nil)
-            {
-                //约束警告：wrapContentHeight和设置的tg_height可能有约束冲突
-                print("Constraint warning！\(self)'s wrapContentHeight and tg_height setting may be constraint.");
-            }
-            
-            if (self.wrapContentWidth && self.tg_width.dimeVal != nil)
-            {
-                //约束警告：wrapContentWidth和设置的tg_width可能有约束冲突
-                print("Constraint warning！\(self)'s wrapContentWidth and tg_width setting may be constraint.");
-            }
-            
-            
-        #endif
-        
-        
-        
         
         //将要添加到父视图时，如果不是MyLayout派生则则跟需要根据父视图的frame的变化而调整自身的位置和尺寸
         if newSuperview != nil && (newSuperview as? TGBaseLayout) == nil
@@ -1135,7 +1118,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 if (self.tg_left.posRelaVal != nil)
                 {
                     //约束冲突：左边距依赖的视图不是父视图
-                    assert(self.tg_left.posRelaVal.view == newSuperview, "Constraint exception!! \(self)left margin dependent on:\(self.tg_left.posRelaVal.view)is not superview");
+                    assert(self.tg_left.posRelaVal.view == newSuperview, "Constraint exception!! \(self)left margin dependent on:\(self.tg_left.posRelaVal.view)is not superview")
                 }
                 
                 if (self.tg_right.posRelaVal != nil)
@@ -1147,38 +1130,38 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 if (self.tg_centerX.posRelaVal != nil)
                 {
                     //约束冲突：水平中心点依赖的视图不是父视图
-                    assert(self.tg_centerX.posRelaVal.view == newSuperview, "Constraint exception!! \(self)horizontal center margin dependent on:\(self.tg_centerX.posRelaVal.view) is not superview");
+                    assert(self.tg_centerX.posRelaVal.view == newSuperview, "Constraint exception!! \(self)horizontal center margin dependent on:\(self.tg_centerX.posRelaVal.view) is not superview")
                 }
                 
                 if (self.tg_top.posRelaVal != nil)
                 {
                     //约束冲突：上边距依赖的视图不是父视图
-                    assert(self.tg_top.posRelaVal.view == newSuperview, "Constraint exception!! \(self)top margin dependent on:\(self.tg_top.posRelaVal.view) is not superview");
+                    assert(self.tg_top.posRelaVal.view == newSuperview, "Constraint exception!! \(self)top margin dependent on:\(self.tg_top.posRelaVal.view) is not superview")
                 }
                 
                 if (self.tg_bottom.posRelaVal != nil)
                 {
                     //约束冲突：下边距依赖的视图不是父视图
-                    assert(self.tg_bottom.posRelaVal.view == newSuperview, "Constraint exception!! \(self)bottom margin dependent on:\(self.tg_bottom.posRelaVal.view) is not superview");
+                    assert(self.tg_bottom.posRelaVal.view == newSuperview, "Constraint exception!! \(self)bottom margin dependent on:\(self.tg_bottom.posRelaVal.view) is not superview")
                     
                 }
                 
                 if (self.tg_centerY.posRelaVal != nil)
                 {
                     //约束冲突：垂直中心点依赖的视图不是父视图
-                    assert(self.tg_centerY.posRelaVal.view == newSuperview, "Constraint exception!! \(self)vertical center margin dependent on:\(self.tg_centerY.posRelaVal.view) is not superview");
+                    assert(self.tg_centerY.posRelaVal.view == newSuperview, "Constraint exception!! \(self)vertical center margin dependent on:\(self.tg_centerY.posRelaVal.view) is not superview")
                 }
                 
                 if (self.tg_width.dimeRelaVal != nil)
                 {
                     //约束冲突：宽度依赖的视图不是父视图
-                    assert(self.tg_width.dimeRelaVal.view == newSuperview, "Constraint exception!! \(self)width dependent on:\(self.tg_width.dimeRelaVal.view) is not superview");
+                    assert(self.tg_width.dimeRelaVal.view == newSuperview, "Constraint exception!! \(self)width dependent on:\(self.tg_width.dimeRelaVal.view) is not superview")
                 }
                 
                 if (self.tg_height.dimeRelaVal != nil)
                 {
                     //约束冲突：高度依赖的视图不是父视图
-                    assert(self.tg_height.dimeRelaVal.view == newSuperview, "Constraint exception!! \(self)height dependent on:\(self.tg_height.dimeRelaVal.view) is not superview");
+                    assert(self.tg_height.dimeRelaVal.view == newSuperview, "Constraint exception!! \(self)height dependent on:\(self.tg_height.dimeRelaVal.view) is not superview")
                 }
                 
             #endif
@@ -1197,9 +1180,9 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                     
                 }
                 
-                newSuperview.addObserver(self,forKeyPath:"frame",options:.new,context:nil)
-                newSuperview.addObserver(self,forKeyPath:"bounds",options:.new,context:nil);
-                _isAddSuperviewKVO = true;
+                newSuperview.addObserver(self,forKeyPath:"frame",options:[.new,.old], context:nil)
+                newSuperview.addObserver(self,forKeyPath:"bounds",options:[.new,.old], context:nil)
+                _isAddSuperviewKVO = true
             }
             
         }
@@ -1213,7 +1196,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             _isAddSuperviewKVO = false;
             
             self.superview!.removeObserver(self, forKeyPath:"frame")
-            self.superview!.removeObserver(self,forKeyPath:"bounds");
+            self.superview!.removeObserver(self,forKeyPath:"bounds")
             
             
         }
@@ -1242,12 +1225,18 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?)
     {
         
-        if  (object as! UIView) === self.superview && (self.superview as? TGBaseLayout) == nil
+        if  (object as! UIView) === self.superview && (self.superview as? TGBaseLayout) == nil && !self.tg_useFrame
         {
             
             if keyPath == "frame" || keyPath == "bounds"
             {
-                let _ = self.tgUpdateLayoutRectInNoLayoutSuperview(self.superview!)
+                let rcOld = change![.oldKey] as! CGRect
+                let rcNew = change![.newKey] as! CGRect
+                
+                if !rcOld.size.equalTo(rcNew.size)
+                {
+                    let _ = self.tgUpdateLayoutRectInNoLayoutSuperview(self.superview!)
+                }
             }
             return
         }
@@ -1257,14 +1246,13 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         if (keyPath == "frame" || keyPath == "isHidden" || keyPath == "center")
         {
             
-            if !self.tg_isLayouting && self.subviews.contains(object as! UIView)
+            if !self.tg_isLayouting
             {
-                let sbv:UIView = object as! UIView
-                if !sbv.tg_useFrame
+                if let sbv = object as? UIView, !sbv.tg_useFrame
                 {
                     setNeedsLayout()
                     
-                    if keyPath == "isHidden" && !(change![NSKeyValueChangeKey.newKey] as! Bool)
+                    if keyPath == "isHidden" && !(change![.newKey] as! Bool)
                     {
                         sbv.setNeedsDisplay()
                     }
@@ -2540,11 +2528,11 @@ internal func _tgCGFloatGreatOrEqual(_ f1:CGFloat, _ f2:CGFloat) -> Bool
 {
     if CGFloat.NativeType.self == Double.self
     {
-        return f1 > f2 || abs(f1 - f2) > 1e-6
+        return f1 > f2 || abs(f1 - f2) < 1e-6
     }
     else
     {
-        return f1 > f2 || abs(f1 - f2) > 1e-4
+        return f1 > f2 || abs(f1 - f2) < 1e-4
         
     }
     

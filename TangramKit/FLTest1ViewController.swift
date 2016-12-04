@@ -46,6 +46,7 @@ class FLTest1ViewController: UIViewController {
 
         
         let frameLayout = TGFrameLayout()
+        frameLayout.backgroundColor = .white
         frameLayout.tg_padding = UIEdgeInsetsMake(20, 20, 20, 20)
         self.view = frameLayout
         

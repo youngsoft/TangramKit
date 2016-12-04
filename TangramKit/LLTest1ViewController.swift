@@ -12,6 +12,7 @@ class LLTest1ViewController: UIViewController {
     
     override func loadView() {
         
+        
         /*
          一个视图可以通过对frame的设置来完成其在父视图中的布局。这种方法的缺点是要明确的指出视图所在的位置origin和视图所在的尺寸size，而且在代码中会出现大量的常数，以及需要进行大量的计算。TangramKit的出现就是为了解决布局时的大量常数的使用，以及大量的计算，以及自动适配的问题。需要明确的是用TangramKit进行布局时并不是不要指定视图的位置和尺寸，而是可以通过一些特定的上下文来省略或者隐式的指定视图的位置和尺寸。因此不管何种布局方式，视图布局时都必须要指定视图的位置和尺寸。
          */
@@ -158,7 +159,7 @@ extension LLTest1ViewController
          */
         
         
-        let v4 = self.createLabel(NSLocalizedString("horz fill", comment:""), color: CFTool.color(8))
+        let v4 = self.createLabel(NSLocalizedString("left right", comment:""), color: CFTool.color(8))
         v4.tg_top.equal(10)
         v4.tg_bottom.equal(10) // 注意这里虽然设置了上下的间距，但是对于垂直线性布局来说，同时设置上下间距并不能决定子视图的高度，只是表明子视图离兄弟视图的距离而已
         v4.tg_left.equal(10)
@@ -218,7 +219,7 @@ extension LLTest1ViewController
         horzLayout.addSubview(v3)
         
         
-        let v4 = self.createLabel(NSLocalizedString("vert fill", comment:""), color: CFTool.color(8))
+        let v4 = self.createLabel(NSLocalizedString("top bottom", comment:""), color: CFTool.color(8))
         v4.tg_left.equal(10)
         v4.tg_right.equal(10)
         v4.tg_top.equal(10)

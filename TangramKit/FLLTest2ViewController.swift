@@ -152,7 +152,7 @@ extension FLLTest2ViewController
         //间距拉伸
         if sender.isOn
         {
-            self.flowLayout.tg_gravity = TGGravity.horz.fill //流式布局的tg_gravity如果设置为TGGravity.horz.fill表示子视图的间距会被拉伸，以便填充满整个布局。
+            self.flowLayout.tg_gravity = TGGravity.horz.between //流式布局的tg_gravity如果设置为TGGravity.horz.between表示子视图的间距会被拉伸，以便填充满整个布局。
         }
         else
         {
@@ -168,11 +168,11 @@ extension FLLTest2ViewController
         //内容拉伸
         if sender.isOn
         {
-            self.flowLayout.tg_averageArrange = true  //对于内容填充的流时布局来说，tg_averageArrange属性如果设置为true表示里面的子视图的内容会自动的拉伸以便填充整个布局。
+            self.flowLayout.tg_gravity = TGGravity.horz.fill  //流式布局的gravity如果设置为TGGravity.horz.fill表示子视图的间距会被拉伸，以便填充满整个布局。
         }
         else
         {
-            self.flowLayout.tg_averageArrange = false
+            self.flowLayout.tg_gravity = TGGravity.none
         }
         
         self.flowLayout.tg_layoutAnimationWithDuration(0.2)

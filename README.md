@@ -115,6 +115,9 @@ TangramKit is a simple and easy Swift framework for iOS view layout. The name co
 `TGWeight` is used to set relative position and dimension. TangramKit override operator % to easily construct a TGWeight object. e.g 20% is equal to TGWeight(20).
 
 ###TGLinearLayout
+> Is equivalent to: UIStackView of iOS and LinearLayout of Android.
+
+
 Linear layout is a single line layout view that the subviews are arranged in sequence according to the added order（from top to bottom or from left to right). So the subviews' origin&size constraints are established by the added order. Subviews arranged in top-to-bottom order is called vertical linear layout view, and 
 the subviews arranged in left-to-right order is called horizontal linear layout.
 
@@ -124,242 +127,355 @@ the subviews arranged in left-to-right order is called horizontal linear layout.
 
 ```swift
 
-let rootLayout = TGLinearLayout(.vert)
-rootLayout.tg_width.equal(.wrap)
-rootLayout.tg_height.equal(.wrap)
-rootLayout.tg_vspace = 10
-
-let A = UIView()
-A.tg_left.equal(5)
-A.tg_right.equal(5)
-A.tg_width.equal(100)
-A.tg_height.equal(40)
-rootLayout.addSubview(A)
-
-let B = UIView()
-B.tg_left.equal(20)
-B.tg_width.equal(40)
-B.tg_height.equal(40)
-rootLayout.addSubview(B)
-
-let C = UIView()
-C.tg_right.equal(40)
-C.tg_width.equal(50)
-C.tg_height.equal(40)
-rootLayout.addSubview(C)
-
-let D = UIView()
-D.tg_left.equal(10)
-D.tg_right.equal(10)
-D.tg_width.equal(100)
-D.tg_height.equal(40)
-rootLayout.addSubview(D)
+override func loadView() {
+        
+        
+            super.loadView()
+        
+            let S = TGLinearLayout(.vert)
+            S.tg_width.equal(120)
+            S.tg_height.equal(.wrap)
+            S.tg_vspace = 10
+            
+            let A = UIView()
+            A.tg_left.equal(5)
+            A.tg_right.equal(5)
+            A.tg_width.equal(100)
+            A.tg_height.equal(40)
+            S.addSubview(A)
+            
+            let B = UIView()
+            B.tg_left.equal(20)
+            B.tg_width.equal(40)
+            B.tg_height.equal(40)
+            S.addSubview(B)
+            
+            let C = UIView()
+            C.tg_right.equal(40)
+            C.tg_width.equal(50)
+            C.tg_height.equal(40)
+            S.addSubview(C)
+            
+            let D = UIView()
+            D.tg_left.equal(10)
+            D.tg_right.equal(10)
+            D.tg_width.equal(100)
+            D.tg_height.equal(40)
+            S.addSubview(D)
+            
+            self.view.addSubview(S)
+            S.backgroundColor = .red
+            A.backgroundColor = .green
+            B.backgroundColor = .blue
+            C.backgroundColor = .orange
+            D.backgroundColor = .cyan
+     }
 
 ```
 
 
 ###TGRelativeLayout
+> Is equivalent to: AutoLayout of iOS and RelativeLayout of Android.
+
 Relative layout is a layout view that the subviews layout and position through mutual constraints.The subviews in the relative layout are not depended to the adding order but layout and position by setting the subviews' constraints.
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/rl.png)
 
 
 ```swift
-let rootLayout = TGRelativeLayout()
-rootLayout.tg_width.equal(.wrap)
-rootLayout.tg_height.equal(.wrap)
-
-
-let A = UIView()
-A.tg_left.equal(20)
-A.tg_top.equal(20)
-A.tg_width.equal(40)
-A.tg_height.equal(A.tg_width)
-rootLayout.addSubview(A)
-
-let B = UIView()
-B.tg_left.equal(A.tg_centerX)
-B.tg_top.equal(A.tg_bottom)
-B.tg_width.equal(60)
-B.tg_height.equal(A.tg_height)
-rootLayout.addSubview(B)
-
-let C = UIView()
-C.tg_left.equal(B.tg_right)
-C.tg_width.equal(40)
-C.tg_height.equal(B.tg_height, multiple:0.5)
-rootLayout.addSubview(C)
-
-let D = UIView()
-D.tg_bottom.equal(C.tg_top)
-D.tg_right.equal(20)
-D.tg_height.equal(A.tg_height)
-D.tg_width.equal(D.tg_height)
-rootLayout.addSubview(D)
-
-let E = UIView()
-E.centerYPos.equalTo(0)
-E.tg_height.equal(40)
-E.tg_width.equal(rootLayout.tg_width)
-rootLayout.addSubview(E)
-//...F,G
+override func loadView() {
+        
+        
+            super.loadView()
+        
+        let S = TGRelativeLayout()
+        S.tg_width.equal(170).and().tg_height.equal(280)
+        
+        let A = UIView()
+        A.tg_left.equal(20).and().tg_top.equal(20)
+        A.tg_width.equal(40).and().tg_height.equal(A.tg_width)
+        S.addSubview(A)
+        
+        let B = UIView()
+        B.tg_left.equal(A.tg_centerX).and().tg_top.equal(A.tg_bottom).offset(10)
+        B.tg_width.equal(60).and().tg_height.equal(A.tg_height)
+        S.addSubview(B)
+        
+        let C = UIView()
+        C.tg_left.equal(B.tg_right).offset(10)
+        C.tg_bottom.equal(B.tg_bottom)
+        C.tg_width.equal(40)
+        C.tg_height.equal(B.tg_height, multiple:0.5)
+        S.addSubview(C)
+        
+        let D = UIView()
+        D.tg_bottom.equal(C.tg_top).offset(10)
+        D.tg_right.equal(15)
+        D.tg_height.equal(A.tg_height)
+        D.tg_width.equal(D.tg_height)
+        S.addSubview(D)
+        
+        let E = UIView()
+        E.tg_centerY.equal(0)
+        E.tg_centerX.equal(0)
+        E.tg_height.equal(40)
+        E.tg_width.equal(S.tg_width).add(-20)
+        S.addSubview(E)
+        //...F,G
+        
+            self.view.addSubview(S)
+            S.backgroundColor = .red
+            A.backgroundColor = .green
+            B.backgroundColor = .blue
+            C.backgroundColor = .orange
+            D.backgroundColor = .cyan
+            E.backgroundColor = .magenta
+       }
 
 ```
 
 ###TGFrameLayout
+> Is equivalent to: FrameLayout of Android.
+
 Frame layout is a layout view that the subviews can be overlapped and gravity in a special location of the superview.The subviews' layout position&size is not depended to the adding order and establish dependency constraint with the superview. Frame layout devided the vertical orientation to top,vertical center and bottom, while horizontal orientation is devided to left,horizontal center and right. Any of the subviews is just gravity in either vertical orientation or horizontal orientation.
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/fl.png)
 
 
 ```swift
-  let rootLayout = TGFrameLayout()
-  rootLayout.tg_width.equal(500)
-  rootLayout.tg_height.equal(500)  
-  
-  UIView *A = UIView()
-  A.tg_width(40)
-  A.tg_height(40)
-  rootLayout.addSubview(A)
-  
-  let B = UIView()
-  B.tg_width(40)
-  B.tg_height(40)
-  B.tg_right.equal(0)
-  rootLayout.addSubview(B)
-  
-  let C = UIView()
-  C.tg_width(40)
-  C.tg_height(40)
-  C.tg_centerY.equal(0)
-  rootLayout.addSubview(C)
-
-  let D = UIView()
-  D.tg_width(40)
-  D.tg_height(40)
-  D.tg_centerY.equal(0)
-  D.tg_centerX.equal(0)
-  rootLayout.addSubview(D)
-  
-  //..E，F,G
+ override func loadView() {
+        
+        
+        super.loadView()
+        
+        let S = TGFrameLayout()
+        S.tg_width.equal(320)
+        S.tg_height.equal(500)
+        
+        let A = UIView()
+        A.tg_width.equal(40)
+        A.tg_height.equal(40)
+        S.addSubview(A)
+        
+        let B = UIView()
+        B.tg_width.equal(40)
+        B.tg_height.equal(40)
+        B.tg_right.equal(0)
+        S.addSubview(B)
+        
+        let C = UIView()
+        C.tg_width.equal(40)
+        C.tg_height.equal(40)
+        C.tg_centerY.equal(0)
+        S.addSubview(C)
+        
+        let D = UIView()
+        D.tg_width.equal(40)
+        D.tg_height.equal(40)
+        D.tg_centerY.equal(0)
+        D.tg_centerX.equal(0)
+        S.addSubview(D)
+        
+        //..E，F,G
+        
+        self.view.addSubview(S)
+        S.backgroundColor = .red
+        A.backgroundColor = .green
+        B.backgroundColor = .blue
+        C.backgroundColor = .orange
+        D.backgroundColor = .cyan
+}
   
 ```
 
 
 ###TGTableLayout
+> Is equivalent to: TableLayout of Android and table of HTML.
+
 Table layout is a layout view that the subviews are multi-row&col arranged like a table. First you must create a rowview and add it to the table layout, then add the subview to the rowview. If the rowviews arranged in top-to-bottom order,the tableview is caled vertical table layout,in which the subviews are arranged from left to right; If the rowviews arranged in in left-to-right order,the tableview is caled horizontal table layout,in which the subviews are arranged from top to bottom.
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/tl.png)
 
 
 ```swift
-  let rootLayout = TGTableLayout(.vert)
-  rootLayout.tg_height.equal(.wrap)
-  rootLayout.tg_width.equal(500)
-  
-  rootLayout.tg_addRow(size:TGLayoutSize.wrap,colSize:TGLayoutSize.fill)
-  
-  let A = UIView()
-  A.tg_width(50)
-  A.tg_height(40)
-  rootLayout.addSubview(A)
-  
-  let B = UIView()
-  B.tg_width(100)
-  B.tg_height(40)
-  rootLayout.addSubview(B)
-  
-  let C = UIView()
-  C.tg_width(30)
-  C.tg_height(40)
-  rootLayout.addSubview(C)
-  
-  rootLayout.tg_addRow(size:TGLayoutSize.wrap,colSize:TGLayoutSize.fill)
-  
-   let D = UIView()
-   D.tg_width(180)
-   D.tg_height(40)
-   rootLayout.addSubview(D)
-  
-  //...E,F  
+   override func loadView() {
+        
+        
+        super.loadView()
+        
+        let S = TGTableLayout(.vert)
+        S.tg_height.equal(.wrap)
+        S.tg_width.equal(.wrap)
+        S.tg_vspace = 10
+        S.tg_hspace = 10
+        
+        
+        S.tg_addRow(size:TGLayoutSize.wrap,colSize:TGLayoutSize.wrap)
+        
+        let A = UIView()
+        A.tg_width.equal(50)
+        A.tg_height.equal(40)
+        S.addSubview(A)
+        
+        let B = UIView()
+        B.tg_width.equal(100)
+        B.tg_height.equal(40)
+        S.addSubview(B)
+        
+        let C = UIView()
+        C.tg_width.equal(30)
+        C.tg_height.equal(40)
+        S.addSubview(C)
+        
+        S.tg_addRow(size:TGLayoutSize.wrap,colSize:TGLayoutSize.wrap)
+        
+        let D = UIView()
+        D.tg_width.equal(200)
+        D.tg_height.equal(40)
+        S.addSubview(D)
+        
+        //...E,F  
+        
+        self.view.addSubview(S)
+        S.backgroundColor = .red
+        A.backgroundColor = .green
+        B.backgroundColor = .blue
+        C.backgroundColor = .orange
+        D.backgroundColor = .cyan       
+}  
   
   
 ```
 
 
 ###TGFlowLayout
+> Is equivalent to: flexbox of CSS3.
+
 Flow layout is a layout view presents in multi-line that the subviews are arranged in sequence according to the added order, and when meeting with a arranging constraint it will start a new line and rearrange. The constrains mentioned here includes count constraints and size constraints. The orientation of the new line would be vertical and horizontal, so the flow layout is divided into: count constraints vertical flow layout, size constraints vertical flow layout, count constraints horizontal flow layout,  size constraints horizontal flow layout. Flow layout often used in the scenes that the subviews is  arranged regularly, it can be substitutive of UICollectionView to some extent. the TGFlowLayout is almost implement the flex-box function of the HTML/CSS.
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/fll.png)
 
 
 ```swift
-   let rootLayout = TGFlowLayout(.vert,arrangedCount:4)
-   rootLayout.tg_height.equal(.wrap)
-   rootLayout.tg_width.equal(300)
-   rootLayout.tg_averageArrange = true
-   rootLayout.tg_space = 10
-   
-   for _ in 0 ..< 10
-   {
-       let A = UIView()
-       A.tg_height.equal(A.tg_width)
-       rootLayout.addSubview(A)
-   }
-   
+
+   override func loadView() {
+        
+        
+        super.loadView()
+        
+        let S = TGFlowLayout(.vert,arrangedCount:4)
+        S.tg_height.equal(.wrap)
+        S.tg_width.equal(300)
+        S.tg_padding = UIEdgeInsetsMake(10,10,10,10)
+        S.tg_gravity = TGGravity.horz.fill
+        S.tg_space = 10
+        
+        for _ in 0 ..< 10
+        {
+            let A = UIView()
+            A.tg_height.equal(A.tg_width)
+            S.addSubview(A)
+            
+            A.backgroundColor = .green
+        }
+        
+        self.view.addSubview(S)
+        S.backgroundColor = .red
+}   
    
 
 ```
 
 
 ###TGFloatLayout
+> Is equivalent to: float of CSS.
+
 Float layout is a layout view that the subviews are floating gravity in the given orientations, when the size is not enough to be hold, it will automatically find the best location to gravity. float layout's conception is reference from the HTML/CSS's floating positioning technology, so the float layout can be designed in implementing irregular layout. According to the different orientation of the floating, float layout can be divided into left-right float layout and up-down float layout.
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/flo.png)
 
 
 ```swift
-     let rootLayout = TGFloatLayout(.vert)
-     rootLayout.tg_height.equal(.wrap)
-     rootLayout.tg_width.equal(300)
-     
-     let A = UIView()
-     A.tg_height.equal(80)
-     A.tg_width.equal(70)
-     rootLayout.addSubview(A)
-     
-     let B = UIView()
-     B.tg_height.equal(150)
-     B.tg_width.equal(40)
-     rootLayout.addSubview(B)
-     
-     let C = UIView()
-     C.tg_height.equal(70)
-     C.tg_width.equal(40)
-     rootLayout.addSubview(C)
-     
-     let D = UIView()
-     D.tg_height.equal(140)
-     D.tg_width.equal(140)
-     rootLayout.addSubview(D)
-     
-     let E = UIView()
-     E.tg_height.equal(150)
-     E.tg_width.equal(40)
-     E.tg_reverseFloat = true
-     rootLayout.addSubview(E)
-
-     let F = UIView()
-     F.tg_height.equal(140)
-     F.tg_width.equal(60)
-     rootLayout.addSubview(F)
-     
+     override func loadView() {
+        
+        
+        super.loadView()
+        
+        let S = TGFloatLayout(.vert)
+        S.tg_height.equal(.wrap)
+        S.tg_width.equal(300)
+        S.tg_padding = UIEdgeInsetsMake(10,10,10,10)
+        S.tg_space = 10
+        
+        let A = UIView()
+        A.tg_width.equal(80)
+        A.tg_height.equal(70)
+        S.addSubview(A)
+        
+        let B = UIView()
+        B.tg_width.equal(150)
+        B.tg_height.equal(40)
+        S.addSubview(B)
+        
+        let C = UIView()
+        C.tg_width.equal(70)
+        C.tg_height.equal(40)
+        S.addSubview(C)
+        
+        let D = UIView()
+        D.tg_width.equal(100)
+        D.tg_height.equal(140)
+        S.addSubview(D)
+        
+        let E = UIView()
+        E.tg_width.equal(150)
+        E.tg_height.equal(40)
+        E.tg_reverseFloat = true
+        S.addSubview(E)
+        
+        let F = UIView()
+        F.tg_width.equal(120)
+        F.tg_height.equal(60)
+        S.addSubview(F)
+      
+        self.view.addSubview(S)
+        S.backgroundColor = .red
+        A.backgroundColor = .green
+        B.backgroundColor = .blue
+        C.backgroundColor = .orange
+        D.backgroundColor = .black
+        E.backgroundColor = .magenta
+        F.backgroundColor = .white
+}     
 
 ```
 
 
 ###TGViewSizeClass
+> Is equivalent to: Size Classes of iOS.
+
 TangramKit provided support to SizeClass in order to fit the different screen sizes of devices. You can combinate the SizeClass with any of the 6 kinds of layout views mentioned above to perfect fit the UI of all equipments.
+
+```swift
+
+    public func tg_fetchSizeClass(with type:TGSizeClassType, from srcType:TGSizeClassType! = nil) ->TGViewSizeClass
+
+
+````
+
+```swift
+
+//all device
+let rootLayout = TGLinearLayout(.vert)
+        rootLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10);
+        rootLayout.tg_vspace = 10
+        rootLayout.tg_hspace = 10
+        
+//iPhone landscape orientation.
+let lsc = rootLayout.tg_fetchSizeClass(with: .comb(.any, .compact, nil), from:.default) as! TGLinearLayoutViewSizeClass
+        lsc.tg_orientation = .horz
+
+```
 
 
 

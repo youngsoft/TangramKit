@@ -147,16 +147,17 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
     }
     
     /**
-     *根据浮动视图的方向设置子视图的间距为浮动间距而不是上面确定的固定间距。在一些应用场景我们有时候希望某些子视图的宽度是固定的情况下，子视图的间距是浮动的而不是固定的。因此您可以通过如下方法来设置浮动间距。这个方法会根据您当前布局的orientation方向不同而意义不同：
-     1.如果您的布局方向是.vert表示设置的是子视图的水平间距，其中的size指定的是子视图的宽度，minFloatMargin指定的是最小的水平间距。
-     2.如果您的布局方向是.horz表示设置的是子视图的垂直间距，其中的size指定的是子视图的高度，minFloatMargin指定的是最小的垂直间距。
-     3.如果您不想使用浮动间距则请将size设置为0就可以了。
+     *根据浮动布局视图的方向设置子视图的固定尺寸和视图之间的最小间距。在一些应用场景我们有时候希望某些子视图的宽度是固定的情况下，子视图的间距是浮动的而不是固定的，这样就可以尽可能的容纳更多的子视图。比如每个子视图的宽度是固定80，那么在小屏幕下每行只能放3个，而我们希望大屏幕每行能放4个或者5个子视图。因此您可以通过如下方法来设置浮动间距。这个方法会根据您当前布局的orientation方向不同而意义不同：
+     1.如果您的布局方向是MyLayoutViewOrientation_Vert表示设置的是子视图的水平间距，其中的subviewSize指定的是子视图的宽度，minSpace指定的是最小的水平间距，maxSpace指定的是最大的水平间距，如果指定的subviewSize计算出的间距大于这个值则会调整subviewSize的宽度。
+     2.如果您的布局方向是MyLayoutViewOrientation_Horz表示设置的是子视图的垂直间距，其中的subviewSize指定的是子视图的高度，minSpace指定的是最小的垂直间距，maxSpace指定的是最大的垂直间距，如果指定的subviewSize计算出的间距大于这个值则会调整subviewSize的高度。
+     3.如果您不想使用浮动间距则请将subviewSize设置为0就可以了。
      */
-    public func tg_setSubviews(size:CGFloat, minFloatMargin:CGFloat ,inSizeClass type:TGSizeClassType = .default)
+    public func tg_setSubviews(size:CGFloat, minSpace:CGFloat, maxSpace:CGFloat = .greatestFiniteMagnitude, inSizeClass type:TGSizeClassType = .default)
     {
         let sc = self.tg_fetchSizeClass(with: type) as! TGFloatLayoutViewSizeClassImpl
-        sc.tgSubviewSize = size;
-        sc.tgMinMargin = minFloatMargin;
+        sc.tgSubviewSize = size
+        sc.tgMinSpace = minSpace
+        sc.tgMaxSpace = maxSpace
         
         self.setNeedsLayout()
     }
@@ -393,7 +394,7 @@ extension TGFloatLayout
         
         if !hasBoundaryLimit
         {
-            selfSize.width = CGFloat.greatestFiniteMagnitude;
+            selfSize.width = CGFloat.greatestFiniteMagnitude
         }
         
         
@@ -446,22 +447,31 @@ extension TGFloatLayout
             selfSize.width = padding.left + maxContentWidth + padding.right;
         }
         
-        let vertMargin = self.tg_vspace;
-        var horzMargin = self.tg_hspace;
-        let subviewSize = (self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClassImpl).tgSubviewSize;
+        let vertSpace = self.tg_vspace;
+        var horzSpace = self.tg_hspace;
+        var subviewSize = (self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClassImpl).tgSubviewSize
         if (subviewSize != 0)
         {
             #if DEBUG
                 //异常崩溃：当布局视图设置了tg_noBoundaryLimit为true时，不能设置最小垂直间距。
-                assert(hasBoundaryLimit, "Constraint exception！！, vertical float layout:\(self) can not set tg_noBoundaryLimit to true when call  tg_setSubview(size:CGFloat minFloatMargin:CGFloat)  method")
+                assert(hasBoundaryLimit, "Constraint exception！！, vertical float layout:\(self) can not set tg_noBoundaryLimit to true when call  tg_setSubviews(size:CGFloat,minSpace:CGFloat,maxSpace:CGFloat)  method")
             #endif
             
-            let minMargin = (self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClassImpl).tgMinMargin;
+            let minSpace = (self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClassImpl).tgMinSpace
+            let maxSpace = (self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClassImpl).tgMaxSpace
+
             
-            let rowCount =  floor((selfSize.width - padding.left - padding.right  + minMargin) / (subviewSize + minMargin));
+            let rowCount =  floor((selfSize.width - padding.left - padding.right  + minSpace) / (subviewSize + minSpace));
             if (rowCount > 1)
             {
-                horzMargin = (selfSize.width - padding.left - padding.right - subviewSize * rowCount)/(rowCount - 1);
+                horzSpace = (selfSize.width - padding.left - padding.right - subviewSize * rowCount)/(rowCount - 1);
+                
+                if horzSpace > maxSpace
+                {
+                    horzSpace = maxSpace
+                    
+                    subviewSize = (selfSize.width - padding.left - padding.right -  horzSpace * (rowCount - 1)) / rowCount
+                }
             }
         }
         
@@ -495,6 +505,12 @@ extension TGFloatLayout
             var rect = sbv.tgFrame.frame;
             let isWidthWeight = sbv.tg_width.dimeWeightVal != nil || sbv.tg_width.isFill
             let isHeightWeight = sbv.tg_height.dimeWeightVal != nil || sbv.tg_height.isFill
+            
+            
+            if subviewSize != 0
+            {
+                rect.size.width = subviewSize
+            }
             
             if (sbv.tg_width.dimeNumVal != nil)
             {
@@ -662,7 +678,7 @@ extension TGFloatLayout
                 
                 
                 //这里有可能子视图本身的宽度会超过布局视图本身，但是我们的候选区域则不存储超过的宽度部分。
-                let cRect = CGRect(x: max(rect.origin.x - leftMargin - horzMargin,padding.left), y: rect.origin.y - topMargin, width: min((rect.size.width + leftMargin + rightMargin),(selfSize.width - padding.left - padding.right)), height: rect.size.height + topMargin + bottomMargin + vertMargin);
+                let cRect = CGRect(x: max(rect.origin.x - leftMargin - horzSpace,padding.left), y: rect.origin.y - topMargin, width: min((rect.size.width + leftMargin + rightMargin),(selfSize.width - padding.left - padding.right)), height: rect.size.height + topMargin + bottomMargin + vertSpace);
                 
                 
                 //把新的候选区域添加到数组中去。并删除高度小于新候选区域的其他区域
@@ -676,9 +692,9 @@ extension TGFloatLayout
                 rightCandidateRects.append(cRect)
                 rightLastYOffset = rect.origin.y - topMargin;
                 
-                if (rect.origin.y + rect.size.height + bottomMargin + vertMargin > rightMaxHeight)
+                if (rect.origin.y + rect.size.height + bottomMargin + vertSpace > rightMaxHeight)
                 {
-                    rightMaxHeight = rect.origin.y + rect.size.height + bottomMargin + vertMargin;
+                    rightMaxHeight = rect.origin.y + rect.size.height + bottomMargin + vertSpace;
                 }
             }
             else
@@ -786,7 +802,7 @@ extension TGFloatLayout
                 
                 
                 
-                let cRect = CGRect(x: rect.origin.x - leftMargin, y: rect.origin.y - topMargin, width: min((rect.size.width + leftMargin + rightMargin + horzMargin),(selfSize.width - padding.left - padding.right)), height: rect.size.height + topMargin + bottomMargin + vertMargin);
+                let cRect = CGRect(x: rect.origin.x - leftMargin, y: rect.origin.y - topMargin, width: min((rect.size.width + leftMargin + rightMargin + horzSpace),(selfSize.width - padding.left - padding.right)), height: rect.size.height + topMargin + bottomMargin + vertSpace);
                 
                 
                 //把新添加到候选中去。并删除高度小于的候选键。和高度
@@ -798,21 +814,21 @@ extension TGFloatLayout
                 leftCandidateRects.append(cRect);
                 leftLastYOffset = rect.origin.y - topMargin;
                 
-                if (rect.origin.y + rect.size.height + bottomMargin + vertMargin > leftMaxHeight)
+                if (rect.origin.y + rect.size.height + bottomMargin + vertSpace > leftMaxHeight)
                 {
-                    leftMaxHeight = rect.origin.y + rect.size.height + bottomMargin + vertMargin;
+                    leftMaxHeight = rect.origin.y + rect.size.height + bottomMargin + vertSpace;
                 }
                 
             }
             
-            if rect.origin.y + rect.size.height + bottomMargin + vertMargin > maxHeight
+            if rect.origin.y + rect.size.height + bottomMargin + vertSpace > maxHeight
             {
-                maxHeight = rect.origin.y + rect.size.height + bottomMargin + vertMargin;
+                maxHeight = rect.origin.y + rect.size.height + bottomMargin + vertSpace;
             }
             
-            if rect.origin.x + rect.size.width + rightMargin + horzMargin > maxWidth
+            if rect.origin.x + rect.size.width + rightMargin + horzSpace > maxWidth
             {
-                maxWidth = rect.origin.x + rect.size.width + rightMargin + horzMargin
+                maxWidth = rect.origin.x + rect.size.width + rightMargin + horzSpace
             }
             
             sbv.tgFrame.frame = rect;
@@ -821,8 +837,8 @@ extension TGFloatLayout
         
         if sbs.count > 0
         {
-            maxHeight -= vertMargin
-            maxWidth -= horzMargin
+            maxHeight -= vertSpace
+            maxWidth -= horzSpace
         }
         
         maxHeight += padding.bottom
@@ -941,22 +957,32 @@ extension TGFloatLayout
         
         
         //支持浮动垂直间距。
-        let horzMargin = self.tg_hspace;
-        var vertMargin = self.tg_vspace;
-        let subviewSize = (self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClassImpl).tgSubviewSize;
+        let horzSpace = self.tg_hspace
+        var vertSpace = self.tg_vspace
+        var subviewSize = (self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClassImpl).tgSubviewSize;
         if (subviewSize != 0)
         {
             #if DEBUG
                 //异常崩溃：当布局视图设置了tg_noBoundaryLimit为true时，不能设置最小垂直间距。
-                assert(hasBoundaryLimit, "Constraint exception！！, horizontal float layout:\(self) can not set tg_noBoundaryLimit to true when call  tg_setSubview(size:CGFloat minFloatMargin:CGFloat)  method");
+                assert(hasBoundaryLimit, "Constraint exception！！, horizontal float layout:\(self) can not set tg_noBoundaryLimit to true when call  tg_setSubviews(size:CGFloat,minSpace:CGFloat,maxSpace:CGFloat)  method");
             #endif
             
-            let minMargin = (self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClassImpl).tgMinMargin;
-            
-            let rowCount =  floor((selfSize.height - padding.top - padding.bottom  + minMargin) / (subviewSize + minMargin));
+            let minSpace = (self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClassImpl).tgMinSpace
+            let maxSpace = (self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClassImpl).tgMaxSpace
+
+            let rowCount =  floor((selfSize.height - padding.top - padding.bottom  + minSpace) / (subviewSize + minSpace))
             if (rowCount > 1)
             {
-                vertMargin = (selfSize.height - padding.top - padding.bottom - subviewSize * rowCount)/(rowCount - 1);
+                vertSpace = (selfSize.height - padding.top - padding.bottom - subviewSize * rowCount)/(rowCount - 1)
+                
+                if (vertSpace > maxSpace)
+                {
+                    vertSpace = maxSpace
+                    
+                    subviewSize =  (selfSize.height - padding.top - padding.bottom -  vertSpace * (rowCount - 1)) / rowCount
+                    
+                }
+
             }
         }
         
@@ -996,6 +1022,11 @@ extension TGFloatLayout
             if (sbv.tg_width.dimeNumVal != nil)
             {
                 rect.size.width = sbv.tg_width.measure;
+            }
+            
+            if subviewSize != 0
+            {
+                rect.size.height = subviewSize
             }
             
             if (sbv.tg_height.dimeNumVal != nil)
@@ -1150,7 +1181,7 @@ extension TGFloatLayout
                 
                 
                 //这里有可能子视图本身的宽度会超过布局视图本身，但是我们的候选区域则不存储超过的宽度部分。
-                let cRect = CGRect(x: rect.origin.x - leftMargin, y: max(rect.origin.y - topMargin - vertMargin, padding.top), width: rect.size.width + leftMargin + rightMargin + horzMargin, height: min((rect.size.height + topMargin + bottomMargin),(selfSize.height - padding.top - padding.bottom)));
+                let cRect = CGRect(x: rect.origin.x - leftMargin, y: max(rect.origin.y - topMargin - vertSpace, padding.top), width: rect.size.width + leftMargin + rightMargin + horzSpace, height: min((rect.size.height + topMargin + bottomMargin),(selfSize.height - padding.top - padding.bottom)));
                 
                 //把新的候选区域添加到数组中去。并删除高度小于新候选区域的其他区域
                 bottomCandidateRects = bottomCandidateRects.filter({$0.maxX > cRect.maxX})
@@ -1161,9 +1192,9 @@ extension TGFloatLayout
                 bottomCandidateRects.append(cRect)
                 bottomLastXOffset = rect.origin.x - leftMargin;
                 
-                if (rect.origin.x + rect.size.width + rightMargin + horzMargin > bottomMaxWidth)
+                if (rect.origin.x + rect.size.width + rightMargin + horzSpace > bottomMaxWidth)
                 {
-                    bottomMaxWidth = rect.origin.x + rect.size.width + rightMargin + horzMargin;
+                    bottomMaxWidth = rect.origin.x + rect.size.width + rightMargin + horzSpace;
                 }
             }
             else
@@ -1260,7 +1291,7 @@ extension TGFloatLayout
                 }
                 
                 
-                let cRect = CGRect(x: rect.origin.x - leftMargin, y: rect.origin.y - topMargin,width: rect.size.width + leftMargin + rightMargin + horzMargin,height: min((rect.size.height + topMargin + bottomMargin + vertMargin),(selfSize.height - padding.top - padding.bottom)));
+                let cRect = CGRect(x: rect.origin.x - leftMargin, y: rect.origin.y - topMargin,width: rect.size.width + leftMargin + rightMargin + horzSpace,height: min((rect.size.height + topMargin + bottomMargin + vertSpace),(selfSize.height - padding.top - padding.bottom)));
                 
                 
                 //把新添加到候选中去。并删除宽度小于的最新候选区域的候选区域
@@ -1272,21 +1303,21 @@ extension TGFloatLayout
                 topCandidateRects.append(cRect)
                 topLastXOffset = rect.origin.x - leftMargin;
                 
-                if (rect.origin.x + rect.size.width + rightMargin + horzMargin > topMaxWidth)
+                if (rect.origin.x + rect.size.width + rightMargin + horzSpace > topMaxWidth)
                 {
-                    topMaxWidth = rect.origin.x + rect.size.width + rightMargin + horzMargin;
+                    topMaxWidth = rect.origin.x + rect.size.width + rightMargin + horzSpace;
                 }
                 
             }
             
-            if rect.origin.y + rect.size.height + bottomMargin + vertMargin > maxHeight
+            if rect.origin.y + rect.size.height + bottomMargin + vertSpace > maxHeight
             {
-                maxHeight = rect.origin.y + rect.size.height + bottomMargin + vertMargin;
+                maxHeight = rect.origin.y + rect.size.height + bottomMargin + vertSpace;
             }
             
-            if rect.origin.x + rect.size.width + rightMargin + horzMargin > maxWidth
+            if rect.origin.x + rect.size.width + rightMargin + horzSpace > maxWidth
             {
-                maxWidth = rect.origin.x + rect.size.width + rightMargin + horzMargin
+                maxWidth = rect.origin.x + rect.size.width + rightMargin + horzSpace
             }
 
             
@@ -1298,8 +1329,8 @@ extension TGFloatLayout
         
         if (sbs.count > 0)
         {
-            maxWidth -= horzMargin
-            maxHeight -= vertMargin
+            maxWidth -= horzSpace
+            maxHeight -= vertSpace
         }
         
         maxWidth += padding.right;

@@ -277,7 +277,7 @@ extension AllTest3ViewController
         
         let testLayout = TGFlowLayout(.vert, arrangedCount:3)
         testLayout.backgroundColor = UIColor.white
-        testLayout.tg_averageArrange = true
+        testLayout.tg_gravity = TGGravity.horz.fill   //尺寸相等
         testLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
         testLayout.tg_space = 10
         testLayout.tg_bottom.equal(50) //这里设置底部间距的原因是登录按钮在最底部。为了使得滚动到底部时不被覆盖。
@@ -545,7 +545,7 @@ extension AllTest3ViewController
         let itemLayout = TGFlowLayout(.vert, arrangedCount:3)
         itemLayout.tg_width.equal(.fill)
         itemLayout.tg_height.equal(.wrap)
-        itemLayout.tg_averageArrange = true
+        itemLayout.tg_gravity = TGGravity.horz.fill
         itemLayout.tg_space = 10
         scrollView.addSubview(itemLayout)
         self.popmenuItemLayout = itemLayout

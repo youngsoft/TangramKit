@@ -173,7 +173,6 @@ public protocol TGTableLayoutViewSizeClass:TGLinearLayoutViewSizeClass
 public protocol TGFlowLayoutViewSizeClass:TGSequentLayoutViewSizeClass
 {
     var tg_arrangedCount:Int {get set}
-    var tg_averageArrange:Bool {get set}
     var tg_arrangedGravity:TGGravity {get set}
     var tg_autoArrange:Bool {get set}
 }
@@ -383,7 +382,8 @@ internal class TGFloatLayoutViewSizeClassImpl : TGSequentLayoutViewSizeClassImpl
     var tg_noBoundaryLimit:Bool = false
     
     var tgSubviewSize:CGFloat = 0
-    var tgMinMargin:CGFloat = 0
+    var tgMinSpace:CGFloat = 0
+    var tgMaxSpace:CGFloat = .greatestFiniteMagnitude
 
     override func copy(with zone: NSZone?) -> Any {
         
@@ -391,7 +391,8 @@ internal class TGFloatLayoutViewSizeClassImpl : TGSequentLayoutViewSizeClassImpl
         
         tsc.tg_noBoundaryLimit = self.tg_noBoundaryLimit
         tsc.tgSubviewSize = self.tgSubviewSize
-        tsc.tgMinMargin = self.tgMinMargin
+        tsc.tgMinSpace = self.tgMinSpace
+        tsc.tgMaxSpace = self.tgMaxSpace
         
         return tsc
     }
@@ -403,19 +404,25 @@ internal class TGFloatLayoutViewSizeClassImpl : TGSequentLayoutViewSizeClassImpl
 internal class TGFlowLayoutViewSizeClassImpl:TGSequentLayoutViewSizeClassImpl,TGFlowLayoutViewSizeClass
 {
     var tg_arrangedCount:Int = 0
-    var tg_averageArrange:Bool = false
     var tg_arrangedGravity:TGGravity = .none
     var tg_autoArrange:Bool = false
+    
+    var tgSubviewSize:CGFloat = 0
+    var tgMinSpace:CGFloat = 0
+    var tgMaxSpace:CGFloat = .greatestFiniteMagnitude
+
     
     override func copy(with zone: NSZone?) -> Any {
         
         let tsc = super.copy(with: zone) as! TGFlowLayoutViewSizeClassImpl
         
         tsc.tg_arrangedCount = self.tg_arrangedCount
-        tsc.tg_averageArrange = self.tg_averageArrange
         tsc.tg_arrangedGravity = self.tg_arrangedGravity
         tsc.tg_autoArrange = self.tg_autoArrange
-        
+        tsc.tgSubviewSize = self.tgSubviewSize
+        tsc.tgMinSpace = self.tgMinSpace
+        tsc.tgMaxSpace = self.tgMaxSpace
+
         return tsc
     }
 

@@ -127,7 +127,7 @@ extension AllTest4ViewController
     {
         let containerLayout = TGFlowLayout(.vert, arrangedCount:arrangedCount)
         containerLayout.tg_height.equal(.wrap)
-        containerLayout.tg_averageArrange = true //平均分配里面每个子视图的宽度或者拉伸子视图的宽度以便填充满整个布局。
+        containerLayout.tg_gravity = TGGravity.horz.fill //平均分配里面每个子视图的宽度或者拉伸子视图的宽度以便填充满整个布局。
         containerLayout.tg_hspace = 5
         containerLayout.tg_vspace = 5
         containerLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)

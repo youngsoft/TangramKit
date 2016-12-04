@@ -29,6 +29,7 @@ class FLLTest3ViewController: UIViewController {
 
         
         let rootLayout = TGLinearLayout(.vert)
+        rootLayout.backgroundColor = .white
         rootLayout.tg_gravity = TGGravity.horz.fill
         self.view = rootLayout
         
@@ -53,7 +54,7 @@ class FLLTest3ViewController: UIViewController {
         flowLayout.backgroundColor = CFTool.color(0)
         flowLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
         flowLayout.tg_space = 10  //流式布局里面的子视图的水平和垂直间距设置为10
-        flowLayout.tg_averageArrange = true  //流式布局里面的子视图的宽度将平均分配。
+        flowLayout.tg_gravity = TGGravity.horz.fill  //流式布局里面的子视图的宽度将平均分配。
         flowLayout.tg_height.equal(.fill) //占用剩余的高度。
         flowLayout.tg_top.equal(10)
         rootLayout.addSubview(flowLayout)

@@ -129,6 +129,13 @@ final public class TGLayoutPos
         return self
     }
     
+    //返回视图，用于链式语法
+    @discardableResult
+    public func and() -> UIView
+    {
+        return _view
+    }
+    
     //清除位置设置。
     public func clear()
     {

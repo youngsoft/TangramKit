@@ -35,6 +35,7 @@ open class TGTableLayout: TGLinearLayout {
      *  @param rowSize 为TGLayoutSize.wrap表示由子视图决定本行尺寸，子视图需要自己设置尺寸；为TGLayoutSize.average表示均分尺寸，子视图不需要设置尺寸；为数值时表示固定尺寸，子视图不需要设置尺寸;不能设置为TGLayoutSize.fill。
      *  @param colSize  为TGLayoutSize.fill表示子视图需要自己指定尺寸，整体行尺寸和父视图一样的尺寸；为TGLayoutSize.wrap表示由子视图需要自己设置尺寸，行尺寸包裹所有子视图；为TGLayoutSize.average表示均分尺寸，这时候子视图不必设置尺寸；为数值表示子视图固定尺寸，这时候子视图可以不必设置尺寸。
      */
+    @discardableResult
     public func tg_addRow(size rowSize:TGTableRowColSizeType, colSize:TGTableRowColSizeType) ->TGLinearLayout
     {
         return tg_insertRow(size: rowSize, colSize:colSize, rowIndex: self.tg_rowCount)
@@ -43,6 +44,7 @@ open class TGTableLayout: TGLinearLayout {
     /**
      * 在指定的位置插入一个新行
      */
+    @discardableResult
     public func tg_insertRow(size rowSize: TGTableRowColSizeType, colSize : TGTableRowColSizeType, rowIndex : Int) ->TGLinearLayout
     {
         var ori:TGOrientation = .vert;

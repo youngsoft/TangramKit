@@ -33,7 +33,7 @@ class AllTest6ViewController: UIViewController {
         
         //创建顶部的菜单布局部分。
         let menuLayout = TGFlowLayout(.vert, arrangedCount:3)
-        menuLayout.tg_averageArrange = true
+        menuLayout.tg_gravity = TGGravity.fill
         menuLayout.tg_height.equal(.wrap)
         menuLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
         menuLayout.tg_space = 10

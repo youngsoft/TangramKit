@@ -55,6 +55,12 @@ open class TGLinearLayout: TGBaseLayout,TGLinearLayoutViewSizeClass {
     
     /**
      *线性布局里面的所有子视图的整体停靠方向以及填充，所谓停靠是指布局视图里面的所有子视图整体在布局视图中的位置，系统默认的停靠是在布局视图的左上角。
+     *MyMarginGravity_Vert_Top,MyMarginGravity_Vert_Center,MyMarginGravity_Vert_Bottom 表示整体垂直居上，居中，居下
+     *MyMarginGravity_Horz_Left,MyMarginGravity_Horz_Center,MyMarginGravity_Horz_Right 表示整体水平居左，居中，居右
+     *MyMarginGravity_Vert_Between 表示在垂直线性布局里面，每行之间的行间距都被拉伸，以便使里面的子视图垂直方向填充满整个布局视图。水平线性布局里面这个设置无效。
+     *MyMarginGravity_Horz_Between 表示在水平线性布局里面，每列之间的列间距都被拉伸，以便使里面的子视图水平方向填充满整个布局视图。垂直线性布局里面这个设置无效。
+     *MyMarginGravity_Vert_Fill 在垂直线性布局里面表示布局会拉伸每行子视图的高度，以便使里面的子视图垂直方向填充满整个布局视图的高度；在水平线性布局里面表示每个个子视图的高度都将和父视图保持一致，这样就不再需要设置子视图的高度了。
+     *MyMarginGravity_Horz_Fill 在水平线性布局里面表示布局会拉伸每行子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度；在垂直线性布局里面表示每个子视图的宽度都将和父视图保持一致，这样就不再需要设置子视图的宽度了。
      */
     public var tg_gravity:TGGravity
         {
@@ -215,11 +221,6 @@ open class TGLinearLayout: TGBaseLayout,TGLinearLayoutViewSizeClass {
                 
             }
             
-            #if DEBUG
-                //"布局约束冲突:垂直线性布局不能将tg_gravity的垂直停靠值设置为TGGravity.vert.fill"
-                assert((self.tg_gravity & TGGravity.horz.mask) != TGGravity.vert.fill , "Constraint exception！！, vertical linear layout:\(self) can not set tg_gravity to TGGravity.vert.fill.")
-            #endif
-            
             
             if (self.tg_gravity & TGGravity.horz.mask) != .none
             {
@@ -322,12 +323,7 @@ open class TGLinearLayout: TGBaseLayout,TGLinearLayoutViewSizeClass {
                 
             }
             
-            #if DEBUG
-                //布局约束冲突：水平线性布局:%@不能将tg_gravity的水平停靠值设置为TGGravity.horz.fill"
-                assert((self.tg_gravity & TGGravity.vert.mask) != TGGravity.horz.fill , "Constraint exception!! horizontal linear layout:\(self) can not set tg_gravity to TGGravity.horz.fill")
-            #endif
-            
-            
+
             if (self.tg_gravity & TGGravity.vert.mask) != .none
             {
                 selfSize = self.tgLayoutSubviewsForHorzGravity(selfSize,sbs:sbs)
@@ -1263,6 +1259,9 @@ extension TGLinearLayout {
     
     fileprivate func tgLayoutSubviewsForVertGravity(_ selfSize:CGSize, sbs:[UIView]) ->CGSize
     {
+     
+        let mgvert = self.tg_gravity & TGGravity.horz.mask
+        let mghorz = self.tg_gravity & TGGravity.vert.mask
         
         var totalHeight:CGFloat = 0
         
@@ -1282,8 +1281,10 @@ extension TGLinearLayout {
         }
         
         //调整子视图的宽度。并根据情况调整子视图的高度。并计算出固定高度和浮动高度。
+        var noWrapsbsSet = Set<UIView>()
         for sbv in sbs
         {
+            var canAddToNoWrapSbs = true
             
             var rect:CGRect =  sbv.tgFrame.frame;
             let isFlexedHeight:Bool = sbv.tg_height.isFlexHeight
@@ -1303,6 +1304,7 @@ extension TGLinearLayout {
             if (sbv.tg_height.isMatchParent && !self.tg_height.isWrap)
             {
                 rect.size.height = sbv.tg_height.measure(selfSize.height - self.tg_topPadding - self.tg_bottomPadding)
+                canAddToNoWrapSbs = false
             }
             
             //调整子视图的宽度，如果子视图为matchParent的话
@@ -1330,33 +1332,33 @@ extension TGLinearLayout {
             
             
             //优先以容器中的对齐方式为标准，否则以自己的停靠方式为标准
-            var mg:TGGravity = TGGravity.horz.left
-            if (self.tg_gravity & TGGravity.vert.mask) != .none
+            var sbvmghorz:TGGravity = TGGravity.horz.left
+            if mghorz != .none
             {
-                mg = self.tg_gravity & TGGravity.vert.mask;
+                sbvmghorz = mghorz
             }
             else
             {
                 if sbv.tg_centerX.hasValue
                 {
-                    mg = TGGravity.horz.center
+                    sbvmghorz = TGGravity.horz.center
                 }
                 else if sbv.tg_left.hasValue && sbv.tg_right.hasValue
                 {
-                    mg = TGGravity.horz.fill;
+                    sbvmghorz = TGGravity.horz.fill;
                 }
                 else if sbv.tg_left.hasValue
                 {
-                    mg = TGGravity.horz.left
+                    sbvmghorz = TGGravity.horz.left
                 }
                 else if sbv.tg_right.hasValue
                 {
-                    mg = TGGravity.horz.right
+                    sbvmghorz = TGGravity.horz.right
                 }
             }
             
             rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
-            rect = self.tgCalcHorzGravity(mg, selfSize:selfSize, sbv:sbv, rect:rect)
+            rect = self.tgCalcHorzGravity(sbvmghorz, selfSize:selfSize, sbv:sbv, rect:rect)
             
            
             if sbv.tg_height.dimeRelaVal === sbv.tg_width
@@ -1367,9 +1369,15 @@ extension TGLinearLayout {
             if isFlexedHeight
             {
                 rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
+                canAddToNoWrapSbs = false
             }
             
             rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            
+            if sbv.tg_height.minVal.isWrap
+            {
+                canAddToNoWrapSbs = false
+            }
             
             totalHeight += self.tgValidMargin(sbv.tg_top, sbv: sbv, calcPos: sbv.tg_top.realMarginInSize(floatingHeight), selfLayoutSize: selfSize)
             
@@ -1377,22 +1385,36 @@ extension TGLinearLayout {
             totalHeight += self.tgValidMargin(sbv.tg_bottom, sbv: sbv, calcPos: sbv.tg_bottom.realMarginInSize(floatingHeight), selfLayoutSize: selfSize)
             
             
-            sbv.tgFrame.frame = rect;
+            sbv.tgFrame.frame = rect
+            
+            if mgvert == TGGravity.vert.fill && sbv.tg_height.isWrap
+            {
+                canAddToNoWrapSbs = false
+            }
+            
+            if canAddToNoWrapSbs
+            {
+                noWrapsbsSet.insert(sbv)
+            }
+            
         }
         
         
         //根据对齐的方位来定位子视图的布局对齐
-        var pos:CGFloat = 0;
-        if (self.tg_gravity & TGGravity.horz.mask) == TGGravity.vert.top
+        var pos:CGFloat = 0
+        var between:CGFloat = 0
+        var fill:CGFloat = 0
+        
+        if mgvert == TGGravity.vert.top
         {
             pos = self.tg_topPadding;
         }
-        else if (self.tg_gravity & TGGravity.horz.mask) == TGGravity.vert.center
+        else if mgvert == TGGravity.vert.center
         {
             pos = (selfSize.height - totalHeight - self.tg_bottomPadding - self.tg_topPadding)/2.0;
             pos += self.tg_topPadding;
         }
-        else if (self.tg_gravity & TGGravity.horz.mask) == TGGravity.vert.windowCenter
+        else if mgvert == TGGravity.vert.windowCenter
         {
             if let win = self.window
             {
@@ -1404,9 +1426,30 @@ extension TGLinearLayout {
                 
             }
         }
+        else if mgvert == TGGravity.vert.bottom
+        {
+            pos = selfSize.height - totalHeight - self.tg_bottomPadding
+        }
+        else if mgvert == TGGravity.vert.between
+        {
+            pos = self.tg_topPadding;
+            
+            if sbs.count > 1
+            {
+              between = (selfSize.height - totalHeight - self.tg_topPadding - self.tg_bottomPadding) / CGFloat(sbs.count - 1)
+            }
+        }
+        else if mgvert == TGGravity.vert.fill
+        {
+            pos = self.tg_topPadding
+            if noWrapsbsSet.count > 0
+            {
+                fill = (selfSize.height - totalHeight - self.tg_topPadding - self.tg_bottomPadding) / CGFloat(noWrapsbsSet.count)
+            }
+        }
         else
         {
-            pos = selfSize.height - totalHeight - self.tg_bottomPadding;
+            pos = self.tg_topPadding
         }
         
         
@@ -1417,6 +1460,11 @@ extension TGLinearLayout {
             
             sbv.tgFrame.top = pos;
             
+            if fill != 0 && noWrapsbsSet.contains(sbv)
+            {
+                sbv.tgFrame.height += fill
+            }
+            
             pos +=  sbv.tgFrame.height;
             
             pos += self.tgValidMargin(sbv.tg_bottom, sbv: sbv, calcPos: sbv.tg_bottom.realMarginInSize(floatingHeight), selfLayoutSize: selfSize)
@@ -1425,6 +1473,8 @@ extension TGLinearLayout {
             {
                 pos += self.tg_vspace;
             }
+            
+            pos += between
         }
         
         return selfSize;
@@ -1433,6 +1483,8 @@ extension TGLinearLayout {
     
     fileprivate func tgLayoutSubviewsForHorzGravity(_ selfSize:CGSize, sbs:[UIView])->CGSize
     {
+        let mgvert = self.tg_gravity & TGGravity.horz.mask
+        let mghorz = self.tg_gravity & TGGravity.vert.mask
         
         var totalWidth:CGFloat = 0;
         if sbs.count > 1
@@ -1453,8 +1505,10 @@ extension TGLinearLayout {
         }
         
         //计算出固定的高度
+        var noWrapsbsSet = Set<UIView>()
         for sbv in sbs
         {
+            var canAddToNoWrapSbs = true
             
             var rect = sbv.tgFrame.frame;
             let isFlexedHeight = sbv.tg_height.isFlexHeight //sbv.flexedHeight && !sbv.tg_height.isMatchParent;
@@ -1469,9 +1523,10 @@ extension TGLinearLayout {
                 rect.size.height = sbv.tg_height.measure
             }
             
-            if (sbv.tg_width.isMatchParent)
+            if (sbv.tg_width.isMatchParent && !self.tg_width.isWrap)
             {
                 rect.size.width = sbv.tg_width.measure(selfSize.width - self.tg_leftPadding - self.tg_rightPadding)
+                canAddToNoWrapSbs = false
             }
             
             if (sbv.tg_height.isMatchParent)
@@ -1481,7 +1536,10 @@ extension TGLinearLayout {
             
             rect.size.width = self.tgValidMeasure(sbv.tg_width,sbv:sbv,calcSize:rect.size.width,sbvSize:rect.size,selfLayoutSize:selfSize)
             
-            
+            if sbv.tg_width.minVal.isWrap
+            {
+                canAddToNoWrapSbs = false
+            }
             
             //如果高度是浮动的则需要调整高度。
             if (isFlexedHeight)
@@ -1501,12 +1559,23 @@ extension TGLinearLayout {
             
             totalWidth += self.tgValidMargin(sbv.tg_left, sbv: sbv, calcPos: sbv.tg_left.realMarginInSize(floatingWidth), selfLayoutSize: selfSize)
             
-            totalWidth += rect.size.width;
+            totalWidth += rect.size.width
             
             
             totalWidth += self.tgValidMargin(sbv.tg_right, sbv: sbv, calcPos: sbv.tg_right.realMarginInSize(floatingWidth), selfLayoutSize: selfSize)
             
-            sbv.tgFrame.frame = rect;
+            sbv.tgFrame.frame = rect
+            
+            if mghorz == TGGravity.horz.fill && sbv.tg_width.isWrap
+            {
+                canAddToNoWrapSbs = false
+            }
+            
+            if canAddToNoWrapSbs
+            {
+                noWrapsbsSet.insert(sbv)
+            }
+            
         }
         
         
@@ -1518,17 +1587,19 @@ extension TGLinearLayout {
         
         //根据对齐的方位来定位子视图的布局对齐
         var pos:CGFloat = 0
+        var between:CGFloat = 0
+        var fill:CGFloat = 0
         
-        if (self.tg_gravity & TGGravity.vert.mask) == TGGravity.horz.left
+        if mghorz == TGGravity.horz.left
         {
-            pos = self.tg_leftPadding;
+            pos = self.tg_leftPadding
         }
-        else if (self.tg_gravity & TGGravity.vert.mask) == TGGravity.horz.center
+        else if mghorz == TGGravity.horz.center
         {
             pos = (selfSize.width - totalWidth - self.tg_leftPadding - self.tg_rightPadding)/2.0;
             pos += self.tg_leftPadding;
         }
-        else if (self.tg_gravity & TGGravity.vert.mask) == TGGravity.horz.windowCenter
+        else if mghorz == TGGravity.horz.windowCenter
         {
             if let win = self.window
             {
@@ -1538,10 +1609,33 @@ extension TGLinearLayout {
                 pos = win.convert(pt,to:self as UIView?).x
             }
         }
-        else
+        else if mghorz == TGGravity.horz.right
         {
             pos = selfSize.width - totalWidth - self.tg_rightPadding;
         }
+        else if mghorz == TGGravity.horz.between
+        {
+            pos = self.tg_leftPadding
+            
+            if sbs.count > 1
+            {
+                between = (selfSize.width - totalWidth - self.tg_leftPadding - self.tg_rightPadding) / CGFloat(sbs.count - 1)
+            }
+        }
+        else if mghorz == TGGravity.horz.fill
+        {
+            pos = self.tg_leftPadding
+            
+            if noWrapsbsSet.count > 0
+            {
+                fill = (selfSize.width - totalWidth - self.tg_leftPadding - self.tg_rightPadding) / CGFloat(noWrapsbsSet.count)
+            }
+        }
+        else
+        {
+            pos = self.tg_leftPadding
+        }
+        
         
         let floatingHeight = selfSize.height - self.tg_topPadding - self.tg_bottomPadding
         for sbv in sbs
@@ -1575,38 +1669,43 @@ extension TGLinearLayout {
             
             
             
-            var mg:TGGravity = TGGravity.vert.top
-            if (self.tg_gravity & TGGravity.horz.mask) != .none
+            var sbvmgvert:TGGravity = TGGravity.vert.top
+            if mgvert != .none
             {
-                mg = self.tg_gravity & TGGravity.horz.mask;
+                sbvmgvert = mgvert
             }
             else
             {
                 if sbv.tg_centerY.hasValue
                 {
-                    mg = TGGravity.vert.center;
+                    sbvmgvert = TGGravity.vert.center;
                 }
                 else if sbv.tg_top.hasValue && sbv.tg_bottom.hasValue
                 {
-                    mg = TGGravity.vert.fill;
+                    sbvmgvert = TGGravity.vert.fill;
                 }
                 else if sbv.tg_top.hasValue
                 {
-                    mg = TGGravity.vert.top;
+                    sbvmgvert = TGGravity.vert.top;
                 }
                 else if sbv.tg_bottom.hasValue
                 {
-                    mg = TGGravity.vert.bottom
+                    sbvmgvert = TGGravity.vert.bottom
                 }
             }
             
             rect.size.height = self.tgValidMeasure(sbv.tg_height,sbv:sbv,calcSize:rect.size.height,sbvSize:rect.size,selfLayoutSize:selfSize)
             
-            rect = self.tgCalcVertGravity(mg, selfSize:selfSize,sbv:sbv,rect:rect)
+            rect = self.tgCalcVertGravity(sbvmgvert, selfSize:selfSize,sbv:sbv,rect:rect)
             
-            sbv.tgFrame.frame = rect;
+            if fill != 0 && noWrapsbsSet.contains(sbv)
+            {
+                rect.size.width += fill
+            }
             
-            pos += rect.size.width;
+            sbv.tgFrame.frame = rect
+            
+            pos += rect.size.width
             
             pos += self.tgValidMargin(sbv.tg_right, sbv: sbv, calcPos: sbv.tg_right.realMarginInSize(floatingWidth), selfLayoutSize: selfSize)
             
@@ -1614,6 +1713,8 @@ extension TGLinearLayout {
             {
                 pos += self.tg_hspace;
             }
+            
+            pos += between;  //只有mghorz为between才加这个间距拉伸。
         }
         
         return selfSize;

@@ -48,8 +48,7 @@ class LLTest3ViewController: UIViewController {
          
          1.当使用tg_gravity属性时意味着布局视图必须要有明确的尺寸才有意义，因为有确定的尺寸才能决定里面的子视图的停靠的方位。
          2.布局视图的tg_height设置为.wrap时是和tg_gravity上设置垂直停靠方向以及垂直填充是互斥的；而布局视图的tg_width设置为.wrap时是和tg_gravity上设置水平停靠方向和水平填充是互斥的。
-         3.对于垂直线性布局来说不能设置tg_gravity的值为TGGravity.vert.fill；对于水平线性布局来说不能设置tg_gravity的值为TGGravity.horz.fill。
-         4.布局视图的tg_gravity的属性的优先级要高于子视图的停靠和尺寸设置。
+         3.布局视图的tg_gravity的属性的优先级要高于子视图的停靠和尺寸设置。
          */
 
         
@@ -84,14 +83,11 @@ extension LLTest3ViewController
     func createLabel(_ title:String, color backgroundColor:UIColor) -> UILabel
     {
         let v = UILabel()
-        v.text = title;
+        v.text = title
+        v.clipsToBounds = true //这里必须要设置为YES，因为UILabel做高度调整动画时，如果不设置为YES则不会固定顶部。。。
         v.font = CFTool.font(15)
         v.adjustsFontSizeToFitWidth = true
         v.backgroundColor =  backgroundColor
-        v.layer.shadowOffset = CGSize(width:3, height:3)
-        v.layer.shadowColor = CFTool.color(4).cgColor
-        v.layer.shadowRadius = 2
-        v.layer.shadowOpacity = 0.3
         v.sizeToFit()
         return v
     }
@@ -116,26 +112,26 @@ extension LLTest3ViewController
             NSLocalizedString("left",comment:""),
             NSLocalizedString("horz center",comment:""),
             NSLocalizedString("right",comment:""),
-            NSLocalizedString("horz fill",comment:""),
             NSLocalizedString("screen vert center",comment:""),
             NSLocalizedString("screen horz center",comment:""),
-            NSLocalizedString("space",comment:"")
+            NSLocalizedString("between",comment:""),
+            NSLocalizedString("horz fill",comment:""),
+            NSLocalizedString("vert fill",comment:"")
         ]
         
         //用流式布局创建动作菜单。
         let actionLayout = TGFlowLayout(.vert, arrangedCount: 3) //每行3个子视图
         actionLayout.tg_padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         actionLayout.tg_height.equal(.wrap)
-        actionLayout.tg_averageArrange = true //里面的子视图的宽度平均分配。
+        actionLayout.tg_gravity = TGGravity.horz.fill //里面的子视图的宽度平均分配。
         actionLayout.tg_hspace = 5
         actionLayout.tg_vspace = 5   //设置子视图之间的水平和垂直间距。
         contentLayout.addSubview(actionLayout)
         
         for i in 0..<actions.count
         {
-            actionLayout.addSubview(createActionButton(actions[i], tag:(i + 1)*100))
+            actionLayout.addSubview(createActionButton(actions[i], tag:i + 1, action:#selector(handleVertLayoutGravity)))
         }
-
 
     
     }
@@ -155,18 +151,22 @@ extension LLTest3ViewController
         
         
         let v1 = self.createLabel(NSLocalizedString("test text1", comment:""), color: CFTool.color(5))
+        v1.tg_height.equal(20)
         vertGravityLayout.addSubview(v1)
         
         let v2 = self.createLabel(NSLocalizedString("test text2 test text2", comment:""), color: CFTool.color(6))
+        v2.tg_height.equal(20)
         vertGravityLayout.addSubview(v2)
         
         
         let v3 = self.createLabel(NSLocalizedString("test text3 test text3 test text3", comment:""), color: CFTool.color(7))
+        v3.tg_height.equal(30)
         vertGravityLayout.addSubview(v3)
         
         let v4 = self.createLabel(NSLocalizedString("set left and right margin to determine width", comment:""), color: CFTool.color(8))
         v4.tg_left.equal(20)
         v4.tg_right.equal(30) //这两行代码能决定视图的宽度，自己定义。
+        v4.tg_height.equal(25)
         vertGravityLayout.addSubview(v4)
 
     }
@@ -186,21 +186,22 @@ extension LLTest3ViewController
         
         
         let actions = [
-            NSLocalizedString("left",comment:""),
-            NSLocalizedString("horz center",comment:""),
-            NSLocalizedString("right",comment:""),
             NSLocalizedString("top",comment:""),
             NSLocalizedString("vert center",comment:""),
             NSLocalizedString("bottom",comment:""),
-            NSLocalizedString("vert fill",comment:""),
+            NSLocalizedString("left",comment:""),
+            NSLocalizedString("horz center",comment:""),
+            NSLocalizedString("right",comment:""),
             NSLocalizedString("screen vert center",comment:""),
             NSLocalizedString("screen horz center",comment:""),
-            NSLocalizedString("space",comment:"")
+            NSLocalizedString("between",comment:""),
+            NSLocalizedString("horz fill",comment:""),
+            NSLocalizedString("vert fill",comment:"")
         ]
         
-        
+
         let actionLayout = TGFlowLayout(.vert, arrangedCount: 3)
-        actionLayout.tg_averageArrange = true
+        actionLayout.tg_gravity = TGGravity.horz.fill  //平均分配里面所有子视图的宽度
         actionLayout.tg_height.equal(.wrap)
         actionLayout.tg_hspace = 5
         actionLayout.tg_vspace = 5
@@ -209,7 +210,7 @@ extension LLTest3ViewController
 
         for i:Int in 0..<actions.count
         {
-            actionLayout.addSubview(createActionButton(actions[i], tag:(i + 1)*100 + 1))
+            actionLayout.addSubview(createActionButton(actions[i], tag:i + 1, action:#selector(handleHorzLayoutGravity)))
         }
 
     }
@@ -255,7 +256,7 @@ extension LLTest3ViewController
     }
     
     //创建动作按钮
-    func createActionButton(_ title:String,tag:Int) ->UIButton
+    func createActionButton(_ title:String,tag:Int, action:Selector) ->UIButton
     {
         let actionButton = UIButton(type:.system)
         actionButton.setTitle(title  ,for:.normal)
@@ -265,7 +266,7 @@ extension LLTest3ViewController
         actionButton.layer.borderWidth = 0.5
         actionButton.layer.cornerRadius = 4
         actionButton.tag = tag
-        actionButton.addTarget(self, action: #selector(handleGravity), for:.touchUpInside)
+        actionButton.addTarget(self, action:action, for:.touchUpInside)
         actionButton.sizeToFit()
         return actionButton
     }
@@ -275,77 +276,106 @@ extension LLTest3ViewController
 //MARK: - Handle Method
 extension LLTest3ViewController
 {
-    func handleGravity(_ button:UIButton)
+    func handleVertLayoutGravity(_ button:UIButton)
     {
+        //分别取出垂直和水平方向的停靠设置。
+        var vertGravity = self.vertGravityLayout.tg_gravity & TGGravity.horz.mask
+        var horzGravity = self.vertGravityLayout.tg_gravity & TGGravity.vert.mask
+        
         switch (button.tag) {
-        case 100:  //上
-            self.vertGravityLayout.tg_gravity = [self.vertGravityLayout.tg_gravity & TGGravity.vert.mask , TGGravity.vert.top]
-            break
-        case 200:  //垂直
-            self.vertGravityLayout.tg_gravity = [self.vertGravityLayout.tg_gravity & TGGravity.vert.mask , TGGravity.vert.center]
-            break
-        case 300:   //下
-            self.vertGravityLayout.tg_gravity = [self.vertGravityLayout.tg_gravity & TGGravity.vert.mask , TGGravity.vert.bottom]
-            break
-        case 400:  //左
-            self.vertGravityLayout.tg_gravity = [self.vertGravityLayout.tg_gravity & TGGravity.horz.mask , TGGravity.horz.left]
-            break
-        case 500:  //水平
-            self.vertGravityLayout.tg_gravity = [self.vertGravityLayout.tg_gravity & TGGravity.horz.mask , TGGravity.horz.center]
-            break
-        case 600:   //右
-            self.vertGravityLayout.tg_gravity = [self.vertGravityLayout.tg_gravity & TGGravity.horz.mask , TGGravity.horz.right]
-            break
-        case 700:   //填充
-            self.vertGravityLayout.tg_gravity = [self.vertGravityLayout.tg_gravity & TGGravity.horz.mask , TGGravity.horz.fill]
-            break
-        case 800:   //窗口垂直居中
-            self.vertGravityLayout.tg_gravity = [self.vertGravityLayout.tg_gravity & TGGravity.vert.mask , TGGravity.vert.windowCenter]
-            break
-        case 900:   //窗口水平居中
-            self.vertGravityLayout.tg_gravity = [self.vertGravityLayout.tg_gravity & TGGravity.horz.mask , TGGravity.horz.windowCenter]
-            break
-        case 1000:
-            self.vertGravityLayout.tg_vspace = self.vertGravityLayout.tg_vspace == 10 ? -10 : 10
-            self.vertGravityLayout.tg_layoutAnimationWithDuration(0.5)
-            break
-            
-        case 101:  //左
-            self.horzGravityLayout.tg_gravity = [self.horzGravityLayout.tg_gravity & TGGravity.horz.mask , TGGravity.horz.left]
-            break
-        case 201:  //水平
-            self.horzGravityLayout.tg_gravity = [self.horzGravityLayout.tg_gravity & TGGravity.horz.mask , TGGravity.horz.center]
-            break
-        case 301:   //右
-            self.horzGravityLayout.tg_gravity = [self.horzGravityLayout.tg_gravity & TGGravity.horz.mask , TGGravity.horz.right]
-            break
-        case 401:  //上
-            self.horzGravityLayout.tg_gravity = [self.horzGravityLayout.tg_gravity & TGGravity.vert.mask , TGGravity.vert.top]
-            break
-        case 501:  //垂直
-            self.horzGravityLayout.tg_gravity = [self.horzGravityLayout.tg_gravity & TGGravity.vert.mask , TGGravity.vert.center]
-            break
-        case 601:   //下
-            self.horzGravityLayout.tg_gravity = [self.horzGravityLayout.tg_gravity & TGGravity.vert.mask , TGGravity.vert.bottom]
-            break
-        case 701:   //填充
-            self.horzGravityLayout.tg_gravity = [self.horzGravityLayout.tg_gravity & TGGravity.vert.mask , TGGravity.vert.fill]
-            break
-        case 801:   //窗口垂直居中
-            self.horzGravityLayout.tg_gravity = [self.horzGravityLayout.tg_gravity & TGGravity.vert.mask , TGGravity.vert.windowCenter]
-            break
-        case 901:   //窗口水平居中
-            self.horzGravityLayout.tg_gravity = [self.horzGravityLayout.tg_gravity & TGGravity.horz.mask, TGGravity.horz.windowCenter]
-            break
-        case 1001:
-            self.horzGravityLayout.tg_hspace = self.horzGravityLayout.tg_hspace == 5 ? -5 : 5
-            self.horzGravityLayout.tg_layoutAnimationWithDuration(0.5)
-            break
+        case 1:  //上
+            vertGravity = TGGravity.vert.top;
+            break;
+        case 2:  //垂直
+            vertGravity = TGGravity.vert.center;
+            break;
+        case 3:   //下
+            vertGravity = TGGravity.vert.bottom;
+            break;
+        case 4:  //左
+            horzGravity = TGGravity.horz.left;
+            break;
+        case 5:  //水平
+            horzGravity = TGGravity.horz.center;
+            break;
+        case 6:   //右
+            horzGravity =  TGGravity.horz.right;
+            break;
+        case 7:   //窗口垂直居中
+            vertGravity = TGGravity.vert.windowCenter;
+            break;
+        case 8:   //窗口水平居中
+            horzGravity = TGGravity.horz.windowCenter;
+            break;
+        case 9:  //垂直间距拉伸
+            vertGravity = TGGravity.vert.between;
+            break;
+        case 10:   //水平填充
+            horzGravity  = TGGravity.horz.fill;
+            break;
+        case 11:  //垂直填充
+            vertGravity = TGGravity.vert.fill;  //这里模拟器顶部出现黑线，真机是不会出现的。。
+            break;
         default:
-            break
+            break;
         }
         
+        self.vertGravityLayout.tg_gravity = [vertGravity,horzGravity]
+        
+        self.vertGravityLayout.tg_layoutAnimationWithDuration(0.2)
+        
     }
+    
+    func handleHorzLayoutGravity(_ button:UIButton)
+    {
+        //分别取出垂直和水平方向的停靠设置。
+        var vertGravity = self.horzGravityLayout.tg_gravity & TGGravity.horz.mask
+        var horzGravity = self.horzGravityLayout.tg_gravity & TGGravity.vert.mask
+        
+        switch (button.tag) {
+        case 1:  //上
+            vertGravity = TGGravity.vert.top;
+            break;
+        case 2:  //垂直
+            vertGravity = TGGravity.vert.center;
+            break;
+        case 3:   //下
+            vertGravity = TGGravity.vert.bottom;
+            break;
+        case 4:  //左
+            horzGravity = TGGravity.horz.left;
+            break;
+        case 5:  //水平
+            horzGravity = TGGravity.horz.center;
+            break;
+        case 6:   //右
+            horzGravity =  TGGravity.horz.right;
+            break;
+        case 7:   //窗口垂直居中
+            vertGravity = TGGravity.vert.windowCenter;
+            break;
+        case 8:   //窗口水平居中
+            horzGravity = TGGravity.horz.windowCenter;
+            break;
+        case 9:  //水平间距拉伸
+            horzGravity = TGGravity.horz.between;
+            break;
+        case 10:   //水平填充
+            horzGravity  = TGGravity.horz.fill;
+            break;
+        case 11:  //垂直填充
+            vertGravity = TGGravity.vert.fill;  //这里模拟器顶部出现黑线，真机是不会出现的。。
+            break;
+        default:
+            break;
+        }
+        
+        self.horzGravityLayout.tg_gravity = [vertGravity, horzGravity]
+        
+        self.horzGravityLayout.tg_layoutAnimationWithDuration(0.2)
+        
+    }
+
     
     func handleNavigationTitleCentre(_ sender: AnyObject!)
     {
