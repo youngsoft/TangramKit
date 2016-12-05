@@ -221,6 +221,3 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
 
 
 
-
-
-
