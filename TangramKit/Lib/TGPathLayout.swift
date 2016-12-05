@@ -142,7 +142,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     /**
      * 得到子视图在曲线路径中定位时的函数的自变量的值。也就是说在函数中当值等于下面的返回值时，这个视图的位置就被确定了。方法如果返回nil则表示这个子视图没有定位。
      */
-    public func tg_argumentFromSubview(subview:UIView)->CGFloat?{
+    public func tg_argumentFrom(subview:UIView)->CGFloat?{
         return nil
     }
     
