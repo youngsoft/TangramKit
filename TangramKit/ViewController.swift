@@ -136,8 +136,11 @@ class ViewController: UITableViewController {
         demoVCList.append(["title":NSLocalizedString("❁1.Screen perfect fit - Demo1",comment:""),
                            "class":AllTest7ViewController.self]
         )
-
         
+        // MARK: - PathLayout
+        demoVCList.append(["title":NSLocalizedString("1.PathLayout - Animations",comment:""),
+                           "class":PLTest1ViewController.self]
+        )
         
     }
 
