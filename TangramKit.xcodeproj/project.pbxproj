@@ -72,6 +72,7 @@
 		A538CEBC1D41F85C00D51976 /* AllTest4ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A538CEBB1D41F85C00D51976 /* AllTest4ViewController.swift */; };
 		A5D3AE641D45B98F0062BFFD /* AllTest2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D3AE631D45B98F0062BFFD /* AllTest2ViewController.swift */; };
 		A5D3AE671D45BACD0062BFFD /* AllTestDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D3AE661D45BACD0062BFFD /* AllTestDataModel.swift */; };
+		F576C5351DF51CB3003C2A18 /* TGPathLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F576C5341DF51CB3003C2A18 /* TGPathLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -164,6 +165,7 @@
 		A538CEBB1D41F85C00D51976 /* AllTest4ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllTest4ViewController.swift; sourceTree = "<group>"; };
 		A5D3AE631D45B98F0062BFFD /* AllTest2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllTest2ViewController.swift; sourceTree = "<group>"; };
 		A5D3AE661D45BACD0062BFFD /* AllTestDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllTestDataModel.swift; sourceTree = "<group>"; };
+		F576C5341DF51CB3003C2A18 /* TGPathLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGPathLayout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -381,6 +383,7 @@
 				18DB43391D1986230052D770 /* TGRelativeLayout.swift */,
 				18DB433A1D1986230052D770 /* TGTableLayout.swift */,
 				188E086D1D37927E00E982F1 /* TGDimeAdapter.swift */,
+				F576C5341DF51CB3003C2A18 /* TGPathLayout.swift */,
 			);
 			path = Lib;
 			sourceTree = "<group>";
@@ -591,6 +594,7 @@
 				18D2FC7D1D3D0CC20051B235 /* FLLTest1ViewController.swift in Sources */,
 				18D2FC791D3D0CC20051B235 /* AllTest1ViewController.swift in Sources */,
 				182191681D3C7E3100208CD0 /* LLTest5ViewController.swift in Sources */,
+				F576C5351DF51CB3003C2A18 /* TGPathLayout.swift in Sources */,
 				18DB435C1D1986230052D770 /* TGBaseLayout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -884,6 +888,7 @@
 				18B152581DEE538000AD7A1C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		18B152641DEE539200AD7A1C /* Build configuration list for PBXNativeTarget "TangramKitUITests" */ = {
 			isa = XCConfigurationList;
@@ -892,6 +897,7 @@
 				18B152661DEE539200AD7A1C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
