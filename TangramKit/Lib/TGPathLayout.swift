@@ -11,10 +11,10 @@ import UIKit
 /**
  * 定义子视图在路径布局中的距离的类型。
  */
-public enum TGPathSpace{
-    case Flexed             //浮动距离
-    case Fixed(CGFloat)     //固定距离
-    case Count(Int)         //固定数量距离
+public enum TGPathSpaceType{
+    case flexed             //浮动距离
+    case fixed(CGFloat)     //固定距离
+    case count(Int)         //固定数量距离
 }
 
 /**
@@ -111,9 +111,9 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     public var tg_polarEquation : ((CGFloat)->CGFloat)?
     
     /**
-     * 设置子视图在路径曲线上的距离的类型,一共有Flexed, Fixed, MaxCount,默认是Flexed,
+     * 设置子视图在路径曲线上的距离的类型,一共有flexed, fixed, count,默认是flexed,
      */
-    public var tg_spaceType : TGPathSpace!
+    public var tg_spaceType : TGPathSpaceType = .flexed
     
     /**
      * 设置和获取布局视图中的原点视图，默认是nil。如果设置了原点视图则总会将原点视图作为布局视图中的最后一个子视图。原点视图将会显示在路径的坐标原点中心上，因此原点布局是不会参与在路径中的布局的。因为中心原点视图是布局视图中的最后一个子视图，而MyPathLayout重写了AddSubview方法，因此可以正常的使用这个方法来添加子视图。
@@ -128,7 +128,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     /**
      * 设置获取子视图距离的误差值。默认是0.5，误差越小则距离的精确值越大，误差最低值不能<=0。一般不需要调整这个值，只有那些要求精度非常高的场景才需要微调这个值,比如在一些曲线路径较短的情况下，通过调小这个值来子视图之间间距的精确计算。
      */
-    public var distanceError : CGFloat = 0.5
+    public var tg_distanceError : CGFloat = 0.5
     
     
     fileprivate var tgSubviewPoints : [CGPoint]?
