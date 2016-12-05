@@ -18,6 +18,24 @@ public enum TGPathSpaceType{
 }
 
 /**
+ * 实现枚举类TGPathSpaceType的比较接口
+ */
+extension TGPathSpaceType : Equatable{
+    public static func ==(lhs: TGPathSpaceType, rhs: TGPathSpaceType) -> Bool {
+        switch (lhs,rhs) {
+        case ( .flexed , .flexed):
+            return true
+        case (let .fixed(value1),let .fixed(value2)):
+            return value1 == value2
+        case (let .count(count1),let .count(count2)):
+            return count1 == count2
+        default:
+            return false
+        }
+    }
+}
+
+/**
  * 坐标轴设置类，用来描述坐标轴的信息。
  */
 open class TGCoordinateSetting : NSObject{
@@ -25,7 +43,7 @@ open class TGCoordinateSetting : NSObject{
     /**
      * 坐标原点的位置,位置是相对位置，默认是(0,0), 假如设置为(0.5,0.5)则在视图的中间。
      */
-    public var origin : CGPoint = CGPoint(x: 0, y: 0) {
+    public var origin : CGPoint = CGPoint.zero {
         
         didSet{
             if !oldValue.equalTo(origin){
@@ -61,13 +79,17 @@ open class TGCoordinateSetting : NSObject{
      */
     public var start = -CGFloat.greatestFiniteMagnitude {
         didSet{
-            
+            if start != oldValue {
+                pathLayout?.setNeedsLayout()
+            }
         }
     }
     
     public var end = CGFloat.greatestFiniteMagnitude {
         didSet{
-        
+            if end != oldValue {
+                pathLayout?.setNeedsLayout()
+            }
         }
     }
     
@@ -81,7 +103,12 @@ open class TGCoordinateSetting : NSObject{
      * 恢复默认设置
      */
     public func reset(){
-        
+        start = -CGFloat.greatestFiniteMagnitude
+        end = CGFloat.greatestFiniteMagnitude
+        isMath = false
+        isReverse = false
+        origin = CGPoint.zero
+        pathLayout?.setNeedsLayout()
     }
 }
 
@@ -93,7 +120,10 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     /**
      * 坐标系设置，您可以调整坐标系的各种参数来完成下列两个方法中的坐标到绘制的映射转换。
      */
-    public private(set) var tg_coordinateSetting : TGCoordinateSetting!
+    public private(set) lazy var tg_coordinateSetting : TGCoordinateSetting = {
+        [unowned self] in
+        return TGCoordinateSetting(pathLayout:self)
+    }()
     
     /**
      * 直角坐标普通方程，x是坐标系里面x轴的位置，返回y = f(x)。要求函数在定义域内是连续的，否则结果不确定。如果返回的y无效则函数要返回NAN
@@ -113,7 +143,13 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     /**
      * 设置子视图在路径曲线上的距离的类型,一共有flexed, fixed, count,默认是flexed,
      */
-    public var tg_spaceType : TGPathSpaceType = .flexed
+    public var tg_spaceType : TGPathSpaceType = .flexed {
+        didSet{
+            if tg_spaceType != oldValue {
+                setNeedsLayout()
+            }
+        }
+    }
     
     /**
      * 设置和获取布局视图中的原点视图，默认是nil。如果设置了原点视图则总会将原点视图作为布局视图中的最后一个子视图。原点视图将会显示在路径的坐标原点中心上，因此原点布局是不会参与在路径中的布局的。因为中心原点视图是布局视图中的最后一个子视图，而MyPathLayout重写了AddSubview方法，因此可以正常的使用这个方法来添加子视图。
