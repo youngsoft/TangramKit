@@ -128,17 +128,41 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     /**
      * 直角坐标普通方程，x是坐标系里面x轴的位置，返回y = f(x)。要求函数在定义域内是连续的，否则结果不确定。如果返回的y无效则函数要返回NAN
      */
-    public var tg_rectangularEquation : ((CGFloat)->CGFloat)?
+    public var tg_rectangularEquation : ((CGFloat)->CGFloat)?{
+        didSet{
+            if tg_rectangularEquation != nil{
+                tg_parametricEquation = nil
+                tg_polarEquation = nil
+                setNeedsLayout()
+            }
+        }
+    }
     
     /**
      * 直角坐标参数方程，t是参数， 返回CGPoint是x轴和y轴的值。要求函数在定义域内是连续的，否则结果不确定。如果返回的点无效，则请返回CGPointMake(NAN,NAN)
      */
-    public var tg_parametricEquation : ((CGFloat)->CGPoint)?
+    public var tg_parametricEquation : ((CGFloat)->CGPoint)?{
+        didSet{
+            if tg_parametricEquation != nil {
+                tg_rectangularEquation = nil
+                tg_polarEquation = nil
+                setNeedsLayout()
+            }
+        }
+    }
     
     /**
      * 极坐标方程，angle是极坐标的弧度，返回r半径。要求函数在定义域内是连续的，否则结果不确定。如果返回的点无效，则请返回NAN
      */
-    public var tg_polarEquation : ((CGFloat)->CGFloat)?
+    public var tg_polarEquation : ((CGFloat)->CGFloat)?{
+        didSet{
+            if tg_polarEquation != nil {
+                tg_rectangularEquation = nil
+                tg_parametricEquation = nil
+                setNeedsLayout()
+            }
+        }
+    }
     
     /**
      * 设置子视图在路径曲线上的距离的类型,一共有flexed, fixed, count,默认是flexed,
@@ -154,22 +178,66 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     /**
      * 设置和获取布局视图中的原点视图，默认是nil。如果设置了原点视图则总会将原点视图作为布局视图中的最后一个子视图。原点视图将会显示在路径的坐标原点中心上，因此原点布局是不会参与在路径中的布局的。因为中心原点视图是布局视图中的最后一个子视图，而MyPathLayout重写了AddSubview方法，因此可以正常的使用这个方法来添加子视图。
      */
-    public var tg_originView : UIView!
+    public var tg_originView : UIView?{
+        get{
+            return tgHasOriginView && subviews.count > 0 ? subviews.last : nil
+        }
+        set{
+            
+            guard tgHasOriginView else {
+                if newValue != nil {
+                    super.addSubview(newValue!)
+                    tgHasOriginView = true
+                }
+                return
+            }
+            
+            guard newValue != nil else {
+                if subviews.count > 0 {
+                    subviews.last?.removeFromSuperview()
+                }
+                tgHasOriginView = false
+                return
+            }
+            
+            guard subviews.count > 0 else {
+                addSubview(newValue!)
+                return
+            }
+            
+            if subviews.last != newValue {
+                subviews.last?.removeFromSuperview()
+                addSubview(newValue!)
+            }
+        }
+    }
     
     /**
      * 返回布局视图中所有在曲线路径中排列的子视图。如果设置了原点视图则返回subviews里面除最后一个子视图外的所有子视图，如果没有原点子视图则返回subviews
      */
-    public private(set) var tg_pathSubviews : [UIView]!
+    public var tg_pathSubviews : [UIView]{
+        get{
+            guard tgHasOriginView || subviews.count == 0 else {
+                return subviews
+            }
+            
+            var pathSubviews = [UIView]()
+            for i in 0..<subviews.count-1{
+                pathSubviews.append(subviews[i])
+            }
+            return pathSubviews
+        }
+    }
     
     /**
      * 设置获取子视图距离的误差值。默认是0.5，误差越小则距离的精确值越大，误差最低值不能<=0。一般不需要调整这个值，只有那些要求精度非常高的场景才需要微调这个值,比如在一些曲线路径较短的情况下，通过调小这个值来子视图之间间距的精确计算。
      */
     public var tg_distanceError : CGFloat = 0.5
     
-    
+    fileprivate var tgHasOriginView = false
     fileprivate var tgSubviewPoints : [CGPoint]?
-    fileprivate var pointIndexs : [Int]?
-    fileprivate var argumentArray = {
+    fileprivate var tgPointIndexs : [Int]?
+    fileprivate var tgArgumentArray = {
         return []
     }()
     
@@ -179,6 +247,15 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
      * 得到子视图在曲线路径中定位时的函数的自变量的值。也就是说在函数中当值等于下面的返回值时，这个视图的位置就被确定了。方法如果返回nil则表示这个子视图没有定位。
      */
     public func tg_argumentFrom(subview:UIView)->CGFloat?{
+        
+        guard let index = subviews.index(of: subview) else {
+            return nil
+        }
+        
+        if tg_originView == subview {
+            return nil
+        }
+        
         return nil
     }
     
