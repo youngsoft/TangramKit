@@ -126,9 +126,9 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     }()
     
     /**
-     * 直角坐标普通方程，x是坐标系里面x轴的位置，返回y = f(x)。要求函数在定义域内是连续的，否则结果不确定。如果返回的y无效则函数要返回NAN
+     * 直角坐标普通方程，x是坐标系里面x轴的位置，返回y = f(x)。要求函数在定义域内是连续的，否则结果不确定。如果返回的y无效则函数要返回nil
      */
-    public var tg_rectangularEquation : ((CGFloat)->CGFloat)?{
+    public var tg_rectangularEquation : ((CGFloat)->CGFloat?)?{
         didSet{
             if tg_rectangularEquation != nil{
                 tg_parametricEquation = nil
@@ -139,9 +139,9 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     }
     
     /**
-     * 直角坐标参数方程，t是参数， 返回CGPoint是x轴和y轴的值。要求函数在定义域内是连续的，否则结果不确定。如果返回的点无效，则请返回CGPointMake(NAN,NAN)
+     * 直角坐标参数方程，t是参数， 返回CGPoint是x轴和y轴的值。要求函数在定义域内是连续的，否则结果不确定。如果返回的点无效，则请返回nil
      */
-    public var tg_parametricEquation : ((CGFloat)->CGPoint)?{
+    public var tg_parametricEquation : ((CGFloat)->CGPoint?)?{
         didSet{
             if tg_parametricEquation != nil {
                 tg_rectangularEquation = nil
@@ -152,9 +152,9 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     }
     
     /**
-     * 极坐标方程，angle是极坐标的弧度，返回r半径。要求函数在定义域内是连续的，否则结果不确定。如果返回的点无效，则请返回NAN
+     * 极坐标方程，angle是极坐标的弧度，返回r半径。要求函数在定义域内是连续的，否则结果不确定。如果返回的点无效，则请返回nil
      */
-    public var tg_polarEquation : ((CGFloat)->CGFloat)?{
+    public var tg_polarEquation : ((CGFloat)->CGFloat?)?{
         didSet{
             if tg_polarEquation != nil {
                 tg_rectangularEquation = nil
@@ -238,7 +238,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     fileprivate var tgSubviewPoints : [CGPoint]?
     fileprivate var tgPointIndexs : [Int]?
     fileprivate var tgArgumentArray = {
-        return []
+        return [CGFloat]()
     }()
     
     
@@ -256,6 +256,14 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             return nil
         }
         
+        if index < tgArgumentArray.count{
+            guard tg_polarEquation != nil else {
+                return tgArgumentArray[index]/180 * CGFloat(M_PI)
+            }
+            
+            return tgArgumentArray[index]
+        }
+        
         return nil
     }
     
@@ -265,19 +273,59 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     
     //开始和结束获取子视图路径数据的方法,full表示getSubviewPathPoint获取的是否是全部路径点。如果为NO则只会获取子视图的位置的点。
     public func tg_beginSubviewPathPoint(full:Bool){
-    
+        if full {
+        
+        }else{
+            
+        }
     }
     
     public func tg_endSubviewPathPoint(){
-    
+        tgSubviewPoints = nil
+        tgPointIndexs = nil
     }
     
     /**
      * 创建从某个子视图到另外一个子视图之间的路径点，返回NSValue数组，里面的值是CGPoint。
      * fromIndex指定开始的子视图的索引位置，toIndex指定结束的子视图的索引位置。如果有原点子视图时,这两个索引值不能算上原点子视图的索引值。
      */
-    public func tg_getSubviewPathPoint(fromIndex:Int,toIndex:Int) -> [CGPoint]{
-        return [CGPoint]()
+    public func tg_getSubviewPathPoint(fromIndex:Int,toIndex:Int) -> [CGPoint]?{
+        if tgSubviewPoints == nil {
+            return nil
+        }
+        
+        let realFromIndex = fromIndex
+        let realToIndex = toIndex
+        if realFromIndex == realToIndex {
+            return [CGPoint]()
+        }
+        
+        //要求外界传递进来的索引要考虑原点视图的索引。
+        var retPoints = [CGPoint]()
+        if realFromIndex < realToIndex {
+            var start : Int
+            var end : Int
+            if tgPointIndexs == nil {
+                start = realFromIndex
+                end = realToIndex
+            }else{
+                start = tgPointIndexs![realFromIndex]
+                end = tgPointIndexs![realToIndex]
+            }
+            
+            for i in start...end {
+                retPoints.append(tgSubviewPoints![i])
+            }
+        }else{
+            var end = tgPointIndexs![realFromIndex]
+            let start = tgPointIndexs![realToIndex]
+            while end >= start {
+                retPoints.append(tgSubviewPoints![end])
+                end-=1
+            }
+        }
+        
+        return retPoints
     }
     
     /**
@@ -285,9 +333,128 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
      * subviewCount:指定这个路径上子视图的数量的个数，如果设置为-1则是按照布局视图的子视图的数量来创建。需要注意的是如果布局视图的spaceType为Flexed,Count的话则这个参数设置无效。
      */
     public func tg_createPath(subviewCount:Int) -> CGPath{
-        return CGPath(ellipseIn: CGRect.zero, transform: nil)
+        let retPath = CGMutablePath()
+        
+        
+        return retPath
+    }
+    
+    fileprivate func tgCalcPathPoints(showPath:CGMutablePath,
+                                    pTotalLen:CGFloat,
+                                    subviewCount:Int,
+                                    pointIndexArray:[Int],
+                                    viewSpacing:CGFloat)
+        ->[CGPoint]
+    {
+        var pointArray = [CGPoint]()
+        let selfWidth = bounds.width - tg_leftPadding - tg_rightPadding
+        let selfHeight = bounds.height - tg_topPadding - tg_bottomPadding
+        var startArg : CGFloat
+        var endArg : CGFloat
+        if let rectangularEquation = tg_rectangularEquation{
+            startArg = 0 - selfWidth*tg_coordinateSetting.origin.x
+            if tg_coordinateSetting.isReverse{
+                if tg_coordinateSetting.isMath{
+                    startArg = -1 * selfHeight * (1 - tg_coordinateSetting.origin.y)
+                }else{
+                    startArg = selfHeight * (0 - tg_coordinateSetting.origin.y)
+                }
+            }
+            
+            if tg_coordinateSetting.start != -CGFloat.greatestFiniteMagnitude{
+                startArg = tg_coordinateSetting.start
+            }
+            
+            endArg = selfWidth - selfWidth * tg_coordinateSetting.origin.x
+            if tg_coordinateSetting.isReverse{
+                if tg_coordinateSetting.isMath{
+                    endArg = -1 * selfHeight * (0 - tg_coordinateSetting.origin.y)
+                }else{
+                    endArg = selfHeight * (1 - tg_coordinateSetting.origin.y)
+                }
+            }
+            
+            if tg_coordinateSetting.end != CGFloat.greatestFiniteMagnitude{
+                endArg = tg_coordinateSetting.end
+            }
+            
+            tgCalcPathPointsHelper(pointArray: pointArray, showPath: showPath, pTotalLen: pTotalLen, subviewCount: subviewCount, pointIndexArray: pointIndexArray, viewSpacing: viewSpacing, startArg: startArg, endArg: endArg){
+                arg in
+                if let val = rectangularEquation(arg){
+                    if tg_coordinateSetting.isReverse{
+                        let x = val + selfWidth * tg_coordinateSetting.origin.x + tg_leftPadding
+                        let y = (tg_coordinateSetting.isMath ? -arg : arg) + selfHeight * tg_coordinateSetting.origin.y + tg_topPadding
+                        return CGPoint(x: x, y: y)
+                    }else{
+                        let x = arg + selfWidth * tg_coordinateSetting.origin.x + tg_leftPadding
+                        let y = (tg_coordinateSetting.isMath ? -val : val) + selfHeight * tg_coordinateSetting.origin.y + tg_topPadding
+                        return CGPoint(x: x, y: y)
+                    }
+                    
+                }else{
+                    return nil
+                }
+            }
+        }else if let parametricEquation = tg_parametricEquation{
+            startArg = 0 - selfWidth * tg_coordinateSetting.origin.x
+            if tg_coordinateSetting.isReverse{
+                if tg_coordinateSetting.isMath{
+                    startArg = -1 * selfHeight * (1 - tg_coordinateSetting.origin.y)
+                }else{
+                    startArg = selfHeight * (0 - tg_coordinateSetting.origin.y)
+                }
+            }
+            
+            if tg_coordinateSetting.start != -CGFloat.greatestFiniteMagnitude{
+                startArg = tg_coordinateSetting.start
+            }
+            endArg = selfWidth - selfWidth * tg_coordinateSetting.origin.x
+            
+            if tg_coordinateSetting.isReverse{
+                if tg_coordinateSetting.isMath{
+                    endArg = -1 * selfHeight * (0 - tg_coordinateSetting.origin.y)
+                }else{
+                    endArg = selfHeight * (1 - tg_coordinateSetting.origin.y)
+                }
+            }
+            if tg_coordinateSetting.end != CGFloat.greatestFiniteMagnitude{
+                endArg = tg_coordinateSetting.end
+            }
+            
+            //TODO:
+            
+        }
+        
+        
+        
+        return pointArray
+    }
+    
+    fileprivate func tgCalcPathPointsHelper(pointArray:[CGPoint],
+                                          showPath:CGMutablePath,
+                                          pTotalLen:CGFloat,
+                                          subviewCount:Int,
+                                          pointIndexArray:[Int],
+                                          viewSpacing:CGFloat,
+                                          startArg:CGFloat,
+                                          endArg:CGFloat,
+                                          func:(CGFloat)->CGPoint?){
+    
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
