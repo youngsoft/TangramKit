@@ -273,11 +273,9 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     
     //开始和结束获取子视图路径数据的方法,full表示getSubviewPathPoint获取的是否是全部路径点。如果为NO则只会获取子视图的位置的点。
     public func tg_beginSubviewPathPoint(full:Bool){
-        if full {
-        
-        }else{
-            
-        }
+        var pointIndexs:[Int]? = full ? [Int]() : nil
+        tgSubviewPoints = tgCalcPoints(sbs: tg_pathSubviews, path: nil, pointIndexArray: &pointIndexs)
+        tgPointIndexs = full ? pointIndexs : nil
     }
     
     public func tg_endSubviewPathPoint(){
@@ -332,6 +330,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
      * 创建布局的曲线的路径。用户需要负责销毁返回的值。调用者可以用这个方法来获得曲线的路径，进行一些绘制的工作。
      * subviewCount:指定这个路径上子视图的数量的个数，如果设置为-1则是按照布局视图的子视图的数量来创建。需要注意的是如果布局视图的spaceType为Flexed,Count的话则这个参数设置无效。
      */
+    //MARK:待实现
     public func tg_createPath(subviewCount:Int) -> CGPath{
         let retPath = CGMutablePath()
         
@@ -339,10 +338,15 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
         return retPath
     }
     
+    //MARK:待实现
+    fileprivate func tgCalcPoints(sbs:[UIView],path:CGMutablePath?,pointIndexArray:inout [Int]?) -> [CGPoint]{
+        return [CGPoint]()
+    }
+    
     fileprivate func tgCalcPathPoints(showPath:CGMutablePath,
-                                    pTotalLen:CGFloat,
+                                    pTotalLen:inout CGFloat?,
                                     subviewCount:Int,
-                                    pointIndexArray:[Int],
+                                    pointIndexArray:inout [Int]?,
                                     viewSpacing:CGFloat)
         ->[CGPoint]
     {
@@ -378,7 +382,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
                 endArg = tg_coordinateSetting.end
             }
             
-            tgCalcPathPointsHelper(pointArray: pointArray, showPath: showPath, pTotalLen: pTotalLen, subviewCount: subviewCount, pointIndexArray: pointIndexArray, viewSpacing: viewSpacing, startArg: startArg, endArg: endArg){
+            tgCalcPathPointsHelper(pointArray: &pointArray, showPath: showPath, pTotalLen: &pTotalLen, subviewCount: subviewCount, pointIndexArray: &pointIndexArray, viewSpacing: viewSpacing, startArg: startArg, endArg: endArg){
                 arg in
                 if let val = rectangularEquation(arg){
                     if tg_coordinateSetting.isReverse{
@@ -421,25 +425,183 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
                 endArg = tg_coordinateSetting.end
             }
             
-            //TODO:
+            tgCalcPathPointsHelper(pointArray: &pointArray, showPath: showPath, pTotalLen: &pTotalLen, subviewCount: subviewCount, pointIndexArray: &pointIndexArray, viewSpacing: viewSpacing, startArg: startArg, endArg: endArg){
+                arg in
+                if let val = parametricEquation(arg){
+                    if tg_coordinateSetting.isReverse{
+                        let x = val.y + selfWidth * tg_coordinateSetting.origin.x + tg_leftPadding
+                        let y = (tg_coordinateSetting.isMath ? -val.x : val.x) + selfHeight * tg_coordinateSetting.origin.y + tg_topPadding
+                        return CGPoint(x: x, y: y)
+                    
+                    }else{
+                        let x = val.x + selfWidth * tg_coordinateSetting.origin.x + tg_leftPadding
+                        let y = (tg_coordinateSetting.isMath ? -val.y : val.y) + selfHeight * tg_coordinateSetting.origin.y + tg_topPadding
+                        return CGPoint(x: x, y: y)
+                    }
+                
+                }else{
+                    return nil
+                }
+            }
             
+        }else if let polarEquation = tg_polarEquation{
+            startArg = 0
+            if tg_coordinateSetting.start != -CGFloat.greatestFiniteMagnitude{
+                startArg = tg_coordinateSetting.start * 180.0 / CGFloat(M_PI)
+            }
+            endArg = 360
+            if tg_coordinateSetting.end != CGFloat.greatestFiniteMagnitude{
+                endArg = tg_coordinateSetting.end * 180.0 / CGFloat(M_PI)
+            }
+            tgCalcPathPointsHelper(pointArray: &pointArray, showPath: showPath, pTotalLen: &pTotalLen, subviewCount: subviewCount, pointIndexArray: &pointIndexArray, viewSpacing: viewSpacing, startArg: startArg, endArg: endArg){
+                arg in
+                //计算用弧度
+                if let r = polarEquation(arg * CGFloat(M_PI) / 180.0){
+                    if tg_coordinateSetting.isReverse{
+                        let y = r * cos(arg / 180.0 * CGFloat(M_PI))
+                        let x = r * sin(arg / 180.0 * CGFloat(M_PI)) + selfWidth * tg_coordinateSetting.origin.x + tg_leftPadding
+                        let y1 =  (tg_coordinateSetting.isMath ? -y : y) + selfHeight * tg_coordinateSetting.origin.y + tg_topPadding
+                        return CGPoint(x: x, y: y1)
+                    }else{
+                        let y = r * sin(arg / 180 * CGFloat(M_PI))
+                        let x = r * cos(arg / 180 * CGFloat(M_PI)) + selfWidth * tg_coordinateSetting.origin.x + tg_leftPadding
+                        let y1 =  (tg_coordinateSetting.isMath ? -y : y) + selfHeight * tg_coordinateSetting.origin.y + tg_topPadding
+                        return CGPoint(x: x, y: y1)
+                    }
+                }else{
+                    return nil
+                }
+            }
         }
-        
-        
-        
+
         return pointArray
     }
     
-    fileprivate func tgCalcPathPointsHelper(pointArray:[CGPoint],
-                                          showPath:CGMutablePath,
-                                          pTotalLen:CGFloat,
+    fileprivate func tgCalcPathPointsHelper(pointArray:inout [CGPoint],
+                                          showPath:CGMutablePath?,
+                                          pTotalLen:inout CGFloat?,
                                           subviewCount:Int,
-                                          pointIndexArray:[Int],
+                                          pointIndexArray:inout [Int]?,
                                           viewSpacing:CGFloat,
                                           startArg:CGFloat,
                                           endArg:CGFloat,
-                                          func:(CGFloat)->CGPoint?){
+                                          function:(CGFloat)->CGPoint?)
+    {
+        if tg_distanceError <= 0{
+            tg_distanceError = 0.5
+        }
     
+        tgArgumentArray.removeAll()
+        
+        var distance : CGFloat = 0
+        var lastXY = CGPoint.zero
+        
+        var arg = startArg
+        var lastValidArg = arg
+        var isStart = true
+        var startCount = 0
+        var subviewCount = subviewCount
+        while (true){
+            if (subviewCount < 0){
+                if (arg - endArg > 0.1){  //这里不能用arg > endArg 的原因是有精度问题。
+                    break
+                }
+            }else if (subviewCount == 0){
+                break
+            }else{
+                if (isStart && startCount >= 1){
+                    if (pointIndexArray != nil){
+                        pointIndexArray!.append(pointArray.count)
+                    }
+                    pointArray.append(lastXY)
+                    tgArgumentArray.append(arg)
+                    showPath?.addLine(to: lastXY)
+                    break
+                }
+            }
+            
+            var realXY = function(arg)
+            if realXY != nil{
+                if (isStart){
+                    isStart = false
+                    startCount += 1
+                    if (subviewCount > 0 && startCount == 1){
+                        subviewCount-=1
+                        lastValidArg = arg
+                        pointIndexArray?.append(pointArray.count)
+                        tgArgumentArray.append(arg)
+                    }
+                    pointArray.append(realXY!)
+                    showPath?.move(to: realXY!)
+                }else{
+                    if (subviewCount >= 0){
+                        let oldDistance = distance
+                        distance += tgCalcDistance(pt1: realXY!, pt2: lastXY)
+                        if (distance >= viewSpacing){
+                            if (distance - viewSpacing >= tg_distanceError){
+                                realXY = tgGetNearestDistancePoint(startArg: arg, lastXY: lastXY, distance: oldDistance, viewSpace: viewSpacing, pLastValidArg: lastValidArg, function: function)
+                            }else{
+                                lastValidArg = arg
+                            }
+                            if (pointIndexArray == nil){
+                                pointArray.append(realXY!)
+                            }else{
+                                pointIndexArray?.append(pointArray.count)
+                            }
+                            distance = 0
+                            subviewCount -= 1
+                            tgArgumentArray.append(lastValidArg)
+                        }else if (distance - viewSpacing > -1 * tg_distanceError){
+                            if (pointIndexArray == nil){
+                                pointArray.append(realXY!)
+                            }else{
+                                pointIndexArray?.append(pointArray.count)
+                            }
+                            distance = 0
+                            subviewCount -= 1
+                            lastValidArg = arg
+                            tgArgumentArray.append(arg)
+                        }else{
+                            lastValidArg = arg
+                        }
+                    }else{
+                        if (pointIndexArray == nil){
+                            pointArray.append(realXY!)
+                        }
+                    }
+                    
+                    if (pointIndexArray != nil){
+                        pointArray.append(realXY!)
+                    }
+                    
+                    showPath?.addLine(to: realXY!)
+                    
+                    if (pTotalLen != nil){
+                        pTotalLen! += tgCalcDistance(pt1: realXY!, pt2: lastXY)
+                    }
+                }
+                
+                lastXY = realXY!
+            }else{
+                isStart = true
+            }
+            arg += 1
+        }
+    }
+    
+    fileprivate func tgCalcDistance(pt1:CGPoint,pt2:CGPoint) -> CGFloat{
+        return sqrt(pow(pt1.x - pt2.x, 2) + pow(pt1.y - pt2.y, 2))
+    }
+    
+    //MARK:待实现
+    fileprivate func tgGetNearestDistancePoint(startArg:CGFloat,
+                                               lastXY:CGPoint,
+                                               distance:CGFloat,
+                                               viewSpace:CGFloat,
+                                               pLastValidArg:CGFloat,
+                                               function:(CGFloat)->CGPoint?)
+    -> CGPoint {
+        return CGPoint.zero
     }
 }
 
