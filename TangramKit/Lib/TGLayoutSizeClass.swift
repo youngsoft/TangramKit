@@ -456,6 +456,7 @@ internal class TGRelativeLayoutViewSizeClassImpl:TGLayoutViewSizeClassImpl,TGRel
     }
 }
 
-internal class TGPathLayoutViewSizeClassImpl: TGLayoutViewSizeClassImpl,TGPathLayoutViewSizeClass{
+internal class TGPathLayoutViewSizeClassImpl: TGLayoutViewSizeClassImpl,TGPathLayoutViewSizeClass
+{
 
 }
