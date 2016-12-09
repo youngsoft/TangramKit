@@ -455,3 +455,7 @@ internal class TGRelativeLayoutViewSizeClassImpl:TGLayoutViewSizeClassImpl,TGRel
         return tsc
     }
 }
+
+internal class TGPathLayoutViewSizeClassImpl: TGLayoutViewSizeClassImpl,TGPathLayoutViewSizeClass{
+
+}
