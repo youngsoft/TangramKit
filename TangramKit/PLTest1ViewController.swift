@@ -167,7 +167,7 @@ class PLTest1ViewController: UIViewController {
     
     func addAction() {
         let btn = UIButton.init(type: .custom)
-        btn.center = myPathLayout.tg_originView.center
+        btn.center = myPathLayout.tg_originView!.center
         btn.tg_width.equal(40)
         btn.tg_height.equal(40)
         btn.backgroundColor = randomColor
@@ -184,7 +184,7 @@ class PLTest1ViewController: UIViewController {
         
         UIView.animate(withDuration: 0.3, animations: {
             
-            sender.center = self.myPathLayout.tg_originView.center
+            sender.center = self.myPathLayout.tg_originView!.center
             sender.alpha = 0
             
         }, completion: { _ in
@@ -214,7 +214,7 @@ class PLTest1ViewController: UIViewController {
             
             let pathSuviews = myPathLayout.tg_pathSubviews //只对所有曲线路径中的子视图做动画处理。
             
-            for subview in pathSuviews! {
+            for subview in pathSuviews {
                 subview.tg_useFrame = true //设置为true表示布局不控制子视图的布局了。
                 subview.tg_layoutCompletedDo({ (layout, v) in
                     v.alpha = 0
@@ -230,7 +230,7 @@ class PLTest1ViewController: UIViewController {
             
             let pathSuviews = myPathLayout.tg_pathSubviews
             
-            for subview in pathSuviews! {
+            for subview in pathSuviews {
                 subview.tg_useFrame = false
                 subview.tg_layoutCompletedDo({ (layout, v) in
                     v.alpha = 1
@@ -265,7 +265,7 @@ class PLTest1ViewController: UIViewController {
             
             myPathLayout.tg_beginSubviewPathPoint(full: true) //开始获取所有子视图的路径曲线方法。记得调用getSubviewPathPoint方法前必须要调用beginSubviewPathPoint方法。
             
-            let pathSuviews = myPathLayout.tg_pathSubviews!
+            let pathSuviews = myPathLayout.tg_pathSubviews
             
             for (i, sbv) in pathSuviews.enumerated().reversed() {
                 
@@ -293,7 +293,7 @@ class PLTest1ViewController: UIViewController {
             myPathLayout.tg_beginSubviewPathPoint(full: true)
             
             
-            let pathSuviews = myPathLayout.tg_pathSubviews!
+            let pathSuviews = myPathLayout.tg_pathSubviews
             
             for (i, sbv) in pathSuviews.enumerated().reversed() {
                 
