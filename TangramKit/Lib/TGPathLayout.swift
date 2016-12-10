@@ -183,31 +183,29 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             return tgHasOriginView && subviews.count > 0 ? subviews.last : nil
         }
         set{
-            
             guard tgHasOriginView else {
-                if newValue != nil {
+                if (newValue != nil){
                     super.addSubview(newValue!)
                     tgHasOriginView = true
                 }
                 return
             }
             
-            guard newValue != nil else {
-                if subviews.count > 0 {
+            guard let originView = newValue else {
+                if subviews.count > 0{
                     subviews.last?.removeFromSuperview()
+                    tgHasOriginView = false
                 }
-                tgHasOriginView = false
                 return
             }
             
-            guard subviews.count > 0 else {
-                addSubview(newValue!)
-                return
-            }
-            
-            if subviews.last != newValue {
-                subviews.last?.removeFromSuperview()
-                addSubview(newValue!)
+            if subviews.count > 0 {
+                if subviews.last != originView{
+                    subviews.last?.removeFromSuperview()
+                    super.addSubview(originView)
+                }
+            }else{
+                addSubview(originView)
             }
         }
     }
@@ -217,15 +215,16 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
      */
     public var tg_pathSubviews : [UIView]{
         get{
-            guard tgHasOriginView || subviews.count == 0 else {
+            guard tgHasOriginView && subviews.count > 0 else {
                 return subviews
             }
             
-            var pathSubviews = [UIView]()
+            var pathsbs = [UIView]()
             for i in 0..<subviews.count-1{
-                pathSubviews.append(subviews[i])
+                pathsbs.append(subviews[i])
             }
-            return pathSubviews
+            
+            return pathsbs
         }
     }
     
@@ -257,11 +256,11 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
         }
         
         if index < tgArgumentArray.count{
-            guard tg_polarEquation != nil else {
+            if tg_polarEquation != nil {
                 return tgArgumentArray[index]/180 * CGFloat(M_PI)
+            }else{
+                return tgArgumentArray[index]
             }
-            
-            return tgArgumentArray[index]
         }
         
         return nil
@@ -333,7 +332,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     public func tg_createPath(subviewCount:Int) -> CGPath{
         let retPath = CGMutablePath()
         var pTotalLen : CGFloat? = nil
-        var pointIndexArray : [Int]? = nil
+        var pointIndexArray : [Int]? = []
         switch tg_spaceType {
         case let .fixed(value):
             var subviewCount = subviewCount
@@ -363,7 +362,6 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             }
             
             totalLen = 0
-            var pointIndexArray : [Int]? = nil
             let tempArray = tgCalcPathPoints(showPath: path, pTotalLen: &totalLen, subviewCount: -1, pointIndexArray: &pointIndexArray, viewSpacing: 0)
             var bClose = false
             if tempArray.count > 1{
@@ -690,7 +688,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
         var (selfSize,hasSubLayout) = super.tgCalcLayoutRect(size, isEstimate: isEstimate, type: type)
         var sbs = tgGetLayoutSubviews()
         for sbv in sbs{
-            if isEstimate{
+            if !isEstimate{
                 sbv.tgFrame.frame = sbv.bounds
                 tgCalcSizeFromSizeWrapSubview(sbv)
             }
