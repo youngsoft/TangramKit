@@ -69,6 +69,7 @@
 		18DB43621D1986230052D770 /* TGTableLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB433A1D1986230052D770 /* TGTableLayout.swift */; };
 		18DF8A5A1DDB5C62009FD703 /* TangramClass.png in Resources */ = {isa = PBXBuildFile; fileRef = 18DF8A591DDB5C62009FD703 /* TangramClass.png */; };
 		18DF8A5C1DDB5C6A009FD703 /* usagedemo.png in Resources */ = {isa = PBXBuildFile; fileRef = 18DF8A5B1DDB5C6A009FD703 /* usagedemo.png */; };
+		683A84AF1DFED548004FC391 /* PLTest4ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683A84AE1DFED548004FC391 /* PLTest4ViewController.swift */; };
 		6890656E1DFE75A90027D61D /* PLTest2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6890656D1DFE75A90027D61D /* PLTest2ViewController.swift */; };
 		689065701DFE9A7A0027D61D /* PLTest3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6890656F1DFE9A7A0027D61D /* PLTest3ViewController.swift */; };
 		689363EA1DF5567B00028871 /* PLTest1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689363E91DF5567B00028871 /* PLTest1ViewController.swift */; };
@@ -165,6 +166,7 @@
 		18DB433A1D1986230052D770 /* TGTableLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGTableLayout.swift; sourceTree = "<group>"; };
 		18DF8A591DDB5C62009FD703 /* TangramClass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TangramClass.png; sourceTree = "<group>"; };
 		18DF8A5B1DDB5C6A009FD703 /* usagedemo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = usagedemo.png; sourceTree = "<group>"; };
+		683A84AE1DFED548004FC391 /* PLTest4ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PLTest4ViewController.swift; sourceTree = "<group>"; };
 		6890656D1DFE75A90027D61D /* PLTest2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PLTest2ViewController.swift; sourceTree = "<group>"; };
 		6890656F1DFE9A7A0027D61D /* PLTest3ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PLTest3ViewController.swift; sourceTree = "<group>"; };
 		689363E91DF5567B00028871 /* PLTest1ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PLTest1ViewController.swift; sourceTree = "<group>"; };
@@ -401,6 +403,7 @@
 				689363E91DF5567B00028871 /* PLTest1ViewController.swift */,
 				6890656D1DFE75A90027D61D /* PLTest2ViewController.swift */,
 				6890656F1DFE9A7A0027D61D /* PLTest3ViewController.swift */,
+				683A84AE1DFED548004FC391 /* PLTest4ViewController.swift */,
 			);
 			name = PathLayoutDemo;
 			sourceTree = "<group>";
@@ -575,6 +578,7 @@
 				18DB434C1D1986230052D770 /* AppDelegate.swift in Sources */,
 				18D2FC7A1D3D0CC20051B235 /* FOLTest1ViewController.swift in Sources */,
 				182191761D3CAFC300208CD0 /* RLTest3ViewController.swift in Sources */,
+				683A84AF1DFED548004FC391 /* PLTest4ViewController.swift in Sources */,
 				182191741D3CAFC300208CD0 /* RLTest1ViewController.swift in Sources */,
 				182316FA1DAC9C7B00611DD6 /* AllTest3ViewController.swift in Sources */,
 				18DB43581D1986230052D770 /* TGLayoutSize.swift in Sources */,
