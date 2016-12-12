@@ -144,7 +144,9 @@ class ViewController: UITableViewController {
         demoVCList.append(["title":NSLocalizedString("2.PathLayout - Curves",comment:""),
                            "class":PLTest2ViewController.self]
         )
-        
+        demoVCList.append(["title":NSLocalizedString("3.PathLayout - Menu in Circle",comment:""),
+                           "class":PLTest3ViewController.self]
+        )
     }
 
     override  func didReceiveMemoryWarning() {
