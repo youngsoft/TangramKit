@@ -141,6 +141,9 @@ class ViewController: UITableViewController {
         demoVCList.append(["title":NSLocalizedString("1.PathLayout - Animations",comment:""),
                            "class":PLTest1ViewController.self]
         )
+        demoVCList.append(["title":NSLocalizedString("2.PathLayout - Curves",comment:""),
+                           "class":PLTest2ViewController.self]
+        )
         
     }
 
