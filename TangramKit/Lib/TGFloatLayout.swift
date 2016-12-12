@@ -741,7 +741,7 @@ extension TGFloatLayout
                 {
                     #if DEBUG
                         //异常崩溃：当布局视图设置了tg_noBoundaryLimit为true时子视图不能设置tg_width为TGWeight类型和.fill类型
-                        assert(hasBoundaryLimit, "Constraint exception！！, vertical float layout:\(self) can not set tg_noBoundaryLimit to true when the subview:\(sbv) set tg_width to TGWeight or .fill type value.",self, sbv);
+                        assert(hasBoundaryLimit, "Constraint exception！！, vertical float layout:\(self) can not set tg_noBoundaryLimit to true when the subview:\(sbv) set tg_width to TGWeight or .fill type value.")
                     #endif
                     
                     
