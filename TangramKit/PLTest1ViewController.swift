@@ -82,7 +82,7 @@ class PLTest1ViewController: UIViewController {
         myPathLayout.tg_coordinateSetting.end = CGFloat.pi * 2
 
         //提供一个计算圆的极坐标函数。
-        myPathLayout.tg_polarEquation = { angle -> CGFloat in
+        myPathLayout.tg_polarEquation = { angle -> CGFloat? in
             let radius = (self.view.bounds.width - 40) / 2 //半径是视图的宽度 - 两边的左右边距 再除2
             return radius
         }
@@ -99,12 +99,12 @@ class PLTest1ViewController: UIViewController {
         
         
         //提供一个计算圆弧的极坐标函数
-        myPathLayout.tg_polarEquation = { angle -> CGFloat in
+        myPathLayout.tg_polarEquation = { angle -> CGFloat? in
             let radius = self.view.bounds.width - 40  //半径是视图的宽度 - 两边的左右边距
             if angle >= 0 && angle <= CGFloat.pi / 2 { //angle的单位是弧度，这里我们只处理0度 - 90度之间的路径，其他返回NAN。如果coordinateSetting.isMath设置为NO则需要把有效角度改为270到360度。
                 return radius
             } else {
-                return CGFloat.nan //如果我们不想要某个区域或者某个点的值则可以直接函数返回NAN
+                return nil //如果我们不想要某个区域或者某个点的值则可以直接函数返回nil
             }
         }
     }
@@ -119,12 +119,12 @@ class PLTest1ViewController: UIViewController {
         
         
         //提供一个计算圆弧的极坐标函数
-        myPathLayout.tg_polarEquation = { angle -> CGFloat in
+        myPathLayout.tg_polarEquation = { angle -> CGFloat? in
             let radius = (self.view.bounds.width - 40) / 2 //半径是视图的宽度 - 两边的左右边距 再除2
             if angle >= 0 && angle <= CGFloat.pi { //angle的单位是弧度，这里我们只处理0度 - 180度之间的路径，因为用的是数学坐标系
                 return radius
             } else {
-                return CGFloat.nan //如果我们不想要某个区域或者某个点的值则可以直接函数返回NAN
+                return nil //如果我们不想要某个区域或者某个点的值则可以直接函数返回nil
             }
         }
     }
@@ -138,7 +138,7 @@ class PLTest1ViewController: UIViewController {
         myPathLayout.tg_coordinateSetting.end = CGFloat.greatestFiniteMagnitude //结束位置默认。
         
         //提供一个  x = 0;  的方程，注意这里面是因为将isReverse设置为YES表示变量为y轴，值为x轴。
-        myPathLayout.tg_rectangularEquation = { y -> CGFloat in
+        myPathLayout.tg_rectangularEquation = { y -> CGFloat? in
             return 0
         }
     }
@@ -152,7 +152,7 @@ class PLTest1ViewController: UIViewController {
         myPathLayout.tg_coordinateSetting.end = CGFloat.greatestFiniteMagnitude
         
         //提供一个： y = sqrt(200 * x) + 40的方程。
-        myPathLayout.tg_rectangularEquation = { x -> CGFloat in
+        myPathLayout.tg_rectangularEquation = { x -> CGFloat? in
             return sqrt(200 * x) + 40
         }
     }
