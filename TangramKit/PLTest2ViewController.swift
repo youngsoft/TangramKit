@@ -8,15 +8,41 @@
 
 import UIKit
 
+class TGLocusPathLayout: TGPathLayout {
+    
+    override class var layerClass: Swift.AnyClass {
+        return CAShapeLayer.self
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.setup()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.setup()
+    }
+    
+    private func setup() {
+        let shapeLayer = layer as! CAShapeLayer
+        //您可以在这里设置路径曲线的颜色、大小、填充方案等等。
+        shapeLayer.strokeColor = UIColor.red.cgColor
+        shapeLayer.lineWidth = 2
+        shapeLayer.fillColor = nil
+    }
+
+}
+
 class PLTest2ViewController: UIViewController {
     
-    var myPathLayout: TGPathLayout!
+    var myPathLayout: TGLocusPathLayout!
     
     override func loadView() {
         let scrollView = UIScrollView()
         view = scrollView
         
-        myPathLayout = TGPathLayout()
+        myPathLayout = TGLocusPathLayout()
         myPathLayout.backgroundColor = .white
         myPathLayout.tg_height.equal(.wrap).min(scrollView).and().tg_width.equal(.wrap).min(scrollView)
         myPathLayout.tg_padding = UIEdgeInsets.init(top: 20, left: 20, bottom: 20, right: 20)
