@@ -891,3 +891,56 @@ extension TGPathLayout{
         }
     }
 }
+
+// MARK: - TGRadian 弧度类
+
+/// 弧度类 TGRadian(90).val
+public class TGRadian: Any
+{
+    var m_v: CGFloat
+    
+    public init(_ v: CGFloat)
+    {
+        m_v = v
+    }
+    
+    public  init(_ v: Int)
+    {
+        m_v = CGFloat(v)
+    }
+    
+    public init(_ v: Double)
+    {
+        m_v = CGFloat(v)
+    }
+    
+    public init( _ v: Float)
+    {
+        m_v = CGFloat(v)
+    }
+    
+    public init(_ v: TGRadian)
+    {
+        m_v = v.m_v
+    }
+    
+    var val: CGFloat
+    {
+        return m_v / 180.0 * .pi
+    }
+    
+}
+
+postfix operator °
+
+/// TGRadian(30)° 代表30°
+public postfix func °(_ val:TGRadian) -> CGFloat
+{
+    return val.m_v
+}
+
+/// π(30) 代表30°对应的弧度
+public func π(_ val:CGFloat) -> TGRadian
+{
+    return TGRadian(val)
+}

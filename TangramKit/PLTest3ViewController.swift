@@ -62,10 +62,6 @@ class PLTest3View: TGRelativeLayout {
 }
 
 class PLTest3ViewController: UIViewController {
-    
-    func angle(_ r: CGFloat) -> CGFloat {
-        return r / 180.0 * CGFloat.pi
-    }
 
     var myPathLayout: TGPathLayout!
     
@@ -75,8 +71,8 @@ class PLTest3ViewController: UIViewController {
         
         myPathLayout.tg_backgroundImage = #imageLiteral(resourceName: "bk1")
         myPathLayout.tg_coordinateSetting.origin = CGPoint(x: 0.5, y: 0.5)
-        myPathLayout.tg_coordinateSetting.start = angle(-90)
-        myPathLayout.tg_coordinateSetting.end = angle(270)
+        myPathLayout.tg_coordinateSetting.start = TGRadian(-90).val
+        myPathLayout.tg_coordinateSetting.end = TGRadian(270).val
         myPathLayout.tg_padding = UIEdgeInsets.init(top: 30, left: 30, bottom: 30, right: 30)
         myPathLayout.tg_polarEquation = { [weak myPathLayout] (_) -> CGFloat? in
             (myPathLayout!.bounds.width - 60) / 2 //半径为视图的宽度减去两边的内边距30再除2。这里需要注意block的循环引用的问题。

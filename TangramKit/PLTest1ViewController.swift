@@ -76,10 +76,10 @@ class PLTest1ViewController: UIViewController {
     
     fileprivate func changeToCircleStyle() {
         myPathLayout.tg_coordinateSetting.origin = CGPoint(x: 0.5, y: 0.5) //坐标原点居中。默认y轴往下是正值。。
-        myPathLayout.tg_coordinateSetting.isMath = false //为NO 表示y轴下是正值。
+        myPathLayout.tg_coordinateSetting.isMath = false //为false 表示y轴下是正值。
         myPathLayout.tg_coordinateSetting.isReverse = false //变量为x轴，值为y轴。
-        myPathLayout.tg_coordinateSetting.start = 0 //极坐标开始和结束是0和 2* M_PI。
-        myPathLayout.tg_coordinateSetting.end = CGFloat.pi * 2
+        myPathLayout.tg_coordinateSetting.start = 0 //极坐标开始和结束是0和2π。
+        myPathLayout.tg_coordinateSetting.end = TGRadian(2 * 180).val
 
         //提供一个计算圆的极坐标函数。
         myPathLayout.tg_polarEquation = { angle -> CGFloat? in
@@ -92,7 +92,7 @@ class PLTest1ViewController: UIViewController {
     fileprivate func changeToArcStyle1() {
         
         myPathLayout.tg_coordinateSetting.origin = CGPoint(x: 0, y: 1)   //坐标原点在视图的左下角。
-        myPathLayout.tg_coordinateSetting.isMath = true  //为YES 表示y轴往上是正值。
+        myPathLayout.tg_coordinateSetting.isMath = true  //为true 表示y轴往上是正值。
         myPathLayout.tg_coordinateSetting.isReverse = false
         myPathLayout.tg_coordinateSetting.start = -CGFloat.greatestFiniteMagnitude
         myPathLayout.tg_coordinateSetting.end = CGFloat.greatestFiniteMagnitude
@@ -101,7 +101,7 @@ class PLTest1ViewController: UIViewController {
         //提供一个计算圆弧的极坐标函数
         myPathLayout.tg_polarEquation = { angle -> CGFloat? in
             let radius = self.view.bounds.width - 40  //半径是视图的宽度 - 两边的左右边距
-            if angle >= 0 && angle <= CGFloat.pi / 2 { //angle的单位是弧度，这里我们只处理0度 - 90度之间的路径，其他返回NAN。如果coordinateSetting.isMath设置为NO则需要把有效角度改为270到360度。
+            if angle >= 0 && angle <= TGRadian(90).val { //angle的单位是弧度，这里我们只处理0度 - 90度之间的路径，其他返回nil。如果coordinateSetting.isMath设置为false则需要把有效角度改为270到360度。
                 return radius
             } else {
                 return nil //如果我们不想要某个区域或者某个点的值则可以直接函数返回nil
@@ -112,7 +112,7 @@ class PLTest1ViewController: UIViewController {
     fileprivate func changeToArcStyle2() {
         
         myPathLayout.tg_coordinateSetting.origin = CGPoint(x: 0.5, y: 1)   //坐标原点x轴居中，y轴在最下面。
-        myPathLayout.tg_coordinateSetting.isMath = true  //为YES 表示y轴往上是正值。
+        myPathLayout.tg_coordinateSetting.isMath = true  //为true 表示y轴往上是正值。
         myPathLayout.tg_coordinateSetting.isReverse = false
         myPathLayout.tg_coordinateSetting.start = -CGFloat.greatestFiniteMagnitude
         myPathLayout.tg_coordinateSetting.end = CGFloat.greatestFiniteMagnitude
@@ -121,7 +121,7 @@ class PLTest1ViewController: UIViewController {
         //提供一个计算圆弧的极坐标函数
         myPathLayout.tg_polarEquation = { angle -> CGFloat? in
             let radius = (self.view.bounds.width - 40) / 2 //半径是视图的宽度 - 两边的左右边距 再除2
-            if angle >= 0 && angle <= CGFloat.pi { //angle的单位是弧度，这里我们只处理0度 - 180度之间的路径，因为用的是数学坐标系
+            if angle >= 0 && angle <= TGRadian(180).val { //angle的单位是弧度，这里我们只处理0度 - 180度之间的路径，因为用的是数学坐标系
                 return radius
             } else {
                 return nil //如果我们不想要某个区域或者某个点的值则可以直接函数返回nil
@@ -405,3 +405,4 @@ class PLTest1ViewController: UIViewController {
     }
 
 }
+
