@@ -43,9 +43,10 @@ class PLTest2ViewController: UIViewController {
         view = scrollView
         
         myPathLayout = TGLocusPathLayout()
-        myPathLayout.backgroundColor = .white
-        myPathLayout.tg_height.equal(.wrap).min(scrollView).and().tg_width.equal(.wrap).min(scrollView)
-        myPathLayout.tg_padding = UIEdgeInsets.init(top: 20, left: 20, bottom: 20, right: 20)
+        myPathLayout.backgroundColor = .lightGray
+        myPathLayout.tg_size(width:.wrap, height:.wrap)
+       // myPathLayout.tg_height.equal(.wrap).min(scrollView).and().tg_width.equal(.wrap).min(scrollView)
+        myPathLayout.tg_padding = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         scrollView.addSubview(myPathLayout)
     }
 
@@ -88,7 +89,7 @@ class PLTest2ViewController: UIViewController {
                 style = .cancel
             }
             
-            let action = UIAlertAction.init(title: title.rawValue, style: style, handler: { action in
+            let action = UIAlertAction(title: title.rawValue, style: style, handler: { action in
                 
                 switch action.title! {
                 case "straight_line":
@@ -160,27 +161,27 @@ class PLTest2ViewController: UIViewController {
         case .straight_line: //直线函数 y = a * x + b;
             myPathLayout.tg_coordinateSetting.origin = CGPoint(x: 0, y: 0)
             myPathLayout.tg_coordinateSetting.isMath = false
-            myPathLayout.tg_coordinateSetting.start = -CGFloat.greatestFiniteMagnitude
-            myPathLayout.tg_coordinateSetting.end = CGFloat.greatestFiniteMagnitude
+            myPathLayout.tg_coordinateSetting.start = nil
+            myPathLayout.tg_coordinateSetting.end = nil
             myPathLayout.tg_spaceType = .fixed(60)
             myPathLayout.tg_rectangularEquation = { $0 * 2 }
             
         case .sin: //正玄函数 y = sin(x);
             myPathLayout.tg_coordinateSetting.origin = CGPoint(x: 0, y: 0.5)
             myPathLayout.tg_coordinateSetting.isMath = true
-            myPathLayout.tg_coordinateSetting.start = -CGFloat.greatestFiniteMagnitude
-            myPathLayout.tg_coordinateSetting.end = CGFloat.greatestFiniteMagnitude
+            myPathLayout.tg_coordinateSetting.start = nil
+            myPathLayout.tg_coordinateSetting.end = nil
             myPathLayout.tg_spaceType = .fixed(60)
-            myPathLayout.tg_rectangularEquation = { 100 * sin($0 / 180.0 * CGFloat.pi) }
+            myPathLayout.tg_rectangularEquation = { 100 * sin(TGRadian(angle:$0).value) }  //TGRadian是角度转化为弧度的类
             
         case .cycloid: //摆线函数, 用参数方程： x = a * (t - sin(t); y = a *(1 - cos(t));
             myPathLayout.tg_coordinateSetting.origin = CGPoint(x: 0, y: 0.5)
             myPathLayout.tg_coordinateSetting.isMath = true
-            myPathLayout.tg_coordinateSetting.start = -CGFloat.greatestFiniteMagnitude
-            myPathLayout.tg_coordinateSetting.end = CGFloat.greatestFiniteMagnitude
+            myPathLayout.tg_coordinateSetting.start = nil
+            myPathLayout.tg_coordinateSetting.end = nil
             myPathLayout.tg_spaceType = .fixed(100)
             myPathLayout.tg_parametricEquation = {
-                let t = $0 / 180.0 * CGFloat.pi //角度转化为弧度。
+                let t = TGRadian(angle:$0).value
                 let a: CGFloat = 50
                 return CGPoint(x: a * (t - sin(t)), y: a * (1 - cos(t)))
             }
@@ -188,18 +189,18 @@ class PLTest2ViewController: UIViewController {
         case .spiral_like: //阿基米德螺旋线函数: r = a * θ   用的是极坐标。
             myPathLayout.tg_coordinateSetting.origin = CGPoint(x: 0.5, y: 0.5)
             myPathLayout.tg_coordinateSetting.isMath = false
-            myPathLayout.tg_coordinateSetting.start = -CGFloat.greatestFiniteMagnitude
-            myPathLayout.tg_coordinateSetting.end = CGFloat.greatestFiniteMagnitude
+            myPathLayout.tg_coordinateSetting.start = nil
+            myPathLayout.tg_coordinateSetting.end = nil
             myPathLayout.tg_spaceType = .fixed(60)
             myPathLayout.tg_polarEquation = { 20 * $0 }
             
         case .cardioid: //心形线 r = a *(1 + cos(θ)
             myPathLayout.tg_coordinateSetting.origin = CGPoint(x: 0.2, y: 0.5)
             myPathLayout.tg_coordinateSetting.isMath = true
-            myPathLayout.tg_coordinateSetting.start = -CGFloat.greatestFiniteMagnitude
-            myPathLayout.tg_coordinateSetting.end = CGFloat.greatestFiniteMagnitude
+            myPathLayout.tg_coordinateSetting.start = nil
+            myPathLayout.tg_coordinateSetting.end = nil
             myPathLayout.tg_spaceType = .flexed
-            myPathLayout.tg_polarEquation = { 120 * (1 + cos($0)) }
+            myPathLayout.tg_polarEquation = { 120 * (1 + cos(CGFloat($0))) }
             
         case .astroid: //星型线 x = a * cos^3(θ); y =a * sin^3(θ);
             myPathLayout.tg_coordinateSetting.origin = CGPoint(x: 0.5, y: 0.5)
@@ -207,7 +208,7 @@ class PLTest2ViewController: UIViewController {
             myPathLayout.tg_coordinateSetting.start = 0
             myPathLayout.tg_coordinateSetting.end = 360
             myPathLayout.tg_spaceType = .flexed
-            myPathLayout.tg_parametricEquation = { CGPoint.init(x: 150 * pow(cos($0 / 180.0 * CGFloat.pi), 3), y: 150 * pow(sin($0 / 180.0 * CGFloat.pi), 3)) }
+            myPathLayout.tg_parametricEquation = { CGPoint.init(x: 150 * pow(cos(TGRadian(angle:$0).value), 3), y: 150 * pow(sin(TGRadian(angle:$0).value), 3)) }
             
         default: break
             

@@ -18,6 +18,15 @@ extension CGFloat:TGLayoutPosType{}
 extension Double:TGLayoutPosType{}
 extension Float:TGLayoutPosType{}
 extension Int:TGLayoutPosType{}
+extension Int8:TGLayoutPosType{}
+extension Int16:TGLayoutPosType{}
+extension Int32:TGLayoutPosType{}
+extension Int64:TGLayoutPosType{}
+extension UInt:TGLayoutPosType{}
+extension UInt8:TGLayoutPosType{}
+extension UInt16:TGLayoutPosType{}
+extension UInt32:TGLayoutPosType{}
+extension UInt64:TGLayoutPosType{}
 extension TGWeight:TGLayoutPosType{}
 extension Array:TGLayoutPosType{}
 extension TGLayoutPos:TGLayoutPosType{}   //因为TGLayoutPos的equal方法本身就可以设置自身类型，所以这里也实现了这个协议

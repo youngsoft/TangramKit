@@ -23,9 +23,7 @@ class PLTest3View: TGRelativeLayout {
         circleView.layer.cornerRadius = 30
         circleView.backgroundColor = .lightGray
         circleView.tg_coordinateSetting.origin = CGPoint(x: 0.5, y: 0.5)
-        circleView.tg_polarEquation = { _ in
-            return 30
-        }
+        circleView.tg_polarEquation = { _ in 30}
         addSubview(circleView)
         
         let numLabel = UILabel()
@@ -71,9 +69,9 @@ class PLTest3ViewController: UIViewController {
         
         myPathLayout.tg_backgroundImage = #imageLiteral(resourceName: "bk1")
         myPathLayout.tg_coordinateSetting.origin = CGPoint(x: 0.5, y: 0.5)
-        myPathLayout.tg_coordinateSetting.start = TGRadian(-90).val
-        myPathLayout.tg_coordinateSetting.end = TGRadian(270).val
-        myPathLayout.tg_padding = UIEdgeInsets.init(top: 30, left: 30, bottom: 30, right: 30)
+        myPathLayout.tg_coordinateSetting.start = TGRadian(angle:-90).value  //极坐标必须用弧度值
+        myPathLayout.tg_coordinateSetting.end = TGRadian(angle:270).value
+        myPathLayout.tg_padding = UIEdgeInsets(top: 30, left: 30, bottom: 30, right: 30)
         myPathLayout.tg_polarEquation = { [weak myPathLayout] (_) -> CGFloat? in
             (myPathLayout!.bounds.width - 60) / 2 //半径为视图的宽度减去两边的内边距30再除2。这里需要注意block的循环引用的问题。
         }
@@ -109,7 +107,7 @@ class PLTest3ViewController: UIViewController {
                 let vLayout = layout as! TGPathLayout
                 
                 let arg = vLayout.tg_argumentFrom(subview: vplv) //TGPathLayout中的argumentFrom方法的作用是返回子视图在路径布局时所定位的点的自变量的值。上面因为我们用的是极坐标方程来算出每个子视图的位置，因此这里的argumentFrom方法返回的就是子视图所定位的角度。又因为我们的圆环角度是从270度开始的。而PLTest3View的圆环里面的numLabel的初始值又是从180度开始的，所以这里相差了刚好一个M_PI的值，所以我们这里把sbv所在的角度减去M_PI,就是PLTest3View里面的numLabel的开始的角度。
-                vplv.circleView.tg_coordinateSetting.start = arg! - CGFloat.pi
+                vplv.circleView.tg_coordinateSetting.start = arg! - .pi
             })
             
             myPathLayout.addSubview(plView)
@@ -125,8 +123,8 @@ class PLTest3ViewController: UIViewController {
     func handleClick(sender: UIButton) {
         
         //例子中一共有7个子视图。因此每次旋转都是增加 360 / 7度。如果您要实现拖拽进行调整位置时，也只需要动态改变坐标的开始和结束位置就可以了。
-        myPathLayout.tg_coordinateSetting.start += 2 * CGFloat.pi / CGFloat(myPathLayout.tg_pathSubviews.count)
-        myPathLayout.tg_coordinateSetting.end += 2 * CGFloat.pi / CGFloat(myPathLayout.tg_pathSubviews.count)
+        myPathLayout.tg_coordinateSetting.start! += 2 * CGFloat.pi / CGFloat(myPathLayout.tg_pathSubviews.count)
+        myPathLayout.tg_coordinateSetting.end! += 2 * CGFloat.pi / CGFloat(myPathLayout.tg_pathSubviews.count)
         
         //因为角度的改变，所以这里也要激发PLTest3View里面的numLabel的角度的调整。
         
@@ -138,7 +136,7 @@ class PLTest3ViewController: UIViewController {
                 let vLayout = layout as! TGPathLayout
                 
                 let arg = vLayout.tg_argumentFrom(subview: vplv) //TGPathLayout中的argumentFrom方法的作用是返回子视图在路径布局时所定位的点的自变量的值。上面因为我们用的是极坐标方程来算出每个子视图的位置，因此这里的argumentFrom方法返回的就是子视图所定位的角度。又因为我们的圆环角度是从270度开始的。而PLTest3View的圆环里面的numLabel的初始值又是从180度开始的，所以这里相差了刚好一个M_PI的值，所以我们这里把sbv所在的角度减去M_PI,就是PLTest3View里面的numLabel的开始的角度
-                vplv.circleView.tg_coordinateSetting.start = arg! - CGFloat.pi
+                vplv.circleView.tg_coordinateSetting.start = arg! - .pi
                 
                 vplv.circleView.tg_layoutAnimationWithDuration(0.2)
             })

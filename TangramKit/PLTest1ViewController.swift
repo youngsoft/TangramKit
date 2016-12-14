@@ -79,10 +79,10 @@ class PLTest1ViewController: UIViewController {
         myPathLayout.tg_coordinateSetting.isMath = false //为false 表示y轴下是正值。
         myPathLayout.tg_coordinateSetting.isReverse = false //变量为x轴，值为y轴。
         myPathLayout.tg_coordinateSetting.start = 0 //极坐标开始和结束是0和2π。
-        myPathLayout.tg_coordinateSetting.end = TGRadian(2 * 180).val
+        myPathLayout.tg_coordinateSetting.end = 2 * .pi
 
         //提供一个计算圆的极坐标函数。
-        myPathLayout.tg_polarEquation = { angle -> CGFloat? in
+        myPathLayout.tg_polarEquation = { _ in
             let radius = (self.view.bounds.width - 40) / 2 //半径是视图的宽度 - 两边的左右边距 再除2
             return radius
         }
@@ -94,14 +94,13 @@ class PLTest1ViewController: UIViewController {
         myPathLayout.tg_coordinateSetting.origin = CGPoint(x: 0, y: 1)   //坐标原点在视图的左下角。
         myPathLayout.tg_coordinateSetting.isMath = true  //为true 表示y轴往上是正值。
         myPathLayout.tg_coordinateSetting.isReverse = false
-        myPathLayout.tg_coordinateSetting.start = -CGFloat.greatestFiniteMagnitude
-        myPathLayout.tg_coordinateSetting.end = CGFloat.greatestFiniteMagnitude
-        
+        myPathLayout.tg_coordinateSetting.start = nil
+        myPathLayout.tg_coordinateSetting.end = nil
         
         //提供一个计算圆弧的极坐标函数
-        myPathLayout.tg_polarEquation = { angle -> CGFloat? in
+        myPathLayout.tg_polarEquation = { radian in
             let radius = self.view.bounds.width - 40  //半径是视图的宽度 - 两边的左右边距
-            if angle >= 0 && angle <= TGRadian(90).val { //angle的单位是弧度，这里我们只处理0度 - 90度之间的路径，其他返回nil。如果coordinateSetting.isMath设置为false则需要把有效角度改为270到360度。
+            if radian.angle >= 0 && radian.angle <= 90 { //angle的单位是弧度，这里我们只处理0度 - 90度之间的路径，其他返回nil。如果coordinateSetting.isMath设置为false则需要把有效角度改为270到360度。
                 return radius
             } else {
                 return nil //如果我们不想要某个区域或者某个点的值则可以直接函数返回nil
@@ -114,14 +113,14 @@ class PLTest1ViewController: UIViewController {
         myPathLayout.tg_coordinateSetting.origin = CGPoint(x: 0.5, y: 1)   //坐标原点x轴居中，y轴在最下面。
         myPathLayout.tg_coordinateSetting.isMath = true  //为true 表示y轴往上是正值。
         myPathLayout.tg_coordinateSetting.isReverse = false
-        myPathLayout.tg_coordinateSetting.start = -CGFloat.greatestFiniteMagnitude
-        myPathLayout.tg_coordinateSetting.end = CGFloat.greatestFiniteMagnitude
+        myPathLayout.tg_coordinateSetting.start = nil
+        myPathLayout.tg_coordinateSetting.end = nil
         
         
         //提供一个计算圆弧的极坐标函数
-        myPathLayout.tg_polarEquation = { angle -> CGFloat? in
+        myPathLayout.tg_polarEquation = { radian in
             let radius = (self.view.bounds.width - 40) / 2 //半径是视图的宽度 - 两边的左右边距 再除2
-            if angle >= 0 && angle <= TGRadian(180).val { //angle的单位是弧度，这里我们只处理0度 - 180度之间的路径，因为用的是数学坐标系
+            if radian.angle >= 0 && radian.angle <= 180 { //radian的类型是弧度，这里我们只处理0度 - 180度之间的路径，因为用的是数学坐标系
                 return radius
             } else {
                 return nil //如果我们不想要某个区域或者某个点的值则可以直接函数返回nil
@@ -135,12 +134,10 @@ class PLTest1ViewController: UIViewController {
         myPathLayout.tg_coordinateSetting.isMath = true  //为YES 表示y轴往上是正值。
         myPathLayout.tg_coordinateSetting.isReverse = true //这里设置为YES表示方程的入参是y轴的变量，返回的是x轴的值。
         myPathLayout.tg_coordinateSetting.start = 40 //因为最底下的按钮是原点，所以这里要往上偏移40
-        myPathLayout.tg_coordinateSetting.end = CGFloat.greatestFiniteMagnitude //结束位置默认。
+        myPathLayout.tg_coordinateSetting.end = nil //结束位置默认。
         
         //提供一个  x = 0;  的方程，注意这里面是因为将isReverse设置为YES表示变量为y轴，值为x轴。
-        myPathLayout.tg_rectangularEquation = { y -> CGFloat? in
-            return 0
-        }
+        myPathLayout.tg_rectangularEquation = { _ in 0 }
     }
     
     fileprivate func changeToLine2() {
@@ -149,12 +146,10 @@ class PLTest1ViewController: UIViewController {
         myPathLayout.tg_coordinateSetting.isMath = true  //为YES 表示y轴往上是正值。
         myPathLayout.tg_coordinateSetting.isReverse = false
         myPathLayout.tg_coordinateSetting.start = 0
-        myPathLayout.tg_coordinateSetting.end = CGFloat.greatestFiniteMagnitude
+        myPathLayout.tg_coordinateSetting.end = nil
         
         //提供一个： y = sqrt(200 * x) + 40的方程。
-        myPathLayout.tg_rectangularEquation = { x -> CGFloat? in
-            return sqrt(200 * x) + 40
-        }
+        myPathLayout.tg_rectangularEquation = { sqrt(200 * $0) + 40 }
     }
     
     let colors: [UIColor] = [.red, .gray, .blue, .orange, .black, .purple]
@@ -197,8 +192,8 @@ class PLTest1ViewController: UIViewController {
     
     func handleDrag(sender: UIButton) {
         //这个效果只有在圆环中才有效果，你拖动时可以通过调整坐标的开始和结束点来很轻易的实现转动的效果。
-        myPathLayout.tg_coordinateSetting.start += CGFloat.pi/180.0
-        myPathLayout.tg_coordinateSetting.end += CGFloat.pi/180.0
+        myPathLayout.tg_coordinateSetting.start! += .pi/180.0
+        myPathLayout.tg_coordinateSetting.end! += .pi/180.0
     }
     
     func handleStretch1(sender: UIBarButtonItem) {
@@ -219,7 +214,7 @@ class PLTest1ViewController: UIViewController {
                 subview.tg_layoutCompletedDo({ (layout, v) in
                     v.alpha = 0
                     v.center = originCenterPoint
-                    v.transform = CGAffineTransform.init(rotationAngle: CGFloat.pi)
+                    v.transform = CGAffineTransform(rotationAngle: .pi)
                 })
             }
             myPathLayout.tg_layoutAnimationWithDuration(0.4)
@@ -270,7 +265,7 @@ class PLTest1ViewController: UIViewController {
             for (i, sbv) in pathSuviews.enumerated().reversed() {
                 
                 let pts = myPathLayout.tg_getSubviewPathPoint(fromIndex: i, toIndex: 0) //pts返回两个子视图之间的所有点。因为pts是返回两个子视图之间的所有的路劲的点，因此非常适合用来做关键帧动画。
-                let ani = CAKeyframeAnimation.init(keyPath: "position")
+                let ani = CAKeyframeAnimation(keyPath: "position")
                 ani.duration = TimeInterval(0.08 * Double(i + 1))
                 ani.values = pts
                 
@@ -278,7 +273,7 @@ class PLTest1ViewController: UIViewController {
                 
                 UIView.animate(withDuration: TimeInterval(0.08 * Double(i + 1)), animations: { 
                     sbv.alpha = 0
-                    sbv.transform = CGAffineTransform.init(rotationAngle: CGFloat.pi)
+                    sbv.transform = CGAffineTransform(rotationAngle:.pi)
                 })
                 
             }
@@ -298,7 +293,7 @@ class PLTest1ViewController: UIViewController {
             for (i, sbv) in pathSuviews.enumerated().reversed() {
                 
                 let pts = myPathLayout.tg_getSubviewPathPoint(fromIndex: 0, toIndex: i) //上面的从i到0，这里是从0到i，因此getSubviewPathPoint方法是可以返回任意两个点之间的路径点的。
-                let ani = CAKeyframeAnimation.init(keyPath: "position")
+                let ani = CAKeyframeAnimation(keyPath: "position")
                 ani.duration = TimeInterval(0.08 * Double(i + 1))
                 ani.values = pts
                 

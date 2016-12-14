@@ -19,8 +19,8 @@ class PLTest4ViewController: UIViewController {
         myPathLayout.backgroundColor = UIColor.lightGray
         myPathLayout.tg_leftPadding = 20
         myPathLayout.tg_coordinateSetting.origin = CGPoint(x: 0, y: 0.5)
-        myPathLayout.tg_coordinateSetting.start = TGRadian(-60).val
-        myPathLayout.tg_coordinateSetting.end = TGRadian(60).val
+        myPathLayout.tg_coordinateSetting.start = TGRadian(angle:-60).value
+        myPathLayout.tg_coordinateSetting.end = TGRadian(angle:60).value
         myPathLayout.tg_distanceError = 0.01 //因为曲线半径非常的小，为了要求高精度的距离间距，所以要把距离误差调整的非常的小。
         myPathLayout.tg_polarEquation = { _ in 1.0 }
         
@@ -48,7 +48,7 @@ class PLTest4ViewController: UIViewController {
             label.tg_layoutCompletedDo({ (layout, v) in
                 let pLayout = layout as! TGPathLayout
                 let _angle = pLayout.tg_argumentFrom(subview: v)!//TGPathLayout的argumentFrom方法能够取得子视图在曲线上的点的方程函数的自变量的输入的值。
-                print("angle = \(TGRadian(_angle).val)")
+                print("angle = \(_angle)")
                 
                 v.transform = CGAffineTransform.init(rotationAngle: -1 * _angle)
             })
@@ -87,7 +87,7 @@ class PLTest4ViewController: UIViewController {
                 let delay: TimeInterval = 0.9 / 9.0
                 
                 UIView.animate(withDuration: duration, delay: delay, options: .curveEaseInOut, animations: {
-                    sbv.transform = CGAffineTransform.init(rotationAngle: TGRadian(-90).val)
+                    sbv.transform = CGAffineTransform.init(rotationAngle: -.pi/2)
                     
                 })
             }

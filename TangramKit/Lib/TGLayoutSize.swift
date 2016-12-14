@@ -18,6 +18,15 @@ extension CGFloat:TGLayoutSizeType{}
 extension Double:TGLayoutSizeType{}
 extension Float:TGLayoutSizeType{}
 extension Int:TGLayoutSizeType{}
+extension Int8:TGLayoutSizeType{}
+extension Int16:TGLayoutSizeType{}
+extension Int32:TGLayoutSizeType{}
+extension Int64:TGLayoutSizeType{}
+extension UInt:TGLayoutSizeType{}
+extension UInt8:TGLayoutSizeType{}
+extension UInt16:TGLayoutSizeType{}
+extension UInt32:TGLayoutSizeType{}
+extension UInt64:TGLayoutSizeType{}
 extension TGWeight:TGLayoutSizeType{}
 extension Array:TGLayoutSizeType{}
 extension TGLayoutSize:TGLayoutSizeType{}   //因为TGLayoutSize的equal方法本身就可以设置自身类型，所以这里也实现了这个协议

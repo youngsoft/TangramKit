@@ -35,6 +35,8 @@ extension TGPathSpaceType : Equatable{
     }
 }
 
+
+
 /**
  * 坐标轴设置类，用来描述坐标轴的信息。
  */
@@ -43,7 +45,7 @@ open class TGCoordinateSetting : NSObject{
     /**
      * 坐标原点的位置,位置是相对位置，默认是(0,0), 假如设置为(0.5,0.5)则在视图的中间。
      */
-    public var origin : CGPoint = CGPoint.zero {
+    public var origin : CGPoint = .zero {
         
         didSet{
             if !oldValue.equalTo(origin){
@@ -75,9 +77,9 @@ open class TGCoordinateSetting : NSObject{
     }
     
     /**
-     * 开始位置和结束位置。如果不设置则根据坐标原点设置以及视图的尺寸自动确定.默认是-CGFLOAT_MAX, CGFLOAT_MAX
+     * 开始位置和结束位置。如果不设置则根据坐标原点设置以及视图的尺寸自动确定.默认是nil
      */
-    public var start = -CGFloat.greatestFiniteMagnitude {
+    public var start:CGFloat! {
         didSet{
             if start != oldValue {
                 pathLayout?.setNeedsLayout()
@@ -85,7 +87,7 @@ open class TGCoordinateSetting : NSObject{
         }
     }
     
-    public var end = CGFloat.greatestFiniteMagnitude {
+    public var end:CGFloat! {
         didSet{
             if end != oldValue {
                 pathLayout?.setNeedsLayout()
@@ -103,8 +105,8 @@ open class TGCoordinateSetting : NSObject{
      * 恢复默认设置
      */
     public func reset(){
-        start = -CGFloat.greatestFiniteMagnitude
-        end = CGFloat.greatestFiniteMagnitude
+        start = nil
+        end = nil
         isMath = false
         isReverse = false
         origin = CGPoint.zero
@@ -152,9 +154,9 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     }
     
     /**
-     * 极坐标方程，angle是极坐标的弧度，返回r半径。要求函数在定义域内是连续的，否则结果不确定。如果返回的点无效，则请返回nil
+     * 极坐标方程，入参是极坐标的弧度，返回r半径。要求函数在定义域内是连续的，否则结果不确定。如果返回的点无效，则请返回nil
      */
-    public var tg_polarEquation : ((CGFloat)->CGFloat?)?{
+    public var tg_polarEquation : ((TGRadian)->CGFloat?)?{
         didSet{
             if tg_polarEquation != nil {
                 tg_rectangularEquation = nil
@@ -256,10 +258,13 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
         }
         
         if index < tgArgumentArray.count{
-            if tg_polarEquation != nil {
-                return tgArgumentArray[index]/180 * CGFloat(M_PI)
-            }else{
-                return tgArgumentArray[index]
+            if (self.tg_polarEquation != nil)
+            {
+                return CGFloat(TGRadian(angle:tgArgumentArray[index]))
+            }
+            else
+            {
+              return tgArgumentArray[index]
             }
         }
         
@@ -404,7 +409,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
                 }
             }
             
-            if tg_coordinateSetting.start != -CGFloat.greatestFiniteMagnitude{
+            if tg_coordinateSetting.start != nil{
                 startArg = tg_coordinateSetting.start
             }
             
@@ -417,7 +422,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
                 }
             }
             
-            if tg_coordinateSetting.end != CGFloat.greatestFiniteMagnitude{
+            if tg_coordinateSetting.end != nil {
                 endArg = tg_coordinateSetting.end
             }
             
@@ -438,7 +443,8 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
                     return nil
                 }
             }
-        }else if let parametricEquation = tg_parametricEquation{
+        }
+        else if let parametricEquation = tg_parametricEquation{
             startArg = 0 - selfWidth * tg_coordinateSetting.origin.x
             if tg_coordinateSetting.isReverse{
                 if tg_coordinateSetting.isMath{
@@ -448,7 +454,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
                 }
             }
             
-            if tg_coordinateSetting.start != -CGFloat.greatestFiniteMagnitude{
+            if tg_coordinateSetting.start != nil{
                 startArg = tg_coordinateSetting.start
             }
             endArg = selfWidth - selfWidth * tg_coordinateSetting.origin.x
@@ -460,7 +466,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
                     endArg = selfHeight * (1 - tg_coordinateSetting.origin.y)
                 }
             }
-            if tg_coordinateSetting.end != CGFloat.greatestFiniteMagnitude{
+            if tg_coordinateSetting.end != nil{
                 endArg = tg_coordinateSetting.end
             }
             
@@ -483,27 +489,30 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
                 }
             }
             
-        }else if let polarEquation = tg_polarEquation{
+        }
+        else if let polarEquation = tg_polarEquation{
             startArg = 0
-            if tg_coordinateSetting.start != -CGFloat.greatestFiniteMagnitude{
-                startArg = tg_coordinateSetting.start * 180.0 / CGFloat(M_PI)
+            if tg_coordinateSetting.start != nil {
+                
+                startArg = TGRadian(value:tg_coordinateSetting.start).angle
             }
             endArg = 360
-            if tg_coordinateSetting.end != CGFloat.greatestFiniteMagnitude{
-                endArg = tg_coordinateSetting.end * 180.0 / CGFloat(M_PI)
+            if tg_coordinateSetting.end != nil {
+                endArg = TGRadian(value:tg_coordinateSetting.end).angle
             }
             tgCalcPathPointsHelper(pointArray: &pointArray, showPath: showPath, pTotalLen: &pTotalLen, subviewCount: subviewCount, pointIndexArray: &pointIndexArray, viewSpacing: viewSpacing, startArg: startArg, endArg: endArg){
                 arg in
                 //计算用弧度
-                if let r = polarEquation(arg * CGFloat(M_PI) / 180.0){
+                let rad = TGRadian(angle:arg)
+                if let r = polarEquation(rad){
                     if tg_coordinateSetting.isReverse{
-                        let y = r * cos(arg / 180.0 * CGFloat(M_PI))
-                        let x = r * sin(arg / 180.0 * CGFloat(M_PI)) + selfWidth * tg_coordinateSetting.origin.x + tg_leftPadding
+                        let y = r * cos(rad.value)
+                        let x = r * sin(rad.value) + selfWidth * tg_coordinateSetting.origin.x + tg_leftPadding
                         let y1 =  (tg_coordinateSetting.isMath ? -y : y) + selfHeight * tg_coordinateSetting.origin.y + tg_topPadding
                         return CGPoint(x: x, y: y1)
                     }else{
-                        let y = r * sin(arg / 180 * CGFloat(M_PI))
-                        let x = r * cos(arg / 180 * CGFloat(M_PI)) + selfWidth * tg_coordinateSetting.origin.x + tg_leftPadding
+                        let y = r * sin(rad.value)
+                        let x = r * cos(rad.value) + selfWidth * tg_coordinateSetting.origin.x + tg_leftPadding
                         let y1 =  (tg_coordinateSetting.isMath ? -y : y) + selfHeight * tg_coordinateSetting.origin.y + tg_topPadding
                         return CGPoint(x: x, y: y1)
                     }
@@ -707,7 +716,12 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             }
         }
         
-        var maxSize = CGSize(width: tg_leftPadding, height: tg_topPadding)
+       // var maxSize = CGSize(width: tg_leftPadding, height: tg_topPadding)
+        //记录最小的y值和最大的y值
+        var minYPos = CGFloat.greatestFiniteMagnitude
+        var maxYPos = -CGFloat.greatestFiniteMagnitude
+        var minXPos = CGFloat.greatestFiniteMagnitude
+        var maxXPos = -CGFloat.greatestFiniteMagnitude
         
         //算路径子视图的。
         sbs = tgGetLayoutSubviewsFrom(sbsFrom: tg_pathSubviews)
@@ -770,13 +784,25 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             //中心点的位置。。
             rect.origin.x = pt.x - rect.size.width * sbv.layer.anchorPoint.x + sbv.tg_left.margin
             rect.origin.y = pt.y - rect.size.height * sbv.layer.anchorPoint.y + sbv.tg_top.margin
-            
-            if (rect.maxX > maxSize.width){
-                maxSize.width = rect.maxX
+           
+            if (rect.minY < minYPos)
+            {
+                minYPos = rect.minY
             }
             
-            if (rect.maxY > maxSize.height){
-                maxSize.height = rect.maxY
+            if (rect.maxY > maxYPos)
+            {
+                maxYPos = rect.maxY
+            }
+            
+            if (rect.minX < minXPos)
+            {
+                minXPos = rect.minX
+            }
+            
+            if (rect.maxX > maxXPos)
+            {
+                maxXPos = rect.maxX
             }
             
             sbv.tgFrame.frame = rect
@@ -822,23 +848,56 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             rect.origin.x = (selfSize.width - tg_leftPadding - tg_rightPadding)*tg_coordinateSetting.origin.x - rect.size.width / 2 + sbv.tg_left.margin + tg_leftPadding
             rect.origin.y = (selfSize.height - tg_topPadding - tg_bottomPadding)*tg_coordinateSetting.origin.y - rect.size.height / 2 + sbv.tg_top.margin + tg_topPadding
             
-            if (rect.maxX > maxSize.width){
-                maxSize.width = rect.maxX
+            if (rect.minY < minYPos)
+            {
+                minYPos = rect.minY
             }
             
-            if (rect.maxY > maxSize.height){
-                maxSize.height = rect.maxY
+            if (rect.maxY > maxYPos)
+            {
+                maxYPos = rect.maxY
+            }
+            
+            if (rect.minX < minXPos)
+            {
+                minXPos = rect.minX
+            }
+            
+            if (rect.maxX > maxXPos)
+            {
+                maxXPos = rect.maxX
             }
             
             sbv.tgFrame.frame = rect
         }
         
+        if minYPos == .greatestFiniteMagnitude
+        {
+            minYPos = 0
+        }
+        
+        if maxYPos == -.greatestFiniteMagnitude
+        {
+            maxYPos = tg_topPadding + tg_bottomPadding
+        }
+        
+        if minXPos == .greatestFiniteMagnitude
+        {
+            minXPos = 0
+        }
+        
+        if maxXPos == -.greatestFiniteMagnitude
+        {
+            maxXPos = tg_leftPadding + tg_rightPadding
+        }
+ 
+        
         if (tg_width.isWrap){
-            selfSize.width = maxSize.width + tg_rightPadding
+            selfSize.width = maxXPos - minXPos // + tg_leftPadding + tg_rightPadding
         }
         
         if (tg_height.isWrap){
-            selfSize.height = maxSize.height + tg_bottomPadding
+            selfSize.height = maxYPos - minYPos // + tg_topPadding + tg_bottomPadding
         }
         
         selfSize.height = tgValidMeasure(tg_height, sbv: self, calcSize: selfSize.height, sbvSize: selfSize, selfLayoutSize: superview!.bounds.size)
@@ -894,53 +953,238 @@ extension TGPathLayout{
 
 // MARK: - TGRadian 弧度类
 
-/// 弧度类 TGRadian(90).val
-public class TGRadian: Any
+/// 弧度类 TGRadian(angle:90).value
+public struct TGRadian: Any
 {
-    var m_v: CGFloat
-    
-    public init(_ v: CGFloat)
+    public private(set) var value:CGFloat
+    //用角度值构造出一个弧度对象。
+    public init(angle:CGFloat)
     {
-        m_v = v
+        value = angle / 180 * .pi
     }
     
-    public  init(_ v: Int)
+    public  init(angle: Int)
     {
-        m_v = CGFloat(v)
+        self.init(angle:CGFloat(angle))
     }
     
-    public init(_ v: Double)
+    public  init(angle: Int8)
     {
-        m_v = CGFloat(v)
+        self.init(angle:CGFloat(angle))
     }
     
-    public init( _ v: Float)
+    public  init(angle: Int16)
     {
-        m_v = CGFloat(v)
+        self.init(angle:CGFloat(angle))
     }
     
-    public init(_ v: TGRadian)
+    public  init(angle: Int32)
     {
-        m_v = v.m_v
+        self.init(angle:CGFloat(angle))
     }
     
-    var val: CGFloat
+    public  init(angle: Int64)
     {
-        return m_v / 180.0 * .pi
+        self.init(angle:CGFloat(angle))
     }
     
+    public  init(angle: UInt)
+    {
+        self.init(angle:CGFloat(angle))
+    }
+    
+    public  init(angle: UInt8)
+    {
+        self.init(angle:CGFloat(angle))
+    }
+    
+    public  init(angle: UInt16)
+    {
+        self.init(angle:CGFloat(angle))
+    }
+    
+    public  init(angle: UInt32)
+    {
+        self.init(angle:CGFloat(angle))
+    }
+    
+    public  init(angle: UInt64)
+    {
+        self.init(angle:CGFloat(angle))
+    }
+    
+    public init(angle: Double)
+    {
+        self.init(angle:CGFloat(angle))
+    }
+    
+    public init(angle: Float)
+    {
+        self.init(angle:CGFloat(angle))
+    }
+    
+    //用弧度值构造出一个弧度对象。
+    public init(value:CGFloat)
+    {
+        self.value = value
+    }
+    
+    public  init(value: Int)
+    {
+        self.init(value:CGFloat(value))
+    }
+    
+    public  init(value: Int8)
+    {
+        self.init(value:CGFloat(value))
+    }
+    
+    public  init(value: Int16)
+    {
+        self.init(value:CGFloat(value))
+    }
+    
+    public  init(value: Int32)
+    {
+        self.init(value:CGFloat(value))
+    }
+    
+    public  init(value: Int64)
+    {
+        self.init(value:CGFloat(value))
+    }
+    
+    public  init(value: UInt)
+    {
+        self.init(value:CGFloat(value))
+    }
+    
+    public  init(value: UInt8)
+    {
+        self.init(value:CGFloat(value))
+    }
+    
+    public  init(value: UInt16)
+    {
+        self.init(value:CGFloat(value))
+    }
+    
+    public  init(value: UInt32)
+    {
+        self.init(value:CGFloat(value))
+    }
+    
+    public  init(value: UInt64)
+    {
+        self.init(value:CGFloat(value))
+    }
+    
+    public init(value: Double)
+    {
+        self.init(value:CGFloat(value))
+    }
+    
+    public init(value: Float)
+    {
+        self.init(value:CGFloat(value))
+    }
+
+    public init(_ val: TGRadian)
+    {
+        self.value = val.value
+    }
+    
+
+    
+    //角度值
+    public var angle:CGFloat
+        {
+            return self.value / .pi * 180
+    }
 }
+
+
+extension TGRadian:Equatable{
+
+    public static func ==(lhs: TGRadian, rhs: TGRadian) -> Bool {
+        
+        return lhs.value == rhs.value
+        }
+}
+
+
+//弧度运算符重载。
+public func +(lhs:TGRadian, rhs:CGFloat) ->CGFloat
+{
+    return lhs.value + rhs
+}
+
+public func +(lhs:CGFloat, rhs:TGRadian) ->CGFloat
+{
+    return lhs + rhs.value
+}
+
+public func *(lhs:TGRadian, rhs:CGFloat) ->CGFloat
+{
+    return lhs.value * rhs
+}
+
+public func *(lhs:CGFloat, rhs:TGRadian) ->CGFloat
+{
+    return lhs * rhs.value
+}
+
+public func /(lhs:TGRadian, rhs:CGFloat) ->CGFloat
+{
+    return lhs.value / rhs
+}
+
+public func /(lhs:CGFloat, rhs:TGRadian) ->CGFloat
+{
+    return lhs / rhs.value
+}
+
+public func -(lhs:TGRadian, rhs:CGFloat) ->CGFloat
+{
+    return lhs.value - rhs
+}
+
+public func -(lhs:CGFloat, rhs:TGRadian) ->CGFloat
+{
+    return lhs - rhs.value
+}
+
+
+
+
+
+//扩展CGFloat类型的初始化方法，用一个弧度对象来构造CGFloat值，得到的是一个弧度值。
+extension CGFloat
+{
+    public init(_ value: TGRadian)
+    {
+        self.init(value.value)
+    }
+}
+
 
 postfix operator °
 
-/// TGRadian(30)° 代表30°
-public postfix func °(_ val:TGRadian) -> CGFloat
+/// 弧度对象的初始化简易方法：90°  <==>  TGRadian(angle:90)
+public postfix func °(_ angle:CGFloat) -> TGRadian
 {
-    return val.m_v
+    return TGRadian(angle:angle)
 }
 
-/// π(30) 代表30°对应的弧度
-public func π(_ val:CGFloat) -> TGRadian
+public postfix func °(_ angle:Int) -> TGRadian
 {
-    return TGRadian(val)
+    return TGRadian(angle:angle)
 }
+
+public postfix func °(_ angle:UInt) -> TGRadian
+{
+    return TGRadian(angle:angle)
+}
+
+
+
