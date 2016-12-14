@@ -29,7 +29,7 @@ Pod::Spec.new do |s|
                    DESC
 
   s.homepage     = "https://github.com/youngsoft/TangramKit"
-  s.screenshots  = "http://7xoymz.com1.z0.glb.clouddn.com/mylayout.gif", "http://7xoymz.com1.z0.glb.clouddn.com/sizeClassLayout.gif"
+  s.screenshots  = "http://upload-images.jianshu.io/upload_images/1432482-3bfd0855a51b6d8e.gif?imageMogr2/auto-orient/strip"
 
 
   # ―――  Spec License  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #

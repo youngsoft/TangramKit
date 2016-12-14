@@ -334,7 +334,7 @@ private class TGTableRowLayout: TGLinearLayout,TGTableLayoutViewSizeClass {
     var rowSize: TGTableRowColSizeType
     var colSize: TGTableRowColSizeType
     
-    internal init(orientation:TGOrientation,rowSize:TGTableRowColSizeType, colSize:TGTableRowColSizeType)
+    init(orientation:TGOrientation,rowSize:TGTableRowColSizeType, colSize:TGTableRowColSizeType)
     {
         self.rowSize = rowSize
         self.colSize = colSize
@@ -401,12 +401,12 @@ private class TGTableRowLayout: TGLinearLayout,TGTableLayoutViewSizeClass {
         }
     }
     
-    required fileprivate init?(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         self.rowSize = 0
         self.colSize = 0
         super.init(coder:aDecoder)
+        //fatalError("init(coder:) has not been implemented")
     }
-    
 }
 
 

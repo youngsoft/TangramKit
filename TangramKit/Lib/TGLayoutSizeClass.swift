@@ -204,6 +204,12 @@ public protocol TGFrameLayoutViewSizeClass:TGLayoutViewSizeClass
     
 }
 
+/**
+ * 定义SizeClass中PathLayout所具有的布局属性接口
+ */
+public protocol TGPathLayoutViewSizeClass : TGLayoutViewSizeClass{
+
+}
 
 
 //TGSizeClass Implemention
@@ -448,4 +454,9 @@ internal class TGRelativeLayoutViewSizeClassImpl:TGLayoutViewSizeClassImpl,TGRel
         
         return tsc
     }
+}
+
+internal class TGPathLayoutViewSizeClassImpl: TGLayoutViewSizeClassImpl,TGPathLayoutViewSizeClass
+{
+
 }

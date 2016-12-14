@@ -129,29 +129,57 @@ public struct TGWeight:Any
     
     private var _value:CGFloat = 0
     
-    public init(_ val:Int)
+    
+    public init(_ value:Int8)
     {
-        _value = CGFloat(val)
+        _value = CGFloat(value)
     }
     
-    public init(_ val:Double)
+    public init(_ value:Int16)
     {
-        _value = CGFloat(val)
+        _value = CGFloat(value)
     }
     
-    public init (_ val:Float)
+    public init(_ value:Int32)
     {
-        _value = CGFloat(val)
+        _value = CGFloat(value)
+    }
+
+    public init(_ value:Int64)
+    {
+        _value = CGFloat(value)
+    }
+
+    
+    public init(_ value:Int)
+    {
+        _value = CGFloat(value)
     }
     
-    public init(_ val:CGFloat)
+    public init(_ value:UInt)
     {
-        _value = val
+        _value = CGFloat(value)
+    }
+
+    
+    public init(_ value:Double)
+    {
+        _value = CGFloat(value)
     }
     
-    public init(_ val:TGWeight)
+    public init (_ value:Float)
     {
-        _value = val._value
+        _value = CGFloat(value)
+    }
+    
+    public init(_ value:CGFloat)
+    {
+        _value = value
+    }
+    
+    public init(_ value:TGWeight)
+    {
+        _value = value._value
     }
     
     

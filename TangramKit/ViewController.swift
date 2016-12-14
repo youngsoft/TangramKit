@@ -115,6 +115,19 @@ class ViewController: UITableViewController {
         demoVCList.append(["title":NSLocalizedString("6.FloatLayout - User Profiles",comment:""),
                            "class":FOLTest6ViewController.self]
         )
+        // MARK: - PathLayout
+        demoVCList.append(["title":NSLocalizedString("1.PathLayout - Animations",comment:""),
+                           "class":PLTest1ViewController.self]
+        )
+        demoVCList.append(["title":NSLocalizedString("2.PathLayout - Curves",comment:""),
+                           "class":PLTest2ViewController.self]
+        )
+        demoVCList.append(["title":NSLocalizedString("3.PathLayout - Menu in Circle",comment:""),
+                           "class":PLTest3ViewController.self]
+        )
+        demoVCList.append(["title":NSLocalizedString("4.PathLayout - Fan",comment:""),
+                           "class":PLTest4ViewController.self]
+        )
         demoVCList.append(["title":NSLocalizedString("1.UITableView - Dynamic height",comment:""),
        "class":AllTest1ViewController.self]
         )
@@ -136,9 +149,6 @@ class ViewController: UITableViewController {
         demoVCList.append(["title":NSLocalizedString("❁1.Screen perfect fit - Demo1",comment:""),
                            "class":AllTest7ViewController.self]
         )
-
-        
-        
     }
 
     override  func didReceiveMemoryWarning() {
