@@ -1085,7 +1085,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     override open func didAddSubview(_ subview: UIView) {
         super.didAddSubview(subview)
         
-        subview.addObserver(self, forKeyPath:"isHidden", options: [.new, .old], context: nil)
+        subview.addObserver(self, forKeyPath:"hidden", options: [.new, .old], context: nil)
         subview.addObserver(self, forKeyPath:"frame", options: [.new, .old], context: nil)
         subview.addObserver(self, forKeyPath:"center", options: [.new, .old], context: nil)
 
@@ -1095,7 +1095,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         super.willRemoveSubview(subview)
         
         subview.tg_layoutCompletedDo(nil)
-        subview.removeObserver(self, forKeyPath: "isHidden")
+        subview.removeObserver(self, forKeyPath: "hidden")
         subview.removeObserver(self, forKeyPath: "frame")
         subview.removeObserver(self, forKeyPath: "center")
 
@@ -1243,7 +1243,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         
         
         
-        if (keyPath == "frame" || keyPath == "isHidden" || keyPath == "center")
+        if (keyPath == "frame" || keyPath == "hidden" || keyPath == "center")
         {
             
             if !self.tg_isLayouting
@@ -1252,7 +1252,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 {
                     setNeedsLayout()
                     
-                    if keyPath == "isHidden" && !(change![.newKey] as! Bool)
+                    if keyPath == "hidden" && !(change![.newKey] as! Bool)
                     {
                         sbv.setNeedsDisplay()
                     }
