@@ -43,9 +43,7 @@ class PLTest2ViewController: UIViewController {
         view = scrollView
         
         myPathLayout = TGLocusPathLayout()
-        myPathLayout.backgroundColor = .lightGray
-        myPathLayout.tg_size(width:.wrap, height:.wrap)
-       // myPathLayout.tg_height.equal(.wrap).min(scrollView).and().tg_width.equal(.wrap).min(scrollView)
+        myPathLayout.tg_height.equal(.wrap).min(scrollView).and().tg_width.equal(.wrap).min(scrollView)
         myPathLayout.tg_padding = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         scrollView.addSubview(myPathLayout)
     }
