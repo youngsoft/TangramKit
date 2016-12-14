@@ -240,11 +240,7 @@ class PLTest1ViewController: UIViewController {
                 initialSpringVelocity: 3.0,
                 options: .curveEaseInOut,
                 animations: {
-                    
                     self.myPathLayout.layoutIfNeeded()
-            },
-                completion: { (_) in
-                
             })
         }
     }
