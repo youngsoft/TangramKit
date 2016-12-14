@@ -69,8 +69,9 @@ class PLTest3ViewController: UIViewController {
         
         myPathLayout.tg_backgroundImage = #imageLiteral(resourceName: "bk1")
         myPathLayout.tg_coordinateSetting.origin = CGPoint(x: 0.5, y: 0.5)
-        myPathLayout.tg_coordinateSetting.start = TGRadian(angle:-90).value  //极坐标必须用弧度值
-        myPathLayout.tg_coordinateSetting.end = TGRadian(angle:270).value
+        // -90°.value 等同于 TGRadian(angle:-90).value，这是简易写法
+        myPathLayout.tg_coordinateSetting.start = -90°.value //极坐标必须用弧度值
+        myPathLayout.tg_coordinateSetting.end = 270°.value
         myPathLayout.tg_padding = UIEdgeInsets(top: 30, left: 30, bottom: 30, right: 30)
         myPathLayout.tg_polarEquation = { [weak myPathLayout] (_) -> CGFloat? in
             (myPathLayout!.bounds.width - 60) / 2 //半径为视图的宽度减去两边的内边距30再除2。这里需要注意block的循环引用的问题。
