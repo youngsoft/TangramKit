@@ -500,7 +500,7 @@ let lsc = rootLayout.tg_fetchSizeClass(with: .comb(.any, .compact, nil), from:.d
 ### 直接拷贝
 1.  将github工程中的Lib文件夹下的所有文件复制到您的工程中。
 
-### CocoaPods安装(暂时不支持)
+### CocoaPods安装
 
 如果您还没有安装cocoapods则请先执行如下命令：
 ```
@@ -511,7 +511,7 @@ $ gem install cocoapods
 
 ```
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '7.0'
+platform :ios, '8.0'
 
 pod 'TangramKit', '~> 1.0.0'
 ```

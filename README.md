@@ -511,7 +511,7 @@ TangramKit supports multiple methods for installing the library in a project.
 ### Copy to your project
 1.  Copy `Lib` folder from the demo project to your project
 
-### Installation with CocoaPods(does not support temporarily)
+### Installation with CocoaPods
 
 CocoaPods is a dependency manager for Objective-C, which automates and simplifies the process of using 3rd-party libraries like TangramKit in your projects. You can install it with the following command:
 
@@ -521,7 +521,7 @@ To integrate TangramKit into your Xcode project using CocoaPods, specify it in y
 
 ```
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '7.0'
+platform :ios, '8.0'
 
 pod 'TangramKit', '~> 1.0.0'
 ```
