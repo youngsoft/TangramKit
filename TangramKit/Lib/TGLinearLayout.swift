@@ -525,9 +525,16 @@ extension TGLinearLayout {
                 sbv.tg_top.equal(0);
             }
             
-            if sbv === sbs.last && centered
+            if sbv === sbs.last
             {
-                sbv.tg_bottom.equal(scale)
+                if centered
+                {
+                  sbv.tg_bottom.equal(scale)
+                }
+                else
+                {
+                    sbv.tg_bottom.equal(0)
+                }
             }
         }
     }
@@ -548,9 +555,16 @@ extension TGLinearLayout {
                 sbv.tg_left.equal(0);
             }
             
-            if sbv === sbs.last && centered
+            if sbv === sbs.last
             {
-                sbv.tg_right.equal(scale)
+                if centered
+                {
+                    sbv.tg_right.equal(scale)
+                }
+                else
+                {
+                    sbv.tg_right.equal(0)
+                }
             }
         }
         
