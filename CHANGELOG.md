@@ -4,14 +4,6 @@
 --- 
 
 ## [1.0.0]
-  
 
-#### Added
+1. 实现7大布局库和对SizeClass的支持。  
 
-#### Updated
-
-#### Changed
-
-#### Fixed
-
-#### Removed

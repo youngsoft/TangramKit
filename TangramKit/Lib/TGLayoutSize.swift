@@ -45,6 +45,12 @@ final public class TGLayoutSize
     
     //设置尺寸值为一个具体的数值。
     @discardableResult
+    public func equal(_ size:Int, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
+    {
+        return self.equal(CGFloat(size), increment: increment, multiple: multiple)
+    }
+    
+    @discardableResult
     public func equal(_ size:CGFloat, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
         return tgEqual(val: size, increment: increment, multiple: multiple)

@@ -275,6 +275,59 @@ extension TGRelativeLayout
                 sbv.tgFrame.right = sbv.tgFrame.left + sbv.tgFrame.width
             }
         }
+        
+        
+        //这里要更新左边最小和右边最大约束的情况。
+        
+        if (sbv.tg_left.minVal.posRelaVal != nil && sbv.tg_right.maxVal.posRelaVal != nil)
+        {
+            //让宽度缩小并在最小和最大的中间排列。
+            let minLeft = self.tgCalcRelationalSubview(sbv.tg_left.minVal.posRelaVal.view, gravity: sbv.tg_left.minVal.posRelaVal._type, selfSize: selfSize) + sbv.tg_left.minVal.offsetVal
+        
+            
+            let maxRight = self.tgCalcRelationalSubview(sbv.tg_right.maxVal.posRelaVal.view, gravity: sbv.tg_right.maxVal.posRelaVal._type, selfSize: selfSize) - sbv.tg_right.maxVal.offsetVal
+            
+            
+            //用maxRight减去minLeft得到的宽度再减去视图的宽度，然后让其居中。。如果宽度超过则缩小视图的宽度。
+            if (maxRight - minLeft < sbv.tgFrame.width)
+            {
+                sbv.tgFrame.width = maxRight - minLeft
+                sbv.tgFrame.left = minLeft
+            }
+            else
+            {
+                sbv.tgFrame.left = (maxRight - minLeft - sbv.tgFrame.width) / 2 + minLeft
+            }
+            
+            sbv.tgFrame.right = sbv.tgFrame.left + sbv.tgFrame.width
+            
+        }
+        else if (sbv.tg_left.minVal.posRelaVal != nil)
+        {
+            //得到左边的最小位置。如果当前的左边距小于这个位置则缩小视图的宽度。
+             let minLeft = self.tgCalcRelationalSubview(sbv.tg_left.minVal.posRelaVal.view, gravity: sbv.tg_left.minVal.posRelaVal._type, selfSize: selfSize) + sbv.tg_left.minVal.offsetVal
+            
+            if (sbv.tgFrame.left < minLeft)
+            {
+                sbv.tgFrame.left = minLeft
+                sbv.tgFrame.width = sbv.tgFrame.right - sbv.tgFrame.left
+            }
+            
+        }
+        else if (sbv.tg_right.maxVal.posRelaVal != nil)
+        {
+            //得到右边的最大位置。如果当前的右边距大于了这个位置则缩小视图的宽度。
+            let maxRight = self.tgCalcRelationalSubview(sbv.tg_right.maxVal.posRelaVal.view, gravity: sbv.tg_right.maxVal.posRelaVal._type, selfSize: selfSize) - sbv.tg_right.maxVal.offsetVal
+            
+            if (sbv.tgFrame.right > maxRight)
+            {
+                sbv.tgFrame.right = maxRight;
+                sbv.tgFrame.width = sbv.tgFrame.right - sbv.tgFrame.left
+            }
+            
+        }
+
+        
     }
     
     fileprivate func tgCalcSubviewTopBottom(_ sbv: UIView, selfSize: CGSize) {
@@ -343,11 +396,11 @@ extension TGRelativeLayout
                 }
                 else if sbv.tg_top.posNumVal != nil
                 {
-                    sbv.tgFrame.top = sbv.tg_top.margin
+                    sbv.tgFrame.top = sbv.tg_top.margin + self.tg_topPadding
                 }
                 else if sbv.tg_top.posWeightVal != nil
                 {
-                    sbv.tgFrame.top = sbv.tg_top.realMarginInSize(selfSize.height - self.tg_topPadding - self.tg_bottomPadding)
+                    sbv.tgFrame.top = sbv.tg_top.realMarginInSize(selfSize.height - self.tg_topPadding - self.tg_bottomPadding) + self.tg_topPadding
                 }
                 
                 if sbv.tg_height.isFill && !self.tgIsNoLayoutSubview(sbv)
@@ -403,6 +456,58 @@ extension TGRelativeLayout
                 sbv.tgFrame.bottom = sbv.tgFrame.top + sbv.tgFrame.height
             }
         }
+        
+        
+        //这里要更新上边最小和下边最大约束的情况。
+        if (sbv.tg_top.minVal.posRelaVal != nil && sbv.tg_bottom.maxVal.posRelaVal != nil)
+        {
+            //让高度缩小并在最小和最大的中间排列。
+            let minTop = self.tgCalcRelationalSubview(sbv.tg_top.minVal.posRelaVal.view, gravity: sbv.tg_top.minVal.posRelaVal._type, selfSize: selfSize) + sbv.tg_top.minVal.offsetVal
+            
+            
+            let maxBottom = self.tgCalcRelationalSubview(sbv.tg_bottom.maxVal.posRelaVal.view, gravity: sbv.tg_bottom.maxVal.posRelaVal._type, selfSize: selfSize) - sbv.tg_bottom.maxVal.offsetVal
+            
+            
+            //用maxBottom减去minTop得到的高度再减去视图的高度，然后让其居中。。如果高度超过则缩小视图的高度。
+            if (maxBottom - minTop < sbv.tgFrame.height)
+            {
+                sbv.tgFrame.height = maxBottom - minTop
+                sbv.tgFrame.top = minTop
+            }
+            else
+            {
+                sbv.tgFrame.top = (maxBottom - minTop - sbv.tgFrame.height) / 2 + minTop
+            }
+            
+            sbv.tgFrame.bottom = sbv.tgFrame.top + sbv.tgFrame.height
+            
+        }
+        else if (sbv.tg_top.minVal.posRelaVal != nil)
+        {
+            //得到上边的最小位置。如果当前的上边距小于这个位置则缩小视图的高度。
+            let minTop = self.tgCalcRelationalSubview(sbv.tg_top.minVal.posRelaVal.view, gravity: sbv.tg_top.minVal.posRelaVal._type, selfSize: selfSize) + sbv.tg_top.minVal.offsetVal
+        
+            
+            if (sbv.tgFrame.top < minTop)
+            {
+                sbv.tgFrame.top = minTop
+                sbv.tgFrame.height = sbv.tgFrame.bottom - sbv.tgFrame.top
+            }
+            
+        }
+        else if (sbv.tg_bottom.maxVal.posRelaVal != nil)
+        {
+            //得到下边的最大位置。如果当前的下边距大于了这个位置则缩小视图的高度。
+            let maxBottom = self.tgCalcRelationalSubview(sbv.tg_bottom.maxVal.posRelaVal.view, gravity: sbv.tg_bottom.maxVal.posRelaVal._type, selfSize: selfSize) - sbv.tg_bottom.maxVal.offsetVal
+            
+            if (sbv.tgFrame.bottom > maxBottom)
+            {
+                sbv.tgFrame.bottom = maxBottom;
+                sbv.tgFrame.height = sbv.tgFrame.bottom - sbv.tgFrame.top
+            }
+            
+        }
+
     }
     
     
@@ -517,6 +622,18 @@ extension TGRelativeLayout
             
             if sbv.tgFrame.height == CGFloat.greatestFiniteMagnitude {
                 sbv.tgFrame.height = sbv.bounds.size.height
+                
+                
+                if sbv.tg_height.isFlexHeight && !self.tgIsNoLayoutSubview(sbv)
+                {
+                    if sbv.tgFrame.width == CGFloat.greatestFiniteMagnitude
+                    {
+                        _ = self.tgCalcSubviewWidth(sbv, selfSize: selfSize)
+                    }
+                    
+                    sbv.tgFrame.height = self.tgCalcHeightFromHeightWrapView(sbv, width: sbv.tgFrame.width)
+                }
+                
                 sbv.tgFrame.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: sbv.tgFrame.height, sbvSize: sbv.tgFrame.frame.size, selfLayoutSize: selfSize)
             }
         }
@@ -861,6 +978,7 @@ extension TGRelativeLayout
             
             if sbv.tg_height.isFlexHeight {
                 sbv.tgFrame.height = self.tgCalcHeightFromHeightWrapView(sbv, width: sbv.tgFrame.width)
+                sbv.tgFrame.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: sbv.tgFrame.height, sbvSize: sbv.tgFrame.frame.size, selfLayoutSize: selfSize)
             }
             
             tgCalcSubviewTopBottom(sbv, selfSize: selfSize)

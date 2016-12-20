@@ -73,6 +73,12 @@ final public class TGLayoutPos
 
     //设置位置的值为数值类型，offset是在设置值的基础上的偏移量。
     @discardableResult
+    public func equal(_ origin:Int, offset:CGFloat = 0) ->TGLayoutPos
+    {
+        return self.equal(CGFloat(origin), offset:offset)
+    }
+    
+    @discardableResult
     public func equal(_ origin:CGFloat, offset:CGFloat = 0) ->TGLayoutPos
     {
         return self.tgEqual(val: origin, offset: offset)
@@ -128,6 +134,14 @@ final public class TGLayoutPos
         return self
     }
     
+    @discardableResult
+    public func min(_ val:TGLayoutPos!, offset:CGFloat = 0) ->TGLayoutPos
+    {
+        _minVal.equal(val, offset:offset)
+        setNeedLayout()
+        return self
+    }
+    
     //设置位置值的最大边界值。
     @discardableResult
     public func max(_ val:CGFloat, offset:CGFloat = 0) ->TGLayoutPos
@@ -137,6 +151,16 @@ final public class TGLayoutPos
         
         return self
     }
+    
+    @discardableResult
+    public func max(_ val:TGLayoutPos!, offset:CGFloat = 0) ->TGLayoutPos
+    {
+        _maxVal.equal(val, offset:offset)
+        setNeedLayout()
+        
+        return self
+    }
+
     
     //返回视图，用于链式语法
     @discardableResult
@@ -396,11 +420,11 @@ extension TGLayoutPos
     {
         
         var retVal = (self.posNumVal ?? 0) + _offsetVal
-        if _maxVal != nil
+        if _maxVal != nil && _maxVal.posNumVal != nil
         {
             retVal = Swift.min(_maxVal.posNumVal!, retVal)
         }
-        if _minVal != nil
+        if _minVal != nil && _minVal.posNumVal != nil
         {
             retVal = Swift.max(_minVal.posNumVal!, retVal)
         }
@@ -424,8 +448,15 @@ extension TGLayoutPos
             retVal = self.offsetVal
         }
      
-        retVal = Swift.min(_maxVal.posNumVal!, retVal)
-        retVal = Swift.max(_minVal.posNumVal!, retVal)
+        if _maxVal != nil && _maxVal.posNumVal != nil
+        {
+            retVal = Swift.min(_maxVal.posNumVal!, retVal)
+        }
+        
+        if _minVal != nil && _minVal.posNumVal != nil
+        {
+            retVal = Swift.max(_minVal.posNumVal!, retVal)
+        }
         
         return retVal
         

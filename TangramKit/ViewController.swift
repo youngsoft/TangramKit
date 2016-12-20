@@ -76,6 +76,9 @@ class ViewController: UITableViewController {
         demoVCList.append(["title":NSLocalizedString("4.RelativeLayout - Scroll&Dock",comment:""),
                            "class":RLTest4ViewController.self]
         )
+        demoVCList.append(["title":NSLocalizedString("5.RelativeLayout - Boundary limit",comment:""),
+                           "class":RLTest5ViewController.self]
+        )
         demoVCList.append(["title":NSLocalizedString("1.TableLayout - Vert",comment:""),
        "class":TLTest1ViewController.self]
         )

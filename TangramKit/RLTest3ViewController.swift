@@ -18,6 +18,7 @@ class RLTest3ViewController: UIViewController {
          */
         
         let rootLayout = TGRelativeLayout()
+        rootLayout.backgroundColor = .white
         self.view = rootLayout
         
         let layout1 = createLayout1()  //子视图整体水平居中的布局

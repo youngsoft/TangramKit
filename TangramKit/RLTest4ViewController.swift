@@ -32,6 +32,7 @@ class RLTest4ViewController: UIViewController {
          */
         
         let scrollView = UIScrollView()
+        scrollView.backgroundColor = .white
         self.view = scrollView;
         scrollView.delegate = self;
         
