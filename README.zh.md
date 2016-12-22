@@ -1,14 +1,15 @@
 [![Version](https://img.shields.io/cocoapods/v/TangramKit.svg?style=flat)](http://cocoapods.org/pods/TangramKit)
 [![License](https://img.shields.io/cocoapods/l/TangramKit.svg?style=flat)](http://cocoapods.org/pods/TangramKit)
 [![Platform](https://img.shields.io/cocoapods/p/TangramKit.svg?style=flat)](http://cocoapods.org/pods/TangramKit)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Support](https://img.shields.io/badge/support-iOS%205%2B%20-blue.svg?style=flat)](https://www.apple.com/nl/ios/)
 [![Weibo](https://img.shields.io/badge/Sina微博-@欧阳大哥2013-yellow.svg?style=flat)](http://weibo.com/1411091507)
 [![QQ](https://img.shields.io/badge/QQ-156355113-yellow.svg?style=flat)]()
 [![GitHub stars](https://img.shields.io/github/stars/youngsoft/TangramKit.svg)](https://github.com/youngsoft/TangramKit/stargazers)
 
-![logo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKit/logo1.png)
+![logo](TangramKitDemo/Support Files/logo1.png)
 
-#TangramKit ![logo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKit/logo2.png)
+#TangramKit ![logo](TangramKitDemo/Support Files/logo2.png)
 
 TangramKit是一套在Swift3.0语言上开发的iOS界面视图布局框架。它的名字来源于中国古代的玩具七巧板，寓意着可以用简单的功能来构造出各种千变万化且非常复杂的UI界面。TangramKit的内核是基于对UIView的layoutSubviews方法的重载以及对子视图的bounds和center属性的设置而实现的。TangramKit功能强大而且简单易用，它集成了:iOS Autolayout和SizeClass、android的5大布局体系、HTML/CSS的浮动定位技术以及flex-box和bootstrap框架等市面上主流的平台的界面布局功能，同时提供了一套非常简单和完备的多屏幕尺寸适配的解决方案。TangramKit的objective-C版本的名字叫做：**[MyLayout](https://github.com/youngsoft/MyLinearLayout)**   
 
@@ -41,7 +42,7 @@ TangramKit是一套在Swift3.0语言上开发的iOS界面视图布局框架。�
 
 最终的效果图如下：
 
-![demo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKit/usagedemo.png)
+![demo](TangramKitDemo/Support Files/usagedemo.png)
 
 
 ```swift
@@ -498,7 +499,7 @@ let lsc = rootLayout.tg_fetchSizeClass(with: .comb(.any, .compact, nil), from:.d
 ## 使用方法
 
 ### 直接拷贝
-1.  将github工程中的Lib文件夹下的所有文件复制到您的工程中。
+1.  将github工程中的TangramKit文件夹下的所有文件复制到您的工程中。
 
 ### CocoaPods安装
 
@@ -513,7 +514,7 @@ $ gem install cocoapods
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 
-pod 'TangramKit', '~> 1.0.0'
+pod 'TangramKit', '~> 1.0.1'
 ```
    
 然后运行如下命令:
@@ -521,6 +522,27 @@ pod 'TangramKit', '~> 1.0.0'
 ```
 $ pod install
 ```
+
+### 使用[Carthage](https://github.com/Carthage/Carthage)
+
+1.创建一个 `Cartfile` 文件，内容如下：
+
+	github "youngsoft/TangramKit"
+	
+2.终端执行`carthage update`。
+ 
+3.点击“General”按钮，然后把`Carthage/Build/iOS/TangramKit.framework`拖拽到到“Linked Frameworks and Libraries”栏目里。
+
+4.点击“Build Phases”按钮, 然后点击左上角的加号 “+” 选择“New Run Script Phase”，在`Shell`下面填写下面内容:
+
+	/usr/local/bin/carthage copy-frameworks
+	
+  然后在 “Input Files”栏目加上：
+
+	
+	$(SRCROOT)/Carthage/Build/iOS/TangramKit.framework
+	
+
 
 ## MyLayout和TangramKit的差异
 

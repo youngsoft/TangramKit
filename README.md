@@ -1,14 +1,15 @@
 [![Version](https://img.shields.io/cocoapods/v/TangramKit.svg?style=flat)](http://cocoapods.org/pods/TangramKit)
 [![License](https://img.shields.io/cocoapods/l/TangramKit.svg?style=flat)](http://cocoapods.org/pods/TangramKit)
 [![Platform](https://img.shields.io/cocoapods/p/TangramKit.svg?style=flat)](http://cocoapods.org/pods/TangramKit)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Support](https://img.shields.io/badge/support-iOS%205%2B%20-blue.svg?style=flat)](https://www.apple.com/nl/ios/)
 [![Weibo](https://img.shields.io/badge/Sina微博-@欧阳大哥2013-yellow.svg?style=flat)](http://weibo.com/1411091507)
 [![QQ](https://img.shields.io/badge/QQ-156355113-yellow.svg?style=flat)]()
 [![GitHub stars](https://img.shields.io/github/stars/youngsoft/TangramKit.svg)](https://github.com/youngsoft/TangramKit/stargazers)
 
-![logo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKit/logo1.png)
+![logo](TangramKitDemo/Support Files/logo1.png)
 
-##TangramKit ![logo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKit/logo2.png)
+##TangramKit ![logo](TangramKitDemo/Support Files/logo2.png)
 
 TangramKit is a simple and easy Swift framework for iOS view layout. The name comes from Tangram of China which provides some simple functions to build a variety of complex interface. It integrates the functions including: Autolayout and SizeClass of iOS, five layout classes of Android, float and flex-box and bootstrap of HTML/CSS. The TangramKit's objective-C version are named: **[MyLayout](https://github.com/youngsoft/MyLinearLayout)**
 
@@ -25,7 +26,7 @@ TangramKit is a simple and easy Swift framework for iOS view layout. The name co
 *  Subview C's width is filled in to S, height is 40.
 *  Subview D's right margin is 20, width is 50% width of S, height is 40 
 
-![demo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKit/usagedemo.png)
+![demo](TangramKitDemo/Support Files/usagedemo.png)
 
 
 ```swift
@@ -101,7 +102,7 @@ TangramKit is a simple and easy Swift framework for iOS view layout. The name co
 
 ##Architecture
 
-![demo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKit/TangramClass.png)
+![demo](TangramKitDemo/Support Files/TangramClass.png)
 
 ###TGLayoutPos
 `TGLayoutPos` is represent to the position of a view. UIView provides six extension variables:tg_left, tg_top, tg_bottom, tg_right, tg_centerX, tg_centerY to set view's margin or space distance between self and others.
@@ -478,7 +479,6 @@ let lsc = rootLayout.tg_fetchSizeClass(with: .comb(.any, .compact, nil), from:.d
 ```
 
 
-
 ## Demo sample
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/layoutdemo1.gif)
@@ -490,7 +490,7 @@ let lsc = rootLayout.tg_fetchSizeClass(with: .comb(.any, .compact, nil), from:.d
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/layoutdemo7.gif)
 
 
-##How To Get Started
+## How To Get Started
 
  [Download TangramKit](https://github.com/youngsoft/TangramKit/archive/master.zip) 
  
@@ -509,7 +509,7 @@ let lsc = rootLayout.tg_fetchSizeClass(with: .comb(.any, .compact, nil), from:.d
 
 TangramKit supports multiple methods for installing the library in a project.
 ### Copy to your project
-1.  Copy `Lib` folder from the demo project to your project
+1.  Copy `TangramKit` folder from the demo project to your project
 
 ### Installation with CocoaPods
 
@@ -523,7 +523,7 @@ To integrate TangramKit into your Xcode project using CocoaPods, specify it in y
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 
-pod 'TangramKit', '~> 1.0.0'
+pod 'TangramKit', '~> 1.0.1'
 ```
    
 Then, run the following command:
@@ -531,7 +531,28 @@ Then, run the following command:
 `$ pod install`
 
 
+### Use [Carthage](https://github.com/Carthage/Carthage)
 
+1. Create a `Cartfile` file.
+
+	```
+	github "youngsoft/TangramKit"
+	```
+2. Run `carthage update`.
+ 
+3. On your application targets’ “General” settings tab, in the “Linked Frameworks and Libraries” section, drag and drop `TangramKit` framework from the Carthage/Build folder on disk.
+
+4. On your application targets’ “Build Phases” settings tab, click the “+” icon and choose “New Run Script Phase”. Create a Run Script in which you specify your shell (ex: bin/sh), add the following contents to the script area below the shell:
+
+	```
+	/usr/local/bin/carthage copy-frameworks
+	```
+
+	and add the path under “Input Files”, e.g.:
+
+	```
+	$(SRCROOT)/Carthage/Build/iOS/TangramKit.framework
+	```
 
 
 ##FAQ
@@ -548,14 +569,16 @@ TangramKit is released under the MIT license. See LICENSE for details.
 
 
 ##Thanks to the partners:
-
-
-*闫涛:* [github](https://github.com/taoyan)
+     
+*闫涛:* [Github](https://github.com/taoyan)
        [homepage](http://blog.csdn.net/u013928640)
-*张光凯:* [github](https://github.com/loveNoodles)
+*张光凯:* [Github](https://github.com/loveNoodles)
         [homepage](http://blog.csdn.net/u011597585)
-*周杰:*  [github](https://github.com/MineJ)
-*阳光不锈:*[github](https://github.com/towik)
+*周杰:*  [Github](https://github.com/MineJ)
+*阳光不锈:*[Github](https://github.com/towik)
+*Hanwp:* [Github](https://github.com/Hanwp) 
+        [Blog](http://hanwp.github.io/)
+*X:* [Github](https://github.com/0x10000) 
 
 
 
