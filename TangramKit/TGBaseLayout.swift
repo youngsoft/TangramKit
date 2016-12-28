@@ -650,7 +650,9 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         var (selfSize, hasSubLayout) = self.tgCalcLayoutRect(size, isEstimate: false, type: type)
         if hasSubLayout
         {
-            (selfSize,_) = self.tgCalcLayoutRect(CGSize.zero, isEstimate: true, type: type)
+            self.tgFrame.width = selfSize.width
+            self.tgFrame.height = selfSize.height
+            (selfSize,_) = self.tgCalcLayoutRect(.zero, isEstimate: true, type: type)
         }
         self.tgFrame.width = selfSize.width
         self.tgFrame.height = selfSize.height
@@ -961,7 +963,6 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 tgsbvFrame.reset()
                 
             }
-            self.tgFrame.sizeClass = self.tgDefaultSizeClass
             
             if !oldSelfSize.equalTo(newSelfSize) && newSelfSize.width != CGFloat.greatestFiniteMagnitude
             {
@@ -1005,8 +1006,52 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             if newSelfSize.width != CGFloat.greatestFiniteMagnitude
             {
                 self.tgAlterScrollViewContentSize(newSelfSize)
+                
+                if self.superview != nil && !self.superview!.isKind(of: TGBaseLayout.self) && !self.superview!.isKind(of: UIScrollView.self)
+                {
+                    
+                    let rectSuper = self.superview!.bounds
+                    let rectSelf = self.bounds
+                    var centerPonintSelf = self.center
+                    
+                    if (self.tg_width.isWrap)
+                    {
+                        //如果只设置了右边，或者只设置了居中则更新位置。。
+                        if (self.tg_centerX.hasValue)
+                        {
+                            centerPonintSelf.x = (rectSuper.width - rectSelf.width)/2 + self.tg_centerX.realMarginInSize(rectSuper.width) + self.layer.anchorPoint.x * rectSelf.width
+                        }
+                        else if (self.tg_right.hasValue && !self.tg_left.hasValue)
+                        {
+                            centerPonintSelf.x  = rectSuper.width - rectSelf.width - self.tg_right.realMarginInSize(rectSuper.width) + self.layer.anchorPoint.x * rectSelf.width
+                        }
+                        
+                    }
+                    
+                    if (self.tg_height.isWrap)
+                    {
+                        if (self.tg_centerY.hasValue)
+                        {
+                            centerPonintSelf.y = (rectSuper.height - rectSelf.height)/2 + self.tg_centerY.realMarginInSize(rectSuper.height) + self.layer.anchorPoint.y * rectSelf.height
+                        }
+                        else if (self.tg_bottom.hasValue && !self.tg_top.hasValue)
+                        {
+                            centerPonintSelf.y  = rectSuper.height - rectSelf.height - self.tg_bottom.realMarginInSize(rectSuper.height) + self.layer.anchorPoint.y * rectSelf.height
+                        }
+                    }
+                    
+                    //如果有变化则只调整自己的center。而不变化
+                    if (!self.center.equalTo(centerPonintSelf))
+                    {
+                        self.center = centerPonintSelf
+                    }
+
+                    
+                }
+                
             }
             
+            self.tgFrame.sizeClass = self.tgDefaultSizeClass
             self.tg_isLayouting = false
         }
         
@@ -1669,7 +1714,7 @@ extension TGBaseLayout
             return value;
         }
         
-        return value * boundDime.multiVal + boundDime.addVal;
+        return boundDime.measure(value)
     }
     
     
@@ -1677,9 +1722,17 @@ extension TGBaseLayout
     internal func tgValidMeasure(_ dime:TGLayoutSize, sbv:UIView, calcSize:CGFloat, sbvSize:CGSize, selfLayoutSize:CGSize) ->CGFloat
     {
         //算出最大最小值。
-        let  minV = self.tgGetBoundLimitMeasure(dime.minVal, sbv:sbv, dimeType:dime._type, sbvSize:sbvSize, selfLayoutSize:selfLayoutSize, isUBound:false)
+        var minV = -CGFloat.greatestFiniteMagnitude
+        if dime.isActive
+        {
+            minV = self.tgGetBoundLimitMeasure(dime.minVal, sbv:sbv, dimeType:dime._type, sbvSize:sbvSize, selfLayoutSize:selfLayoutSize, isUBound:false)
+        }
         
-        let  maxV = self.tgGetBoundLimitMeasure(dime.maxVal, sbv:sbv, dimeType:dime._type, sbvSize:sbvSize, selfLayoutSize:selfLayoutSize,isUBound:true)
+        var  maxV = CGFloat.greatestFiniteMagnitude
+        if dime.isActive
+        {
+            maxV = self.tgGetBoundLimitMeasure(dime.maxVal, sbv:sbv, dimeType:dime._type, sbvSize:sbvSize, selfLayoutSize:selfLayoutSize,isUBound:true)
+        }
         
         var retCalcSize = calcSize
         retCalcSize = max(minV, retCalcSize);
@@ -1759,8 +1812,17 @@ extension TGBaseLayout
     internal func tgValidMargin(_ pos:TGLayoutPos, sbv:UIView, calcPos:CGFloat, selfLayoutSize:CGSize) ->CGFloat
     {
         //算出最大最小值
-        let  minV = self.tgGetBoundLimitMargin(pos.minVal, sbv:sbv,selfLayoutSize:selfLayoutSize);
-        let  maxV = self.tgGetBoundLimitMargin(pos.maxVal,sbv:sbv,selfLayoutSize:selfLayoutSize);
+        var minV = -CGFloat.greatestFiniteMagnitude
+        if pos.isActive
+        {
+            minV = self.tgGetBoundLimitMargin(pos.minVal, sbv:sbv,selfLayoutSize:selfLayoutSize)
+        }
+        
+        var  maxV = CGFloat.greatestFiniteMagnitude
+        if pos.isActive
+        {
+            maxV = self.tgGetBoundLimitMargin(pos.maxVal,sbv:sbv,selfLayoutSize:selfLayoutSize)
+        }
         
         var retCalcPos = calcPos
         retCalcPos = max(minV, retCalcPos);
@@ -1935,14 +1997,21 @@ extension TGBaseLayout
         if let scrolv = self.superview as? UIScrollView , self.tg_adjustScrollViewContentSizeMode == .yes
         {
             var contSize = scrolv.contentSize
+            let rectSuper = scrolv.bounds
             
-            if contSize.height != newSize.height
+            //这里把自己在父视图中的上下左右边距也算在contentSize的包容范围内。
+            let leftMargin = self.tg_left.realMarginInSize(rectSuper.width)
+            let rightMargin = self.tg_right.realMarginInSize(rectSuper.width)
+            let topMargin = self.tg_top.realMarginInSize(rectSuper.height)
+            let bottomMargin = self.tg_bottom.realMarginInSize(rectSuper.height)
+            
+            if contSize.height != newSize.height + topMargin + bottomMargin
             {
-                contSize.height = newSize.height
+                contSize.height = newSize.height + topMargin + bottomMargin
             }
-            if contSize.width != newSize.width
+            if contSize.width != newSize.width + leftMargin + rightMargin
             {
-                contSize.width = newSize.width
+                contSize.width = newSize.width + leftMargin + rightMargin
             }
             
             scrolv.contentSize = contSize

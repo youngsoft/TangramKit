@@ -699,21 +699,25 @@ extension TGRelativeLayout
                 var totalMulti: CGFloat = isViewHidden ? 0 : sbv.tg_width.multiVal
                 var totalAdd: CGFloat = isViewHidden ? 0 : sbv.tg_width.addVal
                 
-                for dime:TGLayoutSize in dimeArray {
-                    isViewHidden = self.tgIsNoLayoutSubview(dime.view) && self.tg_autoLayoutViewGroupWidth
-                    if !isViewHidden {
-                        if dime.dimeNumVal != nil {
-                            totalAdd += (-1 * dime.dimeNumVal)
+                for dime:TGLayoutSize in dimeArray
+                {
+                    if dime.isActive
+                    {
+                        isViewHidden = self.tgIsNoLayoutSubview(dime.view) && self.tg_autoLayoutViewGroupWidth
+                        if !isViewHidden {
+                            if dime.dimeNumVal != nil {
+                                totalAdd += (-1 * dime.dimeNumVal)
+                            }
+                            else if (dime.view as? TGBaseLayout) == nil && dime.isWrap
+                            {
+                                totalAdd += -1 * dime.view.tgFrame.width
+                            }
+                            else {
+                                totalMulti += dime.multiVal
+                            }
+                            
+                            totalAdd += dime.addVal
                         }
-                        else if (dime.view as? TGBaseLayout) == nil && dime.isWrap
-                        {
-                            totalAdd += -1 * dime.view.tgFrame.width
-                        }
-                        else {
-                            totalMulti += dime.multiVal
-                        }
-                        
-                        totalAdd += dime.addVal
                     }
                 }
                 
@@ -731,19 +735,23 @@ extension TGRelativeLayout
                         sbv.tgFrame.width = 0
                     }
                     
-                    for dime:TGLayoutSize in dimeArray {
-                        if dime.dimeNumVal == nil {
-                            dime.view.tgFrame.width = floatWidth * (dime.multiVal / totalMulti)
-                        }
-                        else {
-                            dime.view.tgFrame.width = dime.dimeNumVal
-                        }
-                        
-                        dime.view.tgFrame.width = self.tgValidMeasure(dime.view.tg_width, sbv: dime.view, calcSize: dime.view.tgFrame.width, sbvSize: dime.view.tgFrame.frame.size, selfLayoutSize: selfSize)
-                        
-                        if self.tgIsNoLayoutSubview(dime.view)
+                    for dime:TGLayoutSize in dimeArray
+                    {
+                        if dime.isActive
                         {
-                            dime.view.tgFrame.width = 0
+                            if dime.dimeNumVal == nil {
+                                dime.view.tgFrame.width = floatWidth * (dime.multiVal / totalMulti)
+                            }
+                            else {
+                                dime.view.tgFrame.width = dime.dimeNumVal
+                            }
+                            
+                            dime.view.tgFrame.width = self.tgValidMeasure(dime.view.tg_width, sbv: dime.view, calcSize: dime.view.tgFrame.width, sbvSize: dime.view.tgFrame.frame.size, selfLayoutSize: selfSize)
+                            
+                            if self.tgIsNoLayoutSubview(dime.view)
+                            {
+                                dime.view.tgFrame.width = 0
+                            }
                         }
                         
                     }
@@ -758,21 +766,25 @@ extension TGRelativeLayout
                 var isViewHidden: Bool = self.tgIsNoLayoutSubview(sbv) && self.tg_autoLayoutViewGroupHeight
                 var totalMulti = isViewHidden ? 0 : sbv.tg_height.multiVal
                 var totalAdd = isViewHidden ? 0 : sbv.tg_height.addVal
-                for dime:TGLayoutSize in dimeArray {
-                    isViewHidden =  self.tgIsNoLayoutSubview(dime.view) && self.tg_autoLayoutViewGroupHeight
-                    if !isViewHidden {
-                        if dime.dimeNumVal != nil {
-                            totalAdd += (-1 * dime.dimeNumVal!)
+                for dime:TGLayoutSize in dimeArray
+                {
+                    if dime.isActive
+                    {
+                        isViewHidden =  self.tgIsNoLayoutSubview(dime.view) && self.tg_autoLayoutViewGroupHeight
+                        if !isViewHidden {
+                            if dime.dimeNumVal != nil {
+                                totalAdd += (-1 * dime.dimeNumVal!)
+                            }
+                            else if (dime.view as? TGBaseLayout) == nil && dime.isWrap
+                            {
+                                totalAdd += -1 * dime.view.tgFrame.height;
+                            }
+                            else {
+                                totalMulti += dime.multiVal
+                            }
+                            
+                            totalAdd += dime.addVal
                         }
-                        else if (dime.view as? TGBaseLayout) == nil && dime.isWrap
-                        {
-                            totalAdd += -1 * dime.view.tgFrame.height;
-                        }
-                        else {
-                            totalMulti += dime.multiVal
-                        }
-                        
-                        totalAdd += dime.addVal
                     }
                 }
                 
@@ -789,19 +801,23 @@ extension TGRelativeLayout
                         sbv.tgFrame.height = 0
                     }
                     
-                    for dime: TGLayoutSize in dimeArray {
-                        if dime.dimeNumVal == nil {
-                            dime.view.tgFrame.height = floatHeight * (dime.multiVal / totalMulti)
-                        }
-                        else {
-                            dime.view.tgFrame.height = dime.dimeNumVal
-                        }
-                        
-                        dime.view.tgFrame.height = self.tgValidMeasure(dime.view.tg_height, sbv: dime.view, calcSize: dime.view.tgFrame.height, sbvSize: dime.view.tgFrame.frame.size, selfLayoutSize: selfSize)
-                        
-                        if self.tgIsNoLayoutSubview(dime.view)
+                    for dime: TGLayoutSize in dimeArray
+                    {
+                        if dime.isActive
                         {
-                            dime.view.tgFrame.height = 0
+                            if dime.dimeNumVal == nil {
+                                dime.view.tgFrame.height = floatHeight * (dime.multiVal / totalMulti)
+                            }
+                            else {
+                                dime.view.tgFrame.height = dime.dimeNumVal
+                            }
+                            
+                            dime.view.tgFrame.height = self.tgValidMeasure(dime.view.tg_height, sbv: dime.view, calcSize: dime.view.tgFrame.height, sbvSize: dime.view.tgFrame.frame.size, selfLayoutSize: selfSize)
+                            
+                            if self.tgIsNoLayoutSubview(dime.view)
+                            {
+                                dime.view.tgFrame.height = 0
+                            }
                         }
                         
                     }

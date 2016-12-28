@@ -1253,7 +1253,7 @@ extension TGFloatLayout
                     
                     if (sbv.tg_width.dimeRelaVal === sbv.tg_height)
                     {
-                        rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.height * sbv.tg_width.multiVal + sbv.tg_width.addVal, sbvSize: rect.size, selfLayoutSize: selfSize)
+                        rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: sbv.tg_width.measure(rect.size.height), sbvSize: rect.size, selfLayoutSize: selfSize)
                     }
                     
                     

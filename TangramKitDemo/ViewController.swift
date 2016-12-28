@@ -152,6 +152,9 @@ class ViewController: UITableViewController {
         demoVCList.append(["title":NSLocalizedString("❁1.Screen perfect fit - Demo1",comment:""),
                            "class":AllTest7ViewController.self]
         )
+        demoVCList.append(["title":NSLocalizedString("❁2.Screen perfect fit - Demo2",comment:""),
+                           "class":AllTest8ViewController.self]
+        )
     }
 
     override  func didReceiveMemoryWarning() {

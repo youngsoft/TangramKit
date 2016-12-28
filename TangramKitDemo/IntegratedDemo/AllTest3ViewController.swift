@@ -76,6 +76,8 @@ class AllTest3ViewController: UIViewController {
         //添加，自动伸缩布局
         self.addShrinkLayout(contentLayout)
 
+        //测试布局位置和布局尺寸的isActive属性
+        self.addActiveLayout(contentLayout)
         
     }
 
@@ -280,7 +282,6 @@ extension AllTest3ViewController
         testLayout.tg_gravity = TGGravity.horz.fill   //尺寸相等
         testLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
         testLayout.tg_space = 10
-        testLayout.tg_bottom.equal(50) //这里设置底部间距的原因是登录按钮在最底部。为了使得滚动到底部时不被覆盖。
         testLayout.tg_height.equal(50)
         testLayout.clipsToBounds = true
         contentLayout.addSubview(testLayout)
@@ -294,6 +295,33 @@ extension AllTest3ViewController
             label.sizeToFit()
             testLayout.addSubview(label)
         }
+    }
+    
+    func addActiveLayout(_ contentLayout:TGLinearLayout)
+    {
+        /*
+         这个例子提供了TGLayoutSize和TGLayoutPos类新加入的属性isActive属性的使用方法。默认情况下这个属性的值都是true表示指定的位置或者尺寸的设置是有效的，如果设置为false则这个位置或者这个尺寸的设置将无效，不会对布局产生影响。因此你可以通过为位置对象或者尺寸对象设置是否为isActive来在运行中进行界面布局的动态调整。
+         */
+        let testLayout = TGLinearLayout(.vert)
+        testLayout.backgroundColor = .white
+        testLayout.tg_height.equal(.wrap)
+        testLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
+        testLayout.tg_top.equal(10)
+        testLayout.tg_bottom.equal(50)   //这里设置底部间距的原因是登录按钮在最底部。为了使得滚动到底部时不被覆盖。你也可以设置contentLayout的tg_bottomPadding = 50来解决这个问题。
+        contentLayout.addSubview(testLayout)
+        
+        let testButton = UIButton(type:.system)
+        testButton.setTitle("Click me",for:.normal)
+        testButton.backgroundColor = CFTool.color(0)
+        testButton.tg_height.equal(50)
+        testButton.tg_width.equal(.wrap,increment:20)
+        testButton.tg_left.equal(10).isActive = true  //左边边距是10，设置active为YES表示左边位置对象的设置是生效的。
+        testButton.tg_right.equal(10).isActive = false  //右边边距是10，设置active为NO表示右边位置对象的设置是不生效的。
+        
+        testButton.addTarget(self,action:#selector(handleActiveTest),for:.touchUpInside)
+        
+        testLayout.addSubview(testButton)
+
     }
     
     //创建可执动作事件的布局
@@ -644,4 +672,32 @@ extension AllTest3ViewController
                 self.popmenuLayout.removeFromSuperview()
         })
     }
+    
+    func handleActiveTest(sender:UIButton!)
+    {
+        //下面代码中布局位置的active属性设置的变化所产生的效果。
+        if (sender.tg_left.isActive && sender.tg_right.isActive)
+        {
+            sender.tg_width.equal(.wrap, increment:20)  //恢复原来的宽度。
+            sender.tg_left.isActive = true
+            sender.tg_right.isActive = false  //按钮将停靠在父布局的左边。
+        }
+        else if (sender.tg_left.isActive)
+        {
+            sender.tg_left.isActive = false
+            sender.tg_right.isActive = true  //按钮将停靠在父布局的右边
+        }
+        else if (sender.tg_right.isActive)
+        {
+            sender.tg_left.isActive = true
+            sender.tg_right.isActive = true  //按钮的左右边距都生效，并且会拉伸按钮的宽度。
+        }
+        
+        if let superLayout = sender.superview as? TGLinearLayout
+        {
+            superLayout.tg_layoutAnimationWithDuration(0.3)
+        }
+        
+    }
+
 }

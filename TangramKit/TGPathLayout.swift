@@ -702,7 +702,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
                 tgCalcSizeFromSizeWrapSubview(sbv)
             }
             
-            if sbv.isKind(of: TGBaseLayout.classForCoder()){
+            if sbv.isKind(of: TGBaseLayout.self){
                 let sbv1 = sbv as! TGBaseLayout
                 if hasSubLayout && (sbv1.tg_width.isWrap || sbv1.tg_height.isWrap){
                     hasSubLayout = true
@@ -727,7 +727,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
         sbs = tgGetLayoutSubviewsFrom(sbsFrom: tg_pathSubviews)
         
         var path:CGMutablePath? = nil
-        if layer.isKind(of: CAShapeLayer.classForCoder()) && !isEstimate{
+        if layer.isKind(of: CAShapeLayer.self) && !isEstimate{
             path = CGMutablePath()
         }
         
@@ -755,9 +755,9 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             
             if sbv.tg_width.dimeRelaVal != nil{
                 if sbv.tg_width.dimeRelaVal === tg_width{
-                    rect.size.width =  (selfSize.width - tg_leftPadding - tg_rightPadding) * sbv.tg_width.multiVal + sbv.tg_width.addVal
+                    rect.size.width =  sbv.tg_width.measure(selfSize.width - tg_leftPadding - tg_rightPadding)
                 }else{
-                    rect.size.width = sbv.tg_width.dimeRelaVal._view.tg_estimatedFrame.size.width * sbv.tg_width.multiVal + sbv.tg_width.addVal
+                    rect.size.width = sbv.tg_width.measure(sbv.tg_width.dimeRelaVal._view.tg_estimatedFrame.size.width)
                 }
             }
             
@@ -769,9 +769,9 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             
             if sbv.tg_height.dimeRelaVal != nil{
                 if sbv.tg_height.dimeRelaVal === tg_height{
-                    rect.size.height = (selfSize.height - tg_topPadding - tg_bottomPadding) * sbv.tg_height.multiVal + sbv.tg_height.addVal
+                    rect.size.height = sbv.tg_height.measure(selfSize.height - tg_topPadding - tg_bottomPadding)
                 }else{
-                    rect.size.height = sbv.tg_height.dimeRelaVal._view.tg_estimatedFrame.size.height * sbv.tg_height.multiVal + sbv.tg_height.addVal
+                    rect.size.height = sbv.tg_height.measure(sbv.tg_height.dimeRelaVal._view.tg_estimatedFrame.size.height)
                 }
             }
             
@@ -818,9 +818,9 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             
             if sbv.tg_width.dimeRelaVal != nil{
                 if sbv.tg_width.dimeRelaVal === tg_width{
-                    rect.size.width = (selfSize.width - tg_leftPadding - tg_rightPadding) * sbv.tg_width.multiVal + sbv.tg_width.addVal
+                    rect.size.width = sbv.tg_width.measure(selfSize.width - tg_leftPadding - tg_rightPadding)
                 }else{
-                    rect.size.width = sbv.tg_width.dimeRelaVal._view.tg_estimatedFrame.size.width * sbv.tg_width.multiVal + sbv.tg_width.addVal
+                    rect.size.width = sbv.tg_width.measure(sbv.tg_width.dimeRelaVal._view.tg_estimatedFrame.size.width)
                 }
             }
             
@@ -832,9 +832,9 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             
             if (sbv.tg_height.dimeRelaVal != nil){
                 if (sbv.tg_height.dimeRelaVal === tg_height){
-                    rect.size.height = (selfSize.height - tg_topPadding - tg_bottomPadding) * sbv.tg_height.multiVal + sbv.tg_height.addVal
+                    rect.size.height = sbv.tg_height.measure(selfSize.height - tg_topPadding - tg_bottomPadding)
                 }else{
-                    rect.size.height = sbv.tg_height.dimeRelaVal._view.tg_estimatedFrame.size.height * sbv.tg_height.multiVal + sbv.tg_height.addVal
+                    rect.size.height = sbv.tg_height.measure(sbv.tg_height.dimeRelaVal._view.tg_estimatedFrame.size.height)
                 }
             }
             

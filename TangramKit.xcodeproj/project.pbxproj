@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		18BCBD461E1336D900AC7766 /* AllTest8ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BCBD451E1336D900AC7766 /* AllTest8ViewController.swift */; };
 		681BD8DF1E0B91A500403A1F /* TangramKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 681BD8DD1E0B91A500403A1F /* TangramKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		681BD8E31E0B91A500403A1F /* TangramKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 681BD8DB1E0B91A500403A1F /* TangramKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		681BD90E1E0B92E100403A1F /* TangramKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9011E0B92E100403A1F /* TangramKit.swift */; };
@@ -120,6 +121,7 @@
 
 /* Begin PBXFileReference section */
 		18270C241C954B3C00CBCC92 /* TangramKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TangramKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		18BCBD451E1336D900AC7766 /* AllTest8ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllTest8ViewController.swift; sourceTree = "<group>"; };
 		681BD8DB1E0B91A500403A1F /* TangramKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TangramKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		681BD8DD1E0B91A500403A1F /* TangramKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TangramKit.h; sourceTree = "<group>"; };
 		681BD8DE1E0B91A500403A1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -323,6 +325,7 @@
 				68F036031E0B7D2700CEBAEF /* AllTest5ViewController.swift */,
 				68F036041E0B7D2700CEBAEF /* AllTest6ViewController.swift */,
 				68F036051E0B7D2700CEBAEF /* AllTest7ViewController.swift */,
+				18BCBD451E1336D900AC7766 /* AllTest8ViewController.swift */,
 				68F036061E0B7D2700CEBAEF /* AllTestModel&View */,
 			);
 			path = IntegratedDemo;
@@ -542,6 +545,7 @@
 				681BD9141E0B92E100403A1F /* TGFloatLayout.swift in Sources */,
 				68F036441E0B7D2700CEBAEF /* FOLTest4ViewController.swift in Sources */,
 				68F0366C1E0B7D2700CEBAEF /* LLTest6ViewController.swift in Sources */,
+				18BCBD461E1336D900AC7766 /* AllTest8ViewController.swift in Sources */,
 				68F036541E0B7D2700CEBAEF /* AllTest6ViewController.swift in Sources */,
 				68F036801E0B7D2700CEBAEF /* TLTest3ViewController.swift in Sources */,
 				68F036811E0B7D2700CEBAEF /* ViewController.swift in Sources */,
@@ -868,6 +872,7 @@
 				681BD8E61E0B91A500403A1F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

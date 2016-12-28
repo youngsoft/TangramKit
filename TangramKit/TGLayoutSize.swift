@@ -191,26 +191,49 @@ final public class TGLayoutSize
     //清除所有设置。
     public func clear()
     {
+        _active = true
         _addVal = 0;
         _multiVal = 1;
         _minVal.equal(-CGFloat.greatestFiniteMagnitude)
         _maxVal.equal(CGFloat.greatestFiniteMagnitude)
+        _minVal._active = true
+        _maxVal._active = true
         _dimeVal = nil
         setNeedLayout()
         
     }
     
     
+    //设置布局尺寸是否是活动的,默认是true表示活动的，如果设置为false则表示这个布局尺寸设置的约束将不会起作用。
+    public var isActive:Bool
+    {
+        get
+        {
+            return _active
+        }
+        set
+        {
+            if _active != newValue
+            {
+                _active = newValue
+                _minVal._active = newValue
+                _maxVal._active = newValue
+                setNeedLayout()
+            }
+        }
+        
+    }
+    
     //判断尺寸是否被设置。
     public var hasValue:Bool
     {
-        return _dimeVal != nil
+        return _active && _dimeVal != nil
     }
     
     //判断尺寸值是否被设置为包裹类型。
     public var isWrap:Bool
     {
-        if (_dimeVal == nil)
+        if (!_active || _dimeVal == nil)
         {
             return false
         }
@@ -226,7 +249,7 @@ final public class TGLayoutSize
     //判断尺寸值是否被设置为填充类型。
     public var isFill:Bool
     {
-        if (_dimeVal == nil)
+        if (!_active || _dimeVal == nil)
         {
             return false
         }
@@ -243,7 +266,7 @@ final public class TGLayoutSize
     public var dimeNumVal:CGFloat!
     {
         
-        if (_dimeVal == nil)
+        if (!_active || _dimeVal == nil)
         {
             return nil
         }
@@ -260,7 +283,7 @@ final public class TGLayoutSize
     //获取相对类型的尺寸值。
     public var dimeRelaVal:TGLayoutSize!
     {
-        if (_dimeVal == nil)
+        if (!_active || _dimeVal == nil)
         {
             return nil
         }
@@ -280,7 +303,7 @@ final public class TGLayoutSize
     //获取数组类型的尺寸值。
     public var dimeArrVal:[TGLayoutSize]!
     {
-        if (_dimeVal == nil)
+        if (!_active || _dimeVal == nil)
         {
             return nil
         }
@@ -297,7 +320,7 @@ final public class TGLayoutSize
     //获取比重类型的尺寸值。
     public var dimeWeightVal:TGWeight!
     {
-        if (_dimeVal == nil)
+        if (!_active || _dimeVal == nil)
         {
             return nil
         }
@@ -315,13 +338,27 @@ final public class TGLayoutSize
     //获取尺寸的增量值。
     public var addVal:CGFloat
     {
-        return _addVal
+        if _active
+        {
+           return _addVal
+        }
+        else
+        {
+            return 0
+        }
     }
     
     //获取尺寸的乘量值。
     public var multiVal:CGFloat
     {
-        return _multiVal
+        if _active
+        {
+           return _multiVal
+        }
+        else
+        {
+            return 1
+        }
     }
     
     //获取尺寸的下边界值。
@@ -349,6 +386,7 @@ final public class TGLayoutSize
     
     internal let _type:TGGravity
     internal weak var _view:UIView!
+    internal var _active:Bool = true
     internal var _dimeVal:ValueType! = nil
     internal var _addVal:CGFloat = 0
     internal var _multiVal:CGFloat = 1
@@ -485,7 +523,7 @@ extension TGLayoutSize
     
     internal var isFlexHeight:Bool
     {
-        if (_view as? TGBaseLayout) == nil && /*!_view.tg_width.isWrap &&*/ self.isWrap
+        if (_view as? TGBaseLayout) == nil && /*!_view.tg_width.isWrap &&*/ self.isWrap && _active
         {
             return true
         }
@@ -497,20 +535,33 @@ extension TGLayoutSize
 
     internal var measure:CGFloat
     {
-        
-        return (self.dimeNumVal ?? 0) * _multiVal + _addVal
+        if _active
+        {
+           return (self.dimeNumVal ?? 0) * _multiVal + _addVal
+        }
+        else
+        {
+           return 0
+        }
     }
     
     internal func measure(_ size:CGFloat) -> CGFloat
     {
-        return size * _multiVal + _addVal
+        if _active
+        {
+           return size * _multiVal + _addVal
+        }
+        else
+        {
+            return size
+        }
         
     }
     
     
     
     internal var isMatchParent:Bool{
-        return (self.dimeRelaVal != nil && self.dimeRelaVal.view == _view.superview)
+        return _active && (self.dimeRelaVal != nil && self.dimeRelaVal.view == _view.superview)
     }
     
     fileprivate func setNeedLayout()
@@ -535,15 +586,18 @@ extension TGLayoutSize:NSCopying
     {
         let ls:TGLayoutSize = type(of: self).init(self._type)
         ls._view = self._view
+        ls._active = self._active
         ls._dimeVal = self._dimeVal
         ls._addVal = self._addVal
         ls._multiVal = self._multiVal
         ls._minVal._dimeVal = self._minVal._dimeVal
         ls._minVal._addVal = self._minVal._addVal
         ls._minVal._multiVal = self._minVal.multiVal
+        ls._minVal._active = self._active
         ls._maxVal._dimeVal = self._maxVal._dimeVal
         ls._maxVal._addVal = self._maxVal._addVal
         ls._maxVal._multiVal = self._maxVal.multiVal
+        ls._maxVal._active = self._active
         
         return ls
         
