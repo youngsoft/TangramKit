@@ -11,6 +11,7 @@ import UIKit
 class LLTest6ViewController: UIViewController , UITextViewDelegate  {
     
     weak var editButton:UIButton!
+    weak var headImageView:UIImageView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,7 +84,7 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         headImageView.tg_top.equal(25%)
         headImageView.tg_centerX.equal(0) //距离顶部间隙剩余空间的25%，水平居中对齐。
         rootLayout.addSubview(headImageView)
-        
+        self.headImageView = headImageView
         
         //用户信息
         let nameField = UITextField()
@@ -147,7 +148,6 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         //因为在垂直线性布局里面每一列只能有一个子视图，但在实际中我们希望某个子视图边缘有一个子视图并列，为了不破坏线性布局的能力，而又能实现这种功能
         //我们可以用如下的方法。
         weak var weakVC:LLTest6ViewController! = self
-        weak var weakHeadImageView:UIImageView! = headImageView
         rootLayout.tg_rotationToDeviceOrientationDo{(layout:TGBaseLayout, isFirst:Bool, isPortrait:Bool) in
         //tg_rotationToDeviceOrientationDo方法会在第一次完成布局或者因为屏幕旋转而完成布局时调用这个block。而且布局不会在调用完成后释放这个block。
             //因此需要注意循环引用的问题。
@@ -161,7 +161,7 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
                 weakVC.editButton = editButton
             }
             //下面是直接用frame设置editButton的位置和尺寸。这里设置在头像图片的右边。。
-            weakVC.editButton.frame = CGRect(x:weakHeadImageView.frame.maxX + 5, y:weakHeadImageView.frame.maxY - 30, width:50, height:30)
+            weakVC.editButton.frame = CGRect(x:weakVC.headImageView.frame.maxX + 5, y:weakVC.headImageView.frame.maxY - 30, width:50, height:30)
         }
 
         
@@ -188,6 +188,10 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
             
             let rg = textView.selectedRange
             textView.scrollRangeToVisible(rg)
+            
+            //因为这里面的editButton已经被设置为了tg_useFrame.所以每次布局的变化都要手动的调整editButton的frame值！！！
+            //而且endLayout只会被执行一次，所以这里面不会产生相互引用的问题。
+            self.editButton.frame = CGRect(x:self.headImageView.frame.maxX + 5, y:self.headImageView.frame.maxY - 30, width:50, height:30)
         }
         
         

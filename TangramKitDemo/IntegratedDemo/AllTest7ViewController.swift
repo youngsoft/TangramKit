@@ -54,6 +54,7 @@ class AllTest7ViewController: UIViewController {
         self.createDemo7(rootLayout)
         self.createDemo8(rootLayout)
         self.createDemo9(rootLayout)
+        self.createDemo10(rootLayout)
     }
     /*
     // MARK: - Navigation
@@ -583,5 +584,97 @@ extension AllTest7ViewController
         label3.tg_left.equal(100%).min(30)
         contentLayout.addSubview(label3)
     }
+    
+    
+    func createLabel(_ title:String, color idx:Int) -> UILabel
+    {
+        let label = UILabel()
+        label.text = title
+        label.font = CFTool.font(15)
+        label.backgroundColor = CFTool.color(idx)
+        label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
+        label.sizeToFit()
+        
+        return label
+    }
+    
+    
+    func createDemo10(_ rootLayout: TGLinearLayout) {
+        
+        //一行内所有的子视图的宽度都按屏幕的尺寸来进行按比例的拉伸和缩放。
+        let tipLabel = UILabel()
+        tipLabel.text = "10.下面的例子中展示了一行中各个子视图的宽度和间距都将根据屏幕的尺寸来进行拉伸和收缩，这样不管在任何尺寸的屏幕下都能达到完美的适配。在实践中UI人员往往会按某个设备的尺寸给出一张效果图，那么我们只需要按这个效果图中的子视图的宽度来计算好所占用的宽度和间距的比例，然后我们通过对视图的宽度和间距按比例值进行设置，这样就会使得子视图的真实宽度和间距将根据屏幕的尺寸进行拉升和收缩。您可以分别在iPhone4/5/6/6+上以及横竖屏测试效果:"
+        tipLabel.font = CFTool.font(14)
+        tipLabel.adjustsFontSizeToFitWidth = true
+        tipLabel.numberOfLines = 0
+        tipLabel.tg_top.equal(10)
+        tipLabel.tg_height.equal(.wrap)
+        tipLabel.sizeToFit()
+        rootLayout.addSubview(tipLabel)
+        
+        
+        let contentLayout = TGLinearLayout(.horz)
+        contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        contentLayout.tg_height.equal(60)
+        contentLayout.tg_gravity = TGGravity.vert.center
+        
+        contentLayout.backgroundColor = CFTool.color(0)
+        rootLayout.addSubview(contentLayout)
+        
+        
+        //假设我们以iPhone6的尺寸作为UI的原型。并且假设:
+        /*
+         1.A的宽度不管任何设备下总是固定为30；
+         2.B的宽度在iphone6下是60，与A的间距是10；
+         3.C的宽度在iphone6下是80，与B的间距是16；
+         4.D的宽度在iPhone6下是100，与C的间距在任何设备下总是16；
+         5.E的宽度不管任何设备下总是固定为40，与D的间距就是iPhone6宽度的剩余空间13(375-左右padding只和10-30-60-10-80-16-100-16)了。
+         
+         这种动态比例的展示非常适合用线性布局来完成，iPhone6的总宽度为375。而上面列出的总的浮动宽度部分的和：
+         
+         总的浮动部分的和 = B的宽度60 + 与A的间距10 + C的宽度80 + 与B的间距16 + D的宽度100 + 与D的间距13 = 279.
+         因此我们对B的宽度，与A的间距，C的宽度，与B的间距，D的宽度，与D的间距这部分的值设置为比例值。而不是绝对值！
+         
+         这样我们设置比例值时，只要将视图在iPhone6下的尺寸值除以这个总的浮动宽度就可以得到每个子视图的相对的比例值了。
+         
+         */
+        
+        let subvweights:[CGFloat] = [60.0,10.0,80.0,16.0,100.0,13.0]  //swift不支持连加。。。
+        
+        var totalFloatWidth:CGFloat = 0
+        for v in subvweights
+        {
+            totalFloatWidth += v
+        }
+        
+        let A = self.createLabel("A",color:5)
+        A.tg_left.equal(0)
+        A.tg_width.equal(60.0)   //不管任何设备固定宽度为60,高度根据内容确定。
+        contentLayout.addSubview(A)
+        
+        let B = self.createLabel("B",color:6)
+        B.tg_left.equal((10/totalFloatWidth)%) //B与A的间距，也就是左间距用浮动间距。对于线性布局来说如果间距值大于0小于1则表示是浮动间距。
+        B.tg_width.equal((60 / totalFloatWidth)%)   //对象水平线性布局来说weight值设置的是视图的比重宽度.
+        contentLayout.addSubview(B)
+        
+        let C = self.createLabel("C",color:7)
+        C.tg_left.equal((16 / totalFloatWidth)%)
+        C.tg_width.equal((80 / totalFloatWidth)%)
+        contentLayout.addSubview(C)
+        
+        let D = self.createLabel("D",color:8)
+        D.tg_left.equal(16)  //D与C的间距是固定的16
+        D.tg_width.equal((100 / totalFloatWidth)%)
+        contentLayout.addSubview(D)
+        
+        let E = self.createLabel("E",color:9)
+        E.tg_left.equal((13 / totalFloatWidth)%)
+        E.tg_width.equal(40) //固定的宽度。
+        contentLayout.addSubview(E)
+        
+        
+    }
+    
     
 }

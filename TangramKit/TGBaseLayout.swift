@@ -2158,7 +2158,10 @@ extension TGBaseLayout
             
             let fitSize = sbv.sizeThatFits(.zero)
             sbv.tgFrame.width = sbv.tg_width.measure(fitSize.width)
-            sbv.tgFrame.height = sbv.tg_height.measure(fitSize.height)
+            if (sbv.tg_height.isWrap)
+            {
+               sbv.tgFrame.height = sbv.tg_height.measure(fitSize.height)
+            }
             
         }
     }
