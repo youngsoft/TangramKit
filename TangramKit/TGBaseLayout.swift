@@ -1275,10 +1275,16 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             
             if keyPath == "frame" || keyPath == "bounds"
             {
-                let rcOld = change![.oldKey] as! CGRect
-                let rcNew = change![.newKey] as! CGRect
+                var rcOld = change![.oldKey] as? CGRect
+                var rcNew = change![.newKey] as? CGRect
                 
-                if !rcOld.size.equalTo(rcNew.size)
+                if (rcOld == nil && rcNew == nil)
+                {
+                    rcOld = (change![.oldKey] as! NSValue).cgRectValue
+                    rcNew = (change![.newKey] as! NSValue).cgRectValue
+                }
+                
+                if !rcOld!.size.equalTo(rcNew!.size)
                 {
                     let _ = self.tgUpdateLayoutRectInNoLayoutSuperview(self.superview!)
                 }
