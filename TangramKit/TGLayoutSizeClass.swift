@@ -173,6 +173,7 @@ public protocol TGTableLayoutViewSizeClass:TGLinearLayoutViewSizeClass
 public protocol TGFlowLayoutViewSizeClass:TGSequentLayoutViewSizeClass
 {
     var tg_arrangedCount:Int {get set}
+    var tg_pagedCount:Int {get set}
     var tg_arrangedGravity:TGGravity {get set}
     var tg_autoArrange:Bool {get set}
 }
@@ -410,6 +411,7 @@ internal class TGFloatLayoutViewSizeClassImpl : TGSequentLayoutViewSizeClassImpl
 internal class TGFlowLayoutViewSizeClassImpl:TGSequentLayoutViewSizeClassImpl,TGFlowLayoutViewSizeClass
 {
     var tg_arrangedCount:Int = 0
+    var tg_pagedCount:Int = 0
     var tg_arrangedGravity:TGGravity = .none
     var tg_autoArrange:Bool = false
     
@@ -423,6 +425,7 @@ internal class TGFlowLayoutViewSizeClassImpl:TGSequentLayoutViewSizeClassImpl,TG
         let tsc = super.copy(with: zone) as! TGFlowLayoutViewSizeClassImpl
         
         tsc.tg_arrangedCount = self.tg_arrangedCount
+        tsc.tg_pagedCount = self.tg_pagedCount
         tsc.tg_arrangedGravity = self.tg_arrangedGravity
         tsc.tg_autoArrange = self.tg_autoArrange
         tsc.tgSubviewSize = self.tgSubviewSize

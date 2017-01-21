@@ -73,6 +73,51 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
         }
     }
     
+    
+    
+    /**
+     *为流式布局提供分页展示的能力,默认是0表不支持分页展示，当设置为非0时则要求必须是tg_arrangedCount的整数倍数，表示每页的子视图的数量。而tg_arrangedCount则表示每排的子视图的数量。当启用tg_pagedCount时要求将流式布局加入到UIScrollView或者其派生类中才能生效。只有数量约束流式布局才支持分页展示的功能，tg_pagedCount和tg_height.isWrap以及tg_width.isWrap配合使用能实现不同的分页展示能力:
+     
+     1.垂直数量约束流式布局的tg_height设置为.wrap时则以UIScrollView的尺寸作为一页展示的大小，因为指定了一页的子视图数量，以及指定了一排的子视图数量，因此默认也会自动计算出子视图的宽度和高度，而不需要单独指出高度和宽度(子视图的宽度你也可以自定义)，整体的分页滚动是从上到下滚动。(每页布局时从左到右再从上到下排列，新页往下滚动继续排列)：
+     1  2  3
+     4  5  6
+     -------  ↓
+     7  8  9
+     10 11 12
+     
+     2.垂直数量约束流式布局的tg_width设置为.wrap时则以UIScrollView的尺寸作为一页展示的大小，因为指定了一页的子视图数量，以及指定了一排的子视图数量，因此默认也会自动计算出子视图的宽度和高度，而不需要单独指出高度和宽度(子视图的高度你也可以自定义)，整体的分页滚动是从左到右滚动。(每页布局时从左到右再从上到下排列，新页往右滚动继续排列)
+     1  2  3 | 7  8  9
+     4  5  6 | 10 11 12
+     →
+     1.水平数量约束流式布局的tg_width设置为.wrap时则以UIScrollView的尺寸作为一页展示的大小，因为指定了一页的子视图数量，以及指定了一排的子视图数量，因此默认也会自动计算出子视图的宽度和高度，而不需要单独指出高度和宽度(子视图的高度你也可以自定义)，整体的分页滚动是从左到右滚动。(每页布局时从上到下再从左到右排列，新页往右滚动继续排列)
+     1  3  5 | 7  9   11
+     2  4  6 | 8  10  12
+     →
+     
+     2.水平数量约束流式布局的tg_height设置为.wrap时则以UIScrollView的尺寸作为一页展示的大小，因为指定了一页的子视图数量，以及指定了一排的子视图数量，因此默认也会自动计算出子视图的宽度和高度，而不需要单独指出高度和宽度(子视图的宽度你也可以自定义)，整体的分页滚动是从上到下滚动。(每页布局时从上到下再从左到右排列，新页往下滚动继续排列)
+     
+     1  3  5
+     2  4  6
+     --------- ↓
+     7  9  11
+     8  10 12
+     
+     */
+    
+    public var tg_pagedCount:Int {   //get/set方法
+        get {
+            return (self.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_pagedCount
+        }
+        set {
+            (self.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_pagedCount = newValue
+            setNeedsLayout()
+        }
+    }
+
+    
+    
+    
+    
     /**
      *子视图自动排列,这个属性只有在内容填充约束流式布局下才有用,默认为false.当设置为YES时则根据子视图的内容自动填充，而不是根据加入的顺序来填充，以便保证不会出现多余空隙的情况。
      *请在将所有子视图添加完毕并且初始布局完成后再设置这个属性，否则如果预先设置这个属性则在后续添加子视图时非常耗性能。
@@ -211,10 +256,7 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
                         }
                         
                         
-                        if (sbv.tg_width.dimeRelaVal === self.tg_width && !self.tg_width.isWrap)
-                        {
-                            rect.size.width = sbv.tg_width.measure(selfSize.width - self.tg_padding.left - self.tg_padding.right)
-                        }
+                        rect = tgSetSubviewRelativeSize(sbv.tg_width, selfSize: selfSize, rect: rect)
                         
                         rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
                         
@@ -263,23 +305,13 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
                             rect.size.height = sbv.tg_height.measure;
                         }
                         
-                        if (sbv.tg_width.dimeRelaVal === self.tg_width && !self.tg_width.isWrap)
-                        {
-                            rect.size.width = sbv.tg_width.measure(selfSize.width - self.tg_padding.left - self.tg_padding.right)
-                        }
                         
-                        if (sbv.tg_height.dimeRelaVal === self.tg_height && !self.tg_height.isWrap)
-                        {
-                            rect.size.height = sbv.tg_height.measure(selfSize.height - self.tg_padding.top - self.tg_padding.bottom)
-                        }
+                        rect = tgSetSubviewRelativeSize(sbv.tg_height, selfSize: selfSize, rect: rect)
                         
                         rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
                         
-                        if (sbv.tg_width.dimeRelaVal === sbv.tg_height)
-                        {
-                            rect.size.width = sbv.tg_width.measure(rect.size.height)
-                        }
-                        
+                       
+                        rect = tgSetSubviewRelativeSize(sbv.tg_width, selfSize: selfSize, rect: rect)
                         
                         rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
                         
@@ -734,6 +766,56 @@ extension TGFlowLayout
         let horzSpace = self.tg_hspace
         let vertSpace = self.tg_vspace
         
+        
+        //判断父滚动视图是否分页滚动
+        var isPagingScroll = false
+        if let scrolv = self.superview as? UIScrollView, scrolv.isPagingEnabled
+        {
+            isPagingScroll = true
+        }
+        
+        var pagingItemHeight:CGFloat = 0
+        var pagingItemWidth:CGFloat = 0
+        var isVertPaging = false
+        var isHorzPaging = false
+        if self.tg_pagedCount > 0 && self.superview != nil
+        {
+            let rows = self.tg_pagedCount / arrangedCount  //每页的行数。
+            
+            //对于垂直流式布局来说，要求要有明确的宽度。因此如果我们启用了分页又设置了宽度包裹时则我们的分页是从左到右的排列。否则分页是从上到下的排列。
+            if self.tg_width.isWrap
+            {
+                isHorzPaging = true
+                if isPagingScroll
+                {
+                    pagingItemWidth = (self.superview!.bounds.width - padding.left - padding.right - CGFloat(arrangedCount - 1) * horzSpace ) / CGFloat(arrangedCount)
+                }
+                else
+                {
+                    pagingItemWidth = (self.superview!.bounds.width - padding.left - CGFloat(arrangedCount) * horzSpace ) / CGFloat(arrangedCount)
+                }
+                
+                pagingItemHeight = (selfSize.height - padding.top - padding.bottom - CGFloat(rows - 1) * vertSpace) / CGFloat(rows)
+            }
+            else
+            {
+                isVertPaging = true
+                pagingItemWidth = (selfSize.width - padding.left - padding.right - CGFloat(arrangedCount - 1) * horzSpace) / CGFloat(arrangedCount)
+                //分页滚动时和非分页滚动时的高度计算是不一样的。
+                if (isPagingScroll)
+                {
+                    pagingItemHeight = (self.superview!.bounds.height - padding.top - padding.bottom - CGFloat(rows - 1) * vertSpace) / CGFloat(rows)
+                }
+                else
+                {
+                    pagingItemHeight = (self.superview!.bounds.height - padding.top - CGFloat(rows) * vertSpace) / CGFloat(rows)
+                }
+                
+            }
+            
+        }
+
+        
         let averageArrange = (mghorz == TGGravity.horz.fill)
         
         var arrangedIndex:Int = 0
@@ -777,16 +859,17 @@ extension TGFlowLayout
             }
             else
             {
+                if (pagingItemWidth != 0)
+                {
+                    rect.size.width = pagingItemWidth
+                }
                 
                 if (sbv.tg_width.dimeNumVal != nil && !averageArrange)
                 {
                     rect.size.width = sbv.tg_width.measure;
                 }
                 
-                if (sbv.tg_width.dimeRelaVal === self.tg_width && !self.tg_width.isWrap)
-                {
-                    rect.size.width = sbv.tg_width.measure(selfSize.width - padding.left - padding.right)
-                }
+                rect = tgSetSubviewRelativeSize(sbv.tg_width, selfSize: selfSize, rect: rect)
                 
                 rect.size.width = self.tgValidMeasure(sbv.tg_width,sbv:sbv,calcSize:rect.size.width,sbvSize:rect.size,selfLayoutSize:selfSize)
                 
@@ -819,6 +902,7 @@ extension TGFlowLayout
         }
         
         
+        var pageWidth:CGFloat = 0;  //页宽
         let averageWidth:CGFloat = (selfSize.width - padding.left - padding.right - (CGFloat(arrangedCount) - 1) * horzSpace) / CGFloat(arrangedCount)
         
         arrangedIndex = 0
@@ -828,9 +912,45 @@ extension TGFlowLayout
             //换行
             if arrangedIndex >= arrangedCount {
                 arrangedIndex = 0
-                xPos = padding.left
                 yPos += rowMaxHeight
                 yPos += vertSpace
+                
+                
+                //分别处理水平分页和垂直分页。
+                if (isHorzPaging)
+                {
+                    if (i % self.tg_pagedCount == 0)
+                    {
+                        pageWidth += self.superview!.bounds.width
+                        
+                        if (!isPagingScroll)
+                        {
+                            pageWidth -= padding.left
+                        }
+                        
+                        yPos = padding.top;
+                    }
+                    
+                }
+                
+                if (isVertPaging)
+                {
+                    //如果是分页滚动则要多添加垂直间距。
+                    if (i % self.tg_pagedCount == 0)
+                    {
+                        
+                        if (isPagingScroll)
+                        {
+                            yPos -= vertSpace
+                            yPos += padding.bottom
+                            yPos += padding.top
+                        }
+                    }
+                }
+                
+                
+                xPos = padding.left + pageWidth
+
                 
                 //计算每行的gravity情况
                 self .tgCalcVertLayoutSingleLineGravity(selfSize, rowMaxHeight: rowMaxHeight, rowMaxWidth: rowMaxWidth, mg: mghorz, amg: amgvert, sbs: sbs, startIndex: i, count: arrangedCount, vertSpace: vertSpace, horzSpace: horzSpace)
@@ -847,28 +967,24 @@ extension TGFlowLayout
             
             var rect = sbv.tgFrame.frame
             
-            
-            let isFlexedHeight:Bool = sbv.tg_height.isFlexHeight
-            
+            if (pagingItemHeight != 0)
+            {
+                rect.size.height = pagingItemHeight
+            }
+
+
             if sbv.tg_height.dimeNumVal != nil {
                 rect.size.height = sbv.tg_height.measure
             }
-            
             
             if averageArrange {
                 rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: averageWidth - leftMargin - rightMargin, sbvSize: rect.size, selfLayoutSize:selfSize)
             }
             
-            if sbv.tg_height.dimeRelaVal === self.tg_height && !self.tg_height.isWrap {
-                rect.size.height = sbv.tg_height.measure(selfSize.height - padding.top - padding.bottom)
-            }
-            
-            
-            if sbv.tg_height.dimeRelaVal === sbv.tg_width {
-                rect.size.height = sbv.tg_height.measure(rect.size.width)
-            }
+            rect = tgSetSubviewRelativeSize(sbv.tg_height, selfSize: selfSize, rect: rect)
             
             //如果高度是浮动的 则需要调整陶都
+            let isFlexedHeight:Bool = sbv.tg_height.isFlexHeight
             if isFlexedHeight {
                 
                 rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
@@ -913,8 +1029,22 @@ extension TGFlowLayout
         //最后一行 布局
         self .tgCalcVertLayoutSingleLineGravity(selfSize, rowMaxHeight: rowMaxHeight, rowMaxWidth: rowMaxWidth, mg: mghorz, amg: amgvert, sbs: sbs, startIndex: sbs.count, count: arrangedIndex,vertSpace: vertSpace, horzSpace: horzSpace)
         
-        if self.tg_height.isWrap {
+        if self.tg_height.isWrap
+        {
             selfSize.height = yPos + padding.bottom + rowMaxHeight
+            
+            //只有在父视图为滚动视图，且开启了分页滚动时才会扩充具有包裹设置的布局视图的宽度。
+            if (isVertPaging && isPagingScroll)
+            {
+                //算出页数来。如果包裹计算出来的宽度小于指定页数的宽度，因为要分页滚动所以这里会扩充布局的宽度。
+                let totalPages:CGFloat = floor(CGFloat(sbs.count + self.tg_pagedCount - 1 ) / CGFloat(self.tg_pagedCount))
+                if (selfSize.height < totalPages * self.superview!.bounds.height)
+                {
+                    selfSize.height = totalPages * self.superview!.bounds.height
+                }
+            }
+
+            
         }
         else {
             var addYPos:CGFloat = 0
@@ -961,8 +1091,22 @@ extension TGFlowLayout
             }
         }
         
-        if self.tg_width.isWrap && !averageArrange {
+        if self.tg_width.isWrap && !averageArrange
+        {
             selfSize.width = maxWidth + padding.right
+            
+            //只有在父视图为滚动视图，且开启了分页滚动时才会扩充具有包裹设置的布局视图的宽度。
+            if (isHorzPaging && isPagingScroll)
+            {
+                //算出页数来。如果包裹计算出来的宽度小于指定页数的宽度，因为要分页滚动所以这里会扩充布局的宽度。
+                let totalPages:CGFloat = floor(CGFloat(sbs.count + self.tg_pagedCount - 1 ) / CGFloat(self.tg_pagedCount))
+                if (selfSize.width < totalPages * self.superview!.bounds.width)
+                {
+                    selfSize.width = totalPages * self.superview!.bounds.width
+                }
+            }
+
+            
         }
         return selfSize
     }
@@ -1030,13 +1174,10 @@ extension TGFlowLayout
             if sbv.tg_height.dimeNumVal != nil {
                 rect.size.height = sbv.tg_height.measure
             }
-            if sbv.tg_width.dimeRelaVal === self.tg_width && !self.tg_width.isWrap {
-                rect.size.width = sbv.tg_width.measure(selfSize.width - padding.left - padding.right)
-            }
-            if sbv.tg_height.dimeRelaVal === self.tg_height && !self.tg_height.isWrap {
-                rect.size.height = sbv.tg_height.measure(selfSize.height - padding.top - padding.bottom)
-            }
             
+            rect = tgSetSubviewRelativeSize(sbv.tg_width, selfSize: selfSize, rect: rect)
+            rect = tgSetSubviewRelativeSize(sbv.tg_height, selfSize: selfSize, rect: rect)
+
             if isHeightWeight
             {
                 var heightWeight:CGFloat = 1.0
@@ -1220,6 +1361,56 @@ extension TGFlowLayout
         let vertSpace = self.tg_vspace
         let horzSpace = self.tg_hspace
         
+        
+        //判断父滚动视图是否分页滚动
+        var isPagingScroll = false
+        if let scrolv = self.superview as? UIScrollView, scrolv.isPagingEnabled
+        {
+            isPagingScroll = true
+        }
+        
+        var pagingItemHeight:CGFloat = 0
+        var pagingItemWidth:CGFloat = 0
+        var isVertPaging = false
+        var isHorzPaging = false
+        if self.tg_pagedCount > 0 && self.superview != nil
+        {
+            let cols = self.tg_pagedCount / arrangedCount  //每页的列数。
+            
+            //对于水平流式布局来说，要求要有明确的高度。因此如果我们启用了分页又设置了高度包裹时则我们的分页是从上到下的排列。否则分页是从左到右的排列。
+            if self.tg_height.isWrap
+            {
+                isVertPaging = true
+                if isPagingScroll
+                {
+                    pagingItemHeight = (self.superview!.bounds.height - padding.top - padding.bottom - CGFloat(arrangedCount - 1) * vertSpace ) / CGFloat(arrangedCount)
+                }
+                else
+                {
+                    pagingItemHeight = (self.superview!.bounds.height - padding.top - CGFloat(arrangedCount) * vertSpace ) / CGFloat(arrangedCount)
+                }
+                
+                pagingItemWidth = (selfSize.width - padding.left - padding.right - CGFloat(cols - 1) * horzSpace) / CGFloat(cols)
+            }
+            else
+            {
+                isHorzPaging = true
+                pagingItemHeight = (selfSize.height - padding.top - padding.bottom - CGFloat(arrangedCount - 1) * vertSpace) / CGFloat(arrangedCount)
+                //分页滚动时和非分页滚动时的高度计算是不一样的。
+                if (isPagingScroll)
+                {
+                    pagingItemWidth = (self.superview!.bounds.width - padding.left - padding.right - CGFloat(cols - 1) * horzSpace) / CGFloat(cols)
+                }
+                else
+                {
+                    pagingItemWidth = (self.superview!.bounds.width - padding.left - CGFloat(cols) * horzSpace) / CGFloat(cols)
+                }
+                
+            }
+            
+        }
+
+        
         let averageArrange = (mgvert == TGGravity.vert.fill)
         
         var arrangedIndex:Int = 0
@@ -1249,6 +1440,10 @@ extension TGFlowLayout
             let  bottomMargin = sbv.tg_bottom.margin;
             var  rect = sbv.tgFrame.frame;
             
+            if (pagingItemWidth != 0)
+            {
+                rect.size.width = pagingItemWidth
+            }
             
             if (sbv.tg_width.dimeNumVal != nil)
             {
@@ -1256,10 +1451,7 @@ extension TGFlowLayout
             }
             
             
-            if (sbv.tg_width.dimeRelaVal === self.tg_width && !self.tg_width.isWrap)
-            {
-                rect.size.width = sbv.tg_width.measure(selfSize.width - padding.left - padding.right)
-            }
+            rect = tgSetSubviewRelativeSize(sbv.tg_width, selfSize: selfSize, rect: rect)
             
             rect.size.width = self.tgValidMeasure(sbv.tg_width,sbv:sbv,calcSize:rect.size.width,sbvSize:rect.size,selfLayoutSize:selfSize)
             
@@ -1277,22 +1469,23 @@ extension TGFlowLayout
             }
             else
             {
-                
-                let  isFlexedHeight = sbv.tg_height.isFlexHeight
-                
-                
+                if (pagingItemHeight != 0)
+                {
+                    rect.size.height = pagingItemHeight
+                }
+
+            
                 if (sbv.tg_height.dimeNumVal != nil && !averageArrange)
                 {
                     rect.size.height = sbv.tg_height.measure;
                 }
                 
-                if (sbv.tg_height.dimeRelaVal === self.tg_height && !self.tg_height.isWrap)
-                {
-                    rect.size.height = sbv.tg_height.measure(selfSize.height - padding.top - padding.bottom)
-                }
+                
+                rect = tgSetSubviewRelativeSize(sbv.tg_height, selfSize: selfSize, rect: rect)
                 
                 
                 //如果高度是浮动的则需要调整高度。
+                let  isFlexedHeight = sbv.tg_height.isFlexHeight
                 if (isFlexedHeight)
                 {
                     rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
@@ -1335,6 +1528,7 @@ extension TGFlowLayout
         }
         
         
+        var pageHeight:CGFloat = 0
         let averageHeight:CGFloat = (selfSize.height - padding.top - padding.bottom - (CGFloat(arrangedCount) - 1) * vertSpace) / CGFloat(arrangedCount)
         
         arrangedIndex = 0
@@ -1345,7 +1539,45 @@ extension TGFlowLayout
                 arrangedIndex = 0
                 xPos += colMaxWidth
                 xPos += horzSpace
-                yPos = padding.top
+
+                
+                //分别处理水平分页和垂直分页。
+                if (isVertPaging)
+                {
+                    if (i % self.tg_pagedCount == 0)
+                    {
+                        pageHeight += self.superview!.bounds.height
+                        
+                        if (!isPagingScroll)
+                        {
+                            pageHeight -= padding.top
+                        }
+                        
+                        xPos = padding.left;
+                    }
+                    
+                }
+                
+                if (isHorzPaging)
+                {
+                    //如果是分页滚动则要多添加垂直间距。
+                    if (i % self.tg_pagedCount == 0)
+                    {
+                        
+                        if (isPagingScroll)
+                        {
+                            xPos -= horzSpace
+                            xPos += padding.right
+                            xPos += padding.left
+                        }
+                    }
+                }
+                
+                
+                yPos = padding.top + pageHeight;
+
+                
+                
                 
                 //计算每行Gravity情况
                 self.tgCalcHorzLayoutSingleLineGravity(selfSize, colMaxHeight: colMaxHeight, colMaxWidth: colMaxWidth, mg: mgvert, amg: amghorz, sbs: sbs, startIndex: i, count: arrangedCount, vertSpace: vertSpace, horzSpace: horzSpace)
@@ -1411,11 +1643,39 @@ extension TGFlowLayout
         //最后一列
         self .tgCalcHorzLayoutSingleLineGravity(selfSize, colMaxHeight: colMaxHeight, colMaxWidth: colMaxWidth, mg: mgvert, amg: amghorz, sbs: sbs, startIndex: sbs.count, count: arrangedIndex, vertSpace: vertSpace, horzSpace: horzSpace)
         
-        if self.tg_height.isWrap && !averageArrange {
-            selfSize.width = maxHeight + padding.bottom
+        if self.tg_height.isWrap && !averageArrange
+        {
+            selfSize.height = maxHeight + padding.bottom
+            
+            //只有在父视图为滚动视图，且开启了分页滚动时才会扩充具有包裹设置的布局视图的宽度。
+            if (isVertPaging && isPagingScroll)
+            {
+                //算出页数来。如果包裹计算出来的宽度小于指定页数的宽度，因为要分页滚动所以这里会扩充布局的宽度。
+                let totalPages:CGFloat = floor(CGFloat(sbs.count + self.tg_pagedCount - 1 ) / CGFloat(self.tg_pagedCount))
+                if (selfSize.height < totalPages * self.superview!.bounds.height)
+                {
+                    selfSize.height = totalPages * self.superview!.bounds.height
+                }
+            }
+
         }
-        if self.tg_width.isWrap {
+        
+        if self.tg_width.isWrap
+        {
             selfSize.width = xPos + padding.right + colMaxWidth
+            
+            //只有在父视图为滚动视图，且开启了分页滚动时才会扩充具有包裹设置的布局视图的宽度。
+            if (isHorzPaging && isPagingScroll)
+            {
+                //算出页数来。如果包裹计算出来的宽度小于指定页数的宽度，因为要分页滚动所以这里会扩充布局的宽度。
+                let totalPages:CGFloat = floor(CGFloat(sbs.count + self.tg_pagedCount - 1 ) / CGFloat(self.tg_pagedCount))
+                if (selfSize.width < totalPages * self.superview!.bounds.width)
+                {
+                    selfSize.width = totalPages * self.superview!.bounds.width
+                }
+            }
+
+            
         }
         else {
             var addXPos:CGFloat = 0
@@ -1521,21 +1781,18 @@ extension TGFlowLayout
                 rect.size.width = sbv.tg_width.measure
             }
             
+            if sbv.tg_height.dimeNumVal != nil {
+                rect.size.height = sbv.tg_height.measure
+            }
+            
+            rect = tgSetSubviewRelativeSize(sbv.tg_height, selfSize: selfSize, rect: rect)
             
             if subviewSize != 0
             {
                 rect.size.height = subviewSize
             }
             
-            if sbv.tg_height.dimeNumVal != nil {
-                rect.size.height = sbv.tg_height.measure
-            }
-            if sbv.tg_width.dimeRelaVal === self.tg_width && !self.tg_width.isWrap {
-                rect.size.width = sbv.tg_width.measure(selfSize.width - padding.left - padding.right)
-            }
-            if sbv.tg_height.dimeRelaVal === self.tg_height && !self.tg_height.isWrap {
-                rect.size.height = sbv.tg_height.measure(selfSize.height - padding.top - padding.bottom)
-            }
+            rect = tgSetSubviewRelativeSize(sbv.tg_width, selfSize: selfSize, rect: rect)
             
             if isHeightWeight
             {

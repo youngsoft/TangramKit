@@ -53,6 +53,9 @@
  
  */
 
+//Current version is 1.0.3, please open: https://github.com/youngsoft/TangramKit/blob/master/CHANGELOG.md to show the changes.
+
+
 
 import Foundation
 import UIKit

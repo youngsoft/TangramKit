@@ -144,13 +144,13 @@ extension UIView:TGViewSizeClass
      路径布局简写为P、全部简写为ALL，不支持为-，
      
      定义A为操作的视图本身，B为A的兄弟视图，S为A的父视图。
-+-----------+-------+--------+----+----+----------------+------------+----------+-----------+--------------+--------------+--------------+
-| 对象 \ 值  |CGFloat|TGWeight|wrap|fill|A.tg_width      |A.tg_height |B.tg_width|B.tg_height|S.tg_width    |S.tg_heigh    |[TGLayoutSize]|
-+-----------+-------+--------+----+----+----------------+------------+----------+-----------+-----------------------------+--------------+
-|A.tg_width |ALL    |ALL     |ALL |ALL | -   	        |FR/R/FL-H/FO|FR/R/FO/P | R	        |ALL           | R	          |R             |
-+-----------+-------+--------+----+----+----------------+------------+----------+--------------------------+--------------+--------------+
-|A.tg_height|ALL    |ALL     |ALL |ALL |FR/R/FL-V/FO/L-V|-           |R	        |FR/R/FO/P  |R             |ALL           |R             |
-+-----------+-------+--------+----+----+----------------+------------+----------+-----------+--------------+-----------------------------+
++-----------+-------+--------+----+----+----------------+---------------+----------+-----------+--------------+--------------+--------------+
+| 对象 \ 值  |CGFloat|TGWeight|wrap|fill|A.tg_width      |A.tg_height    |B.tg_width|B.tg_height|S.tg_width    |S.tg_heigh    |[TGLayoutSize]|
++-----------+-------+--------+----+----+----------------+---------------+----------+-----------+--------------+--------------+--------------+
+|A.tg_width |ALL    |ALL     |ALL |ALL | -   	        |FR/R/FL-H/FO/LH|FR/R/FO/P | R	       |ALL           | R	         |R             |
++-----------+-------+--------+----+----+----------------+---------------+----------+-----------+--------------+--------------+--------------+
+|A.tg_height|ALL    |ALL     |ALL |ALL |FR/R/FL-V/FO/L  |-              |R	       |FR/R/FO/P  |R             |ALL           |R             |
++-----------+-------+--------+----+----+----------------+---------------+----------+-----------+--------------+--------------+--------------+
      
      这里面重点介绍TGWeight，wrap,fill三种类型的值设置。
      其中的TGWeight是指设置的值为相对值，表示占用父视图或者剩余尺寸的比例，具体是父视图空间比例还是剩余空间比例则需要根据布局视图的类型来决定，下面列出了各种布局视图下的TGWeight设置的意义：
@@ -938,7 +938,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             }
             
             let oldSelfSize = self.bounds.size
-            let (newSelfSize,_) = self.tgCalcLayoutRect(CGSize.zero,isEstimate: false,type:sizeClassType)
+            var (newSelfSize,_) = self.tgCalcLayoutRect(CGSize.zero,isEstimate: false,type:sizeClassType)
             
             for sbv:UIView in self.subviews
             {
@@ -946,6 +946,16 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 let ptOrigin = sbv.bounds.origin
                 if tgsbvFrame.left != CGFloat.greatestFiniteMagnitude && tgsbvFrame.top != CGFloat.greatestFiniteMagnitude && !sbv.tg_noLayout
                 {
+                    if tgsbvFrame.width < 0
+                    {
+                        tgsbvFrame.width = 0
+                    }
+                    
+                    if tgsbvFrame.height < 0
+                    {
+                        tgsbvFrame.height = 0
+                    }
+                    
                     sbv.center = CGPoint(x: tgsbvFrame.left + sbv.layer.anchorPoint.x * tgsbvFrame.width, y: tgsbvFrame.top + sbv.layer.anchorPoint.y * tgsbvFrame.height)
                     sbv.bounds = CGRect(origin: ptOrigin, size: tgsbvFrame.frame.size)
                     
@@ -977,6 +987,15 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 }
                 if (isAdjustSelf)
                 {
+                    if (newSelfSize.width < 0)
+                    {
+                        newSelfSize.width = 0
+                    }
+                    
+                    if (newSelfSize.height < 0)
+                    {
+                        newSelfSize.height = 0
+                    }
                     
                     self.bounds = CGRect(origin:self.bounds.origin, size:newSelfSize)
                     self.center = CGPoint(x:self.center.x + (newSelfSize.width - oldSelfSize.width) * self.layer.anchorPoint.x, y:self.center.y + (newSelfSize.height - oldSelfSize.height) * self.layer.anchorPoint.y)
@@ -1293,12 +1312,11 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         }
         
         
-        
-        if (keyPath == "frame" || keyPath == "hidden" || keyPath == "center")
+        if !self.tg_isLayouting
         {
-            
-            if !self.tg_isLayouting
+            if (keyPath == "frame" || keyPath == "hidden" || keyPath == "center")
             {
+            
                 if let sbv = object as? UIView, !sbv.tg_useFrame
                 {
                     setNeedsLayout()
@@ -1984,6 +2002,15 @@ extension TGBaseLayout
         
         if (!rectSelf.equalTo(oldSelfRect))
         {
+            if (rectSelf.size.width < 0)
+            {
+                rectSelf.size.width = 0
+            }
+            if (rectSelf.size.height < 0)
+            {
+                rectSelf.size.height = 0
+            }
+            
             self.bounds = CGRect(x:self.bounds.origin.x, y:self.bounds.origin.y,width:rectSelf.width, height:rectSelf.height)
             self.center = CGPoint(x:rectSelf.origin.x + self.layer.anchorPoint.x * rectSelf.width, y:rectSelf.origin.y + self.layer.anchorPoint.y * rectSelf.height)
         }
@@ -2149,6 +2176,66 @@ extension TGBaseLayout
     }
     
 
+    internal func tgSetSubviewRelativeSize(_ dime:TGLayoutSize, selfSize:CGSize, rect:CGRect) ->CGRect
+    {
+        if dime.dimeRelaVal == nil
+        {
+            return rect
+        }
+        
+        var rect = rect
+        
+        if dime._type == TGGravity.horz.fill
+        {
+            
+            if dime.dimeRelaVal === self.tg_width && !self.tg_width.isWrap
+            {
+               rect.size.width = dime.measure(selfSize.width - self.tg_leftPadding - self.tg_rightPadding)
+            }
+            else if dime.dimeRelaVal === self.tg_height
+            {
+               rect.size.width = dime.measure(selfSize.height - self.tg_topPadding - self.tg_bottomPadding)
+            }
+            else if dime.dimeRelaVal === dime.view.tg_height
+            {
+                rect.size.width = dime.measure(rect.height)
+            }
+            else if dime.dimeRelaVal._type == TGGravity.horz.fill
+            {
+               rect.size.width = dime.measure(dime.dimeRelaVal.view.tg_estimatedFrame.width)
+            }
+            else
+            {
+               rect.size.width = dime.measure(dime.dimeRelaVal.view.tg_estimatedFrame.height)
+            }
+        }
+        else
+        {
+            if (dime.dimeRelaVal === self.tg_height && !self.tg_height.isWrap)
+            {
+                rect.size.height = dime.measure(selfSize.height - self.tg_topPadding - self.tg_bottomPadding)
+            }
+            else if (dime.dimeRelaVal === self.tg_width)
+            {
+                rect.size.height = dime.measure(selfSize.width - self.tg_leftPadding - self.tg_rightPadding)
+            }
+            else if (dime.dimeRelaVal === dime.view.tg_width)
+            {
+                rect.size.height = dime.measure(rect.width)
+            }
+            else if (dime.dimeRelaVal._type == TGGravity.horz.fill)
+            {
+                rect.size.height = dime.measure(dime.dimeRelaVal.view.tg_estimatedFrame.width)
+            }
+            else
+            {
+                rect.size.height = dime.measure(dime.dimeRelaVal.view.tg_estimatedFrame.height)
+            }
+        }
+
+        return rect
+        
+    }
     
     
     
@@ -2370,71 +2457,78 @@ extension UIView
         
         
         var searchTypeInt:Int = wsc | hsc | ori
-        var sizeClass:TGViewSizeClass! = dict.object(forKey: searchTypeInt) as? TGViewSizeClass
-        if sizeClass != nil
-        {
-            return sizeClass!
-        }
+        var sizeClass:TGViewSizeClass! = nil
         
-        searchTypeInt = wsc | hsc
-        if (searchTypeInt != typeInt)
+        if dict.count > 1
         {
+            
             sizeClass = dict.object(forKey: searchTypeInt) as? TGViewSizeClass
             if sizeClass != nil
             {
                 return sizeClass!
             }
-        }
-        
-        
-        searchTypeInt =  hsc | ori
-        if ori != 0 && searchTypeInt != typeInt
-        {
-            sizeClass = dict.object(forKey: searchTypeInt) as? TGViewSizeClass
-            if sizeClass != nil
+            
+            searchTypeInt = wsc | hsc
+            if (searchTypeInt != typeInt)
             {
-                return sizeClass!
+                sizeClass = dict.object(forKey: searchTypeInt) as? TGViewSizeClass
+                if sizeClass != nil
+                {
+                    return sizeClass!
+                }
             }
-        }
-        
-        searchTypeInt =  hsc;
-        if searchTypeInt != typeInt
-        {
-            sizeClass = dict.object(forKey: searchTypeInt) as? TGViewSizeClass
-            if sizeClass != nil
+            
+            
+            searchTypeInt =  hsc | ori
+            if ori != 0 && searchTypeInt != typeInt
             {
-                return sizeClass!
+                sizeClass = dict.object(forKey: searchTypeInt) as? TGViewSizeClass
+                if sizeClass != nil
+                {
+                    return sizeClass!
+                }
             }
-        }
-        
-        searchTypeInt = wsc | ori
-        if ori != 0 && searchTypeInt != typeInt
-        {
-            sizeClass = dict.object(forKey: searchTypeInt) as? TGViewSizeClass
-            if sizeClass != nil
+            
+            searchTypeInt =  hsc;
+            if searchTypeInt != typeInt
             {
-                return sizeClass!
+                sizeClass = dict.object(forKey: searchTypeInt) as? TGViewSizeClass
+                if sizeClass != nil
+                {
+                    return sizeClass!
+                }
             }
-        }
-        
-        searchTypeInt = wsc
-        if searchTypeInt != typeInt
-        {
-            sizeClass = dict.object(forKey: searchTypeInt) as? TGViewSizeClass
-            if sizeClass != nil
+            
+            searchTypeInt = wsc | ori
+            if ori != 0 && searchTypeInt != typeInt
             {
-                return sizeClass!
+                sizeClass = dict.object(forKey: searchTypeInt) as? TGViewSizeClass
+                if sizeClass != nil
+                {
+                    return sizeClass!
+                }
             }
-        }
-        
-        searchTypeInt = ori
-        if ori != 0 && searchTypeInt != typeInt
-        {
-            sizeClass = dict.object(forKey: searchTypeInt) as? TGViewSizeClass
-            if sizeClass != nil
+            
+            searchTypeInt = wsc
+            if searchTypeInt != typeInt
             {
-                return sizeClass!
+                sizeClass = dict.object(forKey: searchTypeInt) as? TGViewSizeClass
+                if sizeClass != nil
+                {
+                    return sizeClass!
+                }
             }
+            
+            searchTypeInt = ori
+            if ori != 0 && searchTypeInt != typeInt
+            {
+                sizeClass = dict.object(forKey: searchTypeInt) as? TGViewSizeClass
+                if sizeClass != nil
+                {
+                    return sizeClass!
+                }
+            }
+            
         }
         
         searchTypeInt = 0

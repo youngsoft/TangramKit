@@ -514,7 +514,7 @@ $ gem install cocoapods
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 
-pod 'TangramKit', '~> 1.0.2'
+pod 'TangramKit', '~> 1.0.3'
 ```
    
 然后运行如下命令:
@@ -562,3 +562,5 @@ $ pod install
 TangramKit is released under the MIT license. See LICENSE for details.
 
 
+ ## 版本历史
+ **[CHANGELOG.md](CHANGELOG.md)**

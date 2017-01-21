@@ -1175,6 +1175,11 @@ extension TGLinearLayout {
                 pos += self.tg_hspace
             }
             
+            if sbv.tg_height.dimeRelaVal === sbv.tg_width
+            {
+                rect.size.height = sbv.tg_height.measure(rect.size.width)
+            }
+            
             //如果高度是浮动的则需要调整高度。
             if sbv.tg_height.isFlexHeight //sbv.flexedHeight
             {
@@ -1548,11 +1553,21 @@ extension TGLinearLayout {
                 rect.size.height = sbv.tg_height.measure(selfSize.height - self.tg_topPadding - self.tg_bottomPadding)
             }
             
+            if (sbv.tg_width.dimeRelaVal === sbv.tg_height)
+            {
+                rect.size.width = sbv.tg_width.measure(rect.size.height)
+            }
+            
             rect.size.width = self.tgValidMeasure(sbv.tg_width,sbv:sbv,calcSize:rect.size.width,sbvSize:rect.size,selfLayoutSize:selfSize)
             
             if sbv.tg_width.minVal.isWrap
             {
                 canAddToNoWrapSbs = false
+            }
+            
+            if sbv.tg_height.dimeRelaVal === sbv.tg_width
+            {
+                rect.size.height = sbv.tg_height.measure(rect.size.width)
             }
             
             //如果高度是浮动的则需要调整高度。
