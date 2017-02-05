@@ -467,6 +467,48 @@ override func loadView() {
 
 ```
 
+
+### 路径布局MyPathLayout
+> 布局库独有
+
+
+路径布局是一种里面的子视图根据您提供的一条特定的曲线函数形成的路径来进行布局的布局视图。您需要提供一个实现曲线路径的函数、一个特定的坐标体系、一种特定的子视图在曲线上的距离设置这三个要素来实现界面布局。当曲线路径形成后，子视图将按相等的距离依次环绕着曲线进行布局。路径布局主要应用于那些具有特定规律的不规则排列，而且效果很酷炫的的界面布局。
+
+![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/pl.png)
+
+示例代码:
+
+ ```swift
+ 
+ override func loadView() 
+ {
+        
+    super.loadView()
+    
+    let S = TGPathLayout()
+    S.tg_width.equal(320)
+    S.tg_height.equal(320)
+    S.tg_coordinateSetting.isReverse = true
+    S.tg_coordinateSetting.origin = CGPoint(x: 0.5, y: 0.2) 
+    S.tg_polarEquation = { 80 * (1 + cos(CGFloat($0))) } // r = a *(1 + cos(𝛉))
+    
+    for _ in 0 ..< 4
+    {
+        let A = UIView()
+        A.tg_size(width:40,height:40)
+        S.addSubview(A)
+        
+        A.backgroundColor = .green
+    }
+
+    self.view.addSubview(S)
+    S.backgroundColor = .red
+ }
+
+ 
+ ```
+
+
  
 ###  SizeClass的支持
 > 等价于iOS的Size Classes
@@ -562,5 +604,5 @@ $ pod install
 TangramKit is released under the MIT license. See LICENSE for details.
 
 
- ## 版本历史
+## 版本历史
  **[CHANGELOG.md](CHANGELOG.md)**

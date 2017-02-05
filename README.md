@@ -452,6 +452,46 @@ Float layout is a layout view that the subviews are floating gravity in the give
 ```
 
 
+### TGPathLayout
+> Is unique characteristic layout view of iOS.
+
+ Path layout is a layout view that the subviews are according to a specified path curve to layout. You must provide a type of Functional equation，a coordinate and a type of distance setting to create a Path Curve than all subview are equidistance layout in the Path layout. path layout usually used to create some irregular and gorgeous UI layout.
+
+![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/pl.png)
+
+Sample code:
+ 
+ ```swift
+ 
+ override func loadView() 
+ {
+        
+    super.loadView()
+    
+    let S = TGPathLayout()
+    S.tg_width.equal(320)
+    S.tg_height.equal(320)
+    S.tg_coordinateSetting.isReverse = true
+    S.tg_coordinateSetting.origin = CGPoint(x: 0.5, y: 0.2) 
+    S.tg_polarEquation = { 80 * (1 + cos(CGFloat($0))) } // r = a *(1 + cos(𝛉))
+    
+    for _ in 0 ..< 4
+    {
+        let A = UIView()
+        A.tg_size(width:40,height:40)
+        S.addSubview(A)
+        
+        A.backgroundColor = .green
+    }
+
+    self.view.addSubview(S)
+    S.backgroundColor = .red
+ }
+
+ 
+ ```
+
+
 ###TGViewSizeClass
 > Is equivalent to: Size Classes of iOS.
 
@@ -581,6 +621,6 @@ TangramKit is released under the MIT license. See LICENSE for details.
 *X:* [Github](https://github.com/0x10000) 
 
 
- ## Version History
+## Version History
  **[CHANGELOG.md](CHANGELOG.md)**
 
