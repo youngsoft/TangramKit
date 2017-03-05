@@ -8,6 +8,9 @@
 
 import UIKit
 
+/**
+ *3.FlowLayout - Drag
+ */
 class FLLTest3ViewController: UIViewController {
 
     weak var flowLayout: TGFlowLayout!
@@ -118,11 +121,12 @@ extension FLLTest3ViewController {
     func handleTouchDrag(sender: UIButton, event: UIEvent) {
         self.hasDrag = true
         
+        //取出拖动时当前的位置点。
         let touch: UITouch = (event.touches(for: sender)! as NSSet).anyObject() as! UITouch
         let pt = touch.location(in: self.flowLayout)
         
-        //判断当前手指在具体视图的位置。这里要排除self.addButton的位置。
-        var sbv2: UIView!
+        var sbv2: UIView!  //sbv2保存拖动时手指所在的视图。
+        //判断当前手指在具体视图的位置。这里要排除self.addButton的位置(因为这个按钮将固定不调整)。
         for sbv: UIView in self.flowLayout.subviews
         {
             if sbv != sender && sender.tg_useFrame && sbv != self.addButton
@@ -135,6 +139,8 @@ extension FLLTest3ViewController {
             }
         }
         
+        
+        //如果拖动的控件sender和手指下当前其他的兄弟控件有重合时则意味着需要将当前控件插入到手指下的sbv2所在的位置，并且调整sbv2的位置。
         if sbv2 != nil
         {
             self.flowLayout.tg_layoutAnimationWithDuration(0.2)
@@ -153,6 +159,7 @@ extension FLLTest3ViewController {
                 self.flowLayout.exchangeSubview(at: index, withSubviewAt: index-1)
             }
             
+            //经过上面的sbv2的位置调整完成后，需要重新激发布局视图的布局，因此这里要设置autoresizesSubviews为YES。
             self.flowLayout.autoresizesSubviews = true
             sender.tg_useFrame = false
             sender.tg_noLayout = true //这里设置为true表示布局时不会改变sender的真实位置而只是在布局视图中占用一个位置和尺寸，正是因为只是占用位置，因此会调整其他视图的位置。
@@ -164,15 +171,16 @@ extension FLLTest3ViewController {
         //在进行sender的位置调整时，要把sender移动到最顶端，也就子视图数组的的最后，这时候布局视图不能布局，因此要把autoresizesSubviews设置为false，同时因为要自定义
         //sender的位置，因此要把tg_useFrame设置为true，并且恢复tg_noLayout为false。
 
-        self.flowLayout.bringSubview(toFront: sender)
-        self.flowLayout.autoresizesSubviews = false
-        sender.tg_useFrame = true
-        sender.tg_noLayout = false
+        self.flowLayout.bringSubview(toFront: sender)   //把拖动的子视图放在最后，这样这个子视图在移动时就会在所有兄弟视图的上面。
+        self.flowLayout.autoresizesSubviews = false //在拖动时不要让布局视图激发布局
+        sender.tg_useFrame = true //因为拖动时，拖动的控件需要自己确定位置，不能被布局约束，因此必须要将useFrame设置为YES下面的center设置才会有效。
+        sender.tg_noLayout = false //因为useFrame设置为了YES所有这里可以直接调整center，从而实现了位置的自定义设置。
         sender.center = pt  //因为tg_useFrame设置为了YES所有这里可以直接调整center，从而实现了位置的自定义设置。
     }
     
     func handleTouchDown(sender: UIButton, event: UIEvent)
     {
+        //在按下时记录当前要拖动的控件的索引。
         self.oldIndex = self.flowLayout.subviews.index(of: sender)!
         self.currentIndex = self.oldIndex
         self.hasDrag = false
@@ -183,12 +191,17 @@ extension FLLTest3ViewController {
             return
         }
         
-        sender.tg_useFrame = false
-        self.flowLayout.autoresizesSubviews = true
+        //当抬起时，需要让拖动的子视图调整到正确的顺序，并重新参与布局，因此这里要把拖动的子视图的tg_useFrame设置为false，同时把布局视图的autoresizesSubviews还原为YES。
+        
+        //调整索引。
         
         for index in ((self.currentIndex+1)...(self.flowLayout.subviews.count-1)).reversed() {
             self.flowLayout.exchangeSubview(at: index, withSubviewAt: index-1)
         }
+        
+        sender.tg_useFrame = false  //让拖动的子视图重新参与布局，将tg_useFrame设置为false
+        self.flowLayout.autoresizesSubviews = true  //让布局视图可以重新激发布局，这里还原为true。
+
     }
     
     func handleTouchDownRepeat(sender: UIButton, event: UIEvent) {

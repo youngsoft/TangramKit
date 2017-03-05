@@ -8,6 +8,9 @@
 
 import UIKit
 
+/**
+ *❁1.Screen perfect fit - Demo1
+ */
 class AllTest7ViewController: UIViewController {
 
     override func viewDidLoad() {
@@ -36,7 +39,7 @@ class AllTest7ViewController: UIViewController {
         scrollView.addSubview(rootLayout)
         
         let tipLabel = UILabel()
-        tipLabel.text = "在编程中，我们经常会遇到一些需要在各种屏幕下完美适配的界面，一个解决的方法就是写if else语句在不同的屏幕尺寸下进行不同的设置。而MyLayout则提供了一套完美的解决方案，除了支持SizeClass外，布局本身也提供一些机制来支持多种屏幕适配处理，您不再需要编写各种条件语句来进行屏幕尺寸的适配了，下面的例子里面我列举出了我们在实践中会遇到的9种场景："
+        tipLabel.text = "在编程中，我们经常会遇到一些需要在各种屏幕下完美适配的界面，一个解决的方法就是写if else语句在不同的屏幕尺寸下进行不同的设置。而TangramKit则提供了一套完美的解决方案，除了支持Size Classes外，布局本身也提供一些机制来支持多种屏幕适配处理，您不再需要编写各种条件语句来进行屏幕尺寸的适配了，下面的例子里面我列举出了我们在实践中会遇到的10种场景："
         tipLabel.font = CFTool.font(16)
         tipLabel.textColor = CFTool.color(3)
         tipLabel.adjustsFontSizeToFitWidth = true
@@ -89,7 +92,7 @@ extension AllTest7ViewController
         contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
         contentLayout.tg_hspace = 5
         contentLayout.tg_shrinkType = .weight
-        //这个属性用来设置当子视图的总尺寸大于布局视图的尺寸时如何压缩这些具有固定尺寸的方法为按比例缩小。您可以分别试试设置为：.weight,.average,.none三种值的效果。
+        //这个属性用来设置当子视图的总尺寸大于布局视图的尺寸时如何压缩这些具有固定尺寸的方法为按比例缩小。您可以分别试试设置为：.weight,.average,.auto,.none四种值的效果。
         contentLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(contentLayout)
         
@@ -212,7 +215,6 @@ extension AllTest7ViewController
         contentLayout.tg_height.equal(.wrap)
         contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
         contentLayout.tg_hspace = 5
-        contentLayout.tg_shrinkType = .none
         contentLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(contentLayout)
         
@@ -253,23 +255,25 @@ extension AllTest7ViewController
         
     }
     
-    func handleStretch(_ sender: UIButton) {
+    
+    func handleChangeText(_ sender: UIButton) {
+    
+         let texts = ["这是一段很长的文本，目的是为了实现最大限度的利用整个空间而不出现多余的缝隙","您好","北京市朝阳区三里屯SOHO城","我是醉里挑灯看键","欧阳大哥","Tangram是一套功能强大的综合界面布局库"]
         
-        if sender.currentTitle!.characters.count > 50
-        {
-            sender.setTitle("Click", for: .normal)
-        }
-        if sender.tag == 1000 {
-            sender.setTitle(sender.currentTitle!.appending("-->"), for: .normal)
-        }
-        else {
-            sender.setTitle("<--".appending(sender.currentTitle!), for: .normal)
-        }
-        sender.sizeToFit()
+        
+        let  layout = sender.superview!.viewWithTag(4000)
+        let leftLabel = layout!.viewWithTag(1000) as! UILabel
+        let rightLabel = layout!.viewWithTag(2000) as! UILabel
+        
+        leftLabel.text = texts[Int(arc4random_uniform(UInt32(texts.count)))];
+        rightLabel.text = texts[Int(arc4random_uniform(UInt32(texts.count)))];
+        layout!.setNeedsLayout()  //设置文本后激活布局重新布局
+        
+        
     }
     
     func createDemo4(_ rootLayout: TGLinearLayout) {
-        //一个行内的两个子视图的内容彼此约束，左边的往右边延伸，右边的往左边延伸，但不会相互覆盖。
+        //左右两个子视图宽度不确定，但是不会覆盖和重叠。
         let tipLabel = UILabel()
         tipLabel.text = "4.下面的例子展示左右2个子视图的内容分别向两边延伸，但是不会重叠。这样做的好处就是不会产生空间的浪费。一个具体例子就是UITableviewCell中展示内容时，一部分在左边而一部分在右边，两边的内容长度都不确定，但是不能重叠以及浪费空间。 您可以分别在横竖屏下测试以及在iPhone4/5/6/6+上测试效果:"
         tipLabel.font = CFTool.font(14)
@@ -280,37 +284,58 @@ extension AllTest7ViewController
         tipLabel.sizeToFit()
         rootLayout.addSubview(tipLabel)
         
+        let changeButton = UIButton(type:.system)
+        changeButton.setTitle("Change Text",for:.normal)
+        changeButton.sizeToFit()
+        rootLayout.addSubview(changeButton)
+        changeButton.addTarget(self,action:#selector(handleChangeText),for:.touchUpInside)
+
+        
         let contentLayout = TGLinearLayout(.horz)
         contentLayout.tg_height.equal(.wrap)
         contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
-        contentLayout.tg_hspace = 5
-        contentLayout.tg_shrinkType = .weight
-        //这里当固定子视图的宽度超过布局时，所有子视图按比例缩小，您也可以设置平均缩小或者不缩小。您可以设置为：.average和.none的区别。
+        contentLayout.tg_hspace = 20
+        contentLayout.tg_shrinkType = .auto
+        //为了实现左右两边文本的自动缩放调整，必须要将线性布局的属性设置.auto。当设置为.auto属性时，必要要满足当前子视图中只有2个子视图的宽度设置为等于自身内容，否则无效。这个属性用来实现左右2个子视图根据内容来占用最佳的空间的例子。
         contentLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(contentLayout)
+        contentLayout.tag = 4000
         
-        //第一个子视图。
-        let buttonLeft = UIButton(type: .system)
-        buttonLeft.setTitle("Click->", for: .normal)
-        buttonLeft.tintColor! = UIColor.blue
-        buttonLeft.titleLabel!.font = UIFont.systemFont(ofSize: CGFloat(14))
-        buttonLeft.sizeToFit()
-        buttonLeft.tag = 1000
-        buttonLeft.tg_right.equal(50%)  //设置右边的相对间距
-       
-        contentLayout.addSubview(buttonLeft)
-        buttonLeft.addTarget(self, action: #selector(self.handleStretch), for: .touchUpInside)
+        //您可以解开如下注释再看看运行的效果。
+        /*
+         let fixedLabel = UILabel()
+         fixedLabel.tg_width.equal(40)
+         fixedLabel.tg_height.equal(30)
+         fixedLabel.backgroundColor = .orange
+         contentLayout.addSubview(fixedLabel)
+         */
         
-        //第二个子视图。
-        let  buttonRight = UIButton(type: .system)
-        buttonRight.setTitle("<-Click", for: .normal)
-        buttonRight.tintColor! = UIColor.red
-        buttonRight.titleLabel!.font = UIFont.systemFont(ofSize: CGFloat(14))
-        buttonRight.sizeToFit()
-        buttonRight.tag = 2000
-        buttonRight.tg_left.equal(50%)  //设置右边的相对间距
-        contentLayout.addSubview(buttonRight)
-        buttonRight.addTarget(self, action: #selector(self.handleStretch), for: .touchUpInside)
+        //左边子视图。
+        let leftLabel = UILabel()
+        leftLabel.font = UIFont.systemFont(ofSize: 14)
+        leftLabel.textColor = .red
+        leftLabel.tg_width.equal(.wrap)//设置宽度等于自身内容的宽度
+        leftLabel.tg_height.equal(.wrap)
+        leftLabel.numberOfLines = 0;
+        leftLabel.tg_right.equal(50%) //设置右边的相对间距.
+        contentLayout.addSubview(leftLabel)
+        leftLabel.tag = 1000;
+        
+        
+        //右边子视图。
+        let rightLabel = UILabel()
+        rightLabel.font = UIFont.systemFont(ofSize: 14)
+        rightLabel.textColor = .blue
+        rightLabel.tg_width.equal(.wrap)  //设置宽度等于自身内容的宽度
+        rightLabel.tg_height.equal(.wrap)
+        rightLabel.tg_left.equal(50%) //设置左边的相对间距.
+        rightLabel.numberOfLines = 0;
+        contentLayout.addSubview(rightLabel)
+        rightLabel.tag = 2000
+        
+        
+        self.handleChangeText(changeButton)
+
     }
     
     
@@ -375,8 +400,8 @@ extension AllTest7ViewController
      */
     
     func handleAddCell(_ sender: UIButton) {
-        //在创建时指定了3000.所以这里为了方便使用。
-        let tableLayout = sender.superview!.viewWithTag(3000) as! TGTableLayout
+        //在创建时指定了6000.所以这里为了方便使用。
+        let tableLayout = sender.superview!.viewWithTag(6000) as! TGTableLayout
         let cellLabel = UILabel()
         cellLabel.text = "测试文本"
         cellLabel.adjustsFontSizeToFitWidth = true
@@ -439,7 +464,7 @@ extension AllTest7ViewController
         //设置行间距和列间距都为5.
         contentLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(contentLayout)
-        contentLayout.tag = 3000//为了方便查找。
+        contentLayout.tag = 6000//为了方便查找。
     }
     
     
@@ -500,7 +525,6 @@ extension AllTest7ViewController
         contentLayout.tg_gravity = TGGravity.vert.fill
         contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
         contentLayout.tg_space = 5
-        contentLayout.tg_shrinkType = .none //如果具有固定尺寸的视图的总宽度超过布局视图的总宽度时，不产生固定视图的尺寸的压缩。
         scrollView.addSubview(contentLayout)
         
         //第一个子视图。
@@ -555,7 +579,6 @@ extension AllTest7ViewController
         contentLayout.tg_gravity = TGGravity.vert.fill
         contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
         contentLayout.tg_hspace = 5
-        contentLayout.tg_shrinkType = .none //如果具有固定尺寸的视图的总宽度超过布局视图的总宽度时，不产生固定视图的尺寸的压缩。
         scrollView.addSubview(contentLayout)
       
         //第一个子视图。
@@ -654,8 +677,8 @@ extension AllTest7ViewController
         contentLayout.addSubview(A)
         
         let B = self.createLabel("B",color:6)
-        B.tg_left.equal((10/totalFloatWidth)%) //B与A的间距，也就是左间距用浮动间距。对于线性布局来说如果间距值大于0小于1则表示是浮动间距。
-        B.tg_width.equal((60 / totalFloatWidth)%)   //对象水平线性布局来说weight值设置的是视图的比重宽度.
+        B.tg_left.equal((10/totalFloatWidth)%) //B与A的间距，也就是左间距用浮动间距。
+        B.tg_width.equal((60 / totalFloatWidth)%)
         contentLayout.addSubview(B)
         
         let C = self.createLabel("C",color:7)

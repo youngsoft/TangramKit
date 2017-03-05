@@ -11,7 +11,7 @@ import UIKit
 private let sBaseTag:NSInteger = 100000
 
 /**
- *  用Tangram来实现UICollectionView的方法。
+ *  4.Replacement of UICollectionView
  */
 class AllTest4ViewController: UIViewController {
 
@@ -179,7 +179,9 @@ extension AllTest4ViewController
 
     }
     
-    func handleCellLayoutTap(_ sender:UIView) -> Void {
+    
+    func showClickAlert(_ sender:UIView)
+    {
         let supplementaryIndex = sender.tag / sBaseTag
         let cellIndex = sender.tag % sBaseTag
         
@@ -188,6 +190,72 @@ extension AllTest4ViewController
         let alertView = UIAlertView(title:"", message:message, delegate:nil ,cancelButtonTitle:"OK")
         
         alertView.show()
+    }
+    
+    func exchangeSubview(_ sender:UIView, from fromLayout:TGBaseLayout, to toLayout:TGBaseLayout)
+    {
+        //往下移动时，有可能会上面缩小而下面整体往上移动,结束位置不正确。 也就是移动的视图开始位置正确，结束位置不正确。
+        //往上移动时，有可能会上面撑大而下面整体往下移动,开始位置不正确。 也就是移动的视图开始位置不正确，结束位置正确。
+        //因此为了解决这个问题，我们在删除子视图时不让布局视图进行布局，这可以通过设置布局视图的autoresizesSubviews为NO。
+        
+        
+        //得到当前的sender在self.view中的frame，这里进行坐标的转换。
+        let rectOld = fromLayout.convert(sender.frame, to: self.view)
+        
+        //得到将sender加入到toLayout后的评估的frame值，注意这时候sender还没有加入到toLayout。因为是加入到最后面，因此只能用这个方法来评估加入后的值，如果不是添加到最后则是可以很简单的得到应该插入的位置的。
+        var rectNew = toLayout.tg_estimatedFrame(of: sender)
+        rectNew = toLayout.convert(rectNew, to: self.view) //将新位置的评估的frame值，进行坐标转换。
+        
+        //在动画的过程中，我们将sender作为self.view的子视图来实现移动的效果。
+        fromLayout.autoresizesSubviews = false
+        sender.removeFromSuperview()
+        sender.frame = rectOld
+        sender.tg_useFrame = true  //设置为true表示sender不再受到布局视图的约束，而是可以自由设置frame值。
+        self.view.addSubview(sender)
+        
+        UIView.animate(withDuration: 0.3, animations: { 
+            sender.frame = rectNew
+        }) { _ in
+            
+            //恢复重新布局。
+            fromLayout.autoresizesSubviews = true
+            fromLayout.setNeedsLayout()
+            
+            //动画结束后再将sender移植到toLayout中。
+            sender.removeFromSuperview()
+            sender.tg_useFrame = false  //还原tg_useFrame，因为加入到toLayout后将受到布局视图的约束。
+            toLayout.addSubview(sender)
+        }
+        
+    }
+    
+    func handleCellLayoutTap(_ sender:UIView) -> Void {
+        
+        //这里是为了节省，所以将两个不同的功能放在一起。。。
+        
+        let superFlowLayout = sender.superview as! TGFlowLayout
+        
+        //第一个和第二个里面的子视图点击后弹出当前点击的cell的提示信息。
+        if (superFlowLayout == self.containerLayouts[0] || superFlowLayout == self.containerLayouts[1])
+        {
+            self.showClickAlert(sender)
+        }
+        else
+        {
+            //第三个第四个里面的子视图点击后进行互相移动的场景。
+            let flowLayout2 = self.containerLayouts[2]
+            let flowLayout3 = self.containerLayouts[3]
+            if (superFlowLayout == flowLayout2)
+            {
+                self.exchangeSubview(sender,from:flowLayout2,to:flowLayout3)
+            }
+            else
+            {
+                self.exchangeSubview(sender,from:flowLayout3,to:flowLayout2)
+            }
+        }
+        
+        
     }
     
 }

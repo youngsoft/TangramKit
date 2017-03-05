@@ -8,6 +8,9 @@
 
 import UIKit
 
+/**
+ * 7.LinearLayout - Average size&space
+ */
 class LLTest7ViewController: UIViewController {
 
     weak var testLayout: TGLinearLayout!
@@ -147,22 +150,22 @@ extension LLTest7ViewController
         
         switch (sender.tag) {
         case 100:
-            self.testLayout.tg_equalizeSubviews(centered: false) //均分所有子视图尺寸和间距不留最外面边距
+            self.testLayout.tg_equalizeSubviews(centered: false) //均分所有子视图尺寸和间距不留最外面间距
             break;
         case 200:
-            self.testLayout.tg_equalizeSubviews(centered: true) //均分所有子视图的尺寸和间距保留最外边距
+            self.testLayout.tg_equalizeSubviews(centered: true) //均分所有子视图的尺寸和间距保留最外间距
             break;
         case 300:
-            self.testLayout.tg_equalizeSubviews(centered: false, withSpace: 40) //均分所有子视图尺寸，固定边距，不保留最外边距
+            self.testLayout.tg_equalizeSubviews(centered: false, withSpace: 40) //均分所有子视图尺寸，固定间距，不保留最外间距
             break;
         case 400:
-            self.testLayout.tg_equalizeSubviews(centered:true, withSpace: 40) //均分所有子视图尺寸，固定边距，保留最外边距
+            self.testLayout.tg_equalizeSubviews(centered:true, withSpace: 40) //均分所有子视图尺寸，固定间距，保留最外间距
             break;
         case 500:
-            self.testLayout.tg_equalizeSubviewsSpace(centered: false) //均分所有边距，子视图尺寸不变，不保留最外边距
+            self.testLayout.tg_equalizeSubviewsSpace(centered: false) //均分所有间距，子视图尺寸不变，不保留最外间距
             break;
         case 600:
-            self.testLayout.tg_equalizeSubviewsSpace(centered: true) //均分所有边距，子视图尺寸不变，保留最外边距。
+            self.testLayout.tg_equalizeSubviewsSpace(centered: true) //均分所有间距，子视图尺寸不变，保留最外间距。
             break;
         default:
             break;

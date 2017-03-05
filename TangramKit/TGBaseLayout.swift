@@ -8,11 +8,20 @@
 
 import UIKit
 
-/**
- * 定义SizeClass中普通视图的布局属性
- */
+
 extension UIView:TGViewSizeClass
 {
+    
+    /*
+     1.布局视图：    就是从TGBaseLayout派生而出的视图，目前TangramKit中一共有：线性布局、框架布局、相对布局、表格布局、流式布局、浮动布局、路径布局7种布局。 布局视图也是一个视图。
+     2.非布局视图：  除上面说的7种布局视图外的所有视图和控件。
+     3.布局父视图：  如果某个视图的父视图是一个布局视图，那么这个父视图就是布局父视图。
+     4.非布局父视图：如果某个视图的父视图不是一个布局视图，那么这个父视图就是非布局父视图。
+     5.布局子视图：  如果某个视图的子视图是一个布局视图，那么这个子视图就是布局子视图。
+     6.非布局子视图：如果某个视图的子视图不是一个布局视图，那么这个子视图就是非布局子视图。
+     
+     */
+    
     
     /*
      视图的布局位置对象属性，用来指定视图水平布局位置和垂直布局位置。对于一个视图来说我们可以使用frame属性中的origin部分来确定一个视图的左上方位在父视图的位置。这种方法的缺点是需要明确的指定一个常数值，以及需要进行位置的计算，缺乏可扩展性以及可维护性。因此对于布局视图里面的子视图来说我们将不再通过设置frame属性中的origin部分来确定位置，而是通过视图扩展的布局位置对象属性来设置视图的布局位置。子视图的布局位置对象在不同类型的布局视图里和不同的场景下所表达的意义以及能设置的值类型将会有一定的差异性。下面的表格将列出这些差异性：
@@ -51,9 +60,10 @@ extension UIView:TGViewSizeClass
      比如A.tg_left.equal(10)表示A的左边距是10，也就是A视图的左边和父视图的左边距离10个点。
      
      Scene2:布局位置对象的值设置为数值,且表示的是视图之间的间距。所谓间距就是指视图和其他视图之间的距离。这里要注意边距和间距的区别，边距是子视图和父视图之间的距离，间距是子视图和兄弟视图之间的距离。
-     比如垂直线性布局视图L分别添加了A,B两个子视图则设置A.tg_top.equal(10),A.tg_bottom.equal(10),B.tg_top.equal(10)的意思是A的顶部间距是10，底部间距也是10。视图B的顶部间距10。这样视图B和视图A之间的间距就是20
-     Scene3:布局位置对象的值设置为TGWeight,表示的是相对比例值,表示视图之间的相对距离。
-     相对距离的最终距离 = (布局视图尺寸 - 所有固定尺寸和间距的视图) * 当前视图的相对距离 /(所有子视图相对距离的总和)
+     比如垂直线性布局视图L分别添加了A,B两个子视图且设置A.tg_top.equal(10),A.tg_bottom.equal(10),B.tg_top.equal(10)的意思是A的顶部间距是10，底部间距也是10。视图B的顶部间距10。这样视图B和视图A之间的间距就是20
+     Scene3:布局位置对象的值设置为TGWeight,表示的是相对比重值,表示视图之间的相对间距值或者边距值。
+     视图的相对间距的最终距离 = (布局视图尺寸 - 所有具有固定尺寸和固定间距之和) * 当前视图的相对间距值 /(所有子视图相对间距的总和)
+     视图的相对边距的最终距离 = 布局视图尺寸 * 当前视图的相对边距值
      
      Scene4:布局位置对象的值设置为TGLayoutPos对象，表示某个位置依赖于另外一个位置。只有在相对布局中的子视图的布局位置对象的位置值才能设置为TGLayoutPos对象。
      比如： A.tg_left.equal(B.tg_right)表示视图A的左边等于视图B的右边。
@@ -67,8 +77,30 @@ extension UIView:TGViewSizeClass
      Scene7:当同时设置了tg_top和tg_bottom上下边距后就能确定出视图的布局高度了，这样就不需要为子视图指定布局高度值了。需要注意的是只有同时设置了上下边距才能确定视图的高度，而设置上下间距是则不能。
      比如：某个布局布局视图高度是100，而某个子视图的tg_top.equal(10),tg_bottom.equal(20).则这个子视图的高度=70(100-10-20)
      
+     
+     
+     
+     这要区分一下边距和间距和概念，所谓边距是指子视图距离父视图的距离；而间距则是指子视图距离兄弟视图的距离。
+     当tg_left,tg_right,tg_top,tg_bottom这四个属性的equal方法设置的值为CGFloat类型或者TGWeight类型时即可用来表示边距也可以用来表示间距，这个要根据子视图所归属的父布局视图的类型而确定：
+     
+     1.垂直线性布局TGLinearLayout中的子视图： tg_left,tg_right表示边距，而tg_top,tg_bottom则表示间距。
+     2.水平线性布局TGLinearLayout中的子视图： tg_left,tg_right表示间距，而tg_top,tg_bottom则表示边距。
+     3.表格布局中的子视图：                  tg_left,tg_right,tg_top,tg_bottom的定义和线性布局是一致的。
+     4.框架布局TGFrameLayout中的子视图：     tg_left,tg_right,tg_top,tg_bottom都表示边距。
+     5.相对布局TGRelativeLayout中的子视图：  tg_left,tg_right,tg_top,tg_bottom都表示边距。
+     6.流式布局TGFlowLayout中的子视图：      tg_left,tg_right,tg_top,tg_bottom都表示间距。
+     7.浮动布局TGFloatLayout中的子视图：     tg_left,tg_right,tg_top,tg_bottom都表示间距。
+     8.路径布局TGPathLayout中的子视图：      tg_left,tg_right,tg_top,tg_bottom即不表示间距也不表示边距，它表示自己中心位置的偏移量。
+     9.非布局父视图中的布局子视图：           tg_left,tg_right,tg_top,tg_bottom都表示边距。
+     10.非布局父视图中的非布局子视图：         tg_left,tg_right,tg_top,tg_bottom的设置不会起任何作用，因为TangramKit已经无法控制了。
+     
+     再次强调的是：
+     1. 如果同时设置了左右边距就能决定自己的宽度，同时设置左右间距不能决定自己的宽度！
+     2. 如果同时设置了上下边距就能决定自己的高度，同时设置上下间距不能决定自己的高度！
+     
+     
      */
-
+    
     
     /**
      *视图的左边布局位置对象。(left layout position of the view.)
@@ -144,44 +176,44 @@ extension UIView:TGViewSizeClass
      路径布局简写为P、全部简写为ALL，不支持为-，
      
      定义A为操作的视图本身，B为A的兄弟视图，S为A的父视图。
-+-----------+-------+--------+----+----+----------------+---------------+----------+-----------+--------------+--------------+--------------+
-| 对象 \ 值  |CGFloat|TGWeight|wrap|fill|A.tg_width      |A.tg_height    |B.tg_width|B.tg_height|S.tg_width    |S.tg_heigh    |[TGLayoutSize]|
-+-----------+-------+--------+----+----+----------------+---------------+----------+-----------+--------------+--------------+--------------+
-|A.tg_width |ALL    |ALL     |ALL |ALL | -   	        |FR/R/FL-H/FO/LH|FR/R/FO/P | R	       |ALL           | R	         |R             |
-+-----------+-------+--------+----+----+----------------+---------------+----------+-----------+--------------+--------------+--------------+
-|A.tg_height|ALL    |ALL     |ALL |ALL |FR/R/FL-V/FO/L  |-              |R	       |FR/R/FO/P  |R             |ALL           |R             |
-+-----------+-------+--------+----+----+----------------+---------------+----------+-----------+--------------+--------------+--------------+
+     +-----------+-------+--------+----+----+----------------+---------------+----------+-----------+--------------+--------------+--------------+
+     | 对象 \ 值  |CGFloat|TGWeight|wrap|fill|A.tg_width      |A.tg_height    |B.tg_width|B.tg_height|S.tg_width    |S.tg_heigh    |[TGLayoutSize]|
+     +-----------+-------+--------+----+----+----------------+---------------+----------+-----------+--------------+--------------+--------------+
+     |A.tg_width |ALL    |ALL     |ALL |ALL | -   	        |FR/R/FL-H/FO/LH|FR/R/FO/P | R	       |ALL           | R	         |R             |
+     +-----------+-------+--------+----+----+----------------+---------------+----------+-----------+--------------+--------------+--------------+
+     |A.tg_height|ALL    |ALL     |ALL |ALL |FR/R/FL-V/FO/L  |-              |R	       |FR/R/FO/P  |R             |ALL           |R             |
+     +-----------+-------+--------+----+----+----------------+---------------+----------+-----------+--------------+--------------+--------------+
      
      这里面重点介绍TGWeight，wrap,fill三种类型的值设置。
      其中的TGWeight是指设置的值为相对值，表示占用父视图或者剩余尺寸的比例，具体是父视图空间比例还是剩余空间比例则需要根据布局视图的类型来决定，下面列出了各种布局视图下的TGWeight设置的意义：
-         父视图宽度比例： FR, L-V,R
-         父视图剩余宽度比例：L-H, FL, FO
-         父视图高度比例： FR, L-H,R
-         父视图剩余高度比例：L-V, FL, FO
+     父视图宽度比例： FR, L-V,R
+     父视图剩余宽度比例：L-H, FL, FO
+     父视图高度比例： FR, L-H,R
+     父视图剩余高度比例：L-V, FL, FO
      
      假如某个框架布局下面的子视图A，希望其宽度是父视图宽度的50%，那么就可以设置 A.tg_width.equal(50%)
      假如某个线性布局下面的子视图A,B， 其中父视图的高度为100， A子视图的高度为20， 而B视图想占用剩余的高度则可以设置B.tg_height.equal(100%)
      这里的%运算符，是对TGWeight类型对象简化操作，比如下面是等价的：
-        a.tg_width.equal(TGWeight(100)) <==> a.tg_width.equal(100%) <==> a.tg_width ~= 100%
-          
+     a.tg_width.equal(TGWeight(100)) <==> a.tg_width.equal(100%) <==> a.tg_width ~= 100%
      
-     .wrap属性值则表示视图的尺寸是有内容或者其子视图来决定的。比如UILabel的宽度希望由自身的内容决定，那么就可以设置tg_width.equal(.wrap),同样对于布局视图也是一样的，这里的wrap对于布局视图来说其实就是OC版本的wrapContentWidth和wrapContentHeight的概念。如果某个子视图的宽度是固定的，而高度则会动态伸缩则我们可以定义如下：
-            let label = UILabel()
-            label.tg_width ~= 100
-            label.tg_height ~=.wrap
-            label.numberOflines = 0
      
-      同样如果一个线性布局里面的宽度和高度都希望由子视图决定则可以如下处理：
-            let l = TGLinearLayout(.vert)
-            l.tg_width.equal(.wrap)
-            l.tg_height.equal(.wrap)
+     .wrap属性值则表示视图的尺寸是有内容或者其子视图来决定的。比如UILabel的宽度希望由自身的内容决定，那么就可以设置tg_width.equal(.wrap),同样对于布局视图也是一样的，这里的wrap对于布局视图来说其实就是OC版本的wrapContentWidth和wrapContentHeight的概念。如果某个子视图的宽度是固定的，而高度则自适应则我们可以定义如下：
+     let label = UILabel()
+     label.tg_width ~= 100
+     label.tg_height ~=.wrap
+     label.numberOflines = 0
+     
+     同样如果一个线性布局里面的宽度和高度都希望由子视图决定则可以如下处理：
+     let l = TGLinearLayout(.vert)
+     l.tg_width.equal(.wrap)
+     l.tg_height.equal(.wrap)
      
      
      .fill属性则表示视图的尺寸会填充父视图的剩余空间，这个和TGWeight(100)是等价的。比如某个子视图的宽度想填充父视图的宽度相等则：
-             a.tg_width.equal(.fill)  <==>  a.tg_width.equal(100%)
+     a.tg_width.equal(.fill)  <==>  a.tg_width.equal(100%)
      
-*/
-
+     */
+    
     
     
     /**
@@ -201,7 +233,31 @@ extension UIView:TGViewSizeClass
     }
     
     /**
-     *设置视图不受布局视图的布局约束控制，所有的视图扩展属性失效而是用自身原始的frame的设置值来进行定位和布局，默认值是false。这个属性一般用来实现视图在特定场景下的动画效果，以及可以和布局视图的autoresizesSubviews方法配合使用来实现一些特殊功能。
+     *设置视图不受布局父视图的布局约束控制和不再参与视图的布局，所有设置的其他扩展属性都将失效而必须用frame来设置视图的位置和尺寸，默认值是false。这个属性主要用于某些视图希望在布局视图中进行特殊处理和进行自定义的设置的场景。比如一个垂直线性布局下有A,B,C三个子视图设置如下：
+     A.tg_size(width:100,height:100)
+     B.tg_size(width:100,height:50)
+     C.tg_size(width:100,height:200)
+     B.frame = CGRect(x:20,y:20,width:200,height:100)
+     
+     正常情况下当布局完成后:
+     A.frame == {0,0,100,100}
+     B.frame == {0,100,100,50}  //可以看出即使B设置了frame值，但是因为布局约束属性优先级高所以对B设置的frame值是无效的。
+     C.frame == {0,150,100,200}
+     
+     而当我们设置如下时：
+     A.tg_size(width:100,height:100)
+     B.tg_size(width:100,height:50)
+     C.tg_size(width:100,height:200)
+     B.frame = CGRect(x:20,y:20,width:200,height:100)
+     B.tg_useFrame = true
+     
+     那么在布局完成后：
+     A.frame == {0, 0, 100, 100}
+     B.frame == {20,20,200,100}   //可以看出B并没有受到约束的限制，结果就是B设置的frame值。
+     C.frame == {0, 100,100,200}  //因为B不再参与布局了，所以C就往上移动了，由原来的150变为了100.
+     
+     *tg_useFrame的应用场景是某个视图虽然是布局视图的子视图但不想受到父布局视图的约束，而是可以通过frame进行自由位置和尺寸调整的场景。
+     
      */
     public var tg_useFrame:Bool
         {
@@ -225,7 +281,36 @@ extension UIView:TGViewSizeClass
     }
     
     /**
-     *设置视图在进行布局时只占位置而不真实的调整位置和尺寸。也就是视图的真实位置和尺寸不变，但在布局视图布局时会保留出子视图的布局位置和布局尺寸的空间，这个属性通常和tg_useFrame混合使用来实现一些动画特效。通常在处理时设置：tg_noLayout为true同时tg_useFrame为false时布局时视图的frame是不会改变的，而当tg_useFrame设置为true时则tg_noLayout属性无效。
+     *设置视图在进行布局时只会参与布局但不会真实的调整位置和尺寸，默认值是false。当设置为YES时会在布局时保留出视图的布局位置和布局尺寸的空间，但不会更新视图的位置和尺寸，也就是说只会占位但不会更新。因此你可以通过frame值来进行位置和尺寸的任意设置，而不会受到你的布局视图的影响。这个属性主要用于某些视图希望在布局视图中进行特殊处理和进行自定义的设置的场景。比如一个垂直线性布局下有A,B,C三个子视图设置如下：
+     A.tg_size(width:100,height:100)
+     B.tg_size(width:100,height:50)
+     C.tg_size(width:100,height:200)
+     B.frame = CGRect(x:20,y:20,width:200,height:100)
+     
+     正常情况下当布局完成后:
+     A.frame == {0,0,100,100}
+     B.frame == {0,100,100,50}  //可以看出即使B设置了frame值，但是因为布局约束属性优先级高所以对B设置的frame值是无效的。
+     C.frame == {0,150,100,200}
+     
+     而当我们设置如下时：
+     A.tg_size(width:100,height:100)
+     B.tg_size(width:100,height:50)
+     C.tg_size(width:100,height:200)
+     B.frame = CGRect(x:20,y:20,width:200,height:100)
+     B.tg_noLayout = true
+     
+     那么在布局完成后：
+     A.frame == {0,0,100,100}
+     B.frame == {20,20,200,100}  //可以看出虽然B参与了布局，但是并没有更新B的frame值，而是保持为通过frame设置的原始值。
+     C.frame == {0,150,100,200}  //因为B参与了布局，占用了50的高度，所以这里C的位置还是150，而不是100.
+     
+     
+     * tg_useFrame和tg_noLayout的区别是：
+     1.前者不会参与布局而必须要通过frame值进行设置，而后者则会参与布局但是不会将布局的结果更新到frame中。
+     2.当前者设置为true时后者的设置将无效，而后者的设置并不会影响前者的设置。
+     
+     *tg_noLayout的应用场景是那些想在运行时动态调整某个视图的位置和尺寸，但是又不想破坏布局视图中其他子视图的布局结构的场景，也就是调整了视图的位置和尺寸，但是不会调整其他的兄弟子视图的位置和尺寸。
+     
      */
     public var tg_noLayout:Bool
         {
@@ -310,10 +395,11 @@ extension UIView
         self.tg_height.tgEqual(val: height)
     }
     
-
+    
+    
     
     /**
-     *视图的评估frame值。评估frame值是在布局前评估计算的值，而frame则是视图真正完成布局后的真实值。在调用这个方法前请先调用父布局视图的tg_sizeThatFits方法进行布局视图的尺寸评估，否则此方法返回的值未可知。这个方法主要用于在视图布局前而想得到其在父布局视图中的frame值的场景。
+     *视图的在父布局视图调用完评估尺寸的方法后，可以通过这个方法来获取评估的CGRect值。评估的CGRect值是在布局前评估计算的值，而frame则是视图真正完成布局后的真实的CGRect值。在调用这个方法前请先调用父布局视图的tg_sizeThatFits方法进行布局视图的尺寸评估，否则此方法返回的值未可知。这个方法主要用于在视图布局前而想得到其在父布局视图中的位置和尺寸的场景。
      */
     public var tg_estimatedFrame:CGRect
     {
@@ -327,16 +413,17 @@ extension UIView
     }
     
     /**
-     *视图在布局视图中布局完成后执行的块，执行完动作后会被重置为nil。通过在tg_layoutCompletedDo的实现中我们可以得到这个视图真实的frame值。还可以设置一些属性，主要是用来实现一些动画特效。这里面layout就是父布局视图，而v就是视图本身，用这两个参数返回的目的是为了防止循环引用的问题.
+     *视图在父布局视图中布局完成后也就是视图的frame更新完成后执行的block，执行完block后会被重置为nil。通过在tg_layoutCompletedDo中我们可以得到这个视图真实的frame值,当然您也可以在里面进行其他业务逻辑的操作和属性的获取和更新。block方法中layout参数就是父布局视图，而v就是视图本身，block中这两个参数目的是为了防止循环引用的问题。
      */
     public func tg_layoutCompletedDo(_ action:((_ layout:TGBaseLayout, _ view:UIView)->Void)?)
     {
         (self.tgCurrentSizeClass as! TGViewSizeClassImpl).tgLayoutCompletedAction = action
     }
     
+    
     /**
-     *清除所有为布局而设置的视图布局属性值。
-     *@type: 清除某个MySizeClassType下设置的视图布局属性值。
+     *清除视图所有为布局而设置的扩展属性值。如果是布局视图调用这个方法则同时会清除布局视图中所有关于布局设置的属性值。
+     *@type: 清除某个TGSizeClassType下设置的视图布局属性值。
      */
     public func tg_clearLayout(inSizeClass type:TGSizeClassType = .default)
     {
@@ -348,7 +435,7 @@ extension UIView
     }
     
     /**
-     *获取视图在某个SizeClassType下的TGViewSizeClass对象。可以通过得到的TGViewSizeClass对象来设置视图在对应SizeClass下的各种布局约束属性。
+     *获取视图在某个SizeClassType下的TGViewSizeClass对象。视图可以通过得到的TGViewSizeClass对象来设置视图在对应SizeClass下的各种布局约束属性。
      *@srcType:如果视图指定的type不存在则会拷贝srcType中定义的约束值，如果存在则不拷贝直接返回type中指定的SizeClass。
      */
     public func tg_fetchSizeClass(with type:TGSizeClassType, from srcType:TGSizeClassType! = nil) ->TGViewSizeClass
@@ -386,7 +473,7 @@ extension UIView
 }
 
 /**
- *布局视图边界线类，可用于布局视图的四周边界线的设置。
+ *布局的边界画线类，用于实现绘制布局的四周的边界线的功能。一个布局视图中提供了上下左右4个方向的边界画线类对象。
  */
 public class TGLayoutBorderline:NSObject
 {
@@ -398,9 +485,9 @@ public class TGLayoutBorderline:NSObject
         self.headIndent = headIndent
         self.tailIndent = tailIndent
         super.init()
-
+        
     }
-
+    
     //边界线颜色
     public var color:UIColor
     //边界线粗细
@@ -415,8 +502,49 @@ public class TGLayoutBorderline:NSObject
 
 
 
-/*布局视图基类，基类不支持实例化对象*/
+/**
+ *布局视图基类，基类不支持实例化对象。在编程时我们经常会用到一些视图，这种视图只是负责将里面的子视图按照某种规则进行排列和布局，而别无其他的作用。因此我们称这种视图为容器视图或者称为布局视图。
+ 布局视图通过重载layoutSubviews方法来完成子视图的布局和排列的工作。对于每个加入到布局视图中的子视图，都会在加入时通过KVO机制监控子视图的center和bounds以及frame值的变化，每当子视图的这些属性一变化时就又会重新引发布局视图的布局动作。同时对每个视图的布局扩展属性的设置以及对布局视图的布局属性的设置都会引发布局视图的布局动作。布局视图在添加到非布局父视图时也会通过KVO机制来监控非布局父视图的frame值和bounds值，这样每当非布局父视图的尺寸变更时也会引发布局视图的布局动作。前面说的引起变动的方法就是会在KVO处理逻辑以及布局扩展属性和布局属性设置完毕后通过调用setNeedLayout来实现的，当布局视图收到setNeedLayout的请求后，会在下一个runloop中对布局视图进行重新布局而这就是通过调用layoutSubviews方法来实现的。布局视图基类只提供了更新所有子视图的位置和尺寸以及一些基础的设置，而至于如何排列和布局这些子视图则要根据应用的场景和需求来确定，因此布局基类视图提供了一个：
+ internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, type:TGSizeClassType) ->(selfSize:CGSize, hasSubLayout:Bool)
+ 的方法，要求派生类去重载这个方法，这样不同的派生类就可以实现不同的应用场景，这就是布局视图的核心实现机制。
+ 
+ TangramKit布局库根据实际中常见的场景实现了7种不同的布局视图派生类他们分别是：线性布局、表格布局、相对布局、框架布局、流式布局、浮动布局、路径布局。
+ */
 open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
+    
+    
+    /*
+     布局视图里面的tg_padding属性用来设置布局视图的内边距。内边距是指布局视图里面的子视图离自己距离。外边距则是视图与父视图之间的距离。
+     内边距是在自己的尺寸内离子视图的距离，而外边距则不是自己尺寸内离其他视图的距离。下面是内边距和外边距的效果图：
+     
+     ^
+     | topMargin
+     |           width
+     +------------------------------+
+     |                              |------------>
+     |  l                       r   | rightMargin
+     |  e       topPadding      i   |
+     |  f                       g   |
+     |  t   +---------------+   h   |
+     <----------|  P   |               |   t   |
+     leftMargin|  a   |               |   P   |
+     |  d   |   subviews    |   a   |  height
+     |  d   |    content    |   d   |
+     |  i   |               |   d   |
+     |  n   |               |   i   |
+     |  g   +---------------+   n   |
+     |                          g   |
+     |        bottomPadding         |
+     +------------------------------+
+     |bottomMargin
+     |
+     V
+     
+     
+     如果一个布局视图中的每个子视图都离自己有一定的距离就可以通过设置布局视图的内边距来实现，而不需要为每个子视图都设置外边距。
+     
+     */
+    
     
     /**
      * 设置布局视图四周的内边距值。所谓内边距是指布局视图内的所有子视图离布局视图四周的边距。通过为布局视图设置内边距可以减少为所有子视图设置外边距的工作，而外边距则是指视图离父视图四周的距离。
@@ -469,7 +597,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 sc.tg_leftPadding = newValue
                 setNeedsLayout()
             }
-
+            
         }
     }
     
@@ -504,12 +632,34 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 sc.tg_rightPadding = newValue
                 setNeedsLayout()
             }
-
+            
+        }
+    }
+    
+    /**
+     * 设置当布局的尺寸由子视图决定并且在没有子视图的情况下tg_padding的设置值是否会加入到布局的尺寸值里面。默认是true，表示当布局视图没有子视图时tg_padding值也会加入到尺寸里面。
+     * 举例来说假设某个布局视图的高度是.wrap,并且设置了tg_topPadding为10，tg_bottomPadding为20。那么默认情况下当没有任何子视图时布局视图的高度是30；而当我们将这个属性设置为false时，那么在没有任何子视图时布局视图的高度就是0，也就是说tg_padding不会参与高度的计算了。
+     */
+    public var tg_zeroPadding:Bool
+        {
+        get{
+            return (self.tgCurrentSizeClass as! TGLayoutViewSizeClass).tg_zeroPadding
+        }
+        set
+        {
+            let sc = self.tgCurrentSizeClass as! TGLayoutViewSizeClass
+            if sc.tg_zeroPadding != newValue
+            {
+                sc.tg_zeroPadding = newValue
+                setNeedsLayout()
+            }
         }
     }
     
     
-    //定义布局视图内子视图之间的间距，所谓间距就是子视图之间的间隔距离。
+    /**
+     *定义布局视图内子视图之间的间距，所谓间距就是子视图之间的间隔距离。
+     */
     public var tg_space:CGFloat {
         get {
             return (self.tgCurrentSizeClass as! TGLayoutViewSizeClass).tg_space
@@ -527,7 +677,9 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     }
     
     
-    //定义布局视图内子视图之间的上下垂直间距。只有顺序布局这个属性才有意义。
+    /**
+     *定义布局视图内子视图之间的上下垂直间距。只有顺序布局这个属性才有意义。
+     */
     public var tg_vspace:CGFloat {
         get {
             return (self.tgCurrentSizeClass as! TGLayoutViewSizeClass).tg_vspace
@@ -540,11 +692,13 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 sc.tg_vspace = newValue
                 setNeedsLayout()
             }
-
+            
         }
     }
     
-    //定义布局视图内子视图之间的左右水平间距。只有顺序布局这个属性才有意义。
+    /**
+     *定义布局视图内子视图之间的左右水平间距。只有顺序布局这个属性才有意义。
+     */
     public var tg_hspace:CGFloat {
         get {
             return (self.tgCurrentSizeClass as! TGLayoutViewSizeClass).tg_hspace
@@ -559,12 +713,12 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             }
         }
     }
-
+    
     /**
-     *布局里面的所有子视图按添加的顺序逆序进行布局。默认是false。
+     *布局里面的所有子视图按添加的顺序逆序进行布局。默认是false，表示按子视图添加的顺序排列。比如一个垂直线性布局依次添加A,B,C三个子视图，那么在布局时则A,B,C从上到下依次排列。当这个属性设置为YES时，则布局时C,B,A依次从上到下排列。
      */
     public var tg_reverseLayout:Bool
-    {
+        {
         get{
             return (self.tgCurrentSizeClass as! TGLayoutViewSizeClass).tg_reverseLayout
         }
@@ -580,12 +734,12 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     }
     
     /**
-     *把一个布局视图放入到UIScrollView内时是否自动调整UIScrollView的contentSize值。默认是.auto，你可以将这个属性设置no而不调整contentSize的值，设置为yes则一定会调整contentSize.
+     *把一个布局视图放入到UIScrollView(UITableView和UICollectionView除外)内时是否自动调整UIScrollView的contentSize值。默认是.auto表示布局视图会自动接管UIScrollView的contentSize的值。 你可以将这个属性设置.no而不调整和控制contentSize的值，设置为.yes则一定会调整contentSize.
      */
     public var tg_adjustScrollViewContentSizeMode:TGAdjustScrollViewContentSizeMode = .auto
     
     /**
-     *在布局视图进行布局时是否调用基类的layoutSubviews方法，默认设置为NO。
+     *在布局视图进行布局时是否调用基类的layoutSubviews方法，默认设置为false。
      */
     public var tg_priorAutoresizingMask:Bool = false
     
@@ -606,7 +760,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 sc.tg_layoutHiddenSubviews = newValue
                 setNeedsLayout()
             }
-
+            
         }
     }
     
@@ -640,38 +794,64 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
      */
     public func tg_sizeThatFits(_ size:CGSize = .zero, inSizeClass type:TGSizeClassType = .default) -> CGSize
     {
-        self.tgFrame.sizeClass = self.tgMatchBestSizeClass(type)
-        
-        for sbv:UIView in self.subviews
-        {
-            sbv.tgFrame.sizeClass = sbv.tgMatchBestSizeClass(type)
-        }
-        
-        var (selfSize, hasSubLayout) = self.tgCalcLayoutRect(size, isEstimate: false, type: type)
-        if hasSubLayout
-        {
-            self.tgFrame.width = selfSize.width
-            self.tgFrame.height = selfSize.height
-            (selfSize,_) = self.tgCalcLayoutRect(.zero, isEstimate: true, type: type)
-        }
-        self.tgFrame.width = selfSize.width
-        self.tgFrame.height = selfSize.height
-        
-        for sbv:UIView in self.subviews
-        {
-            sbv.tgFrame.sizeClass = self.tgDefaultSizeClass
-        }
-        
-        self.tgFrame.sizeClass = self.tgDefaultSizeClass
-        
-        
-        return selfSize
-        
+        return self.tgSizeThatFits(size:size,sbs:nil, inSizeClass: type)
     }
     
     
+    
     /**
-     *设置布局视图在布局之前和布局完成之后的处理块。这两个处理块主要用来实现布局的动画功能。系统会在每次布局完成之后将处理块清空为nil。您也可以在tg_endLayoutDo块内取到所有子视图真实布局后的frame值。
+     *评估计算一个未加入到布局视图中的子视图subview在加入后的frame值。在实践中我们希望得到某个未加入的子视图在添加到布局视图后的应该具有的frame值，这时候就可以用这个方法来获取。比如我们希望把一个子视图从一个布局视图里面移到另外一个布局视图的末尾时希望能够提供动画效果,这时候就可以通过这个方法来得到加入后的子视图的位置和尺寸。
+     *这个方法只有针对那些通过添加顺序进行约束的布局视图才有意义，相对布局和框架布局则没有意义。
+     *@subview: 一个未加入布局视图的子视图，如果子视图已经加入则直接返回子视图的frame值。
+     *@size:指定布局视图期望的宽度或者高度，一般请将这个值设置为.zero。 具体请参考tg_sizeThatFits方法中的size的说明。
+     *@return: 子视图在布局视图最后一个位置(假如加入后)的frame值。
+     
+     *使用示例：假设存在两个布局视图L1,L2他们的父视图是S，现在要实现将L1中的任意一个子视图A移动到L2的末尾中去，而且要带动画效果，那么代码如下：
+     
+     //得到A在S中的frame，这里需要进行坐标转换为S在中的frame
+     let rectOld = L1.convert(A.frame, to: S)
+     
+     //得到将A加入到L2后的评估的frame值，注意这时候A还没有加入到L2。
+     var rectNew = L2.tg_estimatedFrame(of: A)
+     rectNew = L2.convert(rectNew, to: S) //将新位置的评估的frame值，这里需要进行坐标转换为S在中的frame。
+     
+     //动画的过程是先将A作为S的子视图进行位置的调整后再加入到L2中去
+     A.removeFromSuperview()
+     A.frame = rectOld
+     A.tg_useFrame = true  //设置为true表示A不再受到布局视图的约束，而是可以自由设置frame值。
+     S.addSubview(sender)
+     
+     UIView.animate(withDuration: 0.3, animations: {
+     A.frame = rectNew
+     }) { _ in
+     
+     //动画结束后再将A移植到L2中。
+     A.removeFromSuperview()
+     A.tg_useFrame = false  //还原tg_useFrame，因为加入到L2后将受到布局视图的约束。
+     L2.addSubview(A)
+     }
+     
+     */
+    public func tg_estimatedFrame(of subview:UIView, inLayoutSize size:CGSize = .zero) -> CGRect
+    {
+        if subview.superview != nil && subview.superview! === self
+        {
+            return subview.frame
+        }
+        
+        var sbs = self.tgGetLayoutSubviews()
+        sbs.append(subview)
+        
+        let _ = self.tgSizeThatFits(size: size, sbs: sbs, inSizeClass: .default)
+        
+        return subview.tg_estimatedFrame
+    }
+    
+    
+    
+    
+    /**
+     *设置布局视图在布局开始之前和布局完成之后的处理块。系统会在每次布局完成前后分别执行对应的处理块后将处理块清空为nil。您也可以在tg_endLayoutDo块内取到所有子视图真实布局后的frame值。系统会在调用layoutSubviews方法前执行tg_beginLayoutDo，而在layoutSubviews方法执行后执行tg_endLayoutDo。
      */
     public func tg_beginLayoutDo(_ action:(()->Void)?)
     {
@@ -682,7 +862,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     {
         _endLayoutAction = action
     }
-
+    
     /**
      *设置布局视图在第一次布局完成之后或者有横竖屏切换时进行处理的动作块。这个block不像tg_beginLayoutDo以及tg_endLayoutDo那样只会执行一次,而是会一直存在
      *因此需要注意代码块里面的循环引用的问题。这个block调用的时机是第一次布局完成或者每次横竖屏切换时布局完成被调用。
@@ -697,8 +877,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     }
     
     
-    //MARK: borderline
-    //设置布局视图的顶部边界线对象
+    //设置布局视图的顶部边界线对象,默认是nil。
     public var tg_topBorderline:TGLayoutBorderline!
         {
         didSet
@@ -711,7 +890,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         }
     }
     
-    //设置布局视图的左边边界线对象
+    //设置布局视图的左边边界线对象，默认是nil。
     public var tg_leftBorderline:TGLayoutBorderline!
         {
         didSet
@@ -723,7 +902,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         }
     }
     
-    //设置布局视图的底部边界线对象
+    //设置布局视图的底部边界线对象，默认是nil。
     public var tg_bottomBorderline:TGLayoutBorderline!
         {
         didSet
@@ -735,7 +914,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         }
     }
     
-    //设置布局视图的右边边界线对象
+    //设置布局视图的右边边界线对象，默认是nil。
     public var tg_rightBorderline:TGLayoutBorderline!
         {
         
@@ -750,7 +929,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         }
     }
     
-    //设置布局视图的四周边界线对象
+    //设置布局视图的四周边界线对象，默认是nil。
     public var tg_boundBorderline:TGLayoutBorderline!
         {
         get
@@ -767,7 +946,8 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     }
     
     /**
-     *智能边界线，智能边界线不是设置自身的边界线而是对添加到布局视图里面的子布局视图根据子视图之间的关系智能的生成边界线，对于布局视图里面的非布局子视图则不会生成边界线。目前的版本只支持线性布局，表格布局，流式布局和浮动布局这四种布局。
+     *智能边界线，智能边界线不是设置布局自身的边界线而是对添加到布局视图里面的子布局视图根据子视图之间的关系智能的生成边界线，对于布局视图里面的非布局子视图则不会生成边界线。目前的版本只支持线性布局，表格布局，流式布局和浮动布局这四种布局。
+     *举例来说如果为某个垂直线性布局设置了智能边界线，那么当这垂直线性布局里面添加了A和B两个子布局视图时，系统会智能的在A和B之间绘制一条边界线。
      */
     public var tg_intelligentBorderline:TGLayoutBorderline! = nil
     
@@ -776,8 +956,6 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
      */
     public var tg_notUseIntelligentBorderline:Bool = false
     
-    
-    //MARK:action&effect
     
     /**
      *设置布局的按下抬起、按下、取消事件的处理动作,后两个事件的处理必须依赖于第一个事件的处理。请不要在这些处理动作中修改背景色，不透明度，以及背景图片。如果您只想要高亮效果但是不想处理事件则将action设置为nil即可了。
@@ -840,9 +1018,9 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     public var tg_highlightedBackgroundImage:UIImage! = nil
     
     
-
     
-//MARK: override Method
+    
+    //MARK: override Method
     
     deinit {
         
@@ -938,13 +1116,13 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             }
             
             let oldSelfSize = self.bounds.size
-            var (newSelfSize,_) = self.tgCalcLayoutRect(CGSize.zero,isEstimate: false,type:sizeClassType)
+            var (newSelfSize,_) = self.tgCalcLayoutRect(self.tgCalcSizeInNoLayout(newSuperview: self.superview, currentSize: oldSelfSize),isEstimate: false, sbs:nil, type:sizeClassType)
             
             for sbv:UIView in self.subviews
             {
                 let tgsbvFrame = sbv.tgFrame
                 let ptOrigin = sbv.bounds.origin
-                if tgsbvFrame.left != CGFloat.greatestFiniteMagnitude && tgsbvFrame.top != CGFloat.greatestFiniteMagnitude && !sbv.tg_noLayout
+                if tgsbvFrame.left != CGFloat.greatestFiniteMagnitude && tgsbvFrame.top != CGFloat.greatestFiniteMagnitude && !sbv.tg_noLayout && !sbv.tg_useFrame
                 {
                     if tgsbvFrame.width < 0
                     {
@@ -1024,49 +1202,88 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             
             if newSelfSize.width != CGFloat.greatestFiniteMagnitude
             {
-                self.tgAlterScrollViewContentSize(newSelfSize)
+                let supv:UIView! = self.superview
                 
-                if self.superview != nil && !self.superview!.isKind(of: TGBaseLayout.self) && !self.superview!.isKind(of: UIScrollView.self)
+                //如果自己的父视图是非UIScrollView以及非布局视图。以及自己的宽度是.wrap或者高度是.wrap时，并且如果设置了在父视图居中或者居下或者居右时要在父视图中更新自己的位置。
+                if supv != nil && !supv.isKind(of: TGBaseLayout.self) && !supv.isKind(of: UIScrollView.self)
                 {
                     
-                    let rectSuper = self.superview!.bounds
-                    let rectSelf = self.bounds
-                    var centerPonintSelf = self.center
-                    
-                    if (self.tg_width.isWrap)
+                    if self.tg_width.isWrap || self.tg_height.isWrap
                     {
-                        //如果只设置了右边，或者只设置了居中则更新位置。。
-                        if (self.tg_centerX.hasValue)
+                        let rectSuper = supv.bounds
+                        let rectSelf = self.bounds
+                        var centerPonintSelf = self.center
+                        
+                        if (self.tg_width.isWrap)
                         {
-                            centerPonintSelf.x = (rectSuper.width - rectSelf.width)/2 + self.tg_centerX.realMarginInSize(rectSuper.width) + self.layer.anchorPoint.x * rectSelf.width
+                            //如果只设置了右边，或者只设置了居中则更新位置。。
+                            if (self.tg_centerX.hasValue)
+                            {
+                                centerPonintSelf.x = (rectSuper.width - rectSelf.width)/2 + self.tg_centerX.realMarginInSize(rectSuper.width) + self.layer.anchorPoint.x * rectSelf.width
+                            }
+                            else if (self.tg_right.hasValue && !self.tg_left.hasValue)
+                            {
+                                centerPonintSelf.x  = rectSuper.width - rectSelf.width - self.tg_right.realMarginInSize(rectSuper.width) + self.layer.anchorPoint.x * rectSelf.width
+                            }
+                            
                         }
-                        else if (self.tg_right.hasValue && !self.tg_left.hasValue)
+                        
+                        if (self.tg_height.isWrap)
                         {
-                            centerPonintSelf.x  = rectSuper.width - rectSelf.width - self.tg_right.realMarginInSize(rectSuper.width) + self.layer.anchorPoint.x * rectSelf.width
+                            if (self.tg_centerY.hasValue)
+                            {
+                                centerPonintSelf.y = (rectSuper.height - rectSelf.height)/2 + self.tg_centerY.realMarginInSize(rectSuper.height) + self.layer.anchorPoint.y * rectSelf.height
+                            }
+                            else if (self.tg_bottom.hasValue && !self.tg_top.hasValue)
+                            {
+                                centerPonintSelf.y  = rectSuper.height - rectSelf.height - self.tg_bottom.realMarginInSize(rectSuper.height) + self.layer.anchorPoint.y * rectSelf.height
+                            }
+                        }
+                        
+                        //如果有变化则只调整自己的center。而不变化
+                        if (!self.center.equalTo(centerPonintSelf))
+                        {
+                            self.center = centerPonintSelf
+                        }
+                    }
+                    
+                }
+                
+                
+                //这里处理当布局视图的父视图是非布局父视图，且父视图的尺寸是.wrap时需要调整父视图的尺寸。
+                if (supv != nil && !supv.isKind(of: TGBaseLayout.self))
+                {
+                    if (supv.tg_height.isWrap || supv.tg_width.isWrap)
+                    {
+                        //调整父视图的高度和宽度。frame值。
+                        var superBounds = supv.bounds
+                        var superCenter = supv.center
+                        
+                        if (supv.tg_height.isWrap)
+                        {
+                            superBounds.size.height = self.tg_top.margin + newSelfSize.height + self.tg_bottom.margin
+                            superCenter.y += (superBounds.height - supv.bounds.height) * supv.layer.anchorPoint.y
+                        }
+                        
+                        if (supv.tg_width.isWrap)
+                        {
+                            superBounds.size.width = self.tg_left.margin + newSelfSize.width + self.tg_right.margin
+                            superCenter.x += (superBounds.width - supv.bounds.width) * supv.layer.anchorPoint.x
+                        }
+                        
+                        if (!supv.bounds.equalTo(superBounds))
+                        {
+                            supv.center = superCenter
+                            supv.bounds = superBounds
+                            
                         }
                         
                     }
-                    
-                    if (self.tg_height.isWrap)
-                    {
-                        if (self.tg_centerY.hasValue)
-                        {
-                            centerPonintSelf.y = (rectSuper.height - rectSelf.height)/2 + self.tg_centerY.realMarginInSize(rectSuper.height) + self.layer.anchorPoint.y * rectSelf.height
-                        }
-                        else if (self.tg_bottom.hasValue && !self.tg_top.hasValue)
-                        {
-                            centerPonintSelf.y  = rectSuper.height - rectSelf.height - self.tg_bottom.realMarginInSize(rectSuper.height) + self.layer.anchorPoint.y * rectSelf.height
-                        }
-                    }
-                    
-                    //如果有变化则只调整自己的center。而不变化
-                    if (!self.center.equalTo(centerPonintSelf))
-                    {
-                        self.center = centerPonintSelf
-                    }
-
-                    
                 }
+                
+                //处理父视图是滚动视图时动态调整滚动视图的contentSize
+                self.tgAlterScrollViewContentSize(newSelfSize)
+                
                 
             }
             
@@ -1076,7 +1293,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         
         _endLayoutAction?()
         _endLayoutAction = nil
-
+        
         
         //执行屏幕旋转的处理逻辑。
         if (_rotationToDeviceOrientationAction != nil && currentScreenOrientation != nil)
@@ -1097,7 +1314,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             
             _lastScreenOrientation = currentScreenOrientation;
         }
-
+        
         
         
     }
@@ -1136,8 +1353,8 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 
                 if let supl = self.superview as? TGBaseLayout
                 {
-                     if !supl.tg_layoutHiddenSubviews && !self.tg_useFrame
-                     {
+                    if !supl.tg_layoutHiddenSubviews && !self.tg_useFrame
+                    {
                         self.setNeedsLayout()
                     }
                 }
@@ -1152,7 +1369,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         subview.addObserver(self, forKeyPath:"hidden", options: [.new, .old], context: nil)
         subview.addObserver(self, forKeyPath:"frame", options: [.new, .old], context: nil)
         subview.addObserver(self, forKeyPath:"center", options: [.new, .old], context: nil)
-
+        
     }
     
     override open func willRemoveSubview(_ subview: UIView) {
@@ -1162,14 +1379,33 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         subview.removeObserver(self, forKeyPath: "hidden")
         subview.removeObserver(self, forKeyPath: "frame")
         subview.removeObserver(self, forKeyPath: "center")
-
+        
     }
     
-
+    
     
     override open func willMove(toSuperview newSuperview: UIView?) {
         
         super.willMove(toSuperview: newSuperview)
+        
+        if (newSuperview != nil)
+        {
+            if self.value(forKey: "viewDelegate") != nil
+            {
+                if (self.tg_width.isWrap)
+                {
+                    self.tg_width.equal(nil)
+                }
+                
+                if self.tg_height.isWrap
+                {
+                    self.tg_height.equal(nil)
+                }
+                
+                self.tg_adjustScrollViewContentSizeMode = .no
+            }
+            
+        }
         
         
         //将要添加到父视图时，如果不是MyLayout派生则则跟需要根据父视图的frame的变化而调整自身的位置和尺寸
@@ -1273,7 +1509,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             {
                 if self.tg_adjustScrollViewContentSizeMode == .auto
                 {
-                  self.tg_adjustScrollViewContentSizeMode = .yes
+                    self.tg_adjustScrollViewContentSizeMode = .yes
                 }
             }
         }
@@ -1316,7 +1552,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         {
             if (keyPath == "frame" || keyPath == "hidden" || keyPath == "center")
             {
-            
+                
                 if let sbv = object as? UIView, !sbv.tg_useFrame
                 {
                     setNeedsLayout()
@@ -1331,7 +1567,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         }
         
     }
-
+    
     override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
     {
         let touch:UITouch = (touches as NSSet).anyObject() as! UITouch
@@ -1384,7 +1620,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                     
                     if !_hasDoCancel
                     {
-                       _ = _touchCancelTarget?.perform(_touchCancelAction, with: self)
+                        _ = _touchCancelTarget?.perform(_touchCancelAction, with: self)
                         _hasDoCancel = true;
                         
                     }
@@ -1454,7 +1690,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         super.touchesCancelled(touches,with:event)
     }
     
-    internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, type:TGSizeClassType) ->(selfSize:CGSize, hasSubLayout:Bool)
+    internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, sbs:[UIView]!, type:TGSizeClassType) ->(selfSize:CGSize, hasSubLayout:Bool)
     {
         var selfSize:CGSize
         
@@ -1486,7 +1722,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     }
     
     //MARK:private var
-
+    
     //边界线私有属性
     fileprivate var _topBorderlineLayer:CAShapeLayer! = nil
     fileprivate var _leftBorderlineLayer:CAShapeLayer! = nil
@@ -1512,9 +1748,9 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     fileprivate lazy var _canCallAction:Bool = false
     fileprivate lazy var _beginPoint:CGPoint = CGPoint.zero
     static var _hasBegin:Bool = false
-
     
-
+    
+    
     //布局回调处理
     private lazy var _beginLayoutAction:(()->Void)? = nil
     private lazy var _endLayoutAction:(()->Void)? = nil
@@ -1523,9 +1759,9 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     //旋转处理。
     private var _lastScreenOrientation:Int! = nil //为nil为初始状态，为1为竖屏，为2为横屏。内部使用。
     private lazy var _rotationToDeviceOrientationAction:((_ layout:TGBaseLayout, _ isFirst:Bool, _ isPortrait:Bool)->Void)? = nil
-
+    
     private var _isAddSuperviewKVO:Bool=false;
-
+    
     
 }
 
@@ -1576,7 +1812,7 @@ extension TGBaseLayout
     }
     
     
-
+    
     
     fileprivate func tgUpdateBorderLayer(_ layer:CAShapeLayer!, borderLineDraw:TGLayoutBorderline!) ->CAShapeLayer!
     {
@@ -1635,7 +1871,7 @@ extension TGBaseLayout
     }
     
     
-
+    
     
     internal func tgCalcHeightFromHeightWrapView(_ sbv:UIView, width:CGFloat) ->CGFloat
     {
@@ -1650,6 +1886,26 @@ extension TGBaseLayout
             {
                 let sz = sbvimg.sizeThatFits(CGSize(width: width, height: 0))
                 return sbv.tg_height.measure(sz.height)
+            }
+        }
+        else if let sbvButton = sbv as? UIButton
+        {//按钮特殊处理多行的。。
+            
+            if sbvButton.titleLabel != nil
+            {
+                //得到按钮本身的高度，以及单行文本的高度，这样就能算出按钮和文本的间距
+                let buttonSize = sbvButton.sizeThatFits(.zero)
+                let buttonTitleSize = sbvButton.titleLabel!.sizeThatFits(.zero)
+                let sz = sbvButton.titleLabel!.sizeThatFits(CGSize(width: width, height: 0))
+                
+                return sbv.tg_height.measure(sz.height + buttonSize.height - buttonTitleSize.height) //这个sz只是纯文本的高度，所以要加上原先按钮和文本的高度差。。
+            }
+            else
+            {
+                
+                let sz = sbv.sizeThatFits(CGSize(width: width, height: 0));
+                return sbv.tg_height.measure(sz.height)
+                
             }
         }
         else
@@ -1724,7 +1980,7 @@ extension TGBaseLayout
             }
             else
             {
-              value = sbvSize.height
+                value = sbvSize.height
             }
         }
         else
@@ -1855,6 +2111,68 @@ extension TGBaseLayout
     }
     
     
+    fileprivate func tgCalcSizeInNoLayout(newSuperview:UIView!, currentSize size:CGSize) -> CGSize
+    {
+        if newSuperview == nil || newSuperview.isKind(of: TGBaseLayout.self)
+        {
+            return size
+        }
+        
+        
+        let rectSuper = newSuperview.bounds
+        var size = size
+        
+        if !newSuperview.tg_width.isWrap
+        {
+            if (self.tg_width.dimeRelaVal != nil && self.tg_width.dimeRelaVal.view  === newSuperview) || self.tg_width.isFill
+            {
+                size.width = self.tg_width.measure(rectSuper.width)
+                size.width = self.tgValidMeasure(self.tg_width, sbv: self, calcSize: size.width, sbvSize: size, selfLayoutSize: rectSuper.size)
+            }
+            
+            if self.tg_left.hasValue && self.tg_right.hasValue
+            {
+                let  leftMargin =  self.tg_left.realMarginInSize(rectSuper.width)
+                let rightMargin = self.tg_right.realMarginInSize(rectSuper.width)
+                size.width = rectSuper.width - leftMargin - rightMargin
+                size.width = self.tgValidMeasure(self.tg_width, sbv: self, calcSize: size.width, sbvSize: size, selfLayoutSize: rectSuper.size)
+            }
+            
+            if size.width < 0
+            {
+                size.width = 0
+            }
+        }
+        
+        if !newSuperview.tg_height.isWrap
+        {
+            if  (self.tg_height.dimeRelaVal != nil && self.tg_height.dimeRelaVal.view  === newSuperview) || self.tg_height.isFill
+            {
+                size.height = self.tg_height.measure(rectSuper.height)
+                size.height = self.tgValidMeasure(self.tg_height, sbv: self, calcSize: size.height, sbvSize: size, selfLayoutSize: rectSuper.size)
+            }
+            
+            if self.tg_top.hasValue && self.tg_bottom.hasValue
+            {
+                let  topMargin =  self.tg_top.realMarginInSize(rectSuper.height)
+                let bottomMargin = self.tg_bottom.realMarginInSize(rectSuper.height)
+                size.height = rectSuper.height - topMargin - bottomMargin
+                size.height = self.tgValidMeasure(self.tg_height, sbv: self, calcSize: size.height, sbvSize: size, selfLayoutSize: rectSuper.size)
+            }
+            
+            if size.height < 0
+            {
+                size.height = 0
+            }
+        }
+        
+        
+        
+        return size
+    }
+    
+    
+    
     fileprivate func tgUpdateLayoutRectInNoLayoutSuperview(_ newSuperview:UIView) -> Bool
     {
         var isAdjust = false;
@@ -1865,7 +2183,7 @@ extension TGBaseLayout
         let topMargin = self.tg_top.realMarginInSize(rectSuper.height)
         let bottomMargin = self.tg_bottom.realMarginInSize(rectSuper.height)
         var rectSelf = self.bounds
-
+        
         rectSelf.origin.x = self.center.x - rectSelf.size.width * self.layer.anchorPoint.x
         rectSelf.origin.y = self.center.y - rectSelf.size.height * self.layer.anchorPoint.y
         
@@ -1955,7 +2273,7 @@ extension TGBaseLayout
                 }
                 
                 isAdjust = true
-
+                
             }
             else if self.tg_height.dimeWeightVal != nil
             {
@@ -2023,7 +2341,27 @@ extension TGBaseLayout
         
     }
     
-
+    
+    internal func tgAdjustSizeWhenNoSubviews(size:CGSize, sbs:[UIView]) -> CGSize
+    {
+        //如果没有子视图，并且padding不参与空子视图尺寸计算则尺寸应该扣除padding的值。
+        var size = size
+        if sbs.count == 0 && !self.tg_zeroPadding
+        {
+            if self.tg_width.isWrap
+            {
+                size.width -= (self.tg_leftPadding + self.tg_rightPadding)
+            }
+            if (self.tg_height.isWrap)
+            {
+                size.height -= (self.tg_topPadding + self.tg_bottomPadding)
+            }
+        }
+        
+        return size;
+    }
+    
+    
     
     fileprivate func tgAlterScrollViewContentSize(_ newSize:CGSize)
     {
@@ -2051,7 +2389,37 @@ extension TGBaseLayout
             
         }
     }
-
+    
+    fileprivate func tgSizeThatFits(size:CGSize, sbs:[UIView]!, inSizeClass type:TGSizeClassType) -> CGSize
+    {
+        self.tgFrame.sizeClass = self.tgMatchBestSizeClass(type)
+        
+        for sbv:UIView in self.subviews
+        {
+            sbv.tgFrame.sizeClass = sbv.tgMatchBestSizeClass(type)
+        }
+        
+        var (selfSize, hasSubLayout) = self.tgCalcLayoutRect(size, isEstimate: false, sbs:sbs, type: type)
+        if hasSubLayout
+        {
+            self.tgFrame.width = selfSize.width
+            self.tgFrame.height = selfSize.height
+            (selfSize,_) = self.tgCalcLayoutRect(.zero, isEstimate: true, sbs:sbs, type: type)
+        }
+        self.tgFrame.width = selfSize.width
+        self.tgFrame.height = selfSize.height
+        
+        for sbv:UIView in self.subviews
+        {
+            sbv.tgFrame.sizeClass = self.tgDefaultSizeClass
+        }
+        
+        self.tgFrame.sizeClass = self.tgDefaultSizeClass
+        
+        
+        return selfSize
+        
+    }
     
     internal func tgCalcVertGravity(_ vert:TGGravity, selfSize:CGSize, sbv:UIView, rect:CGRect) ->CGRect
     {
@@ -2175,7 +2543,7 @@ extension TGBaseLayout
         
     }
     
-
+    
     internal func tgSetSubviewRelativeSize(_ dime:TGLayoutSize, selfSize:CGSize, rect:CGRect) ->CGRect
     {
         if dime.dimeRelaVal == nil
@@ -2190,11 +2558,11 @@ extension TGBaseLayout
             
             if dime.dimeRelaVal === self.tg_width && !self.tg_width.isWrap
             {
-               rect.size.width = dime.measure(selfSize.width - self.tg_leftPadding - self.tg_rightPadding)
+                rect.size.width = dime.measure(selfSize.width - self.tg_leftPadding - self.tg_rightPadding)
             }
             else if dime.dimeRelaVal === self.tg_height
             {
-               rect.size.width = dime.measure(selfSize.height - self.tg_topPadding - self.tg_bottomPadding)
+                rect.size.width = dime.measure(selfSize.height - self.tg_topPadding - self.tg_bottomPadding)
             }
             else if dime.dimeRelaVal === dime.view.tg_height
             {
@@ -2202,11 +2570,11 @@ extension TGBaseLayout
             }
             else if dime.dimeRelaVal._type == TGGravity.horz.fill
             {
-               rect.size.width = dime.measure(dime.dimeRelaVal.view.tg_estimatedFrame.width)
+                rect.size.width = dime.measure(dime.dimeRelaVal.view.tg_estimatedFrame.width)
             }
             else
             {
-               rect.size.width = dime.measure(dime.dimeRelaVal.view.tg_estimatedFrame.height)
+                rect.size.width = dime.measure(dime.dimeRelaVal.view.tg_estimatedFrame.height)
             }
         }
         else
@@ -2232,7 +2600,7 @@ extension TGBaseLayout
                 rect.size.height = dime.measure(dime.dimeRelaVal.view.tg_estimatedFrame.height)
             }
         }
-
+        
         return rect
         
     }
@@ -2253,12 +2621,12 @@ extension TGBaseLayout
             sbv.tgFrame.width = sbv.tg_width.measure(fitSize.width)
             if (sbv.tg_height.isWrap)
             {
-               sbv.tgFrame.height = sbv.tg_height.measure(fitSize.height)
+                sbv.tgFrame.height = sbv.tg_height.measure(fitSize.height)
             }
             
         }
     }
-        
+    
 }
 
 private var ASSOCIATEDOBJECT_KEY_MYLAYOUT_SIZECLASSES = "ASSOCIATEDOBJECT_KEY_MYLAYOUT_SIZECLASSES"
@@ -2657,15 +3025,15 @@ internal func _tgCGFloatEqual(_ f1:CGFloat, _ f2:CGFloat) -> Bool
 {
     //print("aa\(DBL_EPSILON)")
     
-   if CGFloat.NativeType.self == Double.self
-   {
-    return abs(f1 - f2) < 1e-6
-
+    if CGFloat.NativeType.self == Double.self
+    {
+        return abs(f1 - f2) < 1e-6
+        
     }
     else
-   {
-    return abs(f1 - f2) < 1e-4
-
+    {
+        return abs(f1 - f2) < 1e-4
+        
     }
     
     

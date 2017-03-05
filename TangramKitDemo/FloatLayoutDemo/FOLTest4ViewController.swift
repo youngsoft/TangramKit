@@ -8,7 +8,9 @@
 
 import UIKit
 
-
+/**
+ *4.FloatLayout - Tag cloud
+ */
 class FOLTest4ViewController: UIViewController {
 
     static var sTagHeight:CGFloat = 40

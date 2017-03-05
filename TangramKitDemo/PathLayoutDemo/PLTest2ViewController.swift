@@ -8,6 +8,9 @@
 
 import UIKit
 
+/**
+ * 您可以重载TGPathLayout，并重载其中的layerClass属性，返回一个CAShapeLayer类，并且在初始化时设置这个类的属性，这样系统和就会自动生成一条和路径布局一致的曲线了。
+ */
 class TGLocusPathLayout: TGPathLayout {
     
     override class var layerClass: Swift.AnyClass {
@@ -34,6 +37,9 @@ class TGLocusPathLayout: TGPathLayout {
 
 }
 
+/**
+ *2.PathLayout - Curves
+ */
 class PLTest2ViewController: UIViewController {
     
     var myPathLayout: TGLocusPathLayout!
@@ -53,9 +59,9 @@ class PLTest2ViewController: UIViewController {
         super.viewDidLoad()
         
         navigationItem.rightBarButtonItems = [
-            UIBarButtonItem.init(barButtonSystemItem: .refresh, target: self, action: #selector(PLTest2ViewController.handleRevrse(sender:))),
-            UIBarButtonItem.init(barButtonSystemItem: .action, target: self, action: #selector(PLTest2ViewController.handleAction(sender:))),
-            UIBarButtonItem.init(barButtonSystemItem: .add, target: self, action: #selector(PLTest2ViewController.handleAdd(sender:)))
+            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(PLTest2ViewController.handleRevrse(sender:))),
+            UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(PLTest2ViewController.handleAction(sender:))),
+            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(PLTest2ViewController.handleAdd(sender:)))
         ]
         
         changeFunc(index: .straight_line)
@@ -129,7 +135,7 @@ class PLTest2ViewController: UIViewController {
             pt = myPathLayout.tg_pathSubviews.last!.frame.origin
         }
         
-        let btn = UIButton.init(type: .custom)
+        let btn = UIButton(type: .custom)
         btn.layer.cornerRadius = 20
         btn.layer.masksToBounds = true
         btn.center = pt
@@ -207,7 +213,7 @@ class PLTest2ViewController: UIViewController {
             myPathLayout.tg_coordinateSetting.start = 0
             myPathLayout.tg_coordinateSetting.end = 360
             myPathLayout.tg_spaceType = .flexed
-            myPathLayout.tg_parametricEquation = { CGPoint.init(x: 150 * pow(cos(TGRadian(angle:$0).value), 3), y: 150 * pow(sin(TGRadian(angle:$0).value), 3)) }
+            myPathLayout.tg_parametricEquation = { CGPoint(x: 150 * pow(cos(TGRadian(angle:$0).value), 3), y: 150 * pow(sin(TGRadian(angle:$0).value), 3)) }
             
         default: break
             

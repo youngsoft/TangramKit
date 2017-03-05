@@ -8,6 +8,9 @@
 
 import UIKit
 
+/**
+ *2.SizeClass - Demo2
+ */
 class AllTest6ViewController: UIViewController {
 
     override func viewDidLoad() {

@@ -55,9 +55,9 @@ open class TGRelativeLayout: TGBaseLayout,TGRelativeLayoutViewSizeClass {
     
     //MARK: override method
     
-    override func tgCalcLayoutRect(_ size: CGSize, isEstimate: Bool, type: TGSizeClassType) -> (selfSize: CGSize, hasSubLayout: Bool) {
+    override func tgCalcLayoutRect(_ size: CGSize, isEstimate: Bool, sbs:[UIView]!, type: TGSizeClassType) -> (selfSize: CGSize, hasSubLayout: Bool) {
         
-        var (selfSize, hasSubLayout) = super.tgCalcLayoutRect(size, isEstimate: isEstimate, type: type)
+        var (selfSize, hasSubLayout) = super.tgCalcLayoutRect(size, isEstimate: isEstimate, sbs:sbs, type: type)
         
         for sbv: UIView in self.subviews
         {
@@ -141,7 +141,7 @@ open class TGRelativeLayout: TGBaseLayout,TGRelativeLayoutViewSizeClass {
         selfSize.height = self.tgValidMeasure(self.tg_height,sbv:self,calcSize:selfSize.height,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
         selfSize.width = self.tgValidMeasure(self.tg_width,sbv:self,calcSize:selfSize.width,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
         
-        return (selfSize, hasSubLayout)
+        return (self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: self.tgGetLayoutSubviews()), hasSubLayout)
     }
     
     internal override func tgCreateInstance() -> AnyObject

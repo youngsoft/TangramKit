@@ -91,10 +91,21 @@ extension RLTest4ViewController:UIScrollViewDelegate
         if (scrollView.contentOffset.y > 90)
         {
             
-            //当偏移的位置大于某个值后，我们将特定的子视图的tg_noLayout设置为true，表示特定的子视图会参与布局，但是不会设置frame值
-            //所以当特定的子视图的tg_noLayout设置为true后，我们就可以手动的设置其frame值来达到悬停的能力。
-            //需要注意的是这个特定的子视图一定要最后加入到布局视图中去。
-            //代码就是这么简单，这么任性。。。
+            /*
+             当滚动条偏移的位置大于某个值后，我们将特定的子视图的tg_noLayout设置为YES，表示特定的子视图虽然会参与布局，但是在布局完成后不会更新frame值。
+             因为参与了布局，所以不会影响到依赖这个视图的其他视图，所以整体布局结构是保持不变，这时候虽然设置为了tg_noLayout的视图留出了一个空挡，但是却可以通过frame值来进行任意的定位而不受到布局的控制。
+             
+             上面的代码中我们可以看到v4视图的位置和尺寸设置如下：
+             v4.tg_width.equal(rootLayout.tg_width);  //宽度和父视图相等。
+             v4.tg_height.equal(80);              //高度等于80。
+             v4.tg_top.equalTo(v1.tg_bottom);         //总是位于v1的下面。
+             。。。。
+             v2.tg_top.equalTo(v4.tg_bottom);         //v2则总是位于v4的下面。
+             
+             而当我们将v4的tg_noLayout设置为了YES后，这时候v4仍然会参与布局，也就是说v4的那块区域和位置是保持不变的，v2还是会在v4的下面。但是v4却可以通过frame值进行任意位置和尺寸的改变。 这样就实现了当滚动时我们调整v4的真实frame值来达到悬停的功能，但是v2却保持了不变，还是向往常一样保持在那个v4假位置的下面，而随着滚动条滚动而滚动。
+             
+             ***需要注意的是这个特定的子视图一定要最后加入到布局视图中去。***
+             */
            
                 self.testTopDockView.tg_noLayout = true
             

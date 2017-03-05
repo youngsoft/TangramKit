@@ -125,7 +125,7 @@ extension RLTest3ViewController
         v2.tg_centerX.equal(0)
         layout.addSubview(v2)
         
-        //通过为tg_centerY等于一个数组值，表示他们之间整体居中,还可以设置其他视图的偏移量。
+        //通过为tg_centerY等于一个数组值，表示v1和v2在父布局视图之内整体垂直居中,这里的20表示v1和v2之间还有20的间隔。        
         v2.tg_centerY.offset(20)
         v1.tg_centerY.equal([v2.tg_centerY])
         
@@ -161,7 +161,7 @@ extension RLTest3ViewController
         let lb3down = self.createLabel("bottom right", backgroundColor: CFTool.color(10))
         layout.addSubview(lb3down)
         
-        //左，中，右三组视图分别垂直居中显示，并且下面和上面间隔10
+        //左，中，右三组视图分别整体垂直居中显示，并且下面和上面间隔10
         lb1down.tg_centerY.offset(10)
         lb2down.tg_centerY.offset(10)
         lb3down.tg_centerY.offset(10)
@@ -170,7 +170,7 @@ extension RLTest3ViewController
         lb2up.tg_centerY.equal([lb2down.tg_centerY])
         lb3up.tg_centerY.equal([lb3down.tg_centerY])
         
-        //上面的三个视图水平居中显示并且间隔60
+        //上面的三个视图整体水平居中显示并且间隔60
         lb2up.tg_centerX.offset(60)
         lb3up.tg_centerX.offset(60)
         lb1up.tg_centerX.equal([lb2up.tg_centerX, lb3up.tg_centerX])

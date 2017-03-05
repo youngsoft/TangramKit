@@ -8,10 +8,12 @@
 
 import UIKit
 
+
+/**
+ * 6.LinearLayout - Size limit & Flexed margin
+ */
 class LLTest6ViewController: UIViewController , UITextViewDelegate  {
     
-    weak var editButton:UIButton!
-    weak var headImageView:UIImageView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,17 +29,16 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
 
     override func loadView() {
         
-        //注意这个DEMO进来慢的原因是其中使用了UITextView,和MyLayout无关。UITextView会在第一次使用时非常的慢，后续就快了。。
+        //注意这个DEMO进来慢的原因是其中使用了UITextView,和TangramKit无关。UITextView会在第一次使用时非常的慢，后续就快了。。
         
         
         /*
-         这个例子主要说的是视图之间的浮动间距设置，以及间距和尺寸的最大最小值限制的应用场景。子视图的布局尺寸类MyLayoutDime可以通过设置min,max的方法来实现最低尺寸和最高尺寸的限制设置。
+         这个例子主要说的是视图之间的浮动间距设置，以及间距和尺寸的最大最小值限制的应用场景。子视图的布局尺寸类TGLayoutSize可以通过设置min,max的方法来实现最低尺寸和最高尺寸的限制设置。
          */
         
         /*
-         1.如果把一个布局视图作为视图控制器根视图请务必将wrapContentHeight和wrapContentWidth设置为NO。
-         2.如果想让一个布局视图的宽度和非布局视图的宽度相等则请将布局视图的myLeftMargin = myRightMargin = 0或者widthDime.equalTo(superview.widthDime)
-         3.如果想让一个布局视图的高度和非布局视图的高度相等则请将布局视图的myTopMargin = myBottomMargin = 0或者heightDime.equalTo(superview.heightDime)
+         1.如果想让一个布局视图的宽度和非布局视图的宽度相等则请将布局视图的或者tg_width.equal(.fill)
+         2.如果想让一个布局视图的高度和非布局视图的高度相等则请将布局视图的tg_height.equal(.fill)
          */
 
 
@@ -84,7 +85,6 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         headImageView.tg_top.equal(25%)
         headImageView.tg_centerX.equal(0) //距离顶部间隙剩余空间的25%，水平居中对齐。
         rootLayout.addSubview(headImageView)
-        self.headImageView = headImageView
         
         //用户信息
         let nameField = UITextField()
@@ -95,7 +95,7 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         nameField.tg_left.equal(10%)
         nameField.tg_right.equal(10%)
         nameField.tg_top.equal(10%)
-        nameField.tg_height.equal(40) //高度为40，左右间距为布局的10%, 顶部间距为剩余空间的10%
+        nameField.tg_height.equal(40) //高度为40，左右边距为布局的10%, 顶部间距为剩余空间的10%
         rootLayout.addSubview(nameField)
         
         
@@ -111,7 +111,7 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         userDescLabel.font = CFTool.font(14)
         userDescLabel.sizeToFit()
         userDescLabel.tg_top.equal(10)
-        //userDescLabel.tg_left.equal(5%).min(17).max(19)  //最小17最大19
+        userDescLabel.tg_left.equal(5%).min(17).max(19)  //最小17最大19
        // userDescLabel.tg_left >= 17
        // userDescLabel.tg_left <= 19
         rootLayout.addSubview(userDescLabel)
@@ -125,7 +125,7 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         textView.text = NSLocalizedString("please try input text and carriage return continuous to see effect", comment:"")
         textView.delegate = self
         
-        //左右间距为布局的10%，距离底部间距为65%,浮动高度，但高度最高为300，最低为30
+        //左右边距为布局的10%，距离底部间距为65%,浮动高度，但高度最高为300，最低为60
         //高度为.wrap和min,max的结合能做到一些完美的自动伸缩功能。
         textView.tg_left.equal(5%)
         textView.tg_right.equal(5%)
@@ -139,31 +139,10 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         copyRightLabel.text = NSLocalizedString("copy rights reserved by Youngsoft", comment:"")
         copyRightLabel.textColor = CFTool.color(4)
         copyRightLabel.font = CFTool.font(15)
-        copyRightLabel.tg_bottom.equal(20) //总是固定在底部20的边距,因为上面的textView用了底部相对间距。
+        copyRightLabel.tg_bottom.equal(20) //总是固定在底部20的间距,因为上面的textView用了底部相对间距。
         copyRightLabel.tg_centerX.equal(0)
         copyRightLabel.sizeToFit()
         rootLayout.addSubview(copyRightLabel)
-        
-        
-        //因为在垂直线性布局里面每一列只能有一个子视图，但在实际中我们希望某个子视图边缘有一个子视图并列，为了不破坏线性布局的能力，而又能实现这种功能
-        //我们可以用如下的方法。
-        weak var weakVC:LLTest6ViewController! = self
-        rootLayout.tg_rotationToDeviceOrientationDo{(layout:TGBaseLayout, isFirst:Bool, isPortrait:Bool) in
-        //tg_rotationToDeviceOrientationDo方法会在第一次完成布局或者因为屏幕旋转而完成布局时调用这个block。而且布局不会在调用完成后释放这个block。
-            //因此需要注意循环引用的问题。
-            if (isFirst)
-            {
-                let editButton = UIButton(type:.system)
-                editButton.setTitle("Edit", for:.normal)
-                editButton.titleLabel!.font = CFTool.font(15)
-                editButton.tg_useFrame = true  //注意这里必须要设置为useFrame为YES，目的是为了不破坏线性布局的概念，而改用直接frame的设置。
-                layout.addSubview(editButton)
-                weakVC.editButton = editButton
-            }
-            //下面是直接用frame设置editButton的位置和尺寸。这里设置在头像图片的右边。。
-            weakVC.editButton.frame = CGRect(x:weakVC.headImageView.frame.maxX + 5, y:weakVC.headImageView.frame.maxY - 30, width:50, height:30)
-        }
-
         
         
     }
@@ -189,10 +168,7 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
             let rg = textView.selectedRange
             textView.scrollRangeToVisible(rg)
             
-            //因为这里面的editButton已经被设置为了tg_useFrame.所以每次布局的变化都要手动的调整editButton的frame值！！！
-            //而且endLayout只会被执行一次，所以这里面不会产生相互引用的问题。
-            self.editButton.frame = CGRect(x:self.headImageView.frame.maxX + 5, y:self.headImageView.frame.maxY - 30, width:50, height:30)
-        }
+          }
         
         
     }

@@ -8,7 +8,9 @@
 
 import UIKit
 
-
+/**
+ *6.FloatLayout - User Profiles
+ */
 class FOLTest6ViewController: UIViewController {
     
     

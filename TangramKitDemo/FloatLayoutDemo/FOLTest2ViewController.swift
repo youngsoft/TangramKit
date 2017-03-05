@@ -8,12 +8,12 @@
 
 import UIKit
 
-
+//布局模型类,用于实现不同的布局展示风格
 struct FOLTest2LayoutTemplate
 {
-    var layoutSelector:Selector
-    var width:CGFloat
-    var height:CGFloat
+    var layoutSelector:Selector  //布局实现的方法
+    var width:CGFloat   //布局宽度，如果设置的值<=1则是相对宽度
+    var height:CGFloat  //布局高度，如果设置的值<=1则是相对高度
 }
 
 
@@ -30,6 +30,7 @@ class FOLTest2DataModel : NSObject
     var templateIndex = 0  //数据模型使用布局的索引。通常由服务端决定使用的布局模型，所以这里作为一个属性保存在模型数据结构中。
 }
 
+//数据片段模型
 class FOLTest2SectionModel:NSObject
 {
     var title:String!
@@ -37,7 +38,9 @@ class FOLTest2SectionModel:NSObject
 }
 
 
-
+/**
+ *2.FloatLayout - Jagged
+ */
 class FOLTest2ViewController: UIViewController {
     
     weak var rootLayout:TGLinearLayout!

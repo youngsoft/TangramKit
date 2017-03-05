@@ -11,8 +11,33 @@ import UIKit
 extension UIView
 {
     /**
-     *是否反方向浮动，这个属性只有在浮动布局下才有意义。默认是false表示正向浮动，具体方向则根据浮动布局视图的方向。如果是垂直布局则默认是向左浮动的，如果是水平布局则默认是向上浮动的。
-     如果这个值设置为true则当布局是垂直布局时则向右浮动，而如果是水平布局则向下浮动。
+     *是否反方向浮动，默认是false表示正向浮动，正向浮动和反向浮动的意义根据所在的父浮动布局视图的方向的不同而不同：
+     1.如果父视图是垂直浮动布局则默认正向浮动是向左浮动的，而反向浮动则是向右浮动。
+     2.如果父视图是水平浮动布局则默认正向浮动是向上浮动的，而反向浮动则是向下浮动。
+     
+     下面是垂直浮动布局中的正向浮动和反向浮动的效果图(正向浮动:A,B,D; 反向浮动:C,E,F)：
+     
+     |<--A-- <---B---    -C->|
+     |<-----D---- -F-> --E-->|
+     
+     
+     下面是水平浮动布局中的正向浮动和反向浮动的效果图(正向浮动:A,B,D; 反向浮动:C,E,F):
+     
+     -----------
+     ↑   ↑
+     |   |
+     A   |
+     |   D
+     |
+     ↑   |
+     B
+     |   F
+     ↓
+     |   |
+     C   E
+     ↓   ↓
+     ------------
+     
      */
     public var tg_reverseFloat:Bool
         {
@@ -36,7 +61,20 @@ extension UIView
     }
     
     /**
-     *清除浮动，这个属性只有在浮动布局下才有意义。默认是false。这个属性也跟布局视图的方向相关。如果设置为了清除浮动属性则表示本子视图不会在浮动方向上紧跟在前一个浮动子视图的后面，而是会另外新起一行或者一列来进行布局。tg_reverseFloat和tg_clearFloat这两个属性的定义是完全参考CSS样式表中浮动布局中的float和clear这两个属性。
+     *清除浮动，默认是false。这个属性的意义也跟父浮动布局视图的方向相关。如果设置为了清除浮动属性则表示本视图不会在浮动方向上紧跟在前一个浮动视图的后面，而是会另外新起一行或者一列来重新排列。tg_reverseFloat和tg_clearFloat这两个属性的定义是完全参考CSS样式表中浮动布局中的float和clear这两个属性。
+     
+     
+     垂直浮动布局下的浮动和清除浮动
+     
+     |<--A-- <---B--- <-C--|
+     |<----D---            |
+     |<--E-- <---F--       |
+     |<-----G----          |
+     |      ---I---> --H-->|
+     |                -J-> |
+     
+     A(正向浮动);B(正向浮动);C(正向浮动);D(正向浮动);E(正向浮动);F(正向浮动);G(正向浮动，清除浮动);H(反向浮动);I(反向浮动);J(反向浮动，清除浮动)
+     
      */
     public var tg_clearFloat:Bool
         {
@@ -62,9 +100,9 @@ extension UIView
 }
 
 /**
- * 浮动布局是一种里面的子视图按照约定的方向浮动停靠，当尺寸不足以被容纳时会自动寻找最佳的位置进行浮动停靠的布局视图。
+ * 浮动布局是一种里面的子视图按照约定的方向浮动停靠，当浮动布局的剩余空间不足容纳子视图的尺寸时会自动寻找最佳的位置进行浮动停靠的布局视图。
  *浮动布局的理念源于HTML/CSS中的浮动定位技术,因此浮动布局可以专门用来实现那些不规则布局或者图文环绕的布局。
- *根据浮动的方向不同，浮动布局可以分为左右浮动布局和上下浮动布局。
+ *根据浮动的方向不同，浮动布局可以分为左右浮动布局和上下浮动布局。我们称左右浮动的浮动布局为垂直浮动布局，因为左右浮动时最终整个方向是从上到下的；称上下浮动的浮动布局为水平浮动布局，因为上下浮动时最终整个方向是从左到右的。
  */
 open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
     
@@ -76,9 +114,14 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
      }
      */
     
-    public init(_ orientation:TGOrientation = .vert)
+    public convenience init(_ orientation:TGOrientation = .vert)
     {
-        super.init(frame: CGRect.zero)
+        self.init(frame:.zero, orientation:orientation)
+    }
+    
+    public init(frame: CGRect, orientation:TGOrientation = .vert) {
+        
+        super.init(frame: frame)
         
         (self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass).tg_orientation = orientation
         
@@ -91,8 +134,8 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
     
     /**
      *浮动布局的方向。
-     *如果是.vert则表示从左到右，从上到下的垂直布局方式，这个方式是默认方式。
-     *如果是.horz则表示从上到下，从左到右的水平布局方式
+     *如果是.vert则表示里面的子视图可以进行左右的浮动，整体从上到下进行排列的布局方式，这个方式是默认方式。
+     *如果是.horz则表示里面的子视图可以进行上下的浮动，整体从左到右进行排列的布局方式，这个方式是默认方式。
      */
     public var tg_orientation:TGOrientation
         {
@@ -109,8 +152,14 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
     
     /**
      *浮动布局内所有子视图的整体停靠对齐位置设定，默认是.none
-     *如果视图方向为.vert时则水平方向的停靠失效。只能设置TGGravity.vert.top,TGGravity.vert.center,TGGravity.vert.bottom 三个值。
-     *如果视图方向为.horz时则垂直方向的停靠失效。只能设置TGGravity.horz.left,TGGravity.horz.center,TGGravity.horz.right
+     *如果视图方向为.vert时则水平方向的停靠失效。只能设置：
+     TGGravity.vert.top  整体顶部停靠
+     TGGravity.vert.center  整体垂直居中停靠
+     TGGravity.vert.bottom  整体底部停靠
+     *如果视图方向为.horz时则垂直方向的停靠失效。只能设置：
+     TGGravity.horz.left 整体左边停靠
+     TGGravity.horz.center 整体水平居中停靠
+     TGGravity.horz.right 整体右边停靠
      */
     public var tg_gravity:TGGravity
         {
@@ -126,7 +175,7 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
     }
     
     /**
-     *不做布局边界的限制，子视图不会自动换行，因此当设置为true时，子视图需要设置tg_clearFloat来实现主动换行的处理。默认为false。
+     *不做布局边界尺寸的限制，子视图不会自动换行，因此当设置为true时，子视图需要设置tg_clearFloat来实现主动换行的处理。默认为false。
      *当布局的orientation为.vert并且tg_width.equal(.wrap)时,这个属性设置为true才生效。
      *当布局的orientation为.horz并且tg_height.equal(.wrap)时，这个属性设置为true才生效。
      *当属性设置为true时，子视图不能将扩展属性tg_reverseFloat设置为true，否则将导致结果异常。
@@ -165,12 +214,15 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
 
     //MARK: override method
 
-    override internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, type :TGSizeClassType) ->(selfSize:CGSize, hasSubLayout:Bool)
+    override internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, sbs:[UIView]!, type :TGSizeClassType) ->(selfSize:CGSize, hasSubLayout:Bool)
     {
-        var (selfSize, hasSubLayout) = super.tgCalcLayoutRect(size, isEstimate:isEstimate, type:type)
+        var (selfSize, hasSubLayout) = super.tgCalcLayoutRect(size, isEstimate:isEstimate, sbs:sbs, type:type)
         
-        
-        let  sbs = self.tgGetLayoutSubviews()
+        var sbs:[UIView]! = sbs
+        if sbs == nil
+        {
+            sbs = self.tgGetLayoutSubviews()
+        }
         
         for sbv in sbs
         {
@@ -213,7 +265,7 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
         selfSize.width = self.tgValidMeasure(self.tg_width,sbv:self,calcSize:selfSize.width,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
         
         
-        return (selfSize,hasSubLayout)
+        return (self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs),hasSubLayout)
     }
     
     

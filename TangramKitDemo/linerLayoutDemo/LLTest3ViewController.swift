@@ -8,7 +8,13 @@
 
 import UIKit
 
+/**
+ *3.LinearLayout - Gravity&Fill
+ */
 class LLTest3ViewController: UIViewController {
+
+    weak var vertGravitySetLabel:UILabel!
+    weak var horzGravitySetLabel:UILabel!
 
     weak var vertGravityLayout:TGLinearLayout!
     weak var horzGravityLayout:TGLinearLayout!
@@ -139,6 +145,17 @@ extension LLTest3ViewController
     //创建垂直停靠线性布局
     func createVertGravityLayout(in contentLayout:TGLinearLayout)
     {
+        
+        //这个标签显示设置gravity值。
+        let vertGravitySetLabel = UILabel()
+        vertGravitySetLabel.adjustsFontSizeToFitWidth = true
+        vertGravitySetLabel.font = CFTool.font(13)
+        vertGravitySetLabel.text = "vertGravityLayout.tg_gravity = "
+        vertGravitySetLabel.sizeToFit()
+        vertGravitySetLabel.numberOfLines = 2;
+        contentLayout.addSubview(vertGravitySetLabel)
+        self.vertGravitySetLabel = vertGravitySetLabel
+
     
         let vertGravityLayout = TGLinearLayout(.vert)
         vertGravityLayout.backgroundColor = CFTool.color(0)
@@ -217,6 +234,15 @@ extension LLTest3ViewController
 
     func createHorzGravityLayout(in contentLayout:TGLinearLayout)
     {
+        //这个标签显示设置gravity值。
+        let horzGravitySetLabel = UILabel()
+        horzGravitySetLabel.adjustsFontSizeToFitWidth = true
+        horzGravitySetLabel.font = CFTool.font(13)
+        horzGravitySetLabel.text = "horzGravityLayout.tg_gravity = "
+        horzGravitySetLabel.sizeToFit()
+        horzGravitySetLabel.numberOfLines = 2;
+        contentLayout.addSubview(horzGravitySetLabel)
+        self.horzGravitySetLabel = horzGravitySetLabel
         
         let horzGravityLayout = TGLinearLayout(.horz)
         horzGravityLayout.backgroundColor = CFTool.color(0)
@@ -323,6 +349,8 @@ extension LLTest3ViewController
         self.vertGravityLayout.tg_gravity = [vertGravity,horzGravity]
         
         self.vertGravityLayout.tg_layoutAnimationWithDuration(0.2)
+        self.vertGravitySetLabel.text = self.gravityText(gravity: self.vertGravityLayout.tg_gravity, prefixText: "vertGravityLayout.tg_gravity")
+        self.vertGravitySetLabel.sizeToFit()
         
     }
     
@@ -374,6 +402,9 @@ extension LLTest3ViewController
         
         self.horzGravityLayout.tg_layoutAnimationWithDuration(0.2)
         
+        self.horzGravitySetLabel.text = self.gravityText(gravity: self.horzGravityLayout.tg_gravity, prefixText: "horzGravityLayout.tg_gravity")
+        self.horzGravitySetLabel.sizeToFit()
+        
     }
 
     
@@ -418,4 +449,64 @@ extension LLTest3ViewController
     }
     
 
+    func gravityText(gravity:TGGravity, prefixText:String) -> String
+    {
+        //分别取出垂直和水平方向的停靠设置。
+        let vertGravity = gravity & TGGravity.horz.mask
+        let  horzGravity = gravity & TGGravity.vert.mask
+        
+        var vertGravityStr = ""
+        switch (vertGravity) {
+        case TGGravity.vert.top:
+            vertGravityStr = "TGGravity.vert.top"
+            break
+        case TGGravity.vert.center:
+            vertGravityStr = "TGGravity.vert.center"
+            break
+        case TGGravity.vert.bottom:
+            vertGravityStr = "TGGravity.vert.bottom"
+            break
+        case TGGravity.vert.fill:
+            vertGravityStr = "TGGravity.vert.fill"
+            break
+        case TGGravity.vert.between:
+            vertGravityStr = "TGGravity.vert.between"
+            break
+        case TGGravity.vert.windowCenter:
+            vertGravityStr = "TGGravity.vert.windowCenter"
+            break;
+        default:
+            vertGravityStr = "TGGravity.vert.top"
+            break
+        }
+        
+        var horzGravityStr = ""
+        switch (horzGravity) {
+        case TGGravity.horz.left:
+            horzGravityStr = "TGGravity.horz.left"
+            break
+        case TGGravity.horz.center:
+            horzGravityStr = "TGGravity.horz.center"
+            break
+        case TGGravity.horz.right:
+            horzGravityStr = "TGGravity.horz.right"
+            break
+        case TGGravity.horz.fill:
+            horzGravityStr = "TGGravity.horz.fill"
+            break
+        case TGGravity.horz.between:
+            horzGravityStr = "TGGravity.horz.between"
+            break
+        case TGGravity.horz.windowCenter:
+            horzGravityStr = "TGGravity.horz.WindowCenter"
+            break
+        default:
+            horzGravityStr = "TGGravity.horz.left"
+            break;
+        }
+        
+        return prefixText + "=\n" + vertGravityStr + " | " + horzGravityStr
+    }
+
+    
 }

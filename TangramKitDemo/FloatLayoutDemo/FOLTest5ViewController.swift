@@ -8,11 +8,18 @@
 
 import UIKit
 
+/**
+ *5.FloatLayout - Title & Description
+ */
 class FOLTest5ViewController: UIViewController {
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        /*
+            这个DEMO用浮动布局来实现图文结合的一些场景，这也是浮动布局擅长做的事情。
+        */
         
         let scrollView = UIScrollView(frame:self.view.bounds)
         scrollView.autoresizingMask = [.flexibleHeight, .flexibleWidth]

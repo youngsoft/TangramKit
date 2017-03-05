@@ -8,15 +8,19 @@
 
 import UIKit
 
+/**
+ *3.Replacement of UITableView
+ */
 class AllTest3ViewController: UIViewController {
     
     
     var frameLayout:TGFrameLayout!
     
+    //弹出布局视图的一些属性。
     var  popmenuLayout:TGLinearLayout!
     var  popmenuContainerLayout:TGLinearLayout!
-    var popmenuScrollView:UIScrollView!
-    var popmenuItemLayout:TGFlowLayout!
+    var  popmenuScrollView:UIScrollView!
+    var  popmenuItemLayout:TGFlowLayout!
     
     
     //用来测试隐藏子视图时重新布局一些视图
@@ -33,6 +37,10 @@ class AllTest3ViewController: UIViewController {
     
     
     override func loadView() {
+        
+        /*
+           在框架布局中，scrollView占据整个布局视图，而底部的按钮则总是在最底部显示。这种场景非常适合用框架布局来实现，即一部分填充整个布局，而一部分总是固定在布局的某个区域中。
+         */
         
         let frameLayout = TGFrameLayout()
         frameLayout.backgroundColor = CFTool.color(0)
@@ -55,12 +63,12 @@ class AllTest3ViewController: UIViewController {
         button.tg_bottom.equal(0) //按钮定位在框架布局的底部并且宽度填充。
         frameLayout.addSubview(button)
         
-        //整体一个线性布局，实现各种片段。
+        //滚动视图内整体一个线性布局，实现各种片段。
         let  contentLayout = TGLinearLayout(.vert)
         contentLayout.tg_width.equal(.fill)
         contentLayout.tg_height.equal(.wrap)
         contentLayout.tg_gravity = TGGravity.horz.fill; //子视图里面的内容的宽度跟布局视图相等，这样子视图就不需要设置宽度了。
-        contentLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
+        contentLayout.tg_padding = UIEdgeInsetsMake(10, 10, 60, 10) //这里bottom设置为60的原因是底部有一个50高度的按钮，因此保留这部分空间。
         scrollView.addSubview(contentLayout)
         
         //头部布局。
@@ -75,7 +83,6 @@ class AllTest3ViewController: UIViewController {
         self.addHideSubviewReLayoutLayout(contentLayout)
         //添加，自动伸缩布局
         self.addShrinkLayout(contentLayout)
-
         //测试布局位置和布局尺寸的isActive属性
         self.addActiveLayout(contentLayout)
         
@@ -109,7 +116,6 @@ extension AllTest3ViewController
 {
     
     //添加头部布局。里面用的相对布局实现。
-    
     func addHeaderLayout(_ contentLayout: TGLinearLayout) {
         
         let headerLayout = TGRelativeLayout()
@@ -134,7 +140,7 @@ extension AllTest3ViewController
         headerNameLabel.tg_top.equal(headerImageView.tg_bottom, offset:10)
         headerLayout.addSubview(headerNameLabel)
         
-        //将tg_useFrame属性设置为true后。即使是布局里面的子视图也不会参与自动布局，而是可以通过最原始的设置frame的值来进行位置定位和尺寸的确定。
+        //将tg_useFrame属性设置为true后，布局里面的子视图不会受到布局视图的约束和控制了，因此可以通过设置frame的值来进行位置定位和尺寸的确定。
         let imageView2 = UIImageView(image: UIImage(named: "user"))
         imageView2.backgroundColor = .white
         imageView2.frame = CGRect(x:5, y:5, width:30, height:30)
@@ -145,18 +151,18 @@ extension AllTest3ViewController
     //添加高亮，以及边界线效果的布局
     func addHighlightedBackgroundAndBorderLineLayout(_ contentLayout: TGLinearLayout)
     {
-        //如果您只想要高亮效果而不想处理事件则方法：setTarget中的action为nil即可。
+        //如果您只想要高亮效果而不想处理事件则将方法：setTarget中的action为nil即可。
         //具有事件处理的layout,以及边界线效果的layout
         let layout1 = self.createActionLayout(title: NSLocalizedString("please touch here(no highlighted)", comment:""), action: #selector(handleTap))
         layout1.tg_top.equal(10)
-        layout1.tg_topBorderline = TGLayoutBorderline(color: UIColor.yellow, headIndent:-10, tailIndent:-10) //底部边界线如果为负数则外部缩进
-        layout1.tg_bottomBorderline = TGLayoutBorderline(color: UIColor.red) //设置底部和顶部都有红色的线
+        layout1.tg_topBorderline = TGLayoutBorderline(color: .yellow, headIndent:-10, tailIndent:-10) //底部边界线如果为负数则外部缩进
+        layout1.tg_bottomBorderline = TGLayoutBorderline(color: .red) //设置底部和顶部都有红色的线
         contentLayout.addSubview(layout1)
         
         //具有事件处理的layout,高亮背景色的设置。
         let layout2 = self.createActionLayout(title:NSLocalizedString("please touch here(highlighted background)", comment:""), action: #selector(handleTap))
         layout2.tg_highlightedBackgroundColor = .lightGray //可以设置高亮的背景色用于单击事件
-        layout2.tg_bottomBorderline = TGLayoutBorderline(color: UIColor.red, thick:4) //设置底部有红色的线，并且粗细为4
+        layout2.tg_bottomBorderline = TGLayoutBorderline(color: .red, thick:4) //设置底部有红色的线，并且粗细为4
         //您还可以为布局视图设置按下、按下取消的事件处理逻辑。
         layout2.tg_setTarget(self, action: #selector(handleTouchDown), for:.touchDown)
         layout2.tg_setTarget(self, action: #selector(handleTouchCancel), for:.touchCancel)
@@ -166,7 +172,7 @@ extension AllTest3ViewController
         //具有事件处理的layout, 可以设置触摸时的高亮背景图。虚线边界线。
         let layout3 = self.createActionLayout(title:NSLocalizedString("please touch here(highlighted background image)", comment:""), action: #selector(handleTap))
         layout3.tg_highlightedBackgroundImage = UIImage(named: "image2") //设置单击时的高亮背景图片。
-        let dashLine = TGLayoutBorderline(color: UIColor.green, dash:3) //设置为非0表示虚线边界线。
+        let dashLine = TGLayoutBorderline(color: .green, dash:3) //设置为非0表示虚线边界线。
         layout3.tg_leftBorderline = dashLine
         layout3.tg_rightBorderline = dashLine //设置左右边绿色的虚线
         contentLayout.addSubview(layout3)
@@ -183,14 +189,14 @@ extension AllTest3ViewController
     //添加隐藏重新布局的布局
     func addHideSubviewReLayoutLayout(_ contentLayout: TGLinearLayout)
     {
-        //下面两个布局用来测试布局视图的hideSubviewReLayout属性。
+        //下面两个布局用来测试布局视图的tg_layoutHiddenSubviews属性。
         let switchLayout = self.createSwitchLayout(title: NSLocalizedString("relayout switch when subview hidden&show", comment:""), action: #selector(handleReLayoutSwitch))
-        switchLayout.tg_bottomBorderline = TGLayoutBorderline(color: UIColor.red, headIndent:10, tailIndent:10) //底部边界线设置可以缩进
+        switchLayout.tg_bottomBorderline = TGLayoutBorderline(color: .red, headIndent:10, tailIndent:10) //底部边界线设置可以缩进
         switchLayout.tg_top.equal(10)
         contentLayout.addSubview(switchLayout)
         
         let testLayout = TGLinearLayout(.horz)
-        testLayout.backgroundColor = UIColor.white
+        testLayout.backgroundColor = .white
         testLayout.tg_leftPadding = 10
         testLayout.tg_rightPadding = 10
         testLayout.tg_height.equal(50)
@@ -224,20 +230,21 @@ extension AllTest3ViewController
         testLayout.addSubview(rightButton)
     }
     
-    //添加，一个浮动宽度的布局，里面的子视图的宽度是浮动的，会进行宽度的合适的分配。您可以尝试着点击加减按钮测试结果。
+    //添加一个左右视图的内容宽度自适应的水平线性布局。
     func addFlexedWidthLayout(_ contentLayout: TGLinearLayout)
     {
-        let flexedLayout = self.createSegmentedLayout(leftAction: #selector(self.handleLeftFlexed), rightAction: #selector(self.handleRightFlexed))
-        flexedLayout.tg_bottomBorderline = TGLayoutBorderline(color: UIColor.red, headIndent:10, tailIndent:10)  //底部边界线设置可以缩进
-        flexedLayout.tg_top.equal(10)
-        contentLayout.addSubview(flexedLayout)
+        let operatorLayout = self.createSegmentedLayout(leftAction: #selector(self.handleLeftFlexed), rightAction: #selector(self.handleRightFlexed))
+        operatorLayout.tg_bottomBorderline = TGLayoutBorderline(color: .red, headIndent:10, tailIndent:10)  //底部边界线设置可以缩进
+        operatorLayout.tg_top.equal(10)
+        contentLayout.addSubview(operatorLayout)
         
         let testLayout = TGLinearLayout(.horz)
-        testLayout.backgroundColor = UIColor.white
+        testLayout.backgroundColor = .white
         testLayout.tg_leftPadding = 10
         testLayout.tg_rightPadding = 10
         testLayout.tg_height.equal(50)
         testLayout.tg_gravity = TGGravity.vert.fill
+        testLayout.tg_shrinkType = .auto  //左右2个子视图会根据自身的宽度自动调整。不会产生覆盖和重叠。
         contentLayout.addSubview(testLayout)
         self.flexedLayout = testLayout
         
@@ -245,12 +252,11 @@ extension AllTest3ViewController
         leftLabel.text = "abc"
         leftLabel.textAlignment = .right
         leftLabel.lineBreakMode = .byTruncatingMiddle
-        leftLabel.textColor = UIColor.white
+        leftLabel.textColor = .white
         leftLabel.backgroundColor = CFTool.color(5)
         leftLabel.font = CFTool.font(14)
-        leftLabel.sizeToFit()
         leftLabel.tg_right.equal(50%).min(0) //右边浮动间距为0.5,最小为0
-        leftLabel.tg_width.min(10).max(testLayout.tg_width, increment:-10) //宽度最小为10，最大为布局视图的宽度减10
+        leftLabel.tg_width.equal(.wrap)
         testLayout.addSubview(leftLabel)
         self.leftFlexedLabel = leftLabel
         
@@ -258,12 +264,11 @@ extension AllTest3ViewController
         rightLabel.text = "123"
         rightLabel.textAlignment = .right
         rightLabel.lineBreakMode = .byTruncatingMiddle
-        rightLabel.textColor = UIColor.white
+        rightLabel.textColor = .white
         rightLabel.backgroundColor = CFTool.color(6)
         rightLabel.font = CFTool.font(14)
-        rightLabel.sizeToFit()
         rightLabel.tg_left.equal(50%).min(0) //左边浮动间距为0.5，最小为0
-        rightLabel.tg_width.min(10).max(testLayout.tg_width, increment:-10) //宽度最小为10，最大为布局视图的宽度减10
+        rightLabel.tg_width.equal(.wrap)
         testLayout.addSubview(rightLabel)
         self.rightFlexedLabel = rightLabel
     }
@@ -271,14 +276,13 @@ extension AllTest3ViewController
     //添加一个能伸缩的布局
     func addShrinkLayout(_ contentLayout: TGLinearLayout)
     {
-        //下面两个布局用来测试布局视图的hideSubviewReLayout属性。
         let switchLayout = self.createSwitchLayout(title: NSLocalizedString("show all switch", comment:""), action: #selector(self.handleShrinkSwitch))
         switchLayout.tg_bottomBorderline = TGLayoutBorderline(color: UIColor.red, headIndent:10, tailIndent:10)  //底部边界线设置可以缩进
         switchLayout.tg_top.equal(10)
         contentLayout.addSubview(switchLayout)
         
         let testLayout = TGFlowLayout(.vert, arrangedCount:3)
-        testLayout.backgroundColor = UIColor.white
+        testLayout.backgroundColor = .white
         testLayout.tg_gravity = TGGravity.horz.fill   //尺寸相等
         testLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
         testLayout.tg_space = 10
@@ -307,7 +311,6 @@ extension AllTest3ViewController
         testLayout.tg_height.equal(.wrap)
         testLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
         testLayout.tg_top.equal(10)
-        testLayout.tg_bottom.equal(50)   //这里设置底部间距的原因是登录按钮在最底部。为了使得滚动到底部时不被覆盖。你也可以设置contentLayout的tg_bottomPadding = 50来解决这个问题。
         contentLayout.addSubview(testLayout)
         
         let testButton = UIButton(type:.system)
@@ -327,7 +330,7 @@ extension AllTest3ViewController
     //创建可执动作事件的布局
     func createActionLayout(title: String, action: Selector) -> TGLinearLayout {
         let actionLayout = TGLinearLayout(.horz)
-        actionLayout.backgroundColor = UIColor.white
+        actionLayout.backgroundColor = .white
         actionLayout.tg_setTarget(self, action: action, for:.touchUpInside) //这里设置布局的触摸事件处理。
         actionLayout.tg_leftPadding = 10
         actionLayout.tg_rightPadding = 10
@@ -379,7 +382,7 @@ extension AllTest3ViewController
     {
         //建立一个左右浮动布局(注意左右浮动布局的orientation是.vert)
         let segmentedLayout = TGFloatLayout(.vert)
-        segmentedLayout.backgroundColor = UIColor.white
+        segmentedLayout.backgroundColor = .white
         segmentedLayout.tg_leftPadding = 10
         segmentedLayout.tg_rightPadding = 10
         segmentedLayout.tg_height.equal(50)
@@ -410,14 +413,14 @@ extension AllTest3ViewController
     func handleTouchDown(sender:TGBaseLayout)
     {
         let label = sender.viewWithTag(1000) as! UILabel
-        label.textColor = UIColor.blue
+        label.textColor = .blue
          print("按下动作")
     }
     
     func handleTouchCancel(sender:TGBaseLayout)
     {
         let label = sender.viewWithTag(1000) as! UILabel
-        label.textColor = UIColor.black
+        label.textColor = .black
         print("按下取消")
     }
     
@@ -438,56 +441,36 @@ extension AllTest3ViewController
     
     func handleLeftFlexed(segmented: UISegmentedControl)
     {
-    
-    if (segmented.selectedSegmentIndex == 0)
-    {
-    if (self.leftFlexedLabel.text!.characters.count > 1)
-    {
-        let text = self.leftFlexedLabel.text!
-        self.leftFlexedLabel.text =  text.substring(to: text.index(text.endIndex, offsetBy: -1))
-    }
-    }
-    else
-    {
-        let strs = "abcdefghijklmnopqrstuvwxyz";
-        //真他妈的扯，取一个子字符串还这么麻烦。swift也有够垃圾的。
-        let rand = arc4random_uniform(UInt32(strs.characters.count))
-        let start = strs.index(strs.startIndex, offsetBy: String.IndexDistance(rand))
-        let end = strs.index(strs.startIndex, offsetBy: String.IndexDistance(rand) + 1)
-        let rg = Range(uncheckedBounds: (lower: start, upper: end))
-        let str = strs.substring(with: rg)
-        self.leftFlexedLabel.text = self.leftFlexedLabel.text!.appending(str)
-    }
-    
-    self.leftFlexedLabel.sizeToFit()
-    
-    
-    //我们可以在布局视图布局结束后，计算如果包裹文字的真实宽度都超过布局视图的一半时，我们将二者的宽度都设置为布局视图的宽度一半。
-    //而一旦不满足条件时我们将宽度的设置清除，而保持子视图的真实尺寸。
-    //如果我们想要获得某个布局视图下所有子视图在布局完成后的真实frame，则可以为布局的tg_endLayoutDo进行设置。
-        weak var weakSelf = self
-        self.flexedLayout.tg_endLayoutDo({
-            //算出左右的实际宽度。如果二者的宽度都超过一半，则将二者的宽度都设置为一半。
-            let leftRealSize = weakSelf!.leftFlexedLabel.sizeThatFits(.zero)
-            let rightRealSize = weakSelf!.rightFlexedLabel.sizeThatFits(.zero)
-            let halfWidth: CGFloat = (weakSelf!.flexedLayout.frame.width - 20) / 2
-            if leftRealSize.width > halfWidth && rightRealSize.width > halfWidth {
-                weakSelf!.leftFlexedLabel.tg_width.equal(halfWidth)
-                weakSelf!.rightFlexedLabel.tg_width.equal(halfWidth)
+        
+        if (segmented.selectedSegmentIndex == 0)
+        {
+            if (self.leftFlexedLabel.text!.characters.count > 1)
+            {
+                let text = self.leftFlexedLabel.text!
+                self.leftFlexedLabel.text =  text.substring(to: text.index(text.endIndex, offsetBy: -1))
             }
-            else {
-                weakSelf!.leftFlexedLabel.tg_width.equal(nil)
-                weakSelf!.rightFlexedLabel.tg_width.equal(nil)
-                weakSelf!.rightFlexedLabel.sizeToFit()
-            }
-        })
+        }
+        else
+        {
+            let strs = "abcdefghijklmnopqrstuvwxyz";
+            //真他妈的扯，取一个子字符串还这么麻烦。swift也有够垃圾的。
+            let rand = arc4random_uniform(UInt32(strs.characters.count))
+            let start = strs.index(strs.startIndex, offsetBy: String.IndexDistance(rand))
+            let end = strs.index(strs.startIndex, offsetBy: String.IndexDistance(rand) + 1)
+            let rg = Range(uncheckedBounds: (lower: start, upper: end))
+            let str = strs.substring(with: rg)
+            self.leftFlexedLabel.text = self.leftFlexedLabel.text!.appending(str)
+        }
+        
+        self.leftFlexedLabel.sizeToFit()
+        
     }
-
+    
     
     func handleRightFlexed(segmented: UISegmentedControl) {
         if segmented.selectedSegmentIndex == 0 {
             let strs = "01234567890"
-    
+            
             //真他妈的扯，取一个子字符串还这么麻烦。swift也有够垃圾的。
             let rand = arc4random_uniform(UInt32(strs.characters.count))
             let start = strs.index(strs.startIndex, offsetBy: String.IndexDistance(rand))
@@ -504,22 +487,6 @@ extension AllTest3ViewController
             }
         }
         self.rightFlexedLabel.sizeToFit()
-        weak var weakSelf = self
-        self.flexedLayout.tg_endLayoutDo({
-            //算出左右的实际宽度。如果二者的宽度都超过一半，则将二者的宽度都设置为一半。
-            let leftRealSize = weakSelf!.leftFlexedLabel.sizeThatFits(.zero)
-            let rightRealSize = weakSelf!.rightFlexedLabel.sizeThatFits(.zero)
-            let halfWidth: CGFloat = (weakSelf!.flexedLayout.frame.width - 20) / 2
-            if leftRealSize.width > halfWidth && rightRealSize.width > halfWidth {
-                weakSelf!.leftFlexedLabel.tg_width.equal(halfWidth)
-                weakSelf!.rightFlexedLabel.tg_width.equal(halfWidth)
-            }
-            else {
-                weakSelf!.leftFlexedLabel.tg_width.equal(nil)
-                weakSelf!.rightFlexedLabel.tg_width.equal(nil)
-                weakSelf!.leftFlexedLabel.sizeToFit()
-            }
-        })
     }
     
     func handleShrinkSwitch(sender: UISwitch) {
@@ -611,7 +578,7 @@ extension AllTest3ViewController
         closeButton.setTitle(NSLocalizedString("close pop menu", comment:""), for: .normal)
         closeButton.setTitleColor(CFTool.color(4), for: .normal)
         closeButton.titleLabel!.font = CFTool.font(14)
-        closeButton.backgroundColor = UIColor.white
+        closeButton.backgroundColor = .white
         closeButton.addTarget(self, action: #selector(self.handleClosePopmenu), for: .touchUpInside)
         closeButton.tg_top.equal(5)
         closeButton.sizeToFit()

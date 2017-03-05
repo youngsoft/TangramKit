@@ -8,10 +8,17 @@
 
 import UIKit
 
+/**
+ *1.SizeClass - Demo1
+ */
 class AllTest5ViewController: UIViewController {
 
     override func loadView() {
         
+        /*
+         这个例子用来介绍MyLayout对sizeClasses的支持的能力
+         */
+
         //默认设置为垂直布局
         let rootLayout = TGLinearLayout(.vert)
         rootLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10);

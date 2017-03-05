@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "TangramKit"
-  s.version      = "1.0.3"
+  s.version      = "1.0.4"
   s.summary      = "TangramKit is A powerful iOS UI framework. It integrated the Android layout,AutoLayout,SizeClass, HTML/CSS float and flexbox functions."
 
   s.description  = <<-DESC
@@ -79,7 +79,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/youngsoft/TangramKit.git", :tag => "1.0.3" }
+  s.source       = { :git => "https://github.com/youngsoft/TangramKit.git", :tag => "1.0.4" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #

@@ -8,6 +8,9 @@
 
 import UIKit
 
+/**
+ *2.FlowLayout - Tag cloud
+ */
 class FLLTest2ViewController: UIViewController {
     
     weak var tagTextField:UITextField!
@@ -54,7 +57,7 @@ class FLLTest2ViewController: UIViewController {
         rootLayout.addSubview(stretchSpacingLabel)
         
         let stretchSpacingSwitch = UISwitch()
-        stretchSpacingSwitch.addTarget(self, action: #selector(handleShrinkMargin), for: .valueChanged)
+        stretchSpacingSwitch.addTarget(self, action: #selector(handleStretchSpace), for: .valueChanged)
         rootLayout.addSubview(stretchSpacingSwitch)
         
         //第三行
@@ -67,7 +70,7 @@ class FLLTest2ViewController: UIViewController {
         rootLayout.addSubview(stretchSizeLabel)
         
         let stretchSizeSwitch = UISwitch()
-        stretchSizeSwitch.addTarget(self, action: #selector(handleShrinkContent), for: .valueChanged)
+        stretchSizeSwitch.addTarget(self, action: #selector(handleStretchContent), for: .valueChanged)
         rootLayout.addSubview(stretchSizeSwitch)
         
         //第四行
@@ -80,7 +83,7 @@ class FLLTest2ViewController: UIViewController {
         rootLayout.addSubview(autoArrangeLabel)
         
         let autoArrangeSwitch = UISwitch()
-        autoArrangeSwitch.addTarget(self, action: #selector(handleShrinkAuto), for: .valueChanged)
+        autoArrangeSwitch.addTarget(self, action: #selector(handleAutoArrange), for: .valueChanged)
         rootLayout.addSubview(autoArrangeSwitch)
         
         //最后一行。
@@ -146,7 +149,7 @@ extension FLLTest2ViewController
         }
     }
     
-    func handleShrinkMargin(sender:UISwitch!)
+    func handleStretchSpace(sender:UISwitch!)
     {
         
         //间距拉伸
@@ -162,7 +165,7 @@ extension FLLTest2ViewController
         self.flowLayout.tg_layoutAnimationWithDuration(0.2)
     }
     
-    func handleShrinkContent(sender:UISwitch!)
+    func handleStretchContent(sender:UISwitch!)
     {
         
         //内容拉伸
@@ -179,7 +182,7 @@ extension FLLTest2ViewController
         
     }
     
-    func handleShrinkAuto(sender:UISwitch!)
+    func handleAutoArrange(sender:UISwitch!)
     {
         
         //自动调整位置。

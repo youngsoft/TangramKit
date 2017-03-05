@@ -8,6 +8,9 @@
 
 import UIKit
 
+/**
+ *1.PathLayout - Animations
+ */
 class PLTest1ViewController: UIViewController {
     
     var myPathLayout: TGPathLayout!
@@ -21,9 +24,9 @@ class PLTest1ViewController: UIViewController {
         view = myPathLayout
         
         /// 因为路径布局里面的点算的都是子视图的中心点，所以为了避免子视图被遮盖这里设置了4个内边距。
-        myPathLayout.tg_padding = UIEdgeInsets.init(top: 20, left: 20, bottom: 20, right: 20)
+        myPathLayout.tg_padding = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         
-        let btn = UIButton.init(type: .contactAdd)
+        let btn = UIButton(type: .contactAdd)
         btn.addTarget(self, action: #selector(PLTest1ViewController.addAction), for: .touchUpInside)
         myPathLayout.tg_originView = btn
     }
@@ -32,8 +35,8 @@ class PLTest1ViewController: UIViewController {
         super.viewDidLoad()
         
         navigationItem.rightBarButtonItems = [
-            UIBarButtonItem.init(barButtonSystemItem: .fastForward, target: self, action: #selector(PLTest1ViewController.handleStretch1(sender:))),
-            UIBarButtonItem.init(barButtonSystemItem: .play, target: self, action: #selector(PLTest1ViewController.handleStretch2(sender:)))
+            UIBarButtonItem(barButtonSystemItem: .fastForward, target: self, action: #selector(PLTest1ViewController.handleStretch1(sender:))),
+            UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(PLTest1ViewController.handleStretch2(sender:)))
         ]
         
         toolbarItems = [
@@ -161,7 +164,7 @@ class PLTest1ViewController: UIViewController {
     // MARK: - Actions
     
     func addAction() {
-        let btn = UIButton.init(type: .custom)
+        let btn = UIButton(type: .custom)
         btn.center = myPathLayout.tg_originView!.center
         btn.tg_width.equal(40)
         btn.tg_height.equal(40)

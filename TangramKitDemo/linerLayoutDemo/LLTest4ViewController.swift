@@ -8,6 +8,9 @@
 
 import UIKit
 
+/**
+ *4.LinearLayout - Wrap content
+ */
 class LLTest4ViewController: UIViewController {
 
     weak var rootLayout :TGLinearLayout!
@@ -32,9 +35,13 @@ class LLTest4ViewController: UIViewController {
          */
 
         
-        let scrollView = UIScrollView()
-        scrollView.backgroundColor = .white
-        self.view = scrollView
+        super.loadView()
+        
+        let contentView = UIView()
+        contentView.backgroundColor = CFTool.color(5)
+        self.view.addSubview(contentView)
+        contentView.tg_width.equal(.wrap)
+        contentView.tg_height.equal(.wrap)   //如果一个非布局父视图里面有布局子视图，那么这个非布局父视图也是可以将高度和宽度设置为.wrap的，他表示的意义是这个非布局父视图的尺寸由里面的布局子视图的尺寸来决定的。还有一个场景是非布局父视图是一个UIScrollView。他是左右滚动的，但是滚动视图的高度是由里面的布局子视图确定的，而宽度则是和窗口保持一致。这样只需要将滚动视图的宽度设置为和屏幕保持一致，高度设置为.wrap，并且把一个水平线性布局添加到滚动视图即可。
         
         let rootLayout = TGLinearLayout(.vert)
         rootLayout.layer.borderWidth = 1
@@ -42,8 +49,9 @@ class LLTest4ViewController: UIViewController {
         rootLayout.tg_height.equal(.wrap)
         rootLayout.tg_width.equal(.wrap)
         rootLayout.tg_padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        rootLayout.tg_zeroPadding = false   //这个属性设置为false时表示当布局视图的尺寸是wrap也就是由子视图决定时并且在没有任何子视图是不会参与布局视图高度的计算的。您可以在这个DEMO的测试中将所有子视图都删除掉，看看效果，然后注释掉这句代码看看效果。
         rootLayout.tg_vspace = 5
-        self.view.addSubview(rootLayout)
+        contentView.addSubview(rootLayout)
         self.rootLayout = rootLayout
         
         self.rootLayout.addSubview(self.addWrapContentLayout())
@@ -102,6 +110,7 @@ extension LLTest4ViewController
         let button = UIButton(type:.system)
         button.addTarget(self ,action:#selector(handleAction), for:.touchUpInside)
         button.setTitle(title ,for:.normal)
+        button.titleLabel!.adjustsFontSizeToFitWidth = true
         button.titleLabel!.font = CFTool.font(14)
         button.backgroundColor = CFTool.color(14)
         button.layer.cornerRadius = 10
@@ -109,7 +118,7 @@ extension LLTest4ViewController
         button.layer.borderWidth = 0.5
         button.tag = tag
         button.tg_height.equal(50)
-        button.tg_width.equal(110)
+        button.tg_width.equal(80)
         
         return button
     }

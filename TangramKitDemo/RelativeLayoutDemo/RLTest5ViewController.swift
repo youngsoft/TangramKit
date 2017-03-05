@@ -85,10 +85,10 @@ class RLTest5ViewController: UIViewController {
         leftButton.sizeToFit()
         //根据内容得到高度和宽度
         leftButton.tg_left.min(containerLayout.tg_left)
-        //左边最小边距是父视图左边偏移0
+        //左边最小边界是父视图左边偏移0
         leftButton.tg_right.max(containerLayout.tg_centerX)
-        //右边最大的边距是父视图中心点偏移0
-        //在相对布局中可以不设置左右边距而是设置最小和最大的左右边距，可以让子视图在指定的范围内居中，并且如果宽度超过最小和最大的边距设定时会自动压缩子视图的宽度。
+        //右边最大的边界是父视图中心点偏移0
+        //在相对布局中子视图可以不设置左右边距而是设置最小和最大的边界值，就可以让子视图在指定的边界范围内居中，并且如果宽度超过最小和最大的边界设定时会自动压缩子视图的宽度。在这个例子中leftButton始终在父视图的左边和父视图的水平中心这个边界内居中显示。
         containerLayout.addSubview(leftButton)
         leftButton.isSelected = true
         
@@ -100,9 +100,9 @@ class RLTest5ViewController: UIViewController {
         rightButton.tag = 2
         rightButton.addTarget(self, action: #selector(self.handleButtonSelect), for: .touchUpInside)
         rightButton.sizeToFit() //根据内容得到高度和宽度
-        rightButton.tg_left.min(containerLayout.tg_centerX) //左边最小边距是父视图中心点偏移0
-        rightButton.tg_right.max(containerLayout.tg_right)//右边最大边距是父视图右边偏移0
-        //在相对布局中可以不设置左右边距而是设置最小和最大的左右边距，可以让子视图在指定的范围内居中，并且如果宽度超过最小和最大的边距设定时会自动压缩子视图的宽度。
+        rightButton.tg_left.min(containerLayout.tg_centerX) //左边最小边界是父视图中心点偏移0
+        rightButton.tg_right.max(containerLayout.tg_right)//右边最大边界是父视图右边偏移0
+        //在相对布局中子视图可以不设置左右边距而是设置最小和最大的边界值，就可以让子视图在指定的边界范围内居中，并且如果宽度超过最小和最大的边界设定时会自动压缩子视图的宽度。在这个例子中rightButton始终在父视图的水平中心和父视图的右边这个边界内居中显示。
         containerLayout.addSubview(rightButton)
         
         //添加下划线视图。
@@ -121,6 +121,7 @@ class RLTest5ViewController: UIViewController {
     func createDemo2(_ rootLayout: UIView) {
         /*
          这个例子通常用于UITableViewCell中的某些元素的最大尺寸的限制，您可以横竖屏切换，看看效果。
+         对于某些布局场景中，某个子视图的尺寸是不确定的，因此你不能设置一个固定的值，同时这个尺寸又不能无限制的延生而会受到某些边界的约束控制。因此可以用如下的方法来进行视图的尺寸设置。
          */
         let containerLayout = TGRelativeLayout()
         containerLayout.tg_width.equal(.fill).and().tg_height.equal(.wrap)
@@ -128,6 +129,11 @@ class RLTest5ViewController: UIViewController {
         containerLayout.tg_bottomPadding = 6
         containerLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(containerLayout)
+        
+        /*
+         这个例子中，水平方向一共有leftImageView,flexedLabel,editImageView,rightLabel四个子视图水平排列。其中leftImageView在最左边且宽度固定，flexedLabel则跟在leftImageView的右边但是宽度是不确定的，editImageView则是跟在flexedLabel的后面宽度是固定的，rightLabel则总是在屏幕的右边且宽度是固定的，但是其中的flexedLabel的宽度最宽不能无限制的延生，且不能和rightLabel进行重叠。
+         */
+
 
         let images = ["minions1", "minions2", "minions3", "minions4"]
         let  texts = ["test text1",
@@ -170,7 +176,7 @@ class RLTest5ViewController: UIViewController {
             containerLayout.addSubview(rightLabel)
             
             flexedLabel.tg_width.equal(.wrap) //宽度等于自身的宽度
-            flexedLabel.tg_right.max(rightLabel.tg_left, offset:editImageView.frame.width + 10)//右边的最大的边界就等于rightLabel的最左边再减去editImageView的尺寸外加上10,这里的10是视图之间的间距，为了让视图之间保持有足够的边距。这样当flexedLabel的宽度超过这个最大的右边界时，系统自动会缩小flexedLabel的宽度，以便来满足右边界的限制。 这个场景非常适合某个UITableViewCell里面的两个子视图之间有尺寸长度约束的情况。
+            flexedLabel.tg_right.max(rightLabel.tg_left, offset:editImageView.frame.width + 10)//右边的最大的边界就等于rightLabel的最左边再减去editImageView的尺寸外加上10,这里的10是视图之间的间距，为了让视图之间保持有足够的间距。这样当flexedLabel的宽度超过这个最大的右边界时，系统自动会缩小flexedLabel的宽度，以便来满足右边界的限制。 这个场景非常适合某个UITableViewCell里面的两个子视图之间有尺寸长度约束的情况。
         }
     }
     
@@ -220,7 +226,7 @@ class RLTest5ViewController: UIViewController {
         rightLabel.numberOfLines = 0
         rightLabel.tg_right.equal(containerLayout.tg_right) //和父布局视图右对齐。
         rightLabel.tg_centerY.equal(leftLabel.tg_centerY) //和左边视图垂直居中对齐。
-        rightLabel.tg_left.min(leftLabel.tg_right, offset:10) //右边视图的最小左间距是等于左边视图的右边偏移10，这样当右边视图的宽度超过这个最小间距时则会自动压缩视图的宽度。
+        rightLabel.tg_left.min(leftLabel.tg_right, offset:10) //右边视图的最小左边界是等于左边视图的右边偏移10，这样当右边视图的宽度超过这个最小边界时则会自动压缩视图的宽度。
         
         rightLabel.tg_width.equal(.wrap) //宽度等于自身的宽度。这个设置和上面的tg_left.min方法配合使用实现子视图宽度的压
         rightLabel.tg_height.equal(.wrap).max(containerLayout.tg_height) //但是最大的高度等于父布局视图的高度(注意这里内部自动减去了padding的值)

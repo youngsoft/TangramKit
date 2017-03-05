@@ -8,6 +8,9 @@
 
 import UIKit
 
+/**
+ * ❁2.Screen perfect fit - Demo2
+ */
 class AllTest8ViewController: UIViewController {
     
     

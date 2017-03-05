@@ -103,6 +103,9 @@ class ViewController: UITableViewController {
         demoVCList.append(["title":NSLocalizedString("5.FlowLayout - Paging",comment:""),
                            "class":FLLTest5ViewController.self]
         )
+        demoVCList.append(["title":NSLocalizedString("6.FlowLayout - Scroll",comment:""),
+                           "class":FLLTest6ViewController.self]
+        )
         demoVCList.append(["title":NSLocalizedString("1.FloatLayout - Float",comment:""),
        "class":FOLTest1ViewController.self]
         )

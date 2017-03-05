@@ -8,13 +8,14 @@
 
 import UIKit
 
+
 /**
  * 定义子视图在路径布局中的距离的类型。
  */
 public enum TGPathSpaceType{
-    case flexed             //浮动距离
-    case fixed(CGFloat)     //固定距离
-    case count(Int)         //固定数量距离
+    case flexed             //浮动距离，子视图之间的距离根据路径布局的尺寸和子视图的数量而确定。
+    case fixed(CGFloat)     //固定距离，就是子视图之间的距离是固定的某个数值。
+    case count(Int)         //固定数量距离，就是子视图之间的距离根据路径布局的尺寸和某个具体的数量而确定。
 }
 
 /**
@@ -38,7 +39,7 @@ extension TGPathSpaceType : Equatable{
 
 
 /**
- * 坐标轴设置类，用来描述坐标轴的信息。
+ * 坐标轴设置类，用来描述坐标轴的信息。一个坐标轴具有原点、坐标系类型、开始和结束点、坐标轴对应的值这四个方面的内容。
  */
 open class TGCoordinateSetting : NSObject{
     
@@ -119,6 +120,18 @@ open class TGCoordinateSetting : NSObject{
  */
 open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     
+    
+    /*
+     你可以从TGPathLayout中派生出一个子类。并实现如下方法：
+     +(Class)layerClass
+     {
+     return [CAShapeLayer class];
+     }
+     也就是说TGPathLayout的派生类返回一个CAShapeLayer，那么系统将自动会在每次布局时将layer的path属性进行赋值操作。
+     */
+    
+    
+    
     /**
      * 坐标系设置，您可以调整坐标系的各种参数来完成下列两个方法中的坐标到绘制的映射转换。
      */
@@ -178,7 +191,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     }
     
     /**
-     * 设置和获取布局视图中的原点视图，默认是nil。如果设置了原点视图则总会将原点视图作为布局视图中的最后一个子视图。原点视图将会显示在路径的坐标原点中心上，因此原点布局是不会参与在路径中的布局的。因为中心原点视图是布局视图中的最后一个子视图，而MyPathLayout重写了AddSubview方法，因此可以正常的使用这个方法来添加子视图。
+     * 设置和获取布局视图中的原点视图，默认是nil。如果设置了原点视图则总会将原点视图作为布局视图中的最后一个子视图。原点视图将会显示在路径的坐标原点中心上，因此原点布局是不会参与在路径中的布局的。因为中心原点视图是布局视图中的最后一个子视图，而TGPathLayout重写了addSubview方法，因此可以正常的使用这个方法来添加子视图。
      */
     public var tg_originView : UIView?{
         get{
@@ -272,7 +285,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     }
     
     /**
-     * 下面三个函数用来获取两个子视图之间的曲线路径数据，在调用getSubviewPathPoint方法之前请先调用beginSubviewPathPoint方法，而调用完毕后请调用endSubviewPathPoint方法，否则getSubviewPathPoint返回的结果未可知。
+     * 下面三个函数用来获取两个子视图之间的曲线路径数据，在调用tg_getSubviewPathPoint方法之前请先调用tg_beginSubviewPathPoint方法，而调用完毕后请调用endSubviewPathPoint方法，否则getSubviewPathPoint返回的结果未可知。
      */
     
     //开始和结束获取子视图路径数据的方法,full表示getSubviewPathPoint获取的是否是全部路径点。如果为NO则只会获取子视图的位置的点。
@@ -332,7 +345,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     
     /**
      * 创建布局的曲线的路径。用户需要负责销毁返回的值。调用者可以用这个方法来获得曲线的路径，进行一些绘制的工作。
-     * subviewCount:指定这个路径上子视图的数量的个数，如果设置为-1则是按照布局视图的子视图的数量来创建。需要注意的是如果布局视图的spaceType为Flexed,Count的话则这个参数设置无效。
+     * subviewCount:指定这个路径上子视图的数量的个数，如果设置为-1则是按照布局视图的子视图的数量来创建。需要注意的是如果布局视图的tg_spaceType为.flexed,.count的话则这个参数设置无效。
      */
     public func tg_createPath(subviewCount:Int) -> CGPath{
         let retPath = CGMutablePath()
@@ -693,9 +706,16 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
         return lastXY
     }
     
-    override func tgCalcLayoutRect(_ size: CGSize, isEstimate: Bool, type: TGSizeClassType) -> (selfSize: CGSize, hasSubLayout: Bool) {
-        var (selfSize,hasSubLayout) = super.tgCalcLayoutRect(size, isEstimate: isEstimate, type: type)
-        var sbs = tgGetLayoutSubviews()
+    override func tgCalcLayoutRect(_ size: CGSize, isEstimate: Bool, sbs:[UIView]!, type: TGSizeClassType) -> (selfSize: CGSize, hasSubLayout: Bool) {
+        var (selfSize,hasSubLayout) = super.tgCalcLayoutRect(size, isEstimate: isEstimate, sbs:sbs,type: type)
+        
+        var sbs:[UIView]! = sbs
+        if sbs == nil
+        {
+          sbs = tgGetLayoutSubviews()
+        }
+        
+        let sbs2:[UIView] = sbs
         for sbv in sbs{
             if !isEstimate{
                 sbv.tgFrame.frame = sbv.bounds
@@ -904,7 +924,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
         
         selfSize.width = tgValidMeasure(tg_width, sbv: self, calcSize: selfSize.width, sbvSize: selfSize, selfLayoutSize: superview!.bounds.size)
     
-        return (selfSize,hasSubLayout)
+        return (self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs2),hasSubLayout)
     }
     
     override func tgCreateInstance() -> AnyObject {

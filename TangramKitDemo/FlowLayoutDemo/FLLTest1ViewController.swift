@@ -8,8 +8,12 @@
 
 import UIKit
 
+/**
+ * 1.FlowLayout - Regular arrangement
+ */
 class FLLTest1ViewController: UIViewController {
-    
+   
+    weak var flowLayoutSetLabel:UILabel!
     weak var flowLayout:TGFlowLayout!
 
     override func viewDidLoad() {
@@ -25,9 +29,11 @@ class FLLTest1ViewController: UIViewController {
         /*
          这个例子用来介绍流式布局的特性，流式布局中的子视图总是按一定的规则一次排列，当数量到达一定程度或者内容到达一定程度时就会自动换行从新排列。
          */
-        let rootLayout = TGLinearLayout(.vert)
-        rootLayout.tg_gravity = TGGravity.horz.fill  //里面的子视图的宽度和父视图保持一致。
+        //根视图用一个水平内容约束流式布局，这里实现了一个类似于垂直线性布局的能力。
+        let rootLayout = TGFlowLayout(.horz,arrangedCount:0)
+        rootLayout.tg_gravity = TGGravity.horz.fill //里面所有子视图的宽度都填充为和父视图一样宽。
         self.view = rootLayout
+
         
         //添加操作按钮。
         let actionLayout = TGFlowLayout(.vert, arrangedCount: 2)
@@ -47,8 +53,17 @@ class FLLTest1ViewController: UIViewController {
         actionLayout.addSubview(self.createActionButton(NSLocalizedString("adjust align", comment:""),
         action:#selector(handleAdjustArrangeGravity)))
         actionLayout.addSubview(self.createActionButton(NSLocalizedString("adjust spacing", comment:""),
-        action:#selector(handleAdjustMargin)))
+        action:#selector(handleAdjustSpace)))
         
+        
+        let flowLayoutSetLabel = UILabel()
+        flowLayoutSetLabel.font = CFTool.font(13)
+        flowLayoutSetLabel.textColor = .red
+        flowLayoutSetLabel.adjustsFontSizeToFitWidth = true
+        flowLayoutSetLabel.tg_height.equal(.wrap)
+        flowLayoutSetLabel.numberOfLines = 5
+        rootLayout.addSubview(flowLayoutSetLabel)
+        self.flowLayoutSetLabel = flowLayoutSetLabel
         
         let scrollView = UIScrollView()
         scrollView.alwaysBounceHorizontal = true
@@ -78,6 +93,7 @@ class FLLTest1ViewController: UIViewController {
             self.flowLayout.addSubview(imageView)
         }
         
+        self.flowlayoutInfo()
     }
 }
 
@@ -93,7 +109,7 @@ extension FLLTest1ViewController
         button.layer.borderColor = UIColor.lightGray.cgColor
         button.layer.borderWidth = 0.5
         button.addTarget(self,action:action, for:.touchUpInside)
-        button.tg_height.equal(44)
+        button.tg_height.equal(30)
         return button
     
     }
@@ -117,6 +133,8 @@ extension FLLTest1ViewController
         }
         
         self.flowLayout.tg_layoutAnimationWithDuration(0.4)
+        self.flowlayoutInfo()
+
 
     }
     
@@ -126,11 +144,15 @@ extension FLLTest1ViewController
         //调整流式布局的每行的数量。
         self.flowLayout.tg_arrangedCount = (self.flowLayout.tg_arrangedCount + 1) % 6
         self.flowLayout.tg_layoutAnimationWithDuration(0.4)
+        self.flowlayoutInfo()
+
 
     }
     
     func handleAdjustVertGravity(_ sender:AnyObject?)
     {
+        //调整整体垂直方向的停靠
+        
         var vertGravity = self.flowLayout.tg_gravity & TGGravity.horz.mask
         let horzGravity = self.flowLayout.tg_gravity & TGGravity.vert.mask
         
@@ -162,6 +184,8 @@ extension FLLTest1ViewController
         
         self.flowLayout.tg_gravity = [horzGravity,vertGravity]
         self.flowLayout.tg_layoutAnimationWithDuration(0.4)
+        self.flowlayoutInfo()
+
         
     }
 
@@ -169,6 +193,8 @@ extension FLLTest1ViewController
     
     func handleAdjustHorzGravity(_ sender:AnyObject?)
     {
+        //调整整体水平方向的停靠。
+        
         let vertGravity = self.flowLayout.tg_gravity & TGGravity.horz.mask;
         var horzGravity = self.flowLayout.tg_gravity & TGGravity.vert.mask;
         
@@ -200,6 +226,8 @@ extension FLLTest1ViewController
         
         self.flowLayout.tg_gravity = [horzGravity,vertGravity]
         self.flowLayout.tg_layoutAnimationWithDuration(0.4)
+        self.flowlayoutInfo()
+
 
         
     }
@@ -265,9 +293,10 @@ extension FLLTest1ViewController
         
         self.flowLayout.tg_arrangedGravity = [vertArrangeGravity, horzArrangeGravity]
         self.flowLayout.tg_layoutAnimationWithDuration(0.4)
+        self.flowlayoutInfo()
     }
     
-    func handleAdjustMargin(_ sender:AnyObject?)
+    func handleAdjustSpace(_ sender:AnyObject?)
     {
         //调整子视图之间的间距
         
@@ -290,8 +319,101 @@ extension FLLTest1ViewController
         }
         
         self.flowLayout.tg_layoutAnimationWithDuration(0.4)
+        self.flowlayoutInfo()
+
 
     }
 
 }
 
+//MARK: -Private Method
+extension FLLTest1ViewController
+{
+    func flowlayoutInfo()
+    {
+        var orientationStr = ""
+        if (self.flowLayout.tg_orientation == .vert)
+        {
+            orientationStr = "TGOrientation.vert"
+        }
+        else
+        {
+            orientationStr = "TGOrientation.horz"
+        }
+    
+    
+        let arrangeCountStr = "\(self.flowLayout.tg_arrangedCount)"
+    
+        let gravityStr = self.gravityInfo(self.flowLayout.tg_gravity)
+    
+        let arrangedGravityStr = self.gravityInfo(self.flowLayout.tg_arrangedGravity)
+    
+        let subviewSpaceStr = "vert:\(self.flowLayout.tg_vspace), horz:\(self.flowLayout.tg_hspace)"
+
+    
+        self.flowLayoutSetLabel.text = "flowLayout:\norientation=" + orientationStr + ",arrangedCount=" + arrangeCountStr + "\ngravity="+gravityStr + "\narrangedGravity=" + arrangedGravityStr + "\nsubviewMargin=(" + subviewSpaceStr + ")"
+    }
+    
+    func gravityInfo(_ gravity:TGGravity) ->String
+    {
+        //分别取出垂直和水平方向的停靠设置。
+        let vertGravity = gravity & TGGravity.horz.mask
+        let  horzGravity = gravity & TGGravity.vert.mask
+        
+        var vertGravityStr = ""
+        switch (vertGravity) {
+        case TGGravity.vert.top:
+            vertGravityStr = "TGGravity.vert.top"
+            break
+        case TGGravity.vert.center:
+            vertGravityStr = "TGGravity.vert.center"
+            break
+        case TGGravity.vert.bottom:
+            vertGravityStr = "TGGravity.vert.bottom"
+            break
+        case TGGravity.vert.fill:
+            vertGravityStr = "TGGravity.vert.fill"
+            break
+        case TGGravity.vert.between:
+            vertGravityStr = "TGGravity.vert.between"
+            break
+        case TGGravity.vert.windowCenter:
+            vertGravityStr = "TGGravity.vert.windowCenter"
+            break;
+        default:
+            vertGravityStr = "TGGravity.vert.top"
+            break
+        }
+        
+        var horzGravityStr = ""
+        switch (horzGravity) {
+        case TGGravity.horz.left:
+            horzGravityStr = "TGGravity.horz.left"
+            break
+        case TGGravity.horz.center:
+            horzGravityStr = "TGGravity.horz.center"
+            break
+        case TGGravity.horz.right:
+            horzGravityStr = "TGGravity.horz.right"
+            break
+        case TGGravity.horz.fill:
+            horzGravityStr = "TGGravity.horz.fill"
+            break
+        case TGGravity.horz.between:
+            horzGravityStr = "TGGravity.horz.between"
+            break
+        case TGGravity.horz.windowCenter:
+            horzGravityStr = "TGGravity.horz.WindowCenter"
+            break
+        default:
+            horzGravityStr = "TGGravity.horz.left"
+            break;
+        }
+        
+        return vertGravityStr + "|" + horzGravityStr
+        
+        
+    }
+    
+
+}

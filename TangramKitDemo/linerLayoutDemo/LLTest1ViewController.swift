@@ -8,28 +8,68 @@
 
 import UIKit
 
+/**
+ * 1.LinearLayout - Vert&Horz
+ */
 class LLTest1ViewController: UIViewController {
     
     override func loadView() {
         
         /*
-         很多同学都反馈问我：为什么要在loadView方法中进行布局而不在viewDidLoad中进行布局？ 以及在什么时候需要调用[super loadView]；什么时候不需要？现在统一回复如下：
+         使用TangramKit时必读的知识点：
          
-         1.所有视图控制中的根视图view(self.view)都是在loadView中完成建立的，也就是说如果你的VC关联了XIB或者SB，那么其实会在VC的loadView方法里面加载XIB或者SB中的所有视图以及子视图，如果您的VC没有关联XIB或者SB那么loadView方法中将建立一个默认的根视图。而系统提供的viewDidLoad方法则是表示VC里面关联的视图已经建立好了，您可以有机会做其他一些初始化的东西。因此如果你想完全自定义VC里面的根视图和子视图的话那么建议您应该重载loadView方法而不是在viewDidLoad里面进行自定义视图的加载和处理。
-         2.因为MyLayout是一套基于代码的界面布局库，因此建议您从VC的根视图就使用布局视图，所以我这边的很多DEMO都是直接在loadView里面进行布局，并且把一个布局视图作为根视图赋值给self.view。因此如果您直接想把布局视图作为根视图或者想自定义根视图的实现那么您就可以不必要再loadView里面调用[super loadView]方法；而如果您只是想把布局视图作为默认根视图的一个子视图的话那么您就必须要调用[super loadView]方法，然后再通过[self.view addSubview:XXXX]来将布局视图加入到根视图里面，如果您只是想把布局视图作为根视图的一个子视图的话，那么您也完全可以不用重载loadView方法，而是直接在viewDidLoad里面添加布局视图也是一样的。
-         3.因为很多DEMO里面都是在loadView里面进行代码布局的，这个是为了方便处理，实际中布局视图是可以用在任何一个地方的，也可以在任何一个地方被建立，因此布局视图就是UIView的一个子视图，因此所有可以使用视图的地方都可以用布局视图。
+         
+         1.布局视图：    就是从TGBaseLayout派生而出的视图，目前TangramKit中一共有：线性布局、框架布局、相对布局、表格布局、流式布局、浮动布局、路径布局7种布局。 布局视图也是一个视图。
+         2.非布局视图：  除上面说的7种布局视图外的所有视图和控件。
+         3.布局父视图：  如果某个视图的父视图是一个布局视图，那么这个父视图就是布局父视图。
+         4.非布局父视图：如果某个视图的父视图不是一个布局视图，那么这个父视图就是非布局父视图。
+         5.布局子视图：  如果某个视图的子视图是一个布局视图，那么这个子视图就是布局子视图。
+         6.非布局子视图：如果某个视图的子视图不是一个布局视图，那么这个子视图就是非布局子视图。
+         
+         
+         
+         这要区分一下边距和间距和概念，所谓边距是指子视图距离父视图的距离；而间距则是指子视图距离兄弟视图的距离。
+         当tg_left,tg_right,tg_top,tg_bottom这四个属性的equal方法设置的值为CGFloat类型或者TGWeight类型时即可用来表示边距也可以用来表示间距，这个要根据子视图所归属的父布局视图的类型而确定：
+         
+         1.垂直线性布局TGLinearLayout中的子视图： tg_left,tg_right表示边距，而tg_top,tg_bottom则表示间距。
+         2.水平线性布局TGLinearLayout中的子视图： tg_left,tg_right表示间距，而tg_top,tg_bottom则表示边距。
+         3.表格布局中的子视图：                  tg_left,tg_right,tg_top,tg_bottom的定义和线性布局是一致的。
+         4.框架布局TGFrameLayout中的子视图：     tg_left,tg_right,tg_top,tg_bottom都表示边距。
+         5.相对布局TGRelativeLayout中的子视图：  tg_left,tg_right,tg_top,tg_bottom都表示边距。
+         6.流式布局TGFlowLayout中的子视图：      tg_left,tg_right,tg_top,tg_bottom都表示间距。
+         7.浮动布局TGFloatLayout中的子视图：     tg_left,tg_right,tg_top,tg_bottom都表示间距。
+         8.路径布局TGPathLayout中的子视图：      tg_left,tg_right,tg_top,tg_bottom即不表示间距也不表示边距，它表示自己中心位置的偏移量。
+         9.非布局父视图中的布局子视图：           tg_left,tg_right,tg_top,tg_bottom都表示边距。
+         10.非布局父视图中的非布局子视图：         tg_left,tg_right,tg_top,tg_bottom的设置不会起任何作用，因为TangramKit已经无法控制了。
+         
+         再次强调的是：
+         1. 如果同时设置了左右边距就能决定自己的宽度，同时设置左右间距不能决定自己的宽度！
+         2. 如果同时设置了上下边距就能决定自己的高度，同时设置上下间距不能决定自己的高度！
          
          */
-                
+        
         
         /*
-         一个视图可以通过对frame的设置来完成其在父视图中的布局。这种方法的缺点是要明确的指出视图所在的位置origin和视图所在的尺寸size，而且在代码中会出现大量的常数，以及需要进行大量的计算。TangramKit的出现就是为了解决布局时的大量常数的使用，以及大量的计算，以及自动适配的问题。需要明确的是用TangramKit进行布局时并不是不要指定视图的位置和尺寸，而是可以通过一些特定的上下文来省略或者隐式的指定视图的位置和尺寸。因此不管何种布局方式，视图布局时都必须要指定视图的位置和尺寸。
+         很多同学都反馈问我：为什么要在loadView方法中进行布局而不在viewDidLoad中进行布局？ 以及在什么时候需要调用[super loadView]；什么时候不需要？现在统一回复如下：
+         
+         1.所有视图控制中的根视图view(self.view)都是在loadView中完成建立的，也就是说如果你的VC关联了XIB或者SB，那么其实会在VC的loadView方法里面加载XIB或者SB中的所有视图以及子视图，如果您的VC没有关联XIB或者SB那么loadView方法中将建立一个默认的根视图。而系统提供的viewDidLoad方法则是表示VC里面关联的视图已经建立好了，您可以有机会做其他一些初始化的事情。因此如果你想完全自定义VC里面的根视图和子视图的话那么建议您应该重载loadView方法而不是在viewDidLoad里面进行视图的创建和加载，换句话说就是loadView负责创建视图而viewDidLoad则是负责视图创建后的一些设置工作。
+         2.因为MyLayout是一套基于代码的界面布局库，因此建议您从VC的根视图就使用布局视图。所以我这边的很多DEMO都是直接在loadView里面进行布局，并且把一个布局视图作为根视图赋值给self.view。因此如果您直接想把布局视图作为根视图或者想自定义根视图的实现那么您就可以不必要在loadView里面调用[super loadView]方法；如果您只是想把布局视图作为默认根视图的一个子视图的话那么您就必须要调用[super loadView]方法，然后再通过[self.view addSubview:XXXX]来将布局视图加入到根视图里面；如果您只是想把布局视图作为根视图的一个子视图的话，那么您也可以不用重载loadView方法，而是直接在viewDidLoad里面添加布局视图也是一样的。
+         3.因为很多DEMO里面都是在loadView里面进行代码布局的，这个是为了方便处理，实际中布局视图是可以用在任何一个地方的，也可以在任何一个地方被建立，因为布局视图就是UIView的一个子视图，因此所有可以使用视图的地方都可以用布局视图。
+         
          */
+        
+        
+        /*
+         一个视图可以通过对frame的设置来完成其在父视图中的定位和尺寸大小的设定。这种方法的缺点是要明确的指出视图所在的位置origin和视图的尺寸size，而且在代码中会出现大量的常数，以及需要进行大量的计算。TangramKit的出现就是为了解决布局时的大量常数的使用，以及大量的计算，以及自动适配的问题。需要明确的是用TangramKit进行布局时并不是不要指定视图的位置和尺寸，而是可以通过一些特定的上下文来省略或者隐式的指定视图的位置和尺寸，因为不管何种布局方式，视图布局时都必须要指定视图的位置和尺寸。使用TangramKit后如果您的代码中还大量出现了计算的场景以及大量出现常数和宏的场景的话那就表明您还没有熟练的应用好这个库。
+         */
+        
         
         let rootLayout = TGLinearLayout(.vert)
         rootLayout.backgroundColor = .white
         self.view = rootLayout;
         
+        //下面的例子中vertLayout是一个垂直线性布局，垂直线性布局中的子视图按照添加的顺序依次从上到下排列。
+
         let vertTitleLabel = self.createSectionLabel(NSLocalizedString("vertical(from top to bottom)",comment:""))
         vertTitleLabel.tg_top.equal(10)  //顶部距离前面的视图10
         rootLayout.addSubview(vertTitleLabel);

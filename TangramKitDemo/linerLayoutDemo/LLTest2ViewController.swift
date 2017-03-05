@@ -8,6 +8,9 @@
 
 import UIKit
 
+/**
+ *2.LinearLayout - Combine with UIScrollView
+ */
 class LLTest2ViewController: UIViewController {
 
     weak var contentLayout:TGLinearLayout!
@@ -189,12 +192,51 @@ extension LLTest2ViewController
         nickNameLabel.sizeToFit()
         nameLayout.addSubview(nickNameLabel)
         
+        //使用线性布局实现这个功能的一个缺点就是必须使用线性布局嵌套线性布局来完成，这样嵌套层次就可能会比较多，因此您可以尝试改用流式布局局来实现这个功能,从而减少嵌套的问题
+        /*
+        let userInfoLayout = TGFlowLayout(.horz, arrangedCount:2)
+         userInfoLayout.layer.borderColor = UIColor.lightGray.cgColor
+         userInfoLayout.layer.borderWidth = 0.5
+         userInfoLayout.layer.cornerRadius = 4
+         userInfoLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+         userInfoLayout.tg_top.equal(20)
+         userInfoLayout.tg_width.equal(.fill)
+         userInfoLayout.tg_height.equal(.wrap)
+         userInfoLayout.tg_hspace = 10  //子视图的水平间距为10
+         userInfoLayout.tg_gravity = TGGravity.vert.center; //里面的子视图整体垂直居中。
+         contentLayout.addSubview(userInfoLayout)
+         
+         //第一列： 一个头像视图，一个占位视图。
+        let headImageView =  UIImageView(image:#imageLiteral(resourceName: "head1"))
+         userInfoLayout.addSubview(headImageView)
+         
+         //因为数量约束水平流式布局每列必须要2个所以这里建立一个占位视图填满第一列。
+         let placeHolderView = UIView()
+         userInfoLayout.addSubview(placeHolderView)
+         
+         
+         //第二列： 姓名视图，昵称视图。
+         let userNameLabel = UILabel()
+         userNameLabel.text = NSLocalizedString("Name:欧阳大哥", comment:"")
+         userNameLabel.font = CFTool.font(15)
+         userNameLabel.sizeToFit()
+         userInfoLayout.addSubview(userNameLabel)
+        
+         let nickNameLabel = UILabel()
+        nickNameLabel.text  = NSLocalizedString("Nickname:醉里挑灯看键", comment:"")
+        nickNameLabel.textColor = CFTool.color(4)
+        nickNameLabel.font = CFTool.font(14);
+        nickNameLabel.sizeToFit()
+        userInfoLayout.addSubview(nickNameLabel)
+        */
+        
     }
 
     //线性布局片段3：垂直线性布局套垂直线性布局
     func createSection3(in contentLayout:TGLinearLayout)
     {
-        /*垂直线性布局套垂直线性布局*/
+        
+        //垂直线性布局套垂直线性布局
         let ageLayout = TGLinearLayout(.vert)
         ageLayout.layer.borderColor = UIColor.lightGray.cgColor
         ageLayout.layer.borderWidth = 0.5
@@ -213,7 +255,7 @@ extension LLTest2ViewController
         ageTitleLabel.sizeToFit()
         ageLayout.addSubview(ageTitleLabel)
         
-        /*垂直线性布局套水平线性布局*/
+        //垂直线性布局套水平线性布局
         let ageSelectLayout = TGLinearLayout(.horz)
         ageSelectLayout.tg_hspace = 10  //设置里面所有子视图之间的水平间距都是10，这样里面的子视图就不在需要设置间距了。
         ageSelectLayout.tg_top.equal(5)
@@ -233,6 +275,47 @@ extension LLTest2ViewController
             ageLabel.tg_width.equal(.average)  //这里面每个子视图的宽度来平均分配父视图的宽度。这样里面所有子视图的宽度都相等。
             ageSelectLayout.addSubview(ageLabel)
         }
+        
+        //为实现这个功能，线性布局需要2层嵌套来完成，这无疑增加了代码量，因此您可以改为用一个垂直浮动布局来实现相同的能力。
+        /*
+         let ageLayout = TGFloatLayout(.vert)
+        ageLayout.layer.borderColor = UIColor.lightGray.cgColor
+        ageLayout.layer.borderWidth = 0.5
+        ageLayout.layer.cornerRadius = 4
+        ageLayout.tg_padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        ageLayout.tg_top.equal(20)
+        ageLayout.tg_vspace = 5
+        ageLayout.tg_hspace = 10
+        ageLayout.tg_width.equal(.fill)
+        ageLayout.tg_height.equal(.wrap)
+        contentLayout.addSubview(ageLayout)
+        
+        
+        let ageTitleLabel = UILabel()
+        ageTitleLabel.text = NSLocalizedString("Age:", comment:"")
+        ageTitleLabel.font = CFTool.font(15)
+        ageTitleLabel.sizeToFit()
+        ageTitleLabel.tg_width.equal(.fill)  //占据整行
+        ageLayout.addSubview(ageTitleLabel)
+
+        
+        for i in 0...2
+        {
+            let ageLabel = UILabel()
+            ageLabel.text = String(format:"%ld", (i + 2) * 10)
+            ageLabel.textAlignment  = .center
+            ageLabel.layer.cornerRadius = 15
+            ageLabel.layer.borderColor = CFTool.color(3).cgColor
+            ageLabel.layer.borderWidth = 0.5
+            ageLabel.font = CFTool.font(13)
+            ageLabel.tg_height.equal(30)
+            //宽度这样设置的原因是：3个子视图要平分布局视图的宽度，这里每个子视图的间距是10。
+            //因此每个子视图的宽度 = (布局视图宽度 - 2 * 子视图间距)/3 = 布局视图宽度 * 1/3 - 2*子视图间距/3
+            //TGLayoutSize中的equal方法设置布局宽度，multiply方法用来设置1/3，add方法用来设置2*子视图间距/3. 因此可以进行如下设置：
+            ageLabel.tg_width.equal(ageLayout.tg_width).multiply(1.0/3).add(-1 * 2 * ageLayout.tg_hspace / 3)
+            ageLayout.addSubview(ageLabel)
+        }
+      */
     }
     
     //线性布局片段4：垂直线性布局套水平线性布局，里面有动态高度的文本。

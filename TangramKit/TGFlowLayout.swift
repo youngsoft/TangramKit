@@ -9,34 +9,94 @@
 import UIKit
 
 /**
- *流式布局是一种里面的子视图按照添加的顺序依次排列，当遇到某种约束限制后会另起一行再重新排列的多行多列展示的布局视图。这里的约束限制主要有数量约束限制和内容尺寸约束限制两种，而换行的方向又分为垂直和水平方向，因此流式布局一共有垂直数量约束流式布局、垂直内容约束流式布局、水平数量约束流式布局、水平内容约束流式布局。流式布局主要应用于那些有规律排列的场景，在某种程度上可以作为UICollectionView的替代品。
+ *流式布局是一种里面的子视图按照添加的顺序依次排列，当遇到某种约束限制后会另起一排再重新排列的多行多列展示的布局视图。这里的约束限制主要有数量约束限制和内容尺寸约束限制两种，排列的方向又分为垂直和水平方向，因此流式布局一共有垂直数量约束流式布局、垂直内容约束流式布局、水平数量约束流式布局、水平内容约束流式布局。流式布局主要应用于那些有规律排列的场景，在某种程度上可以作为UICollectionView的替代品。
  1.垂直数量约束流式布局
- tg_orientation为.vert,tg_arrangedCount不为0,不支持tg_autoArrange。
+ tg_orientation=.vert,tg_arrangedCount>0
+ 
+ 
+ 每排数量为3的垂直数量约束流式布局
+         =>
+ +------+---+-----+
+ |  A   | B |  C  |
+ +---+--+-+-+-----+
+ | D |  E |   F   |  |
+ +---+-+--+--+----+  v
+ |  G  |  H  | I  |
+ +-----+-----+----+
  
  2.垂直内容约束流式布局.
- tg_orientation为.vert,tg_arrangedCount为0,支持tg_autoArrange。
+ tg_orientation = .vert,tg_arrangedCount = 0
+ 
+ 垂直内容约束流式布局
+          =>
+ +-----+-----------+
+ |  A  |     B     |
+ +-----+-----+-----+
+ |  C  |  D  |  E  |  |
+ +-----+-----+-----+  v
+ |        F        |
+ +-----------------+
+ 
  
  
  3.水平数量约束流式布局。
- tg_orientation为.horz,tg_arrangedCount不为0,不支持tg_autoArrange。
+ tg_orientation = .horz,tg_arrangedCount > 0
+ 
+ 每排数量为3的水平数量约束流式布局
+            =>
+    +-----+----+-----+
+    |  A  | D  |     |
+    |     |----|  G  |
+    |-----|    |     |
+ |  |  B  | E  |-----|
+ V  |-----|    |     |
+    |     |----|  H  |
+    |  C  |    |-----|
+    |     | F  |  I  |
+    +-----+----+-----+
+ 
+ 
  
  4.水平内容约束流式布局
- tg_orientation为.horz,tg_arrangedCount为0,支持tg_autoArrange。
+ tg_orientation = .horz,arrangedCount = 0
  
- 流式布局支持子视图的宽度依赖于高度或者高度依赖于宽度,以及高度或者宽度依赖于流式布局本身的高度或者宽度
+ 
+ 水平内容约束流式布局
+         =>
+    +-----+----+-----+
+    |  A  | C  |     |
+    |     |----|     |
+    |-----|    |     |
+ |  |     | D  |     |
+ V  |     |    |  F  |
+    |  B  |----|     |
+    |     |    |     |
+    |     | E  |     |
+    +-----+----+-----+
+ 
+ 
+ 
+ 
+ 流式布局中排的概念是一个通用的称呼，对于垂直方向的流式布局来说一排就是一行，垂直流式布局每排依次从上到下排列，每排内的子视图则是由左往右依次排列；对于水平方向的流式布局来说一排就是一列，水平流式布局每排依次从左到右排列，每排内的子视图则是由上往下依次排列
+ 
  */
 open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
     
     /**
      *初始化一个流式布局并指定布局的方向和布局的数量,如果数量为0则表示内容约束流式布局
      */
-    public init(_ orientation:TGOrientation = .vert, arrangedCount:Int = 0) {
+    public convenience init(_ orientation:TGOrientation = .vert, arrangedCount:Int = 0) {
+        self.init(frame:.zero, orientation:orientation, arrangedCount:arrangedCount)
+    }
+    
+    
+    public init(frame: CGRect, orientation:TGOrientation = .vert, arrangedCount:Int = 0) {
         
-        super.init(frame:CGRect.zero)
-        
+        super.init(frame:frame)
         (self.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_orientation = orientation
         (self.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_arrangedCount = arrangedCount
     }
+    
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -44,9 +104,9 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
     
     
     /**
-     *流式布局的方向：
-     *如果是.vert则表示从左到右，从上到下的垂直布局方式，这个方式是默认方式。
-     *如果是.horz则表示从上到下，从左到右的水平布局方式
+     *流式布局的布局方向
+     *如果是.vert则表示每排先从左到右，再从上到下的垂直布局方式，这个方式是默认方式。
+     *如果是.horz则表示每排先从上到下，在从左到右的水平布局方式。
      */
     public var tg_orientation:TGOrientation {
         get {
@@ -59,9 +119,9 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
     }
     
     /**
-     *指定方向上的子视图的数量，默认是0表示为内容约束流式布局，当数量不为0时则是数量约束流式布局。当值为0时则表示当子视图在方向上的尺寸超过布局视图时则会新起一行或者一列。而如果数量不为0时则：
-     如果方向为.vert，则表示从左到右的数量，当子视图从左往右满足这个数量后新的子视图将会换行再排列
-     如果方向为.horz，则表示从上到下的数量，当子视图从上往下满足这个数量后新的子视图将会换列再排列
+     *指定方向上的子视图的数量，默认是0表示为内容约束流式布局，当数量不为0时则是数量约束流式布局。当值为0时则表示当子视图在方向上的尺寸超过布局视图时则会新起一排。而如果数量不为0时则：
+     如果方向为.vert，则表示从左到右的数量，当子视图从左往右满足这个数量后新的子视图将会新起一排
+     如果方向为.horz，则表示从上到下的数量，当子视图从上往下满足这个数量后新的子视图将会新起一排
      */
     public var tg_arrangedCount:Int {   //get/set方法
         get {
@@ -103,8 +163,7 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
      8  10 12
      
      */
-    
-    public var tg_pagedCount:Int {   //get/set方法
+    public var tg_pagedCount:Int {
         get {
             return (self.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_pagedCount
         }
@@ -138,12 +197,12 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
     
     /**
      *流式布局内所有子视图的整体停靠对齐位置设定。
-     *MyMarginGravity_Vert_Top,MyMarginGravity_Vert_Center,MyMarginGravity_Vert_Bottom 表示整体垂直居上，居中，居下
-     *MyMarginGravity_Horz_Left,MyMarginGravity_Horz_Center,MyMarginGravity_Horz_Right 表示整体水平居左，居中，居右
-     *MyMarginGravity_Vert_Between 表示在流式布局里面，每行之间的行间距都被拉伸，以便使里面的子视图垂直方向填充满整个布局视图。
-     *MyMarginGravity_Horz_Between 表示在流式布局里面，每列之间的列间距都被拉伸，以便使里面的子视图水平方向填充满整个布局视图。
-     *MyMarginGravity_Vert_Fill 在垂直流式布局里面表示布局会拉伸每行子视图的高度，以便使里面的子视图垂直方向填充满整个布局视图的高度；在水平数量流式布局里面表示每列的高度都相等并且填充满整个布局视图的高度；在水平内容约束布局里面表示布局会自动拉升每列的高度，以便垂直方向填充满布局视图的高度(这种设置方法代替过期的方法：averageArrange)。
-     *MyMarginGravity_Horz_Fill 在水平流式布局里面表示布局会拉伸每行子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度；在垂直数量流式布局里面表示每行的宽度都相等并且填充满整个布局视图的宽度；在垂直内容约束布局里面表示布局会自动拉升每行的宽度，以便水平方向填充满布局视图的宽度(这种设置方法代替过期的方法：averageArrange)。
+     *TGGravity.vert.top,TGGravity.vert.center,TGGravity.vert.bottom 表示整体垂直居上，居中，居下
+     *TGGravity.horz.left,TGGravity.horz.center,TGGravity.horz.right 表示整体水平居左，居中，居右
+     *TGGravity.vert.between 表示在流式布局里面，每行之间的行间距都被拉伸，以便使里面的子视图垂直方向填充满整个布局视图。
+     *TGGravity.horz.between 表示在流式布局里面，每列之间的列间距都被拉伸，以便使里面的子视图水平方向填充满整个布局视图。
+     *TGGravity.vert.fill 在垂直流式布局里面表示布局会拉伸每行子视图的高度，以便使里面的子视图垂直方向填充满整个布局视图的高度；在水平数量流式布局里面表示每列的高度都相等并且填充满整个布局视图的高度；在水平内容约束布局里面表示布局会自动拉升每列的高度，以便垂直方向填充满布局视图的高度。
+     *TGGravity.horz.fill 在水平流式布局里面表示布局会拉伸每行子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度；在垂直数量流式布局里面表示每行的宽度都相等并且填充满整个布局视图的宽度；在垂直内容约束布局里面表示布局会自动拉升每行的宽度，以便水平方向填充满布局视图的宽度。
      */
     public var tg_gravity:TGGravity {
         get {
@@ -156,9 +215,17 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
     }
     
     /**
-     *流式布局中每排子视图的停靠对齐位置设定。
-     如果是.vert则只用于表示每行子视图的上中下停靠对齐位置，这个属性只支持TGGravity.vert.top，TGGravity.vert.center,TGGravity.vert.bottom,TGGravity.vert.fill这里的对齐基础是以每行中的最高的子视图为基准。
-     如果是.horz则只用于表示每列子视图的左中右停靠对齐位置，这个属性只支持TGGravity.horz.left，TGGravity.horz.center,TGGravity.horz.right,TGGravity.horz.fill这里的对齐基础是以每列中的最宽的子视图为基准。
+     *设置流式布局中每排子视图的对齐方式。
+     如果布局的方向是.vert则表示每排子视图的上中下对齐方式，这里的对齐基础是以每排中的最高的子视图为基准。这个属性只支持：
+     TGGravity.vert.top     顶部对齐
+     TGGravity.vert.center  垂直居中对齐
+     TGGravity.vert.bottom  底部对齐
+     TGGravity.vert.fill    两端对齐
+     如果布局的方向是.horz则表示每排子视图的左中右对齐方式，这里的对齐基础是以每排中的最宽的子视图为基准。这个属性只支持：
+     TGGravity.horz.left    左边对齐
+     TGGravity.horz.center  水平居中对齐
+     TGGravity.horz.right   右边对齐
+     TGGravity.horz.fill    两端对齐
      */
     public var tg_arrangedGravity:TGGravity {
         get {
@@ -191,10 +258,14 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
     
     
     
-    override internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, type:TGSizeClassType) ->(selfSize:CGSize, hasSubLayout:Bool) {
-        var (selfSize, hasSubLayout) = super.tgCalcLayoutRect(size, isEstimate: isEstimate, type: type)
+    override internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, sbs:[UIView]!, type:TGSizeClassType) ->(selfSize:CGSize, hasSubLayout:Bool) {
+        var (selfSize, hasSubLayout) = super.tgCalcLayoutRect(size, isEstimate: isEstimate, sbs:sbs, type: type)
         
-        var sbs = self.tgGetLayoutSubviews()
+        var sbs:[UIView]! = sbs
+        if sbs == nil
+        {
+          sbs = self.tgGetLayoutSubviews()
+        }
         
         for sbv:UIView in sbs {
             
@@ -347,7 +418,7 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
         selfSize.height = self.tgValidMeasure(self.tg_height,sbv:self,calcSize:selfSize.height,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
         selfSize.width = self.tgValidMeasure(self.tg_width,sbv:self,calcSize:selfSize.width,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
         
-        return (selfSize,hasSubLayout)
+        return (self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs),hasSubLayout)
     }
     
     

@@ -135,6 +135,7 @@ public protocol TGLayoutViewSizeClass:TGViewSizeClass
     var tg_leftPadding:CGFloat{get set}
     var tg_bottomPadding:CGFloat{get set}
     var tg_rightPadding:CGFloat{get set}
+    var tg_zeroPadding:Bool{get set}
     var tg_vspace:CGFloat{get set}
     var tg_hspace:CGFloat{get set}
     var tg_space:CGFloat{get set}
@@ -310,6 +311,8 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
         }
     }
     
+    var tg_zeroPadding: Bool = true
+    
     var tg_vspace:CGFloat = 0
     var tg_hspace:CGFloat = 0
     
@@ -336,6 +339,7 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
         let tsc = super.copy(with: zone) as! TGLayoutViewSizeClassImpl
         
         tsc.tg_padding = self.tg_padding
+        tsc.tg_zeroPadding = self.tg_zeroPadding
         tsc.tg_vspace = self.tg_vspace
         tsc.tg_hspace = self.tg_hspace
         tsc.tg_reverseLayout = self.tg_reverseLayout

@@ -8,6 +8,9 @@
 
 import UIKit
 
+/**
+ * 2.RelativeLayout - Prorate size
+ */
 class RLTest2ViewController: UIViewController {
 
     weak var hiddenButton: UIButton!
@@ -100,7 +103,7 @@ class RLTest2ViewController: UIViewController {
         v6.tg_height.equal(v4.tg_height)
         rootLayout.addSubview(v6)
         
-        //v4固定,v5,v6按一定的比例来平分父视图的宽度，这里同样也是因为每个子视图之间有间距，因此都要减10
+        //v4固定宽度,v5,v6按一定的比例来平分父视图的宽度，这里同样也是因为每个子视图之间有间距，因此都要减10
         v4.tg_width.add(-10)
         v6.tg_width.add(-10)
         v5.tg_width.equal([v4.tg_width, v6.tg_width], increment:-10)

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		18058AAF1E63B4EA00EAECDC /* FLLTest6ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18058AAE1E63B4EA00EAECDC /* FLLTest6ViewController.swift */; };
 		184243081E327F0800E2CCE1 /* FLLTest5ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184243071E327F0800E2CCE1 /* FLLTest5ViewController.swift */; };
 		18BCBD461E1336D900AC7766 /* AllTest8ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BCBD451E1336D900AC7766 /* AllTest8ViewController.swift */; };
 		681BD8DF1E0B91A500403A1F /* TangramKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 681BD8DD1E0B91A500403A1F /* TangramKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -121,6 +122,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		18058AAE1E63B4EA00EAECDC /* FLLTest6ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLLTest6ViewController.swift; sourceTree = "<group>"; };
 		18270C241C954B3C00CBCC92 /* TangramKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TangramKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		184243071E327F0800E2CCE1 /* FLLTest5ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLLTest5ViewController.swift; sourceTree = "<group>"; };
 		18BCBD451E1336D900AC7766 /* AllTest8ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllTest8ViewController.swift; sourceTree = "<group>"; };
@@ -268,7 +270,7 @@
 				68F035F41E0B7D2700CEBAEF /* FlowLayoutDemo */,
 				68F036261E0B7D2700CEBAEF /* RelativeLayoutDemo */,
 				68F036211E0B7D2700CEBAEF /* PathLayoutDemo */,
-				68F036191E0B7D2700CEBAEF /* linerLayoutDemo */,
+				68F036191E0B7D2700CEBAEF /* LinearLayoutDemo */,
 				68F035EB1E0B7D2700CEBAEF /* FloatLayoutDemo */,
 				68F0362C1E0B7D2700CEBAEF /* Support Files */,
 				68F035FD1E0B7D2700CEBAEF /* Info.plist */,
@@ -305,6 +307,7 @@
 				68F035F71E0B7D2700CEBAEF /* FLLTest3ViewController.swift */,
 				68F035F81E0B7D2700CEBAEF /* FLLTest4ViewController.swift */,
 				184243071E327F0800E2CCE1 /* FLLTest5ViewController.swift */,
+				18058AAE1E63B4EA00EAECDC /* FLLTest6ViewController.swift */,
 			);
 			path = FlowLayoutDemo;
 			sourceTree = "<group>";
@@ -345,7 +348,7 @@
 			path = "AllTestModel&View";
 			sourceTree = "<group>";
 		};
-		68F036191E0B7D2700CEBAEF /* linerLayoutDemo */ = {
+		68F036191E0B7D2700CEBAEF /* LinearLayoutDemo */ = {
 			isa = PBXGroup;
 			children = (
 				68F0361A1E0B7D2700CEBAEF /* LLTest1ViewController.swift */,
@@ -356,6 +359,7 @@
 				68F0361F1E0B7D2700CEBAEF /* LLTest6ViewController.swift */,
 				68F036201E0B7D2700CEBAEF /* LLTest7ViewController.swift */,
 			);
+			name = LinearLayoutDemo;
 			path = linerLayoutDemo;
 			sourceTree = "<group>";
 		};
@@ -537,6 +541,7 @@
 				68F0364A1E0B7D2700CEBAEF /* FLLTest4ViewController.swift in Sources */,
 				68F036561E0B7D2700CEBAEF /* AllTest1TableViewCell.swift in Sources */,
 				68F036731E0B7D2700CEBAEF /* RLTest2ViewController.swift in Sources */,
+				18058AAF1E63B4EA00EAECDC /* FLLTest6ViewController.swift in Sources */,
 				68F036501E0B7D2700CEBAEF /* AllTest2ViewController.swift in Sources */,
 				184243081E327F0800E2CCE1 /* FLLTest5ViewController.swift in Sources */,
 				68F0363D1E0B7D2700CEBAEF /* CFTool.swift in Sources */,

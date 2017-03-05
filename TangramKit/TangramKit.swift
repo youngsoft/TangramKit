@@ -53,53 +53,73 @@
  
  */
 
-//Current version is 1.0.3, please open: https://github.com/youngsoft/TangramKit/blob/master/CHANGELOG.md to show the changes.
+//Current version is 1.0.4, please open: https://github.com/youngsoft/TangramKit/blob/master/CHANGELOG.md to show the changes.
 
 
 
 import Foundation
 import UIKit
 
+
+
 /**
- *布局视图中的所有子视图的停靠和填充属性。所谓停靠就是指子视图定位在布局视图中的水平左、中、右和垂直上、中、下的某个方位上的位置。而所谓填充则让布局视图里面的子视图的宽度和高度和自己相等。通过停靠的设置，可以为布局中的所有子视图都设置相同的对齐或者尺寸，而不需要单独为每个子视图进行重复设置。
+ *布局视图方向的枚举类型定义。用来指定布局内子视图的整体排列布局方向。
+ */
+public enum TGOrientation {
+    
+    case vert        //垂直方向，布局视图内所有子视图整体从上到下排列布局
+    case horz        //水平方向，布局视图内所有子视图整体从左到右排列布局
+}
+
+
+
+/**
+ *布局视图内所有子视图的停靠方向和填充拉伸属性以及对齐方式的枚举类型定义。
+ 所谓停靠方向就是指子视图停靠在布局视图中水平方向和垂直方向的位置。水平方向一共有左、水平中心、右、窗口水平中心四个位置，垂直方向一共有上、垂直中心、下、窗口垂直中心四个位置。
+ 所谓填充拉伸属性就是指子视图的尺寸填充或者子视图的间距拉伸满整个布局视图。一共有水平宽度、垂直高度两种尺寸填充，水平间距、垂直间距两种间距拉伸。
+ 所谓对齐方式就是指多个子视图之间的对齐位置。水平方向一共有左、水平居中、右、左右两端对齐四种对齐方式，垂直方向一共有上、垂直居中、下、向下两端对齐四种方式。
+ 在线性布局、流式布局、浮动布局中有一个gravity属性用来表示布局内所有子视图的停靠方向和填充拉伸属性；在流式布局中有一个arrangedGravity属性用来表示布局内每排子视图的对齐方式。
  */
 public struct TGGravity : OptionSet{
     public let rawValue :Int
     public init(rawValue: Int) {self.rawValue = rawValue}
     
-    //不停靠
+    //默认值，不停靠、不填充、不对齐。
     public static let none = TGGravity(rawValue:0)
     
-    //水平
+    //水平方向
     public struct horz
     {
-        public static let left = TGGravity(rawValue:1)           //左
-        public static let center = TGGravity(rawValue:2)         //水平居中
-        public static let right = TGGravity(rawValue:4)          //右
-        public static let windowCenter = TGGravity(rawValue: 8)  //在窗口水平中居中
-        public static let between = TGGravity(rawValue: 16)      //水平间距拉伸，用于线性布局和流式布局
-        public static let fill:TGGravity = [horz.left, horz.center, horz.right]  //水平填充
-        public static let mask = TGGravity(rawValue:0xFF00)
+        public static let left = TGGravity(rawValue:1)           //左边停靠或者左对齐
+        public static let center = TGGravity(rawValue:2)         //水平中心停靠或者水平居中对齐
+        public static let right = TGGravity(rawValue:4)          //右边停靠或者右对齐
+        public static let windowCenter = TGGravity(rawValue: 8)  //窗口水平中心停靠，表示在屏幕窗口的水平中心停靠
+        public static let between = TGGravity(rawValue: 16)      //水平间距拉伸
+        public static let fill:TGGravity = [horz.left, horz.center, horz.right]   //水平宽度填充
+        public static let mask = TGGravity(rawValue:0xFF00)  //水平掩码，用来获取水平方向的枚举值
     }
     
-    //垂直
+    //垂直方向
     public struct vert
     {
-        public static let top = TGGravity(rawValue:1 << 8)           //上
-        public static let center = TGGravity(rawValue:2 << 8)        //垂直居中
-        public static let bottom = TGGravity(rawValue:4 << 8)        //下
-        public static let windowCenter = TGGravity(rawValue:8 << 8)  //在窗口中垂直居中
-        public static let between = TGGravity(rawValue: 16 << 8)      //垂直间距拉伸，用于线性布局和流式布局
-        public static let fill:TGGravity = [vert.top, vert.center, vert.bottom] //垂直填充
-        public static let mask = TGGravity(rawValue:0x00FF)
+        public static let top = TGGravity(rawValue:1 << 8)           //上边停靠或者上对齐
+        public static let center = TGGravity(rawValue:2 << 8)        //垂直中心停靠或者垂直居中对齐
+        public static let bottom = TGGravity(rawValue:4 << 8)        //下边停靠或者下边对齐
+        public static let windowCenter = TGGravity(rawValue:8 << 8)  //窗口垂直中心停靠，表示在屏幕窗口的垂直中心停靠
+        public static let between = TGGravity(rawValue: 16 << 8)     //垂直间距拉伸
+        public static let fill:TGGravity = [vert.top, vert.center, vert.bottom] //垂直高度填充
+        public static let mask = TGGravity(rawValue:0x00FF)  //垂直掩码，用来获取垂直方向的枚举值
         
     }
     
     //整体居中
     public static let center:TGGravity = [horz.center, vert.center]
     
-    //整体填充
+    //全部填充
     public static let fill:TGGravity = [horz.fill, vert.fill]
+    
+    //全部拉伸
+    public static let between:TGGravity = [horz.between, vert.between]
     
 }
 
@@ -108,20 +128,21 @@ public func &(left: TGGravity, right: TGGravity) -> TGGravity {
 }
 
 
-/**
- *设置布局视图的布局方向，方向决定了布局视图里面的所有子视图的排列的方式。
- */
-public enum TGOrientation {
-    
-    case vert        //垂直方向，所有子视图从上往下或者从下往上排列
-    case horz        //水平方向，所有子视图从左往右或者从右往左排列
-}
 
+/**
+ *用来设置当线性布局中的子视图的尺寸大于线性布局的尺寸时的子视图的压缩策略枚举类型定义。请参考线性布局的tg_shrinkType属性的定义。
+ */
+public enum TGSubviewsShrinkType:Int
+{
+    case none = 0     //不压缩。
+    case average = 1  //平均压缩,默认是这个值。
+    case weight = 2   //比例压缩。
+    case auto = 4     //自动压缩。这个属性只有在水平线性布局里面并且只有2个子视图的宽度等于.wrap时才有用。这个属性主要用来实现左右两个子视图根据自身内容来进行缩放，以便实现最佳的宽度空间利用
+}
 
 
 /**
  *位置和尺寸的比重对象，表示位置或尺寸的值是相对值。也就是尺寸或者位置的百分比值。
- *weight值在布局系统中可能表示占用父视图的位置或者尺寸的比例值或者是占用父视图剩余空间的比例值。
  *比如tg_width.equal(20%) 表示子视图的宽度是父视图的20%的比例。
  *请使用  数字% 方法来使用TGWeight类型的值。
  */
@@ -243,7 +264,8 @@ public postfix func %(val:Int) ->TGWeight
 
 
 /**
- *设置当布局视图嵌入到UIScrollView以及其派生类时对UIScrollView的contentSize的调整模式
+ *设置当将布局视图嵌入到UIScrollView以及其派生类时对UIScrollView的contentSize的调整设置模式的枚举类型定义。
+ *当将一个布局视图作为子视图添加到UIScrollView或者其派生类时(UITableView,UICollectionView除外)系统会自动调整和计算并设置其中的contentSize值。您可以使用布局视图的属性tg_adjustScrollViewContentSizeMode来进行设置定义的枚举值。
  */
 public enum TGAdjustScrollViewContentSizeMode {
    
@@ -255,44 +277,6 @@ public enum TGAdjustScrollViewContentSizeMode {
     
     //一定会调整contentSize
     case yes
-}
-
-
-/**
- * 这个枚举定义在线性布局里面当某个子视图的尺寸或者位置值为TGWeight类型时，而当剩余的有固定尺寸和间距的子视图的尺寸总和要大于
- * 视图本身的尺寸时，对那些具有固定尺寸或者固定间距的子视图的处理方式。需要注意的是只有当子视图的尺寸和间距总和大于布局视图的尺寸时才有意义，否则无意义。
- * 比如某个垂直线性布局的高度是100。 里面分别有A,B,C,D四个子视图。其中:
- A.topPos = 10
- A.height = 50
- B.topPos = 10%
- B.weight = 20%
- C.height = 60
- D.topPos = 20
- D.weight = 70%
- 
- 那么这时候总的固定高度 = A.tg_top + A.tg_height + C.tg_height +D.tg_top = 140 > 100。
- 也就是多出了40的尺寸值，那么这时候我们可以用如下压缩类型的组合进行特殊的处理：
- 
- 1. average (布局的默认设置。)
- 这种情况下，我们只会压缩那些具有固定尺寸的视图的高度A,C的尺寸，每个子视图的压缩的值是：剩余的尺寸40 / 固定尺寸的视图数量2 = 20。 这样:
- A的最终高度 = 50 - 20 = 30
- C的最终高度 = 60 - 20 = 40
- 
- 2.weight
- 这种情况下，我们只会压缩那些具有固定尺寸的视图的高度A,C的尺寸，这些总的高度为50 + 60 = 110. 这样：
- A的最终高度 = 50 - 40 *(50/110) = 32
- C的最终高度 = 60 - 40 *（60/110) = 38
- 
-
- 3. none
- 这种情况下即使是固定的视图的尺寸超出也不会进行任何压缩！！！！
- 
- */
-public enum TGSubviewsShrinkType:Int
-{
-    case average = 0  //平均压缩,默认是这个值。
-    case weight = 1   //比例压缩。
-    case none = 8     //不压缩。
 }
 
 

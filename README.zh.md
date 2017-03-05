@@ -556,7 +556,7 @@ $ gem install cocoapods
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 
-pod 'TangramKit', '~> 1.0.3'
+pod 'TangramKit', '~> 1.0.4'
 ```
    
 然后运行如下命令:

@@ -33,7 +33,14 @@ extension TGLayoutSize:TGLayoutSizeType{}   //因为TGLayoutSize的equal方法�
 extension UIView:TGLayoutSizeType{}
 
 /**
- *视图的布局尺寸类，用来设置视图在布局视图中的宽度和高度的布局尺寸值。
+ *视图的布局尺寸类，用来设置视图在布局视图中宽度和高度的尺寸值。布局尺寸类是对尺寸的一个抽象，一个尺寸不一定描述为一个具体的数值，也有可能描述为和另外一个尺寸相等也就是依赖另外一个尺寸，同时一个尺寸可能也会有最大和最小值的限制等等。因此用TGLayoutSize类来描述这种尺寸的抽象概念。
+ *一个尺寸对象的最终尺寸值 = min(max(sizeVal * multiVal + addVal, min.sizeVal * min.multiVal + min.addVal), max.sizeVal * max.multiVal + max.addVal)
+ * 其中:
+ sizeVal是通过equal方法设置的值。
+ multiVal是通过multiply方法或者equal方法中的multiple参数设置的值。
+ addVal是通过add方法或者equal方法中的increment参数设置的值。
+ min.sizeVal,min.multiVal,min.addVal是通过min方法设置的值。他表示尺寸的最小边界值。
+ max.sizeVal,max.multiVal,max.addVal是通过max方法设置的值。他表示尺寸的最大边界值。
  */
 final public class TGLayoutSize
 {
@@ -57,7 +64,11 @@ final public class TGLayoutSize
     }
     
     
-    //设置尺寸值为比重值或者相对值。比如某个子视图的宽度是父视图宽度的50%则可以设置为：a.tg_width.equal(50%) 或者a.tg_width.equal(TGWeight(50))
+    /**
+     *设置尺寸值为比重值或者相对值。
+      比如某个子视图的宽度是父视图宽度的50%则可以设置为：a.tg_width.equal(50%) 或者a.tg_width.equal(TGWeight(50))。
+      具体这个相对或者比重值所表示的意义是根据视图在不同的父布局视图中的不同而不同的。
+     */
     @discardableResult
     public func equal(_ weight:TGWeight, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
@@ -111,7 +122,21 @@ final public class TGLayoutSize
         return self
     }
     
-    //设置尺寸的最小边界值。
+    /**
+     * 设置尺寸的最小边界值，如果尺寸对象没有设置最小边界值，那么最小边界默认就是无穷小-CGFloat.greatestFiniteMagnitude。min方法除了能设置为数值外，还可以设置为TGLayoutSize值，并且还可以指定增量值和倍数值。
+     @size:指定边界的值。可设置的类型有CGFloat和TGLayoutSize类型，前者表示最小限制不能小于某个常量值，而后者表示最小限制不能小于另外一个尺寸对象所表示的尺寸值。
+     @increment: 指定边界值的增量值，如果没有增量请设置为0。
+     @multiple: 指定边界值的倍数值，如果没有倍数请设置为1。
+     
+     *1.比如我们有一个UILabel的宽度是由内容决定的，但是最小的宽度大于等于父视图的宽度，则设置为：
+     A.tg_width.equal(.wrap).min(superview.tg_width)
+     *2.比如我们有一个视图的宽度也是由内容决定的，但是最小的宽度大于等于父视图宽度的1/2，则设置为：
+     A.tg_width.equal(.wrap).min(superview.tg_width, multiple:0.5)
+     *3.比如我们有一个视图的宽度也是由内容决定的，但是最小的宽度大于等于父视图的宽度-30，则设置为：
+     A.tg_width.equal(.wrap).min(superview.tg_width, increment:-30)
+     *4.比如我们有一个视图的宽度也是由内容决定的，但是最小的宽度不能低于100，则设置为：
+     A.tg_width.equal(.wrap).min(100)
+     */
     @discardableResult
     public func min(_ size:CGFloat, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
@@ -146,7 +171,21 @@ final public class TGLayoutSize
     }
 
     
-    //设置尺寸的最大边界值。
+    /**
+     * 设置尺寸的最大边界值，如果尺寸对象没有设置最大边界值，那么最大边界默认就是无穷大CGFloat.greatestFiniteMagnitude。max方法除了能设置为数值外，还可以设置为TGLayoutSize值和nil值，并且还可以指定增量值和倍数值。
+     @size:指定边界的值。可设置的类型有CGFloat和TGLayoutSize类型，前者表示最大限制不能超过某个常量值，而后者表示最大限制不能超过另外一个尺寸对象所表示的尺寸值。
+     @increment: 指定边界值的增量值，如果没有增量请设置为0。
+     @multiple: 指定边界值的倍数值，如果没有倍数请设置为1。
+     
+     *1.比如我们有一个UILabel的宽度是由内容决定的，但是最大的宽度小于等于父视图的宽度，则设置为：
+     A.tg_width.equal(.wrap).max(superview.tg_width)
+     *2.比如我们有一个视图的宽度也是由内容决定的，但是最大的宽度小于等于父视图宽度的1/2，则设置为：
+     A.tg_width.equal(.wrap).max(superview.tg_width, multiple:0.5)
+     *3.比如我们有一个视图的宽度也是由内容决定的，但是最大的宽度小于等于父视图的宽度-30，则设置为：
+     A.tg_width.equal(.wrap).max(superview.tg_width, increment:-30)
+     *4.比如我们有一个视图的宽度也是由内容决定的，但是最大的宽度小于等于100，则设置为：
+     A.tg_width.equal(.wrap).max(100)
+     */
     @discardableResult
     public func max(_ size:CGFloat, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
@@ -188,7 +227,9 @@ final public class TGLayoutSize
         return _view
     }
     
-    //清除所有设置。
+    /**
+     *清除所有设置的约束值，这样尺寸对象将不会再生效了。
+     */
     public func clear()
     {
         _active = true
@@ -204,7 +245,10 @@ final public class TGLayoutSize
     }
     
     
-    //设置布局尺寸是否是活动的,默认是true表示活动的，如果设置为false则表示这个布局尺寸设置的约束将不会起作用。
+    /**
+     *设置布局尺寸是否是活动的,默认是true表示活动的，如果设置为false则表示这个布局尺寸对象设置的约束值将不会起作用。
+     *active设置为true和clear的相同点是尺寸对象设置的约束值都不会生效了，区别是前者不会清除所有设置的约束，而后者则会清除所有设置的约束。
+     */
     public var isActive:Bool
     {
         get

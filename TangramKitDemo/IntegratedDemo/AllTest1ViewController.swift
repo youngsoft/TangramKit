@@ -8,7 +8,9 @@
 
 import UIKit
 
-
+/**
+ *1.UITableView - Dynamic height
+ */
 class AllTest1ViewController: UITableViewController {
 
     
@@ -60,14 +62,14 @@ class AllTest1ViewController: UITableViewController {
         }
         
         /**
-         布局视图和UITableView的结合可以很简单的实现静态和动态高度的tableviewcell。以及tableview的section,tableheaderfooter部分使用布局视图的方法
+         布局视图和UITableView的结合可以很简单的实现静态和动态高度的UITableViewCell。以及tableview的section,tableheaderfooter部分使用布局视图的方法
          */
         
         
         /*
-         将一个布局视图作为uitableview的tableHeaderViewLayout时，因为其父视图是非布局视图，因此需要明确的指明宽度和高度。这个可以用frame来设置。比如：
+         将一个布局视图作为UITableView的tableHeaderView或者tableFooterView时，因为其父视图是非布局视图，因此需要明确的指明宽度和高度，这个可以用frame来设置。比如：
          
-         tableHeaderViewLayout.frame = CGRectMake(0, 0, self.tableView.frame.size.width, 100);
+         tableHeaderViewLayout.frame = CGRect(x: 0, y: 0, width: self.tableView.bounds.width, height: 100)
          
          而如果某个布局视图的高度有可能是动态的高度，也就是用了tg_height为.wrap时，可以不用指定明确的指定高度，但要指定宽度。而且在布局视图添加到self.tableView.tableHeaderView 之前一定要记得调用：
          tableHeaderViewLayout.layoutIfNeeded()
@@ -86,14 +88,13 @@ class AllTest1ViewController: UITableViewController {
     
     
     func createTableHeaderView() {
-        //这个例子用来构建一个动态高度的头部布局视图。
+        //这个例子用来构建一个自适应高度的头部布局视图。
         let tableHeaderViewLayout = TGLinearLayout(.vert)
         tableHeaderViewLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
-        tableHeaderViewLayout.frame = CGRect(x: 0, y: 0, width: self.tableView.bounds.width, height: 0)
+        tableHeaderViewLayout.frame = CGRect(x: 0, y: 0, width: self.tableView.bounds.width, height: 0) //这里没有设置高度
         //高度不确定可以设置为0。尽量不要在代码中使用kScreenWidth,kScreenHeight，SCREEN_WIDTH。之类这样的宏来设定视图的宽度和高度。要充分利用Tangram的特性，减少常数的使用。
-        tableHeaderViewLayout.tg_width.equal(.fill)
+        tableHeaderViewLayout.tg_width.equal(.fill) //这里注意设置宽度和父布局保持一致。
         tableHeaderViewLayout.tg_height.equal(.wrap)
-        //这里注意设置宽度和父布局保持一致。
         tableHeaderViewLayout.tg_backgroundImage = UIImage(named: "bk1")
         //为布局添加触摸事件。
         tableHeaderViewLayout.tg_setTarget(self, action: #selector(handleTableHeaderViewLayoutClick), for:.touchUpInside)
@@ -121,7 +122,7 @@ class AllTest1ViewController: UITableViewController {
         label2.sizeToFit()
         
         tableHeaderViewLayout.addSubview(label2)
-        tableHeaderViewLayout.layoutIfNeeded() //这里必须要在加入前执行这句！！！
+        tableHeaderViewLayout.layoutIfNeeded() //因为高度是.wrap的，所以这里必须要在加入前执行这句！！！
         
         self.tableView.tableHeaderView = tableHeaderViewLayout
     }
@@ -188,6 +189,8 @@ class AllTest1ViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        //如果使用了布局来评估cell高度的话，那么请不要使用- open func dequeueReusableCell(withIdentifier identifier: String, for indexPath: IndexPath) -> UITableViewCell 这个方法，否则可能造成系统崩溃！！！
+        
         
         let cell:AllTest1TableViewCell = tableView.dequeueReusableCell(withIdentifier: "alltest1_cell") as! AllTest1TableViewCell
         
@@ -219,11 +222,10 @@ class AllTest1ViewController: UITableViewController {
         let cell = self.tableView(tableView,cellForRowAt:indexPath) as! AllTest1TableViewCell
         
         
-        //通过布局视图的tg_sizeThatFits函数能够评估出UITableViewCell的动态高度。tg_sizeThatFits并不会进行布局
-        //而只是评估布局的尺寸，这里的宽度不传0的原因是上面的UITableViewCell在建立时默认的宽度是320(不管任何尺寸都如此),因此如果我们
-        //传递了宽度为0的话则会按320的宽度来评估UITableViewCell的动态高度，这样当在375和414的宽度时评估出来的高度将不会正确，因此这里需要
-        //指定出真实的宽度尺寸；而高度设置为0的意思是表示高度不是固定值需要评估出来。
-        //UITableViewCell的动态高度评估不局限于线性布局，相对布局也是同样适用的。
+        /*
+         通过布局视图的tg_sizeThatFits方法能够评估出UITableViewCell的动态高度。tg_sizeThatFits并不会进行布局而只是评估布局的尺寸。
+         这里的宽度不传0的原因是上面的UITableViewCell在建立时默认的宽度是320(不管任何尺寸都如此),因此如果我们传递了宽度为0的话则会按320的宽度来评估UITableViewCell的动态高度，这样当在375和414的宽度时评估出来的高度将不会正确。因此这里需要指定出真实的宽度尺寸，而高度设置为0的意思是表示高度不是固定值需要评估出来。
+        */
         let size = cell.rootLayout.tg_sizeThatFits(CGSize(width:tableView.frame.width, height:0))
         return size.height;  //如果使用系统自带的分割线，请返回rect.size.height+1
 

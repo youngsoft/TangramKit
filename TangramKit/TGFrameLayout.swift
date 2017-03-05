@@ -22,14 +22,19 @@ open class TGFrameLayout: TGBaseLayout,TGFrameLayoutViewSizeClass {
         return TGFrameLayoutViewSizeClassImpl()
     }
     
-    internal override func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool ,type:TGSizeClassType) -> (selfSize:CGSize, hasSubLayout:Bool)
+    internal override func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool , sbs:[UIView]!, type:TGSizeClassType) -> (selfSize:CGSize, hasSubLayout:Bool)
     {
-        var (selfSize,hasSubLayout) = super.tgCalcLayoutRect(size, isEstimate: isEstimate, type: type)
+        var (selfSize,hasSubLayout) = super.tgCalcLayoutRect(size, isEstimate: isEstimate, sbs:sbs, type: type)
         
         var maxWidth = self.tg_leftPadding
         var maxHeight = self.tg_topPadding
         
-        let sbs = self.tgGetLayoutSubviews()
+        var sbs:[UIView]! = sbs
+        if sbs == nil
+        {
+            sbs = self.tgGetLayoutSubviews()
+        }
+        
         for sbv in sbs
         {
             
@@ -129,7 +134,7 @@ open class TGFrameLayout: TGBaseLayout,TGFrameLayoutViewSizeClass {
             }
         }
         
-        return (selfSize,hasSubLayout)
+        return (self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs),hasSubLayout)
         
     }
     

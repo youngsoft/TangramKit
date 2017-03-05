@@ -8,7 +8,14 @@
 
 import UIKit
 
+/**
+ *4.PathLayout - Fan
+ */
 class PLTest4ViewController: UIViewController {
+    
+    /*
+       这个DEMO介绍路径布局中的视图和transform的结合的情况。因为一旦一个视图用transform后那么frame的值将受到这个变换的影响，因此在整个TangramKit中都是通过center和bounds的改变来进行位置和尺寸的调整的。
+    */
     
     var myPathLayout: TGPathLayout!
 
@@ -16,7 +23,7 @@ class PLTest4ViewController: UIViewController {
         myPathLayout = TGPathLayout()
         view = myPathLayout
         
-        myPathLayout.backgroundColor = UIColor.lightGray
+        myPathLayout.backgroundColor = .lightGray
         myPathLayout.tg_leftPadding = 20
         myPathLayout.tg_coordinateSetting.origin = CGPoint(x: 0, y: 0.5)
         myPathLayout.tg_coordinateSetting.start = TGRadian(angle:-60).value
@@ -24,15 +31,15 @@ class PLTest4ViewController: UIViewController {
         myPathLayout.tg_distanceError = 0.01 //因为曲线半径非常的小，为了要求高精度的距离间距，所以要把距离误差调整的非常的小。
         myPathLayout.tg_polarEquation = { _ in 1.0 }
         
-        let btn = UIButton.init(type: .contactAdd)
-        btn.backgroundColor = UIColor.darkGray
+        let btn = UIButton(type: .contactAdd)
+        btn.backgroundColor = .darkGray
         btn.layer.cornerRadius = 10
         btn.addTarget(self, action: #selector(PLTest4ViewController.handleAction(sender:)), for: .touchUpInside)
         myPathLayout.tg_originView = btn
         
         for i in 0..<9 {
             let label = UILabel()
-            label.layer.anchorPoint = CGPoint(x: 0.05, y: 0.5)
+            label.layer.anchorPoint = CGPoint(x: 0.05, y: 0.5) //设置子视图布局点所在的子视图的位置。这个位置是相对位置。
             label.tg_left.equal(-1)
             label.tg_width.equal(200).and().tg_height.equal(30)
             
@@ -41,7 +48,7 @@ class PLTest4ViewController: UIViewController {
             label.backgroundColor = .white
             label.layer.cornerRadius = 2
             label.layer.shadowColor = UIColor.darkGray.cgColor
-            label.layer.shadowOffset = CGSize.zero
+            label.layer.shadowOffset = .zero
             label.layer.shadowRadius = 3
             label.layer.shadowOpacity = 0.5
             
@@ -50,7 +57,7 @@ class PLTest4ViewController: UIViewController {
                 let _angle = pLayout.tg_argumentFrom(subview: v)!//TGPathLayout的argumentFrom方法能够取得子视图在曲线上的点的方程函数的自变量的输入的值。
                 print("angle = \(_angle)")
                 
-                v.transform = CGAffineTransform.init(rotationAngle: -1 * _angle)
+                v.transform = CGAffineTransform(rotationAngle: -1 * _angle)
             })
             
             myPathLayout.addSubview(label)
@@ -69,7 +76,7 @@ class PLTest4ViewController: UIViewController {
                 
                 UIView.animate(withDuration: duration, delay: delay, options: .curveEaseInOut, animations: {
 
-                    sbv.transform = CGAffineTransform.init(rotationAngle: -1 * self.myPathLayout.tg_argumentFrom(subview: sbv)!)
+                    sbv.transform = CGAffineTransform(rotationAngle: -1 * self.myPathLayout.tg_argumentFrom(subview: sbv)!)
                     
                 }, completion: { (_) in
                     
@@ -87,7 +94,7 @@ class PLTest4ViewController: UIViewController {
                 let delay: TimeInterval = 0.9 / 9.0
                 
                 UIView.animate(withDuration: duration, delay: delay, options: .curveEaseInOut, animations: {
-                    sbv.transform = CGAffineTransform.init(rotationAngle: -.pi/2)
+                    sbv.transform = CGAffineTransform(rotationAngle: -.pi/2)
                     
                 })
             }

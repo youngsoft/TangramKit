@@ -8,9 +8,28 @@
 
 import UIKit
 
+
+
+
 /**
- *线性布局是一种里面的子视图按添加的顺序从上到下或者从左到右依次排列的单列(单行)布局视图，因此里面的子视图是通过添加的顺序建立约束和依赖关系的。
- *子视图从上到下依次排列的线性布局视图称为垂直线性布局视图，而子视图从左到右依次排列的线性布局视图则称为水平线性布局。
+ *线性布局是一种里面的子视图按添加的顺序从上到下或者从左到右依次排列的单行(单列)布局视图。线性布局里面的子视图是通过添加的顺序建立约束和依赖关系的。
+ *根据排列的方向我们把子视图从上到下依次排列的线性布局视图称为垂直线性布局视图，而把子视图从左到右依次排列的线性布局视图则称为水平线性布局。
+ 垂直线性布局
+ +-------+
+ |   A   |
+ +-------+
+ |   B   |
+ +-------+  ⥥
+ |   C   |
+ +-------+
+ |  ...  |
+ +-------+
+ 
+ 水平线性布局
+ +-----+-----+-----+-----+
+ |  A  |  B  |  C  | ... |
+ +-----+-----+-----+-----+
+             ⥤
  */
 open class TGLinearLayout: TGBaseLayout,TGLinearLayoutViewSizeClass {
     
@@ -22,9 +41,16 @@ open class TGLinearLayout: TGBaseLayout,TGLinearLayoutViewSizeClass {
      }
      */
     
-    public init(_ orientation:TGOrientation) {
+    public  convenience init(_ orientation:TGOrientation) {
         
-        super.init(frame:CGRect.zero)
+        self.init(frame:.zero, orientation:orientation)
+        
+    }
+
+    
+    public init(frame:CGRect, orientation:TGOrientation) {
+        
+        super.init(frame:frame)
         
         let lsc:TGLinearLayoutViewSizeClass = self.tgCurrentSizeClass as! TGLinearLayoutViewSizeClass
         lsc.tg_orientation = orientation
@@ -55,12 +81,12 @@ open class TGLinearLayout: TGBaseLayout,TGLinearLayoutViewSizeClass {
     
     /**
      *线性布局里面的所有子视图的整体停靠方向以及填充，所谓停靠是指布局视图里面的所有子视图整体在布局视图中的位置，系统默认的停靠是在布局视图的左上角。
-     *MyMarginGravity_Vert_Top,MyMarginGravity_Vert_Center,MyMarginGravity_Vert_Bottom 表示整体垂直居上，居中，居下
-     *MyMarginGravity_Horz_Left,MyMarginGravity_Horz_Center,MyMarginGravity_Horz_Right 表示整体水平居左，居中，居右
-     *MyMarginGravity_Vert_Between 表示在垂直线性布局里面，每行之间的行间距都被拉伸，以便使里面的子视图垂直方向填充满整个布局视图。水平线性布局里面这个设置无效。
-     *MyMarginGravity_Horz_Between 表示在水平线性布局里面，每列之间的列间距都被拉伸，以便使里面的子视图水平方向填充满整个布局视图。垂直线性布局里面这个设置无效。
-     *MyMarginGravity_Vert_Fill 在垂直线性布局里面表示布局会拉伸每行子视图的高度，以便使里面的子视图垂直方向填充满整个布局视图的高度；在水平线性布局里面表示每个个子视图的高度都将和父视图保持一致，这样就不再需要设置子视图的高度了。
-     *MyMarginGravity_Horz_Fill 在水平线性布局里面表示布局会拉伸每行子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度；在垂直线性布局里面表示每个子视图的宽度都将和父视图保持一致，这样就不再需要设置子视图的宽度了。
+     *TGGravity.vert.top,TGGravity.vert.center,TGGravity.vert.bottom 表示整体垂直居上，居中，居下
+     *TGGravity.horz.left,TGGravity.horz.center,TGGravity.horz.right 表示整体水平居左，居中，居右
+     *TGGravity.vert.between 表示在垂直线性布局里面，每行之间的行间距都被拉伸，以便使里面的子视图垂直方向填充满整个布局视图。水平线性布局里面这个设置无效。
+     *TGGravity.horz.between 表示在水平线性布局里面，每列之间的列间距都被拉伸，以便使里面的子视图水平方向填充满整个布局视图。垂直线性布局里面这个设置无效。
+     *TGGravity.vert.fill 在垂直线性布局里面表示布局会拉伸每行子视图的高度，以便使里面的子视图垂直方向填充满整个布局视图的高度；在水平线性布局里面表示每个个子视图的高度都将和父视图保持一致，这样就不再需要设置子视图的高度了。
+     *TGGravity.horz.fill 在水平线性布局里面表示布局会拉伸每行子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度；在垂直线性布局里面表示每个子视图的宽度都将和父视图保持一致，这样就不再需要设置子视图的宽度了。
      */
     public var tg_gravity:TGGravity
         {
@@ -77,7 +103,60 @@ open class TGLinearLayout: TGBaseLayout,TGLinearLayoutViewSizeClass {
     
     
     /**
-     *设置当子视图的尺寸或者位置设置为TGWeight类型时，并且有固定尺寸和间距的子视图的总和大于布局视图的高度时，如何压缩那些固定尺寸和间距的视图的方式。默认的值是：.average:表明会平均的缩小每个固定的视图的尺寸。在设置时可以进行压缩类型和压缩方式的或运算方法。具体的方法见TGSubviewsShrinkType中的各种值的定义。
+     * 用来设置当线性布局中的子视图的尺寸大于线性布局的尺寸时的子视图压缩策略。默认值是.none。
+     * 这个枚举定义在线性布局里面当某个子视图的尺寸或者位置值为TGWeight类型时，而当剩余的有固定尺寸和间距的子视图的尺寸总和要大于
+     * 视图本身的尺寸时，对那些具有固定尺寸或者固定间距的子视图的处理方式。需要注意的是只有当子视图的尺寸和间距总和大于布局视图的尺寸时才有意义，否则无意义。
+     * 比如某个垂直线性布局的高度是100。 里面分别有A,B,C,D四个子视图。其中:
+     A.tg_top ~= 10
+     A.tg_height ~= 50
+     B.tg_top ~= 10%
+     B.tg_height ~= 20%
+     C.tg_height ~= 60
+     D.tg_top ~= 20
+     D.tg_height ~= 70%
+     
+     那么这时候总的固定高度 = A.tg_top + A.tg_height + C.tg_height +D.tg_top = 140 > 100。
+     也就是多出了40的尺寸值，那么这时候我们可以用如下压缩类型的组合进行特殊的处理：
+     
+     1. none(布局的默认设置)
+     这种情况下即使是固定的视图的尺寸超出也不会进行任何压缩！！！！
+     
+     
+     2. average
+     这种情况下，我们只会压缩那些具有固定尺寸的视图的高度A,C的尺寸，每个子视图的压缩的值是：剩余的尺寸40 / 固定尺寸的视图数量2 = 20。 这样:
+     A的最终高度 = 50 - 20 = 30
+     C的最终高度 = 60 - 20 = 40
+     
+     3.weight
+     这种情况下，我们只会压缩那些具有固定尺寸的视图的高度A,C的尺寸，这些总的高度为50 + 60 = 110. 这样：
+     A的最终高度 = 50 - 40 *(50/110) = 32
+     C的最终高度 = 60 - 40 *（60/110) = 38
+     
+     4.auto
+     
+     假如某个水平线性布局里面里面有左右2个UILabel A和B。A和B的宽度都不确定，但是二者不能覆盖重叠，而且当间距小于一个值后要求自动换行。因为宽度都不确定所以不能指定具体的宽度值，但是又要利用好剩余的空间，这时候就可以用这个属性。比如下面的例子：
+     
+     let horzLayout = TGLinearLayout(.horz)
+     horzLayout.tg_width.equal(.fill)
+     horzLayout.tg_height.equal(.wrap)
+     horzLayout.tg_hspace = 10  //二者的最小间距不能小于20
+     horzLayout.tg_shrinkType = .auto
+     
+     let A = UILabel()
+     A.text = "xxxxxxx"
+     A.tg_width.equal(.wrap) //宽度等于自身内容的宽度，必须要这么设置和 .auto 结合使用。
+     A.tg_height.equal(.wrap)        //自动换行
+     A.tg_right.equal(50%)         //右边间距是剩余的50%
+     horzLayout.addSubview(A)
+     
+     
+     let B = UILabel()
+     B.text = "XXXXXXXX"
+     B.tg_width.equal(.wrap) //宽度等于自身内容的宽度，必须要这么设置和 .auto 结合使用。
+     B.tg_height.equal(.wrap)        //自动换行
+     B.tg_left.equal(50%)         //左边间距是剩余的50%
+     horzLayout.addSubview(B)
+     
      */
     public var tg_shrinkType: TGSubviewsShrinkType
     {
@@ -179,12 +258,15 @@ open class TGLinearLayout: TGBaseLayout,TGLinearLayoutViewSizeClass {
     }
     
     //MARK: override method
-    override internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, type:TGSizeClassType) ->(selfSize:CGSize, hasSubLayout:Bool)
+    override internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, sbs:[UIView]!, type:TGSizeClassType) ->(selfSize:CGSize, hasSubLayout:Bool)
     {
-        var (selfSize, hasSubLayout) = super.tgCalcLayoutRect(size, isEstimate:isEstimate, type:type)
+        var (selfSize, hasSubLayout) = super.tgCalcLayoutRect(size, isEstimate:isEstimate, sbs:sbs, type:type)
         
-        
-        let sbs = self.tgGetLayoutSubviews()
+        var sbs:[UIView]! = sbs
+        if sbs == nil
+        {
+            sbs = self.tgGetLayoutSubviews()
+        }
         if self.tg_orientation == .vert
         {
             
@@ -394,7 +476,7 @@ open class TGLinearLayout: TGBaseLayout,TGLinearLayoutViewSizeClass {
         selfSize.height = self.tgValidMeasure(self.tg_height,sbv:self,calcSize:selfSize.height,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
         selfSize.width = self.tgValidMeasure(self.tg_width,sbv:self,calcSize:selfSize.width,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
         
-        return (selfSize,hasSubLayout)
+        return (self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs),hasSubLayout)
         
     }
     
@@ -983,6 +1065,7 @@ extension TGLinearLayout {
         //计算出固定的子视图宽度的总和以及宽度比例总和
         var fixedSizeSbs = [UIView]()
         var fixedSizeWidth:CGFloat = 0
+        var flexedSizeSbs = [UIView]()
         for sbv in sbs
         {
             
@@ -1038,6 +1121,11 @@ extension TGLinearLayout {
                    fixedSizeWidth += vWidth
                    fixedSizeSbs.append(sbv)
                 }
+                
+                if sbv.tg_width.isWrap
+                {
+                    flexedSizeSbs.append(sbv)
+                }
             }
             
             if sbv != sbs.last
@@ -1062,17 +1150,63 @@ extension TGLinearLayout {
         floatingWidth = selfSize.width - fixedWidth - self.tg_leftPadding - self.tg_rightPadding;
         if /*floatingWidth <= 0 || floatingWidth == -0.0*/ _tgCGFloatLessOrEqual(floatingWidth, 0)
         {
-            if self.tg_shrinkType != .none
+            var tempShrinkType = self.tg_shrinkType
+            if tempShrinkType == .auto && flexedSizeSbs.count != 2
+            {
+                tempShrinkType = .none
+            }
+            
+            if tempShrinkType != .none
             {
                 if (fixedSizeSbs.count > 0 && totalWeight != .zeroWeight && floatingWidth < 0 && selfSize.width > 0)
                 {
-                    if self.tg_shrinkType == .average
+                    if tempShrinkType == .average
                     {
                         let averageWidth = floatingWidth / CGFloat(fixedSizeSbs.count)
                         for fsbv in fixedSizeSbs
                         {
                             fsbv.tgFrame.width += averageWidth;
                         }
+                    }
+                    else if tempShrinkType == .auto
+                    {
+                        let leftView = flexedSizeSbs[0]
+                        let rightView = flexedSizeSbs[1]
+                        
+                        let leftWidth = leftView.tgFrame.width
+                        let righWidth = rightView.tgFrame.width
+                        
+                        //如果2个都超过一半则总是一半显示。
+                        //如果1个超过了一半则 如果两个没有超过总宽度则正常显示，如果超过了总宽度则超过一半的视图的宽度等于总宽度减去未超过一半的视图的宽度。
+                        //如果没有一个超过一半。则正常显示
+                        let  layoutWidth = floatingWidth + leftWidth + righWidth
+                        let halfLayoutWidth = layoutWidth / 2
+                        
+                        if leftWidth > halfLayoutWidth && righWidth > halfLayoutWidth
+                        {
+                            leftView.tgFrame.width = halfLayoutWidth
+                            rightView.tgFrame.width = halfLayoutWidth
+                        }
+                        else if ((leftWidth > halfLayoutWidth || righWidth > halfLayoutWidth) && (leftWidth + righWidth > layoutWidth))
+                        {
+                            
+                            if (leftWidth > halfLayoutWidth)
+                            {
+                                rightView.tgFrame.width = righWidth
+                                leftView.tgFrame.width = layoutWidth - righWidth
+                            }
+                            else
+                            {
+                                leftView.tgFrame.width = leftWidth;
+                                rightView.tgFrame.width = layoutWidth - leftWidth
+                            }
+                            
+                        }
+                        else
+                        {
+                            
+                        }
+
                     }
                     else if /*fixedSizeWidth != 0*/ _tgCGFloatNotEqual(fixedSizeWidth, 0)
                     {

@@ -8,6 +8,9 @@
 
 import UIKit
 
+/**
+ *2.UITableView - Static height
+ */
 class AllTest2ViewController: UITableViewController {
 
     static let tablecell = "alltest2cell"

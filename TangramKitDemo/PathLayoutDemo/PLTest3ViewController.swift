@@ -36,7 +36,7 @@ class PLTest3View: TGRelativeLayout {
         circleView.addSubview(numLabel)
         
         let imageView = UIImageView()
-        imageView.image = UIImage.init(named: imageName)
+        imageView.image = UIImage(named: imageName)
         imageView.sizeToFit()
         imageView.tg_centerX.equal(circleView).and().tg_centerY.equal(circleView)
         addSubview(imageView)
@@ -59,6 +59,9 @@ class PLTest3View: TGRelativeLayout {
     }
 }
 
+/**
+ *3.PathLayout - Menu in Circle
+ */
 class PLTest3ViewController: UIViewController {
 
     var myPathLayout: TGPathLayout!
@@ -77,7 +80,7 @@ class PLTest3ViewController: UIViewController {
             (myPathLayout!.bounds.width - 60) / 2 //半径为视图的宽度减去两边的内边距30再除2。这里需要注意block的循环引用的问题。
         }
         
-        let btn = UIButton.init(type: .custom)
+        let btn = UIButton(type: .custom)
         btn.backgroundColor = #colorLiteral(red: 0.6000000238, green: 0.3991502736, blue: 0.3945200147, alpha: 1)
         btn.setTitle("Click me", for: .normal)
         btn.setTitleColor(.white, for: .normal)
@@ -99,7 +102,7 @@ class PLTest3ViewController: UIViewController {
             
             let image = images[Int(arc4random_uniform(UInt32(images.count)))]
             
-            let plView = PLTest3View.init(frame: CGRect.zero,
+            let plView = PLTest3View(frame: CGRect.zero,
                                       imageName: image,
                                           title: title,
                                           index: i)

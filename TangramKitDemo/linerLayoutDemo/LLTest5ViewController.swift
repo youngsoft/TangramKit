@@ -8,6 +8,9 @@
 
 import UIKit
 
+/**
+ *5.LinearLayout - Weight & Relative margin
+ */
 class LLTest5ViewController: UIViewController {
 
     override func viewDidLoad() {

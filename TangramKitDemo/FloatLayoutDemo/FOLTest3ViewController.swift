@@ -17,6 +17,9 @@ class FOLTest3DataModel : NSObject
 }
 
 
+/**
+ *3.FloatLayout - Card news
+ */
 class FOLTest3ViewController: UIViewController {
     
     weak var floatLayout:TGFloatLayout!
