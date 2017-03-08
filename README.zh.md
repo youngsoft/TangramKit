@@ -116,8 +116,7 @@ TangramKit是一套在Swift3.0语言上开发的iOS界面视图布局框架。�
 
 ## 系统结构
  
- ![demo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKit/TangramClass.png)
- 
+ ![demo](TangramKitDemo/Support Files/TangramClass.png)
 
 ### 布局位置类TGLayoutPos
 TGLayoutPos类是用来描述一个视图所在的位置的类。UIView中扩展出了tg_left,tg_top,tg_bottom,tg_right,tg_centerX,tg_centerY这六个变量来实现视图的定位操作。您可以用这些变量的equal方法来设置视图之间的边距和间距。
