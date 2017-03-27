@@ -7,9 +7,9 @@
 [![QQ](https://img.shields.io/badge/QQ-156355113-yellow.svg?style=flat)]()
 [![GitHub stars](https://img.shields.io/github/stars/youngsoft/TangramKit.svg)](https://github.com/youngsoft/TangramKit/stargazers)
 
-![logo](TangramKitDemo/Support Files/logo1.png)
+![logo](TangramKitDemo/Support%20Files/logo1.png)
 
-## TangramKit ![logo](TangramKitDemo/Support Files/logo2.png)
+## TangramKit ![logo](TangramKitDemo/Support%20Files/logo2.png)
 
 TangramKit is a simple and easy Swift framework for iOS view layout. The name comes from Tangram of China which provides some simple functions to build a variety of complex interface. It integrates the functions including: Autolayout and SizeClass of iOS, five layout classes of Android, float and flex-box and bootstrap of HTML/CSS. The TangramKit's objective-C version are named: **[MyLayout](https://github.com/youngsoft/MyLinearLayout)**
 
@@ -26,7 +26,7 @@ TangramKit is a simple and easy Swift framework for iOS view layout. The name co
 *  Subview C's width is filled in to S, height is 40.
 *  Subview D's right margin is 20, width is 50% width of S, height is 40 
 
-![demo](TangramKitDemo/Support Files/usagedemo.png)
+![demo](TangramKitDemo/Support%20Files/usagedemo.png)
 
 
 ```swift
@@ -102,7 +102,7 @@ TangramKit is a simple and easy Swift framework for iOS view layout. The name co
 
 ## Architecture
 
-![demo](TangramKitDemo/Support Files/TangramClass.png)
+![demo](TangramKitDemo/Support%20Files/TangramClass.png)
 
 ### TGLayoutPos
 `TGLayoutPos` is represent to the position of a view. UIView provides six extension variables:tg_left, tg_top, tg_bottom, tg_right, tg_centerX, tg_centerY to set view's margin or space distance between self and others.
