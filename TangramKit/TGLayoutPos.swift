@@ -81,7 +81,8 @@ final public class TGLayoutPos
     //设置位置的值为数值类型，offset是在设置值的基础上的偏移量。
     @discardableResult
     public func equal(_ origin:Int, offset:CGFloat = 0) ->TGLayoutPos
-    {
+    {        
+        
         return self.equal(CGFloat(origin), offset:offset)
     }
     
@@ -157,7 +158,7 @@ final public class TGLayoutPos
     @discardableResult
     public func min(_ val:CGFloat, offset:CGFloat = 0) ->TGLayoutPos
     {
-        _minVal.equal(val, offset:offset)
+        self.minVal.equal(val, offset:offset)
         setNeedLayout()
         return self
     }
@@ -165,7 +166,7 @@ final public class TGLayoutPos
     @discardableResult
     public func min(_ val:TGLayoutPos!, offset:CGFloat = 0) ->TGLayoutPos
     {
-        _minVal.equal(val, offset:offset)
+        self.minVal.equal(val, offset:offset)
         setNeedLayout()
         return self
     }
@@ -186,7 +187,7 @@ final public class TGLayoutPos
     @discardableResult
     public func max(_ val:CGFloat, offset:CGFloat = 0) ->TGLayoutPos
     {
-        _maxVal.equal(val, offset:offset)
+        self.maxVal.equal(val, offset:offset)
         setNeedLayout()
         
         return self
@@ -195,7 +196,7 @@ final public class TGLayoutPos
     @discardableResult
     public func max(_ val:TGLayoutPos!, offset:CGFloat = 0) ->TGLayoutPos
     {
-        _maxVal.equal(val, offset:offset)
+        self.maxVal.equal(val, offset:offset)
         setNeedLayout()
         
         return self
@@ -217,10 +218,8 @@ final public class TGLayoutPos
         _active = true
         _posVal = nil
         _offsetVal = 0
-        _minVal.equal(-CGFloat.greatestFiniteMagnitude)
-        _maxVal.equal(CGFloat.greatestFiniteMagnitude)
-        _minVal._active = true
-        _maxVal._active = true
+        _minVal = nil
+        _maxVal = nil
         setNeedLayout()
     }
     
@@ -239,8 +238,14 @@ final public class TGLayoutPos
             if _active != newValue
             {
                 _active = newValue
-                _minVal._active = newValue
-                _maxVal._active = newValue
+                if _minVal != nil
+                {
+                    _minVal._active = newValue
+                }
+                if _maxVal != nil
+                {
+                    _maxVal._active = newValue
+                }
                 setNeedLayout()
             }
         }
@@ -338,12 +343,23 @@ final public class TGLayoutPos
     //返回设置的下边界值。
     public var minVal:TGLayoutPos
     {
+        if _minVal == nil
+        {
+            _minVal = TGLayoutPos(_type).equal(-CGFloat.greatestFiniteMagnitude)
+            _minVal._active = _active
+        }
         return _minVal
     }
     
     //返回设置的上边界值。
     public var maxVal:TGLayoutPos
     {
+        if _maxVal === nil
+        {
+            _maxVal = TGLayoutPos(_type).equal(CGFloat.greatestFiniteMagnitude)
+            _maxVal._active = _active
+        }
+        
         return _maxVal
     }
     
@@ -361,27 +377,13 @@ final public class TGLayoutPos
     internal var _active:Bool = true
     internal var _posVal:ValueType!
     internal var _offsetVal:CGFloat = 0
-    internal var _minVal:TGLayoutPos!
-    internal var _maxVal:TGLayoutPos!
+    internal var _minVal:TGLayoutPos! = nil
+    internal var _maxVal:TGLayoutPos! = nil
     
-    private init(type:TGGravity, hasBound:Bool)
+    public init(_ type:TGGravity)
     {
         _type = type
-        if (hasBound)
-        {
-            _minVal = TGLayoutPos(type:type,hasBound:false)
-            _maxVal = TGLayoutPos(type:type,hasBound:false)
-            
-            _minVal.equal(-CGFloat.greatestFiniteMagnitude)
-            _maxVal.equal(CGFloat.greatestFiniteMagnitude)
-        }
     }
-    
-    public convenience init(_ type:TGGravity) {
-        
-        self.init(type:type, hasBound:true)
-    }
-    
 
 }
 
@@ -487,7 +489,17 @@ extension TGLayoutPos
     {
         return _view
     }
+
     
+    internal var tgMinVal:TGLayoutPos?
+    {
+        return _minVal
+    }
+
+    internal var tgMaxVal:TGLayoutPos?
+    {
+        return _maxVal
+    }
 
 
     internal var margin:CGFloat
@@ -572,13 +584,22 @@ extension TGLayoutPos:NSCopying
         ls._active = self._active
         ls._posVal = self._posVal
         ls._offsetVal = self._offsetVal
-        ls._minVal._posVal = self._minVal._posVal
-        ls._minVal._offsetVal = self._minVal._offsetVal
-        ls._minVal._active = self._active
-        ls._maxVal._posVal = self._maxVal._posVal
-        ls._maxVal._offsetVal = self._maxVal._offsetVal
-        ls._maxVal._active = self._active
+        if _minVal != nil
+        {
+            ls._minVal = TGLayoutPos(_type)
+            ls._minVal._posVal = _minVal._posVal
+            ls._minVal._offsetVal = _minVal._offsetVal
+            ls._minVal._active = _minVal._active
+        }
         
+        if _maxVal != nil
+        {
+            ls._maxVal = TGLayoutPos(_type)
+            ls._maxVal._posVal = _maxVal._posVal
+            ls._maxVal._offsetVal = _maxVal._offsetVal
+            ls._maxVal._active = _maxVal._active
+        }
+
         return ls
         
     }

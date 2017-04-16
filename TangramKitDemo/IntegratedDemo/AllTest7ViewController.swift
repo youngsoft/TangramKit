@@ -58,6 +58,7 @@ class AllTest7ViewController: UIViewController {
         self.createDemo8(rootLayout)
         self.createDemo9(rootLayout)
         self.createDemo10(rootLayout)
+        self.createDemo11(rootLayout)
     }
     /*
     // MARK: - Navigation
@@ -413,7 +414,7 @@ extension AllTest7ViewController
         
         //如果还没有行则建立第一行，这里的行高是由子视图决定，而列宽则是和表格视图保持一致，但是子视图还需要设置单元格的宽度。
         if tableLayout.tg_rowCount == 0 {
-            _ = tableLayout.tg_addRow(size:TGLayoutSize.wrap, colSize: TGLayoutSize.fill)
+            tableLayout.tg_addRow(size:TGLayoutSize.wrap, colSize: TGLayoutSize.fill).tg_shrinkType = .average
         }
         
         /*
@@ -427,7 +428,7 @@ extension AllTest7ViewController
         //如果有最后一个单元格视图。那么判断这个单元格视图的宽度是不是小于40，如果是则新建立一行。这样当一行内所有的单元格的宽度都小于40时就会自动换行。
         if lastView != nil {
             if lastView!.bounds.width <= 60 {
-                _ = tableLayout.tg_addRow(size:TGLayoutSize.wrap, colSize: TGLayoutSize.fill)
+                tableLayout.tg_addRow(size:TGLayoutSize.wrap, colSize: TGLayoutSize.fill).tg_shrinkType = .average
             }
             else {
                 lastView!.tg_right.equal(nil)
@@ -699,5 +700,54 @@ extension AllTest7ViewController
         
     }
     
+    func createDemo11(_ rootLayout: TGLinearLayout) {
+        
+        //一行内的子视图的间距会根据屏幕尺寸自动缩小。
+        let tipLabel = UILabel()
+        tipLabel.text = "11.下面一个例子展示了当某个布局视图的尺寸能够容纳里面所有子视图的尺寸和间距时就按正常显示，而当尺寸不足以容纳所有子视图的尺寸和间距之和时我们就对子视图之间的间距进行压缩，以便能将所有子视图的内容都显示出来。您可以分别在iPhone4/5/6/6+上以及横竖屏测试效果:"
+        tipLabel.font = CFTool.font(14)
+        tipLabel.adjustsFontSizeToFitWidth = true
+        tipLabel.numberOfLines = 0
+        tipLabel.tg_top.equal(10)
+        tipLabel.tg_height.equal(.wrap)
+        tipLabel.sizeToFit()
+        rootLayout.addSubview(tipLabel)
+        
+        
+        let contentLayout = TGLinearLayout(.horz)
+        contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        contentLayout.tg_height.equal(60)
+        contentLayout.tg_gravity = TGGravity.vert.center
+        
+        contentLayout.backgroundColor = CFTool.color(0)
+        rootLayout.addSubview(contentLayout)
+        
+        
+        contentLayout.tg_hspace = 50;  //默认设定固定间距为50
+        contentLayout.tg_shrinkType = [.space, .average]  //当整体内容的总宽度不超过布局视图的宽度时则正常布局，当布局视图的宽度不能容纳总体宽度时，则会平均缩小子视图之间的间距以保证一行内能容纳下所有的内容。shrinkType支持压缩尺寸和压缩间距两种压缩方法，默认是压缩尺寸。你可以选择.size或者.space来指定当布局尺寸不能容纳内容时是压缩所有子视图之间的间距还是尺寸来实现完美适配。
+        
+               
+        let A = self.createLabel("Objective-C", color:5)
+        A.sizeToFit()
+        //A.tg_left.equal(80)   //您可以解注释这条语句，并将上面的shrinkType设置为MySubviewsShrink_Average或者MySubviewsShrink_Weight查看效果
+        contentLayout.addSubview(A)
+        
+        let B = self.createLabel("Swift",color:6)
+        B.sizeToFit()
+        contentLayout.addSubview(B)
+        
+        let C  = self.createLabel("C++",color:7)
+        C.sizeToFit()
+        contentLayout.addSubview(C)
+        
+        
+        let D = self.createLabel("JAVA", color:8)
+        D.sizeToFit()
+        contentLayout.addSubview(D)
+        
+        
+        
+    }
+
     
 }

@@ -159,11 +159,11 @@ open class TGTableLayout: TGLinearLayout {
         
         if (rowView.tg_orientation == .horz)
         {
-            if (colView.bounds.size.height == 0 && !colView.tg_height.hasValue)
+            if (colView.bounds.size.height == 0 && !(colView.tgHeight?.hasValue ?? false))
             {
                 if let colViewl = colView as? TGBaseLayout
                 {
-                    if (!colViewl.tg_height.isWrap)
+                    if (!(colViewl.tgHeight?.isWrap ?? false))
                     {
                         colView.tg_height.equal(rowView.tg_height);
                     }
@@ -176,12 +176,12 @@ open class TGTableLayout: TGLinearLayout {
         }
         else
         {
-            if (colView.bounds.size.width == 0 && !colView.tg_width.hasValue)
+            if (colView.bounds.size.width == 0 && !(colView.tgWidth?.hasValue ?? false))
             {
                 
                 if let colViewl = colView as? TGBaseLayout
                 {
-                    if (!colViewl.tg_width.isWrap)
+                    if (!(colViewl.tgWidth?.isWrap ?? false))
                     {
                         colView.tg_width.equal(rowView.tg_width)
                     }
@@ -384,13 +384,13 @@ private class TGTableRowLayout: TGLinearLayout,TGTableLayoutViewSizeClass {
         {
             if (orientation == .horz)
             {
-                self.tg_width.equal(nil)
+                self.tgWidth?.equal(nil)
                 self.tg_left.equal(0);
                 self.tg_right.equal(0);
             }
             else
             {
-                self.tg_height.equal(nil)
+                self.tgHeight?.equal(nil)
                 self.tg_top.equal(0);
                 self.tg_bottom.equal(0);
             }

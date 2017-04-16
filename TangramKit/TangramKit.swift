@@ -53,7 +53,7 @@
  
  */
 
-//Current version is 1.0.4, please open: https://github.com/youngsoft/TangramKit/blob/master/CHANGELOG.md to show the changes.
+//Current version is 1.0.5, please open: https://github.com/youngsoft/TangramKit/blob/master/CHANGELOG.md to show the changes.
 
 
 
@@ -132,12 +132,25 @@ public func &(left: TGGravity, right: TGGravity) -> TGGravity {
 /**
  *用来设置当线性布局中的子视图的尺寸大于线性布局的尺寸时的子视图的压缩策略枚举类型定义。请参考线性布局的tg_shrinkType属性的定义。
  */
-public enum TGSubviewsShrinkType:Int
-{
-    case none = 0     //不压缩。
-    case average = 1  //平均压缩,默认是这个值。
-    case weight = 2   //比例压缩。
-    case auto = 4     //自动压缩。这个属性只有在水平线性布局里面并且只有2个子视图的宽度等于.wrap时才有用。这个属性主要用来实现左右两个子视图根据自身内容来进行缩放，以便实现最佳的宽度空间利用
+public struct TGSubviewsShrinkType : OptionSet{
+    public let rawValue :Int
+    public init(rawValue: Int) {self.rawValue = rawValue}
+    
+    //压缩策略
+     //不压缩,默认是这个值
+    public static let none = TGSubviewsShrinkType(rawValue:0)
+    //平均压缩。
+    public static let average = TGSubviewsShrinkType(rawValue:1)
+    //比例压缩。
+    public static let weight = TGSubviewsShrinkType(rawValue:2)
+    //自动压缩。这个属性只有在水平线性布局里面并且只有2个子视图的宽度等于.wrap时才有用。这个属性主要用来实现左右两个子视图根据自身内容来进行缩放，以便实现最佳的宽度空间利用
+    public static let auto = TGSubviewsShrinkType(rawValue:4)
+    
+    //压缩模式
+    //尺寸压缩
+    public static let size = TGSubviewsShrinkType(rawValue:0)
+    //间距压缩
+    public static let space = TGSubviewsShrinkType(rawValue:16)
 }
 
 

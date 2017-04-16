@@ -38,14 +38,14 @@ open class TGFrameLayout: TGBaseLayout,TGFrameLayoutViewSizeClass {
         for sbv in sbs
         {
             
-            if sbv.tg_top.hasValue && sbv.tg_bottom.hasValue
+            if (sbv.tgTop?.hasValue ?? false) && (sbv.tgBottom?.hasValue ?? false)
             {
-                sbv.tg_height._dimeVal = nil
+                sbv.tgHeight?._dimeVal = nil
             }
             
-            if sbv.tg_left.hasValue && sbv.tg_right.hasValue
+            if (sbv.tgLeft?.hasValue ?? false) && (sbv.tgRight?.hasValue ?? false)
             {
-                sbv.tg_width._dimeVal = nil
+                sbv.tgWidth?._dimeVal = nil
             }
             
             if !isEstimate
@@ -58,12 +58,12 @@ open class TGFrameLayout: TGBaseLayout,TGFrameLayoutViewSizeClass {
             if let sbvl = sbv as? TGBaseLayout
             {
                 
-                if (sbvl.tg_width.isWrap || sbvl.tg_height.isWrap)
+                if (sbvl.tgWidth?.isWrap ?? false) || (sbvl.tgHeight?.isWrap ?? false)
                 {
                     hasSubLayout = true
                 }
                 
-                if (isEstimate && (sbvl.tg_width.isWrap || sbvl.tg_height.isWrap))
+                if (isEstimate && ((sbvl.tgWidth?.isWrap ?? false) || (sbvl.tgHeight?.isWrap ?? false)))
                 {
                     _ = sbvl.tg_sizeThatFits(sbvl.tgFrame.frame.size,inSizeClass:type)
                     sbvl.tgFrame.sizeClass = sbvl.tgMatchBestSizeClass(type)
@@ -75,10 +75,10 @@ open class TGFrameLayout: TGBaseLayout,TGFrameLayoutViewSizeClass {
             sbv.tgFrame.frame = self.tgCalcSubviewRect(sbv, rect:sbv.tgFrame.frame, selfSize:selfSize)
             
             //如果子视图的宽度不依赖于父视图则参与最大宽度计算。
-            if !(sbv.tg_left.hasValue && sbv.tg_right.hasValue) &&
-                sbv.tg_width.dimeRelaVal !== self.tg_width &&
-                !sbv.tg_width.isFill &&
-                sbv.tg_width.dimeWeightVal == nil
+            if !((sbv.tgLeft?.hasValue ?? false) && (sbv.tgRight?.hasValue ?? false)) &&
+                (sbv.tgWidth?.dimeRelaVal == nil || sbv.tgWidth!.dimeRelaVal !== self.tgWidth) &&
+                !(sbv.tgWidth?.isFill ?? false) &&
+                sbv.tgWidth?.dimeWeightVal == nil
             {
                 if (maxWidth < sbv.tgFrame.frame.maxX)
                 {
@@ -87,10 +87,10 @@ open class TGFrameLayout: TGBaseLayout,TGFrameLayoutViewSizeClass {
             }
             
             //如果子视图的高度不依赖于父视图则参与最大高度计算。
-            if !(sbv.tg_top.hasValue && sbv.tg_bottom.hasValue) &&
-                sbv.tg_height.dimeRelaVal !== self.tg_height &&
-                !sbv.tg_height.isFill &&
-                sbv.tg_height.dimeWeightVal == nil
+            if !((sbv.tgTop?.hasValue ?? false) && (sbv.tgBottom?.hasValue ?? false)) &&
+                (sbv.tgHeight?.dimeRelaVal == nil || sbv.tgHeight!.dimeRelaVal !== self.tgHeight) &&
+                !(sbv.tgHeight?.isFill ?? false) &&
+                sbv.tgHeight?.dimeWeightVal == nil
             {
                 if (maxHeight < sbv.tgFrame.frame.maxY)
                 {
@@ -101,33 +101,33 @@ open class TGFrameLayout: TGBaseLayout,TGFrameLayoutViewSizeClass {
         }
         
         //如果自身的宽度和高度是包裹属性则尺寸由子视图最大的尺寸给出。
-        if (self.tg_width.isWrap)
+        if (self.tgWidth?.isWrap ?? false)
         {
             selfSize.width = maxWidth + self.tg_rightPadding;
         }
         
-        if (self.tg_height.isWrap)
+        if (self.tgHeight?.isWrap ?? false)
         {
             selfSize.height = maxHeight + self.tg_bottomPadding;
         }
         
-        selfSize.height = self.tgValidMeasure(self.tg_height,sbv:self,calcSize:selfSize.height,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
-        selfSize.width = self.tgValidMeasure(self.tg_width,sbv:self,calcSize:selfSize.width,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
+        selfSize.height = self.tgValidMeasure(self.tgHeight,sbv:self,calcSize:selfSize.height,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
+        selfSize.width = self.tgValidMeasure(self.tgWidth,sbv:self,calcSize:selfSize.width,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
         
         //因为还存在有部分子视图依赖于布局视图尺寸的情况，所以如果布局视图本身是wrap的则需要更新那部分依赖的子视图的尺寸。
-        if (self.tg_width.isWrap || self.tg_height.isWrap)
+        if (self.tgWidth?.isWrap ?? false) || (self.tgHeight?.isWrap ?? false)
         {
             for  sbv:UIView in sbs
             {
                 
-                if (sbv.tg_left.hasValue && sbv.tg_right.hasValue) ||
-                    sbv.tg_width.dimeRelaVal === self.tg_width ||
-                    sbv.tg_width.isFill ||
-                    sbv.tg_width.dimeWeightVal != nil ||
-                    (sbv.tg_top.hasValue && sbv.tg_bottom.hasValue) ||
-                    sbv.tg_height.dimeRelaVal === self.tg_height ||
-                    sbv.tg_height.isFill ||
-                    sbv.tg_height.dimeWeightVal != nil
+                if ((sbv.tgLeft?.hasValue ?? false) && (sbv.tgRight?.hasValue ?? false)) ||
+                    (sbv.tgWidth?.dimeRelaVal != nil && sbv.tgWidth!.dimeRelaVal === self.tgWidth) ||
+                    (sbv.tgWidth?.isFill ?? false) ||
+                    sbv.tgWidth?.dimeWeightVal != nil ||
+                    ((sbv.tgTop?.hasValue ?? false) && (sbv.tgBottom?.hasValue ?? false)) ||
+                    (sbv.tgHeight?.dimeRelaVal != nil && sbv.tgHeight!.dimeRelaVal === self.tgHeight) ||
+                    (sbv.tgHeight?.isFill ?? false) ||
+                    sbv.tgHeight?.dimeWeightVal != nil
                 {
                     sbv.tgFrame.frame = self.tgCalcSubviewRect(sbv,rect:sbv.tgFrame.frame, selfSize:selfSize)
                 }
@@ -148,112 +148,112 @@ extension TGFrameLayout
         
         let selfFloatWidth = selfSize.width - self.tg_leftPadding - self.tg_rightPadding
         let selfFloatHeight = selfSize.height - self.tg_topPadding - self.tg_bottomPadding
-        let leftMargin = sbv.tg_left.realMarginInSize(selfFloatWidth)
-        let rightMargin = sbv.tg_right.realMarginInSize(selfFloatWidth)
-        let topMargin = sbv.tg_top.realMarginInSize(selfFloatHeight)
-        let bottomMargin = sbv.tg_bottom.realMarginInSize(selfFloatHeight)
+        let leftMargin = (sbv.tgLeft?.realMarginInSize(selfFloatWidth) ?? 0)
+        let rightMargin = (sbv.tgRight?.realMarginInSize(selfFloatWidth) ?? 0)
+        let topMargin = (sbv.tgTop?.realMarginInSize(selfFloatHeight) ?? 0)
+        let bottomMargin = (sbv.tgBottom?.realMarginInSize(selfFloatHeight) ?? 0)
         
         var retRect = rect
         
         //明确宽度的情况。
-        if sbv.tg_width.dimeNumVal != nil {
-            retRect.size.width = sbv.tg_width.measure;
+        if sbv.tgWidth?.dimeNumVal != nil {
+            retRect.size.width = sbv.tgWidth!.measure;
         }
-        else if sbv.tg_width.dimeRelaVal != nil && sbv.tg_width.dimeRelaVal.view !== sbv
+        else if sbv.tgWidth?.dimeRelaVal != nil && sbv.tgWidth!.dimeRelaVal.view !== sbv
         {
-            if sbv.tg_width.dimeRelaVal.view === self
+            if sbv.tgWidth!.dimeRelaVal.view === self
             {
-                retRect.size.width =  sbv.tg_width.measure(selfFloatWidth)
+                retRect.size.width =  sbv.tgWidth!.measure(selfFloatWidth)
             }
             else
             {
-                retRect.size.width = sbv.tg_width.measure(sbv.tg_width.dimeRelaVal.view.tg_estimatedFrame.width)
+                retRect.size.width = sbv.tgWidth!.measure(sbv.tgWidth!.dimeRelaVal.view.tg_estimatedFrame.width)
             }
         }
-        else if sbv.tg_width.isFill
+        else if (sbv.tgWidth?.isFill ?? false)
         {
-            retRect.size.width = sbv.tg_width.measure(selfFloatWidth - leftMargin - rightMargin)
+            retRect.size.width = sbv.tgWidth!.measure(selfFloatWidth - leftMargin - rightMargin)
         }
-        else if sbv.tg_width.dimeWeightVal != nil
+        else if sbv.tgWidth?.dimeWeightVal != nil
         {
-            retRect.size.width = sbv.tg_width.measure(selfFloatWidth * sbv.tg_width.dimeWeightVal.rawValue / 100)
+            retRect.size.width = sbv.tgWidth!.measure(selfFloatWidth * sbv.tgWidth!.dimeWeightVal.rawValue / 100)
         }
         
         
         //明确高度的情况
-        if sbv.tg_height.dimeNumVal != nil
+        if sbv.tgHeight?.dimeNumVal != nil
         {
-            retRect.size.height = sbv.tg_height.measure;
+            retRect.size.height = sbv.tgHeight!.measure;
         }
-        else if sbv.tg_height.dimeRelaVal != nil && sbv.tg_height.dimeRelaVal.view != sbv
+        else if sbv.tgHeight?.dimeRelaVal != nil && sbv.tgHeight!.dimeRelaVal.view != sbv
         { //高度依赖其他视图
             
-            if sbv.tg_height.dimeRelaVal.view === self
+            if sbv.tgHeight!.dimeRelaVal.view === self
             {
-                retRect.size.height =  sbv.tg_height.measure(selfFloatHeight)
+                retRect.size.height =  sbv.tgHeight!.measure(selfFloatHeight)
             }
             else
             {
-                retRect.size.height = sbv.tg_height.measure(sbv.tg_height.dimeRelaVal.view.tg_estimatedFrame.height)
+                retRect.size.height = sbv.tgHeight!.measure(sbv.tgHeight!.dimeRelaVal.view.tg_estimatedFrame.height)
             }
             
         }
-        else if sbv.tg_height.isFill
+        else if (sbv.tgHeight?.isFill ?? false)
         {
-            retRect.size.height = sbv.tg_height.measure(selfFloatHeight - topMargin - bottomMargin)
+            retRect.size.height = sbv.tgHeight!.measure(selfFloatHeight - topMargin - bottomMargin)
         }
-        else if (sbv.tg_height.dimeWeightVal != nil)
+        else if (sbv.tgHeight?.dimeWeightVal != nil)
         {//比重高度
-            retRect.size.height = sbv.tg_height.measure(selfFloatHeight * sbv.tg_height.dimeWeightVal.rawValue/100)
+            retRect.size.height = sbv.tgHeight!.measure(selfFloatHeight * sbv.tgHeight!.dimeWeightVal.rawValue/100)
         }
         
         
         //宽度有效性调整。
-        retRect.size.width = self.tgValidMeasure(sbv.tg_width, sbv:sbv, calcSize:retRect.size.width, sbvSize:retRect.size, selfLayoutSize:selfSize)
+        retRect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv:sbv, calcSize:retRect.size.width, sbvSize:retRect.size, selfLayoutSize:selfSize)
         
         //左右位置处理，特殊处理如果设置了左右边距则确定了视图的宽度
         var horz:TGGravity = .none
-        if (sbv.tg_left.hasValue && sbv.tg_right.hasValue)
+        if (sbv.tgLeft?.hasValue ?? false) && (sbv.tgRight?.hasValue ?? false)
         {
             horz = TGGravity.horz.fill;
         }
-        else if (sbv.tg_centerX.hasValue)
+        else if (sbv.tgCenterX?.hasValue ?? false)
         {
             horz = TGGravity.horz.center
         }
-        else if (sbv.tg_left.hasValue)
+        else if (sbv.tgLeft?.hasValue ?? false)
         {
             horz = TGGravity.horz.left
         }
-        else if (sbv.tg_right.hasValue)
+        else if (sbv.tgRight?.hasValue ?? false)
         {
             horz = TGGravity.horz.right
         }
         retRect = self.tgCalcHorzGravity(horz, selfSize:selfSize, sbv: sbv, rect: retRect)
         
         
-        if sbv.tg_height.isFlexHeight
+        if (sbv.tgHeight?.isFlexHeight ?? false)
         {
             retRect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: retRect.size.width)
         }
         
-        retRect.size.height = self.tgValidMeasure(sbv.tg_height,sbv:sbv,calcSize:retRect.size.height,sbvSize:retRect.size, selfLayoutSize:selfSize)
+        retRect.size.height = self.tgValidMeasure(sbv.tgHeight,sbv:sbv,calcSize:retRect.size.height,sbvSize:retRect.size, selfLayoutSize:selfSize)
         
         
         var vert:TGGravity = .none
-        if (sbv.tg_top.hasValue && sbv.tg_bottom.hasValue)
+        if (sbv.tgTop?.hasValue ?? false) && (sbv.tgBottom?.hasValue ?? false)
         {
             vert = TGGravity.vert.fill;
         }
-        else if (sbv.tg_centerY.hasValue)
+        else if (sbv.tgCenterY?.hasValue ?? false)
         {
             vert = TGGravity.vert.center
         }
-        else if (sbv.tg_top.hasValue)
+        else if (sbv.tgTop?.hasValue ?? false)
         {
             vert = TGGravity.vert.top
         }
-        else if (sbv.tg_bottom.hasValue)
+        else if (sbv.tgBottom?.hasValue ?? false)
         {
             vert = TGGravity.vert.bottom
         }
@@ -261,26 +261,26 @@ extension TGFrameLayout
         
         
         //特殊处理宽度等于自身高度的情况。
-        if (sbv.tg_width.dimeRelaVal != nil && sbv.tg_width.dimeRelaVal.view == sbv && sbv.tg_width.dimeRelaVal._type == TGGravity.vert.fill)
+        if (sbv.tgWidth?.dimeRelaVal != nil && sbv.tgWidth!.dimeRelaVal.view == sbv && sbv.tgWidth!.dimeRelaVal._type == TGGravity.vert.fill)
         {
-            retRect.size.width =   self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: sbv.tg_width.measure(retRect.size.height), sbvSize: retRect.size, selfLayoutSize: selfSize)
+            retRect.size.width =   self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: sbv.tgWidth!.measure(retRect.size.height), sbvSize: retRect.size, selfLayoutSize: selfSize)
             
             retRect = self.tgCalcHorzGravity(horz, selfSize:selfSize, sbv: sbv, rect: retRect)
 
         }
         
         //特殊处理高度等于自身宽度的情况。
-        if sbv.tg_height.dimeRelaVal != nil && sbv.tg_height.dimeRelaVal!.view == sbv
+        if sbv.tgHeight?.dimeRelaVal != nil && sbv.tgHeight!.dimeRelaVal.view == sbv
         {
-            retRect.size.height = sbv.tg_height.measure(retRect.size.width)
+            retRect.size.height = sbv.tgHeight!.measure(retRect.size.width)
             
-            if sbv.tg_height.isFlexHeight
+            if (sbv.tgHeight?.isFlexHeight ?? false)
             {
                 retRect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: retRect.size.width)
             }
             
             
-            retRect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: retRect.size.height, sbvSize: retRect.size, selfLayoutSize: selfSize)
+            retRect.size.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: retRect.size.height, sbvSize: retRect.size, selfLayoutSize: selfSize)
             
             retRect = self.tgCalcVertGravity(vert, selfSize:selfSize, sbv: sbv, rect: retRect)
 

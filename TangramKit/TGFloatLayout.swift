@@ -235,12 +235,12 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
             
             if let sbvl:TGBaseLayout = sbv as? TGBaseLayout
             {
-                if sbvl.tg_width.isWrap || sbvl.tg_height.isWrap
+                if (sbvl.tgWidth?.isWrap ?? false) || (sbvl.tgHeight?.isWrap ?? false)
                 {
                    hasSubLayout = true
                 }
                 
-                if isEstimate && (sbvl.tg_width.isWrap || sbvl.tg_height.isWrap)
+                if isEstimate && ((sbvl.tgWidth?.isWrap ?? false) || (sbvl.tgHeight?.isWrap ?? false))
                 {
                     _ = sbvl.tg_sizeThatFits(sbvl.tgFrame.frame.size,inSizeClass:type)
                     sbvl.tgFrame.sizeClass = sbvl.tgMatchBestSizeClass(type) //因为estimateLayoutRect执行后会还原，所以这里要重新设置
@@ -261,8 +261,8 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
         
         
         
-        selfSize.height = self.tgValidMeasure(self.tg_height,sbv:self,calcSize:selfSize.height,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
-        selfSize.width = self.tgValidMeasure(self.tg_width,sbv:self,calcSize:selfSize.width,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
+        selfSize.height = self.tgValidMeasure(self.tgHeight,sbv:self,calcSize:selfSize.height,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
+        selfSize.width = self.tgValidMeasure(self.tgWidth,sbv:self,calcSize:selfSize.width,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
         
         
         return (self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs),hasSubLayout)
@@ -439,7 +439,7 @@ extension TGFloatLayout
         let padding = self.tg_padding;
         var selfSize = selfSize
         var hasBoundaryLimit = true
-        if self.tg_width.isWrap && self.tg_noBoundaryLimit
+        if (self.tgWidth?.isWrap ?? false) && self.tg_noBoundaryLimit
         {
             hasBoundaryLimit = false
         }
@@ -451,46 +451,46 @@ extension TGFloatLayout
         
         
         //遍历所有的子视图，查看是否有子视图的宽度会比视图自身要宽，如果有且有包裹属性则扩充自身的宽度
-        if (self.tg_width.isWrap && hasBoundaryLimit)
+        if ((self.tgWidth?.isWrap ?? false) && hasBoundaryLimit)
         {
             var maxContentWidth = selfSize.width - padding.left - padding.right;
             for sbv in sbs
             {
-                let leftMargin = sbv.tg_left.margin
-                let rightMargin = sbv.tg_right.margin
+                let leftMargin = (sbv.tgLeft?.margin ?? 0)
+                let rightMargin = (sbv.tgRight?.margin ?? 0)
                 
                 var rect = sbv.tgFrame.frame;
                 
                 //这里有可能设置了固定的宽度
-                if (sbv.tg_width.dimeNumVal != nil)
+                if (sbv.tgWidth?.dimeNumVal != nil)
                 {
-                    rect.size.width = sbv.tg_width.measure;
+                    rect.size.width = sbv.tgWidth!.measure;
                 }
                 
                 //有可能宽度是和他的高度相等。
-                if sbv.tg_height === sbv.tg_width.dimeRelaVal
+                if sbv.tgWidth?.dimeRelaVal != nil  && sbv.tgWidth!.dimeRelaVal === sbv.tgHeight
                 {
-                    if (sbv.tg_height.dimeNumVal != nil)
+                    if (sbv.tgHeight?.dimeNumVal != nil)
                     {
-                        rect.size.height = sbv.tg_height.measure;
+                        rect.size.height = sbv.tgHeight!.measure;
                     }
                     
-                    if (sbv.tg_height.dimeRelaVal === self.tg_height)
+                    if (sbv.tgHeight?.dimeRelaVal != nil && sbv.tgHeight!.dimeRelaVal === self.tgHeight)
                     {
-                        rect.size.height = sbv.tg_height.measure(selfSize.height - padding.top - padding.bottom)
+                        rect.size.height = sbv.tgHeight!.measure(selfSize.height - padding.top - padding.bottom)
                     }
                     
-                    rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
-                    rect.size.width = sbv.tg_width.measure(rect.size.height)
+                    rect.size.width = sbv.tgWidth!.measure(rect.size.height)
                 }
                 
-                rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+                rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
                 
                 if (leftMargin + rect.size.width + rightMargin > maxContentWidth &&
-                    sbv.tg_width.dimeRelaVal !== self.tg_width &&
-                    sbv.tg_width.dimeWeightVal == nil &&
-                    !sbv.tg_width.isFill)
+                    (sbv.tgWidth?.dimeRelaVal == nil || sbv.tgWidth!.dimeRelaVal !== self.tgWidth) &&
+                    sbv.tgWidth?.dimeWeightVal == nil &&
+                    !(sbv.tgWidth?.isFill ?? false))
                 {
                     maxContentWidth = leftMargin + rect.size.width + rightMargin;
                 }
@@ -550,13 +550,13 @@ extension TGFloatLayout
         
         for sbv in sbs
         {
-            let topMargin = sbv.tg_top.margin;
-            let leftMargin = sbv.tg_left.margin;
-            let bottomMargin = sbv.tg_bottom.margin;
-            let rightMargin = sbv.tg_right.margin;
+            let topMargin = (sbv.tgTop?.margin ?? 0)
+            let leftMargin = (sbv.tgLeft?.margin ?? 0)
+            let bottomMargin = (sbv.tgBottom?.margin ?? 0)
+            let rightMargin = (sbv.tgRight?.margin ?? 0)
             var rect = sbv.tgFrame.frame;
-            let isWidthWeight = sbv.tg_width.dimeWeightVal != nil || sbv.tg_width.isFill
-            let isHeightWeight = sbv.tg_height.dimeWeightVal != nil || sbv.tg_height.isFill
+            let isWidthWeight = sbv.tgWidth?.dimeWeightVal != nil || (sbv.tgWidth?.isFill ?? false)
+            let isHeightWeight = sbv.tgHeight?.dimeWeightVal != nil || (sbv.tgHeight?.isFill ?? false)
             
             
             if subviewSize != 0
@@ -564,66 +564,66 @@ extension TGFloatLayout
                 rect.size.width = subviewSize
             }
             
-            if (sbv.tg_width.dimeNumVal != nil)
+            if (sbv.tgWidth?.dimeNumVal != nil)
             {
-                rect.size.width = sbv.tg_width.measure;
+                rect.size.width = sbv.tgWidth!.measure;
             }
             
-            if (sbv.tg_height.dimeNumVal != nil)
+            if (sbv.tgHeight?.dimeNumVal != nil)
             {
-                rect.size.height = sbv.tg_height.measure;
+                rect.size.height = sbv.tgHeight!.measure;
             }
             
-            if isHeightWeight && !self.tg_height.isWrap
+            if isHeightWeight && !(self.tgHeight?.isWrap ?? false)
             {
 
-                rect.size.height = sbv.tg_height.measure((selfSize.height - maxHeight - padding.bottom) * (sbv.tg_height.isFill ? 1.0 : sbv.tg_height.dimeWeightVal.rawValue/100) - topMargin - bottomMargin)
+                rect.size.height = sbv.tgHeight!.measure((selfSize.height - maxHeight - padding.bottom) * ((sbv.tgHeight?.isFill ?? false) ? 1.0 : sbv.tgHeight!.dimeWeightVal.rawValue/100) - topMargin - bottomMargin)
             }
             
-            if (sbv.tg_height.dimeRelaVal === self.tg_height && !self.tg_height.isWrap)
+            if (sbv.tgHeight?.dimeRelaVal != nil && sbv.tgHeight!.dimeRelaVal === self.tgHeight && !(self.tgHeight?.isWrap ?? false))
             {
-                rect.size.height = sbv.tg_height.measure(selfSize.height - padding.top - padding.bottom)
+                rect.size.height = sbv.tgHeight!.measure(selfSize.height - padding.top - padding.bottom)
             }
             
-            if (sbv.tg_width.dimeRelaVal === self.tg_width)
+            if (sbv.tgWidth?.dimeRelaVal != nil && sbv.tgWidth!.dimeRelaVal === self.tgWidth)
             {
-                rect.size.width = sbv.tg_width.measure(selfSize.width - padding.left - padding.right)
+                rect.size.width = sbv.tgWidth!.measure(selfSize.width - padding.left - padding.right)
             }
             
-            rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
             
-            if (sbv.tg_height.dimeRelaVal === sbv.tg_width)
+            if (sbv.tgHeight?.dimeRelaVal != nil && sbv.tgHeight!.dimeRelaVal === sbv.tgWidth)
             {
-                rect.size.height = sbv.tg_height.measure(rect.size.width)
+                rect.size.height = sbv.tgHeight!.measure(rect.size.width)
             }
             
-            rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
-            if (sbv.tg_width.dimeRelaVal === sbv.tg_height)
+            if (sbv.tgWidth?.dimeRelaVal != nil && sbv.tgWidth!.dimeRelaVal === sbv.tgHeight)
             {
-                rect.size.width = sbv.tg_width.measure(rect.size.height)
+                rect.size.width = sbv.tgWidth!.measure(rect.size.height)
             }
             
-            if (sbv.tg_width.dimeRelaVal != nil &&  sbv.tg_width.dimeRelaVal.view != nil &&  sbv.tg_width.dimeRelaVal.view != self && sbv.tg_width.dimeRelaVal.view != sbv)
+            if (sbv.tgWidth?.dimeRelaVal != nil &&  sbv.tgWidth!.dimeRelaVal.view != nil &&  sbv.tgWidth!.dimeRelaVal.view != self && sbv.tgWidth!.dimeRelaVal.view != sbv)
             {
-                rect.size.width = sbv.tg_width.measure(sbv.tg_width.dimeRelaVal.view.tgFrame.width)
+                rect.size.width = sbv.tgWidth!.measure(sbv.tgWidth!.dimeRelaVal.view.tgFrame.width)
             }
             
-            if (sbv.tg_height.dimeRelaVal != nil &&  sbv.tg_height.dimeRelaVal.view != nil &&  sbv.tg_height.dimeRelaVal.view != self && sbv.tg_height.dimeRelaVal.view != sbv)
+            if (sbv.tgHeight?.dimeRelaVal != nil &&  sbv.tgHeight!.dimeRelaVal.view != nil &&  sbv.tgHeight!.dimeRelaVal.view != self && sbv.tgHeight!.dimeRelaVal.view != sbv)
             {
-                rect.size.height = sbv.tg_height.measure(sbv.tg_height.dimeRelaVal.view.tgFrame.height)
+                rect.size.height = sbv.tgHeight!.measure(sbv.tgHeight!.dimeRelaVal.view.tgFrame.height)
             }
             
-            rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
             
             //如果高度是浮动的则需要调整高度。
-            if (sbv.tg_height.isFlexHeight)
+            if (sbv.tgHeight?.isFlexHeight ?? false)
             {
                 
                 rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
             }
             
-            rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
             if (sbv.tg_reverseFloat)
             {
@@ -670,25 +670,25 @@ extension TGFloatLayout
                 if isWidthWeight
                 {
                     var widthWeight:CGFloat = 1.0
-                    if sbv.tg_width.dimeWeightVal != nil
+                    if sbv.tgWidth?.dimeWeightVal != nil
                     {
-                        widthWeight = sbv.tg_width.dimeWeightVal.rawValue / 100
+                        widthWeight = sbv.tgWidth!.dimeWeightVal.rawValue / 100
                     }
                     
-                    rect.size.width =  self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: (nextPoint.x - leftCandidateXBoundary + sbv.tg_width.addVal) * widthWeight - leftMargin - rightMargin, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.width =  self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: (nextPoint.x - leftCandidateXBoundary + sbv.tgWidth!.addVal) * widthWeight - leftMargin - rightMargin, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
-                    if (sbv.tg_height.dimeRelaVal === sbv.tg_width)
+                    if (sbv.tgHeight?.dimeRelaVal != nil && sbv.tgHeight!.dimeRelaVal === sbv.tgWidth)
                     {
-                        rect.size.height = sbv.tg_height.measure(rect.size.width)
+                        rect.size.height = sbv.tgHeight!.measure(rect.size.width)
                     }
                     
-                    if (sbv.tg_height.isFlexHeight)
+                    if (sbv.tgHeight?.isFlexHeight ?? false)
                     {
                         
                         rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
                     }
                     
-                    rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
                 }
                 
                 
@@ -798,26 +798,26 @@ extension TGFloatLayout
                     
                     
                     var widthWeight:CGFloat = 1.0
-                    if sbv.tg_width.dimeWeightVal != nil
+                    if sbv.tgWidth?.dimeWeightVal != nil
                     {
-                        widthWeight = sbv.tg_width.dimeWeightVal.rawValue / 100
+                        widthWeight = sbv.tgWidth!.dimeWeightVal.rawValue / 100
                     }
 
                     
-                    rect.size.width =  self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: (rightCandidateXBoundary - nextPoint.x + sbv.tg_width.addVal) * widthWeight - leftMargin - rightMargin, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.width =  self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: (rightCandidateXBoundary - nextPoint.x + sbv.tgWidth!.addVal) * widthWeight - leftMargin - rightMargin, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
-                    if (sbv.tg_height.dimeRelaVal === sbv.tg_width)
+                    if (sbv.tgHeight?.dimeRelaVal != nil && sbv.tgHeight!.dimeRelaVal === sbv.tgWidth)
                     {
-                        rect.size.height = sbv.tg_height.measure(rect.size.width)
+                        rect.size.height = sbv.tgHeight!.measure(rect.size.width)
                     }
                     
-                    if (sbv.tg_height.isFlexHeight)
+                    if (sbv.tgHeight?.isFlexHeight ?? false)
                     {
                         
                         rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
                     }
                     
-                    rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
                 }
                 
@@ -901,7 +901,7 @@ extension TGFloatLayout
             selfSize.width = maxWidth
         }
         
-        if (self.tg_height.isWrap)
+        if (self.tgHeight?.isWrap ?? false)
         {
             selfSize.height = maxHeight
         }
@@ -938,7 +938,7 @@ extension TGFloatLayout
         var selfSize = selfSize
         
         var hasBoundaryLimit = true
-        if (self.tg_height.isWrap && self.tg_noBoundaryLimit)
+        if ((self.tgHeight?.isWrap ?? false) && self.tg_noBoundaryLimit)
         {
             hasBoundaryLimit = false
         }
@@ -949,56 +949,56 @@ extension TGFloatLayout
         }
         
         //遍历所有的子视图，查看是否有子视图的宽度会比视图自身要宽，如果有且有包裹属性则扩充自身的宽度
-        if (self.tg_height.isWrap && hasBoundaryLimit)
+        if ((self.tgHeight?.isWrap ?? false) && hasBoundaryLimit)
         {
             var maxContentHeight = selfSize.height - padding.top - padding.bottom;
             for sbv in sbs
             {
-                let topMargin = sbv.tg_top.margin;
-                let bottomMargin = sbv.tg_bottom.margin;
+                let topMargin = (sbv.tgTop?.margin ?? 0)
+                let bottomMargin = (sbv.tgBottom?.margin ?? 0)
                 var rect = sbv.tgFrame.frame;
                 
                 
                 //这里有可能设置了固定的高度
-                if (sbv.tg_height.dimeNumVal != nil)
+                if (sbv.tgHeight?.dimeNumVal != nil)
                 {
-                    rect.size.height = sbv.tg_height.measure;
+                    rect.size.height = sbv.tgHeight!.measure
                 }
                 
-                rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+                rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
                 
                 //有可能高度是和他的宽度相等。
-                if (sbv.tg_height.dimeRelaVal === sbv.tg_width)
+                if (sbv.tgHeight?.dimeRelaVal != nil && sbv.tgHeight!.dimeRelaVal === sbv.tgWidth)
                 {
                     
-                    if (sbv.tg_width.dimeNumVal != nil)
+                    if (sbv.tgWidth?.dimeNumVal != nil)
                     {
-                        rect.size.width = sbv.tg_width.measure;
+                        rect.size.width = sbv.tgWidth!.measure;
                     }
                     
-                    if (sbv.tg_width.dimeRelaVal === self.tg_width)
+                    if (sbv.tgWidth?.dimeRelaVal != nil && sbv.tgWidth!.dimeRelaVal === self.tgWidth)
                     {
-                        rect.size.width = sbv.tg_width.measure(selfSize.width - padding.left - padding.right)
+                        rect.size.width = sbv.tgWidth!.measure(selfSize.width - padding.left - padding.right)
                     }
                     
-                    rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
                     
-                    rect.size.height = sbv.tg_height.measure(rect.size.width)
+                    rect.size.height = sbv.tgHeight!.measure(rect.size.width)
                 }
                 
-                if (sbv.tg_height.isFlexHeight)
+                if (sbv.tgHeight?.isFlexHeight ?? false)
                 {
                     
                     rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
                 }
                 
-                rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+                rect.size.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
                 
                 if (topMargin + rect.size.height + bottomMargin > maxContentHeight &&
-                    sbv.tg_height.dimeRelaVal !== self.tg_height &&
-                    sbv.tg_height.dimeWeightVal == nil &&
-                    !sbv.tg_height.isFill)
+                    (sbv.tgHeight?.dimeRelaVal == nil || sbv.tgHeight!.dimeRelaVal !== self.tgHeight) &&
+                    sbv.tgHeight?.dimeWeightVal == nil &&
+                    !(sbv.tgHeight?.isFill ?? false))
                 {
                     maxContentHeight = topMargin + rect.size.height + bottomMargin;
                 }
@@ -1062,18 +1062,18 @@ extension TGFloatLayout
         
         for sbv in sbs
         {
-            let  topMargin = sbv.tg_top.margin;
-            let leftMargin = sbv.tg_left.margin;
-            let bottomMargin = sbv.tg_bottom.margin;
-            let rightMargin = sbv.tg_right.margin;
+            let  topMargin = (sbv.tgTop?.margin ?? 0)
+            let leftMargin = (sbv.tgLeft?.margin ?? 0)
+            let bottomMargin = (sbv.tgBottom?.margin ?? 0)
+            let rightMargin = (sbv.tgRight?.margin ?? 0)
             var rect = sbv.tgFrame.frame;
-            let isHeightWeight = sbv.tg_height.dimeWeightVal != nil || sbv.tg_height.isFill
-            let isWidthWeight = sbv.tg_width.dimeWeightVal != nil || sbv.tg_width.isFill
+            let isHeightWeight = sbv.tgHeight?.dimeWeightVal != nil || (sbv.tgHeight?.isFill ?? false)
+            let isWidthWeight = sbv.tgWidth?.dimeWeightVal != nil || (sbv.tgWidth?.isFill ?? false)
             
             
-            if (sbv.tg_width.dimeNumVal != nil)
+            if (sbv.tgWidth?.dimeNumVal != nil)
             {
-                rect.size.width = sbv.tg_width.measure;
+                rect.size.width = sbv.tgWidth!.measure;
             }
             
             if subviewSize != 0
@@ -1081,59 +1081,59 @@ extension TGFloatLayout
                 rect.size.height = subviewSize
             }
             
-            if (sbv.tg_height.dimeNumVal != nil)
+            if (sbv.tgHeight?.dimeNumVal != nil)
             {
-                rect.size.height = sbv.tg_height.measure;
+                rect.size.height = sbv.tgHeight!.measure;
             }
             
-            if (sbv.tg_height.dimeRelaVal === self.tg_height)
+            if (sbv.tgHeight?.dimeRelaVal != nil && sbv.tgHeight!.dimeRelaVal === self.tgHeight)
             {
-                rect.size.height = sbv.tg_height.measure(selfSize.height - padding.top - padding.bottom)
+                rect.size.height = sbv.tgHeight!.measure(selfSize.height - padding.top - padding.bottom)
             }
             
-            if (sbv.tg_width.dimeRelaVal === self.tg_width && !self.tg_width.isWrap)
+            if (sbv.tgWidth?.dimeRelaVal != nil && sbv.tgWidth!.dimeRelaVal === self.tgWidth && !(self.tgWidth?.isWrap ?? false))
             {
-                rect.size.width = sbv.tg_width.measure(selfSize.width - padding.left - padding.right)
+                rect.size.width = sbv.tgWidth!.measure(selfSize.width - padding.left - padding.right)
             }
             
-            if isWidthWeight && !self.tg_width.isWrap
+            if isWidthWeight && !(self.tgWidth?.isWrap ?? false)
             {
-                rect.size.width = sbv.tg_width.measure((selfSize.width - maxWidth - padding.right) * (sbv.tg_width.isFill ? 1.0 : sbv.tg_width.dimeWeightVal.rawValue/100) - leftMargin - rightMargin)
+                rect.size.width = sbv.tgWidth!.measure((selfSize.width - maxWidth - padding.right) * (sbv.tgWidth!.isFill ? 1.0 : sbv.tgWidth!.dimeWeightVal.rawValue/100) - leftMargin - rightMargin)
 
             }
             
-            rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
             
-            if (sbv.tg_height.dimeRelaVal === sbv.tg_width)
+            if (sbv.tgHeight?.dimeRelaVal != nil && sbv.tgHeight!.dimeRelaVal === sbv.tgWidth)
             {
-                rect.size.height = sbv.tg_height.measure(rect.size.width)
+                rect.size.height = sbv.tgHeight!.measure(rect.size.width)
             }
             
-            rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
-            if (sbv.tg_width.dimeRelaVal === sbv.tg_height)
+            if (sbv.tgWidth?.dimeRelaVal != nil && sbv.tgWidth!.dimeRelaVal === sbv.tgHeight)
             {
-                rect.size.width = sbv.tg_width.measure(rect.size.height)
+                rect.size.width = sbv.tgWidth!.measure(rect.size.height)
             }
             
-            if (sbv.tg_width.dimeRelaVal != nil &&  sbv.tg_width.dimeRelaVal.view != nil &&  sbv.tg_width.dimeRelaVal.view != self && sbv.tg_width.dimeRelaVal.view != sbv)
+            if (sbv.tgWidth?.dimeRelaVal != nil &&  sbv.tgWidth!.dimeRelaVal.view != nil &&  sbv.tgWidth!.dimeRelaVal.view != self && sbv.tgWidth!.dimeRelaVal.view != sbv)
             {
-                rect.size.width = sbv.tg_width.measure(sbv.tg_width.dimeRelaVal.view.tgFrame.width)
+                rect.size.width = sbv.tgWidth!.measure(sbv.tgWidth!.dimeRelaVal.view.tgFrame.width)
             }
             
-            if (sbv.tg_height.dimeRelaVal != nil &&  sbv.tg_height.dimeRelaVal.view != nil &&  sbv.tg_height.dimeRelaVal.view != self && sbv.tg_height.dimeRelaVal.view != sbv)
+            if (sbv.tgHeight?.dimeRelaVal != nil &&  sbv.tgHeight!.dimeRelaVal.view != nil &&  sbv.tgHeight!.dimeRelaVal.view != self && sbv.tgHeight!.dimeRelaVal.view != sbv)
             {
-                rect.size.height = sbv.tg_height.measure(sbv.tg_height.dimeRelaVal.view.tgFrame.height)
+                rect.size.height = sbv.tgHeight!.measure(sbv.tgHeight!.dimeRelaVal.view.tgFrame.height)
             }
             
             
             //如果高度是浮动的则需要调整高度。
-            if (sbv.tg_height.isFlexHeight)
+            if (sbv.tgHeight?.isFlexHeight ?? false)
             {
                 rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
             }
             
-            rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
             if (sbv.tg_reverseFloat)
             {
@@ -1179,16 +1179,16 @@ extension TGFloatLayout
                 {
                     
                     var heightWeight:CGFloat = 1.0
-                    if sbv.tg_height.dimeWeightVal != nil
+                    if sbv.tgHeight?.dimeWeightVal != nil
                     {
-                        heightWeight = sbv.tg_height.dimeWeightVal.rawValue/100
+                        heightWeight = sbv.tgHeight!.dimeWeightVal.rawValue/100
                     }
                     
-                    rect.size.height =  self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: (nextPoint.y - topCandidateYBoundary + sbv.tg_height.addVal) * heightWeight - topMargin - bottomMargin, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.height =  self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: (nextPoint.y - topCandidateYBoundary + sbv.tgHeight!.addVal) * heightWeight - topMargin - bottomMargin, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
-                    if (sbv.tg_width.dimeRelaVal === sbv.tg_height)
+                    if (sbv.tgWidth?.dimeRelaVal != nil && sbv.tgWidth!.dimeRelaVal === sbv.tgHeight)
                     {
-                        rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: sbv.tg_width.measure(rect.size.height), sbvSize: rect.size, selfLayoutSize: selfSize)
+                        rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: sbv.tgWidth!.measure(rect.size.height), sbvSize: rect.size, selfLayoutSize: selfSize)
                     }
                     
                 }
@@ -1296,16 +1296,16 @@ extension TGFloatLayout
                     
                     
                     var heightWeight:CGFloat = 1.0
-                    if sbv.tg_height.dimeWeightVal != nil
+                    if sbv.tgHeight?.dimeWeightVal != nil
                     {
-                        heightWeight = sbv.tg_height.dimeWeightVal.rawValue/100
+                        heightWeight = sbv.tgHeight!.dimeWeightVal.rawValue/100
                     }
                     
-                    rect.size.height =  self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: (bottomCandidateYBoundary - nextPoint.y + sbv.tg_height.addVal) * heightWeight - topMargin - bottomMargin, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.height =  self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: (bottomCandidateYBoundary - nextPoint.y + sbv.tgHeight!.addVal) * heightWeight - topMargin - bottomMargin, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
-                    if (sbv.tg_width.dimeRelaVal === sbv.tg_height)
+                    if (sbv.tgWidth?.dimeRelaVal != nil && sbv.tgWidth!.dimeRelaVal === sbv.tgHeight)
                     {
-                        rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: sbv.tg_width.measure(rect.size.height), sbvSize: rect.size, selfLayoutSize: selfSize)
+                        rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: sbv.tgWidth!.measure(rect.size.height), sbvSize: rect.size, selfLayoutSize: selfSize)
                     }
                     
                     
@@ -1393,7 +1393,7 @@ extension TGFloatLayout
             selfSize.height = maxHeight
         }
         
-        if (self.tg_width.isWrap)
+        if (self.tgWidth?.isWrap ?? false)
         {
             selfSize.width = maxWidth;
         }

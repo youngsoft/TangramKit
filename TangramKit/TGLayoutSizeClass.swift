@@ -221,22 +221,94 @@ internal class TGViewSizeClassImpl:NSObject,NSCopying,TGViewSizeClass {
         super.init()
     }
     
-    var tg_left = TGLayoutPos(TGGravity.horz.left)
-    var tg_top = TGLayoutPos(TGGravity.vert.top)
-    var tg_right = TGLayoutPos(TGGravity.horz.right)
-    var tg_bottom = TGLayoutPos(TGGravity.vert.bottom)
-    var tg_centerX = TGLayoutPos(TGGravity.horz.center)
-    var tg_centerY = TGLayoutPos(TGGravity.vert.center)
+    var tg_left:TGLayoutPos {
     
-    var tg_width = TGLayoutSize(TGGravity.horz.fill)
-    var tg_height = TGLayoutSize(TGGravity.vert.fill)
+        if tgLeft == nil
+        {
+            tgLeft = TGLayoutPos(TGGravity.horz.left)
+        }
+        
+        return tgLeft!
+    }
     
+    var tg_top:TGLayoutPos
+    {
+        if tgTop == nil
+        {
+            tgTop = TGLayoutPos(TGGravity.vert.top)
+        }
+        
+        return tgTop!
+    }
+    
+    var tg_right:TGLayoutPos
+    {
+        if tgRight == nil
+        {
+            tgRight = TGLayoutPos(TGGravity.horz.right)
+        }
+        
+        return tgRight!
+    }
+
+    var tg_bottom:TGLayoutPos
+    {
+        if tgBottom == nil
+        {
+            tgBottom = TGLayoutPos(TGGravity.vert.bottom)
+        }
+        
+        return tgBottom!
+    }
+
+
+    var tg_centerX:TGLayoutPos
+    {
+        if tgCenterX == nil
+        {
+            tgCenterX = TGLayoutPos(TGGravity.horz.center)
+        }
+        
+        return tgCenterX!
+    }
+
+    var tg_centerY:TGLayoutPos
+    {
+        if tgCenterY == nil
+        {
+            tgCenterY = TGLayoutPos(TGGravity.vert.center)
+        }
+        
+        return tgCenterY!
+    }
+
+    var tg_width:TGLayoutSize
+    {
+        if tgWidth == nil
+        {
+            tgWidth = TGLayoutSize(TGGravity.horz.fill)
+        }
+        
+        return tgWidth!
+    }
+    
+    var tg_height:TGLayoutSize
+    {
+        if tgHeight == nil
+        {
+            tgHeight = TGLayoutSize(TGGravity.vert.fill)
+        }
+        
+        return tgHeight!
+    }
+
+
     var tg_useFrame:Bool = false
     var tg_noLayout:Bool = false
     var isHidden:Bool = false
     
-    var tg_reverseFloat:Bool = false
-    var tg_clearFloat:Bool = false
+    lazy var tg_reverseFloat:Bool = false
+    lazy var tg_clearFloat:Bool = false
     
     var tgLayoutCompletedAction:((_ layout:TGBaseLayout,_ view:UIView)->Void)? = nil
 
@@ -244,14 +316,39 @@ internal class TGViewSizeClassImpl:NSObject,NSCopying,TGViewSizeClass {
     {
         let tsc:TGViewSizeClassImpl = type(of: self).init()
         
-        tsc.tg_left = self.tg_left.copy() as! TGLayoutPos
-        tsc.tg_top = self.tg_top.copy() as! TGLayoutPos
-        tsc.tg_right = self.tg_right.copy() as! TGLayoutPos
-        tsc.tg_bottom = self.tg_bottom.copy() as! TGLayoutPos
-        tsc.tg_centerX = self.tg_centerX.copy() as! TGLayoutPos
-        tsc.tg_centerY = self.tg_centerY.copy() as! TGLayoutPos
-        tsc.tg_width = self.tg_width.copy() as! TGLayoutSize
-        tsc.tg_height = self.tg_height.copy() as! TGLayoutSize
+        if self.tgLeft != nil
+        {
+            tsc.tgLeft = self.tgLeft!.copy() as? TGLayoutPos
+        }
+        if self.tgRight != nil
+        {
+            tsc.tgRight = self.tgRight!.copy() as? TGLayoutPos
+        }
+        if self.tgTop != nil
+        {
+            tsc.tgTop = self.tgTop!.copy() as? TGLayoutPos
+        }
+        if self.tgBottom != nil
+        {
+            tsc.tgBottom = self.tgBottom!.copy() as? TGLayoutPos
+        }
+        if self.tgCenterX != nil
+        {
+            tsc.tgCenterX = self.tgCenterX!.copy() as? TGLayoutPos
+        }
+        if self.tgCenterY != nil
+        {
+            tsc.tgCenterY = self.tgCenterY!.copy() as? TGLayoutPos
+        }
+        if self.tgWidth != nil
+        {
+            tsc.tgWidth = self.tgWidth!.copy() as? TGLayoutSize
+        }
+        if self.tgHeight != nil
+        {
+            tsc.tgHeight = self.tgHeight!.copy() as? TGLayoutSize
+        }
+      
         tsc.tg_useFrame = self.tg_useFrame
         tsc.tg_noLayout = self.tg_noLayout
         tsc.isHidden = self.isHidden
@@ -260,6 +357,16 @@ internal class TGViewSizeClassImpl:NSObject,NSCopying,TGViewSizeClass {
 
         return tsc
     }
+    
+    
+    internal lazy var tgLeft:TGLayoutPos? = nil
+    internal lazy var tgTop:TGLayoutPos? = nil
+    internal lazy var tgRight:TGLayoutPos? = nil
+    internal lazy var tgBottom:TGLayoutPos? = nil
+    internal lazy var tgCenterX:TGLayoutPos? = nil
+    internal lazy var tgCenterY:TGLayoutPos? = nil
+    internal lazy var tgWidth:TGLayoutSize? = nil
+    internal lazy var tgHeight:TGLayoutSize? = nil
 }
 
 
@@ -369,7 +476,7 @@ internal class TGSequentLayoutViewSizeClassImpl:TGLayoutViewSizeClassImpl,TGSequ
 
 internal class TGLinearLayoutViewSizeClassImpl:TGSequentLayoutViewSizeClassImpl,TGLinearLayoutViewSizeClass
 {
-    var tg_shrinkType: TGSubviewsShrinkType = .average
+    var tg_shrinkType: TGSubviewsShrinkType = .none
     
     override func copy(with zone: NSZone?) -> Any {
         

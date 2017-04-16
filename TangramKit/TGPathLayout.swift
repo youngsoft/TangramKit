@@ -724,11 +724,11 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             
             if sbv.isKind(of: TGBaseLayout.self){
                 let sbv1 = sbv as! TGBaseLayout
-                if hasSubLayout && (sbv1.tg_width.isWrap || sbv1.tg_height.isWrap){
+                if hasSubLayout && ((sbv1.tgWidth?.isWrap ?? false) || (sbv1.tgHeight?.isWrap ?? false)){
                     hasSubLayout = true
                 }
                 
-                if isEstimate && (sbv1.tg_width.isWrap || sbv1.tg_height.isWrap){
+                if isEstimate && ((sbv1.tgWidth?.isWrap ?? false) || (sbv1.tgHeight?.isWrap ?? false)){
                     _ = sbv1.tg_sizeThatFits(sbv1.tgFrame.frame.size, inSizeClass: type)
                     sbv1.tgFrame.sizeClass = sbv1.tgMatchBestSizeClass(type)
                     //因为tg_sizeThatFits执行后会还原，所以这里要重新设置
@@ -769,41 +769,41 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             //计算得到最大的高度和最大的宽度。
             var rect = sbv.tgFrame.frame
             
-            if sbv.tg_width.dimeNumVal != nil{
-                rect.size.width = sbv.tg_width.measure
+            if sbv.tgWidth?.dimeNumVal != nil{
+                rect.size.width = sbv.tgWidth!.measure
             }
             
-            if sbv.tg_width.dimeRelaVal != nil{
-                if sbv.tg_width.dimeRelaVal === tg_width{
-                    rect.size.width =  sbv.tg_width.measure(selfSize.width - tg_leftPadding - tg_rightPadding)
+            if sbv.tgWidth?.dimeRelaVal != nil{
+                if sbv.tgWidth!.dimeRelaVal === self.tgWidth{
+                    rect.size.width =  sbv.tgWidth!.measure(selfSize.width - tg_leftPadding - tg_rightPadding)
                 }else{
-                    rect.size.width = sbv.tg_width.measure(sbv.tg_width.dimeRelaVal._view.tg_estimatedFrame.size.width)
+                    rect.size.width = sbv.tgWidth!.measure(sbv.tgWidth!.dimeRelaVal._view.tg_estimatedFrame.size.width)
                 }
             }
             
-            rect.size.width = tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.width = tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
             
-            if sbv.tg_height.dimeNumVal != nil{
-                rect.size.height = sbv.tg_height.measure
+            if sbv.tgHeight?.dimeNumVal != nil{
+                rect.size.height = sbv.tgHeight!.measure
             }
             
-            if sbv.tg_height.dimeRelaVal != nil{
-                if sbv.tg_height.dimeRelaVal === tg_height{
-                    rect.size.height = sbv.tg_height.measure(selfSize.height - tg_topPadding - tg_bottomPadding)
+            if sbv.tgHeight?.dimeRelaVal != nil{
+                if sbv.tgHeight!.dimeRelaVal === self.tgHeight{
+                    rect.size.height = sbv.tgHeight!.measure(selfSize.height - tg_topPadding - tg_bottomPadding)
                 }else{
-                    rect.size.height = sbv.tg_height.measure(sbv.tg_height.dimeRelaVal._view.tg_estimatedFrame.size.height)
+                    rect.size.height = sbv.tgHeight!.measure(sbv.tgHeight!.dimeRelaVal._view.tg_estimatedFrame.size.height)
                 }
             }
             
-            if (sbv.tg_height.isFlexHeight){
+            if (sbv.tgHeight?.isFlexHeight ?? false){
                 rect.size.height = tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
             }
             
-            rect.size.height = tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.height = tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
             //中心点的位置。。
-            rect.origin.x = pt.x - rect.size.width * sbv.layer.anchorPoint.x + sbv.tg_left.margin
-            rect.origin.y = pt.y - rect.size.height * sbv.layer.anchorPoint.y + sbv.tg_top.margin
+            rect.origin.x = pt.x - rect.size.width * sbv.layer.anchorPoint.x + (sbv.tgLeft?.margin ?? 0)
+            rect.origin.y = pt.y - rect.size.height * sbv.layer.anchorPoint.y + (sbv.tgTop?.margin ?? 0)
            
             if (rect.minY < minYPos)
             {
@@ -832,41 +832,41 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
         if let sbv = tg_originView{
             var rect = sbv.tgFrame.frame
             
-            if sbv.tg_width.dimeNumVal != nil{
-                rect.size.width = sbv.tg_width.measure
+            if sbv.tgWidth?.dimeNumVal != nil{
+                rect.size.width = sbv.tgWidth!.measure
             }
             
-            if sbv.tg_width.dimeRelaVal != nil{
-                if sbv.tg_width.dimeRelaVal === tg_width{
-                    rect.size.width = sbv.tg_width.measure(selfSize.width - tg_leftPadding - tg_rightPadding)
+            if sbv.tgWidth?.dimeRelaVal != nil{
+                if sbv.tgWidth!.dimeRelaVal === self.tgWidth{
+                    rect.size.width = sbv.tgWidth!.measure(selfSize.width - tg_leftPadding - tg_rightPadding)
                 }else{
-                    rect.size.width = sbv.tg_width.measure(sbv.tg_width.dimeRelaVal._view.tg_estimatedFrame.size.width)
+                    rect.size.width = sbv.tgWidth!.measure(sbv.tgWidth!.dimeRelaVal._view.tg_estimatedFrame.size.width)
                 }
             }
             
-            rect.size.width = tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.width = tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
             
-            if (sbv.tg_height.dimeNumVal != nil){
-                rect.size.height = sbv.tg_height.measure
+            if (sbv.tgHeight?.dimeNumVal != nil){
+                rect.size.height = sbv.tgHeight!.measure
             }
             
-            if (sbv.tg_height.dimeRelaVal != nil){
-                if (sbv.tg_height.dimeRelaVal === tg_height){
-                    rect.size.height = sbv.tg_height.measure(selfSize.height - tg_topPadding - tg_bottomPadding)
+            if (sbv.tgHeight?.dimeRelaVal != nil){
+                if (sbv.tgHeight!.dimeRelaVal === self.tgHeight){
+                    rect.size.height = sbv.tgHeight!.measure(selfSize.height - tg_topPadding - tg_bottomPadding)
                 }else{
-                    rect.size.height = sbv.tg_height.measure(sbv.tg_height.dimeRelaVal._view.tg_estimatedFrame.size.height)
+                    rect.size.height = sbv.tgHeight!.measure(sbv.tgHeight!.dimeRelaVal._view.tg_estimatedFrame.size.height)
                 }
             }
             
-            if (sbv.tg_height.isFlexHeight){
+            if (sbv.tgHeight?.isFlexHeight ?? false){
                 rect.size.height = tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
             }
             
-            rect.size.height = tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.height = tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
             //位置在原点位置。。
-            rect.origin.x = (selfSize.width - tg_leftPadding - tg_rightPadding)*tg_coordinateSetting.origin.x - rect.size.width / 2 + sbv.tg_left.margin + tg_leftPadding
-            rect.origin.y = (selfSize.height - tg_topPadding - tg_bottomPadding)*tg_coordinateSetting.origin.y - rect.size.height / 2 + sbv.tg_top.margin + tg_topPadding
+            rect.origin.x = (selfSize.width - tg_leftPadding - tg_rightPadding)*tg_coordinateSetting.origin.x - rect.size.width / 2 + (sbv.tgLeft?.margin ?? 0) + tg_leftPadding
+            rect.origin.y = (selfSize.height - tg_topPadding - tg_bottomPadding)*tg_coordinateSetting.origin.y - rect.size.height / 2 + (sbv.tgTop?.margin ?? 0) + tg_topPadding
             
             if (rect.minY < minYPos)
             {
@@ -912,17 +912,17 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
         }
  
         
-        if (tg_width.isWrap){
+        if (self.tgWidth?.isWrap ?? false){
             selfSize.width = maxXPos - minXPos // + tg_leftPadding + tg_rightPadding
         }
         
-        if (tg_height.isWrap){
+        if (self.tgHeight?.isWrap ?? false){
             selfSize.height = maxYPos - minYPos // + tg_topPadding + tg_bottomPadding
         }
         
-        selfSize.height = tgValidMeasure(tg_height, sbv: self, calcSize: selfSize.height, sbvSize: selfSize, selfLayoutSize: superview!.bounds.size)
+        selfSize.height = tgValidMeasure(self.tgHeight, sbv: self, calcSize: selfSize.height, sbvSize: selfSize, selfLayoutSize: superview!.bounds.size)
         
-        selfSize.width = tgValidMeasure(tg_width, sbv: self, calcSize: selfSize.width, sbvSize: selfSize, selfLayoutSize: superview!.bounds.size)
+        selfSize.width = tgValidMeasure(self.tgWidth, sbv: self, calcSize: selfSize.width, sbvSize: selfSize, selfLayoutSize: superview!.bounds.size)
     
         return (self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs2),hasSubLayout)
     }

@@ -280,21 +280,21 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
             {
                 hasSubLayout = true
                 
-                if (sbvl.tg_width.isWrap)
+                if (sbvl.tgWidth?.isWrap ?? false)
                 {
                     if ((self.tg_orientation == .horz && (self.tg_arrangedGravity & TGGravity.vert.mask) == TGGravity.horz.fill) ||
                         (self.tg_orientation == .vert && ((self.tg_gravity & TGGravity.vert.mask) == TGGravity.horz.fill)))
                     {
-                        sbvl.tg_width._dimeVal = nil
+                        sbvl.tgWidth!._dimeVal = nil
                     }
                 }
                 
-                if (sbvl.tg_height.isWrap)
+                if (sbvl.tgHeight?.isWrap ?? false)
                 {
                     if ((self.tg_orientation == .vert && (self.tg_arrangedGravity & TGGravity.horz.mask) == TGGravity.vert.fill) ||
                         (self.tg_orientation == .horz && ((self.tg_gravity & TGGravity.horz.mask) == TGGravity.vert.fill)))
                     {
-                        sbvl.tg_height._dimeVal = nil
+                        sbvl.tgHeight!._dimeVal = nil
                     }
                 }
                 
@@ -317,19 +317,19 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
                     //计算出每个子视图的宽度。
                     for sbv in sbs
                     {
-                        let leftMargin = sbv.tg_left.margin;
-                        let rightMargin = sbv.tg_right.margin;
+                        let leftMargin = sbv.tgLeft?.margin ?? 0
+                        let rightMargin = sbv.tgRight?.margin ?? 0
                         var rect = sbv.tgFrame.frame;
                         
-                        if (sbv.tg_width.dimeNumVal != nil)
+                        if (sbv.tgWidth?.dimeNumVal != nil)
                         {
-                            rect.size.width = sbv.tg_width.measure;
+                            rect.size.width = sbv.tgWidth!.measure;
                         }
                         
                         
-                        rect = tgSetSubviewRelativeSize(sbv.tg_width, selfSize: selfSize, rect: rect)
+                        rect = tgSetSubviewRelativeSize(sbv.tgWidth, selfSize: selfSize, rect: rect)
                         
-                        rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+                        rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
                         
                         //暂时把宽度存放sbv.tgFrame.right上。因为浮动布局来说这个属性无用。
                         sbv.tgFrame.right = leftMargin + rect.size.width + rightMargin;
@@ -362,36 +362,36 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
                     for sbv in sbs
                     {
                         
-                        let topMargin = sbv.tg_top.margin;
-                        let bottomMargin = sbv.tg_bottom.margin;
+                        let topMargin = sbv.tgTop?.margin ?? 0
+                        let bottomMargin = sbv.tgBottom?.margin ?? 0
                         var rect = sbv.tgFrame.frame;
                         
-                        if (sbv.tg_width.dimeNumVal != nil)
+                        if (sbv.tgWidth?.dimeNumVal != nil)
                         {
-                            rect.size.width = sbv.tg_width.measure;
+                            rect.size.width = sbv.tgWidth!.measure;
                         }
                         
-                        if (sbv.tg_height.dimeNumVal != nil)
+                        if (sbv.tgHeight?.dimeNumVal != nil)
                         {
-                            rect.size.height = sbv.tg_height.measure;
+                            rect.size.height = sbv.tgHeight!.measure;
                         }
                         
                         
-                        rect = tgSetSubviewRelativeSize(sbv.tg_height, selfSize: selfSize, rect: rect)
+                        rect = tgSetSubviewRelativeSize(sbv.tgHeight, selfSize: selfSize, rect: rect)
                         
-                        rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+                        rect.size.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
                         
                        
-                        rect = tgSetSubviewRelativeSize(sbv.tg_width, selfSize: selfSize, rect: rect)
+                        rect = tgSetSubviewRelativeSize(sbv.tgWidth, selfSize: selfSize, rect: rect)
                         
-                        rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+                        rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
                         
                         //如果高度是浮动的则需要调整高度。
-                        if (sbv.tg_height.isFlexHeight)
+                        if (sbv.tgHeight?.isFlexHeight ?? false)
                         {
                             rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
                             
-                            rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+                            rect.size.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
                         }
                         
                         
@@ -415,8 +415,8 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
                 selfSize = self.tgLayoutSubviewsForHorz(selfSize, sbs: sbs)
             }
         }
-        selfSize.height = self.tgValidMeasure(self.tg_height,sbv:self,calcSize:selfSize.height,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
-        selfSize.width = self.tgValidMeasure(self.tg_width,sbv:self,calcSize:selfSize.width,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
+        selfSize.height = self.tgValidMeasure(self.tgHeight,sbv:self,calcSize:selfSize.height,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
+        selfSize.width = self.tgValidMeasure(self.tgWidth,sbv:self,calcSize:selfSize.width,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
         
         return (self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs),hasSubLayout)
     }
@@ -554,7 +554,7 @@ extension TGFlowLayout
                 break
             case TGGravity.horz.between:
                 //总宽减去最大的宽度，再除以数量表示每个应该扩展的空间，对最后一行无效
-                if startIndex != sbs.count && count > 1 {
+                if (startIndex != sbs.count || count == self.tg_arrangedCount) && count > 1 {
                     addXFill = (selfSize.width - padding.left - padding.right - rowMaxWidth)/(CGFloat(count) - 1)
                 }
                 break
@@ -639,13 +639,13 @@ extension TGFlowLayout
                 
                 switch amg {
                 case TGGravity.vert.center:
-                    sbv.tgFrame.top += (rowMaxHeight - sbv.tg_top.margin - sbv.tg_bottom.margin - sbv.tgFrame.height) / 2
+                    sbv.tgFrame.top += (rowMaxHeight - (sbv.tgTop?.margin ?? 0) - (sbv.tgBottom?.margin ?? 0) - sbv.tgFrame.height) / 2
                     break
                 case TGGravity.vert.bottom:
-                    sbv.tgFrame.top += rowMaxHeight - sbv.tg_top.margin - sbv.tg_bottom.margin - sbv.tgFrame.height
+                    sbv.tgFrame.top += rowMaxHeight - (sbv.tgTop?.margin ?? 0) - (sbv.tgBottom?.margin ?? 0) - sbv.tgFrame.height
                     break
                 case TGGravity.vert.fill:
-                    sbv.tgFrame.height =  self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rowMaxHeight - sbv.tg_top.margin - sbv.tg_bottom.margin, sbvSize: sbv.tgFrame.frame.size, selfLayoutSize: selfSize)
+                    sbv.tgFrame.height =  self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rowMaxHeight - (sbv.tgTop?.margin ?? 0) - (sbv.tgBottom?.margin ?? 0), sbvSize: sbv.tgFrame.frame.size, selfLayoutSize: selfSize)
                     break
                 default:
                     break
@@ -672,7 +672,7 @@ extension TGFlowLayout
                 break
             case TGGravity.vert.between:
                 //总高减去最大高度，再除以数量表示每个应该扩展的空气，最后一列无效
-                if startIndex != sbs.count && count > 1 {
+                if (startIndex != sbs.count || count == self.tg_arrangedCount) && count > 1 {
                     addYFill = (selfSize.height - padding.top - padding.bottom - colMaxHeight)/(CGFloat(count) - 1)
                 }
                 break
@@ -755,13 +755,13 @@ extension TGFlowLayout
                 
                 switch amg {
                 case TGGravity.horz.center:
-                    sbv.tgFrame.left += (colMaxWidth - sbv.tg_left.margin - sbv.tg_right.margin - sbv.tgFrame.width)/2
+                    sbv.tgFrame.left += (colMaxWidth - (sbv.tgLeft?.margin ?? 0) - (sbv.tgRight?.margin ?? 0) - sbv.tgFrame.width)/2
                     break
                 case TGGravity.horz.right:
-                    sbv.tgFrame.left += colMaxWidth - sbv.tg_left.margin - sbv.tg_right.margin - sbv.tgFrame.width
+                    sbv.tgFrame.left += colMaxWidth - (sbv.tgLeft?.margin ?? 0) - (sbv.tgRight?.margin ?? 0) - sbv.tgFrame.width
                     break
                 case TGGravity.horz.fill:
-                    sbv.tgFrame.width =  self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: colMaxWidth - sbv.tg_left.margin - sbv.tg_right.margin, sbvSize: sbv.tgFrame.frame.size, selfLayoutSize: selfSize)
+                    sbv.tgFrame.width =  self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: colMaxWidth - (sbv.tgLeft?.margin ?? 0) - (sbv.tgRight?.margin ?? 0), sbvSize: sbv.tgFrame.frame.size, selfLayoutSize: selfSize)
                     break
                 default:
                     break
@@ -777,16 +777,16 @@ extension TGFlowLayout
         for j in startIndex - count ..< startIndex {
             let sbv:UIView = sbs[j]
             
-            let isWidthWeight = sbv.tg_width.dimeWeightVal != nil || sbv.tg_width.isFill
+            let isWidthWeight = sbv.tgWidth?.dimeWeightVal != nil || (sbv.tgWidth?.isFill ?? false)
             if isWidthWeight
             {
                 var widthWeight:CGFloat = 1.0
-                if sbv.tg_width.dimeWeightVal != nil
+                if sbv.tgWidth?.dimeWeightVal != nil
                 {
-                    widthWeight = sbv.tg_width.dimeWeightVal.rawValue/100
+                    widthWeight = sbv.tgWidth!.dimeWeightVal.rawValue/100
                 }
                 
-                sbv.tgFrame.width =  self.tgValidMeasure(sbv.tg_width, sbv:sbv,calcSize:sbv.tg_width.measure(totalFloatWidth * widthWeight / totalWeight),sbvSize:sbv.tgFrame.frame.size,selfLayoutSize:selfSize)
+                sbv.tgFrame.width =  self.tgValidMeasure(sbv.tgWidth, sbv:sbv,calcSize:sbv.tgWidth!.measure(totalFloatWidth * widthWeight / totalWeight),sbvSize:sbv.tgFrame.frame.size,selfLayoutSize:selfSize)
                 sbv.tgFrame.right = sbv.tgFrame.left + sbv.tgFrame.width;
             }
         }
@@ -796,23 +796,23 @@ extension TGFlowLayout
     {
         for j in startIndex - count ..< startIndex {
             let sbv:UIView = sbs[j]
-            let isHeightWeight = sbv.tg_height.dimeWeightVal != nil || sbv.tg_height.isFill
+            let isHeightWeight = sbv.tgHeight?.dimeWeightVal != nil || (sbv.tgHeight?.isFill ?? false)
 
             
             if isHeightWeight
             {
                 var heightWeight:CGFloat = 1.0
-                if sbv.tg_height.dimeWeightVal != nil
+                if sbv.tgHeight?.dimeWeightVal != nil
                 {
-                    heightWeight = sbv.tg_height.dimeWeightVal.rawValue / 100
+                    heightWeight = sbv.tgHeight!.dimeWeightVal.rawValue / 100
                 }
                 
-                sbv.tgFrame.height =  self.tgValidMeasure(sbv.tg_height,sbv:sbv,calcSize:sbv.tg_height.measure(totalFloatHeight * heightWeight / totalWeight),sbvSize:sbv.tgFrame.frame.size,selfLayoutSize:selfSize)
+                sbv.tgFrame.height =  self.tgValidMeasure(sbv.tgHeight,sbv:sbv,calcSize:sbv.tgHeight!.measure(totalFloatHeight * heightWeight / totalWeight),sbvSize:sbv.tgFrame.frame.size,selfLayoutSize:selfSize)
                 sbv.tgFrame.bottom = sbv.tgFrame.top + sbv.tgFrame.height;
                 
-                if (sbv.tg_width.dimeRelaVal === sbv.tg_height)
+                if (sbv.tgWidth?.dimeRelaVal != nil && sbv.tgWidth!.dimeRelaVal === sbv.tgHeight)
                 {
-                    sbv.tgFrame.width = self.tgValidMeasure(sbv.tg_width,sbv:sbv,calcSize:sbv.tg_width.measure(sbv.tgFrame.height),sbvSize:sbv.tgFrame.frame.size,selfLayoutSize:selfSize)
+                    sbv.tgFrame.width = self.tgValidMeasure(sbv.tgWidth,sbv:sbv,calcSize:sbv.tgWidth!.measure(sbv.tgFrame.height),sbvSize:sbv.tgFrame.frame.size,selfLayoutSize:selfSize)
                 }
                 
             }
@@ -854,7 +854,7 @@ extension TGFlowLayout
             let rows = self.tg_pagedCount / arrangedCount  //每页的行数。
             
             //对于垂直流式布局来说，要求要有明确的宽度。因此如果我们启用了分页又设置了宽度包裹时则我们的分页是从左到右的排列。否则分页是从上到下的排列。
-            if self.tg_width.isWrap
+            if (self.tgWidth?.isWrap ?? false)
             {
                 isHorzPaging = true
                 if isPagingScroll
@@ -896,7 +896,7 @@ extension TGFlowLayout
         for i in 0..<sbs.count
         {
             let sbv:UIView = sbs[i]
-            let isWidthWeight = sbv.tg_width.dimeWeightVal != nil || sbv.tg_width.isFill
+            let isWidthWeight = sbv.tgWidth?.dimeWeightVal != nil || (sbv.tgWidth?.isFill ?? false)
             
             if (arrangedIndex >= arrangedCount)
             {
@@ -912,20 +912,20 @@ extension TGFlowLayout
                 
             }
             
-            let  leftMargin = sbv.tg_left.margin
-            let  rightMargin = sbv.tg_right.margin
+            let  leftMargin = (sbv.tgLeft?.margin ?? 0)
+            let  rightMargin = (sbv.tgRight?.margin ?? 0)
             var  rect = sbv.tgFrame.frame
             
             
             if isWidthWeight
             {
-                if sbv.tg_width.isFill
+                if (sbv.tgWidth?.isFill ?? false)
                 {
                     rowTotalWeight += 1.0
                 }
                 else
                 {
-                    rowTotalWeight += sbv.tg_width.dimeWeightVal.rawValue / 100
+                    rowTotalWeight += sbv.tgWidth!.dimeWeightVal.rawValue / 100
                 }
             }
             else
@@ -935,14 +935,14 @@ extension TGFlowLayout
                     rect.size.width = pagingItemWidth
                 }
                 
-                if (sbv.tg_width.dimeNumVal != nil && !averageArrange)
+                if (sbv.tgWidth?.dimeNumVal != nil && !averageArrange)
                 {
-                    rect.size.width = sbv.tg_width.measure;
+                    rect.size.width = sbv.tgWidth!.measure;
                 }
                 
-                rect = tgSetSubviewRelativeSize(sbv.tg_width, selfSize: selfSize, rect: rect)
+                rect = tgSetSubviewRelativeSize(sbv.tgWidth, selfSize: selfSize, rect: rect)
                 
-                rect.size.width = self.tgValidMeasure(sbv.tg_width,sbv:sbv,calcSize:rect.size.width,sbvSize:rect.size,selfLayoutSize:selfSize)
+                rect.size.width = self.tgValidMeasure(sbv.tgWidth,sbv:sbv,calcSize:rect.size.width,sbvSize:rect.size,selfLayoutSize:selfSize)
                 
                 rowTotalFixedWidth += rect.size.width;
             }
@@ -1030,11 +1030,11 @@ extension TGFlowLayout
                 rowMaxWidth = 0
             }
             
-            let topMargin = sbv.tg_top.margin
-            let leftMargin = sbv.tg_left.margin
-            let bottomMargin = sbv.tg_bottom.margin
-            let rightMargin = sbv.tg_right.margin
-            let isHeightWeight = sbv.tg_height.dimeWeightVal != nil || sbv.tg_height.isFill
+            let topMargin = (sbv.tgTop?.margin ?? 0)
+            let leftMargin = (sbv.tgLeft?.margin ?? 0)
+            let bottomMargin = (sbv.tgBottom?.margin ?? 0)
+            let rightMargin = (sbv.tgRight?.margin ?? 0)
+            let isHeightWeight = sbv.tgHeight?.dimeWeightVal != nil || (sbv.tgHeight?.isFill ?? false)
             
             var rect = sbv.tgFrame.frame
             
@@ -1044,18 +1044,18 @@ extension TGFlowLayout
             }
 
 
-            if sbv.tg_height.dimeNumVal != nil {
-                rect.size.height = sbv.tg_height.measure
+            if sbv.tgHeight?.dimeNumVal != nil {
+                rect.size.height = sbv.tgHeight!.measure
             }
             
             if averageArrange {
-                rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: averageWidth - leftMargin - rightMargin, sbvSize: rect.size, selfLayoutSize:selfSize)
+                rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: averageWidth - leftMargin - rightMargin, sbvSize: rect.size, selfLayoutSize:selfSize)
             }
             
-            rect = tgSetSubviewRelativeSize(sbv.tg_height, selfSize: selfSize, rect: rect)
+            rect = tgSetSubviewRelativeSize(sbv.tgHeight, selfSize: selfSize, rect: rect)
             
             //如果高度是浮动的 则需要调整陶都
-            let isFlexedHeight:Bool = sbv.tg_height.isFlexHeight
+            let isFlexedHeight:Bool = sbv.tgHeight?.isFlexHeight ?? false
             if isFlexedHeight {
                 
                 rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
@@ -1064,15 +1064,15 @@ extension TGFlowLayout
             if isHeightWeight
             {
                 var heightWeight:CGFloat = 1.0
-                if sbv.tg_height.dimeWeightVal != nil
+                if sbv.tgHeight?.dimeWeightVal != nil
                 {
-                    heightWeight = sbv.tg_height.dimeWeightVal.rawValue/100
+                    heightWeight = sbv.tgHeight!.dimeWeightVal.rawValue/100
                 }
                 
-                rect.size.height = sbv.tg_height.measure((selfSize.height - yPos - padding.bottom)*heightWeight - topMargin - bottomMargin)
+                rect.size.height = sbv.tgHeight!.measure((selfSize.height - yPos - padding.bottom)*heightWeight - topMargin - bottomMargin)
             }
             
-            rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
             rect.origin.x = (xPos + leftMargin)
             rect.origin.y = (yPos + topMargin)
@@ -1100,7 +1100,7 @@ extension TGFlowLayout
         //最后一行 布局
         self .tgCalcVertLayoutSingleLineGravity(selfSize, rowMaxHeight: rowMaxHeight, rowMaxWidth: rowMaxWidth, mg: mghorz, amg: amgvert, sbs: sbs, startIndex: sbs.count, count: arrangedIndex,vertSpace: vertSpace, horzSpace: horzSpace)
         
-        if self.tg_height.isWrap
+        if (self.tgHeight?.isWrap ?? false)
         {
             selfSize.height = yPos + padding.bottom + rowMaxHeight
             
@@ -1162,7 +1162,7 @@ extension TGFlowLayout
             }
         }
         
-        if self.tg_width.isWrap && !averageArrange
+        if (self.tgWidth?.isWrap ?? false) && !averageArrange
         {
             selfSize.width = maxWidth + padding.right
             
@@ -1226,12 +1226,12 @@ extension TGFlowLayout
         for i in 0..<sbs.count {
             let sbv:UIView = sbs[i]
             
-            let topMargin:CGFloat = sbv.tg_top.margin
-            let leftMargin:CGFloat = sbv.tg_left.margin
-            let bottomMargin:CGFloat = sbv.tg_bottom.margin
-            let rightMargin:CGFloat = sbv.tg_right.margin
-            let isWidthWeight = sbv.tg_width.dimeWeightVal != nil || sbv.tg_width.isFill
-            let isHeightWeight = sbv.tg_height.dimeWeightVal != nil || sbv.tg_height.isFill
+            let topMargin:CGFloat = (sbv.tgTop?.margin ?? 0)
+            let leftMargin:CGFloat = (sbv.tgLeft?.margin ?? 0)
+            let bottomMargin:CGFloat = (sbv.tgBottom?.margin ?? 0)
+            let rightMargin:CGFloat = (sbv.tgRight?.margin ?? 0)
+            let isWidthWeight = sbv.tgWidth?.dimeWeightVal != nil || (sbv.tgWidth?.isFill ?? false)
+            let isHeightWeight = sbv.tgHeight?.dimeWeightVal != nil || (sbv.tgHeight?.isFill ?? false)
             var rect:CGRect = sbv.tgFrame.frame
             
             if subviewSize != 0
@@ -1239,11 +1239,11 @@ extension TGFlowLayout
                 rect.size.width = subviewSize
             }
             
-            if sbv.tg_width.dimeNumVal != nil {
-                rect.size.width = sbv.tg_width.measure
+            if sbv.tgWidth?.dimeNumVal != nil {
+                rect.size.width = sbv.tgWidth!.measure
             }
-            if sbv.tg_height.dimeNumVal != nil {
-                rect.size.height = sbv.tg_height.measure
+            if sbv.tgHeight?.dimeNumVal != nil {
+                rect.size.height = sbv.tgHeight!.measure
             }
             
             rect = tgSetSubviewRelativeSize(sbv.tg_width, selfSize: selfSize, rect: rect)
@@ -1252,9 +1252,9 @@ extension TGFlowLayout
             if isHeightWeight
             {
                 var heightWeight:CGFloat = 1.0
-                if sbv.tg_height.dimeWeightVal != nil
+                if sbv.tgHeight?.dimeWeightVal != nil
                 {
-                    heightWeight = sbv.tg_height.dimeWeightVal.rawValue/100
+                    heightWeight = sbv.tgHeight!.dimeWeightVal.rawValue/100
                 }
                 
                rect.size.height = sbv.tg_height.measure((selfSize.height - yPos - padding.bottom)*heightWeight - topMargin - bottomMargin)
@@ -1276,28 +1276,28 @@ extension TGFlowLayout
                 }
                 
                 var widthWeight:CGFloat = 1.0
-                if sbv.tg_width.dimeWeightVal != nil
+                if sbv.tgWidth?.dimeWeightVal != nil
                 {
-                    widthWeight = sbv.tg_width.dimeWeightVal.rawValue/100
+                    widthWeight = sbv.tgWidth!.dimeWeightVal.rawValue/100
                 }
                 
-                rect.size.width = (floatWidth + sbv.tg_width.addVal) * widthWeight - leftMargin - rightMargin;
+                rect.size.width = (floatWidth + sbv.tgWidth!.addVal) * widthWeight - leftMargin - rightMargin;
             }
             
             
-            rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
             
-            if sbv.tg_height.dimeRelaVal === sbv.tg_width {
-                rect.size.height = sbv.tg_height.measure(rect.size.width)
+            if sbv.tgHeight?.dimeRelaVal != nil && sbv.tgHeight!.dimeRelaVal === sbv.tgWidth {
+                rect.size.height = sbv.tgHeight!.measure(rect.size.width)
             }
             
             //如果高度是浮动则需要调整
-            if sbv.tg_height.isFlexHeight {
+            if (sbv.tgHeight?.isFlexHeight ?? false) {
                 
                 rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
             }
             
-            rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
             //计算xPos的值加上leftMargin + rect.size.width + rightMargin + self.tg_hspace 的值要小于整体的宽度。
             var place:CGFloat = xPos + leftMargin + rect.size.width + rightMargin
@@ -1320,9 +1320,9 @@ extension TGFlowLayout
                 //计算单独的sbv的宽度是否大于整体的宽度。如果大于则缩小宽度。
                 if leftMargin + rightMargin + rect.size.width > selfSize.width - padding.left - padding.right
                 {
-                    rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: selfSize.width - padding.left - padding.right - leftMargin - rightMargin, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: selfSize.width - padding.left - padding.right - leftMargin - rightMargin, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
-                    if sbv.tg_height.isFlexHeight {
+                    if (sbv.tgHeight?.isFlexHeight ?? false) {
                         rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
                         rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
                         
@@ -1357,7 +1357,7 @@ extension TGFlowLayout
         arrangeIndexSet.insert(sbs.count - arrangeIndex)
         self .tgCalcVertLayoutSingleLineGravity(selfSize, rowMaxHeight: rowMaxHeight, rowMaxWidth: rowMaxWidth, mg: mghorz, amg: amgvert, sbs: sbs, startIndex:sbs.count, count: arrangeIndex, vertSpace: vertSpace, horzSpace: horzSpace)
         
-        if self.tg_height.isWrap {
+        if (self.tgHeight?.isWrap ?? false) {
             selfSize.height = yPos + padding.bottom + rowMaxHeight;
         }
         else {
@@ -1449,7 +1449,7 @@ extension TGFlowLayout
             let cols = self.tg_pagedCount / arrangedCount  //每页的列数。
             
             //对于水平流式布局来说，要求要有明确的高度。因此如果我们启用了分页又设置了高度包裹时则我们的分页是从上到下的排列。否则分页是从左到右的排列。
-            if self.tg_height.isWrap
+            if (self.tgHeight?.isWrap ?? false)
             {
                 isVertPaging = true
                 if isPagingScroll
@@ -1490,7 +1490,7 @@ extension TGFlowLayout
         for i in 0..<sbs.count
         {
             let sbv:UIView = sbs[i]
-            let isHeightWeight = sbv.tg_height.dimeWeightVal != nil || sbv.tg_height.isFill
+            let isHeightWeight = sbv.tgHeight?.dimeWeightVal != nil || (sbv.tgHeight?.isFill ?? false)
 
             
             if (arrangedIndex >= arrangedCount)
@@ -1507,8 +1507,8 @@ extension TGFlowLayout
                 
             }
             
-            let  topMargin = sbv.tg_top.margin;
-            let  bottomMargin = sbv.tg_bottom.margin;
+            let  topMargin = (sbv.tgTop?.margin ?? 0)
+            let  bottomMargin = (sbv.tgBottom?.margin ?? 0)
             var  rect = sbv.tgFrame.frame;
             
             if (pagingItemWidth != 0)
@@ -1516,26 +1516,26 @@ extension TGFlowLayout
                 rect.size.width = pagingItemWidth
             }
             
-            if (sbv.tg_width.dimeNumVal != nil)
+            if (sbv.tgWidth?.dimeNumVal != nil)
             {
-                rect.size.width = sbv.tg_width.measure
+                rect.size.width = sbv.tgWidth!.measure
             }
             
             
-            rect = tgSetSubviewRelativeSize(sbv.tg_width, selfSize: selfSize, rect: rect)
+            rect = tgSetSubviewRelativeSize(sbv.tgWidth, selfSize: selfSize, rect: rect)
             
-            rect.size.width = self.tgValidMeasure(sbv.tg_width,sbv:sbv,calcSize:rect.size.width,sbvSize:rect.size,selfLayoutSize:selfSize)
+            rect.size.width = self.tgValidMeasure(sbv.tgWidth,sbv:sbv,calcSize:rect.size.width,sbvSize:rect.size,selfLayoutSize:selfSize)
             
             
             if isHeightWeight
             {
-                if sbv.tg_height.isFill
+                if (sbv.tgHeight?.isFill ?? false)
                 {
                     rowTotalWeight += 1.0
                 }
                 else
                 {
-                  rowTotalWeight += sbv.tg_height.dimeWeightVal.rawValue/100
+                  rowTotalWeight += sbv.tgHeight!.dimeWeightVal.rawValue/100
                 }
             }
             else
@@ -1546,27 +1546,27 @@ extension TGFlowLayout
                 }
 
             
-                if (sbv.tg_height.dimeNumVal != nil && !averageArrange)
+                if (sbv.tgHeight?.dimeNumVal != nil && !averageArrange)
                 {
-                    rect.size.height = sbv.tg_height.measure;
+                    rect.size.height = sbv.tgHeight!.measure;
                 }
                 
                 
-                rect = tgSetSubviewRelativeSize(sbv.tg_height, selfSize: selfSize, rect: rect)
+                rect = tgSetSubviewRelativeSize(sbv.tgHeight, selfSize: selfSize, rect: rect)
                 
                 
                 //如果高度是浮动的则需要调整高度。
-                let  isFlexedHeight = sbv.tg_height.isFlexHeight
+                let  isFlexedHeight = (sbv.tgHeight?.isFlexHeight ?? false)
                 if (isFlexedHeight)
                 {
                     rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
                 }
                 
-                rect.size.height = self.tgValidMeasure(sbv.tg_height,sbv:sbv,calcSize:rect.size.height,sbvSize:rect.size,selfLayoutSize:selfSize)
+                rect.size.height = self.tgValidMeasure(sbv.tgHeight,sbv:sbv,calcSize:rect.size.height,sbvSize:rect.size,selfLayoutSize:selfSize)
                 
-                if (sbv.tg_width.dimeRelaVal === sbv.tg_height)
+                if (sbv.tgWidth?.dimeRelaVal != nil && sbv.tgWidth!.dimeRelaVal === sbv.tgHeight)
                 {
-                    rect.size.width = self.tgValidMeasure(sbv.tg_width,sbv:sbv,calcSize:sbv.tg_width.measure(rect.size.height),sbvSize:rect.size,selfLayoutSize:selfSize)
+                    rect.size.width = self.tgValidMeasure(sbv.tgWidth,sbv:sbv,calcSize:sbv.tgWidth!.measure(rect.size.height),sbvSize:rect.size,selfLayoutSize:selfSize)
                 }
                 
                 rowTotalFixedHeight += rect.size.height;
@@ -1657,20 +1657,20 @@ extension TGFlowLayout
                 colMaxHeight = 0
             }
             
-            let topMargin:CGFloat = sbv.tg_top.margin
-            let leftMargin:CGFloat = sbv.tg_left.margin
-            let bottomMargin:CGFloat = sbv.tg_bottom.margin
-            let rightMargin:CGFloat = sbv.tg_right.margin
-            let isWidthWeight = sbv.tg_width.dimeWeightVal != nil || sbv.tg_width.isFill
+            let topMargin:CGFloat = (sbv.tgTop?.margin ?? 0)
+            let leftMargin:CGFloat = (sbv.tgLeft?.margin ?? 0)
+            let bottomMargin:CGFloat = (sbv.tgBottom?.margin ?? 0)
+            let rightMargin:CGFloat = (sbv.tgRight?.margin ?? 0)
+            let isWidthWeight = sbv.tgWidth?.dimeWeightVal != nil || (sbv.tgWidth?.isFill ?? false)
 
             var rect:CGRect = sbv.tgFrame.frame
             
             if averageArrange {
                 rect.size.height = (averageHeight - topMargin - bottomMargin)
                 
-                if sbv.tg_width.dimeRelaVal === sbv.tg_height {
-                    rect.size.width = sbv.tg_width.measure(rect.size.height)
-                    rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+                if (sbv.tgWidth?.dimeRelaVal != nil && sbv.tgWidth!.dimeRelaVal === sbv.tgHeight) {
+                    rect.size.width = sbv.tgWidth!.measure(rect.size.height)
+                    rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
                 }
             }
@@ -1678,13 +1678,13 @@ extension TGFlowLayout
             if isWidthWeight
             {
                 var widthWeight:CGFloat = 1.0
-                if sbv.tg_width.dimeWeightVal != nil
+                if sbv.tgWidth?.dimeWeightVal != nil
                 {
-                    widthWeight = sbv.tg_width.dimeWeightVal.rawValue/100
+                    widthWeight = sbv.tgWidth!.dimeWeightVal.rawValue/100
                 }
                 
-                rect.size.width = sbv.tg_width.measure((selfSize.width - xPos - padding.right)*widthWeight - leftMargin - rightMargin)
-                rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+                rect.size.width = sbv.tgWidth!.measure((selfSize.width - xPos - padding.right)*widthWeight - leftMargin - rightMargin)
+                rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
             }
 
             
@@ -1714,7 +1714,7 @@ extension TGFlowLayout
         //最后一列
         self .tgCalcHorzLayoutSingleLineGravity(selfSize, colMaxHeight: colMaxHeight, colMaxWidth: colMaxWidth, mg: mgvert, amg: amghorz, sbs: sbs, startIndex: sbs.count, count: arrangedIndex, vertSpace: vertSpace, horzSpace: horzSpace)
         
-        if self.tg_height.isWrap && !averageArrange
+        if (self.tgHeight?.isWrap ?? false) && !averageArrange
         {
             selfSize.height = maxHeight + padding.bottom
             
@@ -1731,7 +1731,7 @@ extension TGFlowLayout
 
         }
         
-        if self.tg_width.isWrap
+        if (self.tgWidth?.isWrap ?? false)
         {
             selfSize.width = xPos + padding.right + colMaxWidth
             
@@ -1839,21 +1839,21 @@ extension TGFlowLayout
         for i in 0..<sbs.count {
             let sbv:UIView = sbs[i]
             
-            let topMargin:CGFloat = sbv.tg_top.margin
-            let leftMargin:CGFloat = sbv.tg_left.margin
-            let bottomMargin:CGFloat = sbv.tg_bottom.margin
-            let rightMargin:CGFloat = sbv.tg_right.margin
-            let isWidthWeight = sbv.tg_width.dimeWeightVal != nil || sbv.tg_width.isFill
-            let isHeightWeight = sbv.tg_height.dimeWeightVal != nil || sbv.tg_height.isFill
+            let topMargin:CGFloat = (sbv.tgTop?.margin ?? 0)
+            let leftMargin:CGFloat = (sbv.tgLeft?.margin ?? 0)
+            let bottomMargin:CGFloat = (sbv.tgBottom?.margin ?? 0)
+            let rightMargin:CGFloat = (sbv.tgRight?.margin ?? 0)
+            let isWidthWeight = sbv.tgWidth?.dimeWeightVal != nil || (sbv.tgWidth?.isFill ?? false)
+            let isHeightWeight = sbv.tgHeight?.dimeWeightVal != nil || (sbv.tgHeight?.isFill ?? false)
             var rect:CGRect = sbv.tgFrame.frame
             
             
-            if sbv.tg_width.dimeNumVal != nil {
-                rect.size.width = sbv.tg_width.measure
+            if sbv.tgWidth?.dimeNumVal != nil {
+                rect.size.width = sbv.tgWidth!.measure
             }
             
-            if sbv.tg_height.dimeNumVal != nil {
-                rect.size.height = sbv.tg_height.measure
+            if sbv.tgHeight?.dimeNumVal != nil {
+                rect.size.height = sbv.tgHeight!.measure
             }
             
             rect = tgSetSubviewRelativeSize(sbv.tg_height, selfSize: selfSize, rect: rect)
@@ -1863,7 +1863,7 @@ extension TGFlowLayout
                 rect.size.height = subviewSize
             }
             
-            rect = tgSetSubviewRelativeSize(sbv.tg_width, selfSize: selfSize, rect: rect)
+            rect = tgSetSubviewRelativeSize(sbv.tgWidth, selfSize: selfSize, rect: rect)
             
             if isHeightWeight
             {
@@ -1881,41 +1881,41 @@ extension TGFlowLayout
                 }
                 
                 var heightWeight:CGFloat = 1.0
-                if sbv.tg_height.dimeWeightVal != nil
+                if sbv.tgHeight?.dimeWeightVal != nil
                 {
-                    heightWeight = sbv.tg_height.dimeWeightVal.rawValue/100
+                    heightWeight = sbv.tgHeight!.dimeWeightVal.rawValue/100
                 }
                 
-                rect.size.height = (floatHeight + sbv.tg_height.addVal) * heightWeight - topMargin - bottomMargin;
+                rect.size.height = (floatHeight + sbv.tgHeight!.addVal) * heightWeight - topMargin - bottomMargin;
                 
             }
             
             
             
-            rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
-            if sbv.tg_width.dimeRelaVal === sbv.tg_height {
-                rect.size.width = sbv.tg_width.measure(rect.size.height)
+            if sbv.tgWidth?.dimeRelaVal != nil && sbv.tgWidth!.dimeRelaVal === sbv.tgHeight {
+                rect.size.width = sbv.tgWidth!.measure(rect.size.height)
             }
             
             
             if isWidthWeight
             {
                 var widthWeight:CGFloat = 1.0
-                if sbv.tg_width.dimeWeightVal != nil
+                if sbv.tgWidth!.dimeWeightVal != nil
                 {
-                    widthWeight = sbv.tg_width.dimeWeightVal.rawValue / 100
+                    widthWeight = sbv.tgWidth!.dimeWeightVal.rawValue / 100
                 }
                 
-                rect.size.width = sbv.tg_width.measure((selfSize.width - xPos - padding.right)*widthWeight - leftMargin - rightMargin)
+                rect.size.width = sbv.tgWidth!.measure((selfSize.width - xPos - padding.right)*widthWeight - leftMargin - rightMargin)
             }
 
             
-            rect.size.width = self.tgValidMeasure(sbv.tg_width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
             
             
             //如果高度是浮动则调整
-            if sbv.tg_height.isFlexHeight {
+            if (sbv.tgHeight?.isFlexHeight ?? false) {
                 
                 rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
                 rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
@@ -1944,7 +1944,7 @@ extension TGFlowLayout
                 if (topMargin + bottomMargin + rect.size.height > selfSize.height - padding.top - padding.bottom)
                 {
                     rect.size.height = selfSize.height - padding.top - padding.bottom - topMargin - bottomMargin
-                    rect.size.height = self.tgValidMeasure(sbv.tg_height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
                 }
                 
                 colMaxWidth = 0;
@@ -1975,7 +1975,7 @@ extension TGFlowLayout
         arrangeIndexSet.insert(sbs.count - arrangedIndex)
         self.tgCalcHorzLayoutSingleLineGravity(selfSize, colMaxHeight: colMaxHeight, colMaxWidth: colMaxWidth, mg: mgvert, amg: amghorz, sbs: sbs, startIndex: sbs.count, count: arrangedIndex, vertSpace: vertSpace, horzSpace: horzSpace)
         
-        if self.tg_width.isWrap {
+        if (self.tgWidth?.isWrap ?? false){
             selfSize.width = xPos + padding.right + colMaxWidth
         }
         else {
