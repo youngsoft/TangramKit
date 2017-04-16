@@ -7,9 +7,9 @@
 [![QQ](https://img.shields.io/badge/QQ-156355113-yellow.svg?style=flat)]()
 [![GitHub stars](https://img.shields.io/github/stars/youngsoft/TangramKit.svg)](https://github.com/youngsoft/TangramKit/stargazers)
 
-![logo](TangramKitDemo/Support Files/logo1.png)
+![logo](TangramKitDemo/Support%20Files/logo1.png)
 
-#TangramKit ![logo](TangramKitDemo/Support Files/logo2.png)
+# TangramKit  ![logo](TangramKitDemo/Support%20Files/logo2.png)
 
 TangramKit是一套在Swift3.0语言上开发的iOS界面视图布局框架。它的名字来源于中国古代的玩具七巧板，寓意着可以用简单的功能来构造出各种千变万化且非常复杂的UI界面。TangramKit的内核是基于对UIView的layoutSubviews方法的重载以及对子视图的bounds和center属性的设置而实现的。TangramKit功能强大而且简单易用，它集成了:iOS Autolayout和SizeClass、android的5大布局体系、HTML/CSS的浮动定位技术以及flex-box和bootstrap框架等市面上主流的平台的界面布局功能，同时提供了一套非常简单和完备的多屏幕尺寸适配的解决方案。TangramKit的objective-C版本的名字叫做：**[MyLayout](https://github.com/youngsoft/MyLinearLayout)**   
 
@@ -42,7 +42,7 @@ TangramKit是一套在Swift3.0语言上开发的iOS界面视图布局框架。�
 
 最终的效果图如下：
 
-![demo](TangramKitDemo/Support Files/usagedemo.png)
+![demo](TangramKitDemo/Support%20Files/usagedemo.png)
 
 
 ```swift
@@ -116,8 +116,7 @@ TangramKit是一套在Swift3.0语言上开发的iOS界面视图布局框架。�
 
 ## 系统结构
  
- ![demo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKit/TangramClass.png)
- 
+ ![demo](TangramKitDemo/Support%20Files/TangramClass.png)
 
 ### 布局位置类TGLayoutPos
 TGLayoutPos类是用来描述一个视图所在的位置的类。UIView中扩展出了tg_left,tg_top,tg_bottom,tg_right,tg_centerX,tg_centerY这六个变量来实现视图的定位操作。您可以用这些变量的equal方法来设置视图之间的边距和间距。
