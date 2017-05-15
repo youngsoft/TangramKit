@@ -23,8 +23,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window!.backgroundColor = .white
         
         let nav = UINavigationController(rootViewController:ViewController(style:.plain))
-        nav.navigationBar.isTranslucent = false
-        nav.toolbar.isTranslucent = false
         self.window!.rootViewController = nav
         
         self.window!.makeKeyAndVisible()

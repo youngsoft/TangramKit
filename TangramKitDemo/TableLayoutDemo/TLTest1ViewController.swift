@@ -31,6 +31,9 @@ class TLTest1ViewController: UIViewController {
     }
     
     override func loadView() {
+        
+        self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
         super.loadView()
         
         let tableLayout = TGTableLayout(.vert)
@@ -46,14 +49,14 @@ class TLTest1ViewController: UIViewController {
         _ = tableLayout.tg_addRow(size:30,colSize:70)
         
         var  colView = self.createLabel("Cell00", backgroundColor: CFTool.color(1))
-        colView.tg_left.equal(10)
-        colView.tg_right.equal(40) //可以使用TGLayoutPos对象来调整间距。
+        colView.tg_leading.equal(10)
+        colView.tg_trailing.equal(40) //可以使用TGLayoutPos对象来调整间距。
         colView.tg_top.equal(5)
         colView.tg_bottom.equal(5)
         tableLayout.tg_addCol(colView, inRow:0)
         
         colView = self.createLabel("Cell01", backgroundColor: CFTool.color(2))
-        colView.tg_left.equal(20)
+        colView.tg_leading.equal(20)
         tableLayout.tg_addCol(colView, inRow:0)
         
         colView = self.createLabel("Cell02", backgroundColor: CFTool.color(3))
@@ -101,7 +104,7 @@ class TLTest1ViewController: UIViewController {
         let row4 = tableLayout.tg_addRow(size:TGLayoutSize.average, colSize:TGLayoutSize.average)
         //可以设置行的属性.比如padding, 线条颜色，
         row4.tg_padding = UIEdgeInsetsMake(3, 3, 3, 3);
-        row4.tg_topBorderline = TGLayoutBorderline(color: UIColor.black, thick: 2)
+        row4.tg_topBorderline = TGBorderline(color: UIColor.black, thick: 2)
         row4.backgroundColor = UIColor(white: 0.5, alpha: 1)
         
         colView = self.createLabel("Cell40", backgroundColor: CFTool.color(1))

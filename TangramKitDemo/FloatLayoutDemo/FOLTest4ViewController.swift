@@ -246,7 +246,7 @@ extension FOLTest4ViewController
         actionLayout.tg_hspace = 5;
         
         actionLayout.tg_height.equal(.wrap)
-        actionLayout.tg_bottomBorderline = TGLayoutBorderline(color: UIColor.black)
+        actionLayout.tg_bottomBorderline = TGBorderline(color: UIColor.black)
         
         let actions = [NSLocalizedString("flexed width, fixed spacing", comment:""),
                        NSLocalizedString("fixed width, flexed spacing", comment:"")]
@@ -290,8 +290,8 @@ extension FOLTest4ViewController
         sectionLabel.textColor = UIColor.lightGray
         sectionLabel.adjustsFontSizeToFitWidth = true
         sectionLabel.textAlignment = .center
-        sectionLabel.tg_left.equal(0)
-        sectionLabel.tg_right.equal(0)
+        sectionLabel.tg_leading.equal(0)
+        sectionLabel.tg_trailing.equal(0)
         sectionLabel.sizeToFit()
         sectionLayout.addSubview(sectionLabel)
         

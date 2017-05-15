@@ -29,18 +29,18 @@ class LLTest1ViewController: UIViewController {
          
          
          这要区分一下边距和间距和概念，所谓边距是指子视图距离父视图的距离；而间距则是指子视图距离兄弟视图的距离。
-         当tg_left,tg_right,tg_top,tg_bottom这四个属性的equal方法设置的值为CGFloat类型或者TGWeight类型时即可用来表示边距也可以用来表示间距，这个要根据子视图所归属的父布局视图的类型而确定：
+         当tg_leading,tg_trailing,tg_top,tg_bottom这四个属性的equal方法设置的值为CGFloat类型或者TGWeight类型时即可用来表示边距也可以用来表示间距，这个要根据子视图所归属的父布局视图的类型而确定：
          
-         1.垂直线性布局TGLinearLayout中的子视图： tg_left,tg_right表示边距，而tg_top,tg_bottom则表示间距。
-         2.水平线性布局TGLinearLayout中的子视图： tg_left,tg_right表示间距，而tg_top,tg_bottom则表示边距。
-         3.表格布局中的子视图：                  tg_left,tg_right,tg_top,tg_bottom的定义和线性布局是一致的。
-         4.框架布局TGFrameLayout中的子视图：     tg_left,tg_right,tg_top,tg_bottom都表示边距。
-         5.相对布局TGRelativeLayout中的子视图：  tg_left,tg_right,tg_top,tg_bottom都表示边距。
-         6.流式布局TGFlowLayout中的子视图：      tg_left,tg_right,tg_top,tg_bottom都表示间距。
-         7.浮动布局TGFloatLayout中的子视图：     tg_left,tg_right,tg_top,tg_bottom都表示间距。
-         8.路径布局TGPathLayout中的子视图：      tg_left,tg_right,tg_top,tg_bottom即不表示间距也不表示边距，它表示自己中心位置的偏移量。
-         9.非布局父视图中的布局子视图：           tg_left,tg_right,tg_top,tg_bottom都表示边距。
-         10.非布局父视图中的非布局子视图：         tg_left,tg_right,tg_top,tg_bottom的设置不会起任何作用，因为TangramKit已经无法控制了。
+         1.垂直线性布局TGLinearLayout中的子视图： tg_leading,tg_trailing表示边距，而tg_top,tg_bottom则表示间距。
+         2.水平线性布局TGLinearLayout中的子视图： tg_leading,tg_trailing表示间距，而tg_top,tg_bottom则表示边距。
+         3.表格布局中的子视图：                  tg_leading,tg_trailing,tg_top,tg_bottom的定义和线性布局是一致的。
+         4.框架布局TGFrameLayout中的子视图：     tg_leading,tg_trailing,tg_top,tg_bottom都表示边距。
+         5.相对布局TGRelativeLayout中的子视图：  tg_leading,tg_trailing,tg_top,tg_bottom都表示边距。
+         6.流式布局TGFlowLayout中的子视图：      tg_leading,tg_trailing,tg_top,tg_bottom都表示间距。
+         7.浮动布局TGFloatLayout中的子视图：     tg_leading,tg_trailing,tg_top,tg_bottom都表示间距。
+         8.路径布局TGPathLayout中的子视图：      tg_leading,tg_trailing,tg_top,tg_bottom即不表示间距也不表示边距，它表示自己中心位置的偏移量。
+         9.非布局父视图中的布局子视图：           tg_leading,tg_trailing,tg_top,tg_bottom都表示边距。
+         10.非布局父视图中的非布局子视图：         tg_leading,tg_trailing,tg_top,tg_bottom的设置不会起任何作用，因为TangramKit已经无法控制了。
          
          再次强调的是：
          1. 如果同时设置了左右边距就能决定自己的宽度，同时设置左右间距不能决定自己的宽度！
@@ -48,12 +48,17 @@ class LLTest1ViewController: UIViewController {
          
          */
         
+        /*
+         tg_left和tg_right用来设置左右位置，tg_leading和tg_trailing用来设置首尾位置。大部分国家和语言在布局时总是遵循从左到右的方向进行(LTR),而有些国家比如阿拉伯国家和语言在布局时则遵循从右到左的方向进行(LTR)。因此为了统一概念我们不再用左右(left, right)来表示水平的方向而是用首尾(leading, trailing)来表示水平的方向。对于LTR方向来说leading和left是一致的，trailing和right是一致的；对于RTL方向来说leading和right是一致的，trailing和left是一致的。如果您的界面布局不考虑左右方向或者不考虑国际化时就直接使用tg_left和tg_right就可以了。
+         */
+
+        
         
         /*
          很多同学都反馈问我：为什么要在loadView方法中进行布局而不在viewDidLoad中进行布局？ 以及在什么时候需要调用[super loadView]；什么时候不需要？现在统一回复如下：
          
          1.所有视图控制中的根视图view(self.view)都是在loadView中完成建立的，也就是说如果你的VC关联了XIB或者SB，那么其实会在VC的loadView方法里面加载XIB或者SB中的所有视图以及子视图，如果您的VC没有关联XIB或者SB那么loadView方法中将建立一个默认的根视图。而系统提供的viewDidLoad方法则是表示VC里面关联的视图已经建立好了，您可以有机会做其他一些初始化的事情。因此如果你想完全自定义VC里面的根视图和子视图的话那么建议您应该重载loadView方法而不是在viewDidLoad里面进行视图的创建和加载，换句话说就是loadView负责创建视图而viewDidLoad则是负责视图创建后的一些设置工作。
-         2.因为MyLayout是一套基于代码的界面布局库，因此建议您从VC的根视图就使用布局视图。所以我这边的很多DEMO都是直接在loadView里面进行布局，并且把一个布局视图作为根视图赋值给self.view。因此如果您直接想把布局视图作为根视图或者想自定义根视图的实现那么您就可以不必要在loadView里面调用[super loadView]方法；如果您只是想把布局视图作为默认根视图的一个子视图的话那么您就必须要调用[super loadView]方法，然后再通过[self.view addSubview:XXXX]来将布局视图加入到根视图里面；如果您只是想把布局视图作为根视图的一个子视图的话，那么您也可以不用重载loadView方法，而是直接在viewDidLoad里面添加布局视图也是一样的。
+         2.因为TangramKit是一套基于代码的界面布局库，因此建议您从VC的根视图就使用布局视图。所以我这边的很多DEMO都是直接在loadView里面进行布局，并且把一个布局视图作为根视图赋值给self.view。因此如果您直接想把布局视图作为根视图或者想自定义根视图的实现那么您就可以不必要在loadView里面调用[super loadView]方法；如果您只是想把布局视图作为默认根视图的一个子视图的话那么您就必须要调用[super loadView]方法，然后再通过[self.view addSubview:XXXX]来将布局视图加入到根视图里面；如果您只是想把布局视图作为根视图的一个子视图的话，那么您也可以不用重载loadView方法，而是直接在viewDidLoad里面添加布局视图也是一样的。
          3.因为很多DEMO里面都是在loadView里面进行代码布局的，这个是为了方便处理，实际中布局视图是可以用在任何一个地方的，也可以在任何一个地方被建立，因为布局视图就是UIView的一个子视图，因此所有可以使用视图的地方都可以用布局视图。
          
          */
@@ -71,8 +76,16 @@ class LLTest1ViewController: UIViewController {
         //下面的例子中vertLayout是一个垂直线性布局，垂直线性布局中的子视图按照添加的顺序依次从上到下排列。
 
         let vertTitleLabel = self.createSectionLabel(NSLocalizedString("vertical(from top to bottom)",comment:""))
-        vertTitleLabel.tg_top.equal(10)  //顶部距离前面的视图10
-        rootLayout.addSubview(vertTitleLabel);
+        /**
+         * 当导航控制器中的导航条或者工具条是半透明时并将布局视图作为控制器中的根视图时，控制器中的根视图将会延伸到整个屏幕。
+         * 如果导航条不是半透明，或者您设置了视图控制中的edgesForExtendedLayout属性，或者视图控制器中的根视图是UIScrollView时那么就不会延伸至整个屏幕
+         * 为了使布局视图里面的子视图不会延伸到导航条下面，你可以将布局视图的第一个子视图的tg_top的值设置为视图控制器的topLayoutGuide值。这样的话
+         * 系统会自动检测如果您的导航条是半透明的那么这个视图的位置总是会在导航条下面出现，而如果不是半透明导航条也会在导航条下面出现，而如果没有导航条时则
+         * 就出现在屏幕的顶部。
+         */
+        vertTitleLabel.tg_top.equal(self.topLayoutGuide, offset:10)  //顶部距离前面的视图10
+       // vertTitleLabel.tg_top.equal(10)  //您可以注释上面，解开这句看看运行效果
+        rootLayout.addSubview(vertTitleLabel)
         
         let vertLayout = createVertSubviewLayout()
         vertLayout.tg_size(width:.fill, height: .wrap) //宽度和父视图保持一致，高度由子视图决定
@@ -157,9 +170,9 @@ extension LLTest1ViewController
         /*
          对于垂直线性布局里面的子视图来说:
          1.如果不设置任何边距则每个子视图的左边都跟父视图左对齐，而上下则依次按加入的顺序排列。
-         2.tg_left, tg_right的意义是子视图距离父视图的左右边距。
+         2.tg_leading, tg_trailing的意义是子视图距离父视图的左右边距。
          3.tg_top, tg_bottom的意义是子视图和兄弟视图之间的上下间距。
-         4.如果同时设置了tg_left,tg_right则除了能确定左右边距，还能确定自身的宽度。
+         4.如果同时设置了tg_leading,tg_trailing则除了能确定左右边距，还能确定自身的宽度。
          5.如果同时设置了tg_top,tg_bottom则只能确定和其他兄弟视图之间的上下间距，但不能确定自身的高度。
          6.tg_centerX表示子视图的水平中心点在父视图的水平中心点上的偏移。
          7.tg_centerY的设置没有意义。
@@ -170,12 +183,12 @@ extension LLTest1ViewController
         v1.tg_size(width: 200, height: 35)   //设置视图的宽度和高度
         //您也可以用如下方式分别设置:
         // v1.tg_top.equal(10)        //上边边距10
-        // v1.tg_left.equal(10)       //左边边距10
+        // v1.tg_leading.equal(10)       //左边边距10
         // v1.tg_width.equal(200)     //宽度200
         // v1.tg_height.equal(35)     //高度35
         //您也可以采用运算符的方式进行设置：
         // v1.tg_top ~= 10
-        // v1.tg_left ~= 10
+        // v1.tg_leading ~= 10
         // v1.tg_width ~= 200
         // v1.tg_height ~= 35
         vertLayout.addSubview(v1)
@@ -192,7 +205,7 @@ extension LLTest1ViewController
         
         let v3 = self.createLabel(NSLocalizedString("right margin", comment:""), color: CFTool.color(7))
         v3.tg_top.equal(10)
-        v3.tg_right.equal(10)  //右边边距10,因为这里只设置了右边边距，所以垂直线性布局会将子视图进行右对齐。
+        v3.tg_trailing.equal(10)  //右边边距10,因为这里只设置了右边边距，所以垂直线性布局会将子视图进行右对齐。
         v3.tg_size(width: 200, height: 35)   //设置视图的宽度和高度
         vertLayout.addSubview(v3)
         
@@ -211,8 +224,8 @@ extension LLTest1ViewController
         let v4 = self.createLabel(NSLocalizedString("left right", comment:""), color: CFTool.color(8))
         v4.tg_top.equal(10)
         v4.tg_bottom.equal(10) // 注意这里虽然设置了上下的间距，但是对于垂直线性布局来说，同时设置上下间距并不能决定子视图的高度，只是表明子视图离兄弟视图的距离而已
-        v4.tg_left.equal(10)
-        v4.tg_right.equal(10)  //上面两行代码将左右边距设置为10。对于垂直线性布局来说如果子视图同时设置了左右边距则宽度会自动算出，因此不需要设置tg_width的值了
+        v4.tg_leading.equal(10)
+        v4.tg_trailing.equal(10)  //上面两行代码将左右边距设置为10。对于垂直线性布局来说如果子视图同时设置了左右边距则宽度会自动算出，因此不需要设置tg_width的值了
         v4.tg_height.equal(35)  //这里仍然要设置子视图的高度。
         vertLayout.addSubview(v4)
         
@@ -234,9 +247,9 @@ extension LLTest1ViewController
          对于水平线性布局里面的子视图来说:
          1.如果不设置任何边距则每个子视图的上边都跟父视图上对齐，而左右则依次按加入的顺序排列。
          2.tg_top, tg_bottom的意义是子视图距离父视图的上下边距。
-         3.tg_left, tg_right的意义是子视图和兄弟视图之间的左右间距。
+         3.tg_leading, tg_trailing的意义是子视图和兄弟视图之间的左右间距。
          4.如果同时设置了tg_top,tg_bottom则除了能确定上下边距，还能确定自身的高度。
-         5.如果同时设置了tg_left,tg_right则只能确定和其他兄弟视图之间的左右间距，但不能确定自身的宽度。
+         5.如果同时设置了tg_leading,tg_trailing则只能确定和其他兄弟视图之间的左右间距，但不能确定自身的宽度。
          6.tg_centerY表示子视图的垂直中心点在父视图的垂直中心点上的偏移。
          7.tg_centerX的设置没有意义。
          */
@@ -244,7 +257,7 @@ extension LLTest1ViewController
         
         let v1 = self.createLabel(NSLocalizedString("top margin", comment:""), color: CFTool.color(5))
         v1.tg_top.equal(10)      //上边边距10
-        v1.tg_left.equal(10)     //左边边距10
+        v1.tg_leading.equal(10)     //左边边距10
         v1.tg_width.equal(60)
         v1.tg_height.equal(60)
         horzLayout.addSubview(v1)
@@ -252,7 +265,7 @@ extension LLTest1ViewController
         
         
         let v2 = self.createLabel(NSLocalizedString("vert center", comment:""), color: CFTool.color(6))
-        v2.tg_left.equal(10)
+        v2.tg_leading.equal(10)
         v2.tg_centerY.equal(0)   //垂直居中，如果不等于0则会产生居中偏移
         v2.tg_width.equal(60)
         v2.tg_height.equal(60)   //设置布局尺寸
@@ -261,16 +274,16 @@ extension LLTest1ViewController
         
         let v3 = self.createLabel(NSLocalizedString("bottom margin", comment:""), color: CFTool.color(7))
         v3.tg_bottom.equal(10)
-        v3.tg_left.equal(10)
-        v3.tg_right.equal(5)  //对于水平线性布局来说，同时设置左右间距并不能决定子视图的宽度，因此需要明确的设定宽度。
+        v3.tg_leading.equal(10)
+        v3.tg_trailing.equal(5)  //对于水平线性布局来说，同时设置左右间距并不能决定子视图的宽度，因此需要明确的设定宽度。
         v3.tg_width.equal(60)
         v3.tg_height.equal(60)   //设置布局尺寸
         horzLayout.addSubview(v3)
         
         
         let v4 = self.createLabel(NSLocalizedString("top bottom", comment:""), color: CFTool.color(8))
-        v4.tg_left.equal(10)
-        v4.tg_right.equal(10)
+        v4.tg_leading.equal(10)
+        v4.tg_trailing.equal(10)
         v4.tg_top.equal(10)
         v4.tg_bottom.equal(10) //上面两行代码将上下边距设置为10,对于水平线性布局来说如果子视图同时设置了上下边距则高度会自动算出,因此不需要设置tg_height的值了。
         v4.tg_width.equal(60)

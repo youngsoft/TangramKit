@@ -32,8 +32,8 @@ class FLLTest6ViewController: UIViewController {
         rootLayout.tg_height.equal(.wrap)  //上下滚动，每页9个。
         rootLayout.tg_space = 10
         rootLayout.tg_padding = UIEdgeInsetsMake(10, 5, 10, 5)
-        rootLayout.tg_left.equal(0).isActive = true //active属性用来表示是否让这个属性设置生效。
-        rootLayout.tg_right.equal(0).isActive = true  //这里设置左右的边距是0并生效，表示宽度和父视图相等。
+        rootLayout.tg_leading.equal(0).isActive = true //active属性用来表示是否让这个属性设置生效。
+        rootLayout.tg_trailing.equal(0).isActive = true  //这里设置左右的边距是0并生效，表示宽度和父视图相等。
         rootLayout.tg_top.equal(0).isActive = false
         rootLayout.tg_bottom.equal(0).isActive = false  //这里设置上下边距是0但是不生效，这时候高度是不能生效的。
         scrollView.addSubview(rootLayout)
@@ -62,8 +62,8 @@ class FLLTest6ViewController: UIViewController {
     {
         //这里实现单击里面控件按钮来实现多行多列到单行单列的切换。多行多列时布局视图的宽度和父视图相等，而单行单列时布局视图的高度和父视图的高度相等。
         //下面这段话就是用来设置每次切换时的布局尺寸的处理。
-        self.rootLayout.tg_left.isActive = !self.rootLayout.tg_left.isActive;
-        self.rootLayout.tg_right.isActive = !self.rootLayout.tg_right.isActive;
+        self.rootLayout.tg_leading.isActive = !self.rootLayout.tg_leading.isActive;
+        self.rootLayout.tg_trailing.isActive = !self.rootLayout.tg_trailing.isActive;
         self.rootLayout.tg_top.isActive = !self.rootLayout.tg_top.isActive;
         self.rootLayout.tg_bottom.isActive = !self.rootLayout.tg_bottom.isActive;
         

@@ -249,7 +249,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     public var tg_distanceError : CGFloat = 0.5
     
     fileprivate var tgHasOriginView = false
-    fileprivate var tgSubviewPoints : [CGPoint]?
+    fileprivate var tgPathPoints : [CGPoint]?
     fileprivate var tgPointIndexs : [Int]?
     fileprivate var tgArgumentArray = {
         return [CGFloat]()
@@ -291,12 +291,12 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     //开始和结束获取子视图路径数据的方法,full表示getSubviewPathPoint获取的是否是全部路径点。如果为NO则只会获取子视图的位置的点。
     public func tg_beginSubviewPathPoint(full:Bool){
         var pointIndexs:[Int]? = full ? [Int]() : nil
-        tgSubviewPoints = tgCalcPoints(sbs: tg_pathSubviews, path: nil, pointIndexArray: &pointIndexs)
+        tgPathPoints = tgCalcPoints(sbs: tg_pathSubviews, path: nil, pointIndexArray: &pointIndexs)
         tgPointIndexs = full ? pointIndexs : nil
     }
     
     public func tg_endSubviewPathPoint(){
-        tgSubviewPoints = nil
+        tgPathPoints = nil
         tgPointIndexs = nil
     }
     
@@ -305,7 +305,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
      * fromIndex指定开始的子视图的索引位置，toIndex指定结束的子视图的索引位置。如果有原点子视图时,这两个索引值不能算上原点子视图的索引值。
      */
     public func tg_getSubviewPathPoint(fromIndex:Int,toIndex:Int) -> [CGPoint]?{
-        if tgSubviewPoints == nil {
+        if tgPathPoints == nil {
             return nil
         }
         
@@ -329,13 +329,13 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             }
             
             for i in start...end {
-                retPoints.append(tgSubviewPoints![i])
+                retPoints.append(tgPathPoints![i])
             }
         }else{
             var end = tgPointIndexs![realFromIndex]
             let start = tgPointIndexs![realToIndex]
             while end >= start {
-                retPoints.append(tgSubviewPoints![end])
+                retPoints.append(tgPathPoints![end])
                 end-=1
             }
         }
@@ -349,7 +349,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
      */
     public func tg_createPath(subviewCount:Int) -> CGPath{
         let retPath = CGMutablePath()
-        var pTotalLen : CGFloat? = nil
+        var pathLen : CGFloat? = nil
         var pointIndexArray : [Int]? = []
         switch tg_spaceType {
         case let .fixed(value):
@@ -357,9 +357,9 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             if subviewCount == -1{
                 subviewCount = tg_pathSubviews.count
             }
-            _ = tgCalcPathPoints(showPath: retPath, pTotalLen: &pTotalLen, subviewCount: subviewCount, pointIndexArray: &pointIndexArray, viewSpacing: value)
+            _ = tgCalcPathPoints(showPath: retPath, pPathLen: &pathLen, subviewCount: subviewCount, pointIndexArray: &pointIndexArray, viewSpace: value)
         default:
-            _ = tgCalcPathPoints(showPath: retPath, pTotalLen: &pTotalLen, subviewCount: -1, pointIndexArray: &pointIndexArray, viewSpacing: 0)
+            _ = tgCalcPathPoints(showPath: retPath, pPathLen: &pathLen, subviewCount: -1, pointIndexArray: &pointIndexArray, viewSpace: 0)
         }
         return retPath
     }
@@ -368,19 +368,19 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     //MARK: -- Private Method
     fileprivate func tgCalcPoints(sbs:[UIView],path:CGMutablePath?,pointIndexArray:inout [Int]?) -> [CGPoint]?{
         if sbs.count > 0{
-            var totalLen : CGFloat? = nil
+            var pathLen : CGFloat? = nil
             var sbvcount = sbs.count
             switch tg_spaceType {
             case let .fixed(value):
-                return tgCalcPathPoints(showPath: path, pTotalLen: &totalLen, subviewCount: sbs.count, pointIndexArray: &pointIndexArray, viewSpacing: value)
+                return tgCalcPathPoints(showPath: path, pPathLen: &pathLen, subviewCount: sbs.count, pointIndexArray: &pointIndexArray, viewSpace: value)
             case let .count(count):
                 sbvcount = count
             default:
                 break
             }
             
-            totalLen = 0
-            let tempArray = tgCalcPathPoints(showPath: path, pTotalLen: &totalLen, subviewCount: -1, pointIndexArray: &pointIndexArray, viewSpacing: 0)
+            pathLen = 0
+            let tempArray = tgCalcPathPoints(showPath: path, pPathLen: &pathLen, subviewCount: -1, pointIndexArray: &pointIndexArray, viewSpace: 0)
             var bClose = false
             if tempArray.count > 1{
                 let p1 = tempArray.first
@@ -388,28 +388,28 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
                 bClose = tgCalcDistance(pt1: p1!, pt2: p2!) <= 1
             }
             
-            var viewSpacing : CGFloat = 0
+            var viewSpace : CGFloat = 0
             if sbvcount > 1{
                 let n  = bClose ? 0 : 1
-                viewSpacing = totalLen! / CGFloat(sbvcount - n)
+                viewSpace = pathLen! / CGFloat(sbvcount - n)
             }
-            totalLen = nil
-            return tgCalcPathPoints(showPath: nil, pTotalLen: &totalLen, subviewCount: sbs.count, pointIndexArray: &pointIndexArray, viewSpacing: viewSpacing)
+            pathLen = nil
+            return tgCalcPathPoints(showPath: nil, pPathLen: &pathLen, subviewCount: sbs.count, pointIndexArray: &pointIndexArray, viewSpace: viewSpace)
         }
         
         return nil
     }
     
     fileprivate func tgCalcPathPoints(showPath:CGMutablePath?,
-                                    pTotalLen:inout CGFloat?,
+                                    pPathLen:inout CGFloat?,
                                     subviewCount:Int,
                                     pointIndexArray:inout [Int]?,
-                                    viewSpacing:CGFloat)
+                                    viewSpace:CGFloat)
         ->[CGPoint]
     {
-        var pointArray = [CGPoint]()
-        let selfWidth = bounds.width - tg_leftPadding - tg_rightPadding
-        let selfHeight = bounds.height - tg_topPadding - tg_bottomPadding
+        var pathPointArray = [CGPoint]()
+        let selfWidth = bounds.width - self.tg_leftPadding - self.tg_rightPadding
+        let selfHeight = bounds.height - self.tg_topPadding - self.tg_bottomPadding
         var startArg : CGFloat
         var endArg : CGFloat
         if let rectangularEquation = tg_rectangularEquation{
@@ -439,16 +439,16 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
                 endArg = tg_coordinateSetting.end
             }
             
-            tgCalcPathPointsHelper(pointArray: &pointArray, showPath: showPath, pTotalLen: &pTotalLen, subviewCount: subviewCount, pointIndexArray: &pointIndexArray, viewSpacing: viewSpacing, startArg: startArg, endArg: endArg){
+            tgCalcPathPointsHelper(pathPointArray: &pathPointArray, showPath: showPath, pPathLen: &pPathLen, subviewCount: subviewCount, pointIndexArray: &pointIndexArray, viewSpace: viewSpace, startArg: startArg, endArg: endArg){
                 arg in
                 if let val = rectangularEquation(arg){
                     if tg_coordinateSetting.isReverse{
-                        let x = val + selfWidth * tg_coordinateSetting.origin.x + tg_leftPadding
-                        let y = (tg_coordinateSetting.isMath ? -arg : arg) + selfHeight * tg_coordinateSetting.origin.y + tg_topPadding
+                        let x = val + selfWidth * tg_coordinateSetting.origin.x + self.tg_leftPadding
+                        let y = (tg_coordinateSetting.isMath ? -arg : arg) + selfHeight * tg_coordinateSetting.origin.y + self.tg_topPadding
                         return CGPoint(x: x, y: y)
                     }else{
-                        let x = arg + selfWidth * tg_coordinateSetting.origin.x + tg_leftPadding
-                        let y = (tg_coordinateSetting.isMath ? -val : val) + selfHeight * tg_coordinateSetting.origin.y + tg_topPadding
+                        let x = arg + selfWidth * tg_coordinateSetting.origin.x + self.tg_leftPadding
+                        let y = (tg_coordinateSetting.isMath ? -val : val) + selfHeight * tg_coordinateSetting.origin.y + self.tg_topPadding
                         return CGPoint(x: x, y: y)
                     }
                     
@@ -483,17 +483,17 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
                 endArg = tg_coordinateSetting.end
             }
             
-            tgCalcPathPointsHelper(pointArray: &pointArray, showPath: showPath, pTotalLen: &pTotalLen, subviewCount: subviewCount, pointIndexArray: &pointIndexArray, viewSpacing: viewSpacing, startArg: startArg, endArg: endArg){
+            tgCalcPathPointsHelper(pathPointArray: &pathPointArray, showPath: showPath, pPathLen: &pPathLen, subviewCount: subviewCount, pointIndexArray: &pointIndexArray, viewSpace: viewSpace, startArg: startArg, endArg: endArg){
                 arg in
                 if let val = parametricEquation(arg){
                     if tg_coordinateSetting.isReverse{
-                        let x = val.y + selfWidth * tg_coordinateSetting.origin.x + tg_leftPadding
-                        let y = (tg_coordinateSetting.isMath ? -val.x : val.x) + selfHeight * tg_coordinateSetting.origin.y + tg_topPadding
+                        let x = val.y + selfWidth * tg_coordinateSetting.origin.x + self.tg_leftPadding
+                        let y = (tg_coordinateSetting.isMath ? -val.x : val.x) + selfHeight * tg_coordinateSetting.origin.y + self.tg_topPadding
                         return CGPoint(x: x, y: y)
                     
                     }else{
-                        let x = val.x + selfWidth * tg_coordinateSetting.origin.x + tg_leftPadding
-                        let y = (tg_coordinateSetting.isMath ? -val.y : val.y) + selfHeight * tg_coordinateSetting.origin.y + tg_topPadding
+                        let x = val.x + selfWidth * tg_coordinateSetting.origin.x + self.tg_leftPadding
+                        let y = (tg_coordinateSetting.isMath ? -val.y : val.y) + selfHeight * tg_coordinateSetting.origin.y + self.tg_topPadding
                         return CGPoint(x: x, y: y)
                     }
                 
@@ -513,20 +513,20 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             if tg_coordinateSetting.end != nil {
                 endArg = TGRadian(value:tg_coordinateSetting.end).angle
             }
-            tgCalcPathPointsHelper(pointArray: &pointArray, showPath: showPath, pTotalLen: &pTotalLen, subviewCount: subviewCount, pointIndexArray: &pointIndexArray, viewSpacing: viewSpacing, startArg: startArg, endArg: endArg){
+            tgCalcPathPointsHelper(pathPointArray: &pathPointArray, showPath: showPath, pPathLen: &pPathLen, subviewCount: subviewCount, pointIndexArray: &pointIndexArray, viewSpace: viewSpace, startArg: startArg, endArg: endArg){
                 arg in
                 //计算用弧度
                 let rad = TGRadian(angle:arg)
                 if let r = polarEquation(rad){
                     if tg_coordinateSetting.isReverse{
                         let y = r * cos(rad.value)
-                        let x = r * sin(rad.value) + selfWidth * tg_coordinateSetting.origin.x + tg_leftPadding
-                        let y1 =  (tg_coordinateSetting.isMath ? -y : y) + selfHeight * tg_coordinateSetting.origin.y + tg_topPadding
+                        let x = r * sin(rad.value) + selfWidth * tg_coordinateSetting.origin.x + self.tg_leftPadding
+                        let y1 =  (tg_coordinateSetting.isMath ? -y : y) + selfHeight * tg_coordinateSetting.origin.y + self.tg_topPadding
                         return CGPoint(x: x, y: y1)
                     }else{
                         let y = r * sin(rad.value)
-                        let x = r * cos(rad.value) + selfWidth * tg_coordinateSetting.origin.x + tg_leftPadding
-                        let y1 =  (tg_coordinateSetting.isMath ? -y : y) + selfHeight * tg_coordinateSetting.origin.y + tg_topPadding
+                        let x = r * cos(rad.value) + selfWidth * tg_coordinateSetting.origin.x + self.tg_leftPadding
+                        let y1 =  (tg_coordinateSetting.isMath ? -y : y) + selfHeight * tg_coordinateSetting.origin.y + self.tg_topPadding
                         return CGPoint(x: x, y: y1)
                     }
                 }else{
@@ -535,15 +535,15 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             }
         }
 
-        return pointArray
+        return pathPointArray
     }
     
-    fileprivate func tgCalcPathPointsHelper(pointArray:inout [CGPoint],
+    fileprivate func tgCalcPathPointsHelper(pathPointArray:inout [CGPoint],
                                           showPath:CGMutablePath?,
-                                          pTotalLen:inout CGFloat?,
+                                          pPathLen:inout CGFloat?,
                                           subviewCount:Int,
                                           pointIndexArray:inout [Int]?,
-                                          viewSpacing:CGFloat,
+                                          viewSpace:CGFloat,
                                           startArg:CGFloat,
                                           endArg:CGFloat,
                                           function:(CGFloat)->CGPoint?)
@@ -572,9 +572,9 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             }else{
                 if (isStart && startCount >= 1){
                     if (pointIndexArray != nil){
-                        pointIndexArray!.append(pointArray.count)
+                        pointIndexArray!.append(pathPointArray.count)
                     }
-                    pointArray.append(lastXY)
+                    pathPointArray.append(lastXY)
                     tgArgumentArray.append(arg)
                     showPath?.addLine(to: lastXY)
                     break
@@ -589,34 +589,34 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
                     if (subviewCount > 0 && startCount == 1){
                         subviewCount-=1
                         lastValidArg = arg
-                        pointIndexArray?.append(pointArray.count)
+                        pointIndexArray?.append(pathPointArray.count)
                         tgArgumentArray.append(arg)
                     }
-                    pointArray.append(realXY!)
+                    pathPointArray.append(realXY!)
                     showPath?.move(to: realXY!)
                 }else{
                     if (subviewCount >= 0){
                         let oldDistance = distance
                         distance += tgCalcDistance(pt1: realXY!, pt2: lastXY)
-                        if (distance >= viewSpacing){
-                            if (distance - viewSpacing >= tg_distanceError){
-                                realXY = tgGetNearestDistancePoint(startArg: arg, lastXY: lastXY, distance: oldDistance, viewSpace: viewSpacing, pLastValidArg: &lastValidArg, function: function)
+                        if (distance >= viewSpace){
+                            if (distance - viewSpace >= tg_distanceError){
+                                realXY = tgGetNearestDistancePoint(startArg: arg, lastXY: lastXY, distance: oldDistance, viewSpace: viewSpace, pLastValidArg: &lastValidArg, function: function)
                             }else{
                                 lastValidArg = arg
                             }
                             if (pointIndexArray == nil){
-                                pointArray.append(realXY!)
+                                pathPointArray.append(realXY!)
                             }else{
-                                pointIndexArray?.append(pointArray.count)
+                                pointIndexArray!.append(pathPointArray.count)
                             }
                             distance = 0
                             subviewCount -= 1
                             tgArgumentArray.append(lastValidArg)
-                        }else if (distance - viewSpacing > -1 * tg_distanceError){
+                        }else if (distance - viewSpace > -1 * tg_distanceError){
                             if (pointIndexArray == nil){
-                                pointArray.append(realXY!)
+                                pathPointArray.append(realXY!)
                             }else{
-                                pointIndexArray?.append(pointArray.count)
+                                pointIndexArray!.append(pathPointArray.count)
                             }
                             distance = 0
                             subviewCount -= 1
@@ -627,18 +627,18 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
                         }
                     }else{
                         if (pointIndexArray == nil){
-                            pointArray.append(realXY!)
+                            pathPointArray.append(realXY!)
                         }
                     }
                     
                     if (pointIndexArray != nil){
-                        pointArray.append(realXY!)
+                        pathPointArray.append(realXY!)
                     }
                     
                     showPath?.addLine(to: realXY!)
                     
-                    if (pTotalLen != nil){
-                        pTotalLen! += tgCalcDistance(pt1: realXY!, pt2: lastXY)
+                    if (pPathLen != nil){
+                        pPathLen! += tgCalcDistance(pt1: realXY!, pt2: lastXY)
                     }
                 }
                 
@@ -699,6 +699,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
                 step /= 10
             }
             if step <= 0.0001 {
+                pLastValidArg = arg
                 break
             }
         }
@@ -715,28 +716,41 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
           sbs = tgGetLayoutSubviews()
         }
         
+        let lsc = self.tgCurrentSizeClass as! TGPathLayoutViewSizeClassImpl
+        
         let sbs2:[UIView] = sbs
         for sbv in sbs{
+            
+            let sbvsc = sbv.tgCurrentSizeClass as! TGViewSizeClassImpl
+            let sbvtgFrame = sbv.tgFrame
+            
             if !isEstimate{
-                sbv.tgFrame.frame = sbv.bounds
-                tgCalcSizeFromSizeWrapSubview(sbv)
+                sbvtgFrame.frame = sbv.bounds
+                tgCalcSizeFromSizeWrapSubview(sbv,sbvsc:sbvsc, sbvtgFrame:sbvtgFrame)
             }
             
             if sbv.isKind(of: TGBaseLayout.self){
-                let sbv1 = sbv as! TGBaseLayout
-                if hasSubLayout && ((sbv1.tgWidth?.isWrap ?? false) || (sbv1.tgHeight?.isWrap ?? false)){
+                
+                let sbvtgWidthIsWrap = sbvsc.tgWidth?.isWrap ?? false
+                let sbvtgHeightIsWrap = sbvsc.tgHeight?.isWrap ?? false
+
+                
+                let sbvl = sbv as! TGBaseLayout
+                if hasSubLayout && (sbvtgWidthIsWrap || sbvtgHeightIsWrap){
                     hasSubLayout = true
                 }
                 
-                if isEstimate && ((sbv1.tgWidth?.isWrap ?? false) || (sbv1.tgHeight?.isWrap ?? false)){
-                    _ = sbv1.tg_sizeThatFits(sbv1.tgFrame.frame.size, inSizeClass: type)
-                    sbv1.tgFrame.sizeClass = sbv1.tgMatchBestSizeClass(type)
-                    //因为tg_sizeThatFits执行后会还原，所以这里要重新设置
+                if isEstimate && (sbvtgWidthIsWrap || sbvtgHeightIsWrap){
+                    _ = sbvl.tg_sizeThatFits(sbvtgFrame.frame.size, inSizeClass: type)
+                    if sbvtgFrame.multiple
+                    {
+                        sbvtgFrame.sizeClass = sbv.tgMatchBestSizeClass(type)  //因为estimateLayoutRect执行后会还原，所以这里要重新设置
+                    }
                 }
             }
         }
         
-       // var maxSize = CGSize(width: tg_leftPadding, height: tg_topPadding)
+       // var maxSize = CGSize(width: lsc.tg_leftPadding, height: lsc.tg_topPadding)
         //记录最小的y值和最大的y值
         var minYPos = CGFloat.greatestFiniteMagnitude
         var maxYPos = -CGFloat.greatestFiniteMagnitude
@@ -761,6 +775,9 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
 
         for i in 0..<sbs.count{
             let sbv = sbs[i]
+            let sbvsc = sbv.tgCurrentSizeClass as! TGViewSizeClassImpl
+            let sbvtgFrame = sbv.tgFrame
+            
             var pt = CGPoint.zero
             if pts != nil && pts!.count > i{
                 pt = pts![i]
@@ -769,41 +786,45 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             //计算得到最大的高度和最大的宽度。
             var rect = sbv.tgFrame.frame
             
-            if sbv.tgWidth?.dimeNumVal != nil{
-                rect.size.width = sbv.tgWidth!.measure
+            if sbvsc.tgWidth?.dimeNumVal != nil{
+                rect.size.width = sbvsc.tgWidth!.measure
             }
             
-            if sbv.tgWidth?.dimeRelaVal != nil{
-                if sbv.tgWidth!.dimeRelaVal === self.tgWidth{
-                    rect.size.width =  sbv.tgWidth!.measure(selfSize.width - tg_leftPadding - tg_rightPadding)
+            if sbvsc.tgWidth?.dimeRelaVal != nil{
+                if sbvsc.tgWidth!.dimeRelaVal === lsc.tgWidth{
+                    rect.size.width =  sbvsc.tgWidth!.measure(selfSize.width - lsc.tg_leftPadding - lsc.tg_rightPadding)
                 }else{
-                    rect.size.width = sbv.tgWidth!.measure(sbv.tgWidth!.dimeRelaVal._view.tg_estimatedFrame.size.width)
+                    rect.size.width = sbvsc.tgWidth!.measure(sbvsc.tgWidth!.dimeRelaVal._view.tg_estimatedFrame.size.width)
                 }
             }
             
-            rect.size.width = tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.width = tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
             
-            if sbv.tgHeight?.dimeNumVal != nil{
-                rect.size.height = sbv.tgHeight!.measure
+            if sbvsc.tgHeight?.dimeNumVal != nil{
+                rect.size.height = sbvsc.tgHeight!.measure
             }
             
-            if sbv.tgHeight?.dimeRelaVal != nil{
-                if sbv.tgHeight!.dimeRelaVal === self.tgHeight{
-                    rect.size.height = sbv.tgHeight!.measure(selfSize.height - tg_topPadding - tg_bottomPadding)
+            if sbvsc.tgHeight?.dimeRelaVal != nil{
+                if sbvsc.tgHeight!.dimeRelaVal === lsc.tgHeight{
+                    rect.size.height = sbvsc.tgHeight!.measure(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
                 }else{
-                    rect.size.height = sbv.tgHeight!.measure(sbv.tgHeight!.dimeRelaVal._view.tg_estimatedFrame.size.height)
+                    rect.size.height = sbvsc.tgHeight!.measure(sbvsc.tgHeight!.dimeRelaVal._view.tg_estimatedFrame.size.height)
                 }
             }
             
-            if (sbv.tgHeight?.isFlexHeight ?? false){
-                rect.size.height = tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
+            if let t = sbvsc.tgHeight, t.isFlexHeight {
+                rect.size.height = tgCalcHeightFromHeightWrapView(sbv, sbvsc:sbvsc, width: rect.size.width)
             }
             
-            rect.size.height = tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.height = tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
             //中心点的位置。。
-            rect.origin.x = pt.x - rect.size.width * sbv.layer.anchorPoint.x + (sbv.tgLeft?.margin ?? 0)
-            rect.origin.y = pt.y - rect.size.height * sbv.layer.anchorPoint.y + (sbv.tgTop?.margin ?? 0)
+            let leftMargin = sbvsc.tgLeft?.margin ?? 0
+            let topMargin = sbvsc.tgTop?.margin ?? 0
+            let rightMargin = sbvsc.tgRight?.margin ?? 0
+            let bottomMargin = sbvsc.tgBottom?.margin ?? 0
+            rect.origin.x = pt.x - rect.size.width * sbv.layer.anchorPoint.x + leftMargin - rightMargin
+            rect.origin.y = pt.y - rect.size.height * sbv.layer.anchorPoint.y + topMargin - bottomMargin
            
             if (rect.minY < minYPos)
             {
@@ -825,48 +846,56 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
                 maxXPos = rect.maxX
             }
             
-            sbv.tgFrame.frame = rect
+            sbvtgFrame.frame = rect
         }
         
         //特殊填充中心视图。
         if let sbv = tg_originView{
-            var rect = sbv.tgFrame.frame
             
-            if sbv.tgWidth?.dimeNumVal != nil{
-                rect.size.width = sbv.tgWidth!.measure
+            let sbvsc = sbv.tgCurrentSizeClass as! TGViewSizeClassImpl
+            let sbvtgFrame = sbv.tgFrame
+            var rect = sbvtgFrame.frame
+            
+            if sbvsc.tgWidth?.dimeNumVal != nil{
+                rect.size.width = sbvsc.tgWidth!.measure
             }
             
-            if sbv.tgWidth?.dimeRelaVal != nil{
-                if sbv.tgWidth!.dimeRelaVal === self.tgWidth{
-                    rect.size.width = sbv.tgWidth!.measure(selfSize.width - tg_leftPadding - tg_rightPadding)
+            if sbvsc.tgWidth?.dimeRelaVal != nil{
+                if sbvsc.tgWidth!.dimeRelaVal === lsc.tgWidth{
+                    rect.size.width = sbvsc.tgWidth!.measure(selfSize.width - lsc.tg_leftPadding - lsc.tg_rightPadding)
                 }else{
-                    rect.size.width = sbv.tgWidth!.measure(sbv.tgWidth!.dimeRelaVal._view.tg_estimatedFrame.size.width)
+                    rect.size.width = sbvsc.tgWidth!.measure(sbvsc.tgWidth!.dimeRelaVal._view.tg_estimatedFrame.size.width)
                 }
             }
             
-            rect.size.width = tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.width = tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
             
-            if (sbv.tgHeight?.dimeNumVal != nil){
-                rect.size.height = sbv.tgHeight!.measure
+            if (sbvsc.tgHeight?.dimeNumVal != nil){
+                rect.size.height = sbvsc.tgHeight!.measure
             }
             
-            if (sbv.tgHeight?.dimeRelaVal != nil){
-                if (sbv.tgHeight!.dimeRelaVal === self.tgHeight){
-                    rect.size.height = sbv.tgHeight!.measure(selfSize.height - tg_topPadding - tg_bottomPadding)
+            if (sbvsc.tgHeight?.dimeRelaVal != nil){
+                if (sbvsc.tgHeight!.dimeRelaVal === lsc.tgHeight){
+                    rect.size.height = sbvsc.tgHeight!.measure(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
                 }else{
-                    rect.size.height = sbv.tgHeight!.measure(sbv.tgHeight!.dimeRelaVal._view.tg_estimatedFrame.size.height)
+                    rect.size.height = sbvsc.tgHeight!.measure(sbvsc.tgHeight!.dimeRelaVal._view.tg_estimatedFrame.size.height)
                 }
             }
             
-            if (sbv.tgHeight?.isFlexHeight ?? false){
-                rect.size.height = tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
+            if let t = sbvsc.tgHeight, t.isFlexHeight {
+                rect.size.height = tgCalcHeightFromHeightWrapView(sbv, sbvsc:sbvsc, width: rect.size.width)
             }
             
-            rect.size.height = tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.height = tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
             //位置在原点位置。。
-            rect.origin.x = (selfSize.width - tg_leftPadding - tg_rightPadding)*tg_coordinateSetting.origin.x - rect.size.width / 2 + (sbv.tgLeft?.margin ?? 0) + tg_leftPadding
-            rect.origin.y = (selfSize.height - tg_topPadding - tg_bottomPadding)*tg_coordinateSetting.origin.y - rect.size.height / 2 + (sbv.tgTop?.margin ?? 0) + tg_topPadding
+            let leftMargin = sbvsc.tgLeft?.margin ?? 0
+            let topMargin = sbvsc.tgTop?.margin ?? 0
+            let rightMargin = sbvsc.tgRight?.margin ?? 0
+            let bottomMargin = sbvsc.tgBottom?.margin ?? 0
+            
+            rect.origin.x = (selfSize.width - lsc.tg_leftPadding - lsc.tg_rightPadding)*tg_coordinateSetting.origin.x - rect.size.width / 2 + leftMargin - rightMargin + lsc.tg_leftPadding
+            rect.origin.y = (selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)*tg_coordinateSetting.origin.y - rect.size.height / 2 + topMargin - bottomMargin + lsc.tg_topPadding
             
             if (rect.minY < minYPos)
             {
@@ -898,7 +927,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
         
         if maxYPos == -.greatestFiniteMagnitude
         {
-            maxYPos = tg_topPadding + tg_bottomPadding
+            maxYPos = lsc.tg_topPadding + lsc.tg_bottomPadding
         }
         
         if minXPos == .greatestFiniteMagnitude
@@ -908,27 +937,26 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
         
         if maxXPos == -.greatestFiniteMagnitude
         {
-            maxXPos = tg_leftPadding + tg_rightPadding
+            maxXPos = lsc.tg_leftPadding + lsc.tg_rightPadding
         }
  
         
-        if (self.tgWidth?.isWrap ?? false){
-            selfSize.width = maxXPos - minXPos // + tg_leftPadding + tg_rightPadding
+        if let t = lsc.tgWidth, t.isWrap {
+            selfSize.width = maxXPos - minXPos
         }
         
-        if (self.tgHeight?.isWrap ?? false){
-            selfSize.height = maxYPos - minYPos // + tg_topPadding + tg_bottomPadding
+        if let t = lsc.tgHeight, t.isWrap {
+            selfSize.height = maxYPos - minYPos
         }
-        
-        selfSize.height = tgValidMeasure(self.tgHeight, sbv: self, calcSize: selfSize.height, sbvSize: selfSize, selfLayoutSize: superview!.bounds.size)
-        
-        selfSize.width = tgValidMeasure(self.tgWidth, sbv: self, calcSize: selfSize.width, sbvSize: selfSize, selfLayoutSize: superview!.bounds.size)
     
-        return (self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs2),hasSubLayout)
+        tgAdjustLayoutSelfSize(selfSize: &selfSize, lsc: lsc)
+        
+        
+        return (self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs2, lsc:lsc),hasSubLayout)
     }
     
     override func tgCreateInstance() -> AnyObject {
-        return TGPathLayoutViewSizeClassImpl()
+        return TGPathLayoutViewSizeClassImpl(view:self)
     }
     
 }

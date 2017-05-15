@@ -34,6 +34,7 @@ class LLTest4ViewController: UIViewController {
          这个例子详细说明tg_width, tg_height设置为.wrap的意义、以及边界线性的设定、以及布局中可局部缩放背景图片的设定方法。
          */
 
+        self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
         
         super.loadView()
         
@@ -80,7 +81,7 @@ extension LLTest4ViewController
         wrapContentLayout.layer.contentsCenter = CGRect(x: 0.1, y: 0.1, width: 0.5, height: 0.5)
         
         //四周的边线
-        wrapContentLayout.tg_boundBorderline = TGLayoutBorderline(color: .red, headIndent:10, tailIndent:30)
+        wrapContentLayout.tg_boundBorderline = TGBorderline(color: .red, headIndent:10, tailIndent:30)
         
         
         let actionLayout = TGLinearLayout(.vert)

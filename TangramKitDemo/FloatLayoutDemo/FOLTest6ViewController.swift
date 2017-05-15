@@ -69,8 +69,8 @@ extension FOLTest6ViewController
         contentLayout.tg_height.equal(.wrap) //对于上下浮动布局来说，如果只想向上浮动，而高度又希望是由子视图决定，则必须要设置tg_noBoundaryLimit的值为true。
         
         
-        contentLayout.tg_left.equal(0)
-        contentLayout.tg_right.equal(0)
+        contentLayout.tg_leading.equal(0)
+        contentLayout.tg_trailing.equal(0)
         contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5);
         contentLayout.tg_hspace = 5
         contentLayout.tg_vspace = 5
@@ -84,7 +84,8 @@ extension FOLTest6ViewController
         
         let nameLabel = UILabel()
         nameLabel.text = "欧阳大哥"
-        nameLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        nameLabel.font = CFTool.font(17)
+        nameLabel.textColor = CFTool.color(4)
         nameLabel.tg_clearFloat = true; //注意这里要另外起一行。
         nameLabel.tg_width.equal(contentLayout.tg_width, increment:-45) //40的头像宽度外加5的左右间距。
         nameLabel.sizeToFit()
@@ -92,32 +93,30 @@ extension FOLTest6ViewController
         
         let nickNameLabel = UILabel()
         nickNameLabel.text = "醉里挑灯看键"
-        nickNameLabel.font = UIFont.systemFont(ofSize:13)
-        nickNameLabel.textColor = UIColor.lightGray
+        nickNameLabel.font = CFTool.font(15)
+        nickNameLabel.textColor = CFTool.color(3)
         nickNameLabel.sizeToFit()
         contentLayout.addSubview(nickNameLabel)
         
         let addressLabel = UILabel()
         addressLabel.text = "联系地址：中华人民共和国北京市朝阳区盈科中心B座2楼,其他的我就不会再告诉你了。"
-        addressLabel.font = UIFont.systemFont(ofSize:13)
-        addressLabel.textColor = UIColor.lightGray
-        addressLabel.numberOfLines = 0
+        addressLabel.font = CFTool.font(15)
+        addressLabel.textColor = CFTool.color(4)
         addressLabel.tg_height.equal(.wrap)
         addressLabel.tg_width.equal(contentLayout.tg_width, increment:-45) //40的头像宽度外加5的左右间距。
-        addressLabel.sizeToFit();
         contentLayout.addSubview(addressLabel)
         
         let qqlabel = UILabel()
         qqlabel.text = "QQ群:178573773"
-        qqlabel.textColor = UIColor.magenta
-        qqlabel.font = UIFont.systemFont(ofSize:13)
+        qqlabel.font = CFTool.font(15)
+        qqlabel.textColor = CFTool.color(4)
         qqlabel.sizeToFit();
         contentLayout.addSubview(qqlabel)
         
         let githublabel = UILabel()
         githublabel.text = "github: https://github.com/youngsoft"
-        githublabel.font = UIFont.systemFont(ofSize:13)
-        githublabel.textColor = UIColor.blue
+        githublabel.font = CFTool.font(15)
+        githublabel.textColor = CFTool.color(9)
         githublabel.tg_width.equal(contentLayout.tg_width, increment:-45) //40的头像宽度外加5的左右间距。
         githublabel.adjustsFontSizeToFitWidth = true
         githublabel.sizeToFit()
@@ -125,8 +124,8 @@ extension FOLTest6ViewController
         
         let detailLabel = UILabel()
         detailLabel.text = "坚持原创，以造轮子为乐!"
-        detailLabel.textColor = UIColor.red
-        detailLabel.font = UIFont.boldSystemFont(ofSize: 16)
+        detailLabel.font = CFTool.font(20)
+        detailLabel.textColor = CFTool.color(2)
         detailLabel.tg_width.equal(contentLayout.tg_width, increment:-45) //40的头像宽度外加5的左右间距。
         detailLabel.adjustsFontSizeToFitWidth = true
         detailLabel.sizeToFit()
@@ -141,8 +140,8 @@ extension FOLTest6ViewController
         let contentLayout = TGFloatLayout(.vert)
         contentLayout.backgroundColor = .white
         contentLayout.tg_height.equal(.wrap)
-        contentLayout.tg_left.equal(0)
-        contentLayout.tg_right.equal(0)
+        contentLayout.tg_leading.equal(0)
+        contentLayout.tg_trailing.equal(0)
         contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5);
         rootLayout.addSubview(contentLayout)
         
@@ -155,7 +154,8 @@ extension FOLTest6ViewController
         
         let nameLabel = UILabel()
         nameLabel.text = "欧阳大哥"
-        nameLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        nameLabel.font = CFTool.font(17)
+        nameLabel.textColor = CFTool.color(4)
         nameLabel.textAlignment = .center
         nameLabel.tg_width.equal(100%)
         nameLabel.tg_top.equal(10)
@@ -165,8 +165,8 @@ extension FOLTest6ViewController
         
         let nickNameLabel = UILabel()
         nickNameLabel.text = "醉里挑灯看键"
-        nickNameLabel.font = UIFont.systemFont(ofSize:13)
-        nickNameLabel.textColor = UIColor.lightGray
+        nickNameLabel.font = CFTool.font(15)
+        nickNameLabel.textColor = CFTool.color(3)
         nickNameLabel.textAlignment = .center
         nickNameLabel.tg_width.equal(100%)
         nickNameLabel.tg_top.equal(5)
@@ -194,7 +194,8 @@ extension FOLTest6ViewController
         {
             let menuLabel = UILabel()
             menuLabel.text = menus[i];
-            menuLabel.textColor = UIColor.lightGray
+            menuLabel.font = CFTool.font(14)
+            menuLabel.textColor = CFTool.color(2)
             menuLabel.textAlignment = .center
             menuLabel.adjustsFontSizeToFitWidth = true
             menuLabel.tg_width.equal(TGWeight(100.0/(CGFloat(3-i))))
@@ -208,7 +209,8 @@ extension FOLTest6ViewController
         {
             let valueLabel = UILabel()
             valueLabel.text = values[i];
-            valueLabel.font = UIFont.boldSystemFont(ofSize: 14)
+            valueLabel.font = CFTool.font(14)
+            valueLabel.textColor = CFTool.color(2)
             valueLabel.textAlignment = .center
             valueLabel.adjustsFontSizeToFitWidth = true
             valueLabel.tg_width.equal(TGWeight(100.0/(CGFloat(3-i))))
@@ -228,8 +230,8 @@ extension FOLTest6ViewController
         let contentLayout = TGFloatLayout(.horz)
         contentLayout.backgroundColor = .white
         contentLayout.tg_height.equal(.wrap)
-        contentLayout.tg_left.equal(0)
-        contentLayout.tg_right.equal(0)
+        contentLayout.tg_leading.equal(0)
+        contentLayout.tg_trailing.equal(0)
         contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5);
         rootLayout.addSubview(contentLayout)
         
@@ -240,14 +242,14 @@ extension FOLTest6ViewController
         headImageView.layer.borderWidth = 1;
         headImageView.tg_width.equal(80)
         headImageView.tg_height.equal(80)
-        headImageView.tg_right.equal(10)
+        headImageView.tg_trailing.equal(10)
         contentLayout.addSubview(headImageView)
         headImageView.tg_layoutCompletedDo{(layout:TGBaseLayout, sbv:UIView) in
             //这里我们建立一个特殊的子视图，我们可以在这个block里面建立子视图，不会影响到这次的子视图的布局。
             let label = UILabel()
             label.tg_useFrame = true   //这里我们设置useFrame为YES表示他不会参与布局，这样这个视图就可以摆脱浮动布局视图的约束。
             label.text = "99";
-            label.font = UIFont.systemFont(ofSize: 12)
+            label.font = CFTool.font(12)
             label.textColor = .white
             label.backgroundColor = .red
             label.sizeToFit() //这里内部会设置frame值。
@@ -264,22 +266,23 @@ extension FOLTest6ViewController
         
         let nameLabel = UILabel()
         nameLabel.text = "欧阳大哥";
-        nameLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        nameLabel.font = CFTool.font(17)
+        nameLabel.textColor = CFTool.color(4)
         nameLabel.sizeToFit()
         contentLayout.addSubview(nameLabel)
         
         let nickNameLabel = UILabel()
         nickNameLabel.text = "醉里挑灯看键"
-        nickNameLabel.font = UIFont.systemFont(ofSize: 13)
-        nickNameLabel.textColor = .lightGray
+        nickNameLabel.font = CFTool.font(15)
+        nickNameLabel.textColor = CFTool.color(3)
         nickNameLabel.sizeToFit()
         contentLayout.addSubview(nickNameLabel)
         
         
         let detailLabel =  UILabel()
         detailLabel.text = "坚持原创，以造轮子为乐!";
-        detailLabel.textColor = .red
-        detailLabel.font = UIFont.boldSystemFont(ofSize: 16)
+        detailLabel.font = CFTool.font(20)
+        detailLabel.textColor = CFTool.color(2)
         detailLabel.adjustsFontSizeToFitWidth = true
         detailLabel.tg_reverseFloat = true
         detailLabel.sizeToFit()
@@ -293,9 +296,9 @@ extension FOLTest6ViewController
         let contentLayout = TGFloatLayout(.vert)
         contentLayout.backgroundColor = .white
         contentLayout.tg_height.equal(.wrap)
-        contentLayout.tg_left.equal(0)
-        contentLayout.tg_right.equal(0)
-        contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5);
+        contentLayout.tg_leading.equal(0)
+        contentLayout.tg_trailing.equal(0)
+        contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
         rootLayout.addSubview(contentLayout)
         
         let headImageView = UIImageView(image:UIImage(named:"minions4"))
@@ -304,7 +307,7 @@ extension FOLTest6ViewController
         headImageView.layer.borderWidth = 1;
         headImageView.tg_width.equal(80)
         headImageView.tg_height.equal(80)
-        headImageView.tg_right.equal(10)
+        headImageView.tg_trailing.equal(10)
         contentLayout.addSubview(headImageView)
         
         
@@ -322,7 +325,8 @@ extension FOLTest6ViewController
         
         let nameLabel = UILabel()
         nameLabel.text = "欧阳大哥";
-        nameLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        nameLabel.font = CFTool.font(17)
+        nameLabel.textColor = CFTool.color(4)
         nameLabel.tg_width.equal(100%)
         nameLabel.sizeToFit()
         contentLayout.addSubview(nameLabel)
@@ -334,8 +338,8 @@ extension FOLTest6ViewController
         
         let nickNameLabel = UILabel()
         nickNameLabel.text = "醉里挑灯看键";
-        nickNameLabel.font = UIFont.systemFont(ofSize: 13)
-        nickNameLabel.textColor = .lightGray
+        nickNameLabel.font = CFTool.font(15)
+        nickNameLabel.textColor = CFTool.color(3)
         nickNameLabel.sizeToFit()
         nickNameLabel.tg_top.equal(5)
         contentLayout.addSubview(nickNameLabel)
@@ -343,8 +347,8 @@ extension FOLTest6ViewController
         
         let detailLabel = UILabel()
         detailLabel.text = "坚持原创，以造轮子为乐!";
-        detailLabel.textColor = .red
-        detailLabel.font = UIFont.boldSystemFont(ofSize: 16)
+        detailLabel.font = CFTool.font(20)
+        detailLabel.textColor = CFTool.color(2)
         detailLabel.adjustsFontSizeToFitWidth = true
         detailLabel.sizeToFit()
         detailLabel.tg_width.equal(.fill)  //等价于tg_width.equal(100%)

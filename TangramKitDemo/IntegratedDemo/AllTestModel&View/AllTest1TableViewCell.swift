@@ -101,7 +101,7 @@ extension AllTest1TableViewCell
         let messageLayout = TGLinearLayout(.vert)
         messageLayout.tg_width.equal(.fill)  //等价于tg_width.equal(100%)
         messageLayout.tg_height.equal(.wrap)
-        messageLayout.tg_left.equal(5)
+        messageLayout.tg_leading.equal(5)
         messageLayout.tg_vspace = 5 //前面4行代码描述的是垂直布局占用除头像外的所有宽度，并和头像保持5个点的间距。
         self.rootLayout.addSubview(messageLayout)
         
@@ -115,7 +115,6 @@ extension AllTest1TableViewCell
         
         let textMessageLabel = UILabel()
         textMessageLabel.font = .systemFont(ofSize: 13)
-        textMessageLabel.numberOfLines = 0;
         textMessageLabel.tg_width.equal(.fill)
         textMessageLabel.tg_height.equal(.wrap)  //高度为包裹，也就是动态高度。
         messageLayout.addSubview(textMessageLabel)
@@ -152,16 +151,15 @@ extension AllTest1TableViewCell
         let nickNameLabel = UILabel()
         nickNameLabel.textColor = .blue
         nickNameLabel.font = .systemFont(ofSize: 15)
-        nickNameLabel.tg_left.equal(self.headImageView.tg_right, offset:5) //昵称文本的左边在头像视图的右边并偏移5个点。
+        nickNameLabel.tg_leading.equal(self.headImageView.tg_trailing, offset:5) //昵称文本的左边在头像视图的右边并偏移5个点。
         rootLayout.addSubview(nickNameLabel)
         self.nickNameLabel = nickNameLabel
         
         //昵称文本的左边在头像视图的右边并偏移5个点。
         let textMessageLabel = UILabel()
         textMessageLabel.font = .systemFont(ofSize: 13)
-        textMessageLabel.numberOfLines = 0
-        textMessageLabel.tg_left.equal(self.headImageView.tg_right, offset:5) //文本消息的左边在头像视图的右边并偏移5个点。
-        textMessageLabel.tg_right.equal(rootLayout.tg_right) //文本消息的右边和父布局的右边对齐。上面2行代码也同时确定了文本消息的宽度。
+        textMessageLabel.tg_leading.equal(self.headImageView.tg_trailing, offset:5) //文本消息的左边在头像视图的右边并偏移5个点。
+        textMessageLabel.tg_trailing.equal(rootLayout.tg_trailing) //文本消息的右边和父布局的右边对齐。上面2行代码也同时确定了文本消息的宽度。
         textMessageLabel.tg_top.equal(self.nickNameLabel.tg_bottom,offset:5) //文本消息的顶部在昵称文本的底部并偏移5个点
         textMessageLabel.tg_height.equal(.wrap)
         rootLayout.addSubview(textMessageLabel)
@@ -195,7 +193,7 @@ extension AllTest1TableViewCell
          要想了解浮动布局的原理，请参考文章：http://www.jianshu.com/p/0c075f2fdab2 中的介绍。
          */
         let headImageView = UIImageView()
-        headImageView.tg_right.equal(5) //右边保留出5个点的视图间距。
+        headImageView.tg_trailing.equal(5) //右边保留出5个点的视图间距。
         rootLayout.addSubview(headImageView)
         self.headImageView = headImageView
         
@@ -209,7 +207,6 @@ extension AllTest1TableViewCell
         
         let textMessageLabel = UILabel()
         textMessageLabel.font = UIFont.systemFont(ofSize: 14)
-        textMessageLabel.numberOfLines = 0
         textMessageLabel.tg_width.equal(.fill)  //占用剩余宽度。
         textMessageLabel.tg_height.equal(.wrap) //高度包裹
         rootLayout.addSubview(textMessageLabel)

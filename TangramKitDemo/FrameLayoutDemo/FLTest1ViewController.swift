@@ -31,18 +31,18 @@ class FLTest1ViewController: UIViewController {
          
          
          这要区分一下边距和间距和概念，所谓边距是指子视图距离父视图的距离；而间距则是指子视图距离兄弟视图的距离。
-         当tg_left,tg_right,tg_top,tg_bottom这四个属性的equal方法设置的值为CGFloat类型或者TGWeight类型时即可用来表示边距也可以用来表示间距，这个要根据子视图所归属的父布局视图的类型而确定：
+         当tg_leading,tg_trailing,tg_top,tg_bottom这四个属性的equal方法设置的值为CGFloat类型或者TGWeight类型时即可用来表示边距也可以用来表示间距，这个要根据子视图所归属的父布局视图的类型而确定：
          
-         1.垂直线性布局TGLinearLayout中的子视图： tg_left,tg_right表示边距，而tg_top,tg_bottom则表示间距。
-         2.水平线性布局TGLinearLayout中的子视图： tg_left,tg_right表示间距，而tg_top,tg_bottom则表示边距。
-         3.表格布局中的子视图：                  tg_left,tg_right,tg_top,tg_bottom的定义和线性布局是一致的。
-         4.框架布局TGFrameLayout中的子视图：     tg_left,tg_right,tg_top,tg_bottom都表示边距。
-         5.相对布局TGRelativeLayout中的子视图：  tg_left,tg_right,tg_top,tg_bottom都表示边距。
-         6.流式布局TGFlowLayout中的子视图：      tg_left,tg_right,tg_top,tg_bottom都表示间距。
-         7.浮动布局TGFloatLayout中的子视图：     tg_left,tg_right,tg_top,tg_bottom都表示间距。
-         8.路径布局TGPathLayout中的子视图：      tg_left,tg_right,tg_top,tg_bottom即不表示间距也不表示边距，它表示自己中心位置的偏移量。
-         9.非布局父视图中的布局子视图：           tg_left,tg_right,tg_top,tg_bottom都表示边距。
-         10.非布局父视图中的非布局子视图：         tg_left,tg_right,tg_top,tg_bottom的设置不会起任何作用，因为TangramKit已经无法控制了。
+         1.垂直线性布局TGLinearLayout中的子视图： tg_leading,tg_trailing表示边距，而tg_top,tg_bottom则表示间距。
+         2.水平线性布局TGLinearLayout中的子视图： tg_leading,tg_trailing表示间距，而tg_top,tg_bottom则表示边距。
+         3.表格布局中的子视图：                  tg_leading,tg_trailing,tg_top,tg_bottom的定义和线性布局是一致的。
+         4.框架布局TGFrameLayout中的子视图：     tg_leading,tg_trailing,tg_top,tg_bottom都表示边距。
+         5.相对布局TGRelativeLayout中的子视图：  tg_leading,tg_trailing,tg_top,tg_bottom都表示边距。
+         6.流式布局TGFlowLayout中的子视图：      tg_leading,tg_trailing,tg_top,tg_bottom都表示间距。
+         7.浮动布局TGFloatLayout中的子视图：     tg_leading,tg_trailing,tg_top,tg_bottom都表示间距。
+         8.路径布局TGPathLayout中的子视图：      tg_leading,tg_trailing,tg_top,tg_bottom即不表示间距也不表示边距，它表示自己中心位置的偏移量。
+         9.非布局父视图中的布局子视图：           tg_leading,tg_trailing,tg_top,tg_bottom都表示边距。
+         10.非布局父视图中的非布局子视图：         tg_leading,tg_trailing,tg_top,tg_bottom的设置不会起任何作用，因为TangramKit已经无法控制了。
          
          再次强调的是：
          1. 如果同时设置了左右边距就能决定自己的宽度，同时设置左右间距不能决定自己的宽度！
@@ -57,6 +57,8 @@ class FLTest1ViewController: UIViewController {
          这个例子主要介绍了框架布局的功能。框架布局里面的所有子视图的布局位置都只跟框架布局相关。
          框架布局中的子视图可以层叠显示，因此框架布局常用来作为视图控制器里面的根视图。
          */
+
+        self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
 
         
         let frameLayout = TGFrameLayout()
@@ -80,28 +82,28 @@ class FLTest1ViewController: UIViewController {
         //上下填充。 height fill subview
         let vertFill = self.createLabel("vert fill", backgroundColor: CFTool.color(9))
         vertFill.numberOfLines = 0;
-        vertFill.tg_left.equal(90)  //这里偏移90为了看清楚一些。
+        vertFill.tg_leading.equal(90)  //这里偏移90为了看清楚一些。
         vertFill.tg_width.equal(10)
         vertFill.tg_height.equal(.fill)
         frameLayout.addSubview(vertFill)
         
         
-        //左上。 top left subview
-        let topLeft = self.createLabel("top left", backgroundColor: CFTool.color(5))
+        //左上。 top leading subview
+        let topLeft = self.createLabel("top leading", backgroundColor: CFTool.color(5))
         topLeft.tg_top.equal(0)
-        topLeft.tg_left.equal(0)
+        topLeft.tg_leading.equal(0)
         frameLayout.addSubview(topLeft)
         
-        //左中。center left subview
-        let centerLeft = self.createLabel("center left", backgroundColor: CFTool.color(5))
+        //左中。center leading subview
+        let centerLeft = self.createLabel("center leading", backgroundColor: CFTool.color(5))
         centerLeft.tg_centerY.equal(0)
-        centerLeft.tg_left.equal(0)
+        centerLeft.tg_leading.equal(0)
         frameLayout.addSubview(centerLeft)
         
-        //左下。bottom left subview
-        let bottomLeft = self.createLabel("bottom left", backgroundColor: CFTool.color(5))
+        //左下。bottom leading subview
+        let bottomLeft = self.createLabel("bottom leading", backgroundColor: CFTool.color(5))
         bottomLeft.tg_bottom.equal(0)
-        bottomLeft.tg_left.equal(0)
+        bottomLeft.tg_leading.equal(0)
         frameLayout.addSubview(bottomLeft)
         
         
@@ -126,23 +128,23 @@ class FLTest1ViewController: UIViewController {
         frameLayout.addSubview(bottomCenter)
         
         
-        //右上。 top right subview
-        let topRight = self.createLabel("top right", backgroundColor: CFTool.color(7))
+        //右上。 top trailing subview
+        let topRight = self.createLabel("top trailing", backgroundColor: CFTool.color(7))
         topRight.tg_top.equal(0)
-        topRight.tg_right.equal(0)
+        topRight.tg_trailing.equal(0)
         frameLayout.addSubview(topRight)
         
         
-        //右中。center right subview
-        let centerRight = self.createLabel("center right", backgroundColor: CFTool.color(7))
+        //右中。center trailing subview
+        let centerRight = self.createLabel("center trailing", backgroundColor: CFTool.color(7))
         centerRight.tg_centerY.equal(0)
-        centerRight.tg_right.equal(0)
+        centerRight.tg_trailing.equal(0)
         frameLayout.addSubview(centerRight)
         
-        //右下。 bottom right subview
-        let bottomRight = self.createLabel("bottom right", backgroundColor: CFTool.color(7))
+        //右下。 bottom trailing subview
+        let bottomRight = self.createLabel("bottom trailing", backgroundColor: CFTool.color(7))
         bottomRight.tg_bottom.equal(0)
-        bottomRight.tg_right.equal(0)
+        bottomRight.tg_trailing.equal(0)
         frameLayout.addSubview(bottomRight)
         
         

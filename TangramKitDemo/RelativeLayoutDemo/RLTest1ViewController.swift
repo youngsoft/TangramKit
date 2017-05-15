@@ -27,13 +27,15 @@ class RLTest1ViewController: UIViewController {
         
         /*
          对于相对视图中子视图的位置对象TGLayoutPos中的equal方法以及其中的offset参数和offset方法设置为数值时的意义有部分同学不是很明白，这里面统一解释清楚
-         1.如果tg_left、tg_right、tg_top、tg_bottom中的equal方法中设置为一个数值的话，这个数表示的是位置离父视图的边距值。当设置为正数是就是内缩而设置为负数时就是外延。比如A.tg_left.equal(10)表示A的左边距离父视图的左边10的位置，A.tg_right.equal(10)表示A的右边距离父视图的右边10的位置。A.tg_pos.equal(-10)表示A的上边在父视图的上边-10的位置。从例子可以看出这里的数值的正负是和位置本身相关的。
+         1.如果tg_leading、tg_trailing、tg_top、tg_bottom中的equal方法中设置为一个数值的话，这个数表示的是位置离父视图的边距值。当设置为正数是就是内缩而设置为负数时就是外延。比如A.tg_leading.equal(10)表示A的左边距离父视图的左边10的位置，A.tg_trailing.equal(10)表示A的右边距离父视图的右边10的位置。A.tg_pos.equal(-10)表示A的上边在父视图的上边-10的位置。从例子可以看出这里的数值的正负是和位置本身相关的。
          2.TGLayoutPos中的offset方法表示位置值的偏移量，而这个偏移量的正负数的意义则是根据位置的不同而不同的。
-         2.1.如果是tg_left和tg_centerX那么正数表示往右偏移，负数表示往左偏移。
+         2.1.如果是tg_leading和tg_centerX那么正数表示往右偏移，负数表示往左偏移。
          2.2.如果是tg_top和tg_centerY那么正数表示往下偏移，负数表示往上偏移。
-         2.3.如果是tg_right那么正数表示往左偏移，负数表示往右偏移。
+         2.3.如果是tg_trailing那么正数表示往左偏移，负数表示往右偏移。
          2.4.如果是tg_bottom那么正数表示往上偏移，负数表示往下偏移。
          */
+
+        self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
 
         
         let rootLayout: TGRelativeLayout = TGRelativeLayout()
@@ -61,7 +63,7 @@ class RLTest1ViewController: UIViewController {
         topLeftCircle.tg_width.equal(rootLayout.tg_width, multiple:3/5.0)
         topLeftCircle.tg_width.max(200)  //宽度是父视图宽度的3/5,且最大只能是200。
         topLeftCircle.tg_height.equal(topLeftCircle.tg_width) //高度和自身宽度相等。
-        topLeftCircle.tg_left.equal(10) //左边距离父视图10
+        topLeftCircle.tg_leading.equal(10) //左边距离父视图10
         topLeftCircle.tg_top.equal(90)  //顶部距离父视图90
         rootLayout.addSubview(topLeftCircle)
         
@@ -106,7 +108,7 @@ class RLTest1ViewController: UIViewController {
         let topRightCircle: UIView = UIView()
         topRightCircle.backgroundColor = CFTool.color(3)
         topRightCircle.tg_top.equal(topLeftCircle.tg_top, offset:-10)  //顶部和greenCircle顶部对齐，并且往上偏移10个点。
-        topRightCircle.tg_right.equal(rootLayout.tg_right, offset:10)//右边和布局视图右对齐，并且往左边偏移10个点.
+        topRightCircle.tg_trailing.equal(rootLayout.tg_trailing, offset:10)//右边和布局视图右对齐，并且往左边偏移10个点.
         topRightCircle.tg_width.equal(120)
         topRightCircle.tg_height.equal(topRightCircle.tg_width)
         topRightCircle.tg_layoutCompletedDo{(_, view:UIView) in
@@ -130,7 +132,7 @@ class RLTest1ViewController: UIViewController {
         cycleMin.textColor = CFTool.color(0)
         cycleMin.font = CFTool.font(15)
         cycleMin.sizeToFit()
-        cycleMin.tg_left.equal(topRightCircle.tg_left)
+        cycleMin.tg_leading.equal(topRightCircle.tg_leading)
         cycleMin.tg_centerY.equal(topRightCircle.tg_centerY)
         rootLayout.addSubview(cycleMin)
         
@@ -140,8 +142,8 @@ class RLTest1ViewController: UIViewController {
          */
         let lineView1: UIView = UIView()
         lineView1.backgroundColor = CFTool.color(7)
-        lineView1.tg_left.equal(0)
-        lineView1.tg_right.equal(0) //和父布局的左右边距为0，这个也同时确定了视图的宽度和父视图一样。
+        lineView1.tg_leading.equal(0)
+        lineView1.tg_trailing.equal(0) //和父布局的左右边距为0，这个也同时确定了视图的宽度和父视图一样。
         //您也可以如下设置：
         //lineView1.tg_width.equal(.fill)   //填充父视图的剩余宽度
         //您也可以如下设置：
@@ -168,7 +170,7 @@ class RLTest1ViewController: UIViewController {
         bottomHalfCircleView.tg_width.equal(50)
         bottomHalfCircleView.tg_height.equal(bottomHalfCircleView.tg_width)
         bottomHalfCircleView.tg_centerY.equal(rootLayout.tg_bottom, offset:10) //垂直中心点和父布局的底部对齐，并且往下偏移10个点。 因为rootLayout设置了bottomPadding为10，所以这里要偏移10，否则不需要设置偏移。
-        bottomHalfCircleView.tg_left.equal(rootLayout.tg_left, offset:50)
+        bottomHalfCircleView.tg_leading.equal(rootLayout.tg_leading, offset:50)
         rootLayout.addSubview(bottomHalfCircleView)
         
         let lineView3 = UIView()
@@ -184,7 +186,7 @@ class RLTest1ViewController: UIViewController {
         walkLabel2.font = CFTool.font(15)
         walkLabel2.textColor = CFTool.color(11)
         walkLabel2.sizeToFit()
-        walkLabel2.tg_left.equal(lineView3.tg_right,offset:15)
+        walkLabel2.tg_leading.equal(lineView3.tg_trailing,offset:15)
         walkLabel2.tg_centerY.equal(lineView3.tg_centerY)
         rootLayout.addSubview(walkLabel2)
         
@@ -193,7 +195,7 @@ class RLTest1ViewController: UIViewController {
         walkLabel3.font = CFTool.font(15)
         walkLabel3.textColor = CFTool.color(12)
         walkLabel3.sizeToFit()
-        walkLabel3.tg_left.equal(walkLabel2.tg_right,offset:5)
+        walkLabel3.tg_leading.equal(walkLabel2.tg_trailing,offset:5)
         walkLabel3.tg_centerY.equal(walkLabel2.tg_centerY)
         rootLayout.addSubview(walkLabel3)
         
@@ -202,7 +204,7 @@ class RLTest1ViewController: UIViewController {
         timeLabel1.font = CFTool.font(14)
         timeLabel1.textColor = CFTool.color(12)
         timeLabel1.sizeToFit()
-        timeLabel1.tg_right.equal(lineView3.tg_left,offset:25)
+        timeLabel1.tg_trailing.equal(lineView3.tg_leading,offset:25)
         timeLabel1.tg_centerY.equal(lineView3.tg_top)
         rootLayout.addSubview(timeLabel1)
         
@@ -211,7 +213,7 @@ class RLTest1ViewController: UIViewController {
         timeLabel2.font = CFTool.font(14)
         timeLabel2.textColor = CFTool.color(12)
         timeLabel2.sizeToFit()
-        timeLabel2.tg_right.equal(timeLabel1.tg_right)
+        timeLabel2.tg_trailing.equal(timeLabel1.tg_trailing)
         timeLabel2.tg_centerY.equal(lineView3.tg_bottom)
         rootLayout.addSubview(timeLabel2)
         
@@ -237,7 +239,7 @@ class RLTest1ViewController: UIViewController {
         homeLabel.font = CFTool.font(15)
         homeLabel.textColor = CFTool.color(4)
         homeLabel.sizeToFit()
-        homeLabel.tg_left.equal(lineView4.tg_right,offset:10)
+        homeLabel.tg_leading.equal(lineView4.tg_trailing,offset:10)
         homeLabel.tg_centerY.equal(lineView4.tg_centerY)
         rootLayout.addSubview(homeLabel)
         
@@ -245,7 +247,7 @@ class RLTest1ViewController: UIViewController {
          右下角区域部分。
          */
         let bottomRightImageView = UIImageView(image: UIImage(named: "head1"))
-        bottomRightImageView.tg_right.equal(rootLayout.tg_right)
+        bottomRightImageView.tg_trailing.equal(rootLayout.tg_trailing)
         bottomRightImageView.tg_bottom.equal(rootLayout.tg_bottom)
         rootLayout.addSubview(bottomRightImageView)
         

@@ -107,12 +107,15 @@ public enum TGSizeClassType
  */
 public protocol TGViewSizeClass:NSObjectProtocol
 {
-    var tg_left:TGLayoutPos{get}
     var tg_top:TGLayoutPos{get}
-    var tg_right:TGLayoutPos{get}
+    var tg_leading:TGLayoutPos{get}
     var tg_bottom:TGLayoutPos{get}
+    var tg_trailing:TGLayoutPos{get}
     var tg_centerX:TGLayoutPos{get}
     var tg_centerY:TGLayoutPos{get}
+    
+    var tg_left:TGLayoutPos{get}
+    var tg_right:TGLayoutPos{get}
     
     var tg_width:TGLayoutSize{get}
     var tg_height:TGLayoutSize{get}
@@ -123,6 +126,7 @@ public protocol TGViewSizeClass:NSObjectProtocol
     
     var tg_reverseFloat:Bool{get set}
     var tg_clearFloat:Bool{get set}
+    
 }
 
 /**
@@ -132,10 +136,15 @@ public protocol TGLayoutViewSizeClass:TGViewSizeClass
 {
     var tg_padding:UIEdgeInsets{get set}
     var tg_topPadding:CGFloat{get set}
-    var tg_leftPadding:CGFloat{get set}
+    var tg_leadingPadding:CGFloat{get set}
     var tg_bottomPadding:CGFloat{get set}
-    var tg_rightPadding:CGFloat{get set}
+    var tg_trailingPadding:CGFloat{get set}
     var tg_zeroPadding:Bool{get set}
+    
+    var tg_leftPadding:CGFloat{get set}
+    var tg_rightPadding:CGFloat{get set}
+
+    
     var tg_vspace:CGFloat{get set}
     var tg_hspace:CGFloat{get set}
     var tg_space:CGFloat{get set}
@@ -217,56 +226,60 @@ public protocol TGPathLayoutViewSizeClass : TGLayoutViewSizeClass{
 //TGSizeClass Implemention
 internal class TGViewSizeClassImpl:NSObject,NSCopying,TGViewSizeClass {
     
-    required override init() {
+    required init(view:UIView) {
         super.init()
+        self.view = view
     }
     
-    var tg_left:TGLayoutPos {
-    
-        if tgLeft == nil
-        {
-            tgLeft = TGLayoutPos(TGGravity.horz.left)
-        }
-        
-        return tgLeft!
-    }
     
     var tg_top:TGLayoutPos
     {
         if tgTop == nil
         {
-            tgTop = TGLayoutPos(TGGravity.vert.top)
+            tgTop = TGLayoutPos(TGGravity.vert.top).belong(to: self.view)
         }
         
         return tgTop!
     }
     
-    var tg_right:TGLayoutPos
-    {
-        if tgRight == nil
+    var tg_leading:TGLayoutPos {
+        
+        if tgLeading == nil
         {
-            tgRight = TGLayoutPos(TGGravity.horz.right)
+            tgLeading = TGLayoutPos(TGGravity.horz.leading).belong(to: self.view)
         }
         
-        return tgRight!
+        return tgLeading!
     }
 
     var tg_bottom:TGLayoutPos
     {
         if tgBottom == nil
         {
-            tgBottom = TGLayoutPos(TGGravity.vert.bottom)
+            tgBottom = TGLayoutPos(TGGravity.vert.bottom).belong(to: self.view)
         }
         
         return tgBottom!
     }
 
+    
+    var tg_trailing:TGLayoutPos
+    {
+        if tgTrailing == nil
+        {
+            tgTrailing = TGLayoutPos(TGGravity.horz.trailing).belong(to: self.view)
+        }
+        
+        return tgTrailing!
+    }
+
+  
 
     var tg_centerX:TGLayoutPos
     {
         if tgCenterX == nil
         {
-            tgCenterX = TGLayoutPos(TGGravity.horz.center)
+            tgCenterX = TGLayoutPos(TGGravity.horz.center).belong(to: self.view)
         }
         
         return tgCenterX!
@@ -276,17 +289,45 @@ internal class TGViewSizeClassImpl:NSObject,NSCopying,TGViewSizeClass {
     {
         if tgCenterY == nil
         {
-            tgCenterY = TGLayoutPos(TGGravity.vert.center)
+            tgCenterY = TGLayoutPos(TGGravity.vert.center).belong(to: self.view)
         }
         
         return tgCenterY!
     }
+    
+    
+    var tg_left:TGLayoutPos {
+        
+        if (TGViewSizeClassImpl.tgIsRTL)
+        {
+            return self.tg_trailing
+        }
+        else
+        {
+            return self.tg_leading
+        }
+
+    }
+    
+    var tg_right:TGLayoutPos
+    {
+        if (TGViewSizeClassImpl.tgIsRTL)
+        {
+            return self.tg_leading
+        }
+        else
+        {
+            return self.tg_trailing
+        }
+
+    }
+
 
     var tg_width:TGLayoutSize
     {
         if tgWidth == nil
         {
-            tgWidth = TGLayoutSize(TGGravity.horz.fill)
+            tgWidth = TGLayoutSize(TGGravity.horz.fill).belong(to: self.view)
         }
         
         return tgWidth!
@@ -296,41 +337,44 @@ internal class TGViewSizeClassImpl:NSObject,NSCopying,TGViewSizeClass {
     {
         if tgHeight == nil
         {
-            tgHeight = TGLayoutSize(TGGravity.vert.fill)
+            tgHeight = TGLayoutSize(TGGravity.vert.fill).belong(to: self.view)
         }
         
         return tgHeight!
     }
 
+    static var tgIsRTL:Bool = false
 
     var tg_useFrame:Bool = false
     var tg_noLayout:Bool = false
     var isHidden:Bool = false
     
-    lazy var tg_reverseFloat:Bool = false
-    lazy var tg_clearFloat:Bool = false
+    var tg_reverseFloat:Bool = false
+    var tg_clearFloat:Bool = false
+    
+    weak var view:UIView!
     
     var tgLayoutCompletedAction:((_ layout:TGBaseLayout,_ view:UIView)->Void)? = nil
 
     func copy(with zone: NSZone? = nil) -> Any
     {
-        let tsc:TGViewSizeClassImpl = type(of: self).init()
+        let tsc:TGViewSizeClassImpl = type(of: self).init(view: self.view)
         
-        if self.tgLeft != nil
-        {
-            tsc.tgLeft = self.tgLeft!.copy() as? TGLayoutPos
-        }
-        if self.tgRight != nil
-        {
-            tsc.tgRight = self.tgRight!.copy() as? TGLayoutPos
-        }
         if self.tgTop != nil
         {
             tsc.tgTop = self.tgTop!.copy() as? TGLayoutPos
         }
+        if self.tgLeading != nil
+        {
+            tsc.tgLeading = self.tgLeading!.copy() as? TGLayoutPos
+        }
         if self.tgBottom != nil
         {
             tsc.tgBottom = self.tgBottom!.copy() as? TGLayoutPos
+        }
+        if self.tgTrailing != nil
+        {
+            tsc.tgTrailing = self.tgTrailing!.copy() as? TGLayoutPos
         }
         if self.tgCenterX != nil
         {
@@ -358,65 +402,141 @@ internal class TGViewSizeClassImpl:NSObject,NSCopying,TGViewSizeClass {
         return tsc
     }
     
+    internal  var tgTop:TGLayoutPos? = nil
+    internal  var tgLeading:TGLayoutPos? = nil
+    internal  var tgBottom:TGLayoutPos? = nil
+    internal  var tgTrailing:TGLayoutPos? = nil
+    internal  var tgCenterX:TGLayoutPos? = nil
+    internal  var tgCenterY:TGLayoutPos? = nil
+    internal  var tgWidth:TGLayoutSize? = nil
+    internal  var tgHeight:TGLayoutSize? = nil
     
-    internal lazy var tgLeft:TGLayoutPos? = nil
-    internal lazy var tgTop:TGLayoutPos? = nil
-    internal lazy var tgRight:TGLayoutPos? = nil
-    internal lazy var tgBottom:TGLayoutPos? = nil
-    internal lazy var tgCenterX:TGLayoutPos? = nil
-    internal lazy var tgCenterY:TGLayoutPos? = nil
-    internal lazy var tgWidth:TGLayoutSize? = nil
-    internal lazy var tgHeight:TGLayoutSize? = nil
+    
+    internal var tgLeft:TGLayoutPos?
+        {
+        get{
+            if (TGViewSizeClassImpl.tgIsRTL)
+            {
+                return tgTrailing
+            }
+            else
+            {
+                return tgLeading
+            }
+        }
+        set
+        {
+            if (TGViewSizeClassImpl.tgIsRTL)
+            {
+                tgTrailing = newValue
+            }
+            else
+            {
+                tgLeading = newValue
+            }
+        }
+    }
+    
+    
+    internal var tgRight:TGLayoutPos?
+        {
+        get{
+            if (TGViewSizeClassImpl.tgIsRTL)
+            {
+                return tgLeading
+            }
+            else
+            {
+                return tgTrailing
+            }
+        }
+        set
+        {
+            if (TGViewSizeClassImpl.tgIsRTL)
+            {
+                tgLeading = newValue
+            }
+            else
+            {
+                tgTrailing = newValue
+            }
+        }
+    }
+
 }
 
 
 internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeClass
 {
-    var tg_padding:UIEdgeInsets = UIEdgeInsets.zero
-    var tg_topPadding:CGFloat
-        {
+    var tg_padding:UIEdgeInsets
+    {
         get{
-            
-            return tg_padding.top
+            return UIEdgeInsets(top: tg_topPadding, left: tg_leftPadding, bottom: tg_bottomPadding, right: tg_rightPadding)
         }
         set
         {
-            tg_padding.top = newValue
+            tg_topPadding = newValue.top
+            tg_leftPadding = newValue.left
+            tg_bottomPadding = newValue.bottom
+            tg_rightPadding = newValue.right
         }
     }
+    var tg_topPadding:CGFloat = 0
+    var tg_leadingPadding:CGFloat = 0
+    var tg_bottomPadding:CGFloat = 0
+    var tg_trailingPadding:CGFloat = 0
     
     var tg_leftPadding:CGFloat
         {
         get{
-            return tg_padding.left
+            if (TGViewSizeClassImpl.tgIsRTL)
+            {
+                return self.tg_trailingPadding
+            }
+            else
+            {
+                return self.tg_leadingPadding
+            }
         }
         set
         {
-            tg_padding.left = newValue
+            if (TGViewSizeClassImpl.tgIsRTL)
+            {
+                self.tg_trailingPadding = newValue
+            }
+            else
+            {
+                self.tg_leadingPadding = newValue
+            }
         }
     }
-    
-    var tg_bottomPadding:CGFloat
-        {
-        get{
-            return tg_padding.bottom
-        }
-        set
-        {
-            tg_padding.bottom = newValue
-        }
-    }
+
     
     var tg_rightPadding:CGFloat
         {
         get{
-            return tg_padding.right
+            if (TGViewSizeClassImpl.tgIsRTL)
+            {
+                return self.tg_leadingPadding
+            }
+            else
+            {
+                return self.tg_trailingPadding
+            }
         }
         set
         {
-            tg_padding.right = newValue
+            if (TGViewSizeClassImpl.tgIsRTL)
+            {
+                self.tg_leadingPadding = newValue
+            }
+            else
+            {
+                self.tg_trailingPadding = newValue
+            }
         }
     }
+
     
     var tg_zeroPadding: Bool = true
     
@@ -444,8 +564,11 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
     override func copy(with zone: NSZone?) -> Any {
         
         let tsc = super.copy(with: zone) as! TGLayoutViewSizeClassImpl
-        
-        tsc.tg_padding = self.tg_padding
+
+        tsc.tg_topPadding = self.tg_topPadding
+        tsc.tg_leadingPadding = self.tg_leadingPadding
+        tsc.tg_bottomPadding = self.tg_bottomPadding
+        tsc.tg_trailingPadding = self.tg_trailingPadding
         tsc.tg_zeroPadding = self.tg_zeroPadding
         tsc.tg_vspace = self.tg_vspace
         tsc.tg_hspace = self.tg_hspace

@@ -57,7 +57,7 @@ class RLTest5ViewController: UIViewController {
         rightButton.isSelected = (tag == 2)
         
         //调整underLineView的位置。
-        underLineView.tg_left.equal(button.tg_left)
+        underLineView.tg_leading.equal(button.tg_leading)
         underLineView.tg_width.equal(button.tg_width)
         
         containerLayout.tg_layoutAnimationWithDuration(0.3)
@@ -84,9 +84,9 @@ class RLTest5ViewController: UIViewController {
         leftButton.addTarget(self, action: #selector(self.handleButtonSelect), for: .touchUpInside)
         leftButton.sizeToFit()
         //根据内容得到高度和宽度
-        leftButton.tg_left.min(containerLayout.tg_left)
+        leftButton.tg_leading.min(containerLayout.tg_leading)
         //左边最小边界是父视图左边偏移0
-        leftButton.tg_right.max(containerLayout.tg_centerX)
+        leftButton.tg_trailing.max(containerLayout.tg_centerX)
         //右边最大的边界是父视图中心点偏移0
         //在相对布局中子视图可以不设置左右边距而是设置最小和最大的边界值，就可以让子视图在指定的边界范围内居中，并且如果宽度超过最小和最大的边界设定时会自动压缩子视图的宽度。在这个例子中leftButton始终在父视图的左边和父视图的水平中心这个边界内居中显示。
         containerLayout.addSubview(leftButton)
@@ -100,8 +100,8 @@ class RLTest5ViewController: UIViewController {
         rightButton.tag = 2
         rightButton.addTarget(self, action: #selector(self.handleButtonSelect), for: .touchUpInside)
         rightButton.sizeToFit() //根据内容得到高度和宽度
-        rightButton.tg_left.min(containerLayout.tg_centerX) //左边最小边界是父视图中心点偏移0
-        rightButton.tg_right.max(containerLayout.tg_right)//右边最大边界是父视图右边偏移0
+        rightButton.tg_leading.min(containerLayout.tg_centerX) //左边最小边界是父视图中心点偏移0
+        rightButton.tg_trailing.max(containerLayout.tg_trailing)//右边最大边界是父视图右边偏移0
         //在相对布局中子视图可以不设置左右边距而是设置最小和最大的边界值，就可以让子视图在指定的边界范围内居中，并且如果宽度超过最小和最大的边界设定时会自动压缩子视图的宽度。在这个例子中rightButton始终在父视图的水平中心和父视图的右边这个边界内居中显示。
         containerLayout.addSubview(rightButton)
         
@@ -111,7 +111,7 @@ class RLTest5ViewController: UIViewController {
         underLineView.tag = 3
         underLineView.tg_height.equal(1)
         underLineView.tg_width.equal(leftButton.tg_width)
-        underLineView.tg_left.equal(leftButton.tg_left)
+        underLineView.tg_leading.equal(leftButton.tg_leading)
         underLineView.tg_top.equal(leftButton.tg_bottom, offset:6)
         containerLayout.addSubview(underLineView)
 
@@ -153,15 +153,14 @@ class RLTest5ViewController: UIViewController {
             flexedLabel.font = CFTool.font(17)
             flexedLabel.textColor = CFTool.color(4)
             flexedLabel.lineBreakMode = .byCharWrapping
-            flexedLabel.numberOfLines = 0
             flexedLabel.tg_height.equal(.wrap) //高度自动计算。
-            flexedLabel.tg_left.equal(leftImageView.tg_right, offset:5) //左边等于leftImageView的右边
+            flexedLabel.tg_leading.equal(leftImageView.tg_trailing, offset:5) //左边等于leftImageView的右边
             flexedLabel.tg_top.equal(leftImageView.tg_top) //顶部和leftImageView相等。
             containerLayout.addSubview(flexedLabel)
             
             
             let  editImageView = UIImageView(image: UIImage(named: "edit")!)
-            editImageView.tg_left.equal(flexedLabel.tg_right)//这个图片总是跟随在flexedLabel的后面。
+            editImageView.tg_leading.equal(flexedLabel.tg_trailing)//这个图片总是跟随在flexedLabel的后面。
             editImageView.tg_top.equal(leftImageView.tg_top, offset:4)
             containerLayout.addSubview(editImageView)
             
@@ -171,12 +170,12 @@ class RLTest5ViewController: UIViewController {
             rightLabel.font = CFTool.font(15)
             rightLabel.textColor = CFTool.color(7)
             rightLabel.sizeToFit()
-            rightLabel.tg_right.equal(containerLayout.tg_right) //右边等于父视图的右边，也就是现实在最右边。
+            rightLabel.tg_trailing.equal(containerLayout.tg_trailing) //右边等于父视图的右边，也就是现实在最右边。
             rightLabel.tg_top.equal(leftImageView.tg_top, offset:4)
             containerLayout.addSubview(rightLabel)
             
             flexedLabel.tg_width.equal(.wrap) //宽度等于自身的宽度
-            flexedLabel.tg_right.max(rightLabel.tg_left, offset:editImageView.frame.width + 10)//右边的最大的边界就等于rightLabel的最左边再减去editImageView的尺寸外加上10,这里的10是视图之间的间距，为了让视图之间保持有足够的间距。这样当flexedLabel的宽度超过这个最大的右边界时，系统自动会缩小flexedLabel的宽度，以便来满足右边界的限制。 这个场景非常适合某个UITableViewCell里面的两个子视图之间有尺寸长度约束的情况。
+            flexedLabel.tg_trailing.max(rightLabel.tg_leading, offset:editImageView.frame.width + 10)//右边的最大的边界就等于rightLabel的最左边再减去editImageView的尺寸外加上10,这里的10是视图之间的间距，为了让视图之间保持有足够的间距。这样当flexedLabel的宽度超过这个最大的右边界时，系统自动会缩小flexedLabel的宽度，以便来满足右边界的限制。 这个场景非常适合某个UITableViewCell里面的两个子视图之间有尺寸长度约束的情况。
         }
     }
     
@@ -186,7 +185,6 @@ class RLTest5ViewController: UIViewController {
         let label = (sender.view as! UILabel)
         let text = label.text
         label.text = text?.appending("+++")
-        label.superview!.setNeedsLayout()
     }
     
     func createDemo3(_ rootLayout: UIView) {
@@ -205,7 +203,6 @@ class RLTest5ViewController: UIViewController {
         leftLabel.backgroundColor = CFTool.color(5)
         leftLabel.text = "Click me:"
         leftLabel.textColor = CFTool.color(4)
-        leftLabel.numberOfLines = 0
         leftLabel.tg_width.equal(100)//宽度固定为100
         leftLabel.tg_height.equal(.wrap) //高度由子视图的内容确定，自动计算高度。
         leftLabel.tg_top.min(containerLayout.tg_top)//最小的顶部位置是父布局的顶部。
@@ -223,12 +220,11 @@ class RLTest5ViewController: UIViewController {
         rightLabel.backgroundColor = CFTool.color(6)
         rightLabel.text = "Click me:"
         rightLabel.textColor = CFTool.color(4)
-        rightLabel.numberOfLines = 0
-        rightLabel.tg_right.equal(containerLayout.tg_right) //和父布局视图右对齐。
+        rightLabel.tg_trailing.equal(containerLayout.tg_trailing) //和父布局视图右对齐。
         rightLabel.tg_centerY.equal(leftLabel.tg_centerY) //和左边视图垂直居中对齐。
-        rightLabel.tg_left.min(leftLabel.tg_right, offset:10) //右边视图的最小左边界是等于左边视图的右边偏移10，这样当右边视图的宽度超过这个最小边界时则会自动压缩视图的宽度。
+        rightLabel.tg_leading.min(leftLabel.tg_trailing, offset:10) //右边视图的最小左边界是等于左边视图的右边偏移10，这样当右边视图的宽度超过这个最小边界时则会自动压缩视图的宽度。
         
-        rightLabel.tg_width.equal(.wrap) //宽度等于自身的宽度。这个设置和上面的tg_left.min方法配合使用实现子视图宽度的压
+        rightLabel.tg_width.equal(.wrap) //宽度等于自身的宽度。这个设置和上面的tg_leading.min方法配合使用实现子视图宽度的压
         rightLabel.tg_height.equal(.wrap).max(containerLayout.tg_height) //但是最大的高度等于父布局视图的高度(注意这里内部自动减去了padding的值)
         containerLayout.addSubview(rightLabel)
         //添加手势处理。

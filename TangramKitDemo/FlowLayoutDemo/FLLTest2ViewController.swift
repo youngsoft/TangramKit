@@ -22,6 +22,8 @@ class FLLTest2ViewController: UIViewController {
          这个例子用来介绍流式布局中的内容填充流式布局，主要用来实现标签流的功能。内容填充流式布局的每行的数量是不固定的，而是根据其内容的尺寸来自动换行。
          */
 
+        self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
         
         let rootLayout = TGFlowLayout(.vert,arrangedCount:2)
         rootLayout.tg_arrangedGravity = TGGravity.vert.center
@@ -33,7 +35,7 @@ class FLLTest2ViewController: UIViewController {
         let tempTagTextField = UITextField()
         tempTagTextField.placeholder = "input tag here"
         tempTagTextField.borderStyle = .roundedRect
-        tempTagTextField.tg_left.equal(2)
+        tempTagTextField.tg_leading.equal(2)
         tempTagTextField.tg_top.equal(2)
         tempTagTextField.tg_height.equal(30)
         tempTagTextField.tg_width.equal(.fill)  //宽度占用剩余父视图宽度。
@@ -43,7 +45,7 @@ class FLLTest2ViewController: UIViewController {
         let addTagButton = UIButton(type: .system)
         addTagButton.setTitle("Add Tag", for: .normal)
         addTagButton.addTarget(self, action: #selector(handleAddTag), for: .touchUpInside)
-        addTagButton.tg_right.equal(2)
+        addTagButton.tg_trailing.equal(2)
         addTagButton.sizeToFit()             //因为每行2个子视图，这个子视图的宽度是固定的，而上面的兄弟视图占用了剩余的宽度。这样这两个子视图将均分父视图。
         rootLayout.addSubview(addTagButton)
         
@@ -51,7 +53,7 @@ class FLLTest2ViewController: UIViewController {
         let stretchSpacingLabel = UILabel()
         stretchSpacingLabel.text = "Stretch Spacing:"
         stretchSpacingLabel.font = CFTool.font(15)
-        stretchSpacingLabel.tg_left.equal(2)
+        stretchSpacingLabel.tg_leading.equal(2)
         stretchSpacingLabel.tg_width.equal(140)
         stretchSpacingLabel.tg_height.equal(.wrap)
         rootLayout.addSubview(stretchSpacingLabel)
@@ -64,7 +66,7 @@ class FLLTest2ViewController: UIViewController {
         let stretchSizeLabel = UILabel()
         stretchSizeLabel.text = "Stretch Size:"
         stretchSizeLabel.font = CFTool.font(15)
-        stretchSizeLabel.tg_left.equal(2)
+        stretchSizeLabel.tg_leading.equal(2)
         stretchSizeLabel.tg_width.equal(140)
         stretchSizeLabel.tg_height.equal(.wrap)
         rootLayout.addSubview(stretchSizeLabel)
@@ -77,7 +79,7 @@ class FLLTest2ViewController: UIViewController {
         let autoArrangeLabel = UILabel()
         autoArrangeLabel.text = "Auto Arrange:"
         autoArrangeLabel.font = CFTool.font(15)
-        autoArrangeLabel.tg_left.equal(2)
+        autoArrangeLabel.tg_leading.equal(2)
         autoArrangeLabel.tg_width.equal(140)
         autoArrangeLabel.tg_height.equal(.wrap)
         rootLayout.addSubview(autoArrangeLabel)

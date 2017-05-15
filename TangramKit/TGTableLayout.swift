@@ -33,12 +33,12 @@ open class TGTableLayout: TGLinearLayout {
     /**
      *  添加一个新行。对于垂直表格来说每一行是从上往下排列的，而水平表格则每一行是从左往右排列的。
      *
-     *  @param rowSize行的尺寸值，可以设置的值有特殊的TGLayoutSize或者CGFloat类型如下：
+     *  rowSize行的尺寸值，可以设置的值有特殊的TGLayoutSize或者CGFloat类型如下：
      1 .wrap表示由列子视图决定本行尺寸(垂直表格为行高，水平表格为行宽)，每个列子视图都需要自己设置尺寸(垂直表格为高度，水平表格为宽度)
      2 .average表示均分尺寸(垂直表格为行高 = 总行高/行数，水平表格为行宽 = 总行宽/行数)，列子视图不需要设置尺寸(垂直表格为高度，水平表格为宽度)
      3 大于0表示固定尺寸，表示这行的尺寸为这个固定的数值(垂直表格为行高，水平表格为行宽)，列子视图不需要设置尺寸(垂直表格为高度，水平表格为宽度)。
      4 不能设置为.fill。
-     *  @param colSize列的尺寸值，可以设置的值有特殊的TGLayoutSize或者CGFloat类型如下：
+     *  colSize列的尺寸值，可以设置的值有特殊的TGLayoutSize或者CGFloat类型如下：
      1 .fill表示整列尺寸和父视图一样的尺寸(垂直表格为列宽，水平表格为列高)，每个子视图需要设置自己的尺寸(垂直表格为宽度，水平表格为高度)
      2 .wrap表示整列的尺寸由列内所有子视图包裹(垂直表格为列宽，水平表格为列高).每个子视图需要设置自己的尺寸(垂直表格为宽度，水平表格为高度)
      3 .average表示整列的尺寸和父视图一样的尺寸(垂直表格为列宽，水平表格为列高)，每列内子视图的尺寸均分(垂直表格 = 列宽/行内子视图数，水平表格 = 行高/列内子视图数)
@@ -56,8 +56,9 @@ open class TGTableLayout: TGLinearLayout {
     @discardableResult
     public func tg_insertRow(size rowSize: TGTableRowColSizeType, colSize : TGTableRowColSizeType, rowIndex : Int) ->TGLinearLayout
     {
+        let lsc = self.tgCurrentSizeClass as! TGTableLayoutViewSizeClass
         var ori:TGOrientation = .vert;
-        if (self.tg_orientation == .vert)
+        if (lsc.tg_orientation == .vert)
         {
             ori = .horz;
         }
@@ -69,11 +70,11 @@ open class TGTableLayout: TGLinearLayout {
         let rowView = TGTableRowLayout(orientation: ori, rowSize: rowSize, colSize: colSize)
         if ori == .horz
         {
-            rowView.tg_hspace = self.tg_hspace
+            rowView.tg_hspace = lsc.tg_hspace
         }
         else
         {
-            rowView.tg_vspace = self.tg_vspace
+            rowView.tg_vspace = lsc.tg_vspace
         }
         
         rowView.tg_intelligentBorderline = self.tg_intelligentBorderline
@@ -130,65 +131,68 @@ open class TGTableLayout: TGLinearLayout {
         
         let rowView:TGTableRowLayout = self.tg_rowView(at:indexPath.row) as! TGTableRowLayout
         
+        let rowsc = rowView.tgCurrentSizeClass as! TGLinearLayoutViewSizeClassImpl
+        let colsc = colView.tgCurrentSizeClass as! TGViewSizeClassImpl
+        
         //colSize为0表示均分尺寸，为-1表示由子视图决定尺寸，大于0表示固定尺寸。
         if let v = rowView.colSize as? TGLayoutSize
         {
             if v === TGLayoutSize.average
             {
-                if (rowView.tg_orientation == .horz)
+                if (rowsc.tg_orientation == .horz)
                 {
-                    colView.tg_width.equal(v)
+                    colsc.tg_width.equal(v)
                 }
                 else
                 {
-                    colView.tg_height.equal(v)
+                    colsc.tg_height.equal(v)
                 }
             }
         }
         else
         {
-            if (rowView.tg_orientation == .horz)
+            if (rowsc.tg_orientation == .horz)
             {
-                colView.tg_width.tgEqual(val:rowView.colSize)
+                colsc.tg_width.tgEqual(val:rowView.colSize)
             }
             else
             {
-                colView.tg_height.tgEqual(val:rowView.colSize)
+                colsc.tg_height.tgEqual(val:rowView.colSize)
             }
         }
         
-        if (rowView.tg_orientation == .horz)
+        if (rowsc.tg_orientation == .horz)
         {
-            if (colView.bounds.size.height == 0 && !(colView.tgHeight?.hasValue ?? false))
+            if (colView.bounds.size.height == 0 && !(colsc.tgHeight?.hasValue ?? false))
             {
-                if let colViewl = colView as? TGBaseLayout
+                if colView is TGBaseLayout
                 {
-                    if (!(colViewl.tgHeight?.isWrap ?? false))
+                    if (!(colsc.tgHeight?.isWrap ?? false))
                     {
-                        colView.tg_height.equal(rowView.tg_height);
+                        colsc.tg_height.equal(rowsc.tg_height);
                     }
                 }
                 else
                 {
-                    colView.tg_height.equal(rowView.tg_height);
+                    colsc.tg_height.equal(rowsc.tg_height);
                 }
             }
         }
         else
         {
-            if (colView.bounds.size.width == 0 && !(colView.tgWidth?.hasValue ?? false))
+            if (colView.bounds.size.width == 0 && !(colsc.tgWidth?.hasValue ?? false))
             {
                 
-                if let colViewl = colView as? TGBaseLayout
+                if colView is TGBaseLayout
                 {
-                    if (!(colViewl.tgWidth?.isWrap ?? false))
+                    if (!(colsc.tgWidth?.isWrap ?? false))
                     {
-                        colView.tg_width.equal(rowView.tg_width)
+                        colsc.tg_width.equal(rowsc.tg_width)
                     }
                 }
                 else
                 {
-                    colView.tg_width.equal(rowView.tg_width);
+                    colsc.tg_width.equal(rowsc.tg_width);
                 }
             }
             
@@ -312,7 +316,7 @@ open class TGTableLayout: TGLinearLayout {
     
     internal override func tgCreateInstance() -> AnyObject
     {
-        return TGTableLayoutViewSizeClassImpl()
+        return TGTableLayoutViewSizeClassImpl(view:self)
     }
     
 }
@@ -349,17 +353,19 @@ private class TGTableRowLayout: TGLinearLayout,TGTableLayoutViewSizeClass {
         self.colSize = colSize
         super.init(frame:.zero, orientation:orientation)
         
+        let lsc = self.tgCurrentSizeClass as! TGLinearLayoutViewSizeClassImpl
+        
         if let v = rowSize as? TGLayoutSize
         {
             if v === TGLayoutSize.average || v === TGLayoutSize.wrap
             {
                 if (orientation == .horz)
                 {
-                    self.tg_height.equal(v)
+                    lsc.tg_height.equal(v)
                 }
                 else
                 {
-                    self.tg_width.equal(v)
+                    lsc.tg_width.equal(v)
                 }
             }
             else
@@ -372,11 +378,11 @@ private class TGTableRowLayout: TGLinearLayout,TGTableLayoutViewSizeClass {
         {
             if (orientation == .horz)
             {
-                self.tg_height.tgEqual(val:rowSize)
+                lsc.tg_height.tgEqual(val:rowSize)
             }
             else
             {
-                self.tg_width.tgEqual(val:rowSize)
+                lsc.tg_width.tgEqual(val:rowSize)
             }
         }
         
@@ -384,15 +390,15 @@ private class TGTableRowLayout: TGLinearLayout,TGTableLayoutViewSizeClass {
         {
             if (orientation == .horz)
             {
-                self.tgWidth?.equal(nil)
-                self.tg_left.equal(0);
-                self.tg_right.equal(0);
+                lsc.tgWidth?.equal(nil)
+                lsc.tg_leading.equal(0);
+                lsc.tg_trailing.equal(0);
             }
             else
             {
-                self.tgHeight?.equal(nil)
-                self.tg_top.equal(0);
-                self.tg_bottom.equal(0);
+                lsc.tgHeight?.equal(nil)
+                lsc.tg_top.equal(0);
+                lsc.tg_bottom.equal(0);
             }
             
         }
@@ -400,11 +406,11 @@ private class TGTableRowLayout: TGLinearLayout,TGTableLayoutViewSizeClass {
         {
             if (orientation == .horz)
             {
-                self.tg_width.equal(.wrap)
+                lsc.tg_width.equal(.wrap)
             }
             else
             {
-                self.tg_height.equal(.wrap)
+                lsc.tg_height.equal(.wrap)
             }
             
         }

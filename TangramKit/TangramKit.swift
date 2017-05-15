@@ -53,7 +53,7 @@
  
  */
 
-//Current version is 1.0.5, please open: https://github.com/youngsoft/TangramKit/blob/master/CHANGELOG.md to show the changes.
+//Current version is 1.0.6, please open: https://github.com/youngsoft/TangramKit/blob/master/CHANGELOG.md to show the changes.
 
 
 
@@ -90,37 +90,38 @@ public struct TGGravity : OptionSet{
     //水平方向
     public struct horz
     {
-        public static let left = TGGravity(rawValue:1)           //左边停靠或者左对齐
-        public static let center = TGGravity(rawValue:2)         //水平中心停靠或者水平居中对齐
-        public static let right = TGGravity(rawValue:4)          //右边停靠或者右对齐
-        public static let windowCenter = TGGravity(rawValue: 8)  //窗口水平中心停靠，表示在屏幕窗口的水平中心停靠
-        public static let between = TGGravity(rawValue: 16)      //水平间距拉伸
-        public static let fill:TGGravity = [horz.left, horz.center, horz.right]   //水平宽度填充
-        public static let mask = TGGravity(rawValue:0xFF00)  //水平掩码，用来获取水平方向的枚举值
+        public static let left = TGGravity(rawValue:1)           /**左边停靠或者左对齐*/
+        public static let center = TGGravity(rawValue:2)         /**水平中心停靠或者水平居中对齐*/
+        public static let right = TGGravity(rawValue:4)          /**右边停靠或者右对齐*/
+        public static let windowCenter = TGGravity(rawValue: 8)  /**窗口水平中心停靠，表示在屏幕窗口的水平中心停靠*/
+        public static let between = TGGravity(rawValue: 16)      /**水平间距拉伸*/
+        public static let leading = TGGravity(rawValue: 32)      /**头部对齐,对于阿拉伯国家来说是和Right等价的,对于非阿拉伯国家则是和Left等价的*/
+        public static let trailing = TGGravity(rawValue:64)      /**尾部对齐,对于阿拉伯国家来说是和Left等价的,对于非阿拉伯国家则是和Right等价的*/
+        public static let fill:TGGravity = [horz.left, horz.center, horz.right]   /**水平宽度填充*/
+        public static let mask = TGGravity(rawValue:0xFF00)  /**水平掩码，用来获取水平方向的枚举值*/
     }
     
     //垂直方向
     public struct vert
     {
-        public static let top = TGGravity(rawValue:1 << 8)           //上边停靠或者上对齐
-        public static let center = TGGravity(rawValue:2 << 8)        //垂直中心停靠或者垂直居中对齐
-        public static let bottom = TGGravity(rawValue:4 << 8)        //下边停靠或者下边对齐
-        public static let windowCenter = TGGravity(rawValue:8 << 8)  //窗口垂直中心停靠，表示在屏幕窗口的垂直中心停靠
-        public static let between = TGGravity(rawValue: 16 << 8)     //垂直间距拉伸
-        public static let fill:TGGravity = [vert.top, vert.center, vert.bottom] //垂直高度填充
-        public static let mask = TGGravity(rawValue:0x00FF)  //垂直掩码，用来获取垂直方向的枚举值
+        public static let top = TGGravity(rawValue:1 << 8)           /**上边停靠或者上对齐*/
+        public static let center = TGGravity(rawValue:2 << 8)        /**垂直中心停靠或者垂直居中对齐*/
+        public static let bottom = TGGravity(rawValue:4 << 8)        /**下边停靠或者下边对齐*/
+        public static let windowCenter = TGGravity(rawValue:8 << 8)  /**窗口垂直中心停靠，表示在屏幕窗口的垂直中心停靠*/
+        public static let between = TGGravity(rawValue: 16 << 8)     /**垂直间距拉伸*/
+        public static let fill:TGGravity = [vert.top, vert.center, vert.bottom] /**垂直高度填充*/
+        public static let mask = TGGravity(rawValue:0x00FF)  /**垂直掩码，用来获取垂直方向的枚举值*/
         
     }
     
-    //整体居中
-    public static let center:TGGravity = [horz.center, vert.center]
     
-    //全部填充
-    public static let fill:TGGravity = [horz.fill, vert.fill]
+    public static let center:TGGravity = [horz.center, vert.center]  /**整体居中*/
     
-    //全部拉伸
-    public static let between:TGGravity = [horz.between, vert.between]
+    public static let fill:TGGravity = [horz.fill, vert.fill]  /**全部填充*/
     
+    public static let between:TGGravity = [horz.between, vert.between]  /**全部拉伸*/
+
+    public static let baseline = TGGravity(rawValue: 32 << 8)  /**基线对齐，暂时不支持*/
 }
 
 public func &(left: TGGravity, right: TGGravity) -> TGGravity {

@@ -31,27 +31,27 @@ class AllTest1TableViewHeaderFooterView: UITableViewHeaderFooterView {
         self.contentView.addSubview(rootLayout)
         
         let leftItemLayout = self.createItemLayout(NSLocalizedString("Show", comment: ""), withTag: 0)
-        leftItemLayout.tg_left.equal(0)
+        leftItemLayout.tg_leading.equal(0)
         leftItemLayout.tg_height.equal(.fill)
         leftItemLayout.tg_width.equal(TGWeight(100.0/3))
         leftItemLayout.tg_highlightedOpacity = 0.5
         rootLayout.addSubview(leftItemLayout)
         
-        let bld = TGLayoutBorderline(color: UIColor.lightGray, headIndent:5, tailIndent:5)
+        let bld = TGBorderline(color: UIColor.lightGray, headIndent:5, tailIndent:5)
         
         let centerItemLayout = self.createItemLayout(NSLocalizedString("Topic", comment: ""), withTag: 1)
         centerItemLayout.tg_centerX.equal(0)
         centerItemLayout.tg_height.equal(.fill)
         centerItemLayout.tg_width.equal(TGWeight(100.0/3))
-        centerItemLayout.tg_leftBorderline = bld
+        centerItemLayout.tg_leadingBorderline = bld
         centerItemLayout.tg_highlightedOpacity = 0.5
         rootLayout.addSubview(centerItemLayout)
         
         let rightItemLayout = self.createItemLayout(NSLocalizedString("Follow", comment: ""), withTag: 2)
-        rightItemLayout.tg_right.equal(0)
+        rightItemLayout.tg_trailing.equal(0)
         rightItemLayout.tg_height.equal(.fill)
         rightItemLayout.tg_width.equal(TGWeight(100.0/3))
-        rightItemLayout.tg_leftBorderline = bld
+        rightItemLayout.tg_leadingBorderline = bld
         rightItemLayout.tg_highlightedOpacity = 0.5
         rootLayout.addSubview(rightItemLayout)
         
@@ -59,13 +59,13 @@ class AllTest1TableViewHeaderFooterView: UITableViewHeaderFooterView {
         let underLineView = UIView()
         underLineView.tg_height.equal(2)
         underLineView.tg_width.equal(TGWeight(100.0/3))
-        underLineView.tg_left.equal(0)
+        underLineView.tg_leading.equal(0)
         underLineView.tg_bottom.equal(0)
         underLineView.backgroundColor = UIColor.red
         rootLayout.addSubview(underLineView)
         self.underLineView = underLineView
         
-        let rootLayoutBld = TGLayoutBorderline(color: .lightGray)
+        let rootLayoutBld = TGBorderline(color: .lightGray)
         rootLayout.tg_bottomBorderline = rootLayoutBld
         rootLayout.tg_topBorderline = rootLayoutBld
 
@@ -83,19 +83,19 @@ class AllTest1TableViewHeaderFooterView: UITableViewHeaderFooterView {
     func handleTap(_ sender: TGBaseLayout) {
         switch sender.tag {
         case 0:
-            self.underLineView.tg_left.equal(0)
+            self.underLineView.tg_leading.equal(0)
             self.underLineView.tg_centerX.equal(nil)
-            self.underLineView.tg_right.equal(nil)
+            self.underLineView.tg_trailing.equal(nil)
             break
         case 1:
-            self.underLineView.tg_left.equal(nil)
+            self.underLineView.tg_leading.equal(nil)
             self.underLineView.tg_centerX.equal(0)
-            self.underLineView.tg_right.equal(nil)
+            self.underLineView.tg_trailing.equal(nil)
             break
         case 2:
-            self.underLineView.tg_left.equal(nil)
+            self.underLineView.tg_leading.equal(nil)
             self.underLineView.tg_centerX.equal(nil)
-            self.underLineView.tg_right.equal(0)
+            self.underLineView.tg_trailing.equal(0)
             break
         default:
             assert(false, "oops!")

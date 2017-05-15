@@ -100,6 +100,30 @@ TangramKit is a simple and easy Swift framework for iOS view layout. The name co
  ```
 
 
+## Performance comparison
+
+![demo](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/MyLayoutP.png)
+
+create time(ms)/per subview|Frame|TangramKit|AutoLayout|Masonry|UIStackView
+-----|-------|---------|------|------|---------
+TGLinearLayout|0.08|0.164|0.219|0.304|0.131
+TGFrameLayout|0.05|0.149|0.209|0.273|0.131
+TGRelativeLayout|0.079|0.182|0.116|0.359|0.131
+TGFlowLayout|0.08|0.107|0.198|0.258|0.131
+TGFloatLayout|0.044|0.148|0.203|0.250|0.131
+
+
+layout time(ms)/per subview |Frame|TangramKit|AutoLayout|Masonry|UIStackView   
+ -----|-------|---------|------|------|---------
+TGLinearLayout|0|0.049|0.269|0.269|0.272
+TGFrameLayout|0|0.042|0.243|0.243|0.272
+TGRelativeLayout|0|0.068|0.274|0.274|0.272
+TGFlowLayout|0|0.036|0.279|0.279|0.272
+TGFloatLayout|0|0.055|0.208|0.208|0.272
+
+
+
+
 ## Architecture
 
 ![demo](TangramKitDemo/Support%20Files/TangramClass.png)
@@ -563,7 +587,7 @@ To integrate TangramKit into your Xcode project using CocoaPods, specify it in y
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 
-pod 'TangramKit', '~> 1.0.5'
+pod 'TangramKit', '~> 1.0.6'
 ```
    
 Then, run the following command:

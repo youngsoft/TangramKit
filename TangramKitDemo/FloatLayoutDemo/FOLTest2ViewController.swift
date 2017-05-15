@@ -171,7 +171,7 @@ class FOLTest2ViewController: UIViewController {
         rootLayout.tg_height.equal(.wrap)
         rootLayout.tg_gravity = TGGravity.horz.fill
         rootLayout.backgroundColor =  UIColor(white:0xe7/255.0, alpha:1)
-        rootLayout.tg_intelligentBorderline =  TGLayoutBorderline(color: .lightGray) //设置智能边界线，布局里面的子视图会根据布局自动产生边界线。
+        rootLayout.tg_intelligentBorderline =  TGBorderline(color: .lightGray) //设置智能边界线，布局里面的子视图会根据布局自动产生边界线。
         scrollView.addSubview(rootLayout)
         self.rootLayout = rootLayout
     }
@@ -233,7 +233,7 @@ extension FOLTest2ViewController
         let itemContainerLayout = TGFloatLayout(.vert)
         itemContainerLayout.backgroundColor = .white
         itemContainerLayout.tg_height.equal(.wrap)
-        itemContainerLayout.tg_intelligentBorderline = TGLayoutBorderline(color: .lightGray)
+        itemContainerLayout.tg_intelligentBorderline = TGBorderline(color: .lightGray)
         self.rootLayout.addSubview(itemContainerLayout)
         
         //创建条目布局，并加入到容器布局中去。
@@ -299,14 +299,14 @@ extension FOLTest2ViewController
         let titleLabel = UILabel()
         titleLabel.text = dataModel.title;
         titleLabel.font = .boldSystemFont(ofSize: 15)
-        titleLabel.tg_left.equal(5)
+        titleLabel.tg_leading.equal(5)
         titleLabel.tg_top.equal(5)
         titleLabel.sizeToFit()
         itemLayout.addSubview(titleLabel)
         
         //向上浮动，左边顶部边距为5，高度为20
         let subImageView = UIImageView(image:UIImage(named:dataModel.subImage))
-        subImageView.tg_left.equal(5)
+        subImageView.tg_leading.equal(5)
         subImageView.tg_top.equal(5)
         subImageView.tg_height.equal(20)
         subImageView.sizeToFit()
@@ -333,7 +333,7 @@ extension FOLTest2ViewController
         titleLabel.text = dataModel.title;
         titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
         titleLabel.tg_width.equal(itemLayout.tg_width)
-        titleLabel.tg_left.equal(5)
+        titleLabel.tg_leading.equal(5)
         titleLabel.tg_top.equal(5)
         titleLabel.sizeToFit()
         itemLayout.addSubview(titleLabel)
@@ -344,14 +344,14 @@ extension FOLTest2ViewController
         subTitleLabel.font = UIFont.systemFont(ofSize: 12)
         subTitleLabel.textColor = .lightGray
         subTitleLabel.tg_width.equal(itemLayout.tg_width)
-        subTitleLabel.tg_left.equal(5)
+        subTitleLabel.tg_leading.equal(5)
         subTitleLabel.sizeToFit()
         itemLayout.addSubview(subTitleLabel)
         
         //图片向右浮动，并且右边距为5，上面因为占据了全宽，因此这里会另起一行向右浮动。
         let imageView = UIImageView(image:UIImage(named:dataModel.image))
         imageView.tg_reverseFloat = true
-        imageView.tg_right.equal(5)
+        imageView.tg_trailing.equal(5)
         imageView.sizeToFit()
         itemLayout.addSubview(imageView)
         
@@ -375,7 +375,7 @@ extension FOLTest2ViewController
         let titleLabel = UILabel()
         titleLabel.text = dataModel.title;
         titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
-        titleLabel.tg_left.equal(5)
+        titleLabel.tg_leading.equal(5)
         titleLabel.tg_top.equal(5)
         titleLabel.tg_width.equal(.fill)
         titleLabel.sizeToFit()
@@ -386,12 +386,10 @@ extension FOLTest2ViewController
         subTitleLabel.text = dataModel.subTitle;
         subTitleLabel.font = UIFont.systemFont(ofSize: 12)
         subTitleLabel.textColor = UIColor.lightGray;
-        subTitleLabel.numberOfLines = 0;
-        subTitleLabel.tg_left.equal(5)
+        subTitleLabel.tg_leading.equal(5)
         subTitleLabel.tg_clearFloat = true;
         subTitleLabel.tg_width.equal(.fill)
         subTitleLabel.tg_height.equal(.wrap)
-        subTitleLabel.sizeToFit()
         itemLayout.addSubview(subTitleLabel)
         
         //如果有小图片则图片另起一行，向左浮动。
@@ -399,7 +397,7 @@ extension FOLTest2ViewController
         {
             let subImageView = UIImageView(image:UIImage(named:dataModel.subImage))
             subImageView.tg_clearFloat = true;
-            subImageView.tg_left.equal(5)
+            subImageView.tg_leading.equal(5)
             subImageView.sizeToFit()
             itemLayout.addSubview(subImageView)
         }
@@ -428,7 +426,7 @@ extension FOLTest2ViewController
         let titleLabel = UILabel()
         titleLabel.text = dataModel.title;
         titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
-        titleLabel.tg_left.equal(5)
+        titleLabel.tg_leading.equal(5)
         titleLabel.tg_top.equal(5)
         titleLabel.sizeToFit()
         itemLayout.addSubview(titleLabel)
@@ -437,7 +435,7 @@ extension FOLTest2ViewController
         let subTitleLabel = UILabel()
         subTitleLabel.text = dataModel.title;
         subTitleLabel.font = UIFont.systemFont(ofSize: 11)
-        subTitleLabel.tg_left.equal(5)
+        subTitleLabel.tg_leading.equal(5)
         subTitleLabel.tg_top.equal(5)
         subTitleLabel.sizeToFit()
         itemLayout.addSubview(subTitleLabel)
@@ -447,7 +445,7 @@ extension FOLTest2ViewController
         priceLabel.text = dataModel.price;
         priceLabel.font = UIFont.systemFont(ofSize: 11)
         priceLabel.textColor = UIColor.red
-        priceLabel.tg_left.equal(5)
+        priceLabel.tg_leading.equal(5)
         priceLabel.tg_bottom.equal(5)
         priceLabel.tg_reverseFloat = true
         priceLabel.sizeToFit()
@@ -458,7 +456,7 @@ extension FOLTest2ViewController
         descLabel.text = dataModel.desc;
         descLabel.font = UIFont.systemFont(ofSize: 11)
         descLabel.textColor = UIColor.lightGray
-        descLabel.tg_left.equal(5)
+        descLabel.tg_leading.equal(5)
         descLabel.tg_reverseFloat = true
         descLabel.sizeToFit()
         itemLayout.addSubview(descLabel)
@@ -481,7 +479,7 @@ extension FOLTest2ViewController
         let titleLabel = UILabel()
         titleLabel.text = dataModel.title;
         titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
-        titleLabel.tg_left.equal(5)
+        titleLabel.tg_leading.equal(5)
         titleLabel.tg_top.equal(5)
         titleLabel.tg_width.equal(itemLayout.tg_width,multiple:0.5)
         titleLabel.sizeToFit()
@@ -491,7 +489,7 @@ extension FOLTest2ViewController
         let subTitleLabel = UILabel()
         subTitleLabel.text = dataModel.subTitle;
         subTitleLabel.font = UIFont.systemFont(ofSize: 11)
-        subTitleLabel.tg_left.equal(5)
+        subTitleLabel.tg_leading.equal(5)
         subTitleLabel.tg_top.equal(5)
         subTitleLabel.tg_width.equal(itemLayout.tg_width,multiple:0.5)
         subTitleLabel.sizeToFit()
@@ -502,7 +500,7 @@ extension FOLTest2ViewController
         priceLabel.text = dataModel.price;
         priceLabel.font = UIFont.systemFont(ofSize: 11)
         priceLabel.textColor = UIColor.red
-        priceLabel.tg_left.equal(5)
+        priceLabel.tg_leading.equal(5)
         priceLabel.tg_bottom.equal(5)
         priceLabel.tg_reverseFloat = true
         priceLabel.tg_width.equal(itemLayout.tg_width,multiple:0.5)
@@ -514,7 +512,7 @@ extension FOLTest2ViewController
         descLabel.text = dataModel.desc;
         descLabel.font = UIFont.systemFont(ofSize: 11)
         descLabel.textColor = UIColor.lightGray
-        descLabel.tg_left.equal(5)
+        descLabel.tg_leading.equal(5)
         descLabel.tg_reverseFloat = true
         descLabel.tg_width.equal(itemLayout.tg_width,multiple:0.5)
         descLabel.sizeToFit()
@@ -539,7 +537,7 @@ extension FOLTest2ViewController
         let titleLabel = UILabel()
         titleLabel.text = dataModel.title;
         titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
-        titleLabel.tg_left.equal(5)
+        titleLabel.tg_leading.equal(5)
         titleLabel.tg_top.equal(5)
         titleLabel.tg_width.equal(itemLayout.tg_width,multiple:0.5)
         titleLabel.sizeToFit()
@@ -549,7 +547,7 @@ extension FOLTest2ViewController
         let subTitleLabel = UILabel()
         subTitleLabel.text = dataModel.subTitle;
         subTitleLabel.font = UIFont.systemFont(ofSize: 11)
-        subTitleLabel.tg_left.equal(5)
+        subTitleLabel.tg_leading.equal(5)
         subTitleLabel.tg_top.equal(5)
         subTitleLabel.tg_width.equal(itemLayout.tg_width,multiple:0.5)
         subTitleLabel.sizeToFit()
@@ -572,7 +570,7 @@ extension FOLTest2ViewController
         let titleLabel = UILabel()
         titleLabel.text = dataModel.title;
         titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
-        titleLabel.tg_left.equal(5)
+        titleLabel.tg_leading.equal(5)
         titleLabel.tg_top.equal(5)
         titleLabel.sizeToFit()
         itemLayout.addSubview(titleLabel)
@@ -580,7 +578,7 @@ extension FOLTest2ViewController
         let subTitleLabel = UILabel()
         subTitleLabel.text = dataModel.subTitle;
         subTitleLabel.font = UIFont.systemFont(ofSize: 11)
-        subTitleLabel.tg_left.equal(5)
+        subTitleLabel.tg_leading.equal(5)
         subTitleLabel.tg_top.equal(5)
         subTitleLabel.sizeToFit()
         itemLayout.addSubview(subTitleLabel)
@@ -604,7 +602,7 @@ extension FOLTest2ViewController
         let titleLabel = UILabel()
         titleLabel.text = dataModel.title;
         titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
-        titleLabel.tg_left.equal(5)
+        titleLabel.tg_leading.equal(5)
         titleLabel.tg_top.equal(5)
         titleLabel.sizeToFit()
         itemLayout.addSubview(titleLabel)
@@ -614,7 +612,7 @@ extension FOLTest2ViewController
         subTitleLabel.text = dataModel.subTitle;
         subTitleLabel.font = UIFont.systemFont(ofSize: 11)
         subTitleLabel.textColor = UIColor.red
-        subTitleLabel.tg_left.equal(5)
+        subTitleLabel.tg_leading.equal(5)
         subTitleLabel.tg_top.equal(5)
         subTitleLabel.sizeToFit()
         itemLayout.addSubview(subTitleLabel)

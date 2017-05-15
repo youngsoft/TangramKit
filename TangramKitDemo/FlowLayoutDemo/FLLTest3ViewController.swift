@@ -40,8 +40,8 @@ class FLLTest3ViewController: UIViewController {
         tipLabel.font = CFTool.font(13)
         tipLabel.text = NSLocalizedString("  You can drag the following tag to adjust location in layout, MyLayout can use subview's useFrame,noLayout property and layout view's autoresizesSubviews propery to complete some position adjustment and the overall animation features: \n useFrame set to YES indicates subview is not controlled by the layout view but use its own frame to set the location and size instead.\n \n autoresizesSubviews set to NO indicate layout view will not do any layout operation, and will remain in the position and size of all subviews.\n \n noLayout set to YES indicate subview in the layout view just only take up the position and size but not real adjust the position and size when layouting.", comment: "")
         tipLabel.textColor = CFTool.color(4)
-        tipLabel.numberOfLines = 0
         tipLabel.tg_height.equal(.wrap)  //高度动态确定。
+        tipLabel.tg_top.equal(self.topLayoutGuide)
         rootLayout.addSubview(tipLabel)
         
         let tip2Label = UILabel()

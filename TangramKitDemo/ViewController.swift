@@ -32,7 +32,7 @@ class ViewController: UITableViewController {
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "RTL", style: .plain, target: self, action: #selector(handleRTL))
         
         
         
@@ -169,6 +169,25 @@ class ViewController: UITableViewController {
     }
     
     
+    // MARK: - Handle Method
+    
+    func handleRTL(_ sender:UIBarButtonItem)
+    {
+     
+        if TGBaseLayout.tg_isRTL
+        {
+            sender.title = "RTL"
+            UILabel.appearance().textAlignment = .left
+        }
+        else
+        {
+            sender.title = "LTR"
+            UILabel.appearance().textAlignment = .right
+        }
+        
+        TGBaseLayout.tg_isRTL = !TGBaseLayout.tg_isRTL
+        self.tableView.reloadData()
+    }
 
     // MARK: - Table view data source
 
@@ -189,6 +208,7 @@ class ViewController: UITableViewController {
         cell.textLabel?.font = CFTool.font(15)
         cell.textLabel?.textColor = CFTool.color(4)
         cell.textLabel?.text = self.demoVCList[indexPath.row]["title"] as? String
+        cell.textLabel?.textAlignment = TGBaseLayout.tg_isRTL ? .right : .left
         
         return cell
     }

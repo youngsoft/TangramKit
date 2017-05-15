@@ -66,7 +66,6 @@ class FOLTest5ViewController: UIViewController {
         label2.text = NSLocalizedString("TangramKit is a powerful view layout library, it support 6 kinds of layout views and SIZECLASS.", comment: "")
         label2.textColor = CFTool.color(3)
         label2.font = CFTool.font(15)
-        label2.numberOfLines = 0
         label2.tg_width.equal(.fill)
         label2.tg_height.equal(.wrap)
         label2.tg_clearFloat = true
@@ -96,10 +95,8 @@ class FOLTest5ViewController: UIViewController {
             descLabel.text = descs[i];
             descLabel.textColor = CFTool.color(4)
             descLabel.font = CFTool.font(13)
-            descLabel.numberOfLines = 0;
             descLabel.tg_width.equal(100%)      //占用剩余的宽度
             descLabel.tg_height.equal(.wrap)
-            descLabel.sizeToFit()
             rootLayout.addSubview(descLabel)
         }
         

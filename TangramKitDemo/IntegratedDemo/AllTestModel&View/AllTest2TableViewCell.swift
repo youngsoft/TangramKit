@@ -56,11 +56,8 @@ class AllTest2TableViewCell: UITableViewCell {
             self.headImageView.image = UIImage(named: newValue.headImage)
             self.headImageView.sizeToFit()
             self.nameLabel.text = newValue.name
-            self.nameLabel.sizeToFit()
             self.descLabel.text = newValue.desc
-            self.descLabel.sizeToFit()
             self.priceLabel.text = newValue.price
-            self.priceLabel.sizeToFit()
         }
     }
 
@@ -83,9 +80,9 @@ extension AllTest2TableViewCell
         rootLayout.tg_width.equal(.fill)
         rootLayout.tg_height.equal(.fill)
         self.contentView.addSubview(rootLayout)
-        rootLayout.tg_bottomBorderline = TGLayoutBorderline(color: UIColor.lightGray,headIndent: 10, tailIndent: 10)
-        rootLayout.tg_leftPadding = 10
-        rootLayout.tg_rightPadding = 10  //两边保留10的内边距。
+        rootLayout.tg_bottomBorderline = TGBorderline(color: UIColor.lightGray,headIndent: 10, tailIndent: 10)
+        rootLayout.tg_leadingPadding = 10
+        rootLayout.tg_trailingPadding = 10  //两边保留10的内边距。
         rootLayout.tg_gravity = TGGravity.vert.center //整个布局内容垂直居中。
 
         /*
@@ -146,7 +143,7 @@ extension AllTest2TableViewCell
         priceLabel.font = UIFont.systemFont(ofSize: 14)
         priceLabel.tg_width.equal(.wrap).max(TGDimeAdapter.width(100)).min(TGDimeAdapter.width(50))
         //宽度最宽为100,注意到这里使用了TGDimeAdapter.width表示会根据屏幕的宽度来对100进行缩放。这个100是按iPhone6为标准设置的。具体请参考TGDimeAdapter类。
-        priceLabel.tg_left.equal(10)
+        priceLabel.tg_leading.equal(10)
         rootLayout.addSubview(priceLabel)
         self.priceLabel = priceLabel
     }
@@ -161,16 +158,16 @@ extension AllTest2TableViewCell
         let rootLayout = TGRelativeLayout()
         rootLayout.tg_width.equal(.fill)
         rootLayout.tg_height.equal(.fill)
-        rootLayout.tg_bottomBorderline = TGLayoutBorderline(color: UIColor.lightGray,headIndent: 10, tailIndent: 10)
-        rootLayout.tg_leftPadding = 10
-        rootLayout.tg_rightPadding = 10
+        rootLayout.tg_bottomBorderline = TGBorderline(color: UIColor.lightGray,headIndent: 10, tailIndent: 10)
+        rootLayout.tg_leadingPadding = 10
+        rootLayout.tg_trailingPadding = 10
         self.contentView.addSubview(rootLayout)
 
         
         //两边保留10的内边距。
         let headImageView = UIImageView()
         headImageView.tg_centerY.equal(rootLayout.tg_centerY)
-        headImageView.tg_left.equal(rootLayout.tg_left)
+        headImageView.tg_leading.equal(rootLayout.tg_leading)
         rootLayout.addSubview(headImageView)
         self.headImageView = headImageView
         
@@ -179,7 +176,7 @@ extension AllTest2TableViewCell
         priceLabel.textAlignment = .right
         priceLabel.adjustsFontSizeToFitWidth = true
         priceLabel.font = UIFont.systemFont(ofSize: 14)
-        priceLabel.tg_right.equal(rootLayout.tg_right)
+        priceLabel.tg_trailing.equal(rootLayout.tg_trailing)
         priceLabel.tg_centerY.equal(rootLayout.tg_centerY)
         //priceLabel的宽度根据内容自适应，但是最大的宽度是100，最小的宽度是50。注意到这里使用了类TGDimeAdapter表示会根据屏幕的宽度来对100进行缩放。这个100是在DEMO中是按iPhone6为标准设置的。具体请参考TGDimeAdapter类的介绍。
         priceLabel.tg_width.equal(.wrap).max(TGDimeAdapter.width(100)).min(TGDimeAdapter.width(50))
@@ -190,21 +187,21 @@ extension AllTest2TableViewCell
         nameLabel.font = UIFont.systemFont(ofSize: 16)
         //相对布局在后续的版本中会增加对边界的限制方法来实现更加灵活的尺寸限制，这里暂时先设置为140经过测试效果最好。
         nameLabel.tg_width.equal(.wrap)
-        nameLabel.tg_left.equal(headImageView.tg_right)
+        nameLabel.tg_leading.equal(headImageView.tg_trailing)
         //设置nameLabel的右边距最大是priceLabel的左边距，再偏移两个小图标和间距的距离。这样当nameLabel的尺寸超过这个最大的右边距时就会自动的缩小视图的宽度。
-        nameLabel.tg_right.max(priceLabel.tg_left, offset:(5 + 14 + 5 + 14))
+        nameLabel.tg_trailing.max(priceLabel.tg_leading, offset:(5 + 14 + 5 + 14))
 
         
         rootLayout.addSubview(nameLabel)
         self.nameLabel = nameLabel
         
         let editImageView = UIImageView(image: UIImage(named: "edit"))
-        editImageView.tg_left.equal(nameLabel.tg_right, offset:5)
+        editImageView.tg_leading.equal(nameLabel.tg_trailing, offset:5)
         editImageView.tg_bottom.equal(nameLabel.tg_bottom)
         rootLayout.addSubview(editImageView)
         
         let delImageView = UIImageView(image: UIImage(named: "del"))
-        delImageView.tg_left.equal(editImageView.tg_right, offset:5)
+        delImageView.tg_leading.equal(editImageView.tg_trailing, offset:5)
         delImageView.tg_bottom.equal(editImageView.tg_bottom)
         rootLayout.addSubview(delImageView)
         
@@ -216,8 +213,8 @@ extension AllTest2TableViewCell
         descLabel.tg_height.equal(.wrap)
         
         //2行高度，高度根据内容确定。
-        descLabel.tg_left.equal(nameLabel.tg_left)
-        descLabel.tg_right.equal(priceLabel.tg_left, offset:10)
+        descLabel.tg_leading.equal(nameLabel.tg_leading)
+        descLabel.tg_trailing.equal(priceLabel.tg_leading, offset:10)
         rootLayout.addSubview(descLabel)
         self.descLabel = descLabel
         
@@ -237,9 +234,9 @@ extension AllTest2TableViewCell
         let rootLayout = TGFloatLayout()
         rootLayout.tg_width.equal(.fill)
         rootLayout.tg_height.equal(.fill)
-        rootLayout.tg_bottomBorderline = TGLayoutBorderline(color: UIColor.lightGray,headIndent: 10, tailIndent: 10)
-        rootLayout.tg_leftPadding = 10
-        rootLayout.tg_rightPadding = 10 //两边保留10的内边距。
+        rootLayout.tg_bottomBorderline = TGBorderline(color: UIColor.lightGray,headIndent: 10, tailIndent: 10)
+        rootLayout.tg_leadingPadding = 10
+        rootLayout.tg_trailingPadding = 10 //两边保留10的内边距。
         self.contentView.addSubview(rootLayout)
         
         
@@ -256,7 +253,7 @@ extension AllTest2TableViewCell
         priceLabel.adjustsFontSizeToFitWidth = true
         priceLabel.font = UIFont.systemFont(ofSize: 14)
         priceLabel.tg_reverseFloat = true
-        priceLabel.tg_left.equal(10)
+        priceLabel.tg_leading.equal(10)
         
         //priceLabel的宽度根据内容自适应，但是最大的宽度是100，最小的宽度是50。注意到这里使用了类TGDimeAdapter表示会根据屏幕的宽度来对100进行缩放。这个100是在DEMO中是按iPhone6为标准设置的。具体请参考TGDimeAdapter类的介绍。
         priceLabel.tg_width.equal(.wrap).max(TGDimeAdapter.width(100)).min(TGDimeAdapter.width(50))

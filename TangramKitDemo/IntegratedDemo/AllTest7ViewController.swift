@@ -43,9 +43,7 @@ class AllTest7ViewController: UIViewController {
         tipLabel.font = CFTool.font(16)
         tipLabel.textColor = CFTool.color(3)
         tipLabel.adjustsFontSizeToFitWidth = true
-        tipLabel.numberOfLines = 0
         tipLabel.tg_height.equal(.wrap)
-        tipLabel.sizeToFit()
         rootLayout.addSubview(tipLabel)
         
         self.createDemo1(rootLayout)
@@ -82,10 +80,8 @@ extension AllTest7ViewController
         tipLabel.text = "1.下面的例子实现一行内多个子视图从左往右排列。如果在小屏幕下显示则会压缩所有子视图的空间，如果能够被容纳的话则正常显示。您可以分别在横竖屏下测试以及在iPhone4/5/6/6+上测试效果:"
         tipLabel.font = CFTool.font(14)
         tipLabel.adjustsFontSizeToFitWidth = true
-        tipLabel.numberOfLines = 0
         tipLabel.tg_top.equal(10)
         tipLabel.tg_height.equal(.wrap)
-        tipLabel.sizeToFit()
         rootLayout.addSubview(tipLabel)
         
         let contentLayout = TGLinearLayout(.horz)
@@ -102,11 +98,9 @@ extension AllTest7ViewController
         label1.text = "不压缩子视图"
         label1.font = CFTool.font(16)
         label1.backgroundColor = CFTool.color(5)
-        label1.numberOfLines = 0
         label1.adjustsFontSizeToFitWidth = true
         label1.tg_height.equal(.wrap)
         label1.tg_width.equal(.wrap).min(label1.tg_width) //并且最小宽度也等于自己，这样设置的话可以保证这个视图永远不会被压缩。您可以注释掉这句看看效果。
-        label1.sizeToFit()
         contentLayout.addSubview(label1)
         
         //第二个子视图。
@@ -125,14 +119,12 @@ extension AllTest7ViewController
         label3.font = CFTool.font(15)
         label3.backgroundColor = CFTool.color(7)
         label3.adjustsFontSizeToFitWidth = true
-        label3.numberOfLines = 0
         label3.tg_height.equal(.wrap)
         label3.tg_width.equal(.wrap)
-        label3.sizeToFit()
         contentLayout.addSubview(label3)
         
         //这句设置非常重要，设置为右间距为相对间距，从而达到如果屏幕小则会缩小固定尺寸，如果大则不会的效果。
-        label3.tg_right.equal(100%)
+        label3.tg_trailing.equal(100%)
     }
     
     func createDemo2(_ rootLayout: TGLinearLayout) {
@@ -141,10 +133,8 @@ extension AllTest7ViewController
         tipLabel.text = "2.下面的例子里面最右边的两个子视图的宽度是固定的，而第一个子视图则占用剩余的空间。您可以分别在横竖屏下测试以及在iPhone4/5/6/6+上测试效果:"
         tipLabel.font = CFTool.font(14)
         tipLabel.adjustsFontSizeToFitWidth = true
-        tipLabel.numberOfLines = 0
         tipLabel.tg_top.equal(10)
         tipLabel.tg_height.equal(.wrap)
-        tipLabel.sizeToFit()
         rootLayout.addSubview(tipLabel)
         
         let contentLayout = TGLinearLayout(.horz)
@@ -159,11 +149,9 @@ extension AllTest7ViewController
         label1.text = "第一个子视图的宽度是占用整个屏幕的剩余空间，您可以切换屏幕和设备查看效果"
         label1.font = CFTool.font(15)
         label1.backgroundColor = CFTool.color(5)
-        label1.numberOfLines = 0
         label1.tg_height.equal(.wrap)
         label1.tg_width.equal(.fill)
         label1.adjustsFontSizeToFitWidth = true
-        label1.sizeToFit()
         contentLayout.addSubview(label1)
         
         //第二个子视图。
@@ -188,16 +176,12 @@ extension AllTest7ViewController
         
         let label1 = sender.superview!.viewWithTag(1000) as! UILabel
         label1.text = label1.text!.appending("/您好！")
-        label1.sizeToFit()
-        //这句要调用重新激发布局。
     }
     
     func handleDel(_ sender: UIButton) {
         
         let label1 = sender.superview!.viewWithTag(1000) as! UILabel
         label1.text = "/您好！"
-        label1.sizeToFit()
-        //这句要调用重新激发布局。
     }
     
     func createDemo3(_ rootLayout: TGLinearLayout) {
@@ -206,7 +190,6 @@ extension AllTest7ViewController
         tipLabel.text = "3.下面的例子里面最右边的两个子视图的宽度是固定的，而第一个子视图的尺寸动态变化，但是最宽不能超过布局剩余的宽度。您可以分别在横竖屏下测试以及在iPhone4/5/6/6+上分别测试效果:"
         tipLabel.font = CFTool.font(14)
         tipLabel.adjustsFontSizeToFitWidth = true
-        tipLabel.numberOfLines = 0
         tipLabel.tg_top.equal(10)
         tipLabel.tg_height.equal(.wrap)
         tipLabel.sizeToFit()
@@ -224,12 +207,11 @@ extension AllTest7ViewController
         label1.text = "点击右边的按钮："
         label1.font = CFTool.font(14)
         label1.backgroundColor = CFTool.color(5)
-        label1.numberOfLines = 0
         label1.adjustsFontSizeToFitWidth = true
         label1.tag = 1000 //为了测试用。。
         label1.tg_height.equal(.wrap)
         label1.tg_width.equal(.wrap)
-        label1.tg_right.equal(50%)
+        label1.tg_trailing.equal(50%)
         contentLayout.addSubview(label1)
         
         //第二个子视图。
@@ -238,7 +220,7 @@ extension AllTest7ViewController
         button2.tintColor! = UIColor.blue
         button2.titleLabel!.font = CFTool.font(14)
         button2.sizeToFit()
-        button2.tg_left.equal(50%)//设置相对间距。
+        button2.tg_leading.equal(50%)//设置相对间距。
         contentLayout.addSubview(button2)
         button2.addTarget(self, action: #selector(self.handleAdd), for: .touchUpInside)
         
@@ -279,10 +261,8 @@ extension AllTest7ViewController
         tipLabel.text = "4.下面的例子展示左右2个子视图的内容分别向两边延伸，但是不会重叠。这样做的好处就是不会产生空间的浪费。一个具体例子就是UITableviewCell中展示内容时，一部分在左边而一部分在右边，两边的内容长度都不确定，但是不能重叠以及浪费空间。 您可以分别在横竖屏下测试以及在iPhone4/5/6/6+上测试效果:"
         tipLabel.font = CFTool.font(14)
         tipLabel.adjustsFontSizeToFitWidth = true
-        tipLabel.numberOfLines = 0
         tipLabel.tg_top.equal(10)
         tipLabel.tg_height.equal(.wrap)
-        tipLabel.sizeToFit()
         rootLayout.addSubview(tipLabel)
         
         let changeButton = UIButton(type:.system)
@@ -317,8 +297,7 @@ extension AllTest7ViewController
         leftLabel.textColor = .red
         leftLabel.tg_width.equal(.wrap)//设置宽度等于自身内容的宽度
         leftLabel.tg_height.equal(.wrap)
-        leftLabel.numberOfLines = 0;
-        leftLabel.tg_right.equal(50%) //设置右边的相对间距.
+        leftLabel.tg_trailing.equal(50%) //设置右边的相对间距.
         contentLayout.addSubview(leftLabel)
         leftLabel.tag = 1000;
         
@@ -329,8 +308,7 @@ extension AllTest7ViewController
         rightLabel.textColor = .blue
         rightLabel.tg_width.equal(.wrap)  //设置宽度等于自身内容的宽度
         rightLabel.tg_height.equal(.wrap)
-        rightLabel.tg_left.equal(50%) //设置左边的相对间距.
-        rightLabel.numberOfLines = 0;
+        rightLabel.tg_leading.equal(50%) //设置左边的相对间距.
         contentLayout.addSubview(rightLabel)
         rightLabel.tag = 2000
         
@@ -367,10 +345,8 @@ extension AllTest7ViewController
         tipLabel.text = "5.下面的例子中(响应式布局！！)，您可以添加按钮来添加多个按钮形成多行多列的布局。在不同的屏幕尺寸下，子视图之间的间距会自动调整以便满足最佳的布局状态。比如多个子视图有规律排列，每个子视图的宽度是固定的，在iPhone4下以及iPhone6下都能放置4个子视图，但是iPhone4中子视图之间的间距要比iPhone6上的小，而在iPhone6+上则因为空间足够可以放置5个子视图。您可以分别在横竖屏下测试以及在iPhone4/5/6/6+上测试效果:"
         tipLabel.font = CFTool.font(14)
         tipLabel.adjustsFontSizeToFitWidth = true
-        tipLabel.numberOfLines = 0
         tipLabel.tg_top.equal(10)
         tipLabel.tg_height.equal(.wrap)
-        tipLabel.sizeToFit()
         rootLayout.addSubview(tipLabel)
         
         let  subviewWidth: CGFloat = 60 //您可以修改这个宽度值，可以看出不管宽度设置多大都能完美的填充整个屏幕，因为系统会自动调整子视图之间的间距。
@@ -409,7 +385,7 @@ extension AllTest7ViewController
         cellLabel.font = CFTool.font(15)
         cellLabel.backgroundColor = CFTool.color(Int(arc4random()) % 14 + 1)
         cellLabel.tg_width.equal(80) //宽度是80
-        cellLabel.tg_right.equal(100%) //右间距占用剩余的空间。
+        cellLabel.tg_trailing.equal(100%) //右间距占用剩余的空间。
         cellLabel.sizeToFit()
         
         //如果还没有行则建立第一行，这里的行高是由子视图决定，而列宽则是和表格视图保持一致，但是子视图还需要设置单元格的宽度。
@@ -431,7 +407,7 @@ extension AllTest7ViewController
                 tableLayout.tg_addRow(size:TGLayoutSize.wrap, colSize: TGLayoutSize.fill).tg_shrinkType = .average
             }
             else {
-                lastView!.tg_right.equal(nil)
+                lastView!.tg_trailing.equal(nil)
                 //因为新添加的单元格视图的右边是相对间距，也就是占用剩余空间，因此这里要把最后一个单元的右间距清空，这样就不会造成有多个单元格的右间距占用剩余空间。注意理解一下这里的设置！！！。
             }
         }
@@ -445,10 +421,8 @@ extension AllTest7ViewController
         tipLabel.text = "6.下面的例子用来实现子视图依次从左往右添加，并且当空间不够时会自动压缩前面的所有子视图的宽度。而当所有子视图的宽度都到达了最小的阈值时就会自动换行，并继续添加上去。您可以分别在横竖屏下测试以及在iPhone4/5/6/6+上分别测试效果:"
         tipLabel.font = CFTool.font(14)
         tipLabel.adjustsFontSizeToFitWidth = true
-        tipLabel.numberOfLines = 0
         tipLabel.tg_top.equal(10)
         tipLabel.tg_height.equal(.wrap)
-        tipLabel.sizeToFit()
         rootLayout.addSubview(tipLabel)
         
         let addButton = UIButton(type: .system)
@@ -475,10 +449,8 @@ extension AllTest7ViewController
         tipLabel.text = "7.下面的例子里面有多个宽度不一致的子视图，但是布局会根据屏幕的大小而智能的排列这些子视图，从而充分的利用好布局视图的空间。您可以分别在横竖屏下测试以及在iPhone4/5/6/6+上分别测试效果:"
         tipLabel.font = CFTool.font(14)
         tipLabel.adjustsFontSizeToFitWidth = true
-        tipLabel.numberOfLines = 0
         tipLabel.tg_top.equal(10)
         tipLabel.tg_height.equal(.wrap)
-        tipLabel.sizeToFit()
         
         rootLayout.addSubview(tipLabel)
         let contentLayout = TGFlowLayout(.vert, arrangedCount: 0)
@@ -509,10 +481,8 @@ extension AllTest7ViewController
         tipLabel.text = "8.下面的例子中如果屏幕足够宽则左边视图居左，中间视图居中，右边视图居右。这时候不会产生滚动，而当屏幕宽度不足时则会压缩中间视图和两边视图之间的间距并且产生滚动效果。这样的例子也可以同样应用在纵向屏幕中：通常在大屏幕设备上中间的部分要居中显示，而在小屏幕上则依次排列产生滚动效果。 您可以分别在iPhone4/5/6/6+上以及横竖屏测试效果:"
         tipLabel.font = CFTool.font(14)
         tipLabel.adjustsFontSizeToFitWidth = true
-        tipLabel.numberOfLines = 0
         tipLabel.tg_top.equal(10)
         tipLabel.tg_height.equal(.wrap)
-        tipLabel.sizeToFit()
         rootLayout.addSubview(tipLabel)
         
         let scrollView = UIScrollView()
@@ -543,8 +513,8 @@ extension AllTest7ViewController
         label2.backgroundColor = CFTool.color(6)
         label2.sizeToFit()
         //中间视图的左边间距是0.5,右边间距是0.5。表明中间视图的左右间距占用剩余的空间而达到居中的效果。这样在屏幕尺寸足够时则会产生居中效果，而屏幕尺寸不足时则会缩小间距，但是这里面最左边的最小间距是0而最右边的最小间距是30，这样布局视图因为具有wrapContentWidth属性所以会扩充宽度而达到滚动的效果。
-        label2.tg_left.equal(50%).min(0)
-        label2.tg_right.equal(50%).min(30)
+        label2.tg_leading.equal(50%).min(0)
+        label2.tg_trailing.equal(50%).min(30)
         contentLayout.addSubview(label2)
         
         //第三个子视图。
@@ -563,10 +533,8 @@ extension AllTest7ViewController
         tipLabel.text = "9.下面的例子中最右边的视图如果能够被屏幕容纳则放在最右边，否则就会产生滚动效果。这个例子同样也可以应用在纵向屏幕中:很多页面里面最下边需要放一个按钮，如果屏幕尺寸够高则总是放在最底部，如果屏幕尺寸不够则会产生滚动效果。 您可以分别在iPhone4/5/6/6+上以及横竖屏测试效果:"
         tipLabel.font = CFTool.font(14)
         tipLabel.adjustsFontSizeToFitWidth = true
-        tipLabel.numberOfLines = 0
         tipLabel.tg_top.equal(10)
         tipLabel.tg_height.equal(.wrap)
-        tipLabel.sizeToFit()
         rootLayout.addSubview(tipLabel)
         
         let scrollView = UIScrollView()
@@ -605,7 +573,7 @@ extension AllTest7ViewController
         label3.backgroundColor = CFTool.color(7)
         label3.sizeToFit()
         //最后一个视图的左边距占用剩余的空间，但是最低不能小于30。这样设置的意义是如果布局视图够宽则第三个子视图的左边间距是剩余的空间，这样就保证了第三个子视图总是在最右边。而如果剩余空间不够时，则因为这里最小的宽度是30，而布局视图又是wrap,所以就会扩充布局视图的宽度，而产生滚动效果。这里的最小值30很重要，也就是第三个子视图和其他子视图的最小间距，具体设置多少就要看UI的界面效果图了。
-        label3.tg_left.equal(100%).min(30)
+        label3.tg_leading.equal(100%).min(30)
         contentLayout.addSubview(label3)
     }
     
@@ -631,10 +599,8 @@ extension AllTest7ViewController
         tipLabel.text = "10.下面的例子中展示了一行中各个子视图的宽度和间距都将根据屏幕的尺寸来进行拉伸和收缩，这样不管在任何尺寸的屏幕下都能达到完美的适配。在实践中UI人员往往会按某个设备的尺寸给出一张效果图，那么我们只需要按这个效果图中的子视图的宽度来计算好所占用的宽度和间距的比例，然后我们通过对视图的宽度和间距按比例值进行设置，这样就会使得子视图的真实宽度和间距将根据屏幕的尺寸进行拉升和收缩。您可以分别在iPhone4/5/6/6+上以及横竖屏测试效果:"
         tipLabel.font = CFTool.font(14)
         tipLabel.adjustsFontSizeToFitWidth = true
-        tipLabel.numberOfLines = 0
         tipLabel.tg_top.equal(10)
         tipLabel.tg_height.equal(.wrap)
-        tipLabel.sizeToFit()
         rootLayout.addSubview(tipLabel)
         
         
@@ -673,27 +639,27 @@ extension AllTest7ViewController
         }
         
         let A = self.createLabel("A",color:5)
-        A.tg_left.equal(0)
+        A.tg_leading.equal(0)
         A.tg_width.equal(60.0)   //不管任何设备固定宽度为60,高度根据内容确定。
         contentLayout.addSubview(A)
         
         let B = self.createLabel("B",color:6)
-        B.tg_left.equal((10/totalFloatWidth)%) //B与A的间距，也就是左间距用浮动间距。
+        B.tg_leading.equal((10/totalFloatWidth)%) //B与A的间距，也就是左间距用浮动间距。
         B.tg_width.equal((60 / totalFloatWidth)%)
         contentLayout.addSubview(B)
         
         let C = self.createLabel("C",color:7)
-        C.tg_left.equal((16 / totalFloatWidth)%)
+        C.tg_leading.equal((16 / totalFloatWidth)%)
         C.tg_width.equal((80 / totalFloatWidth)%)
         contentLayout.addSubview(C)
         
         let D = self.createLabel("D",color:8)
-        D.tg_left.equal(16)  //D与C的间距是固定的16
+        D.tg_leading.equal(16)  //D与C的间距是固定的16
         D.tg_width.equal((100 / totalFloatWidth)%)
         contentLayout.addSubview(D)
         
         let E = self.createLabel("E",color:9)
-        E.tg_left.equal((13 / totalFloatWidth)%)
+        E.tg_leading.equal((13 / totalFloatWidth)%)
         E.tg_width.equal(40) //固定的宽度。
         contentLayout.addSubview(E)
         
@@ -707,10 +673,8 @@ extension AllTest7ViewController
         tipLabel.text = "11.下面一个例子展示了当某个布局视图的尺寸能够容纳里面所有子视图的尺寸和间距时就按正常显示，而当尺寸不足以容纳所有子视图的尺寸和间距之和时我们就对子视图之间的间距进行压缩，以便能将所有子视图的内容都显示出来。您可以分别在iPhone4/5/6/6+上以及横竖屏测试效果:"
         tipLabel.font = CFTool.font(14)
         tipLabel.adjustsFontSizeToFitWidth = true
-        tipLabel.numberOfLines = 0
         tipLabel.tg_top.equal(10)
         tipLabel.tg_height.equal(.wrap)
-        tipLabel.sizeToFit()
         rootLayout.addSubview(tipLabel)
         
         
@@ -729,7 +693,7 @@ extension AllTest7ViewController
                
         let A = self.createLabel("Objective-C", color:5)
         A.sizeToFit()
-        //A.tg_left.equal(80)   //您可以解注释这条语句，并将上面的shrinkType设置为MySubviewsShrink_Average或者MySubviewsShrink_Weight查看效果
+        //A.tg_leading.equal(80)   //您可以解注释这条语句，并将上面的shrinkType设置为MySubviewsShrink_Average或者MySubviewsShrink_Weight查看效果
         contentLayout.addSubview(A)
         
         let B = self.createLabel("Swift",color:6)

@@ -44,11 +44,11 @@ class LLTest3ViewController: UIViewController {
         /*
          这个例子主要用来了解布局视图的tg_gravity这个属性。tg_gravity这个属性主要用来控制布局视图里面的子视图的整体停靠方向以及子视图的填充。我们考虑下面的场景：
          
-         1.假设某个垂直线性布局有A,B,C三个子视图，并且希望这三个子视图都和父视图右对齐。第一个方法是分别为每个子视图设置tg_right ~= 0来实现；第二个方法是只需要设置布局视图的tg_gravity的值为TGGravity.horz.right就可以实现了。
+         1.假设某个垂直线性布局有A,B,C三个子视图，并且希望这三个子视图都和父视图右对齐。第一个方法是分别为每个子视图设置tg_trailing ~= 0来实现；第二个方法是只需要设置布局视图的tg_gravity的值为TGGravity.horz.right就可以实现了。
          2.假设某个垂直线性布局有A,B,C三个子视图，并且希望这三个子视图整体水平居中对齐。第一个方法是分别为每个子视图设置tg_centerX~=0来实现；第二个方法是只需要设置布局视图的gravity的值为TGGravity.horz.center就可以实现了。
          3.假设某个垂直线性布局有A,B,C三个子视图，并且我们希望这三个子视图整体垂直居中。第一个方法是为设置A的tg_top~=50%和设置C的tg_bottom ~=50%;第二个方法是只需要设置布局视图的tg_gravity的值为TGGravity.vert.center就可以实现了。
          4.假设某个垂直线性布局有A,B,C三个子视图，我们希望这三个子视图整体居中。我们就只需要将布局视图的tg_gravity值设置为TGGravity.center就可以了。
-         5.假设某个垂直线性布局有A,B,C三个子视图，我们希望这三个子视图的宽度都和布局视图一样宽。第一个方法是分别为每个子视图的tg_left和tg_right设置为0;第二个方法是只需要设置布局视图的tg_gravity的值为TGGravity.horz.fill就可以了。
+         5.假设某个垂直线性布局有A,B,C三个子视图，我们希望这三个子视图的宽度都和布局视图一样宽。第一个方法是分别为每个子视图的tg_leading和tg_trailing设置为0;第二个方法是只需要设置布局视图的tg_gravity的值为TGGravity.horz.fill就可以了。
          
          通过上面的几个场景我们可以看出tg_gravity属性的设置可以在很大程度上简化布局视图里面的子视图的布局属性的设置的，通过tg_gravity属性的设置我们可以控制布局视图里面所有子视图的整体停靠方向和填充的尺寸。在使用tg_gravity属性时需要明确如下几个条件：
          
@@ -65,7 +65,7 @@ class LLTest3ViewController: UIViewController {
         let rootLayout = TGLinearLayout(.vert)
         rootLayout.tg_width.equal(.fill)
         rootLayout.tg_height.equal(.wrap)
-        rootLayout.tg_gravity = TGGravity.horz.fill  //设置这个属性后rootLayout的所有子视图都不需要指定宽度了，这个值的意义是所有子视图的宽度都填充满布局。也就是说设置了这个值后不需要为每个子视图设置tg_left, tg_right来指定宽度了。
+        rootLayout.tg_gravity = TGGravity.horz.fill  //设置这个属性后rootLayout的所有子视图都不需要指定宽度了，这个值的意义是所有子视图的宽度都填充满布局。也就是说设置了这个值后不需要为每个子视图设置tg_leading, tg_trailing来指定宽度了。
         scrollView.addSubview(rootLayout)
         
         //创建垂直布局停靠操作动作布局。
@@ -106,7 +106,6 @@ extension LLTest3ViewController
         actionTitleLabel.text = NSLocalizedString("Vertical layout gravity control, you can click the following different button to show the effect:", comment:"");
         actionTitleLabel.font = CFTool.font(15)
         actionTitleLabel.textColor = CFTool.color(4)
-        actionTitleLabel.numberOfLines = 0
         actionTitleLabel.tg_height.equal(.wrap)
         contentLayout.addSubview(actionTitleLabel)
         
@@ -160,7 +159,7 @@ extension LLTest3ViewController
         let vertGravityLayout = TGLinearLayout(.vert)
         vertGravityLayout.backgroundColor = CFTool.color(0)
         vertGravityLayout.tg_top.equal(10)
-        vertGravityLayout.tg_left.equal(20)
+        vertGravityLayout.tg_leading.equal(20)
         vertGravityLayout.tg_height.equal(200)
         vertGravityLayout.tg_vspace = 10  //设置每个子视图之间的垂直间距为10，这样子视图就不再需要设置间距了。
         contentLayout.addSubview(vertGravityLayout)
@@ -181,8 +180,8 @@ extension LLTest3ViewController
         vertGravityLayout.addSubview(v3)
         
         let v4 = self.createLabel(NSLocalizedString("set left and right margin to determine width", comment:""), color: CFTool.color(8))
-        v4.tg_left.equal(20)
-        v4.tg_right.equal(30) //这两行代码能决定视图的宽度，自己定义。
+        v4.tg_leading.equal(20)
+        v4.tg_trailing.equal(30) //这两行代码能决定视图的宽度，自己定义。
         v4.tg_height.equal(25)
         vertGravityLayout.addSubview(v4)
 
@@ -197,7 +196,6 @@ extension LLTest3ViewController
         actionTitleLabel.font = CFTool.font(15)
         actionTitleLabel.textColor = CFTool.color(4)
         actionTitleLabel.adjustsFontSizeToFitWidth = true
-        actionTitleLabel.numberOfLines = 0
         actionTitleLabel.tg_height.equal(.wrap)
         contentLayout.addSubview(actionTitleLabel)
         
@@ -248,32 +246,28 @@ extension LLTest3ViewController
         horzGravityLayout.backgroundColor = CFTool.color(0)
         horzGravityLayout.tg_height.equal(200)
         horzGravityLayout.tg_top.equal(10)
-        horzGravityLayout.tg_left.equal(20)
+        horzGravityLayout.tg_leading.equal(20)
         horzGravityLayout.tg_hspace = 5  //设置子视图之间的水平间距为5
         contentLayout.addSubview(horzGravityLayout)
         self.horzGravityLayout = horzGravityLayout
         
         let v1 = self.createLabel(NSLocalizedString("test text1", comment:""), color: CFTool.color(5))
-        v1.numberOfLines = 0
         v1.tg_height.equal(.wrap)
         v1.tg_width.equal(60)
         horzGravityLayout.addSubview(v1)
         
         let v2 = self.createLabel(NSLocalizedString("test text2 test text2", comment:""), color: CFTool.color(6))
-        v2.numberOfLines = 0
         v2.tg_height.equal(.wrap)
         v2.tg_width.equal(60)
         horzGravityLayout.addSubview(v2)
         
         
         let v3 = self.createLabel(NSLocalizedString("test text3 test text3 test text3", comment:""), color: CFTool.color(7))
-        v3.numberOfLines = 0
         v3.tg_height.equal(.wrap)
         v3.tg_width.equal(60)
         horzGravityLayout.addSubview(v3)
         
         let v4 = self.createLabel(NSLocalizedString("set top and bottom margin to determine height", comment:""), color: CFTool.color(8))
-        v4.numberOfLines = 0
         v4.tg_top.equal(20)
         v4.tg_bottom.equal(10)
         v4.tg_height.equal(.wrap)
@@ -421,8 +415,8 @@ extension LLTest3ViewController
         topLabel.textAlignment = .center
         topLabel.textColor = CFTool.color(4)
         topLabel.font = CFTool.font(17)
-        topLabel.tg_left.equal(10)
-        topLabel.tg_right.equal(10)
+        topLabel.tg_leading.equal(10)
+        topLabel.tg_trailing.equal(10)
         topLabel.sizeToFit()
         navigationItemLayout.addSubview(topLabel)
         

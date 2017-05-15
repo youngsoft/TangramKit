@@ -114,12 +114,10 @@ class AllTest1ViewController: UITableViewController {
         label2.text = NSLocalizedString(" if you use layout view to realize the dynamic height tableHeaderView, please use frame to set view's width and use wrapContentHeight to set view's height. the layoutIfNeeded method is needed to call before the layout view assignment to the UITableview's tableHeaderView.", comment: "")
         label2.textColor = CFTool.color(4)
         label2.font = CFTool.font(15)
-        label2.tg_left.equal(5)
-        label2.tg_right.equal(5)
-        label2.numberOfLines = 0
+        label2.tg_leading.equal(5)
+        label2.tg_trailing.equal(5)
         label2.tg_height.equal(.wrap)
         label2.tg_top.equal(10)
-        label2.sizeToFit()
         
         tableHeaderViewLayout.addSubview(label2)
         tableHeaderViewLayout.layoutIfNeeded() //因为高度是.wrap的，所以这里必须要在加入前执行这句！！！
@@ -205,7 +203,7 @@ class AllTest1ViewController: UITableViewController {
         }
         else
         {
-            let bld = TGLayoutBorderline(color:UIColor.red)
+            let bld = TGBorderline(color:UIColor.red)
             cell.rootLayout.tg_bottomBorderline = bld;
         }
         

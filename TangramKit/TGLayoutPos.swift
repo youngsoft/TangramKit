@@ -31,7 +31,7 @@ extension TGWeight:TGLayoutPosType{}
 extension Array:TGLayoutPosType{}
 extension TGLayoutPos:TGLayoutPosType{}   //因为TGLayoutPos的equal方法本身就可以设置自身类型，所以这里也实现了这个协议
 extension UIView:TGLayoutPosType{}
-
+//extension UILayoutSupport:TGLayoutPosType{}
 
 
 /**
@@ -116,6 +116,12 @@ final public class TGLayoutPos
     //设置位置的值为位置对象，表示相对于其他位置。如果设置为nil则表示清除位置的值的设定。
     @discardableResult
     public func equal(_ pos:TGLayoutPos!, offset:CGFloat = 0) ->TGLayoutPos
+    {
+        return self.tgEqual(val: pos, offset: offset)
+    }
+    
+    @discardableResult
+    public func equal(_ pos:UILayoutSupport, offset:CGFloat = 0) ->TGLayoutPos
     {
         return self.tgEqual(val: pos, offset: offset)
     }
@@ -270,6 +276,8 @@ final public class TGLayoutPos
         switch _posVal! {
         case .floatV(let v):
             return v
+        case .layoutSupport(let v):
+            return v.length
         default:
             return nil
         }
@@ -370,6 +378,7 @@ final public class TGLayoutPos
         case posV(TGLayoutPos)
         case arrayV([TGLayoutPos])
         case weightV(TGWeight)
+        case layoutSupport(UILayoutSupport)
     }
     
     internal weak var _view:UIView! = nil
@@ -440,14 +449,14 @@ extension TGLayoutPos
             case TGGravity.vert.bottom:
                 _posVal = .posV(v.tg_bottom)
                 break
-            case TGGravity.horz.left:
-                _posVal = .posV(v.tg_left)
+            case TGGravity.horz.leading:
+                _posVal = .posV(v.tg_leading)
                 break
             case TGGravity.horz.center:
                 _posVal = .posV(v.tg_centerX)
                 break
-            case TGGravity.horz.right:
-                _posVal = .posV(v.tg_right)
+            case TGGravity.horz.trailing:
+                _posVal = .posV(v.tg_trailing)
                 break
             default:
                 assert(false, "oops!");
@@ -477,6 +486,24 @@ extension TGLayoutPos
         
         return self
     }
+    
+    @discardableResult
+    internal func tgEqual(val:UILayoutSupport, offset:CGFloat = 0)  ->TGLayoutPos
+    {
+        
+        if (_type != TGGravity.vert.top && _type != TGGravity.vert.bottom)
+        {
+            assert(false, "oops! only topPos or bottomPos can set to UILayoutSupport")
+        }
+
+        _offsetVal = offset
+        _posVal = .layoutSupport(val)
+        
+        setNeedLayout()
+
+        return self
+    }
+
     
     internal func belong(to view:UIView) -> TGLayoutPos
     {

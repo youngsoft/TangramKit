@@ -30,6 +30,8 @@ class FLTest2ViewController: UIViewController {
          这个例子里面我们可以用框架布局来实现一些复杂的界面布局。框架布局中的子视图还可以利用tg_width和tg_height属性来确定自己的尺寸，其中的equal方法的值可以是一个确定的数字，也可以是父布局视图，也可以是自己,也可以是一个比重值TGWeight
          */
         
+        self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
         
         let rootLayout = TGFrameLayout()
         rootLayout.backgroundColor = CFTool.color(15)
@@ -65,7 +67,7 @@ class FLTest2ViewController: UIViewController {
         rightImageView.backgroundColor = .white
         rightImageView.layer.cornerRadius = 16
         rightImageView.tg_top.equal(10)
-        rightImageView.tg_right.equal(10) //距离父视图顶部和右边偏离10
+        rightImageView.tg_trailing.equal(10) //距离父视图顶部和右边偏离10
         rootLayout.addSubview(rightImageView)
         
         let headImage = UIImageView(image: UIImage(named: "minions1"))
@@ -91,7 +93,7 @@ class FLTest2ViewController: UIViewController {
         
         
         let leftView = UIImageView(image: UIImage(named: "image1"))
-        leftView.tg_left.equal(0)
+        leftView.tg_leading.equal(0)
         leftView.tg_bottom.equal(0)  //左下位置
         leftView.tg_width.equal((100.0/3)%)  //左边视图宽度占用1/3
         leftView.tg_height.equal(leftView.tg_width) //高度等于自身的宽度
@@ -110,7 +112,7 @@ class FLTest2ViewController: UIViewController {
         
         
         let rightView = UIImageView(image: UIImage(named: "image3"))
-        rightView.tg_right.equal(0)
+        rightView.tg_trailing.equal(0)
         rightView.tg_bottom.equal(0)
         rightView.tg_width.equal((100.0/3)%)
         rightView.tg_height.equal(rightView.tg_width)

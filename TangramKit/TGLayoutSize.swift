@@ -523,6 +523,14 @@ extension TGLayoutSize
             {
                 _dimeVal = .wrapV
                 
+                if let labelView = _view as? UILabel, _type == TGGravity.vert.fill
+                {
+                    if labelView.numberOfLines == 1
+                    {
+                        labelView.numberOfLines = 0
+                    }
+                }
+                
                 if let layoutview = _view as? TGBaseLayout
                 {
                     layoutview.setNeedsLayout()
@@ -554,6 +562,7 @@ extension TGLayoutSize
         
         return self
     }
+    
     
     internal func belong(to view: UIView) ->TGLayoutSize
     {
@@ -602,12 +611,6 @@ extension TGLayoutSize
             return size
         }
         
-    }
-    
-    
-    
-    internal var isMatchParent:Bool{
-        return _active && (self.dimeRelaVal != nil && self.dimeRelaVal.view == _view.superview)
     }
     
     internal var tgMinVal:TGLayoutSize?

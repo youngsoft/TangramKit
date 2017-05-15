@@ -2,6 +2,91 @@
 **TangramKit**中的所有历史版本变化将会在这个文件中列出。
 
 --- 
+
+
+## [V1.0.6](https://github.com/youngsoft/TangramKit/releases/tag/1.0.6)(2017/5/15)
+
+#### Added
+1. 添加了对阿拉伯国家的从右往左方向布局的功能[#issue33](https://github.com/youngsoft/MyLinearLayout/issues/33)。系统提供了一个类属性：`tg_isRTL`来实现对RTL布局的支持。同时为了支持RTL系统增加了UIView的扩展属性：`tg_leading, tg_trailing`用来实现头部和尾部的方向，TGBaseLayout则添加了`tg_leadingPadding,tg_trailingPadding`用来实现内边距的RTL支持。而边界线则增加了`tg_leadingBorderline, tg_trailingBorderline`属性来支持RTL。同时新增了`TGGravity.horz.leading,TGGravity.horz.trailing`两个停靠属性。下面的表格是介绍这些属性的意义。
+
+所属类名|新属性|等价于LRT方向布局|等价于RTL布局方向
+-------|---------------|---------------|------------
+UIView(extension)|tg_leading|tg_left|tg_right
+UIView(extension)|tg_trailing|tg_right|tg_left
+TGBaseLayout|tg_leadingPadding|tg_leftPadding|tg_rightPadding
+TGBaseLayout|tg_trailingPadding|tg_rightPadding|tg_leftPadding
+TGBaseLayout|t_leadingBorderline|tg_leftBorderline|tg_rightBorderline
+TGBaseLayout|tg_trailingBorderline|tg_rightBorderline|tg_leftBorderline
+TGGravity|TGGravity.horz.leading|TGGravity.horz.left|TGGravity.horz.right
+TGGravity|TGGravity.horz.trailing|TGGravity.horz.right|TGGravity.horz.left
+
+如果您的界面布局不需要考虑RTL以及对阿拉伯国际的支持则不需要使用上述新添加的属性。
+
+
+2. 实现了对UILabel的`text`和`attributedText`进行设置后自动布局的功能，老版本的代码中每次设置完毕text值后要调用一下sizeToFit来激发布局，新版本自动添加了这个功能，使得不需要明确调用sizeToFit了。但是这样的前提是您必须对UILabel设置了tg_width为.wrap或者tg_height为.wrap。
+3. 对布局类添加新属性`cacheEstimatedRect`，这个属性用来和高度自实用的UITableViewCell结合使用能大幅度的提供布局计算的性能。这个属性提供了缓存一次尺寸评估的机制，使得当存在有复用的cell时减少布局的计算。 具体例子参考(DEMO:AllTest1TableViewCell)
+4. TGLayoutPos对象的equalTo方法的val值新增加了对id<UILayoutSupport>对象的支持，比如tg_top可以等于视图控制器的topLayoutGuide属性，tg_bottom可以等于视图控制器的bottomLayoutGuide属性，这样就可以使得某个布局视图下的子视图的位置不会延生到导航条下面去。具体请参考DEMO:LLTest1ViewController。
+5. 对边界线类`TGBorderline`增加属性`offset`可以实现边界线绘制的偏移位置，而不是默认的在视图的边界上。
+
+#### Fixed
+1. 修复了将一个布局视图加入到SB或者XIB上时同时设置了四周边距而不起作用的[#BUG36](https://github.com/youngsoft/MyLinearLayout/issues/36)。具体解决的方法是实现了TGBaseLayout的awakeFromNib方法，然后在里面更新了布局。
+2. 修复了框架布局`TGFrameLayout`和相对布局`TGRelativeLayout`中尺寸为.wrap时可能计算错误的BUG。
+
+#### Changed
+1.  为了和[TangramKit](https://github.com/youngsoft/TangramKit)库保持一致，对一些名字进行了统一的定义。下面表格列出了新旧名称的定义变化。
+
+所属类名|新定义|老定义|
+------------|---------------|---------------
+TGBorderline|TGBorderline|TGLayoutBorderline
+
+如果您要替换掉所有老方法和属性(建议替换)，则您可以按照如下步骤来完成代码的替换工作：
+ 
+ 			1. 查找所有：TGLayoutBorderline  并替换为TGBorderline  (选择Containning, 查找后选择preview，然后把除TangramKit库之外的其他都替换掉）
+ 			
+
+2. 新版本优化了布局库的子视图构建性能和布局性能。下面表格是新旧版本各布局视图内单个子视图在iPhone6真机设备下的构建和布局时长值(单位是毫秒ms)
+
+create time|1.3.6|1.3.5|提升%|layout time|1.3.6|1.3.5|提升%
+-------|---|---|----|----|----|-------|--------
+TGLinearLayout|0.164|0.211|28%||0.049|0.160|226%
+TGFrameLayout|0.149|0.212|42%||0.042|0.142|234%
+TGRelativeLayout|0.182|0.215|18%||0.068|0.137|101%
+TGFlowLayout|0.107|0.146|37%||0.036|0.111|210%
+TGFloatLayout|0.148|0.147|-0.48%||0.055|0.117|113%
+TGTableLayout\*|||
+TGPathLayout\*|||
+
+	这里没有提供表格布局和路径布局数据是因为表格布局就是一种线性套线性的线性布局，路径布局则没有进行多少优化。下面的一个表格则是单个视图分别在MyLayout,frame,AutoLayout,Masonry,UIStackView5种布局体系下的构建和布局时长对比值。
+	
+create time|Frame|TangramKit|AutoLayout|Masonry|UIStackView	
+-------|-----|------|---------|----------|-----
+TGLinearLayout|0.08|0.164|0.219|0.304|0.131
+TGFrameLayout|0.05|0.149|0.209|0.273|0.131
+TGRelativeLayout|0.079|0.182|0.116|0.359|0.131
+TGFlowLayout|0.08|0.107|0.198|0.258|0.131
+TGFloatLayout|0.044|0.148|0.203|0.250|0.131
+
+
+
+layout time |Frame|TangramKit|AutoLayout|Masonry|UIStackView	
+-------|-----|-------|--------|--------|-------
+TGLinearLayout|0|0.049|0.269|0.269|0.272
+TGFrameLayout|0|0.042|0.243|0.243|0.272
+TGRelativeLayout|0|0.068|0.274|0.274|0.272
+TGFlowLayout|0|0.036|0.279|0.279|0.272
+TGFloatLayout|0|0.055|0.208|0.208|0.272
+
+  从上面的表格中我们得出如下结论[issue#25](https://github.com/youngsoft/MyLinearLayout/issues/25)：
+ 
+ 1. 用frame构建视图用时最少，平均每个视图花费0.068ms。当视图的frame指定后就不再需要布局视图了，所以布局时间几乎是0。
+  2. 当用AutoLayout进行布局时每个子视图的平均构建时长约为0.189ms，而Masonry因为是对AutoLayout的封装所以平均构建时长约为0.289ms。在布局时则因为都是使用了AutoLayout所以是相等的，大概花费0.255ms左右。
+  3. TangramKit的实现因为是对frame的封装，所以无论是构建时长和布局时长都要优于AutoLayout，但低于原始的frame方法。TangramKit的平均构建时长约0.150ms，比frame构建要多花费2.2倍的时间；而AutoLayout的平均构建时长是TangramKit的1.26倍；Masonry的平均构建时长则是TangramKit的1.9倍。
+  4. TangramKit的平均布局时长是0.05ms, 而AutoLayout的布局时长则是TangramKit的5倍。
+  5. UIStackView的构建时长要稍微优于TangramKit的线性布局TGLinearLayout.但是布局时长则是TGLinearLayout的5.5倍。
+  6. TangramKit中流式布局TGFlowLayout的构建时长和布局时长最小，而相对布局的构建和布局时长最长。
+
+
+
 ## [1.0.5](https://github.com/youngsoft/TangramKit/releases/tag/1.0.5)(2017/04/16)
 
 

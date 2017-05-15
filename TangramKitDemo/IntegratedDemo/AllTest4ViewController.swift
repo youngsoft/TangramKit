@@ -45,7 +45,7 @@ class AllTest4ViewController: UIViewController {
                                "image3"
                                 ]
         
-        let scrollView = UIScrollView.init(frame: self.view.bounds)
+        let scrollView = UIScrollView(frame: self.view.bounds)
         scrollView.autoresizingMask = [UIViewAutoresizing.flexibleWidth, UIViewAutoresizing.flexibleHeight] //让uiscrollView的尺寸总是保持和父视图一致。
         self.view.addSubview(scrollView)
         
@@ -98,12 +98,12 @@ extension AllTest4ViewController
         let supplementaryLayout = TGRelativeLayout()
         supplementaryLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
         supplementaryLayout.tg_height.equal(40)
-        supplementaryLayout.tg_boundBorderline = TGLayoutBorderline(color: UIColor.lightGray) //设置底部边界线。
+        supplementaryLayout.tg_boundBorderline = TGBorderline(color: UIColor.lightGray) //设置底部边界线。
         supplementaryLayout.backgroundColor = UIColor.white
         
         let imageView = UIImageView(image:UIImage(named:"next"))
         imageView.tg_centerY.equal(supplementaryLayout.tg_centerY)  //垂直居中
-        imageView.tg_right.equal(supplementaryLayout.tg_right)     //和父视图右对齐。
+        imageView.tg_trailing.equal(supplementaryLayout.tg_trailing)     //和父视图右对齐。
         supplementaryLayout.addSubview(imageView);
         
         let sectionTitleLabel = UILabel()
@@ -114,8 +114,8 @@ extension AllTest4ViewController
         sectionTitleLabel.minimumScaleFactor = 0.7
         sectionTitleLabel.lineBreakMode = .byTruncatingMiddle
         sectionTitleLabel.tg_centerY.equal(supplementaryLayout.tg_centerY)  //垂直居中
-        sectionTitleLabel.tg_left.equal(supplementaryLayout.tg_left)       //左边和父视图左对齐
-        sectionTitleLabel.tg_right.equal(imageView.tg_right)                //右边是图标的左边。
+        sectionTitleLabel.tg_leading.equal(supplementaryLayout.tg_leading)       //左边和父视图左对齐
+        sectionTitleLabel.tg_trailing.equal(imageView.tg_trailing)                //右边是图标的左边。
         sectionTitleLabel.sizeToFit()
         supplementaryLayout.addSubview(sectionTitleLabel)
         

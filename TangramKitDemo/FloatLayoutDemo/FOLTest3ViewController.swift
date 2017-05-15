@@ -53,13 +53,17 @@ class FOLTest3ViewController: UIViewController {
     }()
     
     override func viewDidLoad() {
+        
+        self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
+        
         super.viewDidLoad()
         
         let floatLayout = TGFloatLayout(.vert)
         floatLayout.tg_width.equal(.fill)
         floatLayout.tg_height.equal(.fill)
         //通过智能分界线的使用，浮动布局里面的所有子布局视图的分割线都会进行智能的设置，从而解决了我们需求中需要提供边界线的问题。
-        floatLayout.tg_intelligentBorderline = TGLayoutBorderline(color: UIColor.lightGray.withAlphaComponent(0.2))
+        floatLayout.tg_intelligentBorderline = TGBorderline(color: UIColor.lightGray.withAlphaComponent(0.2))
         self.view.addSubview(floatLayout)
         self.floatLayout = floatLayout
         
@@ -97,7 +101,6 @@ extension FOLTest3ViewController
         let titleLabel = UILabel()
         titleLabel.text = dataModel.title;
         titleLabel.textColor = .white
-        titleLabel.numberOfLines = 0;
         titleLabel.tg_height.equal(.wrap)
         titleLabel.tg_width.equal(.fill)
         itemLayout.addSubview(titleLabel)
@@ -122,7 +125,6 @@ extension FOLTest3ViewController
         let titleLabel = UILabel()
         titleLabel.text = dataModel.title;
         titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
-        titleLabel.numberOfLines = 0;
         titleLabel.tg_height.equal(.wrap)
         titleLabel.tg_width.equal(.fill)
         itemLayout.addSubview(titleLabel)
@@ -157,7 +159,6 @@ extension FOLTest3ViewController
         
         let titleLabel = UILabel()
         titleLabel.text = dataModel.title;
-        titleLabel.numberOfLines = 0;
         titleLabel.tg_height.equal(.wrap)
         titleLabel.tg_width.equal(.fill)
         itemLayout.addSubview(titleLabel)

@@ -125,7 +125,6 @@ extension AllTest3ViewController
         
         let headerImageView = UIImageView(image: UIImage(named: "head2"))
         headerImageView.backgroundColor = .white
-        headerImageView.sizeToFit()
         headerImageView.tg_centerX.equal(0)
         headerImageView.tg_centerY.equal(0) //在父视图中居中。
         headerImageView.layer.cornerRadius = headerImageView.tg_estimatedFrame.height / 2
@@ -155,14 +154,14 @@ extension AllTest3ViewController
         //具有事件处理的layout,以及边界线效果的layout
         let layout1 = self.createActionLayout(title: NSLocalizedString("please touch here(no highlighted)", comment:""), action: #selector(handleTap))
         layout1.tg_top.equal(10)
-        layout1.tg_topBorderline = TGLayoutBorderline(color: .yellow, headIndent:-10, tailIndent:-10) //底部边界线如果为负数则外部缩进
-        layout1.tg_bottomBorderline = TGLayoutBorderline(color: .red) //设置底部和顶部都有红色的线
+        layout1.tg_topBorderline = TGBorderline(color: .yellow, headIndent:-10, tailIndent:-10) //底部边界线如果为负数则外部缩进
+        layout1.tg_bottomBorderline = TGBorderline(color: .red) //设置底部和顶部都有红色的线
         contentLayout.addSubview(layout1)
         
         //具有事件处理的layout,高亮背景色的设置。
         let layout2 = self.createActionLayout(title:NSLocalizedString("please touch here(highlighted background)", comment:""), action: #selector(handleTap))
         layout2.tg_highlightedBackgroundColor = .lightGray //可以设置高亮的背景色用于单击事件
-        layout2.tg_bottomBorderline = TGLayoutBorderline(color: .red, thick:4) //设置底部有红色的线，并且粗细为4
+        layout2.tg_bottomBorderline = TGBorderline(color: .red, thick:4) //设置底部有红色的线，并且粗细为4
         //您还可以为布局视图设置按下、按下取消的事件处理逻辑。
         layout2.tg_setTarget(self, action: #selector(handleTouchDown), for:.touchDown)
         layout2.tg_setTarget(self, action: #selector(handleTouchCancel), for:.touchCancel)
@@ -172,9 +171,9 @@ extension AllTest3ViewController
         //具有事件处理的layout, 可以设置触摸时的高亮背景图。虚线边界线。
         let layout3 = self.createActionLayout(title:NSLocalizedString("please touch here(highlighted background image)", comment:""), action: #selector(handleTap))
         layout3.tg_highlightedBackgroundImage = UIImage(named: "image2") //设置单击时的高亮背景图片。
-        let dashLine = TGLayoutBorderline(color: .green, dash:3) //设置为非0表示虚线边界线。
-        layout3.tg_leftBorderline = dashLine
-        layout3.tg_rightBorderline = dashLine //设置左右边绿色的虚线
+        let dashLine = TGBorderline(color: .green, dash:3) //设置为非0表示虚线边界线。
+        layout3.tg_leadingBorderline = dashLine
+        layout3.tg_trailingBorderline = dashLine //设置左右边绿色的虚线
         contentLayout.addSubview(layout3)
     }
     
@@ -191,14 +190,14 @@ extension AllTest3ViewController
     {
         //下面两个布局用来测试布局视图的tg_layoutHiddenSubviews属性。
         let switchLayout = self.createSwitchLayout(title: NSLocalizedString("relayout switch when subview hidden&show", comment:""), action: #selector(handleReLayoutSwitch))
-        switchLayout.tg_bottomBorderline = TGLayoutBorderline(color: .red, headIndent:10, tailIndent:10) //底部边界线设置可以缩进
+        switchLayout.tg_bottomBorderline = TGBorderline(color: .red, headIndent:10, tailIndent:10) //底部边界线设置可以缩进
         switchLayout.tg_top.equal(10)
         contentLayout.addSubview(switchLayout)
         
         let testLayout = TGLinearLayout(.horz)
         testLayout.backgroundColor = .white
-        testLayout.tg_leftPadding = 10
-        testLayout.tg_rightPadding = 10
+        testLayout.tg_leadingPadding = 10
+        testLayout.tg_trailingPadding = 10
         testLayout.tg_height.equal(50)
         testLayout.tg_gravity = TGGravity.vert.fill
         testLayout.tg_hspace = 10
@@ -215,7 +214,7 @@ extension AllTest3ViewController
         centerButton.addTarget(self, action: #selector(handleHideSelf), for: .touchUpInside)
         centerButton.backgroundColor = CFTool.color(6)
         centerButton.titleLabel!.font = CFTool.font(14)
-        centerButton.sizeToFit()
+        centerButton.tg_height.equal(.wrap)
         centerButton.tg_width.equal(.average)
         testLayout.addSubview(centerButton)
         self.hiddenTestButton = centerButton
@@ -225,7 +224,7 @@ extension AllTest3ViewController
         rightButton.addTarget(self, action: #selector(handleShowBrother), for: .touchUpInside)
         rightButton.backgroundColor = CFTool.color(7)
         rightButton.titleLabel!.font = CFTool.font(14)
-        rightButton.sizeToFit()
+        rightButton.tg_height.equal(.wrap)
         rightButton.tg_width.equal(.average)
         testLayout.addSubview(rightButton)
     }
@@ -234,14 +233,14 @@ extension AllTest3ViewController
     func addFlexedWidthLayout(_ contentLayout: TGLinearLayout)
     {
         let operatorLayout = self.createSegmentedLayout(leftAction: #selector(self.handleLeftFlexed), rightAction: #selector(self.handleRightFlexed))
-        operatorLayout.tg_bottomBorderline = TGLayoutBorderline(color: .red, headIndent:10, tailIndent:10)  //底部边界线设置可以缩进
+        operatorLayout.tg_bottomBorderline = TGBorderline(color: .red, headIndent:10, tailIndent:10)  //底部边界线设置可以缩进
         operatorLayout.tg_top.equal(10)
         contentLayout.addSubview(operatorLayout)
         
         let testLayout = TGLinearLayout(.horz)
         testLayout.backgroundColor = .white
-        testLayout.tg_leftPadding = 10
-        testLayout.tg_rightPadding = 10
+        testLayout.tg_leadingPadding = 10
+        testLayout.tg_trailingPadding = 10
         testLayout.tg_height.equal(50)
         testLayout.tg_gravity = TGGravity.vert.fill
         testLayout.tg_shrinkType = .auto  //左右2个子视图会根据自身的宽度自动调整。不会产生覆盖和重叠。
@@ -255,7 +254,7 @@ extension AllTest3ViewController
         leftLabel.textColor = .white
         leftLabel.backgroundColor = CFTool.color(5)
         leftLabel.font = CFTool.font(14)
-        leftLabel.tg_right.equal(50%).min(0) //右边浮动间距为0.5,最小为0
+        leftLabel.tg_trailing.equal(50%).min(0) //右边浮动间距为0.5,最小为0
         leftLabel.tg_width.equal(.wrap)
         testLayout.addSubview(leftLabel)
         self.leftFlexedLabel = leftLabel
@@ -267,7 +266,7 @@ extension AllTest3ViewController
         rightLabel.textColor = .white
         rightLabel.backgroundColor = CFTool.color(6)
         rightLabel.font = CFTool.font(14)
-        rightLabel.tg_left.equal(50%).min(0) //左边浮动间距为0.5，最小为0
+        rightLabel.tg_leading.equal(50%).min(0) //左边浮动间距为0.5，最小为0
         rightLabel.tg_width.equal(.wrap)
         testLayout.addSubview(rightLabel)
         self.rightFlexedLabel = rightLabel
@@ -277,7 +276,7 @@ extension AllTest3ViewController
     func addShrinkLayout(_ contentLayout: TGLinearLayout)
     {
         let switchLayout = self.createSwitchLayout(title: NSLocalizedString("show all switch", comment:""), action: #selector(self.handleShrinkSwitch))
-        switchLayout.tg_bottomBorderline = TGLayoutBorderline(color: UIColor.red, headIndent:10, tailIndent:10)  //底部边界线设置可以缩进
+        switchLayout.tg_bottomBorderline = TGBorderline(color: UIColor.red, headIndent:10, tailIndent:10)  //底部边界线设置可以缩进
         switchLayout.tg_top.equal(10)
         contentLayout.addSubview(switchLayout)
         
@@ -318,8 +317,8 @@ extension AllTest3ViewController
         testButton.backgroundColor = CFTool.color(0)
         testButton.tg_height.equal(50)
         testButton.tg_width.equal(.wrap,increment:20)
-        testButton.tg_left.equal(10).isActive = true  //左边边距是10，设置active为YES表示左边位置对象的设置是生效的。
-        testButton.tg_right.equal(10).isActive = false  //右边边距是10，设置active为NO表示右边位置对象的设置是不生效的。
+        testButton.tg_leading.equal(10).isActive = true  //左边边距是10，设置active为YES表示左边位置对象的设置是生效的。
+        testButton.tg_trailing.equal(10).isActive = false  //右边边距是10，设置active为NO表示右边位置对象的设置是不生效的。
         
         testButton.addTarget(self,action:#selector(handleActiveTest),for:.touchUpInside)
         
@@ -332,8 +331,8 @@ extension AllTest3ViewController
         let actionLayout = TGLinearLayout(.horz)
         actionLayout.backgroundColor = .white
         actionLayout.tg_setTarget(self, action: action, for:.touchUpInside) //这里设置布局的触摸事件处理。
-        actionLayout.tg_leftPadding = 10
-        actionLayout.tg_rightPadding = 10
+        actionLayout.tg_leadingPadding = 10
+        actionLayout.tg_trailingPadding = 10
         actionLayout.tg_height.equal(50)
         actionLayout.tg_gravity = TGGravity.vert.center //左右内边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
         
@@ -343,11 +342,11 @@ extension AllTest3ViewController
         label.textColor = CFTool.color(4)
         label.sizeToFit()
         label.tag = 1000
-        label.tg_right.equal(50%) //水平线性布局通过相对间距来实现左右分开排列。
+        label.tg_trailing.equal(50%) //水平线性布局通过相对间距来实现左右分开排列。
         actionLayout.addSubview(label)
         
         let imageView = UIImageView(image: UIImage(named: "next"))
-        imageView.tg_left.equal(50%)
+        imageView.tg_leading.equal(50%)
         actionLayout.addSubview(imageView)
         return actionLayout
     }
@@ -357,8 +356,8 @@ extension AllTest3ViewController
     {
         let switchLayout = TGLinearLayout(.horz)
         switchLayout.backgroundColor = .white
-        switchLayout.tg_leftPadding = 10
-        switchLayout.tg_rightPadding = 10
+        switchLayout.tg_leadingPadding = 10
+        switchLayout.tg_trailingPadding = 10
         switchLayout.tg_height.equal(50)
         switchLayout.tg_gravity = TGGravity.vert.center //左右边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
         
@@ -367,13 +366,13 @@ extension AllTest3ViewController
         label.font = CFTool.font(14)
         label.textColor = CFTool.color(4)
         label.adjustsFontSizeToFitWidth = true
-        label.sizeToFit()
+        label.tg_height.equal(.wrap)
         label.tg_width.equal(.fill)
         switchLayout.addSubview(label)
         
         let switchCtrl = UISwitch()
         switchCtrl.addTarget(self, action: action, for: .valueChanged)
-        switchCtrl.tg_right.min(5)
+        switchCtrl.tg_trailing.min(5)
         switchLayout.addSubview(switchCtrl)
         return switchLayout
     }
@@ -383,8 +382,8 @@ extension AllTest3ViewController
         //建立一个左右浮动布局(注意左右浮动布局的orientation是.vert)
         let segmentedLayout = TGFloatLayout(.vert)
         segmentedLayout.backgroundColor = .white
-        segmentedLayout.tg_leftPadding = 10
-        segmentedLayout.tg_rightPadding = 10
+        segmentedLayout.tg_leadingPadding = 10
+        segmentedLayout.tg_trailingPadding = 10
         segmentedLayout.tg_height.equal(50)
         segmentedLayout.tg_gravity = TGGravity.vert.center //左右边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
         //向左浮动
@@ -462,7 +461,6 @@ extension AllTest3ViewController
             self.leftFlexedLabel.text = self.leftFlexedLabel.text!.appending(str)
         }
         
-        self.leftFlexedLabel.sizeToFit()
         
     }
     
@@ -486,7 +484,6 @@ extension AllTest3ViewController
                 self.rightFlexedLabel.text =  text.substring(to: text.index(text.endIndex, offsetBy: -1))
             }
         }
-        self.rightFlexedLabel.sizeToFit()
     }
     
     func handleShrinkSwitch(sender: UISwitch) {
@@ -643,21 +640,21 @@ extension AllTest3ViewController
     func handleActiveTest(sender:UIButton!)
     {
         //下面代码中布局位置的active属性设置的变化所产生的效果。
-        if (sender.tg_left.isActive && sender.tg_right.isActive)
+        if (sender.tg_leading.isActive && sender.tg_trailing.isActive)
         {
             sender.tg_width.equal(.wrap, increment:20)  //恢复原来的宽度。
-            sender.tg_left.isActive = true
-            sender.tg_right.isActive = false  //按钮将停靠在父布局的左边。
+            sender.tg_leading.isActive = true
+            sender.tg_trailing.isActive = false  //按钮将停靠在父布局的左边。
         }
-        else if (sender.tg_left.isActive)
+        else if (sender.tg_leading.isActive)
         {
-            sender.tg_left.isActive = false
-            sender.tg_right.isActive = true  //按钮将停靠在父布局的右边
+            sender.tg_leading.isActive = false
+            sender.tg_trailing.isActive = true  //按钮将停靠在父布局的右边
         }
-        else if (sender.tg_right.isActive)
+        else if (sender.tg_trailing.isActive)
         {
-            sender.tg_left.isActive = true
-            sender.tg_right.isActive = true  //按钮的左右边距都生效，并且会拉伸按钮的宽度。
+            sender.tg_leading.isActive = true
+            sender.tg_trailing.isActive = true  //按钮的左右边距都生效，并且会拉伸按钮的宽度。
         }
         
         if let superLayout = sender.superview as? TGLinearLayout

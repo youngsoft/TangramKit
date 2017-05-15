@@ -45,18 +45,18 @@ class TLTest3ViewController: UIViewController {
         self.rootLayout = tableLayout
         
         //建立一个表格外边界的边界线。颜色为黑色，粗细为3.
-        tableLayout.tg_boundBorderline = TGLayoutBorderline(color:CFTool.color(4), thick: 3)
+        tableLayout.tg_boundBorderline = TGBorderline(color:CFTool.color(4), thick: 3)
         
         //建立智能边界线。所谓智能边界线就是布局里面的如果有子布局视图，则子布局视图会根据自身的布局位置智能的设置边界线。
         //智能边界线只支持表格布局、线性布局、流式布局、浮动布局。
         //如果要想完美使用智能分界线，则请将cellview建立为一个布局视图，比如本例子中的createCellLayout。
-        tableLayout.tg_intelligentBorderline = TGLayoutBorderline(color:CFTool.color(5))
+        tableLayout.tg_intelligentBorderline = TGBorderline(color:CFTool.color(5))
         
         //添加第一行。行高为50，每列宽由自己确定。
         let firstRowTitles = ["Name","Mon.","Tues.","Wed.","Thur.","Fri.","Sat.","Sun."];
         let firstRow:TGLinearLayout = tableLayout.tg_addRow(size:50, colSize: TGLayoutSize.fill)
         firstRow.tg_notUseIntelligentBorderline = true ////因为智能边界线会影响到里面的所有子布局，包括每行，但是这里我们希望这行不受智能边界线的影响而想自己定义边界线，则将这个属性设置为true。
-        firstRow.tg_bottomBorderline = TGLayoutBorderline(color:CFTool.color(7)) //我们自定义第一行的底部边界线为蓝色边界线。
+        firstRow.tg_bottomBorderline = TGBorderline(color:CFTool.color(7)) //我们自定义第一行的底部边界线为蓝色边界线。
         for i in 0 ..< firstRowTitles.count
         {
             let cellView = self.createCellLayout(value: firstRowTitles[i])
@@ -103,7 +103,7 @@ class TLTest3ViewController: UIViewController {
         //最后一行
         let lastRow = tableLayout.tg_addRow(size:60, colSize: TGLayoutSize.fill)
         lastRow.tg_notUseIntelligentBorderline = true
-        lastRow.tg_topBorderline = TGLayoutBorderline(color:.red)
+        lastRow.tg_topBorderline = TGBorderline(color:.red)
       
         var cellLayout = self.createCellLayout(value: "Total:")
         cellLayout.tg_width.equal(.fill) //占用剩余宽度您也可以设置为tg_width.equal(100%)

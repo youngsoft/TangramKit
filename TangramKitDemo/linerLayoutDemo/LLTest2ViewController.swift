@@ -57,8 +57,8 @@ class LLTest2ViewController: UIViewController {
         contentLayout.tg_padding = UIEdgeInsets(top: 10,left: 10,bottom: 10,right: 10) //设置布局内的子视图离自己的边距.
         contentLayout.tg_width.equal(.fill);  //设置视图自身的宽度填充父视图的剩余宽度。
         //您可以用如下的方法设置宽度：
-        //contentLayout.tg_left.equal(0)
-        //contentLayout.tg_right.equal(0)
+        //contentLayout.tg_leading.equal(0)
+        //contentLayout.tg_trailing.equal(0)
         //您还可以用如下的方法设置宽度：
         //contentLayout.tg_width.equal(scrollView.tg_width)  //contentLayout.tg_width.equal(scrollView)
         //您还可以用如下的方法设置宽度
@@ -140,7 +140,7 @@ extension LLTest2ViewController
         let numTitleLabel = UILabel()
         numTitleLabel.text =  NSLocalizedString("No.:", comment:"")
         numTitleLabel.font = CFTool.font(15)
-        numTitleLabel.tg_left.equal(5) //左边距为5
+        numTitleLabel.tg_leading.equal(5) //左边距为5
         numTitleLabel.sizeToFit()      //尺寸由内容决定
         contentLayout.addSubview(numTitleLabel)
         
@@ -164,7 +164,7 @@ extension LLTest2ViewController
         userInfoLayout.layer.cornerRadius = 4
         userInfoLayout.tg_padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         userInfoLayout.tg_top.equal(20)
-        userInfoLayout.tg_width.equal(.fill) //这句代码等价于tg_left.equal(0) tg_right.equal(0)，表明宽度和父视图保持一致
+        userInfoLayout.tg_width.equal(.fill) //这句代码等价于tg_leading.equal(0) tg_trailing.equal(0)，表明宽度和父视图保持一致
         userInfoLayout.tg_height.equal(.wrap) //高度由子视图决定。
         contentLayout.addSubview(userInfoLayout)
         
@@ -174,7 +174,7 @@ extension LLTest2ViewController
         userInfoLayout.addSubview(headImageView)
         
         let nameLayout = TGLinearLayout(.vert)
-        nameLayout.tg_left.equal(10)
+        nameLayout.tg_leading.equal(10)
         nameLayout.tg_width.equal(.fill)
         nameLayout.tg_height.equal(.wrap)
         userInfoLayout.addSubview(nameLayout)
@@ -344,10 +344,9 @@ extension LLTest2ViewController
         addressLabel.text = NSLocalizedString("Winterless Building, West Dawang Road, Chaoyang district CBD, Beijing, People's Republic of China", comment:"")
         addressLabel.textColor = CFTool.color(4)
         addressLabel.font = CFTool.font(14)
-        addressLabel.numberOfLines = 0
-        addressLabel.tg_left.equal(10)
+        addressLabel.tg_leading.equal(10)
         addressLabel.tg_width.equal(.fill)
-        addressLabel.tg_height.equal(.wrap) //这里面的UILabel的宽度和父视图宽度一致，而高度则由内容决定，这种方式可以实现子视图的高度动态决定，这里要记住要同时设置numberOfLines = 0才有效果。
+        addressLabel.tg_height.equal(.wrap) //这里面的UILabel的宽度和父视图宽度一致，而高度则由内容决定，这种方式可以实现子视图的高度动态决定。
         addressLayout.addSubview(addressLabel)
         
     }
@@ -372,16 +371,16 @@ extension LLTest2ViewController
         sexLabel.font = CFTool.font(15)
         sexLabel.sizeToFit()
         sexLabel.tg_centerY.equal(0)  //垂直居中。
-        sexLabel.tg_right.equal(50%)  //右边距离占用剩余空间的一半
+        sexLabel.tg_trailing.equal(50%)  //右边距离占用剩余空间的一半
         sexLayout.addSubview(sexLabel)
         
         
         let sexSwitch = UISwitch()
-        sexSwitch.tg_left.equal(50%) //左边距离占用剩余空间的一半。
+        sexSwitch.tg_leading.equal(50%) //左边距离占用剩余空间的一半。
         sexLayout.addSubview(sexSwitch)
         
         //在水平线性布局视图中的这种子视图左右布局的实现，我们可以将左右的间距设置为比重值！表明间距占用父布局的剩余宽度。
-        //sexLabel, sexSwitch两个子视图在水平线性布局里面一个左一个右的原理是使用了相对间距的原因。假设某个水平线性布局的宽度是100，里面有两个子视图A，B。其中A的宽度是20，B的宽度是30。同时假设A的tg_right ~= 20%。B的tg_left ~=80%。则这时候A的右边距 = (100 - 20 - 30) * 0.2 / (0.2 + 0.8) = 10， B的左边距则是40。通过相对间距可以实现动态的视图之间的间距。
+        //sexLabel, sexSwitch两个子视图在水平线性布局里面一个左一个右的原理是使用了相对间距的原因。假设某个水平线性布局的宽度是100，里面有两个子视图A，B。其中A的宽度是20，B的宽度是30。同时假设A的tg_trailing ~= 20%。B的tg_leading ~=80%。则这时候A的右边距 = (100 - 20 - 30) * 0.2 / (0.2 + 0.8) = 10， B的左边距则是40。通过相对间距可以实现动态的视图之间的间距。
 
 
     }
@@ -390,11 +389,9 @@ extension LLTest2ViewController
     func createSection6(in contentLayout:TGLinearLayout)
     {
         let shrinkLabel = UILabel()
-        shrinkLabel.clipsToBounds = true  //为了实现文本可缩放，需要将这个标志设置为YES，否则效果无法实现。但要慎重使用这个标志，因为如果设置YES的话会影响性能。
         shrinkLabel.text = NSLocalizedString("This is a can automatically wrap text.To realize this function, you need to set the clear width, and set the flexedHeight to YES and set the numberOfLines to 0.You can try to switch different simulator or different orientation screen to see the effect.", comment:"")
         shrinkLabel.backgroundColor = CFTool.color(2)
         shrinkLabel.font = CFTool.font(14)
-        shrinkLabel.numberOfLines = 0
         shrinkLabel.clipsToBounds = true  //为了实现文本可缩放，需要将这个标志设置为YES，否则效果无法实现。但要慎重使用这个标志，因为如果设置YES的话会影响性能。
         shrinkLabel.tg_top.equal(20)
         shrinkLabel.tg_width.equal(.fill)
@@ -424,7 +421,7 @@ extension LLTest2ViewController
         button.titleLabel?.font = CFTool.font(16)
         button.addTarget(self, action: #selector(handleShowMore), for:.touchUpInside)
         button.tg_top.equal(50)
-        button.tg_right.equal(0)
+        button.tg_trailing.equal(0)
         button.sizeToFit()
         contentLayout.addSubview(button)
 

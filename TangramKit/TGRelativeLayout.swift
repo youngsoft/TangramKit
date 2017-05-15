@@ -25,10 +25,10 @@ open class TGRelativeLayout: TGBaseLayout,TGRelativeLayoutViewSizeClass {
         }
         
         set {
-            let sc = self.tgCurrentSizeClass as! TGRelativeLayoutViewSizeClass
-            if sc.tg_autoLayoutViewGroupWidth != newValue
+            let lsc = self.tgCurrentSizeClass as! TGRelativeLayoutViewSizeClass
+            if lsc.tg_autoLayoutViewGroupWidth != newValue
             {
-                sc.tg_autoLayoutViewGroupWidth = newValue;
+                lsc.tg_autoLayoutViewGroupWidth = newValue;
                 setNeedsLayout()
             }
         }
@@ -44,10 +44,10 @@ open class TGRelativeLayout: TGBaseLayout,TGRelativeLayoutViewSizeClass {
         }
         
         set {
-            let sc = self.tgCurrentSizeClass as! TGRelativeLayoutViewSizeClass
-            if sc.tg_autoLayoutViewGroupHeight != newValue
+            let lsc = self.tgCurrentSizeClass as! TGRelativeLayoutViewSizeClass
+            if lsc.tg_autoLayoutViewGroupHeight != newValue
             {
-                sc.tg_autoLayoutViewGroupHeight = newValue
+                lsc.tg_autoLayoutViewGroupHeight = newValue
                 setNeedsLayout()
             }
         }
@@ -59,270 +59,326 @@ open class TGRelativeLayout: TGBaseLayout,TGRelativeLayoutViewSizeClass {
         
         var (selfSize, hasSubLayout) = super.tgCalcLayoutRect(size, isEstimate: isEstimate, sbs:sbs, type: type)
         
+        let lsc = self.tgCurrentSizeClass as! TGRelativeLayoutViewSizeClassImpl
+        
+        let selftgWidthIsWrap = lsc.tgWidth?.isWrap ?? false
+        let selftgHeightIsWrap = lsc.tgHeight?.isWrap ?? false
+        
         for sbv: UIView in self.subviews
         {
-            if sbv.tg_useFrame
+            let sbvsc = sbv.tgCurrentSizeClass as! TGViewSizeClassImpl
+            let sbvtgFrame = sbv.tgFrame
+           
+            if sbvsc.tg_useFrame
             {
                 continue
             }
             
             if !isEstimate {
-                sbv.tgFrame.reset()
+                sbvtgFrame.reset()
             }
             
-            if (sbv.tgLeft?.hasValue ?? false) && (sbv.tgRight?.hasValue ?? false) {
+            
+            let sbvtgWidthIsWrap = sbvsc.tgWidth?.isWrap ?? false
+            let sbvtgHeightIsWrap = sbvsc.tgHeight?.isWrap ?? false
+            let sbvtgLeadingHasValue = sbvsc.tgLeading?.hasValue ?? false
+            let sbvtgTrailingHasValue = sbvsc.tgTrailing?.hasValue ?? false
+            let sbvtgTopHasValue = sbvsc.tgTop?.hasValue ?? false
+            let sbvtgBottomHasValue = sbvsc.tgBottom?.hasValue ?? false
+            
+        
+            if sbvtgLeadingHasValue && sbvtgTrailingHasValue {
                 
-                sbv.tgWidth?._dimeVal = nil
+                sbvsc.tgWidth?._dimeVal = nil
             }
             
-            if (sbv.tgTop?.hasValue ?? false) && (sbv.tgBottom?.hasValue ?? false) {
-                sbv.tgHeight?._dimeVal = nil
+            if sbvtgTopHasValue && sbvtgBottomHasValue
+            {
+                sbvsc.tgHeight?._dimeVal = nil
             }
             
             
             if let sbvl: TGBaseLayout = sbv as? TGBaseLayout
             {
                 
-                if (sbvl.tgWidth?.isWrap ?? false) || (sbvl.tgHeight?.isWrap ?? false)
+                if sbvtgWidthIsWrap || sbvtgHeightIsWrap
                 {
                     hasSubLayout = true
                 }
                 
-                if isEstimate && ((sbvl.tgWidth?.isWrap ?? false) || (sbvl.tgHeight?.isWrap ?? false))
+                if isEstimate && (sbvtgWidthIsWrap || sbvtgHeightIsWrap)
                 {
                     
-                    _ = sbvl.tg_sizeThatFits(sbvl.tgFrame.frame.size, inSizeClass:type)
+                    _ = sbvl.tg_sizeThatFits(sbvtgFrame.frame.size, inSizeClass:type)
                     
-                    sbvl.tgFrame.left = CGFloat.greatestFiniteMagnitude
-                    sbvl.tgFrame.right = CGFloat.greatestFiniteMagnitude
-                    sbvl.tgFrame.top = CGFloat.greatestFiniteMagnitude
-                    sbvl.tgFrame.bottom = CGFloat.greatestFiniteMagnitude;
+                    sbvtgFrame.leading = CGFloat.greatestFiniteMagnitude
+                    sbvtgFrame.trailing = CGFloat.greatestFiniteMagnitude
+                    sbvtgFrame.top = CGFloat.greatestFiniteMagnitude
+                    sbvtgFrame.bottom = CGFloat.greatestFiniteMagnitude;
                     
-                    sbvl.tgFrame.sizeClass = sbvl.tgMatchBestSizeClass(type)
+                    if sbvtgFrame.multiple
+                    {
+                        sbvtgFrame.sizeClass = sbv.tgMatchBestSizeClass(type)  //因为estimateLayoutRect执行后会还原，所以这里要重新设置
+                    }
                 }
             }
         }
         
-        let (maxSize,reCalc) = tgCalcLayoutRectHelper(selfSize)
+        let isWrap = selftgWidthIsWrap || selftgHeightIsWrap
         
-        if (self.tgWidth?.isWrap ?? false)  || (self.tgHeight?.isWrap ?? false) {
-            if /*selfSize.height != maxSize.height*/ _tgCGFloatNotEqual(selfSize.height, maxSize.height) || /*selfSize.width != maxSize.width*/ _tgCGFloatNotEqual(selfSize.width, maxSize.width)
+        let (maxSize,recalc) = tgCalcLayoutRectHelper(selfSize, lsc:lsc, isWrap: isWrap)
+        
+        if isWrap
+        {
+            if _tgCGFloatNotEqual(selfSize.height, maxSize.height) ||  _tgCGFloatNotEqual(selfSize.width, maxSize.width)
             {
-                if (self.tgWidth?.isWrap ?? false) {
+                if selftgWidthIsWrap {
                     selfSize.width = maxSize.width
                 }
                 
-                if (self.tgHeight?.isWrap ?? false) {
+                if selftgHeightIsWrap {
                     selfSize.height = maxSize.height
                 }
                 
-                if reCalc
+                if recalc
                 {
                     for sbv: UIView in self.subviews {
                         
-                        if let sbvl = sbv as? TGBaseLayout , isEstimate
+                        let sbvtgFrame = sbv.tgFrame
+                        
+                        if let _ = sbv as? TGBaseLayout , isEstimate
                         {
-                            sbvl.tgFrame.left = CGFloat.greatestFiniteMagnitude
-                            sbvl.tgFrame.right = CGFloat.greatestFiniteMagnitude
-                            sbvl.tgFrame.top = CGFloat.greatestFiniteMagnitude
-                            sbvl.tgFrame.bottom = CGFloat.greatestFiniteMagnitude;
+                            sbvtgFrame.leading = CGFloat.greatestFiniteMagnitude
+                            sbvtgFrame.trailing = CGFloat.greatestFiniteMagnitude
+                            sbvtgFrame.top = CGFloat.greatestFiniteMagnitude
+                            sbvtgFrame.bottom = CGFloat.greatestFiniteMagnitude
                         }
                         else
                         {
-                            sbv.tgFrame.reset()
+                            sbvtgFrame.reset()
                         }
                     }
                     
-                    _ = tgCalcLayoutRectHelper(selfSize)
+                    _ = tgCalcLayoutRectHelper(selfSize, lsc:lsc, isWrap: false)
                 }
             }
         }
         
-        selfSize.height = self.tgValidMeasure(self.tgHeight,sbv:self,calcSize:selfSize.height,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
-        selfSize.width = self.tgValidMeasure(self.tgWidth,sbv:self,calcSize:selfSize.width,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
         
-        return (self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: self.tgGetLayoutSubviews()), hasSubLayout)
+        let sbs2 = self.tgGetLayoutSubviews()
+        tgAdjustLayoutSelfSize(selfSize: &selfSize, lsc: lsc)
+        
+        tgAdjustSubviewsRTLPos(sbs: sbs2, selfWidth: selfSize.width)
+        
+        return (self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs2, lsc:lsc), hasSubLayout)
     }
     
     internal override func tgCreateInstance() -> AnyObject
     {
-        return TGRelativeLayoutViewSizeClassImpl()
+        return TGRelativeLayoutViewSizeClassImpl(view:self)
     }
 }
 
 extension TGRelativeLayout
 {
-    fileprivate func tgCalcSubviewLeftRight(_ sbv: UIView, selfSize: CGSize) {
+    fileprivate func tgCalcSubviewLeadingTrailing(_ sbv: UIView, sbvsc:TGViewSizeClassImpl, sbvtgFrame:TGFrame, lsc:TGRelativeLayoutViewSizeClassImpl, selfSize: CGSize) {
         
         
-        if sbv.tgFrame.left != CGFloat.greatestFiniteMagnitude &&
-            sbv.tgFrame.right != CGFloat.greatestFiniteMagnitude &&
-            sbv.tgFrame.width != CGFloat.greatestFiniteMagnitude
+        if sbvtgFrame.leading != CGFloat.greatestFiniteMagnitude &&
+            sbvtgFrame.trailing != CGFloat.greatestFiniteMagnitude &&
+            sbvtgFrame.width != CGFloat.greatestFiniteMagnitude
         {
             return
         }
         
-        if tgCalcSubviewWidth(sbv, selfSize: selfSize)
+        if tgCalcSubviewWidth(sbv, sbvsc:sbvsc, sbvtgFrame:sbvtgFrame, lsc:lsc, selfSize: selfSize)
         {
             return
         }
         
-        if (sbv.tgCenterX?.hasValue ?? false)
+        let sbvtgLeadingHasValue = sbvsc.tgLeading?.hasValue ?? false
+        let sbvtgTrailingHasValue = sbvsc.tgTrailing?.hasValue ?? false
+        let sbvtgCenterXHasValue = sbvsc.tgCenterX?.hasValue ?? false
+        let sbvLeadingMargin = sbvsc.tgLeading?.margin ?? 0
+        let sbvTrailingMargin = sbvsc.tgTrailing?.margin ?? 0
+        let sbvCenterXMargin = sbvsc.tgCenterX?.margin ?? 0
+
+        
+        if sbvtgCenterXHasValue
         {
-            if (sbv.tgWidth?.isFill ?? false) && !self.tgIsNoLayoutSubview(sbv)
+            if let t = sbvsc.tgWidth, t.isFill && !self.tgIsNoLayoutSubview(sbv)
             {
-                sbv.tgFrame.width = sbv.tgWidth!.measure(selfSize.width - self.tg_leftPadding - self.tg_rightPadding)
+                sbvtgFrame.width = sbvsc.tgWidth!.measure(selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding)
             }
         }
         
-        if sbv.tgCenterX?.posRelaVal != nil
+        if sbvsc.tgCenterX?.posRelaVal != nil
         {
-            let relaView = sbv.tgCenterX!.posRelaVal.view
+            let relaView = sbvsc.tgCenterX!.posRelaVal.view
             
-            sbv.tgFrame.left = tgCalcRelationalSubview(relaView, gravity: sbv.tgCenterX!.posRelaVal._type, selfSize: selfSize) - sbv.tgFrame.width / 2 + sbv.tgCenterX!.margin
+            sbvtgFrame.leading = tgCalcRelationalSubview(relaView, lsc:lsc, gravity: sbvsc.tgCenterX!.posRelaVal._type, selfSize: selfSize) - sbvtgFrame.width / 2 + sbvCenterXMargin
             
             if relaView != self && self.tgIsNoLayoutSubview(relaView)
             {
-                sbv.tgFrame.left -= sbv.tgCenterX!.margin
+                sbvtgFrame.leading -= sbvCenterXMargin
+            }
+            
+            if let t = lsc.tgWidth, t.isWrap && sbvtgFrame.leading < 0 && relaView === self
+            {
+                sbvtgFrame.leading = 0
             }
             
             
-            sbv.tgFrame.right = sbv.tgFrame.left + sbv.tgFrame.width
+            sbvtgFrame.trailing = sbvtgFrame.leading + sbvtgFrame.width
         }
-        else if sbv.tgCenterX?.posNumVal != nil
+        else if sbvsc.tgCenterX?.posNumVal != nil
         {
-            sbv.tgFrame.left = (selfSize.width - self.tg_rightPadding - self.tg_leftPadding - sbv.tgFrame.width) / 2 + self.tg_leftPadding + sbv.tgCenterX!.margin
-            sbv.tgFrame.right = sbv.tgFrame.left + sbv.tgFrame.width
+            sbvtgFrame.leading = (selfSize.width - lsc.tg_trailingPadding - lsc.tg_leadingPadding - sbvtgFrame.width) / 2 + lsc.tg_leadingPadding + sbvCenterXMargin
+            
+            
+            if let t = lsc.tgWidth, t.isWrap &&  sbvtgFrame.leading < 0
+            {
+                sbvtgFrame.leading = 0
+            }
+            
+            sbvtgFrame.trailing = sbvtgFrame.leading + sbvtgFrame.width
         }
-        else if sbv.tgCenterX?.posWeightVal != nil
+        else if sbvsc.tgCenterX?.posWeightVal != nil
         {
-            sbv.tgFrame.left = (selfSize.width - self.tg_rightPadding - self.tg_leftPadding - sbv.tgFrame.width) / 2 + self.tg_leftPadding + sbv.tgCenterX!.realMarginInSize(selfSize.width - self.tg_rightPadding - self.tg_leftPadding)
-            sbv.tgFrame.right = sbv.tgFrame.left + sbv.tgFrame.width
+            sbvtgFrame.leading = (selfSize.width - lsc.tg_trailingPadding - lsc.tg_leadingPadding - sbvtgFrame.width) / 2 + lsc.tg_leadingPadding + sbvsc.tgCenterX!.realMarginInSize(selfSize.width - lsc.tg_trailingPadding - lsc.tg_leadingPadding)
+            
+            
+            if let t = lsc.tgWidth, t.isWrap &&  sbvtgFrame.leading < 0
+            {
+                sbvtgFrame.leading = 0
+            }
+            
+            sbvtgFrame.trailing = sbvtgFrame.leading + sbvtgFrame.width
         }
         else
         {
-            if (sbv.tgLeft?.hasValue ?? false)
+            if sbvtgLeadingHasValue
             {
-                if sbv.tgLeft?.posRelaVal != nil
+                if sbvsc.tgLeading?.posRelaVal != nil
                 {
-                    let relaView = sbv.tgLeft!.posRelaVal.view
-                    sbv.tgFrame.left = tgCalcRelationalSubview(relaView, gravity:sbv.tgLeft!.posRelaVal._type, selfSize: selfSize) + sbv.tgLeft!.margin
+                    let relaView = sbvsc.tgLeading!.posRelaVal.view
+                    sbvtgFrame.leading = tgCalcRelationalSubview(relaView, lsc:lsc, gravity:sbvsc.tgLeading!.posRelaVal._type, selfSize: selfSize) + sbvLeadingMargin
                     
                     if relaView != self && self.tgIsNoLayoutSubview(relaView)
                     {
-                        sbv.tgFrame.left -= sbv.tgLeft!.margin;
+                        sbvtgFrame.leading -= sbvLeadingMargin
                     }
                 }
-                else if sbv.tgLeft?.posNumVal != nil
+                else if sbvsc.tgLeading?.posNumVal != nil
                 {
-                    sbv.tgFrame.left = sbv.tgLeft!.margin + self.tg_leftPadding
+                    sbvtgFrame.leading = sbvLeadingMargin + lsc.tg_leadingPadding
                 }
-                else if sbv.tgLeft?.posWeightVal != nil
+                else if sbvsc.tgLeading?.posWeightVal != nil
                 {
-                    sbv.tgFrame.left = sbv.tgLeft!.realMarginInSize(selfSize.width - self.tg_rightPadding - self.tg_leftPadding) + self.tg_leftPadding
-                }
-                
-                if (sbv.tgWidth?.isFill ?? false) && !self.tgIsNoLayoutSubview(sbv)
-                {
-                    //self.tg_leftPadding 这里因为sbv.tgFrame.left已经包含了leftPadding所以这里不需要再减
-                    sbv.tgFrame.width = sbv.tgWidth!.measure(selfSize.width - self.tg_rightPadding - sbv.tgFrame.left)
+                    sbvtgFrame.leading = sbvsc.tgLeading!.realMarginInSize(selfSize.width - lsc.tg_trailingPadding - lsc.tg_leadingPadding) + lsc.tg_leadingPadding
                 }
                 
-                sbv.tgFrame.right = sbv.tgFrame.left + sbv.tgFrame.width
+                if let t = sbvsc.tgWidth, t.isFill && !self.tgIsNoLayoutSubview(sbv)
+                {
+                    //lsc.tg_leadingPadding 这里因为sbvtgFrame.leading已经包含了leftPadding所以这里不需要再减
+                    sbvtgFrame.width = sbvsc.tgWidth!.measure(selfSize.width - lsc.tg_trailingPadding - sbvtgFrame.leading)
+                }
+                
+                sbvtgFrame.trailing = sbvtgFrame.leading + sbvtgFrame.width
             }
             
-            if (sbv.tgRight?.hasValue ?? false)
+            if sbvtgTrailingHasValue
             {
-                if sbv.tgRight?.posRelaVal != nil
+                if sbvsc.tgTrailing?.posRelaVal != nil
                 {
-                    let relaView = sbv.tgRight!.posRelaVal.view
+                    let relaView = sbvsc.tgTrailing!.posRelaVal.view
                     
                     
-                    sbv.tgFrame.right = tgCalcRelationalSubview(relaView, gravity: sbv.tgRight!.posRelaVal._type, selfSize: selfSize) - sbv.tgRight!.margin + (sbv.tgLeft?.margin ?? 0)
+                    sbvtgFrame.trailing = tgCalcRelationalSubview(relaView, lsc:lsc, gravity: sbvsc.tgTrailing!.posRelaVal._type, selfSize: selfSize) - sbvTrailingMargin + sbvLeadingMargin
                     
                     if relaView != self && self.tgIsNoLayoutSubview(relaView)
                     {
-                        sbv.tgFrame.right += sbv.tgRight!.margin;
+                        sbvtgFrame.trailing += sbvTrailingMargin
                     }
                     
                 }
-                else if sbv.tgRight?.posNumVal != nil
+                else if sbvsc.tgTrailing?.posNumVal != nil
                 {
-                    sbv.tgFrame.right = selfSize.width - self.tg_rightPadding - sbv.tgRight!.margin + (sbv.tgLeft?.margin ?? 0)
+                    sbvtgFrame.trailing = selfSize.width - lsc.tg_trailingPadding - sbvTrailingMargin + sbvLeadingMargin
                 }
-                else if sbv.tgRight?.posWeightVal != nil
+                else if sbvsc.tgTrailing?.posWeightVal != nil
                 {
-                    sbv.tgFrame.right = selfSize.width - self.tg_rightPadding - sbv.tgRight!.realMarginInSize(selfSize.width - self.tg_rightPadding - self.tg_leftPadding) + (sbv.tgLeft?.margin ?? 0)
-                }
-                
-                if (sbv.tgWidth?.isFill ?? false) && !self.tgIsNoLayoutSubview(sbv)
-                {
-                    sbv.tgFrame.width = sbv.tgWidth!.measure(sbv.tgFrame.right - (sbv.tgLeft?.margin ?? 0) - self.tg_leftPadding)
+                    sbvtgFrame.trailing = selfSize.width - lsc.tg_trailingPadding - sbvsc.tgTrailing!.realMarginInSize(selfSize.width - lsc.tg_trailingPadding - lsc.tg_leadingPadding) + sbvLeadingMargin
                 }
                 
-                sbv.tgFrame.left = sbv.tgFrame.right - sbv.tgFrame.width
+                if let t = sbvsc.tgWidth, t.isFill && !self.tgIsNoLayoutSubview(sbv)
+                {
+                    sbvtgFrame.width = sbvsc.tgWidth!.measure(sbvtgFrame.trailing - sbvLeadingMargin - lsc.tg_leadingPadding)
+                }
+                
+                sbvtgFrame.leading = sbvtgFrame.trailing - sbvtgFrame.width
                 
             }
             
-            if !(sbv.tgLeft?.hasValue ?? false) && !(sbv.tgRight?.hasValue ?? false)
+            if !sbvtgLeadingHasValue && !sbvtgTrailingHasValue
             {
-                if (sbv.tgWidth?.isFill ?? false) && !self.tgIsNoLayoutSubview(sbv)
+                if let t = sbvsc.tgWidth, t.isFill && !self.tgIsNoLayoutSubview(sbv)
                 {
-                    sbv.tgFrame.width = sbv.tgWidth!.measure(selfSize.width - self.tg_leftPadding - self.tg_rightPadding)
+                    sbvtgFrame.width = sbvsc.tgWidth!.measure(selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding)
                 }
                 
-                sbv.tgFrame.left = (sbv.tgLeft?.margin ?? 0) + self.tg_leftPadding
-                sbv.tgFrame.right = sbv.tgFrame.left + sbv.tgFrame.width
+                sbvtgFrame.leading =  sbvLeadingMargin + lsc.tg_leadingPadding
+                sbvtgFrame.trailing = sbvtgFrame.leading + sbvtgFrame.width
             }
         }
         
         
         //这里要更新左边最小和右边最大约束的情况。
         
-        if (sbv.tgLeft?.tgMinVal?.posRelaVal != nil && sbv.tgRight?.tgMaxVal?.posRelaVal != nil)
+        if (sbvsc.tgLeading?.tgMinVal?.posRelaVal != nil && sbvsc.tgTrailing?.tgMaxVal?.posRelaVal != nil)
         {
             //让宽度缩小并在最小和最大的中间排列。
-            let minLeft = self.tgCalcRelationalSubview(sbv.tgLeft!.tgMinVal!.posRelaVal.view, gravity: sbv.tgLeft!.tgMinVal!.posRelaVal._type, selfSize: selfSize) + sbv.tgLeft!.tgMinVal!.offsetVal
+            let minLeading = self.tgCalcRelationalSubview(sbvsc.tgLeading!.tgMinVal!.posRelaVal.view, lsc:lsc, gravity: sbvsc.tgLeading!.tgMinVal!.posRelaVal._type, selfSize: selfSize) + sbvsc.tgLeading!.tgMinVal!.offsetVal
         
             
-            let maxRight = self.tgCalcRelationalSubview(sbv.tgRight!.tgMaxVal!.posRelaVal.view, gravity: sbv.tgRight!.tgMaxVal!.posRelaVal._type, selfSize: selfSize) - sbv.tgRight!.tgMaxVal!.offsetVal
+            let maxTrailing = self.tgCalcRelationalSubview(sbvsc.tgTrailing!.tgMaxVal!.posRelaVal.view, lsc:lsc,  gravity: sbvsc.tgTrailing!.tgMaxVal!.posRelaVal._type, selfSize: selfSize) - sbvsc.tgTrailing!.tgMaxVal!.offsetVal
             
             
-            //用maxRight减去minLeft得到的宽度再减去视图的宽度，然后让其居中。。如果宽度超过则缩小视图的宽度。
-            if (maxRight - minLeft < sbv.tgFrame.width)
+            //用maxTrailing减去minLeading得到的宽度再减去视图的宽度，然后让其居中。。如果宽度超过则缩小视图的宽度。
+            if (maxTrailing - minLeading < sbvtgFrame.width)
             {
-                sbv.tgFrame.width = maxRight - minLeft
-                sbv.tgFrame.left = minLeft
+                sbvtgFrame.width = maxTrailing - minLeading
+                sbvtgFrame.leading = minLeading
             }
             else
             {
-                sbv.tgFrame.left = (maxRight - minLeft - sbv.tgFrame.width) / 2 + minLeft
+                sbvtgFrame.leading = (maxTrailing - minLeading - sbvtgFrame.width) / 2 + minLeading
             }
             
-            sbv.tgFrame.right = sbv.tgFrame.left + sbv.tgFrame.width
+            sbvtgFrame.trailing = sbvtgFrame.leading + sbvtgFrame.width
             
         }
-        else if (sbv.tgLeft?.tgMinVal?.posRelaVal != nil)
+        else if (sbvsc.tgLeading?.tgMinVal?.posRelaVal != nil)
         {
             //得到左边的最小位置。如果当前的左边距小于这个位置则缩小视图的宽度。
-             let minLeft = self.tgCalcRelationalSubview(sbv.tgLeft!.tgMinVal!.posRelaVal.view, gravity: sbv.tgLeft!.tgMinVal!.posRelaVal._type, selfSize: selfSize) + sbv.tgLeft!.tgMinVal!.offsetVal
+            let minLeading = self.tgCalcRelationalSubview(sbvsc.tgLeading!.tgMinVal!.posRelaVal.view, lsc:lsc, gravity: sbvsc.tgLeading!.tgMinVal!.posRelaVal._type, selfSize: selfSize) + sbvsc.tgLeading!.tgMinVal!.offsetVal
             
-            if (sbv.tgFrame.left < minLeft)
+            if (sbvtgFrame.leading < minLeading)
             {
-                sbv.tgFrame.left = minLeft
-                sbv.tgFrame.width = sbv.tgFrame.right - sbv.tgFrame.left
+                sbvtgFrame.leading = minLeading
+                sbvtgFrame.width = sbvtgFrame.trailing - sbvtgFrame.leading
             }
             
         }
-        else if (sbv.tgRight?.tgMaxVal?.posRelaVal != nil)
+        else if (sbvsc.tgTrailing?.tgMaxVal?.posRelaVal != nil)
         {
             //得到右边的最大位置。如果当前的右边距大于了这个位置则缩小视图的宽度。
-            let maxRight = self.tgCalcRelationalSubview(sbv.tgRight!.tgMaxVal!.posRelaVal.view, gravity: sbv.tgRight!.tgMaxVal!.posRelaVal._type, selfSize: selfSize) - sbv.tgRight!.tgMaxVal!.offsetVal
+            let maxTrailing = self.tgCalcRelationalSubview(sbvsc.tgTrailing!.tgMaxVal!.posRelaVal.view, lsc:lsc, gravity: sbvsc.tgTrailing!.tgMaxVal!.posRelaVal._type, selfSize: selfSize) - sbvsc.tgTrailing!.tgMaxVal!.offsetVal
             
-            if (sbv.tgFrame.right > maxRight)
+            if (sbvtgFrame.trailing > maxTrailing)
             {
-                sbv.tgFrame.right = maxRight;
-                sbv.tgFrame.width = sbv.tgFrame.right - sbv.tgFrame.left
+                sbvtgFrame.trailing = maxTrailing;
+                sbvtgFrame.width = sbvtgFrame.trailing - sbvtgFrame.leading
             }
             
         }
@@ -330,180 +386,205 @@ extension TGRelativeLayout
         
     }
     
-    fileprivate func tgCalcSubviewTopBottom(_ sbv: UIView, selfSize: CGSize) {
+    fileprivate func tgCalcSubviewTopBottom(_ sbv: UIView, sbvsc:TGViewSizeClassImpl, sbvtgFrame:TGFrame, lsc:TGRelativeLayoutViewSizeClassImpl,selfSize: CGSize) {
         
         
-        if sbv.tgFrame.top != CGFloat.greatestFiniteMagnitude &&
-            sbv.tgFrame.bottom != CGFloat.greatestFiniteMagnitude &&
-            sbv.tgFrame.height != CGFloat.greatestFiniteMagnitude
+        
+        
+        if sbvtgFrame.top != CGFloat.greatestFiniteMagnitude &&
+            sbvtgFrame.bottom != CGFloat.greatestFiniteMagnitude &&
+            sbvtgFrame.height != CGFloat.greatestFiniteMagnitude
         {
             return
         }
         
-        if tgCalcSubviewHeight(sbv, selfSize: selfSize)
+        if tgCalcSubviewHeight(sbv, sbvsc:sbvsc, sbvtgFrame:sbvtgFrame, lsc:lsc, selfSize: selfSize)
         {
             return
         }
         
-        if (sbv.tgCenterY?.hasValue ?? false)
+        let sbvtgTopHasValue = sbvsc.tgTop?.hasValue ?? false
+        let sbvtgBottomHasValue = sbvsc.tgBottom?.hasValue ?? false
+        let sbvtgCenterYHasValue = sbvsc.tgCenterY?.hasValue ?? false
+        let sbvTopMargin = sbvsc.tgTop?.margin ?? 0
+        let sbvBottomMargin = sbvsc.tgBottom?.margin ?? 0
+        let sbvCenterYMargin = sbvsc.tgCenterY?.margin ?? 0
+        
+        if sbvtgCenterYHasValue
         {
-            if (sbv.tgHeight?.isFill ?? false) && !self.tgIsNoLayoutSubview(sbv)
+            if let t = sbvsc.tgHeight, t.isFill && !self.tgIsNoLayoutSubview(sbv)
             {
-                sbv.tgFrame.height = sbv.tgHeight!.measure(selfSize.height - self.tg_topPadding - self.tg_bottomPadding)
+                sbvtgFrame.height = sbvsc.tgHeight!.measure(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
             }
         }
-        if sbv.tgCenterY?.posRelaVal != nil
+        if sbvsc.tgCenterY?.posRelaVal != nil
         {
-            let relaView = sbv.tgCenterY!.posRelaVal.view
+            let relaView = sbvsc.tgCenterY!.posRelaVal.view
             
-            sbv.tgFrame.top = tgCalcRelationalSubview(relaView, gravity: sbv.tgCenterY!.posRelaVal._type, selfSize: selfSize) - sbv.tgFrame.height / 2 + sbv.tgCenterY!.margin
+            sbvtgFrame.top = tgCalcRelationalSubview(relaView, lsc:lsc, gravity: sbvsc.tgCenterY!.posRelaVal._type, selfSize: selfSize) - sbvtgFrame.height / 2 + sbvCenterYMargin
             
             
             if  relaView != self && self.tgIsNoLayoutSubview(relaView)
             {
-                sbv.tgFrame.top -= sbv.tgCenterY!.margin;
+                sbvtgFrame.top -= sbvCenterYMargin
             }
             
+            if let t = lsc.tgHeight, t.isWrap &&  sbvtgFrame.top < 0 && relaView === self
+            {
+                sbvtgFrame.top = 0
+            }
             
-            sbv.tgFrame.bottom = sbv.tgFrame.top + sbv.tgFrame.height
+            sbvtgFrame.bottom = sbvtgFrame.top + sbvtgFrame.height
         }
-        else if sbv.tgCenterY?.posNumVal != nil
+        else if sbvsc.tgCenterY?.posNumVal != nil
         {
-            sbv.tgFrame.top = (selfSize.height - self.tg_topPadding - self.tg_bottomPadding - sbv.tgFrame.height) / 2 + self.tg_topPadding + sbv.tgCenterY!.margin
-            sbv.tgFrame.bottom = sbv.tgFrame.top + sbv.tgFrame.height
+            sbvtgFrame.top = (selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding - sbvtgFrame.height) / 2 + lsc.tg_topPadding + sbvCenterYMargin
+            
+            if  let t = lsc.tgHeight, t.isWrap &&  sbvtgFrame.top < 0
+            {
+                sbvtgFrame.top = 0
+            }
+            
+            sbvtgFrame.bottom = sbvtgFrame.top + sbvtgFrame.height
         }
-        else if sbv.tgCenterY?.posWeightVal != nil
+        else if sbvsc.tgCenterY?.posWeightVal != nil
         {
-            sbv.tgFrame.top = (selfSize.height - self.tg_topPadding - self.tg_bottomPadding - sbv.tgFrame.height) / 2 + self.tg_topPadding + sbv.tgCenterY!.realMarginInSize(selfSize.height - self.tg_topPadding - self.tg_bottomPadding)
-            sbv.tgFrame.bottom = sbv.tgFrame.top + sbv.tgFrame.height
+            sbvtgFrame.top = (selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding - sbvtgFrame.height) / 2 + lsc.tg_topPadding + sbvsc.tgCenterY!.realMarginInSize(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
+            
+            if  let t = lsc.tgHeight, t.isWrap &&  sbvtgFrame.top < 0
+            {
+                sbvtgFrame.top = 0
+            }
+            
+            sbvtgFrame.bottom = sbvtgFrame.top + sbvtgFrame.height
         }
         else
         {
-            if (sbv.tgTop?.hasValue ?? false)
+            if sbvtgTopHasValue
             {
-                if sbv.tgTop?.posRelaVal != nil
+                if sbvsc.tgTop?.posRelaVal != nil
                 {
-                    let relaView = sbv.tgTop!.posRelaVal.view
+                    let relaView = sbvsc.tgTop!.posRelaVal.view
                     
                     
-                    sbv.tgFrame.top = tgCalcRelationalSubview(relaView, gravity: sbv.tgTop!.posRelaVal._type, selfSize: selfSize) + sbv.tgTop!.margin
+                    sbvtgFrame.top = tgCalcRelationalSubview(relaView, lsc:lsc, gravity: sbvsc.tgTop!.posRelaVal._type, selfSize: selfSize) + sbvTopMargin
                     
                     if  relaView != self && self.tgIsNoLayoutSubview(relaView)
                     {
-                        sbv.tgFrame.top -= sbv.tgTop!.margin;
+                        sbvtgFrame.top -= sbvTopMargin
                     }
                     
                 }
-                else if sbv.tgTop?.posNumVal != nil
+                else if sbvsc.tgTop?.posNumVal != nil
                 {
-                    sbv.tgFrame.top = sbv.tgTop!.margin + self.tg_topPadding
+                    sbvtgFrame.top = sbvTopMargin + lsc.tg_topPadding
                 }
-                else if sbv.tgTop?.posWeightVal != nil
+                else if sbvsc.tgTop?.posWeightVal != nil
                 {
-                    sbv.tgFrame.top = sbv.tgTop!.realMarginInSize(selfSize.height - self.tg_topPadding - self.tg_bottomPadding) + self.tg_topPadding
-                }
-                
-                if (sbv.tgHeight?.isFill ?? false) && !self.tgIsNoLayoutSubview(sbv)
-                {
-                    //self.tg_topPadding 这里因为sbv.tgFrame.top已经包含了topPadding所以这里不需要再减
-                    sbv.tgFrame.height = sbv.tgHeight!.measure(selfSize.height - self.tg_topPadding - sbv.tgFrame.top)
+                    sbvtgFrame.top = sbvsc.tgTop!.realMarginInSize(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding) + lsc.tg_topPadding
                 }
                 
-                sbv.tgFrame.bottom = sbv.tgFrame.top + sbv.tgFrame.height
+                if let t = sbvsc.tgHeight, t.isFill && !self.tgIsNoLayoutSubview(sbv)
+                {
+                    //lsc.tg_topPadding 这里因为sbvtgFrame.top已经包含了topPadding所以这里不需要再减
+                    sbvtgFrame.height = sbvsc.tgHeight!.measure(selfSize.height - lsc.tg_topPadding - sbvtgFrame.top)
+                }
+                
+                sbvtgFrame.bottom = sbvtgFrame.top + sbvtgFrame.height
 
             }
             
-            if (sbv.tgBottom?.hasValue ?? false)
+            if sbvtgBottomHasValue
             {
-                if sbv.tgBottom!.posRelaVal != nil
+                if sbvsc.tgBottom!.posRelaVal != nil
                 {
-                    let relaView = sbv.tgBottom!.posRelaVal.view
+                    let relaView = sbvsc.tgBottom!.posRelaVal.view
                     
-                    sbv.tgFrame.bottom = tgCalcRelationalSubview(relaView, gravity: sbv.tgBottom!.posRelaVal._type, selfSize: selfSize) - sbv.tgBottom!.margin + (sbv.tgTop?.margin ?? 0)
+                    sbvtgFrame.bottom = tgCalcRelationalSubview(relaView, lsc:lsc, gravity: sbvsc.tgBottom!.posRelaVal._type, selfSize: selfSize) - sbvBottomMargin + sbvTopMargin
                     
                     if  relaView != self && self.tgIsNoLayoutSubview(relaView)
                     {
-                        sbv.tgFrame.bottom += sbv.tgBottom!.margin;
+                        sbvtgFrame.bottom += sbvBottomMargin
                     }
                     
                 }
-                else if sbv.tgBottom!.posNumVal != nil
+                else if sbvsc.tgBottom!.posNumVal != nil
                 {
-                    sbv.tgFrame.bottom = selfSize.height - sbv.tgBottom!.margin - self.tg_bottomPadding + (sbv.tgTop?.margin ?? 0)
+                    sbvtgFrame.bottom = selfSize.height - sbvBottomMargin - lsc.tg_bottomPadding + sbvTopMargin
                 }
-                else if sbv.tgBottom!.posWeightVal != nil
+                else if sbvsc.tgBottom!.posWeightVal != nil
                 {
-                    sbv.tgFrame.bottom = selfSize.height - sbv.tgBottom!.realMarginInSize(selfSize.height - self.tg_topPadding - self.tg_bottomPadding) - self.tg_bottomPadding + (sbv.tgTop?.margin ?? 0)
-                }
-                
-                if (sbv.tgHeight?.isFill ?? false) && !self.tgIsNoLayoutSubview(sbv)
-                {
-                    sbv.tgFrame.height = sbv.tgHeight!.measure(sbv.tgFrame.bottom - (sbv.tgTop?.margin ?? 0) - self.tg_topPadding)
+                    sbvtgFrame.bottom = selfSize.height - sbvsc.tgBottom!.realMarginInSize(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding) - lsc.tg_bottomPadding + sbvTopMargin
                 }
                 
-                sbv.tgFrame.top = sbv.tgFrame.bottom - sbv.tgFrame.height
+                if let t = sbvsc.tgHeight, t.isFill && !self.tgIsNoLayoutSubview(sbv)
+                {
+                    sbvtgFrame.height = sbvsc.tgHeight!.measure(sbvtgFrame.bottom - sbvTopMargin - lsc.tg_topPadding)
+                }
+                
+                sbvtgFrame.top = sbvtgFrame.bottom - sbvtgFrame.height
 
             }
         
-            if !(sbv.tgTop?.hasValue ?? false) && !(sbv.tgBottom?.hasValue ?? false)
+            if !sbvtgTopHasValue && !sbvtgBottomHasValue
             {
-                if (sbv.tgHeight?.isFill ?? false) && !self.tgIsNoLayoutSubview(sbv)
+                if let t = sbvsc.tgHeight, t.isFill && !self.tgIsNoLayoutSubview(sbv)
                 {
-                    sbv.tgFrame.height = sbv.tgHeight!.measure(selfSize.height - self.tg_topPadding - self.tg_bottomPadding)
+                    sbvtgFrame.height = sbvsc.tgHeight!.measure(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
                 }
                 
-                sbv.tgFrame.top = (sbv.tgTop?.margin ?? 0) + self.tg_topPadding
-                sbv.tgFrame.bottom = sbv.tgFrame.top + sbv.tgFrame.height
+                sbvtgFrame.top = sbvTopMargin + lsc.tg_topPadding
+                sbvtgFrame.bottom = sbvtgFrame.top + sbvtgFrame.height
             }
         }
         
         
         //这里要更新上边最小和下边最大约束的情况。
-        if (sbv.tgTop?.tgMinVal?.posRelaVal != nil && sbv.tgBottom?.tgMaxVal?.posRelaVal != nil)
+        if (sbvsc.tgTop?.tgMinVal?.posRelaVal != nil && sbvsc.tgBottom?.tgMaxVal?.posRelaVal != nil)
         {
             //让高度缩小并在最小和最大的中间排列。
-            let minTop = self.tgCalcRelationalSubview(sbv.tgTop!.tgMinVal!.posRelaVal.view, gravity: sbv.tgTop!.tgMinVal!.posRelaVal._type, selfSize: selfSize) + sbv.tgTop!.tgMinVal!.offsetVal
+            let minTop = self.tgCalcRelationalSubview(sbvsc.tgTop!.tgMinVal!.posRelaVal.view,lsc:lsc, gravity: sbvsc.tgTop!.tgMinVal!.posRelaVal._type, selfSize: selfSize) + sbvsc.tgTop!.tgMinVal!.offsetVal
             
             
-            let maxBottom = self.tgCalcRelationalSubview(sbv.tgBottom!.tgMaxVal!.posRelaVal.view, gravity: sbv.tgBottom!.tgMaxVal!.posRelaVal._type, selfSize: selfSize) - sbv.tgBottom!.tgMaxVal!.offsetVal
+            let maxBottom = self.tgCalcRelationalSubview(sbvsc.tgBottom!.tgMaxVal!.posRelaVal.view, lsc:lsc, gravity: sbvsc.tgBottom!.tgMaxVal!.posRelaVal._type, selfSize: selfSize) - sbvsc.tgBottom!.tgMaxVal!.offsetVal
             
             
             //用maxBottom减去minTop得到的高度再减去视图的高度，然后让其居中。。如果高度超过则缩小视图的高度。
-            if (maxBottom - minTop < sbv.tgFrame.height)
+            if (maxBottom - minTop < sbvtgFrame.height)
             {
-                sbv.tgFrame.height = maxBottom - minTop
-                sbv.tgFrame.top = minTop
+                sbvtgFrame.height = maxBottom - minTop
+                sbvtgFrame.top = minTop
             }
             else
             {
-                sbv.tgFrame.top = (maxBottom - minTop - sbv.tgFrame.height) / 2 + minTop
+                sbvtgFrame.top = (maxBottom - minTop - sbvtgFrame.height) / 2 + minTop
             }
             
-            sbv.tgFrame.bottom = sbv.tgFrame.top + sbv.tgFrame.height
+            sbvtgFrame.bottom = sbvtgFrame.top + sbvtgFrame.height
             
         }
-        else if (sbv.tgTop?.tgMinVal?.posRelaVal != nil)
+        else if (sbvsc.tgTop?.tgMinVal?.posRelaVal != nil)
         {
             //得到上边的最小位置。如果当前的上边距小于这个位置则缩小视图的高度。
-            let minTop = self.tgCalcRelationalSubview(sbv.tgTop!.tgMinVal!.posRelaVal.view, gravity: sbv.tgTop!.tgMinVal!.posRelaVal._type, selfSize: selfSize) + sbv.tgTop!.tgMinVal!.offsetVal
+            let minTop = self.tgCalcRelationalSubview(sbvsc.tgTop!.tgMinVal!.posRelaVal.view, lsc:lsc, gravity: sbvsc.tgTop!.tgMinVal!.posRelaVal._type, selfSize: selfSize) + sbvsc.tgTop!.tgMinVal!.offsetVal
         
             
-            if (sbv.tgFrame.top < minTop)
+            if (sbvtgFrame.top < minTop)
             {
-                sbv.tgFrame.top = minTop
-                sbv.tgFrame.height = sbv.tgFrame.bottom - sbv.tgFrame.top
+                sbvtgFrame.top = minTop
+                sbvtgFrame.height = sbvtgFrame.bottom - sbvtgFrame.top
             }
             
         }
-        else if (sbv.tgBottom?.tgMaxVal?.posRelaVal != nil)
+        else if (sbvsc.tgBottom?.tgMaxVal?.posRelaVal != nil)
         {
             //得到下边的最大位置。如果当前的下边距大于了这个位置则缩小视图的高度。
-            let maxBottom = self.tgCalcRelationalSubview(sbv.tgBottom!.tgMaxVal!.posRelaVal.view, gravity: sbv.tgBottom!.tgMaxVal!.posRelaVal._type, selfSize: selfSize) - sbv.tgBottom!.tgMaxVal!.offsetVal
+            let maxBottom = self.tgCalcRelationalSubview(sbvsc.tgBottom!.tgMaxVal!.posRelaVal.view, lsc:lsc, gravity: sbvsc.tgBottom!.tgMaxVal!.posRelaVal._type, selfSize: selfSize) - sbvsc.tgBottom!.tgMaxVal!.offsetVal
             
-            if (sbv.tgFrame.bottom > maxBottom)
+            if (sbvtgFrame.bottom > maxBottom)
             {
-                sbv.tgFrame.bottom = maxBottom;
-                sbv.tgFrame.height = sbv.tgFrame.bottom - sbv.tgFrame.top
+                sbvtgFrame.bottom = maxBottom;
+                sbvtgFrame.height = sbvtgFrame.bottom - sbvtgFrame.top
             }
             
         }
@@ -511,178 +592,192 @@ extension TGRelativeLayout
     }
     
     
-    fileprivate func tgCalcSubviewWidth(_ sbv: UIView, selfSize: CGSize) -> Bool {
-        if sbv.tgFrame.width == CGFloat.greatestFiniteMagnitude {
-            if sbv.tgWidth?.dimeRelaVal != nil {
-                sbv.tgFrame.width = sbv.tgWidth!.measure(tgCalcRelationalSubview(sbv.tgWidth!.dimeRelaVal.view, gravity:sbv.tgWidth!.dimeRelaVal._type, selfSize: selfSize))
-                sbv.tgFrame.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: sbv.tgFrame.width, sbvSize: sbv.tgFrame.frame.size, selfLayoutSize: selfSize)
+    fileprivate func tgCalcSubviewWidth(_ sbv: UIView, sbvsc:TGViewSizeClassImpl, sbvtgFrame:TGFrame, lsc:TGRelativeLayoutViewSizeClassImpl,  selfSize: CGSize) -> Bool {
+        if sbvtgFrame.width == CGFloat.greatestFiniteMagnitude {
+            if sbvsc.tgWidth?.dimeRelaVal != nil {
+                sbvtgFrame.width = sbvsc.tgWidth!.measure(tgCalcRelationalSubview(sbvsc.tgWidth!.dimeRelaVal.view, lsc:lsc, gravity:sbvsc.tgWidth!.dimeRelaVal._type, selfSize: selfSize))
+                sbvtgFrame.width = self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: sbvtgFrame.width, sbvSize: sbvtgFrame.frame.size, selfLayoutSize: selfSize)
             }
-            else if sbv.tgWidth?.dimeNumVal != nil {
-                sbv.tgFrame.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: sbv.tgWidth!.measure, sbvSize: sbv.tgFrame.frame.size, selfLayoutSize: selfSize)
+            else if sbvsc.tgWidth?.dimeNumVal != nil {
+                sbvtgFrame.width = self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: sbvsc.tgWidth!.measure, sbvSize: sbvtgFrame.frame.size, selfLayoutSize: selfSize)
             }
-            else if sbv.tgWidth?.dimeWeightVal != nil
+            else if sbvsc.tgWidth?.dimeWeightVal != nil
             {
-                sbv.tgFrame.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: sbv.tgWidth!.measure((selfSize.width - self.tg_leftPadding - self.tg_rightPadding) * sbv.tgWidth!.dimeWeightVal.rawValue/100), sbvSize: sbv.tgFrame.frame.size, selfLayoutSize: selfSize)
+                sbvtgFrame.width = self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: sbvsc.tgWidth!.measure((selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding) * sbvsc.tgWidth!.dimeWeightVal.rawValue/100), sbvSize: sbvtgFrame.frame.size, selfLayoutSize: selfSize)
             }
             
             if self.tgIsNoLayoutSubview(sbv)
             {
-                sbv.tgFrame.width = 0
+                sbvtgFrame.width = 0
             }
             
-            if (sbv.tgLeft?.hasValue ?? false) && (sbv.tgRight?.hasValue ?? false)
+            let sbvtgLeadingHasValue = sbvsc.tgLeading?.hasValue ?? false
+            let sbvtgTrailingHasValue = sbvsc.tgTrailing?.hasValue ?? false
+            
+            if sbvtgLeadingHasValue && sbvtgTrailingHasValue
             {
-                if sbv.tgLeft?.posRelaVal != nil {
-                    sbv.tgFrame.left = tgCalcRelationalSubview(sbv.tgLeft!.posRelaVal.view, gravity:sbv.tgLeft!.posRelaVal._type, selfSize: selfSize) + sbv.tgLeft!.margin
+                if sbvsc.tgLeading?.posRelaVal != nil {
+                    sbvtgFrame.leading = tgCalcRelationalSubview(sbvsc.tgLeading!.posRelaVal.view, lsc:lsc, gravity:sbvsc.tgLeading!.posRelaVal._type, selfSize: selfSize) + sbvsc.tgLeading!.margin
                 }
                 else {
-                    sbv.tgFrame.left = sbv.tgLeft!.realMarginInSize(selfSize.width - self.tg_leftPadding - self.tg_rightPadding) + self.tg_leftPadding
+                    sbvtgFrame.leading = sbvsc.tgLeading!.realMarginInSize(selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding) + lsc.tg_leadingPadding
                 }
                 
-                if sbv.tgRight?.posRelaVal != nil {
-                    sbv.tgFrame.right = tgCalcRelationalSubview(sbv.tgRight!.posRelaVal.view, gravity:sbv.tgRight!.posRelaVal._type, selfSize: selfSize) - sbv.tgRight!.margin
+                if sbvsc.tgTrailing?.posRelaVal != nil {
+                    sbvtgFrame.trailing = tgCalcRelationalSubview(sbvsc.tgTrailing!.posRelaVal.view, lsc:lsc, gravity:sbvsc.tgTrailing!.posRelaVal._type, selfSize: selfSize) - sbvsc.tgTrailing!.margin
                 }
                 else {
-                    sbv.tgFrame.right = selfSize.width - sbv.tgRight!.realMarginInSize(selfSize.width - self.tg_leftPadding - self.tg_rightPadding) - self.tg_rightPadding
+                    sbvtgFrame.trailing = selfSize.width - sbvsc.tgTrailing!.realMarginInSize(selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding) - lsc.tg_trailingPadding
                 }
                 
-                sbv.tgFrame.width = sbv.tgFrame.right - sbv.tgFrame.left
-                sbv.tgFrame.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: sbv.tgFrame.width, sbvSize: sbv.tgFrame.frame.size, selfLayoutSize: selfSize)
+                sbvtgFrame.width = sbvtgFrame.trailing - sbvtgFrame.leading
+                sbvtgFrame.width = self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: sbvtgFrame.width, sbvSize: sbvtgFrame.frame.size, selfLayoutSize: selfSize)
                 
                 if self.tgIsNoLayoutSubview(sbv)
                 {
-                    sbv.tgFrame.width = 0
-                    sbv.tgFrame.right = sbv.tgFrame.left + sbv.tgFrame.width
+                    sbvtgFrame.width = 0
+                    sbvtgFrame.trailing = sbvtgFrame.leading + sbvtgFrame.width
                 }
                 
                 return true
             }
             
-            if sbv.tgFrame.width == CGFloat.greatestFiniteMagnitude {
-                sbv.tgFrame.width = sbv.bounds.size.width
-                sbv.tgFrame.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: sbv.tgFrame.width, sbvSize: sbv.tgFrame.frame.size, selfLayoutSize: selfSize)
+            if sbvtgFrame.width == CGFloat.greatestFiniteMagnitude {
+                sbvtgFrame.width = sbv.bounds.size.width
+                sbvtgFrame.width = self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: sbvtgFrame.width, sbvSize: sbvtgFrame.frame.size, selfLayoutSize: selfSize)
             }
         }
         
-        if ( (sbv.tgWidth?.tgMinVal?.dimeNumVal != nil && sbv.tgWidth!.tgMinVal!.dimeNumVal != -CGFloat.greatestFiniteMagnitude) || (sbv.tgWidth?.tgMaxVal?.dimeNumVal != nil && sbv.tgWidth!.tgMaxVal!.dimeNumVal != CGFloat.greatestFiniteMagnitude))
+        if ( (sbvsc.tgWidth?.tgMinVal?.dimeNumVal != nil && sbvsc.tgWidth!.tgMinVal!.dimeNumVal != -CGFloat.greatestFiniteMagnitude) || (sbvsc.tgWidth?.tgMaxVal?.dimeNumVal != nil && sbvsc.tgWidth!.tgMaxVal!.dimeNumVal != CGFloat.greatestFiniteMagnitude))
         {
-            sbv.tgFrame.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: sbv.tgFrame.width, sbvSize: sbv.tgFrame.frame.size, selfLayoutSize: selfSize)
+            sbvtgFrame.width = self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: sbvtgFrame.width, sbvSize: sbvtgFrame.frame.size, selfLayoutSize: selfSize)
         }
         
         
         return false
     }
     
-    fileprivate func tgCalcSubviewHeight(_ sbv: UIView, selfSize: CGSize) -> Bool {
-        if sbv.tgFrame.height == CGFloat.greatestFiniteMagnitude {
-            if sbv.tgHeight?.dimeRelaVal != nil {
-                sbv.tgFrame.height = sbv.tgHeight!.measure(self.tgCalcRelationalSubview(sbv.tgHeight!.dimeRelaVal.view, gravity:sbv.tgHeight!.dimeRelaVal._type, selfSize: selfSize))
-                sbv.tgFrame.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: sbv.tgFrame.height, sbvSize: sbv.tgFrame.frame.size, selfLayoutSize: selfSize)
+    fileprivate func tgCalcSubviewHeight(_ sbv: UIView, sbvsc:TGViewSizeClassImpl, sbvtgFrame:TGFrame, lsc:TGRelativeLayoutViewSizeClassImpl,selfSize: CGSize) -> Bool {
+        if sbvtgFrame.height == CGFloat.greatestFiniteMagnitude {
+            if sbvsc.tgHeight?.dimeRelaVal != nil {
+                sbvtgFrame.height = sbvsc.tgHeight!.measure(self.tgCalcRelationalSubview(sbvsc.tgHeight!.dimeRelaVal.view, lsc:lsc, gravity:sbvsc.tgHeight!.dimeRelaVal._type, selfSize: selfSize))
+                sbvtgFrame.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: sbvtgFrame.height, sbvSize: sbvtgFrame.frame.size, selfLayoutSize: selfSize)
             }
-            else if sbv.tgHeight?.dimeNumVal != nil {
-                sbv.tgFrame.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: sbv.tgHeight!.measure, sbvSize: sbv.tgFrame.frame.size, selfLayoutSize: selfSize)
+            else if sbvsc.tgHeight?.dimeNumVal != nil {
+                sbvtgFrame.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: sbvsc.tgHeight!.measure, sbvSize: sbvtgFrame.frame.size, selfLayoutSize: selfSize)
             }
-            else if sbv.tgHeight?.dimeWeightVal != nil
+            else if sbvsc.tgHeight?.dimeWeightVal != nil
             {
-                sbv.tgFrame.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: sbv.tgHeight!.measure((selfSize.height - self.tg_topPadding - self.tg_bottomPadding) * sbv.tgHeight!.dimeWeightVal.rawValue/100), sbvSize: sbv.tgFrame.frame.size, selfLayoutSize: selfSize)
+                sbvtgFrame.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: sbvsc.tgHeight!.measure((selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding) * sbvsc.tgHeight!.dimeWeightVal.rawValue/100), sbvSize: sbvtgFrame.frame.size, selfLayoutSize: selfSize)
             }
             
             if self.tgIsNoLayoutSubview(sbv)
             {
-                sbv.tgFrame.height = 0
+                sbvtgFrame.height = 0
             }
             
-            if (sbv.tgTop?.hasValue ?? false) && (sbv.tgBottom?.hasValue ?? false) {
-                if sbv.tgTop?.posRelaVal != nil {
-                    sbv.tgFrame.top = self.tgCalcRelationalSubview(sbv.tgTop!.posRelaVal.view, gravity:sbv.tgTop!.posRelaVal._type, selfSize: selfSize) + sbv.tgTop!.margin
+            let sbvtgTopHasValue = sbvsc.tgTop?.hasValue ?? false
+            let sbvtgBottomHasValue = sbvsc.tgBottom?.hasValue ?? false
+
+            
+            if sbvtgTopHasValue && sbvtgBottomHasValue {
+                if sbvsc.tgTop?.posRelaVal != nil {
+                    sbvtgFrame.top = self.tgCalcRelationalSubview(sbvsc.tgTop!.posRelaVal.view,lsc:lsc, gravity:sbvsc.tgTop!.posRelaVal._type, selfSize: selfSize) + sbvsc.tgTop!.margin
                 }
                 else {
-                    sbv.tgFrame.top = sbv.tgTop!.realMarginInSize(selfSize.height - self.tg_topPadding - self.tg_bottomPadding) + self.tg_topPadding
+                    sbvtgFrame.top = sbvsc.tgTop!.realMarginInSize(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding) + lsc.tg_topPadding
                 }
                 
-                if sbv.tgBottom?.posRelaVal != nil {
-                    sbv.tgFrame.bottom = self.tgCalcRelationalSubview(sbv.tgBottom!.posRelaVal.view, gravity:sbv.tgBottom!.posRelaVal._type, selfSize: selfSize) - sbv.tgBottom!.margin
+                if sbvsc.tgBottom?.posRelaVal != nil {
+                    sbvtgFrame.bottom = self.tgCalcRelationalSubview(sbvsc.tgBottom!.posRelaVal.view,lsc:lsc, gravity:sbvsc.tgBottom!.posRelaVal._type, selfSize: selfSize) - sbvsc.tgBottom!.margin
                 }
                 else {
-                    sbv.tgFrame.bottom = selfSize.height - sbv.tgBottom!.realMarginInSize(selfSize.height - self.tg_topPadding - self.tg_bottomPadding) - self.tg_bottomPadding
+                    sbvtgFrame.bottom = selfSize.height - sbvsc.tgBottom!.realMarginInSize(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding) - lsc.tg_bottomPadding
                 }
                 
-                sbv.tgFrame.height = sbv.tgFrame.bottom - sbv.tgFrame.top
-                sbv.tgFrame.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: sbv.tgFrame.height, sbvSize: sbv.tgFrame.frame.size, selfLayoutSize: selfSize)
+                sbvtgFrame.height = sbvtgFrame.bottom - sbvtgFrame.top
+                sbvtgFrame.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: sbvtgFrame.height, sbvSize: sbvtgFrame.frame.size, selfLayoutSize: selfSize)
                 
                 if self.tgIsNoLayoutSubview(sbv)
                 {
-                    sbv.tgFrame.height = 0
-                    sbv.tgFrame.bottom = sbv.tgFrame.top + sbv.tgFrame.height
+                    sbvtgFrame.height = 0
+                    sbvtgFrame.bottom = sbvtgFrame.top + sbvtgFrame.height
                 }
                 
                 
                 return true
             }
             
-            if sbv.tgFrame.height == CGFloat.greatestFiniteMagnitude {
-                sbv.tgFrame.height = sbv.bounds.size.height
+            if sbvtgFrame.height == CGFloat.greatestFiniteMagnitude {
+                sbvtgFrame.height = sbv.bounds.size.height
                 
                 
-                if (sbv.tgHeight?.isFlexHeight ?? false) && !self.tgIsNoLayoutSubview(sbv)
+                if let t = sbvsc.tgHeight, t.isFlexHeight && !self.tgIsNoLayoutSubview(sbv)
                 {
-                    if sbv.tgFrame.width == CGFloat.greatestFiniteMagnitude
+                    if sbvtgFrame.width == CGFloat.greatestFiniteMagnitude
                     {
-                        _ = self.tgCalcSubviewWidth(sbv, selfSize: selfSize)
+                        _ = self.tgCalcSubviewWidth(sbv, sbvsc:sbvsc, sbvtgFrame:sbvtgFrame, lsc:lsc, selfSize: selfSize)
                     }
                     
-                    sbv.tgFrame.height = self.tgCalcHeightFromHeightWrapView(sbv, width: sbv.tgFrame.width)
+                    sbvtgFrame.height = self.tgCalcHeightFromHeightWrapView(sbv,sbvsc:sbvsc, width: sbvtgFrame.width)
                 }
                 
-                sbv.tgFrame.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: sbv.tgFrame.height, sbvSize: sbv.tgFrame.frame.size, selfLayoutSize: selfSize)
+                sbvtgFrame.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: sbvtgFrame.height, sbvSize: sbvtgFrame.frame.size, selfLayoutSize: selfSize)
             }
         }
         
-        if ( (sbv.tgHeight?.tgMinVal?.dimeNumVal != nil && sbv.tgHeight!.tgMinVal!.dimeNumVal != -CGFloat.greatestFiniteMagnitude) || (sbv.tgHeight?.tgMaxVal?.dimeNumVal != nil && sbv.tgHeight!.tgMaxVal!.dimeNumVal != CGFloat.greatestFiniteMagnitude))
+        if ( (sbvsc.tgHeight?.tgMinVal?.dimeNumVal != nil && sbvsc.tgHeight!.tgMinVal!.dimeNumVal != -CGFloat.greatestFiniteMagnitude) || (sbvsc.tgHeight?.tgMaxVal?.dimeNumVal != nil && sbvsc.tgHeight!.tgMaxVal!.dimeNumVal != CGFloat.greatestFiniteMagnitude))
         {
-            sbv.tgFrame.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: sbv.tgFrame.height, sbvSize: sbv.tgFrame.frame.size, selfLayoutSize: selfSize)
+            sbvtgFrame.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: sbvtgFrame.height, sbvSize: sbvtgFrame.frame.size, selfLayoutSize: selfSize)
         }
         
         return false
     }
     
-    fileprivate func tgCalcLayoutRectHelper(_ selfSize: CGSize) -> (selfSize: CGSize, reCalc: Bool) {
+    fileprivate func tgCalcLayoutRectHelper(_ selfSize: CGSize, lsc:TGRelativeLayoutViewSizeClassImpl, isWrap:Bool) -> (selfSize: CGSize, reCalc: Bool) {
         
-        var recalc: Bool = false
-        
+
+        var recalc = false
         
         for sbv:UIView in self.subviews
         {
-            self.tgCalcSizeFromSizeWrapSubview(sbv);
+            let sbvsc = sbv.tgCurrentSizeClass as! TGViewSizeClassImpl
+            let sbvtgFrame = sbv.tgFrame
             
-            if (sbv.tgFrame.width != CGFloat.greatestFiniteMagnitude)
+            self.tgCalcSizeFromSizeWrapSubview(sbv, sbvsc:sbvsc, sbvtgFrame: sbvtgFrame);
+            
+            if (sbvtgFrame.width != CGFloat.greatestFiniteMagnitude)
             {
-                if (sbv.tgWidth?.tgMaxVal?.dimeRelaVal != nil && sbv.tgWidth!.tgMaxVal!.dimeRelaVal.view != self)
+                let maxRela = sbvsc.tgWidth?.tgMaxVal?.dimeRelaVal
+                if (maxRela != nil && maxRela!.view !== self)
                 {
-                    _ = self.tgCalcSubviewWidth(sbv.tgWidth!.tgMaxVal!.dimeRelaVal.view, selfSize:selfSize)
+                    _ = self.tgCalcSubviewWidth(maxRela!.view,sbvsc:maxRela!.view.tgCurrentSizeClass as! TGViewSizeClassImpl,sbvtgFrame:maxRela!.view.tgFrame, lsc:lsc, selfSize:selfSize)
                 }
                 
-                if (sbv.tgWidth?.tgMinVal?.dimeRelaVal != nil && sbv.tgWidth!.tgMinVal!.dimeRelaVal.view != self)
+                let minRela = sbvsc.tgWidth?.tgMinVal?.dimeRelaVal
+                if (minRela != nil &&  minRela!.view != self)
                 {
-                    _ = self.tgCalcSubviewWidth(sbv.tgWidth!.tgMinVal!.dimeRelaVal.view, selfSize:selfSize)
+                    _ = self.tgCalcSubviewWidth(minRela!.view, sbvsc:minRela!.view.tgCurrentSizeClass as! TGViewSizeClassImpl,sbvtgFrame:minRela!.view.tgFrame, lsc:lsc, selfSize:selfSize)
                 }
                 
-                sbv.tgFrame.width = self.tgValidMeasure(sbv.tgWidth, sbv:sbv, calcSize:sbv.tgFrame.width, sbvSize:sbv.tgFrame.frame.size,selfLayoutSize:selfSize)
+                sbvtgFrame.width = self.tgValidMeasure(sbvsc.tgWidth, sbv:sbv, calcSize:sbvtgFrame.width, sbvSize:sbvtgFrame.frame.size,selfLayoutSize:selfSize)
             }
             
-            if (sbv.tgFrame.height != CGFloat.greatestFiniteMagnitude)
+            if (sbvtgFrame.height != CGFloat.greatestFiniteMagnitude)
             {
-                if (sbv.tgHeight?.tgMaxVal?.dimeRelaVal != nil && sbv.tgHeight!.tgMaxVal!.dimeRelaVal.view != self)
+                let maxRela = sbvsc.tgHeight?.tgMaxVal?.dimeRelaVal
+                if (maxRela != nil && maxRela!.view !== self)
                 {
-                    _ = self.tgCalcSubviewHeight(sbv.tgHeight!.tgMaxVal!.dimeRelaVal.view,selfSize:selfSize)
+                    _ = self.tgCalcSubviewHeight(maxRela!.view,sbvsc:maxRela!.view.tgCurrentSizeClass as! TGViewSizeClassImpl,sbvtgFrame:maxRela!.view.tgFrame, lsc:lsc, selfSize:selfSize)
                 }
                 
-                if (sbv.tgHeight?.tgMinVal?.dimeRelaVal != nil && sbv.tgHeight!.tgMinVal!.dimeRelaVal.view != self)
+                let minRela = sbvsc.tgHeight?.tgMinVal?.dimeRelaVal
+                if (minRela != nil && minRela!.view !== self)
                 {
-                    _ = self.tgCalcSubviewHeight(sbv.tgHeight!.tgMinVal!.dimeRelaVal.view,selfSize:selfSize)
+                    _ = self.tgCalcSubviewHeight(minRela!.view, sbvsc:minRela!.view.tgCurrentSizeClass as! TGViewSizeClassImpl,sbvtgFrame:minRela!.view.tgFrame, lsc:lsc, selfSize:selfSize)
                 }
                 
-                sbv.tgFrame.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: sbv.tgFrame.height, sbvSize: sbv.tgFrame.frame.size, selfLayoutSize: selfSize)
+                sbvtgFrame.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: sbvtgFrame.height, sbvSize: sbvtgFrame.frame.size, selfLayoutSize: selfSize)
             }
             
             
@@ -691,19 +786,22 @@ extension TGRelativeLayout
         
         for sbv: UIView in self.subviews {
             
-            if sbv.tgWidth?.dimeArrVal != nil {
+            let sbvsc = sbv.tgCurrentSizeClass as! TGViewSizeClassImpl
+            let sbvtgFrame = sbv.tgFrame
+            
+            if sbvsc.tgWidth?.dimeArrVal != nil {
                 recalc = true
                 
-                let dimeArray: [TGLayoutSize] = sbv.tgWidth!.dimeArrVal
-                var  isViewHidden = self.tgIsNoLayoutSubview(sbv) && self.tg_autoLayoutViewGroupWidth
-                var totalMulti: CGFloat = isViewHidden ? 0 : sbv.tgWidth!.multiVal
-                var totalAdd: CGFloat = isViewHidden ? 0 : sbv.tgWidth!.addVal
+                let dimeArray: [TGLayoutSize] = sbvsc.tgWidth!.dimeArrVal
+                var  isViewHidden = self.tgIsNoLayoutSubview(sbv) && lsc.tg_autoLayoutViewGroupWidth
+                var totalMulti: CGFloat = isViewHidden ? 0 : sbvsc.tgWidth!.multiVal
+                var totalAdd: CGFloat = isViewHidden ? 0 : sbvsc.tgWidth!.addVal
                 
                 for dime:TGLayoutSize in dimeArray
                 {
                     if dime.isActive
                     {
-                        isViewHidden = self.tgIsNoLayoutSubview(dime.view) && self.tg_autoLayoutViewGroupWidth
+                        isViewHidden = self.tgIsNoLayoutSubview(dime.view) && lsc.tg_autoLayoutViewGroupWidth
                         if !isViewHidden {
                             if dime.dimeNumVal != nil {
                                 totalAdd += (-1 * dime.dimeNumVal)
@@ -721,18 +819,18 @@ extension TGRelativeLayout
                     }
                 }
                 
-                var floatWidth: CGFloat = selfSize.width - self.tg_leftPadding - self.tg_rightPadding + totalAdd
-                if /*floatWidth <= 0*/ _tgCGFloatLessOrEqual(floatWidth, 0)
+                var floatWidth: CGFloat = selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding + totalAdd
+                if _tgCGFloatLessOrEqual(floatWidth, 0)
                 {
                     floatWidth = 0
                 }
                 
                 if totalMulti != 0 {
-                    sbv.tgFrame.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: floatWidth * (sbv.tgWidth!.multiVal / totalMulti), sbvSize: sbv.tgFrame.frame.size, selfLayoutSize: selfSize)
+                    sbvtgFrame.width = self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: floatWidth * (sbvsc.tgWidth!.multiVal / totalMulti), sbvSize: sbvtgFrame.frame.size, selfLayoutSize: selfSize)
                     
                     if self.tgIsNoLayoutSubview(sbv)
                     {
-                        sbv.tgFrame.width = 0
+                        sbvtgFrame.width = 0
                     }
                     
                     for dime:TGLayoutSize in dimeArray
@@ -759,18 +857,18 @@ extension TGRelativeLayout
             }
             
             
-            if sbv.tgHeight?.dimeArrVal != nil {
+            if sbvsc.tgHeight?.dimeArrVal != nil {
                 recalc = true
                 
-                let dimeArray: [TGLayoutSize] = sbv.tgHeight!.dimeArrVal
-                var isViewHidden: Bool = self.tgIsNoLayoutSubview(sbv) && self.tg_autoLayoutViewGroupHeight
-                var totalMulti = isViewHidden ? 0 : sbv.tgHeight!.multiVal
-                var totalAdd = isViewHidden ? 0 : sbv.tgHeight!.addVal
+                let dimeArray: [TGLayoutSize] = sbvsc.tgHeight!.dimeArrVal
+                var isViewHidden: Bool = self.tgIsNoLayoutSubview(sbv) && lsc.tg_autoLayoutViewGroupHeight
+                var totalMulti = isViewHidden ? 0 : sbvsc.tgHeight!.multiVal
+                var totalAdd = isViewHidden ? 0 : sbvsc.tgHeight!.addVal
                 for dime:TGLayoutSize in dimeArray
                 {
                     if dime.isActive
                     {
-                        isViewHidden =  self.tgIsNoLayoutSubview(dime.view) && self.tg_autoLayoutViewGroupHeight
+                        isViewHidden =  self.tgIsNoLayoutSubview(dime.view) && lsc.tg_autoLayoutViewGroupHeight
                         if !isViewHidden {
                             if dime.dimeNumVal != nil {
                                 totalAdd += (-1 * dime.dimeNumVal!)
@@ -788,17 +886,17 @@ extension TGRelativeLayout
                     }
                 }
                 
-                var floatHeight = selfSize.height - self.tg_topPadding - self.tg_bottomPadding + totalAdd
-                if /*floatHeight <= 0*/ _tgCGFloatLessOrEqual(floatHeight, 0)
+                var floatHeight = selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding + totalAdd
+                if _tgCGFloatLessOrEqual(floatHeight, 0)
                 {
                     floatHeight = 0
                 }
                 if totalMulti != 0 {
-                    sbv.tgFrame.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: floatHeight * (sbv.tgHeight!.multiVal / totalMulti), sbvSize: sbv.tgFrame.frame.size, selfLayoutSize: selfSize)
+                    sbvtgFrame.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: floatHeight * (sbvsc.tgHeight!.multiVal / totalMulti), sbvSize: sbvtgFrame.frame.size, selfLayoutSize: selfSize)
                     
                     if self.tgIsNoLayoutSubview(sbv)
                     {
-                        sbv.tgFrame.height = 0
+                        sbvtgFrame.height = 0
                     }
                     
                     for dime: TGLayoutSize in dimeArray
@@ -825,10 +923,10 @@ extension TGRelativeLayout
             }
             
             
-            if sbv.tgCenterX?.posArrVal != nil
+            if sbvsc.tgCenterX?.posArrVal != nil
             {
                 
-                let centerArray: [TGLayoutPos] = sbv.tgCenterX!.posArrVal
+                let centerArray: [TGLayoutPos] = sbvsc.tgCenterX!.posArrVal
                 var totalWidth: CGFloat = 0.0
                 var totalOffset:CGFloat = 0.0
                 
@@ -847,7 +945,7 @@ extension TGRelativeLayout
                             }
                         }
                         
-                        _ = self.tgCalcSubviewWidth(pos.view, selfSize: selfSize)
+                        _ = self.tgCalcSubviewWidth(pos.view, sbvsc:pos.view.tgCurrentSizeClass as! TGViewSizeClassImpl, sbvtgFrame: pos.view.tgFrame, lsc:lsc, selfSize: selfSize)
                         totalWidth += pos.view.tgFrame.width
                     }
                     
@@ -865,38 +963,38 @@ extension TGRelativeLayout
                         }
                     }
                     
-                    _ = self.tgCalcSubviewWidth(sbv, selfSize: selfSize)
-                    totalWidth += sbv.tgFrame.width
-                    totalOffset += sbv.tgCenterX!.margin
+                    _ = self.tgCalcSubviewWidth(sbv,sbvsc:sbvsc, sbvtgFrame:sbvtgFrame, lsc:lsc, selfSize: selfSize)
+                    totalWidth += sbvtgFrame.width
+                    totalOffset += sbvsc.tgCenterX!.margin
                     
                 }
                 
-                var leftOffset: CGFloat = (selfSize.width - self.tg_leftPadding - self.tg_rightPadding - totalWidth - totalOffset) / 2.0
-                leftOffset += self.tg_leftPadding
+                var leadingOffset: CGFloat = (selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding - totalWidth - totalOffset) / 2.0
+                leadingOffset += lsc.tg_leadingPadding
                 
-                var prev:AnyObject! = leftOffset as AnyObject!
-                sbv.tg_left.equal(leftOffset)
-                prev = sbv.tg_right
+                var prev:AnyObject! = leadingOffset as AnyObject!
+                sbv.tg_leading.equal(leadingOffset)
+                prev = sbv.tg_trailing
                 
                 for pos: TGLayoutPos in centerArray
                 {
                     if let prevf = prev as? CGFloat
                     {
-                        pos.view.tg_left.equal(prevf,offset:pos.view.tgCenterX!.margin)
+                        pos.view.tg_leading.equal(prevf,offset:pos.view.tgCenterX!.margin)
                         
                     }
                     else
                     {
-                        pos.view.tg_left.equal(prev as? TGLayoutPos, offset:pos.view.tgCenterX!.margin)
+                        pos.view.tg_leading.equal(prev as? TGLayoutPos, offset:pos.view.tgCenterX!.margin)
                     }
                     
-                    prev = pos.view.tg_right
+                    prev = pos.view.tg_trailing
                 }
             }
             
-            if sbv.tgCenterY?.posArrVal != nil
+            if sbvsc.tgCenterY?.posArrVal != nil
             {
-                let centerArray: [TGLayoutPos] = sbv.tgCenterY!.posArrVal
+                let centerArray: [TGLayoutPos] = sbvsc.tgCenterY!.posArrVal
                 var totalHeight: CGFloat = 0.0
                 var totalOffset:CGFloat = 0.0
                 
@@ -915,7 +1013,7 @@ extension TGRelativeLayout
                             }
                         }
                         
-                        _  = self.tgCalcSubviewHeight(pos.view, selfSize: selfSize)
+                        _  = self.tgCalcSubviewHeight(pos.view,sbvsc:pos.view.tgCurrentSizeClass as! TGViewSizeClassImpl, sbvtgFrame: pos.view.tgFrame, lsc:lsc, selfSize: selfSize)
                         totalHeight += pos.view.tgFrame.height
                     }
                     
@@ -933,14 +1031,14 @@ extension TGRelativeLayout
                         }
                     }
                     
-                    _ = self.tgCalcSubviewHeight(sbv, selfSize: selfSize)
-                    totalHeight += sbv.tgFrame.height
-                    totalOffset += sbv.tgCenterY!.margin
+                    _ = self.tgCalcSubviewHeight(sbv,sbvsc:sbvsc, sbvtgFrame:sbvtgFrame, lsc:lsc, selfSize: selfSize)
+                    totalHeight += sbvtgFrame.height
+                    totalOffset += sbvsc.tgCenterY!.margin
                     
                 }
                 
-                var topOffset: CGFloat = (selfSize.height - self.tg_topPadding - self.tg_bottomPadding - totalHeight - totalOffset) / 2.0
-                topOffset += self.tg_topPadding
+                var topOffset: CGFloat = (selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding - totalHeight - totalOffset) / 2.0
+                topOffset += lsc.tg_topPadding
                 
                 var prev:AnyObject! = topOffset as AnyObject!
                 sbv.tg_top.equal(topOffset)
@@ -965,184 +1063,246 @@ extension TGRelativeLayout
         }
         
         
-        var maxWidth = self.tg_leftPadding
-        var maxHeight = self.tg_topPadding
+        var maxWidth = lsc.tg_leadingPadding + lsc.tg_trailingPadding
+        var maxHeight = lsc.tg_topPadding + lsc.tg_bottomPadding
         
         for sbv: UIView in self.subviews {
-            var canCalcMaxWidth = true
-            var canCalcMaxHeight = true
             
-            tgCalcSubviewLeftRight(sbv, selfSize: selfSize)
+            let sbvsc = sbv.tgCurrentSizeClass as! TGViewSizeClassImpl
+            let sbvtgFrame = sbv.tgFrame
             
-            if (sbv.tgRight?.posRelaVal != nil && sbv.tgRight!.posRelaVal.view == self) || sbv.tgRight?.posWeightVal != nil
+            tgCalcSubviewLeadingTrailing(sbv, sbvsc:sbvsc, sbvtgFrame: sbvtgFrame, lsc:lsc, selfSize: selfSize)
+            
+            if let t = sbvsc.tgHeight,t.isFlexHeight
             {
-                recalc = true
+                sbvtgFrame.height = self.tgCalcHeightFromHeightWrapView(sbv, sbvsc:sbvsc, width: sbvtgFrame.width)
+                sbvtgFrame.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: sbvtgFrame.height, sbvSize: sbvtgFrame.frame.size, selfLayoutSize: selfSize)
             }
             
-            if (sbv.tgWidth?.dimeRelaVal != nil && sbv.tgWidth!.dimeRelaVal.view == self) || sbv.tgWidth?.dimeWeightVal != nil || (sbv.tgWidth?.isFill ?? false)
-            {
-                canCalcMaxWidth = false
-                recalc = true
-            }
-            
-            if sbv.tgLeft?.posRelaVal != nil && sbv.tgLeft!.posRelaVal.view == self && sbv.tgRight?.posRelaVal != nil && sbv.tgRight!.posRelaVal.view == self
-            {
-                canCalcMaxWidth = false
-            }
-            
-            
-            
-            if (sbv.tgHeight?.isFlexHeight ?? false) {
-                sbv.tgFrame.height = self.tgCalcHeightFromHeightWrapView(sbv, width: sbv.tgFrame.width)
-                sbv.tgFrame.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: sbv.tgFrame.height, sbvSize: sbv.tgFrame.frame.size, selfLayoutSize: selfSize)
-            }
-            
-            tgCalcSubviewTopBottom(sbv, selfSize: selfSize)
-            
-                        
-            if (sbv.tgBottom?.posRelaVal != nil && sbv.tgBottom!.posRelaVal.view == self) || sbv.tgBottom?.posWeightVal != nil
-            {
-                recalc = true
-            }
-            
-            if (sbv.tgHeight?.dimeRelaVal != nil && sbv.tgHeight!.dimeRelaVal.view == self) ||  (sbv.tgHeight?.isFill ?? false) || sbv.tgHeight?.dimeWeightVal != nil
-            {
-                recalc = true
-                canCalcMaxHeight = false
-            }
-            
-           
-            if sbv.tgTop?.posRelaVal != nil && sbv.tgTop!.posRelaVal.view == self && sbv.tgBottom?.posRelaVal != nil && sbv.tgBottom!.posRelaVal.view == self {
-                canCalcMaxHeight = false
-            }
+            tgCalcSubviewTopBottom(sbv, sbvsc:sbvsc, sbvtgFrame: sbvtgFrame, lsc:lsc,selfSize: selfSize)
+
             
             if self.tgIsNoLayoutSubview(sbv)
             {
                 continue
             }
-            
-            
-            if canCalcMaxWidth && maxWidth < sbv.tgFrame.right + (sbv.tgRight?.margin ?? 0) {
-                maxWidth = sbv.tgFrame.right + (sbv.tgRight?.margin ?? 0)
+
+            if isWrap
+            {
+                maxWidth = self.tgCalcMaxWrapSize(sbvHead: sbvsc.tgLeading, sbvCenter: sbvsc.tgCenterX, sbvTail: sbvsc.tgTrailing, sbvSize: sbvsc.tgWidth, sbvMeasure: sbvtgFrame.width, sbvMinPos: sbvtgFrame.leading, sbvMaxPos: sbvtgFrame.trailing, headPadding: lsc.tg_leadingPadding, tailPadding: lsc.tg_trailingPadding, lscSize: lsc.tgWidth, maxSize: maxWidth, recalc: &recalc)
+                
+                maxHeight = self.tgCalcMaxWrapSize(sbvHead: sbvsc.tgTop, sbvCenter: sbvsc.tgCenterY, sbvTail: sbvsc.tgBottom, sbvSize: sbvsc.tgHeight, sbvMeasure: sbvtgFrame.height, sbvMinPos: sbvtgFrame.top, sbvMaxPos: sbvtgFrame.bottom, headPadding: lsc.tg_topPadding, tailPadding: lsc.tg_bottomPadding, lscSize: lsc.tgHeight, maxSize: maxHeight, recalc: &recalc)
             }
             
-            if canCalcMaxHeight && maxHeight < sbv.tgFrame.bottom + (sbv.tgBottom?.margin ?? 0) {
-                maxHeight = sbv.tgFrame.bottom + (sbv.tgBottom?.margin ?? 0)
-            }
         }
         
-        maxWidth += self.tg_rightPadding
-        maxHeight += self.tg_bottomPadding
-        return (CGSize(width: maxWidth, height: maxHeight), recalc);
+        return (CGSize(width: maxWidth, height: maxHeight),recalc)
     }
     
-    fileprivate func tgCalcRelationalSubview(_ sbv: UIView!, gravity:TGGravity, selfSize: CGSize) -> CGFloat {
+    fileprivate func tgCalcMaxWrapSize(sbvHead:TGLayoutPos?,
+                                       sbvCenter:TGLayoutPos?,
+                                       sbvTail:TGLayoutPos?,
+                                       sbvSize:TGLayoutSize?,
+                                       sbvMeasure:CGFloat,
+                                       sbvMinPos:CGFloat,
+                                       sbvMaxPos:CGFloat,
+                                       headPadding:CGFloat,
+                                       tailPadding:CGFloat,
+                                       lscSize:TGLayoutSize?,
+                                       maxSize:CGFloat,
+                                       recalc:inout Bool) -> CGFloat
+    {
+        var maxSize = maxSize
+        if let t = lscSize, t.isWrap
+        {
+            let headMargin = sbvHead?.margin ?? 0
+            let tailMargin = sbvTail?.margin ?? 0
+            let sbvIsFill = sbvSize?.isFill ?? false
+            let sbvHeadHasValue = sbvHead?.hasValue ?? false
+            let sbvTailHasValue = sbvTail?.hasValue ?? false
+            
+            
+            
+            if (sbvTail?.posNumVal != nil ||
+                sbvTail?.posRelaVal?.view === self ||
+                sbvTail?.posWeightVal != nil ||
+                sbvCenter?.posNumVal != nil ||
+                sbvCenter?.posRelaVal?.view === self ||
+                sbvCenter?.posWeightVal != nil ||
+                sbvSize?.dimeRelaVal === self ||
+                sbvSize?.dimeWeightVal != nil ||
+                sbvIsFill
+                )
+            {
+                recalc = true
+            }
+            
+            
+            if maxSize < headMargin + tailMargin + headPadding + tailPadding
+            {
+                maxSize = headMargin + tailMargin + headPadding + tailPadding
+            }
+            
+            //宽度没有相对约束或者宽度不依赖父视图并且没有指定比重并且不是填充时才计算最大宽度。
+            if (sbvSize?.dimeRelaVal == nil ||
+                sbvSize!.dimeRelaVal !== lscSize) &&
+                sbvSize?.dimeWeightVal == nil &&
+                !sbvIsFill
+            {
+                
+                if let t = sbvCenter, t.hasValue
+                {
+                    if maxSize < sbvMeasure + headMargin + tailMargin + headPadding + tailPadding
+                    {
+                        maxSize = sbvMeasure + headMargin + tailMargin + headPadding + tailPadding
+                    }
+                }
+                else if sbvHeadHasValue && sbvTailHasValue
+                {
+                    if maxSize < fabs(sbvMaxPos) + headMargin + headPadding
+                    {
+                        maxSize = fabs(sbvMaxPos) + headMargin + headPadding
+                    }
+                }
+                else if sbvTailHasValue
+                {
+                    if maxSize < fabs(sbvMinPos) + headPadding
+                    {
+                        maxSize = fabs(sbvMinPos) + headPadding
+                    }
+                }
+                else
+                {
+                    if maxSize < fabs(sbvMaxPos) + tailPadding
+                    {
+                        maxSize = fabs(sbvMaxPos) + tailPadding
+                    }
+                }
+                
+                if maxSize < sbvMaxPos + tailMargin + tailPadding
+                {
+                    maxSize = sbvMaxPos + tailMargin + tailPadding
+                }
+                
+                
+            }
+            
+        }
+
+        return maxSize
+    }
+    
+    fileprivate func tgCalcRelationalSubview(_ sbv: UIView!, lsc:TGRelativeLayoutViewSizeClassImpl, gravity:TGGravity, selfSize: CGSize) -> CGFloat {
+        
+        let sbvsc = sbv.tgCurrentSizeClass as! TGViewSizeClassImpl
+        let sbvtgFrame = sbv.tgFrame
+        
         switch gravity {
-        case TGGravity.horz.left:
+        case TGGravity.horz.leading:
             if sbv == self || sbv == nil {
-                return self.tg_leftPadding
+                return lsc.tg_leadingPadding
             }
             
-            if sbv.tgFrame.left != CGFloat.greatestFiniteMagnitude {
-                return sbv.tgFrame.left
+            if sbvtgFrame.leading != CGFloat.greatestFiniteMagnitude {
+                return sbvtgFrame.leading
             }
             
             
-            tgCalcSubviewLeftRight(sbv, selfSize: selfSize)
+            tgCalcSubviewLeadingTrailing(sbv, sbvsc:sbvsc, sbvtgFrame:sbvtgFrame, lsc:lsc, selfSize: selfSize)
             
-            return sbv.tgFrame.left
+            return sbvtgFrame.leading
             
             
-        case TGGravity.horz.right:
+        case TGGravity.horz.trailing:
             if sbv == self || sbv == nil {
-                return selfSize.width - self.tg_rightPadding
+                return selfSize.width - lsc.tg_trailingPadding
             }
             
             
-            if sbv.tgFrame.right != CGFloat.greatestFiniteMagnitude {
-                return sbv.tgFrame.right
+            if sbvtgFrame.trailing != CGFloat.greatestFiniteMagnitude {
+                return sbvtgFrame.trailing
             }
             
-            tgCalcSubviewLeftRight(sbv, selfSize: selfSize)
+            tgCalcSubviewLeadingTrailing(sbv, sbvsc:sbvsc, sbvtgFrame:sbvtgFrame, lsc:lsc, selfSize: selfSize)
             
-            return sbv.tgFrame.right
+            return sbvtgFrame.trailing
             
         case TGGravity.vert.top:
             if sbv == self || sbv == nil {
-                return self.tg_topPadding
+                return lsc.tg_topPadding
             }
             
-            if sbv.tgFrame.top != CGFloat.greatestFiniteMagnitude {
-                return sbv.tgFrame.top
+            if sbvtgFrame.top != CGFloat.greatestFiniteMagnitude {
+                return sbvtgFrame.top
             }
             
-            tgCalcSubviewTopBottom(sbv, selfSize: selfSize)
+            tgCalcSubviewTopBottom(sbv, sbvsc:sbvsc, sbvtgFrame:sbvtgFrame, lsc:lsc, selfSize: selfSize)
             
-            return sbv.tgFrame.top
+            return sbvtgFrame.top
             
         case TGGravity.vert.bottom:
             if sbv == self || sbv == nil {
-                return selfSize.height - self.tg_bottomPadding
+                return selfSize.height - lsc.tg_bottomPadding
             }
             
-            if sbv.tgFrame.bottom != CGFloat.greatestFiniteMagnitude {
-                return sbv.tgFrame.bottom
+            if sbvtgFrame.bottom != CGFloat.greatestFiniteMagnitude {
+                return sbvtgFrame.bottom
             }
-            tgCalcSubviewTopBottom(sbv, selfSize: selfSize)
+            tgCalcSubviewTopBottom(sbv, sbvsc:sbvsc, sbvtgFrame:sbvtgFrame, lsc:lsc, selfSize: selfSize)
             
-            return sbv.tgFrame.bottom
+            return sbvtgFrame.bottom
             
         case TGGravity.horz.fill:
             
             if sbv == self || sbv == nil {
-                return selfSize.width - self.tg_leftPadding - self.tg_rightPadding
+                return selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding
             }
             
-            if sbv.tgFrame.width != CGFloat.greatestFiniteMagnitude {
-                return sbv.tgFrame.width
+            if sbvtgFrame.width != CGFloat.greatestFiniteMagnitude {
+                return sbvtgFrame.width
             }
             
-            tgCalcSubviewLeftRight(sbv, selfSize: selfSize)
-            return sbv.tgFrame.width
+            tgCalcSubviewLeadingTrailing(sbv, sbvsc:sbvsc, sbvtgFrame:sbvtgFrame, lsc:lsc, selfSize: selfSize)
+            return sbvtgFrame.width
             
         case TGGravity.vert.fill:
             if sbv == self || sbv == nil {
-                return selfSize.height - self.tg_topPadding - self.tg_bottomPadding
+                return selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding
             }
             
-            if sbv.tgFrame.height != CGFloat.greatestFiniteMagnitude {
-                return sbv.tgFrame.height
+            if sbvtgFrame.height != CGFloat.greatestFiniteMagnitude {
+                return sbvtgFrame.height
             }
             
-            tgCalcSubviewTopBottom(sbv, selfSize: selfSize)
-            return sbv.tgFrame.height
+            tgCalcSubviewTopBottom(sbv, sbvsc:sbvsc, sbvtgFrame:sbvtgFrame, lsc:lsc, selfSize: selfSize)
+            return sbvtgFrame.height
             
         case TGGravity.horz.center:
             if sbv == self || sbv == nil {
-                return (selfSize.width - self.tg_leftPadding - self.tg_rightPadding) / 2 + self.tg_leftPadding
+                return (selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding) / 2 + lsc.tg_leadingPadding
             }
             
             
-            if sbv.tgFrame.left != CGFloat.greatestFiniteMagnitude && sbv.tgFrame.right != CGFloat.greatestFiniteMagnitude && sbv.tgFrame.width != CGFloat.greatestFiniteMagnitude {
-                return sbv.tgFrame.left + sbv.tgFrame.width / 2
+            if sbvtgFrame.leading != CGFloat.greatestFiniteMagnitude && sbvtgFrame.trailing != CGFloat.greatestFiniteMagnitude && sbvtgFrame.width != CGFloat.greatestFiniteMagnitude {
+                return sbvtgFrame.leading + sbvtgFrame.width / 2
             }
             
-            tgCalcSubviewLeftRight(sbv, selfSize: selfSize)
+            tgCalcSubviewLeadingTrailing(sbv, sbvsc:sbvsc, sbvtgFrame:sbvtgFrame, lsc:lsc, selfSize: selfSize)
             
-            return sbv.tgFrame.left + sbv.tgFrame.width / 2.0
+            return sbvtgFrame.leading + sbvtgFrame.width / 2.0
             
         case TGGravity.vert.center:
             if sbv == self || sbv == nil {
-                return (selfSize.height - self.tg_topPadding - self.tg_bottomPadding) / 2 + self.tg_topPadding
+                return (selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding) / 2 + lsc.tg_topPadding
             }
             
             
-            if sbv.tgFrame.top != CGFloat.greatestFiniteMagnitude && sbv.tgFrame.bottom != CGFloat.greatestFiniteMagnitude && sbv.tgFrame.height != CGFloat.greatestFiniteMagnitude {
-                return sbv.tgFrame.top + sbv.tgFrame.height / 2.0
+            if sbvtgFrame.top != CGFloat.greatestFiniteMagnitude && sbvtgFrame.bottom != CGFloat.greatestFiniteMagnitude && sbvtgFrame.height != CGFloat.greatestFiniteMagnitude {
+                return sbvtgFrame.top + sbvtgFrame.height / 2.0
             }
             
-            tgCalcSubviewTopBottom(sbv, selfSize: selfSize)
-            return sbv.tgFrame.top + sbv.tgFrame.height / 2
+            tgCalcSubviewTopBottom(sbv, sbvsc:sbvsc, sbvtgFrame:sbvtgFrame, lsc:lsc, selfSize: selfSize)
+            return sbvtgFrame.top + sbvtgFrame.height / 2
             
         default:
             print("do nothing")

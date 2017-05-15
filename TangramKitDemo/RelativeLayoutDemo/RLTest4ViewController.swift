@@ -11,6 +11,7 @@ import UIKit
 class RLTest4ViewController: UIViewController {
 
     var testTopDockView:UIView!
+    var testView1:UIView!    //记录浮动的视图的上个位置的视图。
     
     
     func createLabel(_ title: String, backgroundColor color: UIColor) -> UILabel {
@@ -31,6 +32,9 @@ class RLTest4ViewController: UIViewController {
          这里之所以用相对布局来实现滚动和停靠的原因是，线性布局、流式布局、浮动布局这几种布局都是根据添加的顺序来排列的。一般情况下，前面添加的子视图会显示在底部，而后面添加的子视图则会显示在顶部，所以一旦我们出现这种滚动，且某个子视图固定停靠时，我们一般要求这个停靠的子视图要放在最上面，也就是最后一个.
          */
         
+        self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
+        
         let scrollView = UIScrollView()
         scrollView.backgroundColor = .white
         self.view = scrollView;
@@ -47,6 +51,7 @@ class RLTest4ViewController: UIViewController {
         v1.tg_width.equal(.fill)  //填充父视图的剩余宽度。
         v1.tg_height.equal(80)
         rootLayout.addSubview(v1)
+        self.testView1 = v1
         
         
         let v2 = self.createLabel("", backgroundColor: CFTool.color(2))
@@ -56,8 +61,8 @@ class RLTest4ViewController: UIViewController {
         
         
         let v3 = self.createLabel("", backgroundColor: CFTool.color(3))
-        v3.tg_left.equal(0)
-        v3.tg_right.equal(0)    //左右边距为0表示宽度和父视图相等。
+        v3.tg_leading.equal(0)
+        v3.tg_trailing.equal(0)    //左右边距为0表示宽度和父视图相等。
         v3.tg_height.equal(800)
         v3.tg_top.equal(v2.tg_bottom)
         rootLayout.addSubview(v3)
@@ -87,8 +92,8 @@ extension RLTest4ViewController:UIScrollViewDelegate
 {
     func scrollViewDidScroll(_ scrollView: UIScrollView)
     {
-        //因为这里第一个视图的高度是80外加10的顶部padding，这样这里判断的偏移位置是90.
-        if (scrollView.contentOffset.y > 90)
+        //v4的上面视图是v1。所以这里如果偏移超过v1的最大则开始固定v4了
+        if (scrollView.contentOffset.y > self.testView1.frame.maxY)
         {
             
             /*

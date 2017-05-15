@@ -25,6 +25,9 @@ class FOLTest1ViewController: UIViewController {
     
     override func loadView() {
         
+        self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
+        
         let rootLayout = TGFloatLayout(.vert)
         self.view = rootLayout
         
@@ -33,8 +36,8 @@ class FOLTest1ViewController: UIViewController {
         adjOriButton.sizeToFit()
         adjOriButton.addTarget(self, action: #selector(handleChangeOrientation), for: .touchUpInside)
         adjOriButton.tg_reverseFloat = true //向右浮动。
-        adjOriButton.tg_right.equal(10)
-        adjOriButton.tg_left.equal(10)
+        adjOriButton.tg_trailing.equal(10)
+        adjOriButton.tg_leading.equal(10)
         rootLayout.addSubview(adjOriButton)
         
         let addViewButton = UIButton(type:.system)
@@ -42,8 +45,8 @@ class FOLTest1ViewController: UIViewController {
         addViewButton.sizeToFit()
         addViewButton.addTarget(self, action: #selector(handleAddSubview), for: .touchUpInside)
         addViewButton.tg_reverseFloat = true  //向右浮动
-        addViewButton.tg_right.equal(10)
-        addViewButton.tg_left.equal(10)
+        addViewButton.tg_trailing.equal(10)
+        addViewButton.tg_leading.equal(10)
         rootLayout.addSubview(addViewButton)
 
         let tempwhTextField = UITextField()
@@ -51,7 +54,7 @@ class FOLTest1ViewController: UIViewController {
         tempwhTextField.placeholder = "input:width,height"
         tempwhTextField.tg_height.equal(30)
         tempwhTextField.tg_width.equal(.fill)   //宽度占用剩余空间。
-        tempwhTextField.tg_left.equal(5)
+        tempwhTextField.tg_leading.equal(5)
         tempwhTextField.tg_top.equal(5)
         tempwhTextField.tg_bottom.equal(5)
         rootLayout.addSubview(tempwhTextField)
@@ -64,8 +67,8 @@ class FOLTest1ViewController: UIViewController {
         reverseFloatTip.sizeToFit()
         reverseFloatTip.tg_clearFloat = true  //换行
         reverseFloatTip.tg_top.equal(3)
-        reverseFloatTip.tg_left.equal(5)
-        reverseFloatTip.tg_right.equal(5)
+        reverseFloatTip.tg_leading.equal(5)
+        reverseFloatTip.tg_trailing.equal(5)
         rootLayout.addSubview(reverseFloatTip)
         
         let reverseFloatSwitch = UISwitch()
@@ -77,9 +80,9 @@ class FOLTest1ViewController: UIViewController {
         clearFloatTip.text = "Clear:"
         clearFloatTip.font = CFTool.font(13)
         clearFloatTip.sizeToFit()
-        clearFloatTip.tg_left.equal(40)
+        clearFloatTip.tg_leading.equal(40)
         clearFloatTip.tg_top.equal(3)
-        clearFloatTip.tg_right.equal(5)
+        clearFloatTip.tg_trailing.equal(5)
         rootLayout.addSubview(clearFloatTip)
         
         let clearFloatSwitch = UISwitch()
@@ -172,9 +175,9 @@ class FOLTest1ViewController: UIViewController {
         
         if (arr.count == 6)
         {
-            tagButton.tg_left.equal(CGFloat(atof(arr[2])))
+            tagButton.tg_leading.equal(CGFloat(atof(arr[2])))
             tagButton.tg_top.equal(CGFloat(atof(arr[3])))
-            tagButton.tg_right.equal(CGFloat(atof(arr[4])))
+            tagButton.tg_trailing.equal(CGFloat(atof(arr[4])))
             tagButton.tg_bottom.equal(CGFloat(atof(arr[5])))
 
         }

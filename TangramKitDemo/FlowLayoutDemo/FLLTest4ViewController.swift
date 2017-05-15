@@ -41,6 +41,9 @@ class FLLTest4ViewController: UIViewController {
         self.createFlowLayout2(rootLayout: rootLayout)
         //这是一个内容填充布局的例子。通过weight来进行均分处理。可以看出内容约束流式布局中的子视图的weight和数量约束流式布局中的子视图的weight之间的差异。
         self.createFlowLayout3(rootLayout: rootLayout)
+        
+        //这是一个综合的例子
+        self.createFlowLayout4(rootLayout: rootLayout)
     }
     
     override func viewDidLoad() {
@@ -86,7 +89,7 @@ extension FLLTest4ViewController {
         userNameTextField.borderStyle = .roundedRect
         userNameTextField.tg_width.equal(.fill) //这里表示宽度用来占用流式布局每行的剩余宽度，这样就不需要明确的设置宽度了。
         userNameTextField.tg_height.equal(44)
-        userNameTextField.tg_left.equal(20)  //文本输入框距的左边间距为20
+        userNameTextField.tg_leading.equal(20)  //文本输入框距的左边间距为20
         flowLayout.addSubview(userNameTextField)
         
         //the third line: password
@@ -104,7 +107,7 @@ extension FLLTest4ViewController {
         passwordTextField.tg_width.equal(.fill)  //表示宽度用来占用流式布局每行的剩余宽度，这样就不需要明确的设置宽度了。
         passwordTextField.tg_height.equal(44)
         passwordTextField.tg_top.equal(20)  //距离上行的顶部间距为20,注意这里要和passwordLabel设置的顶部间距一致，否则可能导致无法居中对齐.
-        passwordTextField.tg_left.equal(20)
+        passwordTextField.tg_leading.equal(20)
         flowLayout.addSubview(passwordTextField)
         
         //the fourth line: forgot password.
@@ -186,8 +189,8 @@ extension FLLTest4ViewController {
             let imageView = UIImageView(image: UIImage(named: images[Int(arc4random_uniform(UInt32(images.count)))]))
             imageView.layer.cornerRadius = 5
             imageView.layer.masksToBounds = true
-            imageView.tg_left.equal(10)
-            imageView.tg_right.equal(10)
+            imageView.tg_leading.equal(10)
+            imageView.tg_trailing.equal(10)
             imageView.tg_top.equal(10)
             imageView.tg_height.equal(.average)  //每个子视图的高度都一样，也就是意味着均分处理。
             imageView.tg_width.equal(imageView.tg_height) //宽度等于高度，对于水平流式布局来说，子视图的宽度可以等于高度，反之不可以；而对于垂直流式布局来说则高度可以等于宽度，反之则不可以。
@@ -199,7 +202,7 @@ extension FLLTest4ViewController {
         
         //the last col
         let addButton = UIButton(type: .contactAdd)
-        addButton.tg_left.equal(10)
+        addButton.tg_leading.equal(10)
         flowLayout.addSubview(addButton)
     }
     
@@ -251,5 +254,57 @@ extension FLLTest4ViewController {
         v6.tg_height.equal(50)
         flowLayout.addSubview(v6)
     }
+    
+    func createFlowLayout4(rootLayout: TGLinearLayout)
+    {
+        /**
+         这个例子中有2行，每行2列，这个符合流式布局的规律。因此你不需要用一个垂直布局套两个水平线性布局来实现，而是一个流式布局就好了。另外这个例子里面还展示了边界线的功能，你可以设置边界线的首尾缩进，还可以设置边界线的偏移。这样在一些场合您可以用边界线来代替横线的视图。
+         */
+        
+        let flowLayout = TGFlowLayout(.vert, arrangedCount:2)
+        flowLayout.backgroundColor = CFTool.color(0)
+        rootLayout.addSubview(flowLayout)
+        flowLayout.tg_height.equal(.wrap)
+        flowLayout.tg_space = 10
+        flowLayout.tg_arrangedGravity = TGGravity.vert.center
+        flowLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
+        
+        
+        //边界线：下面的边界线往上偏移45，头部缩进10，尾部缩进30
+        flowLayout.tg_bottomBorderline = TGBorderline(color:CFTool.color(5),headIndent:10, tailIndent:30, offset:45)
+        
+        //第一行占据全部
+        let titleLabel = UILabel()
+        titleLabel.text = "这个例子里面有2行，每行有2个子视图，这样符合流式布局的规则。因此可以用一个流式布局来实现而不必要用一个垂直线性布局套2个水平线性布局来实现。"
+        titleLabel.textColor = CFTool.color(5)
+        titleLabel.font = CFTool.font(14)
+        titleLabel.tg_width.equal(.fill)   //对于指定数量的流式布局来说这个weight的是剩余的占比。
+        titleLabel.tg_height.equal(.wrap)
+        flowLayout.addSubview(titleLabel)
+        
+        //第二行第一个固定，剩余的占据全部
+        let editImageView = UIImageView(image: #imageLiteral(resourceName: "edit"))
+        flowLayout.addSubview(editImageView)
+        
+        let priceLabel = UILabel()
+        priceLabel.text = "$123.23 - $200.12"
+        priceLabel.textColor = .red
+        priceLabel.font = CFTool.font(13)
+        priceLabel.tg_width.equal(.wrap)
+        priceLabel.tg_height.equal(30)
+        flowLayout.addSubview(priceLabel)
+        
+        //第三行，三个子视图均分。
+        let buyButton = UILabel()
+        buyButton.text = "Buy"
+        buyButton.font =  CFTool.font(12)
+        buyButton.tg_width.equal(.wrap)
+        buyButton.tg_height.equal(30)
+        buyButton.tg_leading.equal(20)
+        flowLayout.addSubview(buyButton)
+        
+        
+    }
+    
 
 }

@@ -19,6 +19,9 @@ class AllTest5ViewController: UIViewController {
          这个例子用来介绍MyLayout对sizeClasses的支持的能力
          */
 
+        self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
+        
         //默认设置为垂直布局
         let rootLayout = TGLinearLayout(.vert)
         rootLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10);

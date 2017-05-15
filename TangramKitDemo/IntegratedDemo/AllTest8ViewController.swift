@@ -29,11 +29,15 @@ class AllTest8ViewController: UIViewController {
     
 
     override func viewDidLoad() {
+        
+        self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
+        
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         /*
-         本例子演示当把一个布局视图加入到非布局视图时的各种场景。当把一个布局视图加入到非布局父视图时，因为无法完全对非布局父视图进行控制。所以一些布局视图的属性将不再起作用了，但是基本的视图扩展属性： tg_left,tg_right,tg_top,tg_bottom,tg_centerX,tg_centerY，tg_width,tg_height这几个属性仍然有意义，只不过这些属性的equal方法能设置的类型有限，而且这些设置都只是基于父视图的。
+         本例子演示当把一个布局视图加入到非布局视图时的各种场景。当把一个布局视图加入到非布局父视图时，因为无法完全对非布局父视图进行控制。所以一些布局视图的属性将不再起作用了，但是基本的视图扩展属性： tg_leading,tg_trailing,tg_top,tg_bottom,tg_centerX,tg_centerY，tg_width,tg_height这几个属性仍然有意义，只不过这些属性的equal方法能设置的类型有限，而且这些设置都只是基于父视图的。
          */
 
         let scrollView = UIScrollView(frame: self.view.bounds)
@@ -71,8 +75,8 @@ class AllTest8ViewController: UIViewController {
         /*
          button.tg_top.equal(10)
          button.tg_height.equal(40)
-         button.tg_left.equal(10)
-         button.tg_right.equal(10)
+         button.tg_leading.equal(10)
+         button.tg_trailing.equal(10)
         */
 
         
@@ -85,8 +89,8 @@ class AllTest8ViewController: UIViewController {
         let floatLayout = TGFloatLayout(.horz)
         floatLayout.backgroundColor = CFTool.color(0)
         floatLayout.tg_space = 10
-        floatLayout.tg_left.equal(10)
-        floatLayout.tg_right.equal(10) //同时设定了左边和右边边距，布局视图的宽度就决定了。
+        floatLayout.tg_leading.equal(10)
+        floatLayout.tg_trailing.equal(10) //同时设定了左边和右边边距，布局视图的宽度就决定了。
         floatLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10);  //设置内边距。
         floatLayout.tg_top.equal(60)
         floatLayout.tg_bottom.equal(10) //底部边距为10，这样同样设置了顶部和底部边距后布局的高度就决定了。
@@ -94,7 +98,7 @@ class AllTest8ViewController: UIViewController {
         /*这里面把布局视图加入到滚动视图时不会自动调整滚动视图的contentSize，如果不设置这个属性则当布局视图加入滚动视图时会自动调整滚动视图的contentSize。您可以把tg_adjustScrollViewContentSizeMode属性设置这句话注释掉，可以看到当使用默认设置时，UIScrollView的contentSize的值会完全受到布局视图的尺寸和边距控制，这时候：
          
          contentSize.height = 布局视图的高度+布局视图的tg_top设置的上边距值 + 布局视图的tg_bottom设置的下边距值。
-         contentSize.width = 布局视图的宽度+布局视图的tg_left设置的左距值 + 布局视图的tg_right设置的右边距值。
+         contentSize.width = 布局视图的宽度+布局视图的tg_leading设置的左距值 + 布局视图的tg_trailing设置的右边距值。
          
          */
         
@@ -127,7 +131,6 @@ class AllTest8ViewController: UIViewController {
         if let label = sender.superview?.superview?.subviews[1] as? UILabel
         {
             label.text = label.text?.appending("添加文字。")
-            label.sizeToFit()
         }
         
     }
@@ -152,8 +155,8 @@ class AllTest8ViewController: UIViewController {
         //设置视图之间的间距，这样子视图就不再需要单独设置间距了。
         layout.tg_gravity = TGGravity.horz.fill
         //里面的子视图宽度和自己一样，这样就不再需要设置子视图的宽度了。
-        layout.tg_left.equal(20%)
-        layout.tg_right.equal(20%)
+        layout.tg_leading.equal(20%)
+        layout.tg_trailing.equal(20%)
         //左右边距0.2表示相对边距，也就是左右边距都是父视图总宽度的20%，这样布局视图的宽度就默认为父视图的60%了。
         layout.tg_centerY.equal(0)
         //布局视图在父视图中垂直居中出现。
@@ -171,7 +174,6 @@ class AllTest8ViewController: UIViewController {
         
         //文本
         let label = UILabel()
-        label.numberOfLines = 0
         label.font = CFTool.font(14)
         label.text = "这是一段具有动态高度的文本，同时他也会影响着布局视图的高度。您可以单击下面的按钮来添加文本来查看效果："
         label.tg_height.equal(.wrap)

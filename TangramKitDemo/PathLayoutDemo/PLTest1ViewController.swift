@@ -19,6 +19,10 @@ class PLTest1ViewController: UIViewController {
         /**
          *  本例子是介绍TGPathLayout布局视图的。用来建立曲线布局。
          */
+        
+        self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
+        
         myPathLayout = TGPathLayout()
         myPathLayout.backgroundColor = UIColor.white
         view = myPathLayout

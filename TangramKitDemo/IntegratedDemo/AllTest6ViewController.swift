@@ -29,6 +29,9 @@ class AllTest6ViewController: UIViewController {
          这个DEMO 主要介绍了Tangram对SizeClass的支持能力。下面的代码分别针对iPhone设备的横竖屏以及iPad设备的横竖屏分别做了适配处理。
          */
         
+        self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
+        
         let rootLayout = TGLinearLayout(.vert)
         rootLayout.tg_gravity = TGGravity.horz.fill
         self.view = rootLayout;
@@ -96,7 +99,7 @@ class AllTest6ViewController: UIViewController {
         contentLayout.addSubview(func2Label)
         
         func1Label.tg_width.equal([func2Label.tg_width])
-        func2Label.tg_left.equal(func1Label.tg_right)
+        func2Label.tg_leading.equal(func1Label.tg_trailing)
         
         let func3Label = UILabel()
         func3Label.text = NSLocalizedString("Content3:please run in different iPhone&iPad device and change different screen orientation", comment:"")
@@ -130,8 +133,8 @@ class AllTest6ViewController: UIViewController {
         let func3LabelSC = func3Label.tg_fetchSizeClass(with: .comb(.any,.compact,nil))
         
         func1LabelSC.tg_width.equal([func2LabelSC.tg_width, func3LabelSC.tg_width])
-        func2LabelSC.tg_left.equal(func1LabelSC.tg_right)
-        func3LabelSC.tg_left.equal(func2LabelSC.tg_right)
+        func2LabelSC.tg_leading.equal(func1LabelSC.tg_trailing)
+        func3LabelSC.tg_leading.equal(func2LabelSC.tg_trailing)
         func1LabelSC.tg_height.equal(contentLayout.tg_height)
         func2LabelSC.tg_height.equal(contentLayout.tg_height)
         func3LabelSC.tg_height.equal(contentLayout.tg_height)

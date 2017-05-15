@@ -41,6 +41,7 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
          2.如果想让一个布局视图的高度和非布局视图的高度相等则请将布局视图的tg_height.equal(.fill)
          */
 
+        self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
 
         super.loadView()
         let scrollView = UIScrollView(frame: self.view.bounds)
@@ -92,8 +93,8 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         nameField.placeholder = NSLocalizedString("input user name here", comment:"")
         nameField.textAlignment = .center
         nameField.font = CFTool.font(15)
-        nameField.tg_left.equal(10%)
-        nameField.tg_right.equal(10%)
+        nameField.tg_leading.equal(10%)
+        nameField.tg_trailing.equal(10%)
         nameField.tg_top.equal(10%)
         nameField.tg_height.equal(40) //高度为40，左右边距为布局的10%, 顶部间距为剩余空间的10%
         rootLayout.addSubview(nameField)
@@ -111,9 +112,9 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         userDescLabel.font = CFTool.font(14)
         userDescLabel.sizeToFit()
         userDescLabel.tg_top.equal(10)
-        userDescLabel.tg_left.equal(5%).min(17).max(19)  //最小17最大19
-       // userDescLabel.tg_left >= 17
-       // userDescLabel.tg_left <= 19
+        userDescLabel.tg_leading.equal(5%).min(17).max(19)  //最小17最大19
+       // userDescLabel.tg_leading >= 17
+       // userDescLabel.tg_leading <= 19
         rootLayout.addSubview(userDescLabel)
         
         
@@ -127,8 +128,8 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         
         //左右边距为布局的10%，距离底部间距为65%,浮动高度，但高度最高为300，最低为60
         //高度为.wrap和min,max的结合能做到一些完美的自动伸缩功能。
-        textView.tg_left.equal(5%)
-        textView.tg_right.equal(5%)
+        textView.tg_leading.equal(5%)
+        textView.tg_trailing.equal(5%)
         textView.tg_bottom.equal(65%)
         textView.tg_height.equal(.wrap).max(300).min(60)  //虽然高度为.wrap表示高度为动态高度，但是仍然不能超过300的高度以及不能小于60的高度。
         rootLayout.addSubview(textView)

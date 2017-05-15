@@ -145,8 +145,12 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
         }
         set
         {
-            (self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass).tg_orientation = newValue
-            setNeedsLayout()
+            let lsc = self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass
+            if lsc.tg_orientation != newValue
+            {
+                lsc.tg_orientation = newValue
+                setNeedsLayout()
+            }
         }
     }
     
@@ -169,8 +173,12 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
         }
         set
         {
-            (self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass).tg_gravity = newValue
-            setNeedsLayout()
+            let lsc = self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass
+            if lsc.tg_gravity != newValue
+            {
+                lsc.tg_gravity = newValue
+                setNeedsLayout()
+            }
         }
     }
     
@@ -190,8 +198,12 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
         }
         set
         {
-            (self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass).tg_noBoundaryLimit = newValue
-            setNeedsLayout()
+            let lsc = self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass
+            if lsc.tg_noBoundaryLimit != newValue
+            {
+                lsc.tg_noBoundaryLimit = newValue
+                setNeedsLayout()
+            }
         }
     }
     
@@ -203,10 +215,10 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
      */
     public func tg_setSubviews(size:CGFloat, minSpace:CGFloat, maxSpace:CGFloat = .greatestFiniteMagnitude, inSizeClass type:TGSizeClassType = .default)
     {
-        let sc = self.tg_fetchSizeClass(with: type) as! TGFloatLayoutViewSizeClassImpl
-        sc.tgSubviewSize = size
-        sc.tgMinSpace = minSpace
-        sc.tgMaxSpace = maxSpace
+        let lsc = self.tg_fetchSizeClass(with: type) as! TGFloatLayoutViewSizeClassImpl
+        lsc.tgSubviewSize = size
+        lsc.tgMinSpace = minSpace
+        lsc.tgMaxSpace = maxSpace
         
         self.setNeedsLayout()
     }
@@ -224,55 +236,67 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
             sbs = self.tgGetLayoutSubviews()
         }
         
+        let lsc = self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClassImpl
+        
         for sbv in sbs
         {
+            let sbvsc = sbv.tgCurrentSizeClass as! TGViewSizeClassImpl
+            let sbvtgFrame = sbv.tgFrame
+            
             if (!isEstimate)
             {
-                sbv.tgFrame.frame = sbv.bounds;
-                self.tgCalcSizeFromSizeWrapSubview(sbv)
+                sbvtgFrame.frame = sbv.bounds;
+                self.tgCalcSizeFromSizeWrapSubview(sbv, sbvsc:sbvsc, sbvtgFrame: sbvtgFrame)
                 
             }
             
             if let sbvl:TGBaseLayout = sbv as? TGBaseLayout
             {
-                if (sbvl.tgWidth?.isWrap ?? false) || (sbvl.tgHeight?.isWrap ?? false)
+                let sbvtgWidthIsWrap = sbvsc.tgWidth?.isWrap ?? false
+                let sbvtgHeightIsWrap = sbvsc.tgHeight?.isWrap ?? false
+
+                if sbvtgWidthIsWrap || sbvtgHeightIsWrap
                 {
                    hasSubLayout = true
                 }
                 
-                if isEstimate && ((sbvl.tgWidth?.isWrap ?? false) || (sbvl.tgHeight?.isWrap ?? false))
+                if isEstimate && (sbvtgWidthIsWrap || sbvtgHeightIsWrap)
                 {
-                    _ = sbvl.tg_sizeThatFits(sbvl.tgFrame.frame.size,inSizeClass:type)
-                    sbvl.tgFrame.sizeClass = sbvl.tgMatchBestSizeClass(type) //因为estimateLayoutRect执行后会还原，所以这里要重新设置
+                    _ = sbvl.tg_sizeThatFits(sbvtgFrame.frame.size,inSizeClass:type)
+                    if sbvtgFrame.multiple
+                    {
+                        sbvtgFrame.sizeClass = sbv.tgMatchBestSizeClass(type)  //因为estimateLayoutRect执行后会还原，所以这里要重新设置
+                    }
                 }
             }
         }
         
         
-        if (self.tg_orientation == .vert)
+        if (lsc.tg_orientation == .vert)
         {
-            selfSize = self.tgLayoutSubviewsForVert(selfSize,sbs:sbs);
+            selfSize = self.tgLayoutSubviewsForVert(selfSize,sbs:sbs, isEstimate:isEstimate, lsc:lsc);
         }
         else
         {
-            selfSize = self.tgLayoutSubviewsForHorz(selfSize,sbs:sbs);
+            selfSize = self.tgLayoutSubviewsForHorz(selfSize,sbs:sbs, isEstimate:isEstimate, lsc:lsc);
         }
         
         
         
         
-        selfSize.height = self.tgValidMeasure(self.tgHeight,sbv:self,calcSize:selfSize.height,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
-        selfSize.width = self.tgValidMeasure(self.tgWidth,sbv:self,calcSize:selfSize.width,sbvSize:selfSize,selfLayoutSize:(self.superview == nil ? CGSize.zero : self.superview!.bounds.size));
+        tgAdjustLayoutSelfSize(selfSize: &selfSize, lsc: lsc)
+        
+        tgAdjustSubviewsRTLPos(sbs: sbs, selfWidth: selfSize.width)
         
         
-        return (self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs),hasSubLayout)
+        return (self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs, lsc:lsc),hasSubLayout)
     }
     
     
     
     internal override func tgCreateInstance() -> AnyObject
     {
-        return TGFloatLayoutViewSizeClassImpl()
+        return TGFloatLayoutViewSizeClassImpl(view:self)
     }
     
     
@@ -285,38 +309,38 @@ extension TGFloatLayout
     
     
     
-    fileprivate func tgFindRightCandidatePoint(_ leftCandidateRect:CGRect, width:CGFloat, rightBoundary:CGFloat, rightCandidateRects:[CGRect], hasWeight:Bool) ->CGPoint
+    fileprivate func tgFindTrailingCandidatePoint(_ leadingCandidateRect:CGRect, width:CGFloat, trailingBoundary:CGFloat, trailingCandidateRects:[CGRect], hasWeight:Bool, lsc:TGFloatLayoutViewSizeClassImpl) ->CGPoint
     {
         
-        var retPoint = CGPoint(x: rightBoundary,y: CGFloat.greatestFiniteMagnitude)
+        var retPoint = CGPoint(x: trailingBoundary,y: CGFloat.greatestFiniteMagnitude)
         
-        var lastHeight = self.tg_topPadding;
+        var lastHeight = lsc.tg_topPadding;
         
-        var i = rightCandidateRects.count - 1
+        var i = trailingCandidateRects.count - 1
         while i >= 0
         {
             //CGFloat
-            let rightCandidateRect = rightCandidateRects[i]
+            let trailingCandidateRect = trailingCandidateRects[i]
             //如果有比重则不能相等只能小于。
-            if (hasWeight ? leftCandidateRect.maxX + width < rightCandidateRect.minX : /*leftCandidateRect.maxX + width <= rightCandidateRect.minX*/ _tgCGFloatLessOrEqual(leftCandidateRect.maxX + width, rightCandidateRect.minX)) &&
-                leftCandidateRect.maxY > lastHeight
+            if (hasWeight ? leadingCandidateRect.maxX + width < trailingCandidateRect.minX : _tgCGFloatLessOrEqual(leadingCandidateRect.maxX + width, trailingCandidateRect.minX)) &&
+                leadingCandidateRect.maxY > lastHeight
             {
                 
-                retPoint.y = max(leftCandidateRect.minY,lastHeight);
-                retPoint.x = rightCandidateRect.minX;
+                retPoint.y = max(leadingCandidateRect.minY,lastHeight);
+                retPoint.x = trailingCandidateRect.minX;
                 break;
             }
             
-            lastHeight = rightCandidateRect.maxY;
+            lastHeight = trailingCandidateRect.maxY;
             i-=1
         }
         
         if retPoint.y == CGFloat.greatestFiniteMagnitude
         {
-            if (hasWeight ? leftCandidateRect.maxX + width < rightBoundary : /*leftCandidateRect.maxX + width <= rightBoundary*/_tgCGFloatLessOrEqual(leftCandidateRect.maxX + width, rightBoundary) ) &&
-                leftCandidateRect.maxY > lastHeight
+            if (hasWeight ? leadingCandidateRect.maxX + width < trailingBoundary : _tgCGFloatLessOrEqual(leadingCandidateRect.maxX + width, trailingBoundary) ) &&
+                leadingCandidateRect.maxY > lastHeight
             {
-                retPoint.y =  max(leftCandidateRect.minY,lastHeight);
+                retPoint.y =  max(leadingCandidateRect.minY,lastHeight);
             }
         }
         
@@ -324,19 +348,19 @@ extension TGFloatLayout
     }
     
     
-    fileprivate func tgFindBottomCandidatePoint(_ topCandidateRect:CGRect, height:CGFloat, bottomBoundary:CGFloat, bottomCandidateRects:[CGRect], hasWeight:Bool) ->CGPoint
+    fileprivate func tgFindBottomCandidatePoint(_ topCandidateRect:CGRect, height:CGFloat, bottomBoundary:CGFloat, bottomCandidateRects:[CGRect], hasWeight:Bool, lsc:TGFloatLayoutViewSizeClassImpl) ->CGPoint
     {
         
         var  retPoint = CGPoint(x: CGFloat.greatestFiniteMagnitude,y: bottomBoundary)
         
-        var lastWidth = self.tg_leftPadding;
+        var lastWidth = lsc.tg_leadingPadding;
         var i = bottomCandidateRects.count - 1
         while i >= 0
         {
             
             let bottomCandidateRect = bottomCandidateRects[i]
             
-            if (hasWeight ? topCandidateRect.maxY + height < bottomCandidateRect.minY : /*topCandidateRect.maxY + height <= bottomCandidateRect.minY*/ _tgCGFloatLessOrEqual(topCandidateRect.maxY + height, bottomCandidateRect.minY) ) &&
+            if (hasWeight ? topCandidateRect.maxY + height < bottomCandidateRect.minY :  _tgCGFloatLessOrEqual(topCandidateRect.maxY + height, bottomCandidateRect.minY) ) &&
                 topCandidateRect.maxX > lastWidth
             {
                 retPoint.x = max(topCandidateRect.minX,lastWidth);
@@ -350,7 +374,7 @@ extension TGFloatLayout
         
         if (retPoint.x == CGFloat.greatestFiniteMagnitude)
         {
-            if ((hasWeight ? topCandidateRect.maxY + height < bottomBoundary : /*topCandidateRect.maxY + height <= bottomBoundary*/ _tgCGFloatLessOrEqual(topCandidateRect.maxY + height, bottomBoundary) ) &&
+            if ((hasWeight ? topCandidateRect.maxY + height < bottomBoundary :  _tgCGFloatLessOrEqual(topCandidateRect.maxY + height, bottomBoundary) ) &&
                 topCandidateRect.maxX > lastWidth)
             {
                 retPoint.x =  max(topCandidateRect.minX,lastWidth);
@@ -361,54 +385,54 @@ extension TGFloatLayout
     }
     
     
-    fileprivate func tgFindLeftCandidatePoint(_ rightCandidateRect:CGRect, width:CGFloat, leftBoundary:CGFloat, leftCandidateRects:[CGRect], hasWeight:Bool) ->CGPoint
+    fileprivate func tgFindLeadingCandidatePoint(_ trailingCandidateRect:CGRect, width:CGFloat, leadingBoundary:CGFloat, leadingCandidateRects:[CGRect], hasWeight:Bool, lsc:TGFloatLayoutViewSizeClassImpl) ->CGPoint
     {
         
-        var retPoint = CGPoint(x: leftBoundary,y: CGFloat.greatestFiniteMagnitude)
+        var retPoint = CGPoint(x: leadingBoundary,y: CGFloat.greatestFiniteMagnitude)
         
-        var lastHeight = self.tg_topPadding;
-        var i = leftCandidateRects.count - 1
+        var lastHeight = lsc.tg_topPadding;
+        var i = leadingCandidateRects.count - 1
         while i >= 0
         {
             
-            let  leftCandidateRect = leftCandidateRects[i]
-            if ((hasWeight ? rightCandidateRect.minX - width > leftCandidateRect.maxX : /*rightCandidateRect.minX - width >= leftCandidateRect.maxX*/ _tgCGFloatGreatOrEqual(rightCandidateRect.minX - width, leftCandidateRect.maxX)) &&
-                rightCandidateRect.maxY > lastHeight)
+            let  leadingCandidateRect = leadingCandidateRects[i]
+            if ((hasWeight ? trailingCandidateRect.minX - width > leadingCandidateRect.maxX :  _tgCGFloatGreatOrEqual(trailingCandidateRect.minX - width, leadingCandidateRect.maxX)) &&
+                trailingCandidateRect.maxY > lastHeight)
             {
-                retPoint.y = max(rightCandidateRect.minY,lastHeight);
-                retPoint.x = leftCandidateRect.maxX;
+                retPoint.y = max(trailingCandidateRect.minY,lastHeight);
+                retPoint.x = leadingCandidateRect.maxX;
                 break;
             }
             
-            lastHeight = leftCandidateRect.maxY;
+            lastHeight = leadingCandidateRect.maxY;
             i -= 1
             
         }
         
         if (retPoint.y == CGFloat.greatestFiniteMagnitude)
         {
-            if ((hasWeight ? rightCandidateRect.minX - width > leftBoundary : /*rightCandidateRect.minX - width >= leftBoundary*/ _tgCGFloatGreatOrEqual(rightCandidateRect.minX - width, leftBoundary)) &&
-                rightCandidateRect.maxY > lastHeight)
+            if ((hasWeight ? trailingCandidateRect.minX - width > leadingBoundary : _tgCGFloatGreatOrEqual(trailingCandidateRect.minX - width, leadingBoundary)) &&
+                trailingCandidateRect.maxY > lastHeight)
             {
-                retPoint.y =  max(rightCandidateRect.minY,lastHeight);
+                retPoint.y =  max(trailingCandidateRect.minY,lastHeight);
             }
         }
         
         return retPoint;
     }
     
-    fileprivate func tgFindTopCandidatePoint(_ bottomCandidateRect:CGRect, height:CGFloat, topBoundary:CGFloat, topCandidateRects:[CGRect], hasWeight:Bool) ->CGPoint
+    fileprivate func tgFindTopCandidatePoint(_ bottomCandidateRect:CGRect, height:CGFloat, topBoundary:CGFloat, topCandidateRects:[CGRect], hasWeight:Bool, lsc:TGFloatLayoutViewSizeClassImpl) ->CGPoint
     {
         
         var retPoint = CGPoint(x: CGFloat.greatestFiniteMagnitude, y: topBoundary)
         
-        var lastWidth = self.tg_leftPadding;
+        var lastWidth = lsc.tg_leadingPadding;
         var i = topCandidateRects.count - 1
         while i >= 0
         {
             
             let topCandidateRect = topCandidateRects[i]
-            if ((hasWeight ? bottomCandidateRect.minY - height > topCandidateRect.maxY : /*bottomCandidateRect.minY - height >= topCandidateRect.maxY*/ _tgCGFloatGreatOrEqual(bottomCandidateRect.minY - height, topCandidateRect.maxY)) &&
+            if ((hasWeight ? bottomCandidateRect.minY - height > topCandidateRect.maxY :  _tgCGFloatGreatOrEqual(bottomCandidateRect.minY - height, topCandidateRect.maxY)) &&
                 bottomCandidateRect.maxX > lastWidth)
             {
                 retPoint.x = max(bottomCandidateRect.minX,lastWidth);
@@ -423,7 +447,7 @@ extension TGFloatLayout
         
         if (retPoint.x == CGFloat.greatestFiniteMagnitude)
         {
-            if ((hasWeight ? bottomCandidateRect.minY - height > topBoundary : /*bottomCandidateRect.minY - height >= topBoundary*/ _tgCGFloatGreatOrEqual(bottomCandidateRect.minY - height, topBoundary)) &&
+            if ((hasWeight ? bottomCandidateRect.minY - height > topBoundary :  _tgCGFloatGreatOrEqual(bottomCandidateRect.minY - height, topBoundary)) &&
                 bottomCandidateRect.maxX > lastWidth)
             {
                 retPoint.x =  max(bottomCandidateRect.minX,lastWidth);
@@ -434,12 +458,14 @@ extension TGFloatLayout
     }
     
     
-    fileprivate func tgLayoutSubviewsForVert(_ selfSize:CGSize, sbs:[UIView]) -> CGSize
+    fileprivate func tgLayoutSubviewsForVert(_ selfSize:CGSize, sbs:[UIView], isEstimate:Bool, lsc:TGFloatLayoutViewSizeClassImpl) -> CGSize
     {
-        let padding = self.tg_padding;
         var selfSize = selfSize
         var hasBoundaryLimit = true
-        if (self.tgWidth?.isWrap ?? false) && self.tg_noBoundaryLimit
+        let selftgWidthIsWrap = lsc.tgWidth?.isWrap ?? false
+        let selftgHeightIsWrap = lsc.tgHeight?.isWrap ?? false
+        
+        if selftgWidthIsWrap && lsc.tg_noBoundaryLimit
         {
             hasBoundaryLimit = false
         }
@@ -451,57 +477,58 @@ extension TGFloatLayout
         
         
         //遍历所有的子视图，查看是否有子视图的宽度会比视图自身要宽，如果有且有包裹属性则扩充自身的宽度
-        if ((self.tgWidth?.isWrap ?? false) && hasBoundaryLimit)
+        if (selftgWidthIsWrap && hasBoundaryLimit)
         {
-            var maxContentWidth = selfSize.width - padding.left - padding.right;
+            var maxContentWidth = selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding;
             for sbv in sbs
             {
-                let leftMargin = (sbv.tgLeft?.margin ?? 0)
-                let rightMargin = (sbv.tgRight?.margin ?? 0)
-                
+                let sbvsc = sbv.tgCurrentSizeClass as! TGViewSizeClassImpl
+                let leadingSpace = (sbvsc.tgLeading?.margin ?? 0)
+                let trailingSpace = (sbvsc.tgTrailing?.margin ?? 0)
+                let sbvtgWidthIsFill = sbvsc.tgWidth?.isFill ?? false
                 var rect = sbv.tgFrame.frame;
                 
                 //这里有可能设置了固定的宽度
-                if (sbv.tgWidth?.dimeNumVal != nil)
+                if (sbvsc.tgWidth?.dimeNumVal != nil)
                 {
-                    rect.size.width = sbv.tgWidth!.measure;
+                    rect.size.width = sbvsc.tgWidth!.measure;
                 }
                 
                 //有可能宽度是和他的高度相等。
-                if sbv.tgWidth?.dimeRelaVal != nil  && sbv.tgWidth!.dimeRelaVal === sbv.tgHeight
+                if sbvsc.tgWidth?.dimeRelaVal != nil  && sbvsc.tgWidth!.dimeRelaVal === sbvsc.tgHeight
                 {
-                    if (sbv.tgHeight?.dimeNumVal != nil)
+                    if (sbvsc.tgHeight?.dimeNumVal != nil)
                     {
-                        rect.size.height = sbv.tgHeight!.measure;
+                        rect.size.height = sbvsc.tgHeight!.measure;
                     }
                     
-                    if (sbv.tgHeight?.dimeRelaVal != nil && sbv.tgHeight!.dimeRelaVal === self.tgHeight)
+                    if (sbvsc.tgHeight?.dimeRelaVal != nil && sbvsc.tgHeight!.dimeRelaVal === lsc.tgHeight)
                     {
-                        rect.size.height = sbv.tgHeight!.measure(selfSize.height - padding.top - padding.bottom)
+                        rect.size.height = sbvsc.tgHeight!.measure(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
                     }
                     
-                    rect.size.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
-                    rect.size.width = sbv.tgWidth!.measure(rect.size.height)
+                    rect.size.width = sbvsc.tgWidth!.measure(rect.size.height)
                 }
                 
-                rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+                rect.size.width = self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
                 
-                if (leftMargin + rect.size.width + rightMargin > maxContentWidth &&
-                    (sbv.tgWidth?.dimeRelaVal == nil || sbv.tgWidth!.dimeRelaVal !== self.tgWidth) &&
-                    sbv.tgWidth?.dimeWeightVal == nil &&
-                    !(sbv.tgWidth?.isFill ?? false))
+                if (leadingSpace + rect.size.width + trailingSpace > maxContentWidth &&
+                    (sbvsc.tgWidth?.dimeRelaVal == nil || sbvsc.tgWidth!.dimeRelaVal !== lsc.tgWidth) &&
+                    sbvsc.tgWidth?.dimeWeightVal == nil &&
+                    !sbvtgWidthIsFill)
                 {
-                    maxContentWidth = leftMargin + rect.size.width + rightMargin;
+                    maxContentWidth = leadingSpace + rect.size.width + trailingSpace;
                 }
             }
             
-            selfSize.width = padding.left + maxContentWidth + padding.right;
+            selfSize.width = lsc.tg_leadingPadding + maxContentWidth + lsc.tg_trailingPadding;
         }
         
-        let vertSpace = self.tg_vspace;
-        var horzSpace = self.tg_hspace;
-        var subviewSize = (self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClassImpl).tgSubviewSize
+        let vertSpace = lsc.tg_vspace;
+        var horzSpace = lsc.tg_hspace;
+        var subviewSize = lsc.tgSubviewSize
         if (subviewSize != 0)
         {
             #if DEBUG
@@ -509,54 +536,58 @@ extension TGFloatLayout
                 assert(hasBoundaryLimit, "Constraint exception！！, vertical float layout:\(self) can not set tg_noBoundaryLimit to true when call  tg_setSubviews(size:CGFloat,minSpace:CGFloat,maxSpace:CGFloat)  method")
             #endif
             
-            let minSpace = (self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClassImpl).tgMinSpace
-            let maxSpace = (self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClassImpl).tgMaxSpace
+            let minSpace = lsc.tgMinSpace
+            let maxSpace = lsc.tgMaxSpace
 
             
-            let rowCount =  floor((selfSize.width - padding.left - padding.right  + minSpace) / (subviewSize + minSpace));
+            let rowCount =  floor((selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding  + minSpace) / (subviewSize + minSpace));
             if (rowCount > 1)
             {
-                horzSpace = (selfSize.width - padding.left - padding.right - subviewSize * rowCount)/(rowCount - 1);
+                horzSpace = (selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding - subviewSize * rowCount)/(rowCount - 1);
                 
                 if horzSpace > maxSpace
                 {
                     horzSpace = maxSpace
                     
-                    subviewSize = (selfSize.width - padding.left - padding.right -  horzSpace * (rowCount - 1)) / rowCount
+                    subviewSize = (selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding -  horzSpace * (rowCount - 1)) / rowCount
                 }
             }
         }
         
         
         //左边候选区域数组，保存的是CGRect值。
-        var leftCandidateRects:[CGRect] = [CGRect]()
+        var leadingCandidateRects:[CGRect] = [CGRect]()
         //为了计算方便总是把最左边的个虚拟区域作为一个候选区域
-        leftCandidateRects.append(CGRect(x: padding.left, y: padding.top, width: 0, height: CGFloat.greatestFiniteMagnitude));
+        leadingCandidateRects.append(CGRect(x: lsc.tg_leadingPadding, y: lsc.tg_topPadding, width: 0, height: CGFloat.greatestFiniteMagnitude));
         
         //右边候选区域数组，保存的是CGRect值。
-        var rightCandidateRects:[CGRect] = [CGRect]()
+        var trailingCandidateRects:[CGRect] = [CGRect]()
         //为了计算方便总是把最右边的个虚拟区域作为一个候选区域
-        rightCandidateRects.append(CGRect(x: selfSize.width - padding.right, y: padding.top, width: 0, height: CGFloat.greatestFiniteMagnitude));
+        trailingCandidateRects.append(CGRect(x: selfSize.width - lsc.tg_trailingPadding, y: lsc.tg_topPadding, width: 0, height: CGFloat.greatestFiniteMagnitude));
         
         //分别记录左边和右边的最后一个视图在Y轴的偏移量
-        var leftLastYOffset = padding.top
-        var rightLastYOffset = padding.top
+        var leadingLastYOffset = lsc.tg_topPadding
+        var trailingLastYOffset = lsc.tg_topPadding
         
         //分别记录左右边和全局浮动视图的最高占用的Y轴的值
-        var leftMaxHeight = padding.top
-        var rightMaxHeight = padding.top
-        var maxHeight = padding.top
-        var maxWidth = padding.left
+        var leadingMaxHeight = lsc.tg_topPadding
+        var trailingMaxHeight = lsc.tg_topPadding
+        var maxHeight = lsc.tg_topPadding
+        var maxWidth = lsc.tg_leadingPadding
         
         for sbv in sbs
         {
-            let topMargin = (sbv.tgTop?.margin ?? 0)
-            let leftMargin = (sbv.tgLeft?.margin ?? 0)
-            let bottomMargin = (sbv.tgBottom?.margin ?? 0)
-            let rightMargin = (sbv.tgRight?.margin ?? 0)
-            var rect = sbv.tgFrame.frame;
-            let isWidthWeight = sbv.tgWidth?.dimeWeightVal != nil || (sbv.tgWidth?.isFill ?? false)
-            let isHeightWeight = sbv.tgHeight?.dimeWeightVal != nil || (sbv.tgHeight?.isFill ?? false)
+            let sbvsc = sbv.tgCurrentSizeClass as! TGViewSizeClassImpl
+            let sbvtgFrame = sbv.tgFrame
+            let topSpace = (sbvsc.tgTop?.margin ?? 0)
+            let leadingSpace = (sbvsc.tgLeading?.margin ?? 0)
+            let bottomSpace = (sbvsc.tgBottom?.margin ?? 0)
+            let trailingSpace = (sbvsc.tgTrailing?.margin ?? 0)
+            var rect = sbvtgFrame.frame;
+            let sbvtgWidthIsFill = sbvsc.tgWidth?.isFill ?? false
+            let sbvtgHeightIsFill = sbvsc.tgHeight?.isFill ?? false
+            let isWidthWeight = sbvsc.tgWidth?.dimeWeightVal != nil || sbvtgWidthIsFill
+            let isHeightWeight = sbvsc.tgHeight?.dimeWeightVal != nil || sbvtgHeightIsFill
             
             
             if subviewSize != 0
@@ -564,100 +595,100 @@ extension TGFloatLayout
                 rect.size.width = subviewSize
             }
             
-            if (sbv.tgWidth?.dimeNumVal != nil)
+            if (sbvsc.tgWidth?.dimeNumVal != nil)
             {
-                rect.size.width = sbv.tgWidth!.measure;
+                rect.size.width = sbvsc.tgWidth!.measure;
             }
             
-            if (sbv.tgHeight?.dimeNumVal != nil)
+            if (sbvsc.tgHeight?.dimeNumVal != nil)
             {
-                rect.size.height = sbv.tgHeight!.measure;
+                rect.size.height = sbvsc.tgHeight!.measure;
             }
             
-            if isHeightWeight && !(self.tgHeight?.isWrap ?? false)
+            if isHeightWeight && !selftgHeightIsWrap
             {
 
-                rect.size.height = sbv.tgHeight!.measure((selfSize.height - maxHeight - padding.bottom) * ((sbv.tgHeight?.isFill ?? false) ? 1.0 : sbv.tgHeight!.dimeWeightVal.rawValue/100) - topMargin - bottomMargin)
+                rect.size.height = sbvsc.tgHeight!.measure((selfSize.height - maxHeight - lsc.tg_bottomPadding) * (sbvtgHeightIsFill ? 1.0 : sbvsc.tgHeight!.dimeWeightVal.rawValue/100) - topSpace - bottomSpace)
             }
             
-            if (sbv.tgHeight?.dimeRelaVal != nil && sbv.tgHeight!.dimeRelaVal === self.tgHeight && !(self.tgHeight?.isWrap ?? false))
+            if (sbvsc.tgHeight?.dimeRelaVal != nil && sbvsc.tgHeight!.dimeRelaVal === lsc.tgHeight && !selftgHeightIsWrap)
             {
-                rect.size.height = sbv.tgHeight!.measure(selfSize.height - padding.top - padding.bottom)
+                rect.size.height = sbvsc.tgHeight!.measure(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
             }
             
-            if (sbv.tgWidth?.dimeRelaVal != nil && sbv.tgWidth!.dimeRelaVal === self.tgWidth)
+            if (sbvsc.tgWidth?.dimeRelaVal != nil && sbvsc.tgWidth!.dimeRelaVal === lsc.tgWidth)
             {
-                rect.size.width = sbv.tgWidth!.measure(selfSize.width - padding.left - padding.right)
+                rect.size.width = sbvsc.tgWidth!.measure(selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding)
             }
             
-            rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.width = self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
             
-            if (sbv.tgHeight?.dimeRelaVal != nil && sbv.tgHeight!.dimeRelaVal === sbv.tgWidth)
+            if (sbvsc.tgHeight?.dimeRelaVal != nil && sbvsc.tgHeight!.dimeRelaVal === sbvsc.tgWidth)
             {
-                rect.size.height = sbv.tgHeight!.measure(rect.size.width)
+                rect.size.height = sbvsc.tgHeight!.measure(rect.size.width)
             }
             
-            rect.size.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
-            if (sbv.tgWidth?.dimeRelaVal != nil && sbv.tgWidth!.dimeRelaVal === sbv.tgHeight)
+            if (sbvsc.tgWidth?.dimeRelaVal != nil && sbvsc.tgWidth!.dimeRelaVal === sbvsc.tgHeight)
             {
-                rect.size.width = sbv.tgWidth!.measure(rect.size.height)
+                rect.size.width = sbvsc.tgWidth!.measure(rect.size.height)
             }
             
-            if (sbv.tgWidth?.dimeRelaVal != nil &&  sbv.tgWidth!.dimeRelaVal.view != nil &&  sbv.tgWidth!.dimeRelaVal.view != self && sbv.tgWidth!.dimeRelaVal.view != sbv)
+            if (sbvsc.tgWidth?.dimeRelaVal != nil &&  sbvsc.tgWidth!.dimeRelaVal.view != nil &&  sbvsc.tgWidth!.dimeRelaVal.view != self && sbvsc.tgWidth!.dimeRelaVal.view != sbv)
             {
-                rect.size.width = sbv.tgWidth!.measure(sbv.tgWidth!.dimeRelaVal.view.tgFrame.width)
+                rect.size.width = sbvsc.tgWidth!.measure(sbvsc.tgWidth!.dimeRelaVal.view.tgFrame.width)
             }
             
-            if (sbv.tgHeight?.dimeRelaVal != nil &&  sbv.tgHeight!.dimeRelaVal.view != nil &&  sbv.tgHeight!.dimeRelaVal.view != self && sbv.tgHeight!.dimeRelaVal.view != sbv)
+            if (sbvsc.tgHeight?.dimeRelaVal != nil &&  sbvsc.tgHeight!.dimeRelaVal.view != nil &&  sbvsc.tgHeight!.dimeRelaVal.view != self && sbvsc.tgHeight!.dimeRelaVal.view != sbv)
             {
-                rect.size.height = sbv.tgHeight!.measure(sbv.tgHeight!.dimeRelaVal.view.tgFrame.height)
+                rect.size.height = sbvsc.tgHeight!.measure(sbvsc.tgHeight!.dimeRelaVal.view.tgFrame.height)
             }
             
-            rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.width = self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
             
             //如果高度是浮动的则需要调整高度。
-            if (sbv.tgHeight?.isFlexHeight ?? false)
+            if let t = sbvsc.tgHeight, t.isFlexHeight
             {
                 
-                rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
+                rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, sbvsc:sbvsc, width: rect.size.width)
             }
             
-            rect.size.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
-            if (sbv.tg_reverseFloat)
+            if (sbvsc.tg_reverseFloat)
             {
                 #if DEBUG
                     //异常崩溃：当布局视图设置了tg_noBoundaryLimit为true时子视图不能设置逆向浮动
                     assert(hasBoundaryLimit, "Constraint exception！！, vertical float layout:\(self) can not set tg_noBoundaryLimit to true when the subview:\(sbv) set tg_reverseFloat to true.")
                 #endif
                 
-                var nextPoint = CGPoint(x: selfSize.width - padding.right, y: leftLastYOffset);
-                var leftCandidateXBoundary = padding.left;
-                if (sbv.tg_clearFloat)
+                var nextPoint = CGPoint(x: selfSize.width - lsc.tg_trailingPadding, y: leadingLastYOffset);
+                var leadingCandidateXBoundary = lsc.tg_leadingPadding;
+                if (sbvsc.tg_clearFloat)
                 {
                     
                     //找到最底部的位置。
-                    nextPoint.y = max(rightMaxHeight, leftLastYOffset);
-                    let leftPoint = self.tgFindLeftCandidatePoint(CGRect(x: selfSize.width - padding.right, y: nextPoint.y, width: 0, height: CGFloat.greatestFiniteMagnitude), width:leftMargin + (isWidthWeight ? 0 : rect.size.width) + rightMargin,leftBoundary:padding.left,leftCandidateRects:leftCandidateRects,hasWeight:false)
+                    nextPoint.y = max(trailingMaxHeight, leadingLastYOffset);
+                    let leftPoint = self.tgFindLeadingCandidatePoint(CGRect(x: selfSize.width - lsc.tg_trailingPadding, y: nextPoint.y, width: 0, height: CGFloat.greatestFiniteMagnitude), width:leadingSpace + (isWidthWeight ? 0 : rect.size.width) + trailingSpace,leadingBoundary:lsc.tg_leadingPadding,leadingCandidateRects:leadingCandidateRects,hasWeight:false, lsc:lsc)
                     if (leftPoint.y != CGFloat.greatestFiniteMagnitude)
                     {
-                        nextPoint.y = max(rightMaxHeight, leftPoint.y);
-                        leftCandidateXBoundary = leftPoint.x;
+                        nextPoint.y = max(trailingMaxHeight, leftPoint.y);
+                        leadingCandidateXBoundary = leftPoint.x;
                     }
                 }
                 else
                 {
                     //依次从后往前，每个都比较右边的。
-                    var i = rightCandidateRects.count - 1
+                    var i = trailingCandidateRects.count - 1
                     while i >= 0
                     {
-                        let candidateRect = rightCandidateRects[i]
-                        let leftPoint = self.tgFindLeftCandidatePoint(candidateRect,width:leftMargin + (isWidthWeight ? 0 : rect.size.width) + rightMargin,leftBoundary:padding.left, leftCandidateRects:leftCandidateRects,hasWeight:isWidthWeight)
+                        let candidateRect = trailingCandidateRects[i]
+                        let leftPoint = self.tgFindLeadingCandidatePoint(candidateRect,width:leadingSpace + (isWidthWeight ? 0 : rect.size.width) + trailingSpace,leadingBoundary:lsc.tg_leadingPadding, leadingCandidateRects:leadingCandidateRects,hasWeight:isWidthWeight, lsc:lsc)
                         if (leftPoint.y != CGFloat.greatestFiniteMagnitude)
                         {
                             nextPoint = CGPoint(x: candidateRect.minX, y: max(nextPoint.y, leftPoint.y));
-                            leftCandidateXBoundary = leftPoint.x;
+                            leadingCandidateXBoundary = leftPoint.x;
                             break;
                         }
                         
@@ -670,33 +701,33 @@ extension TGFloatLayout
                 if isWidthWeight
                 {
                     var widthWeight:CGFloat = 1.0
-                    if sbv.tgWidth?.dimeWeightVal != nil
+                    if sbvsc.tgWidth?.dimeWeightVal != nil
                     {
-                        widthWeight = sbv.tgWidth!.dimeWeightVal.rawValue / 100
+                        widthWeight = sbvsc.tgWidth!.dimeWeightVal.rawValue / 100
                     }
                     
-                    rect.size.width =  self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: (nextPoint.x - leftCandidateXBoundary + sbv.tgWidth!.addVal) * widthWeight - leftMargin - rightMargin, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.width =  self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: (nextPoint.x - leadingCandidateXBoundary + sbvsc.tgWidth!.addVal) * widthWeight - leadingSpace - trailingSpace, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
-                    if (sbv.tgHeight?.dimeRelaVal != nil && sbv.tgHeight!.dimeRelaVal === sbv.tgWidth)
+                    if (sbvsc.tgHeight?.dimeRelaVal != nil && sbvsc.tgHeight!.dimeRelaVal === sbvsc.tgWidth)
                     {
-                        rect.size.height = sbv.tgHeight!.measure(rect.size.width)
+                        rect.size.height = sbvsc.tgHeight!.measure(rect.size.width)
                     }
                     
-                    if (sbv.tgHeight?.isFlexHeight ?? false)
+                    if let t = sbvsc.tgHeight, t.isFlexHeight
                     {
                         
-                        rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
+                        rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, sbvsc:sbvsc, width: rect.size.width)
                     }
                     
-                    rect.size.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
                 }
                 
                 
-                rect.origin.x = nextPoint.x - rightMargin - rect.size.width;
-                rect.origin.y = min(nextPoint.y, maxHeight) + topMargin;
+                rect.origin.x = nextPoint.x - trailingSpace - rect.size.width;
+                rect.origin.y = min(nextPoint.y, maxHeight) + topSpace;
                 
                 //如果有智能边界线则找出所有智能边界线。
-                if (self.tg_intelligentBorderline != nil)
+                if (!isEstimate && self.tg_intelligentBorderline != nil)
                 {
                     //优先绘制左边和上边的。绘制左边的和上边的。
                     if let sbvl = sbv as? TGBaseLayout
@@ -705,22 +736,22 @@ extension TGFloatLayout
                         {
                             sbvl.tg_bottomBorderline = nil;
                             sbvl.tg_topBorderline = nil;
-                            sbvl.tg_rightBorderline = nil;
-                            sbvl.tg_leftBorderline = nil;
+                            sbvl.tg_trailingBorderline = nil;
+                            sbvl.tg_leadingBorderline = nil;
                             
-                            if (rect.origin.x + rect.size.width + rightMargin < selfSize.width - padding.right)
+                            if (rect.origin.x + rect.size.width + trailingSpace < selfSize.width - lsc.tg_trailingPadding)
                             {
-                                sbvl.tg_rightBorderline = self.tg_intelligentBorderline;
+                                sbvl.tg_trailingBorderline = self.tg_intelligentBorderline;
                             }
                             
-                            if (rect.origin.y + rect.size.height + bottomMargin < selfSize.height - padding.bottom)
+                            if (rect.origin.y + rect.size.height + bottomSpace < selfSize.height - lsc.tg_bottomPadding)
                             {
                                 sbvl.tg_bottomBorderline = self.tg_intelligentBorderline;
                             }
                             
-                            if (rect.origin.x > leftCandidateXBoundary && sbvl == sbs.last)
+                            if (rect.origin.x > leadingCandidateXBoundary && sbvl == sbs.last)
                             {
-                                sbvl.tg_leftBorderline = self.tg_intelligentBorderline;
+                                sbvl.tg_leadingBorderline = self.tg_intelligentBorderline;
                             }
                         }
                         
@@ -730,56 +761,56 @@ extension TGFloatLayout
                 
                 
                 //这里有可能子视图本身的宽度会超过布局视图本身，但是我们的候选区域则不存储超过的宽度部分。
-                let cRect = CGRect(x: max(rect.origin.x - leftMargin - horzSpace,padding.left), y: rect.origin.y - topMargin, width: min((rect.size.width + leftMargin + rightMargin),(selfSize.width - padding.left - padding.right)), height: rect.size.height + topMargin + bottomMargin + vertSpace);
+                let cRect = CGRect(x: max(rect.origin.x - leadingSpace - horzSpace,lsc.tg_leadingPadding), y: rect.origin.y - topSpace, width: min((rect.size.width + leadingSpace + trailingSpace),(selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding)), height: rect.size.height + topSpace + bottomSpace + vertSpace);
                 
                 
                 //把新的候选区域添加到数组中去。并删除高度小于新候选区域的其他区域
-                rightCandidateRects = rightCandidateRects.filter({$0.maxY > cRect.maxY})
+                trailingCandidateRects = trailingCandidateRects.filter({$0.maxY > cRect.maxY})
                 
                 
                 //删除左边高度小于新添加区域的顶部的候选区域
-                leftCandidateRects = leftCandidateRects.filter({$0.maxY > cRect.minY})
+                leadingCandidateRects = leadingCandidateRects.filter({$0.maxY > cRect.minY})
                
             
-                rightCandidateRects.append(cRect)
-                rightLastYOffset = rect.origin.y - topMargin;
+                trailingCandidateRects.append(cRect)
+                trailingLastYOffset = rect.origin.y - topSpace;
                 
-                if (rect.origin.y + rect.size.height + bottomMargin + vertSpace > rightMaxHeight)
+                if (rect.origin.y + rect.size.height + bottomSpace + vertSpace > trailingMaxHeight)
                 {
-                    rightMaxHeight = rect.origin.y + rect.size.height + bottomMargin + vertSpace;
+                    trailingMaxHeight = rect.origin.y + rect.size.height + bottomSpace + vertSpace;
                 }
             }
             else
             {
-                var nextPoint = CGPoint(x: padding.left, y: rightLastYOffset)
-                var rightCandidateXBoundary = selfSize.width - padding.right;
+                var nextPoint = CGPoint(x: lsc.tg_leadingPadding, y: trailingLastYOffset)
+                var trailingCandidateXBoundary = selfSize.width - lsc.tg_trailingPadding;
                 
                 //如果是清除了浮动则直换行移动到最下面。
-                if (sbv.tg_clearFloat)
+                if (sbvsc.tg_clearFloat)
                 {
                     //找到最低点。
-                    nextPoint.y = max(leftMaxHeight, rightLastYOffset);
+                    nextPoint.y = max(leadingMaxHeight, trailingLastYOffset);
                     
-                    let rightPoint = self.tgFindRightCandidatePoint(CGRect(x: padding.left, y: nextPoint.y, width: 0, height: CGFloat.greatestFiniteMagnitude), width:leftMargin + (isWidthWeight ? 0 : rect.size.width) + rightMargin, rightBoundary:rightCandidateXBoundary, rightCandidateRects:rightCandidateRects, hasWeight:false)
+                    let rightPoint = self.tgFindTrailingCandidatePoint(CGRect(x: lsc.tg_leadingPadding, y: nextPoint.y, width: 0, height: CGFloat.greatestFiniteMagnitude), width:leadingSpace + (isWidthWeight ? 0 : rect.size.width) + trailingSpace, trailingBoundary:trailingCandidateXBoundary, trailingCandidateRects:trailingCandidateRects, hasWeight:false, lsc:lsc)
                     if (rightPoint.y != CGFloat.greatestFiniteMagnitude)
                     {
-                        nextPoint.y = max(leftMaxHeight, rightPoint.y);
-                        rightCandidateXBoundary = rightPoint.x;
+                        nextPoint.y = max(leadingMaxHeight, rightPoint.y);
+                        trailingCandidateXBoundary = rightPoint.x;
                     }
                 }
                 else
                 {
                     
                     //依次从后往前，每个都比较右边的。
-                    var i = leftCandidateRects.count - 1
+                    var i = leadingCandidateRects.count - 1
                     while i >= 0
                     {
-                        let candidateRect = leftCandidateRects[i]
-                        let rightPoint = self.tgFindRightCandidatePoint(candidateRect, width:leftMargin + (isWidthWeight ? 0 : rect.size.width) + rightMargin,rightBoundary:selfSize.width - padding.right,rightCandidateRects:rightCandidateRects,hasWeight:isWidthWeight)
+                        let candidateRect = leadingCandidateRects[i]
+                        let rightPoint = self.tgFindTrailingCandidatePoint(candidateRect, width:leadingSpace + (isWidthWeight ? 0 : rect.size.width) + trailingSpace,trailingBoundary:selfSize.width - lsc.tg_trailingPadding,trailingCandidateRects:trailingCandidateRects,hasWeight:isWidthWeight,lsc:lsc)
                         if (rightPoint.y != CGFloat.greatestFiniteMagnitude)
                         {
                             nextPoint = CGPoint(x: candidateRect.maxX, y: max(nextPoint.y, rightPoint.y));
-                            rightCandidateXBoundary = rightPoint.x;
+                            trailingCandidateXBoundary = rightPoint.x;
                             break;
                         }
                         
@@ -798,34 +829,34 @@ extension TGFloatLayout
                     
                     
                     var widthWeight:CGFloat = 1.0
-                    if sbv.tgWidth?.dimeWeightVal != nil
+                    if sbvsc.tgWidth?.dimeWeightVal != nil
                     {
-                        widthWeight = sbv.tgWidth!.dimeWeightVal.rawValue / 100
+                        widthWeight = sbvsc.tgWidth!.dimeWeightVal.rawValue / 100
                     }
 
                     
-                    rect.size.width =  self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: (rightCandidateXBoundary - nextPoint.x + sbv.tgWidth!.addVal) * widthWeight - leftMargin - rightMargin, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.width =  self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: (trailingCandidateXBoundary - nextPoint.x + sbvsc.tgWidth!.addVal) * widthWeight - leadingSpace - trailingSpace, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
-                    if (sbv.tgHeight?.dimeRelaVal != nil && sbv.tgHeight!.dimeRelaVal === sbv.tgWidth)
+                    if (sbvsc.tgHeight?.dimeRelaVal != nil && sbvsc.tgHeight!.dimeRelaVal === sbvsc.tgWidth)
                     {
-                        rect.size.height = sbv.tgHeight!.measure(rect.size.width)
+                        rect.size.height = sbvsc.tgHeight!.measure(rect.size.width)
                     }
                     
-                    if (sbv.tgHeight?.isFlexHeight ?? false)
+                    if let t = sbvsc.tgHeight, t.isFlexHeight
                     {
                         
-                        rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
+                        rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, sbvsc:sbvsc,width: rect.size.width)
                     }
                     
-                    rect.size.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
                 }
                 
-                rect.origin.x = nextPoint.x + leftMargin;
-                rect.origin.y = min(nextPoint.y,maxHeight) + topMargin;
+                rect.origin.x = nextPoint.x + leadingSpace;
+                rect.origin.y = min(nextPoint.y,maxHeight) + topSpace;
                 
                 
-                if (self.tg_intelligentBorderline != nil)
+                if (!isEstimate && self.tg_intelligentBorderline != nil)
                 {
                     //优先绘制左边和上边的。绘制左边的和上边的。
                     if let sbvl = sbv as? TGBaseLayout
@@ -834,16 +865,16 @@ extension TGFloatLayout
                         {
                             sbvl.tg_bottomBorderline = nil;
                             sbvl.tg_topBorderline = nil;
-                            sbvl.tg_rightBorderline = nil;
-                            sbvl.tg_leftBorderline = nil;
+                            sbvl.tg_trailingBorderline = nil;
+                            sbvl.tg_leadingBorderline = nil;
                             
                             //如果自己的上边和左边有子视图。
-                            if (rect.origin.x - leftMargin > padding.left)
+                            if (rect.origin.x - leadingSpace > lsc.tg_leadingPadding)
                             {
-                                sbvl.tg_leftBorderline = self.tg_intelligentBorderline;
+                                sbvl.tg_leadingBorderline = self.tg_intelligentBorderline;
                             }
                             
-                            if (rect.origin.y - topMargin > padding.top)
+                            if (rect.origin.y - topSpace > lsc.tg_topPadding)
                             {
                                 sbvl.tg_topBorderline = self.tg_intelligentBorderline;
                             }
@@ -854,36 +885,36 @@ extension TGFloatLayout
                 
                 
                 
-                let cRect = CGRect(x: rect.origin.x - leftMargin, y: rect.origin.y - topMargin, width: min((rect.size.width + leftMargin + rightMargin + horzSpace),(selfSize.width - padding.left - padding.right)), height: rect.size.height + topMargin + bottomMargin + vertSpace);
+                let cRect = CGRect(x: rect.origin.x - leadingSpace, y: rect.origin.y - topSpace, width: min((rect.size.width + leadingSpace + trailingSpace + horzSpace),(selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding)), height: rect.size.height + topSpace + bottomSpace + vertSpace);
                 
                 
                 //把新添加到候选中去。并删除高度小于的候选键。和高度
-                leftCandidateRects = leftCandidateRects.filter({$0.maxY > cRect.maxY})
+                leadingCandidateRects = leadingCandidateRects.filter({$0.maxY > cRect.maxY})
                 //删除右边高度小于新添加区域的顶部的候选区域
-                rightCandidateRects = rightCandidateRects.filter({$0.maxY > cRect.minY})
+                trailingCandidateRects = trailingCandidateRects.filter({$0.maxY > cRect.minY})
                
                 
-                leftCandidateRects.append(cRect);
-                leftLastYOffset = rect.origin.y - topMargin;
+                leadingCandidateRects.append(cRect);
+                leadingLastYOffset = rect.origin.y - topSpace;
                 
-                if (rect.origin.y + rect.size.height + bottomMargin + vertSpace > leftMaxHeight)
+                if (rect.origin.y + rect.size.height + bottomSpace + vertSpace > leadingMaxHeight)
                 {
-                    leftMaxHeight = rect.origin.y + rect.size.height + bottomMargin + vertSpace;
+                    leadingMaxHeight = rect.origin.y + rect.size.height + bottomSpace + vertSpace;
                 }
                 
             }
             
-            if rect.origin.y + rect.size.height + bottomMargin + vertSpace > maxHeight
+            if rect.origin.y + rect.size.height + bottomSpace + vertSpace > maxHeight
             {
-                maxHeight = rect.origin.y + rect.size.height + bottomMargin + vertSpace;
+                maxHeight = rect.origin.y + rect.size.height + bottomSpace + vertSpace;
             }
             
-            if rect.origin.x + rect.size.width + rightMargin + horzSpace > maxWidth
+            if rect.origin.x + rect.size.width + trailingSpace + horzSpace > maxWidth
             {
-                maxWidth = rect.origin.x + rect.size.width + rightMargin + horzSpace
+                maxWidth = rect.origin.x + rect.size.width + trailingSpace + horzSpace
             }
             
-            sbv.tgFrame.frame = rect;
+            sbvtgFrame.frame = rect;
             
         }
         
@@ -893,22 +924,22 @@ extension TGFloatLayout
             maxWidth -= horzSpace
         }
         
-        maxHeight += padding.bottom
-        maxWidth += padding.right
+        maxHeight += lsc.tg_bottomPadding
+        maxWidth += lsc.tg_trailingPadding
         
         if !hasBoundaryLimit
         {
             selfSize.width = maxWidth
         }
         
-        if (self.tgHeight?.isWrap ?? false)
+        if selftgHeightIsWrap
         {
             selfSize.height = maxHeight
         }
         else
         {
             var addYPos:CGFloat = 0;
-            let mgvert = self.tg_gravity & TGGravity.horz.mask;
+            let mgvert = lsc.tg_gravity & TGGravity.horz.mask;
             if (mgvert == TGGravity.vert.center)
             {
                 addYPos = (selfSize.height - maxHeight) / 2;
@@ -931,14 +962,17 @@ extension TGFloatLayout
         return selfSize;
     }
     
-    fileprivate func tgLayoutSubviewsForHorz(_ selfSize:CGSize, sbs:[UIView]) ->CGSize
+    fileprivate func tgLayoutSubviewsForHorz(_ selfSize:CGSize, sbs:[UIView], isEstimate:Bool, lsc:TGFloatLayoutViewSizeClassImpl) ->CGSize
     {
         
-        let padding = self.tg_padding
         var selfSize = selfSize
         
+        let selftgWidthIsWrap = lsc.tgWidth?.isWrap ?? false
+        let selftgHeightIsWrap = lsc.tgHeight?.isWrap ?? false
+        
+        
         var hasBoundaryLimit = true
-        if ((self.tgHeight?.isWrap ?? false) && self.tg_noBoundaryLimit)
+        if (selftgHeightIsWrap && lsc.tg_noBoundaryLimit)
         {
             hasBoundaryLimit = false
         }
@@ -949,69 +983,73 @@ extension TGFloatLayout
         }
         
         //遍历所有的子视图，查看是否有子视图的宽度会比视图自身要宽，如果有且有包裹属性则扩充自身的宽度
-        if ((self.tgHeight?.isWrap ?? false) && hasBoundaryLimit)
+        if (selftgHeightIsWrap && hasBoundaryLimit)
         {
-            var maxContentHeight = selfSize.height - padding.top - padding.bottom;
+            var maxContentHeight = selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding;
             for sbv in sbs
             {
-                let topMargin = (sbv.tgTop?.margin ?? 0)
-                let bottomMargin = (sbv.tgBottom?.margin ?? 0)
-                var rect = sbv.tgFrame.frame;
+                let sbvsc = sbv.tgCurrentSizeClass as! TGViewSizeClassImpl
+                let sbvtgFrame = sbv.tgFrame
+                
+                let topSpace = (sbvsc.tgTop?.margin ?? 0)
+                let bottomSpace = (sbvsc.tgBottom?.margin ?? 0)
+                let sbvtgHeightIsFill = sbvsc.tgHeight?.isFill ?? false
+                var rect = sbvtgFrame.frame;
                 
                 
                 //这里有可能设置了固定的高度
-                if (sbv.tgHeight?.dimeNumVal != nil)
+                if (sbvsc.tgHeight?.dimeNumVal != nil)
                 {
-                    rect.size.height = sbv.tgHeight!.measure
+                    rect.size.height = sbvsc.tgHeight!.measure
                 }
                 
-                rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+                rect.size.width = self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
                 
                 //有可能高度是和他的宽度相等。
-                if (sbv.tgHeight?.dimeRelaVal != nil && sbv.tgHeight!.dimeRelaVal === sbv.tgWidth)
+                if (sbvsc.tgHeight?.dimeRelaVal != nil && sbvsc.tgHeight!.dimeRelaVal === sbvsc.tgWidth)
                 {
                     
-                    if (sbv.tgWidth?.dimeNumVal != nil)
+                    if (sbvsc.tgWidth?.dimeNumVal != nil)
                     {
-                        rect.size.width = sbv.tgWidth!.measure;
+                        rect.size.width = sbvsc.tgWidth!.measure;
                     }
                     
-                    if (sbv.tgWidth?.dimeRelaVal != nil && sbv.tgWidth!.dimeRelaVal === self.tgWidth)
+                    if (sbvsc.tgWidth?.dimeRelaVal != nil && sbvsc.tgWidth!.dimeRelaVal === lsc.tgWidth)
                     {
-                        rect.size.width = sbv.tgWidth!.measure(selfSize.width - padding.left - padding.right)
+                        rect.size.width = sbvsc.tgWidth!.measure(selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding)
                     }
                     
-                    rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.width = self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
                     
-                    rect.size.height = sbv.tgHeight!.measure(rect.size.width)
+                    rect.size.height = sbvsc.tgHeight!.measure(rect.size.width)
                 }
                 
-                if (sbv.tgHeight?.isFlexHeight ?? false)
+                if let t = sbvsc.tgHeight, t.isFlexHeight
                 {
                     
-                    rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
+                    rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, sbvsc:sbvsc, width: rect.size.width)
                 }
                 
-                rect.size.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+                rect.size.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
                 
-                if (topMargin + rect.size.height + bottomMargin > maxContentHeight &&
-                    (sbv.tgHeight?.dimeRelaVal == nil || sbv.tgHeight!.dimeRelaVal !== self.tgHeight) &&
-                    sbv.tgHeight?.dimeWeightVal == nil &&
-                    !(sbv.tgHeight?.isFill ?? false))
+                if (topSpace + rect.size.height + bottomSpace > maxContentHeight &&
+                    (sbvsc.tgHeight?.dimeRelaVal == nil || sbvsc.tgHeight!.dimeRelaVal !== lsc.tgHeight) &&
+                    sbvsc.tgHeight?.dimeWeightVal == nil &&
+                    !sbvtgHeightIsFill)
                 {
-                    maxContentHeight = topMargin + rect.size.height + bottomMargin;
+                    maxContentHeight = topSpace + rect.size.height + bottomSpace;
                 }
             }
             
-            selfSize.height = padding.top + maxContentHeight + padding.bottom;
+            selfSize.height = lsc.tg_topPadding + maxContentHeight + lsc.tg_bottomPadding;
         }
         
         
         //支持浮动垂直间距。
-        let horzSpace = self.tg_hspace
-        var vertSpace = self.tg_vspace
-        var subviewSize = (self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClassImpl).tgSubviewSize;
+        let horzSpace = lsc.tg_hspace
+        var vertSpace = lsc.tg_vspace
+        var subviewSize = lsc.tgSubviewSize;
         if (subviewSize != 0)
         {
             #if DEBUG
@@ -1019,19 +1057,19 @@ extension TGFloatLayout
                 assert(hasBoundaryLimit, "Constraint exception！！, horizontal float layout:\(self) can not set tg_noBoundaryLimit to true when call  tg_setSubviews(size:CGFloat,minSpace:CGFloat,maxSpace:CGFloat)  method");
             #endif
             
-            let minSpace = (self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClassImpl).tgMinSpace
-            let maxSpace = (self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClassImpl).tgMaxSpace
+            let minSpace = lsc.tgMinSpace
+            let maxSpace = lsc.tgMaxSpace
 
-            let rowCount =  floor((selfSize.height - padding.top - padding.bottom  + minSpace) / (subviewSize + minSpace))
+            let rowCount =  floor((selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding  + minSpace) / (subviewSize + minSpace))
             if (rowCount > 1)
             {
-                vertSpace = (selfSize.height - padding.top - padding.bottom - subviewSize * rowCount)/(rowCount - 1)
+                vertSpace = (selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding - subviewSize * rowCount)/(rowCount - 1)
                 
                 if (vertSpace > maxSpace)
                 {
                     vertSpace = maxSpace
                     
-                    subviewSize =  (selfSize.height - padding.top - padding.bottom -  vertSpace * (rowCount - 1)) / rowCount
+                    subviewSize =  (selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding -  vertSpace * (rowCount - 1)) / rowCount
                     
                 }
 
@@ -1043,37 +1081,41 @@ extension TGFloatLayout
         var topCandidateRects:[CGRect] = [CGRect]()
         
         //为了计算方便总是把最上边的个虚拟区域作为一个候选区域
-        topCandidateRects.append(CGRect(x: padding.left, y: padding.top,width: CGFloat.greatestFiniteMagnitude,height: 0))
+        topCandidateRects.append(CGRect(x: lsc.tg_leadingPadding, y: lsc.tg_topPadding,width: CGFloat.greatestFiniteMagnitude,height: 0))
         
         //右边候选区域数组，保存的是CGRect值。
         var bottomCandidateRects:[CGRect] = [CGRect]()
         //为了计算方便总是把最下边的个虚拟区域作为一个候选区域
-        bottomCandidateRects.append(CGRect(x: padding.left, y: selfSize.height - padding.bottom,width: CGFloat.greatestFiniteMagnitude, height: 0))
+        bottomCandidateRects.append(CGRect(x: lsc.tg_leadingPadding, y: selfSize.height - lsc.tg_bottomPadding,width: CGFloat.greatestFiniteMagnitude, height: 0))
         
         //分别记录上边和下边的最后一个视图在X轴的偏移量
-        var topLastXOffset = padding.left;
-        var bottomLastXOffset = padding.left;
+        var topLastXOffset = lsc.tg_leadingPadding;
+        var bottomLastXOffset = lsc.tg_leadingPadding;
         
         //分别记录上下边和全局浮动视图的最宽占用的X轴的值
-        var topMaxWidth = padding.left
-        var bottomMaxWidth = padding.left
-        var maxWidth = padding.left
-        var maxHeight = padding.top
+        var topMaxWidth = lsc.tg_leadingPadding
+        var bottomMaxWidth = lsc.tg_leadingPadding
+        var maxWidth = lsc.tg_leadingPadding
+        var maxHeight = lsc.tg_topPadding
         
         for sbv in sbs
         {
-            let  topMargin = (sbv.tgTop?.margin ?? 0)
-            let leftMargin = (sbv.tgLeft?.margin ?? 0)
-            let bottomMargin = (sbv.tgBottom?.margin ?? 0)
-            let rightMargin = (sbv.tgRight?.margin ?? 0)
-            var rect = sbv.tgFrame.frame;
-            let isHeightWeight = sbv.tgHeight?.dimeWeightVal != nil || (sbv.tgHeight?.isFill ?? false)
-            let isWidthWeight = sbv.tgWidth?.dimeWeightVal != nil || (sbv.tgWidth?.isFill ?? false)
+            let sbvsc = sbv.tgCurrentSizeClass as! TGViewSizeClassImpl
+            let sbvtgFrame = sbv.tgFrame
+            let  topSpace = (sbvsc.tgTop?.margin ?? 0)
+            let leadingSpace = (sbvsc.tgLeading?.margin ?? 0)
+            let bottomSpace = (sbvsc.tgBottom?.margin ?? 0)
+            let trailingSpace = (sbvsc.tgTrailing?.margin ?? 0)
+            var rect = sbvtgFrame.frame;
+            let sbvtgWidthIsFill = sbvsc.tgWidth?.isFill ?? false
+            let sbvtgHeightIsFill = sbvsc.tgHeight?.isFill ?? false
+            let isWidthWeight = sbvsc.tgWidth?.dimeWeightVal != nil || sbvtgWidthIsFill
+            let isHeightWeight = sbvsc.tgHeight?.dimeWeightVal != nil || sbvtgHeightIsFill
+          
             
-            
-            if (sbv.tgWidth?.dimeNumVal != nil)
+            if (sbvsc.tgWidth?.dimeNumVal != nil)
             {
-                rect.size.width = sbv.tgWidth!.measure;
+                rect.size.width = sbvsc.tgWidth!.measure;
             }
             
             if subviewSize != 0
@@ -1081,74 +1123,74 @@ extension TGFloatLayout
                 rect.size.height = subviewSize
             }
             
-            if (sbv.tgHeight?.dimeNumVal != nil)
+            if (sbvsc.tgHeight?.dimeNumVal != nil)
             {
-                rect.size.height = sbv.tgHeight!.measure;
+                rect.size.height = sbvsc.tgHeight!.measure;
             }
             
-            if (sbv.tgHeight?.dimeRelaVal != nil && sbv.tgHeight!.dimeRelaVal === self.tgHeight)
+            if (sbvsc.tgHeight?.dimeRelaVal != nil && sbvsc.tgHeight!.dimeRelaVal === lsc.tgHeight)
             {
-                rect.size.height = sbv.tgHeight!.measure(selfSize.height - padding.top - padding.bottom)
+                rect.size.height = sbvsc.tgHeight!.measure(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
             }
             
-            if (sbv.tgWidth?.dimeRelaVal != nil && sbv.tgWidth!.dimeRelaVal === self.tgWidth && !(self.tgWidth?.isWrap ?? false))
+            if (sbvsc.tgWidth?.dimeRelaVal != nil && sbvsc.tgWidth!.dimeRelaVal === lsc.tgWidth && !selftgWidthIsWrap)
             {
-                rect.size.width = sbv.tgWidth!.measure(selfSize.width - padding.left - padding.right)
+                rect.size.width = sbvsc.tgWidth!.measure(selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding)
             }
             
-            if isWidthWeight && !(self.tgWidth?.isWrap ?? false)
+            if isWidthWeight && !selftgWidthIsWrap
             {
-                rect.size.width = sbv.tgWidth!.measure((selfSize.width - maxWidth - padding.right) * (sbv.tgWidth!.isFill ? 1.0 : sbv.tgWidth!.dimeWeightVal.rawValue/100) - leftMargin - rightMargin)
+                rect.size.width = sbvsc.tgWidth!.measure((selfSize.width - maxWidth - lsc.tg_trailingPadding) * (sbvtgWidthIsFill ? 1.0 : sbvsc.tgWidth!.dimeWeightVal.rawValue/100) - leadingSpace - trailingSpace)
 
             }
             
-            rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.width = self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
             
-            if (sbv.tgHeight?.dimeRelaVal != nil && sbv.tgHeight!.dimeRelaVal === sbv.tgWidth)
+            if (sbvsc.tgHeight?.dimeRelaVal != nil && sbvsc.tgHeight!.dimeRelaVal === sbvsc.tgWidth)
             {
-                rect.size.height = sbv.tgHeight!.measure(rect.size.width)
+                rect.size.height = sbvsc.tgHeight!.measure(rect.size.width)
             }
             
-            rect.size.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
-            if (sbv.tgWidth?.dimeRelaVal != nil && sbv.tgWidth!.dimeRelaVal === sbv.tgHeight)
+            if (sbvsc.tgWidth?.dimeRelaVal != nil && sbvsc.tgWidth!.dimeRelaVal === sbvsc.tgHeight)
             {
-                rect.size.width = sbv.tgWidth!.measure(rect.size.height)
+                rect.size.width = sbvsc.tgWidth!.measure(rect.size.height)
             }
             
-            if (sbv.tgWidth?.dimeRelaVal != nil &&  sbv.tgWidth!.dimeRelaVal.view != nil &&  sbv.tgWidth!.dimeRelaVal.view != self && sbv.tgWidth!.dimeRelaVal.view != sbv)
+            if (sbvsc.tgWidth?.dimeRelaVal != nil &&  sbvsc.tgWidth!.dimeRelaVal.view != nil &&  sbvsc.tgWidth!.dimeRelaVal.view != self && sbvsc.tgWidth!.dimeRelaVal.view != sbv)
             {
-                rect.size.width = sbv.tgWidth!.measure(sbv.tgWidth!.dimeRelaVal.view.tgFrame.width)
+                rect.size.width = sbvsc.tgWidth!.measure(sbvsc.tgWidth!.dimeRelaVal.view.tgFrame.width)
             }
             
-            if (sbv.tgHeight?.dimeRelaVal != nil &&  sbv.tgHeight!.dimeRelaVal.view != nil &&  sbv.tgHeight!.dimeRelaVal.view != self && sbv.tgHeight!.dimeRelaVal.view != sbv)
+            if (sbvsc.tgHeight?.dimeRelaVal != nil &&  sbvsc.tgHeight!.dimeRelaVal.view != nil &&  sbvsc.tgHeight!.dimeRelaVal.view != self && sbvsc.tgHeight!.dimeRelaVal.view != sbv)
             {
-                rect.size.height = sbv.tgHeight!.measure(sbv.tgHeight!.dimeRelaVal.view.tgFrame.height)
+                rect.size.height = sbvsc.tgHeight!.measure(sbvsc.tgHeight!.dimeRelaVal.view.tgFrame.height)
             }
             
             
             //如果高度是浮动的则需要调整高度。
-            if (sbv.tgHeight?.isFlexHeight ?? false)
+            if let t = sbvsc.tgHeight, t.isFlexHeight
             {
-                rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, width: rect.size.width)
+                rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, sbvsc:sbvsc, width: rect.size.width)
             }
             
-            rect.size.height = self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
-            if (sbv.tg_reverseFloat)
+            if (sbvsc.tg_reverseFloat)
             {
                 #if DEBUG
                     //异常崩溃：当布局视图设置了tg_noBoundaryLimit为true时子视图不能设置逆向浮动
                     assert(hasBoundaryLimit, "Constraint exception！！, horizontal float layout:\(self) can not set tg_noBoundaryLimit to true when the subview:\(sbv) set tg_reverseFloat to true.")
                 #endif
                 
-                var nextPoint = CGPoint(x: topLastXOffset, y: selfSize.height - padding.bottom)
-                var topCandidateYBoundary = padding.top;
-                if (sbv.tg_clearFloat)
+                var nextPoint = CGPoint(x: topLastXOffset, y: selfSize.height - lsc.tg_bottomPadding)
+                var topCandidateYBoundary = lsc.tg_topPadding;
+                if (sbvsc.tg_clearFloat)
                 {
                     //找到最底部的位置。
                     nextPoint.x = max(bottomMaxWidth, topLastXOffset);
-                    let topPoint = self.tgFindTopCandidatePoint(CGRect(x: nextPoint.x, y: selfSize.height - padding.bottom, width: CGFloat.greatestFiniteMagnitude, height: 0), height:topMargin + (isHeightWeight ? 0 : rect.size.height) + bottomMargin,topBoundary:topCandidateYBoundary,topCandidateRects:topCandidateRects,hasWeight:false)
+                    let topPoint = self.tgFindTopCandidatePoint(CGRect(x: nextPoint.x, y: selfSize.height - lsc.tg_bottomPadding, width: CGFloat.greatestFiniteMagnitude, height: 0), height:topSpace + (isHeightWeight ? 0 : rect.size.height) + bottomSpace,topBoundary:topCandidateYBoundary,topCandidateRects:topCandidateRects,hasWeight:false,lsc:lsc)
                     if (topPoint.x != CGFloat.greatestFiniteMagnitude)
                     {
                         nextPoint.x = max(bottomMaxWidth, topPoint.x);
@@ -1162,7 +1204,7 @@ extension TGFloatLayout
                     while i >= 0
                     {
                         let candidateRect = bottomCandidateRects[i]
-                        let topPoint = self.tgFindTopCandidatePoint(candidateRect,height:topMargin + (isHeightWeight ? 0 : rect.size.height) + bottomMargin,topBoundary:padding.top,topCandidateRects:topCandidateRects,hasWeight:isHeightWeight)
+                        let topPoint = self.tgFindTopCandidatePoint(candidateRect,height:topSpace + (isHeightWeight ? 0 : rect.size.height) + bottomSpace,topBoundary:lsc.tg_topPadding,topCandidateRects:topCandidateRects,hasWeight:isHeightWeight,lsc:lsc)
                         if (topPoint.x != CGFloat.greatestFiniteMagnitude)
                         {
                             nextPoint = CGPoint(x: max(nextPoint.x, topPoint.x),y: candidateRect.minY);
@@ -1179,26 +1221,26 @@ extension TGFloatLayout
                 {
                     
                     var heightWeight:CGFloat = 1.0
-                    if sbv.tgHeight?.dimeWeightVal != nil
+                    if sbvsc.tgHeight?.dimeWeightVal != nil
                     {
-                        heightWeight = sbv.tgHeight!.dimeWeightVal.rawValue/100
+                        heightWeight = sbvsc.tgHeight!.dimeWeightVal.rawValue/100
                     }
                     
-                    rect.size.height =  self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: (nextPoint.y - topCandidateYBoundary + sbv.tgHeight!.addVal) * heightWeight - topMargin - bottomMargin, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.height =  self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: (nextPoint.y - topCandidateYBoundary + sbvsc.tgHeight!.addVal) * heightWeight - topSpace - bottomSpace, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
-                    if (sbv.tgWidth?.dimeRelaVal != nil && sbv.tgWidth!.dimeRelaVal === sbv.tgHeight)
+                    if (sbvsc.tgWidth?.dimeRelaVal != nil && sbvsc.tgWidth!.dimeRelaVal === sbvsc.tgHeight)
                     {
-                        rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: sbv.tgWidth!.measure(rect.size.height), sbvSize: rect.size, selfLayoutSize: selfSize)
+                        rect.size.width = self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: sbvsc.tgWidth!.measure(rect.size.height), sbvSize: rect.size, selfLayoutSize: selfSize)
                     }
                     
                 }
                 
                 
-                rect.origin.y = nextPoint.y - bottomMargin - rect.size.height;
-                rect.origin.x = min(nextPoint.x, maxWidth) + leftMargin;
+                rect.origin.y = nextPoint.y - bottomSpace - rect.size.height;
+                rect.origin.x = min(nextPoint.x, maxWidth) + leadingSpace;
                 
                 //如果有智能边界线则找出所有智能边界线。
-                if (self.tg_intelligentBorderline != nil)
+                if (!isEstimate && self.tg_intelligentBorderline != nil)
                 {
                     //优先绘制左边和上边的。绘制左边的和上边的。
                     if let sbvl = sbv as? TGBaseLayout
@@ -1208,16 +1250,16 @@ extension TGFloatLayout
                         {
                             sbvl.tg_bottomBorderline = nil;
                             sbvl.tg_topBorderline = nil;
-                            sbvl.tg_rightBorderline = nil;
-                            sbvl.tg_leftBorderline = nil;
+                            sbvl.tg_trailingBorderline = nil;
+                            sbvl.tg_leadingBorderline = nil;
                             
                             //如果自己的上边和左边有子视图。
-                            if (rect.origin.x + rect.size.width + rightMargin < selfSize.width - padding.right)
+                            if (rect.origin.x + rect.size.width + trailingSpace < selfSize.width - lsc.tg_trailingPadding)
                             {
-                                sbvl.tg_rightBorderline = self.tg_intelligentBorderline;
+                                sbvl.tg_trailingBorderline = self.tg_intelligentBorderline;
                             }
                             
-                            if (rect.origin.y + rect.size.height + bottomMargin < selfSize.height - padding.bottom)
+                            if (rect.origin.y + rect.size.height + bottomSpace < selfSize.height - lsc.tg_bottomPadding)
                             {
                                 sbvl.tg_bottomBorderline = self.tg_intelligentBorderline;
                             }
@@ -1233,7 +1275,7 @@ extension TGFloatLayout
                 
                 
                 //这里有可能子视图本身的宽度会超过布局视图本身，但是我们的候选区域则不存储超过的宽度部分。
-                let cRect = CGRect(x: rect.origin.x - leftMargin, y: max(rect.origin.y - topMargin - vertSpace, padding.top), width: rect.size.width + leftMargin + rightMargin + horzSpace, height: min((rect.size.height + topMargin + bottomMargin),(selfSize.height - padding.top - padding.bottom)));
+                let cRect = CGRect(x: rect.origin.x - leadingSpace, y: max(rect.origin.y - topSpace - vertSpace, lsc.tg_topPadding), width: rect.size.width + leadingSpace + trailingSpace + horzSpace, height: min((rect.size.height + topSpace + bottomSpace),(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)));
                 
                 //把新的候选区域添加到数组中去。并删除高度小于新候选区域的其他区域
                 bottomCandidateRects = bottomCandidateRects.filter({$0.maxX > cRect.maxX})
@@ -1242,24 +1284,24 @@ extension TGFloatLayout
                 topCandidateRects = topCandidateRects.filter({$0.maxX > cRect.minX})
                 
                 bottomCandidateRects.append(cRect)
-                bottomLastXOffset = rect.origin.x - leftMargin;
+                bottomLastXOffset = rect.origin.x - leadingSpace;
                 
-                if (rect.origin.x + rect.size.width + rightMargin + horzSpace > bottomMaxWidth)
+                if (rect.origin.x + rect.size.width + trailingSpace + horzSpace > bottomMaxWidth)
                 {
-                    bottomMaxWidth = rect.origin.x + rect.size.width + rightMargin + horzSpace;
+                    bottomMaxWidth = rect.origin.x + rect.size.width + trailingSpace + horzSpace;
                 }
             }
             else
             {
-                var nextPoint = CGPoint(x: bottomLastXOffset,y: padding.top);
-                var bottomCandidateYBoundary = selfSize.height - padding.bottom;
+                var nextPoint = CGPoint(x: bottomLastXOffset,y: lsc.tg_topPadding);
+                var bottomCandidateYBoundary = selfSize.height - lsc.tg_bottomPadding;
                 //如果是清除了浮动则直换行移动到最下面。
-                if (sbv.tg_clearFloat)
+                if (sbvsc.tg_clearFloat)
                 {
                     //找到最低点。
                     nextPoint.x = max(topMaxWidth, bottomLastXOffset);
                     
-                    let bottomPoint = self.tgFindBottomCandidatePoint(CGRect(x: nextPoint.x, y: padding.top,width: CGFloat.greatestFiniteMagnitude,height: 0),height:topMargin + (isHeightWeight ? 0: rect.size.height) + bottomMargin,bottomBoundary:bottomCandidateYBoundary,bottomCandidateRects:bottomCandidateRects,hasWeight:false)
+                    let bottomPoint = self.tgFindBottomCandidatePoint(CGRect(x: nextPoint.x, y: lsc.tg_topPadding,width: CGFloat.greatestFiniteMagnitude,height: 0),height:topSpace + (isHeightWeight ? 0: rect.size.height) + bottomSpace,bottomBoundary:bottomCandidateYBoundary,bottomCandidateRects:bottomCandidateRects,hasWeight:false,lsc:lsc)
                     if (bottomPoint.x != CGFloat.greatestFiniteMagnitude)
                     {
                         nextPoint.x = max(topMaxWidth, bottomPoint.x);
@@ -1274,7 +1316,7 @@ extension TGFloatLayout
                     while i >= 0
                     {
                         let candidateRect = topCandidateRects[i]
-                        let bottomPoint = self.tgFindBottomCandidatePoint(candidateRect,height:topMargin + (isHeightWeight ? 0: rect.size.height) + bottomMargin, bottomBoundary:selfSize.height - padding.bottom,bottomCandidateRects:bottomCandidateRects, hasWeight:isHeightWeight);
+                        let bottomPoint = self.tgFindBottomCandidatePoint(candidateRect,height:topSpace + (isHeightWeight ? 0: rect.size.height) + bottomSpace, bottomBoundary:selfSize.height - lsc.tg_bottomPadding,bottomCandidateRects:bottomCandidateRects, hasWeight:isHeightWeight,lsc:lsc);
                         if (bottomPoint.x != CGFloat.greatestFiniteMagnitude)
                         {
                             nextPoint = CGPoint(x: max(nextPoint.x, bottomPoint.x),y: candidateRect.maxY);
@@ -1296,26 +1338,26 @@ extension TGFloatLayout
                     
                     
                     var heightWeight:CGFloat = 1.0
-                    if sbv.tgHeight?.dimeWeightVal != nil
+                    if sbvsc.tgHeight?.dimeWeightVal != nil
                     {
-                        heightWeight = sbv.tgHeight!.dimeWeightVal.rawValue/100
+                        heightWeight = sbvsc.tgHeight!.dimeWeightVal.rawValue/100
                     }
                     
-                    rect.size.height =  self.tgValidMeasure(sbv.tgHeight, sbv: sbv, calcSize: (bottomCandidateYBoundary - nextPoint.y + sbv.tgHeight!.addVal) * heightWeight - topMargin - bottomMargin, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.height =  self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: (bottomCandidateYBoundary - nextPoint.y + sbvsc.tgHeight!.addVal) * heightWeight - topSpace - bottomSpace, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
-                    if (sbv.tgWidth?.dimeRelaVal != nil && sbv.tgWidth!.dimeRelaVal === sbv.tgHeight)
+                    if (sbvsc.tgWidth?.dimeRelaVal != nil && sbvsc.tgWidth!.dimeRelaVal === sbvsc.tgHeight)
                     {
-                        rect.size.width = self.tgValidMeasure(sbv.tgWidth, sbv: sbv, calcSize: sbv.tgWidth!.measure(rect.size.height), sbvSize: rect.size, selfLayoutSize: selfSize)
+                        rect.size.width = self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: sbvsc.tgWidth!.measure(rect.size.height), sbvSize: rect.size, selfLayoutSize: selfSize)
                     }
                     
                     
                 }
                 
-                rect.origin.y = nextPoint.y + topMargin;
-                rect.origin.x = min(nextPoint.x,maxWidth) + leftMargin;
+                rect.origin.y = nextPoint.y + topSpace;
+                rect.origin.x = min(nextPoint.x,maxWidth) + leadingSpace;
                 
                 //如果有智能边界线则找出所有智能边界线。
-                if (self.tg_intelligentBorderline != nil)
+                if (!isEstimate && self.tg_intelligentBorderline != nil)
                 {
                     //优先绘制左边和上边的。绘制左边的和上边的。
                     if let sbvl = sbv as? TGBaseLayout
@@ -1324,16 +1366,16 @@ extension TGFloatLayout
                         {
                             sbvl.tg_bottomBorderline = nil;
                             sbvl.tg_topBorderline = nil;
-                            sbvl.tg_rightBorderline = nil;
-                            sbvl.tg_leftBorderline = nil;
+                            sbvl.tg_trailingBorderline = nil;
+                            sbvl.tg_leadingBorderline = nil;
                             
                             //如果自己的上边和左边有子视图。
-                            if (rect.origin.x - leftMargin > padding.left)
+                            if (rect.origin.x - leadingSpace > lsc.tg_leadingPadding)
                             {
-                                sbvl.tg_leftBorderline = self.tg_intelligentBorderline;
+                                sbvl.tg_leadingBorderline = self.tg_intelligentBorderline;
                             }
                             
-                            if (rect.origin.y - topMargin > padding.top)
+                            if (rect.origin.y - topSpace > lsc.tg_topPadding)
                             {
                                 sbvl.tg_topBorderline = self.tg_intelligentBorderline;
                             }
@@ -1343,7 +1385,7 @@ extension TGFloatLayout
                 }
                 
                 
-                let cRect = CGRect(x: rect.origin.x - leftMargin, y: rect.origin.y - topMargin,width: rect.size.width + leftMargin + rightMargin + horzSpace,height: min((rect.size.height + topMargin + bottomMargin + vertSpace),(selfSize.height - padding.top - padding.bottom)));
+                let cRect = CGRect(x: rect.origin.x - leadingSpace, y: rect.origin.y - topSpace,width: rect.size.width + leadingSpace + trailingSpace + horzSpace,height: min((rect.size.height + topSpace + bottomSpace + vertSpace),(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)));
                 
                 
                 //把新添加到候选中去。并删除宽度小于的最新候选区域的候选区域
@@ -1353,29 +1395,29 @@ extension TGFloatLayout
                 bottomCandidateRects = bottomCandidateRects.filter({$0.maxX > cRect.minX})
                 
                 topCandidateRects.append(cRect)
-                topLastXOffset = rect.origin.x - leftMargin;
+                topLastXOffset = rect.origin.x - leadingSpace;
                 
-                if (rect.origin.x + rect.size.width + rightMargin + horzSpace > topMaxWidth)
+                if (rect.origin.x + rect.size.width + trailingSpace + horzSpace > topMaxWidth)
                 {
-                    topMaxWidth = rect.origin.x + rect.size.width + rightMargin + horzSpace;
+                    topMaxWidth = rect.origin.x + rect.size.width + trailingSpace + horzSpace;
                 }
                 
             }
             
-            if rect.origin.y + rect.size.height + bottomMargin + vertSpace > maxHeight
+            if rect.origin.y + rect.size.height + bottomSpace + vertSpace > maxHeight
             {
-                maxHeight = rect.origin.y + rect.size.height + bottomMargin + vertSpace;
+                maxHeight = rect.origin.y + rect.size.height + bottomSpace + vertSpace;
             }
             
-            if rect.origin.x + rect.size.width + rightMargin + horzSpace > maxWidth
+            if rect.origin.x + rect.size.width + trailingSpace + horzSpace > maxWidth
             {
-                maxWidth = rect.origin.x + rect.size.width + rightMargin + horzSpace
+                maxWidth = rect.origin.x + rect.size.width + trailingSpace + horzSpace
             }
 
             
             
             
-            sbv.tgFrame.frame = rect;
+            sbvtgFrame.frame = rect;
             
         }
         
@@ -1385,27 +1427,28 @@ extension TGFloatLayout
             maxHeight -= vertSpace
         }
         
-        maxWidth += padding.right;
-        maxHeight += padding.bottom;
+        maxWidth += lsc.tg_trailingPadding;
+        maxHeight += lsc.tg_bottomPadding;
         
         if !hasBoundaryLimit
         {
             selfSize.height = maxHeight
         }
         
-        if (self.tgWidth?.isWrap ?? false)
+        if selftgWidthIsWrap
         {
             selfSize.width = maxWidth;
         }
         else
         {
             var addXPos:CGFloat = 0;
-            let  mghorz = self.tg_gravity & TGGravity.vert.mask;
+            let mghorz = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.vert.mask)
+            
             if (mghorz == TGGravity.horz.center)
             {
                 addXPos = (selfSize.width - maxWidth) / 2;
             }
-            else if (mghorz == TGGravity.horz.right)
+            else if (mghorz == TGGravity.horz.trailing)
             {
                 addXPos = selfSize.width - maxWidth;
             }
@@ -1414,7 +1457,7 @@ extension TGFloatLayout
             {
                 for i in 0 ..< sbs.count
                 {
-                    sbs[i].tgFrame.left += addXPos
+                    sbs[i].tgFrame.leading += addXPos
                     
                 }
             }

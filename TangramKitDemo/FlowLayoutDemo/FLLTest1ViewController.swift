@@ -29,9 +29,12 @@ class FLLTest1ViewController: UIViewController {
         /*
          这个例子用来介绍流式布局的特性，流式布局中的子视图总是按一定的规则一次排列，当数量到达一定程度或者内容到达一定程度时就会自动换行从新排列。
          */
-        //根视图用一个水平内容约束流式布局，这里实现了一个类似于垂直线性布局的能力。
-        let rootLayout = TGFlowLayout(.horz,arrangedCount:0)
+        
+        self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
+        let rootLayout = TGLinearLayout(.vert)
         rootLayout.tg_gravity = TGGravity.horz.fill //里面所有子视图的宽度都填充为和父视图一样宽。
+        rootLayout.backgroundColor = .white
         self.view = rootLayout
 
         

@@ -113,6 +113,41 @@ TangramKit是一套在Swift3.0语言上开发的iOS界面视图布局框架。�
 
  ```
 
+### TangramKit和各种布局方式的性能比较
+![demo](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/MyLayoutP.png)
+
+下面两张表格分别列表每个子视图的建立消耗的时间和布局消耗时间，单位为：毫秒
+
+create time(ms)/per subview|Frame|TangramKit|AutoLayout|Masonry|UIStackView	
+-------|-----|-------|--------|--------|-------
+TGLinearLayout|0.08|0.164|0.219|0.304|0.131
+TGFrameLayout|0.05|0.149|0.209|0.273|0.131
+TGRelativeLayout|0.079|0.182|0.116|0.359|0.131
+TGFlowLayout|0.08|0.107|0.198|0.258|0.131
+TGFloatLayout|0.044|0.148|0.203|0.250|0.131
+
+
+
+layout time(ms)/per subview |Frame|TangramKit|AutoLayout|Masonry|UIStackView	
+-----|-------|--------|-------|---------|------
+TGLinearLayout|0|0.049|0.269|0.269|0.272
+TGFrameLayout|0|0.042|0.243|0.243|0.272
+TGRelativeLayout|0|0.068|0.274|0.274|0.272
+TGFlowLayout|0|0.036|0.279|0.279|0.272
+TGFloatLayout|0|0.055|0.208|0.208|0.272
+
+
+
+从上面的表格可以总结如下：
+
+ 1. 用frame构建视图用时最少，平均每个视图花费0.068ms。当视图的frame指定后就不再需要布局视图了，所以布局时间几乎是0。
+  2. 当用AutoLayout进行布局时每个子视图的平均构建时长约为0.189ms，而Masonry因为是对AutoLayout的封装所以平均构建时长约为0.289ms。在布局时则因为都是使用了AutoLayout所以是相等的，大概花费0.255ms左右。
+  3. TangramKit的实现因为是对frame的封装，所以无论是构建时长和布局时长都要优于AutoLayout，但低于原始的frame方法。TangramKit的平均构建时长约0.150ms，比frame构建要多花费2.2倍的时间；而AutoLayout的平均构建时长是TangramKit的1.26倍；Masonry的平均构建时长则是TangramKit的1.9倍。
+  4. TangramKit的平均布局时长是0.05ms, 而AutoLayout的布局时长则是TangramKit的5倍。
+  5. UIStackView的构建时长要稍微优于TangramKit的线性布局TGLinearLayout.但是布局时长则是TGLinearLayout的5.5倍。
+  6. TangramKit中流式布局TGFlowLayout的构建时长和布局时长最小，而相对布局的构建和布局时长最长。
+
+
 
 ## 系统结构
  
@@ -555,7 +590,7 @@ $ gem install cocoapods
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 
-pod 'TangramKit', '~> 1.0.5'
+pod 'TangramKit', '~> 1.0.6'
 ```
    
 然后运行如下命令:

@@ -82,7 +82,7 @@ class LLTest5ViewController: UIViewController {
         
         let  v1 = self.createLabel(NSLocalizedString("width equal to superview, height equal to 20% of free height of superview", comment: ""), color:CFTool.color(5))
         v1.numberOfLines = 3
-        v1.tg_top.equal(10)
+        v1.tg_top.equal(self.topLayoutGuide, offset:10)
         v1.tg_width.equal(100%)  //等价于v1.tg_width.equal(.fill)
         //您可以设置为:
         //v1.tg_width ~= 100%
@@ -102,7 +102,7 @@ class LLTest5ViewController: UIViewController {
         let  v3 = self.createLabel(NSLocalizedString("width equal to superview - 20, height equal to 50% of free height of superview", comment: ""), color:CFTool.color(7))
         v3.numberOfLines = 0
         v3.tg_top.equal(10)
-        v3.tg_right.equal(0)  //右对齐。
+        v3.tg_trailing.equal(0)  //右对齐。
         v3.tg_width.equal(100%, increment:-20)  //等价于v3.tg_width.equal(.fill, increment:-20)
         v3.tg_height.equal(50%)
         rootLayout.addSubview(v3)
@@ -118,8 +118,8 @@ class LLTest5ViewController: UIViewController {
         
         let  v5 = self.createLabel(NSLocalizedString("left margin equal to 20% of superview, right margin equal to 30% of superview, width equal to 50% of superview, top spacing equal to 5% of free height of superview, bottom spacing equal to 10% of free height of superview", comment: ""), color:CFTool.color(9))
         v5.numberOfLines = 0
-        v5.tg_left.equal(20%)
-        v5.tg_right.equal(30%)
+        v5.tg_leading.equal(20%)
+        v5.tg_trailing.equal(30%)
         v5.tg_top.equal(5%)
         v5.tg_bottom.equal(10%)
         v5.tg_height.equal(10%)
