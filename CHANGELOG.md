@@ -31,6 +31,8 @@ TGGravity|TGGravity.horz.trailing|TGGravity.horz.right|TGGravity.horz.left
 #### Fixed
 1. 修复了将一个布局视图加入到SB或者XIB上时同时设置了四周边距而不起作用的[#BUG36](https://github.com/youngsoft/MyLinearLayout/issues/36)。具体解决的方法是实现了TGBaseLayout的awakeFromNib方法，然后在里面更新了布局。
 2. 修复了框架布局`TGFrameLayout`和相对布局`TGRelativeLayout`中尺寸为.wrap时可能计算错误的BUG。
+3. 修复了路径布局`TGPathLayout`中曲线精度计算的一个BUG。这个BUG可能导致子视图之间的间距不正确。
+4. 修复了1.0.5版本编译缓慢的问题，主要是优化了对??运算符的使用以及类型转换的问题导致编译缓慢。
 
 #### Changed
 1.  为了和[TangramKit](https://github.com/youngsoft/TangramKit)库保持一致，对一些名字进行了统一的定义。下面表格列出了新旧名称的定义变化。
