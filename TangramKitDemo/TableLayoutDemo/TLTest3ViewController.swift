@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 class TLTest3ViewController: UIViewController {
     
@@ -35,6 +37,7 @@ class TLTest3ViewController: UIViewController {
         
         let scrollView = UIScrollView(frame:self.view.bounds.insetBy(dx: 10, dy: 10))
         scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        scrollView.backgroundColor = .white
         self.view.addSubview(scrollView)
         
         
@@ -159,7 +162,8 @@ extension TLTest3ViewController
 {
     func handleCellTap(sender:TGBaseLayout)
     {
-        let  message = "您单击了:\((sender.subviews.first as! UILabel).text)"
+        let label = sender.subviews.first as! UILabel
+        let  message = "您单击了:\(label.text!)"
         let alert = UIAlertView(title: nil, message: message, delegate: nil, cancelButtonTitle: "OK")
         alert.show()
     }

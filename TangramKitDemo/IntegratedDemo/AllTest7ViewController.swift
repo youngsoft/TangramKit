@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 /**
  *❁1.Screen perfect fit - Demo1

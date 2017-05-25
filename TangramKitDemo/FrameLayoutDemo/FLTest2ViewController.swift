@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 /**
  * 2.FrameLayout - Complex UI

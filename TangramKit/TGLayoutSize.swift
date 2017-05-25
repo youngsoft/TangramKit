@@ -9,6 +9,41 @@
 import UIKit
 
 
+protocol TGLayoutSizeValue
+{    
+    var hasValue:Bool {get}
+    
+    var isWrap:Bool {get}
+    
+    var isFill:Bool {get}
+    
+    var numberVal:CGFloat! {get}
+    
+    var sizeVal:TGLayoutSize! {get}
+    
+    var arrayVal:[TGLayoutSize]! {get}
+    
+    var weightVal:TGWeight! {get}
+    
+    var increment:CGFloat {get}
+    
+    var multiple:CGFloat {get}
+    
+    var minVal:TGLayoutSize? {get}
+    
+    var maxVal:TGLayoutSize? {get}
+    
+    var isFlexHeight:Bool {get}
+    
+    var measure:CGFloat {get}
+    
+    func measure(_ size:CGFloat) -> CGFloat
+    
+    func resetValue()
+
+}
+
+
 //定义TGLayoutSize对象可以设置的值类型。
 public protocol TGLayoutSizeType
 {
@@ -34,21 +69,21 @@ extension UIView:TGLayoutSizeType{}
 
 /**
  *视图的布局尺寸类，用来设置视图在布局视图中宽度和高度的尺寸值。布局尺寸类是对尺寸的一个抽象，一个尺寸不一定描述为一个具体的数值，也有可能描述为和另外一个尺寸相等也就是依赖另外一个尺寸，同时一个尺寸可能也会有最大和最小值的限制等等。因此用TGLayoutSize类来描述这种尺寸的抽象概念。
- *一个尺寸对象的最终尺寸值 = min(max(sizeVal * multiVal + addVal, min.sizeVal * min.multiVal + min.addVal), max.sizeVal * max.multiVal + max.addVal)
+ *一个尺寸对象的最终尺寸值 = min(max(sizeVal * multiple + increment, min.sizeVal * min.multiple + min.increment), max.sizeVal * max.multiple + max.increment)
  * 其中:
  sizeVal是通过equal方法设置的值。
- multiVal是通过multiply方法或者equal方法中的multiple参数设置的值。
- addVal是通过add方法或者equal方法中的increment参数设置的值。
- min.sizeVal,min.multiVal,min.addVal是通过min方法设置的值。他表示尺寸的最小边界值。
- max.sizeVal,max.multiVal,max.addVal是通过max方法设置的值。他表示尺寸的最大边界值。
+ multiple是通过multiply方法或者equal方法中的multiple参数设置的值。
+ increment是通过add方法或者equal方法中的increment参数设置的值。
+ min.sizeVal,min.multiple,min.increment是通过min方法设置的值。他表示尺寸的最小边界值。
+ max.sizeVal,max.multiple,max.increment是通过max方法设置的值。他表示尺寸的最大边界值。
  */
-final public class TGLayoutSize
+final public class TGLayoutSize:TGLayoutSizeValue
 {
     
     //定义三个特殊类型的值。
-    public static let wrap = TGLayoutSize(.none)  //视图的尺寸由内容或者子视图包裹。
-    public static let fill = TGLayoutSize(.none)  //视图的尺寸填充父视图的剩余空间。
-    public static let average = TGLayoutSize(.none) //视图的尺寸会平分父视图的剩余空间。
+    public static let wrap = TGLayoutSize(.none, view: nil)  //视图的尺寸由内容或者子视图包裹。
+    public static let fill = TGLayoutSize(.none, view: nil)  //视图的尺寸填充父视图的剩余空间。
+    public static let average = TGLayoutSize(.none, view:nil) //视图的尺寸会平分父视图的剩余空间。
     
     //设置尺寸值为一个具体的数值。
     @discardableResult
@@ -60,7 +95,7 @@ final public class TGLayoutSize
     @discardableResult
     public func equal(_ size:CGFloat, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
-        return tgEqual(val: size, increment: increment, multiple: multiple)
+        return equalHelper(val: size, increment: increment, multiple: multiple)
     }
     
     
@@ -72,37 +107,37 @@ final public class TGLayoutSize
     @discardableResult
     public func equal(_ weight:TGWeight, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
-        return tgEqual(val: weight, increment: increment, multiple: multiple)
+        return equalHelper(val: weight, increment: increment, multiple: multiple)
     }
     
     //设置尺寸值为数组类型，表示这个尺寸和数组中的尺寸对象按比例分配父布局的尺寸，这个设置只有当视图是TGRelativeLayout下的子视图才有意义。
     @discardableResult
     public func equal(_ array:[TGLayoutSize], increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
-        return tgEqual(val: array, increment: increment, multiple: multiple)
+        return equalHelper(val: array, increment: increment, multiple: multiple)
     }
     
     //设置位置的值为视图的对应的尺寸，如果当前是tg_width则等价于 tg_width.equal(view.tg_width)
     @discardableResult
     public func equal(_ view:UIView,increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
-        return tgEqual(val: view, increment: increment, multiple: multiple)
+        return equalHelper(val: view, increment: increment, multiple: multiple)
     }
     
     //设置尺寸值为TGLayoutSize，表示和另外一个对象的尺寸相等。如果设置为nil则表示清除尺寸值的设置。
     @discardableResult
     public func equal(_ dime:TGLayoutSize!, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
-        return tgEqual(val: dime, increment: increment, multiple: multiple)
+        return equalHelper(val: dime, increment: increment, multiple: multiple)
     }
     
     //设置尺寸在equal设置的基础上添加的值，这个设置和equal方法中的increment的设定等价。
     @discardableResult
     public func add(_ val:CGFloat) ->TGLayoutSize
     {
-        if _addVal != val
+        if _increment != val
         {
-            _addVal = val
+            _increment = val
             setNeedLayout()
         }
         
@@ -113,9 +148,9 @@ final public class TGLayoutSize
     @discardableResult
     public func multiply(_ val:CGFloat) ->TGLayoutSize
     {
-        if _multiVal != val
+        if _multiple != val
         {
-            _multiVal = val
+            _multiple = val
             setNeedLayout()
         }
         
@@ -140,7 +175,7 @@ final public class TGLayoutSize
     @discardableResult
     public func min(_ size:CGFloat, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
-        self.minVal.equal(size, increment:increment, multiple:multiple)
+        self.min.equal(size, increment:increment, multiple:multiple)
         setNeedLayout()
         return self
     }
@@ -152,10 +187,10 @@ final public class TGLayoutSize
         var dime = dime
         if dime === self
         {
-            dime = self.minVal
+            dime = self.min
         }
         
-        self.minVal.equal(dime,increment:increment, multiple:multiple)
+        self.min.equal(dime,increment:increment, multiple:multiple)
         setNeedLayout()
         
         return self
@@ -165,7 +200,7 @@ final public class TGLayoutSize
     @discardableResult
     public func min(_ view:UIView, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
-        self.minVal.equal(view,increment:increment, multiple:multiple)
+        self.min.equal(view,increment:increment, multiple:multiple)
         setNeedLayout()
         
         return self
@@ -190,7 +225,7 @@ final public class TGLayoutSize
     @discardableResult
     public func max(_ size:CGFloat, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
-        self.maxVal.equal(size,increment:increment, multiple:multiple)
+        self.max.equal(size,increment:increment, multiple:multiple)
         setNeedLayout()
         return self
     }
@@ -199,7 +234,7 @@ final public class TGLayoutSize
     @discardableResult
     public func max(_ view:UIView, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
-        self.maxVal.equal(view ,increment:increment, multiple:multiple)
+        self.max.equal(view ,increment:increment, multiple:multiple)
         setNeedLayout()
         
         return self
@@ -212,10 +247,10 @@ final public class TGLayoutSize
         var dime = dime
         if dime === self
         {
-            dime = self.maxVal
+            dime = self.max
         }
 
-        self.maxVal.equal(dime ,increment:increment, multiple:multiple)
+        self.max.equal(dime ,increment:increment, multiple:multiple)
         setNeedLayout()
         
         return self
@@ -234,11 +269,11 @@ final public class TGLayoutSize
     public func clear()
     {
         _active = true
-        _dimeVal = nil
-        _addVal = 0
-        _multiVal = 1
-        _minVal = nil
-        _maxVal = nil
+        _val = nil
+        _increment = 0
+        _multiple = 1
+        _min = nil
+        _max = nil
         setNeedLayout()
         
     }
@@ -259,14 +294,14 @@ final public class TGLayoutSize
             if _active != newValue
             {
                 _active = newValue
-                if _minVal != nil
+                if _min != nil
                 {
-                  _minVal._active = newValue
+                  _min._active = newValue
                 }
                 
-                if _maxVal != nil
+                if _max != nil
                 {
-                  _maxVal._active = newValue
+                  _max._active = newValue
                 }
                 setNeedLayout()
             }
@@ -277,18 +312,18 @@ final public class TGLayoutSize
     //判断尺寸是否被设置。
     public var hasValue:Bool
     {
-        return _active && _dimeVal != nil
+        return _active && _val != nil
     }
     
     //判断尺寸值是否被设置为包裹类型。
     public var isWrap:Bool
     {
-        if (!_active || _dimeVal == nil)
+        if (!_active || _val == nil)
         {
             return false
         }
         
-        switch _dimeVal! {
+        switch _val! {
         case .wrapV:
             return true
         default:
@@ -299,12 +334,12 @@ final public class TGLayoutSize
     //判断尺寸值是否被设置为填充类型。
     public var isFill:Bool
     {
-        if (!_active || _dimeVal == nil)
+        if (!_active || _val == nil)
         {
             return false
         }
         
-        switch _dimeVal! {
+        switch _val! {
         case .fillV:
             return true
         default:
@@ -313,16 +348,16 @@ final public class TGLayoutSize
     }
     
     //获取数值类型的尺寸值。
-    public var dimeNumVal:CGFloat!
+    public var numberVal:CGFloat!
     {
         
-        if (!_active || _dimeVal == nil)
+        if (!_active || _val == nil)
         {
             return nil
         }
         
         
-        switch _dimeVal! {
+        switch _val! {
         case .floatV(let v):
             return v
         default:
@@ -331,15 +366,15 @@ final public class TGLayoutSize
     }
     
     //获取相对类型的尺寸值。
-    public var dimeRelaVal:TGLayoutSize!
+    public var sizeVal:TGLayoutSize!
     {
-        if (!_active || _dimeVal == nil)
+        if (!_active || _val == nil)
         {
             return nil
         }
         
         
-        switch _dimeVal! {
+        switch _val! {
         case .dimeV(let v):
             return v
         default:
@@ -351,15 +386,15 @@ final public class TGLayoutSize
     }
     
     //获取数组类型的尺寸值。
-    public var dimeArrVal:[TGLayoutSize]!
+    public var arrayVal:[TGLayoutSize]!
     {
-        if (!_active || _dimeVal == nil)
+        if (!_active || _val == nil)
         {
             return nil
         }
         
         
-        switch _dimeVal! {
+        switch _val! {
         case .arrayV(let v):
             return v
         default:
@@ -368,15 +403,15 @@ final public class TGLayoutSize
     }
     
     //获取比重类型的尺寸值。
-    public var dimeWeightVal:TGWeight!
+    public var weightVal:TGWeight!
     {
-        if (!_active || _dimeVal == nil)
+        if (!_active || _val == nil)
         {
             return nil
         }
         
         
-        switch _dimeVal! {
+        switch _val! {
         case .weightV(let v):
             return v
         default:
@@ -386,11 +421,11 @@ final public class TGLayoutSize
     }
     
     //获取尺寸的增量值。
-    public var addVal:CGFloat
+    public var increment:CGFloat
     {
         if _active
         {
-           return _addVal
+           return _increment
         }
         else
         {
@@ -399,11 +434,11 @@ final public class TGLayoutSize
     }
     
     //获取尺寸的乘量值。
-    public var multiVal:CGFloat
+    public var multiple:CGFloat
     {
         if _active
         {
-           return _multiVal
+           return _multiple
         }
         else
         {
@@ -412,25 +447,25 @@ final public class TGLayoutSize
     }
     
     //获取尺寸的下边界值。
-    public var minVal:TGLayoutSize
+    public var min:TGLayoutSize
     {
-        if _minVal == nil
+        if _min == nil
         {
-            _minVal = TGLayoutSize(_type).equal(-CGFloat.greatestFiniteMagnitude)
-            _minVal._active = _active
+            _min = TGLayoutSize(_type, view:nil).equal(-CGFloat.greatestFiniteMagnitude)
+            _min._active = _active
         }
-        return _minVal
+        return _min
     }
     
     //获取尺寸的上边界值。
-    public var maxVal:TGLayoutSize
+    public var max:TGLayoutSize
     {
-        if _maxVal == nil
+        if _max == nil
         {
-            _maxVal = TGLayoutSize(_type).equal(CGFloat.greatestFiniteMagnitude)
-            _maxVal._active = _active
+            _max = TGLayoutSize(_type, view:nil).equal(CGFloat.greatestFiniteMagnitude)
+            _max._active = _active
         }
-        return _maxVal
+        return _max
     }
     
     
@@ -444,19 +479,20 @@ final public class TGLayoutSize
         case fillV
     }
     
-    internal let _type:TGGravity
-    internal weak var _view:UIView!
-    internal var _active:Bool = true
-    internal var _dimeVal:ValueType! = nil
-    internal var _addVal:CGFloat = 0
-    internal var _multiVal:CGFloat = 1
-    internal var _minVal:TGLayoutSize! = nil
-    internal var _maxVal:TGLayoutSize! = nil
+    fileprivate let _type:TGGravity
+    fileprivate weak var _view:UIView!
+    fileprivate var _active:Bool = true
+    fileprivate var _val:ValueType! = nil
+    fileprivate var _increment:CGFloat = 0
+    fileprivate var _multiple:CGFloat = 1
+    fileprivate var _min:TGLayoutSize! = nil
+    fileprivate var _max:TGLayoutSize! = nil
     
     
-    public init(_ type:TGGravity)
+    public init(_ type:TGGravity, view:UIView!)
     {
         _type = type
+        _view = view
     }
     
 }
@@ -464,34 +500,34 @@ final public class TGLayoutSize
 extension TGLayoutSize
 {
     @discardableResult
-    internal func tgEqual(val:TGLayoutSizeType!, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
+    internal func equalHelper(val:TGLayoutSizeType!, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
-        _addVal = increment
-        _multiVal = multiple
+        _increment = increment
+        _multiple = multiple
         
         if let v = val as? CGFloat
         {
-            _dimeVal = .floatV(v)
+            _val = .floatV(v)
         }
         else if let v = val as? Double
         {
-            _dimeVal = .floatV(CGFloat(v))
+            _val = .floatV(CGFloat(v))
         }
         else if let v = val as? Float
         {
-            _dimeVal = .floatV(CGFloat(v))
+            _val = .floatV(CGFloat(v))
         }
         else if let v = val as? Int
         {
-            _dimeVal = .floatV(CGFloat(v))
+            _val = .floatV(CGFloat(v))
         }
         else if let v = val as? TGWeight
         {
-            _dimeVal = .weightV(v)
+            _val = .weightV(v)
         }
         else if let v = val as? [TGLayoutSize]
         {
-            _dimeVal = .arrayV(v)
+            _val = .arrayV(v)
         }
         else if let v = val as? UIView
         {
@@ -502,10 +538,10 @@ extension TGLayoutSize
             
             switch _type {
             case TGGravity.vert.fill:
-                _dimeVal = .dimeV(v.tg_height)
+                _val = .dimeV(v.tg_height)
                 break
             case TGGravity.horz.fill:
-                _dimeVal = .dimeV(v.tg_width)
+                _val = .dimeV(v.tg_width)
                 break
             default:
                 assert(false, "oops!")
@@ -521,7 +557,7 @@ extension TGLayoutSize
             
             if v === TGLayoutSize.wrap
             {
-                _dimeVal = .wrapV
+                _val = .wrapV
                 
                 if let labelView = _view as? UILabel, _type == TGGravity.vert.fill
                 {
@@ -538,20 +574,20 @@ extension TGLayoutSize
             }
             else if v === TGLayoutSize.fill
             {
-                _dimeVal = .fillV
+                _val = .fillV
             }
             else if v === TGLayoutSize.average
             {
-                _dimeVal = .weightV(TGWeight(100))
+                _val = .weightV(TGWeight(100))
             }
             else
             {
-                _dimeVal = .dimeV(v)
+                _val = .dimeV(v)
             }
         }
         else if val == nil
         {
-            _dimeVal = nil
+            _val = nil
         }
         else
         {
@@ -563,12 +599,9 @@ extension TGLayoutSize
         return self
     }
     
-    
-    internal func belong(to view: UIView) ->TGLayoutSize
+    internal var type:TGGravity
     {
-        _view = view
-        
-        return self
+        return _type
     }
     
     internal var view:UIView!
@@ -578,7 +611,7 @@ extension TGLayoutSize
     
     internal var isFlexHeight:Bool
     {
-        if (_view as? TGBaseLayout) == nil && /*!_view.tg_width.isWrap &&*/ self.isWrap && _active
+        if (_view as? TGBaseLayout) == nil && self.isWrap && _active
         {
             return true
         }
@@ -592,7 +625,12 @@ extension TGLayoutSize
     {
         if _active
         {
-           return (self.dimeNumVal ?? 0) * _multiVal + _addVal
+            var retVal = _increment
+            if let t = self.numberVal
+            {
+                retVal += t * _multiple
+            }
+            return retVal
         }
         else
         {
@@ -604,7 +642,7 @@ extension TGLayoutSize
     {
         if _active
         {
-           return size * _multiVal + _addVal
+           return size * _multiple + _increment
         }
         else
         {
@@ -613,14 +651,18 @@ extension TGLayoutSize
         
     }
     
-    internal var tgMinVal:TGLayoutSize?
-    {
-        return _minVal
+    internal func resetValue() {
+        _val = nil
     }
     
-    internal var tgMaxVal:TGLayoutSize?
+    internal var minVal:TGLayoutSize?
     {
-        return _maxVal
+        return _min
+    }
+    
+    internal var maxVal:TGLayoutSize?
+    {
+        return _max
     }
     
     
@@ -644,28 +686,27 @@ extension TGLayoutSize:NSCopying
 {
     public func copy(with zone: NSZone? = nil) -> Any
     {
-        let ls:TGLayoutSize = type(of: self).init(self._type)
-        ls._view = self._view
+        let ls:TGLayoutSize = type(of: self).init(_type, view:_view)
         ls._active = self._active
-        ls._dimeVal = self._dimeVal
-        ls._addVal = self._addVal
-        ls._multiVal = self._multiVal
-        if _minVal != nil
+        ls._val = self._val
+        ls._increment = self._increment
+        ls._multiple = self._multiple
+        if _min != nil
         {
-            ls._minVal = TGLayoutSize(_type)
-            ls._minVal._dimeVal = _minVal._dimeVal
-            ls._minVal._addVal = _minVal._addVal
-            ls._minVal._multiVal = _minVal._multiVal
-            ls._minVal._active = _minVal._active
+            ls._min = TGLayoutSize(_type, view:nil)
+            ls._min._val = _min._val
+            ls._min._increment = _min._increment
+            ls._min._multiple = _min._multiple
+            ls._min._active = _min._active
         }
         
-        if _maxVal != nil
+        if _max != nil
         {
-            ls._maxVal = TGLayoutSize(_type)
-            ls._maxVal._dimeVal = _maxVal._dimeVal
-            ls._maxVal._addVal = _maxVal._addVal
-            ls._maxVal._multiVal = _maxVal._multiVal
-            ls._maxVal._active = _maxVal._active
+            ls._max = TGLayoutSize(_type, view:nil)
+            ls._max._val = _max._val
+            ls._max._increment = _max._increment
+            ls._max._multiple = _max._multiple
+            ls._max._active = _max._active
         }
                 
         return ls

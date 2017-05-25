@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 class RLTest5ViewController: UIViewController {
 

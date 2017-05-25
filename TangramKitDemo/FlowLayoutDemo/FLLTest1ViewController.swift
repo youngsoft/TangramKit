@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 /**
  * 1.FlowLayout - Regular arrangement

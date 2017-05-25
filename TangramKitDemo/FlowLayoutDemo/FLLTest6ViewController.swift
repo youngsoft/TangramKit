@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 /**
  *6.FlowLayout - Scroll

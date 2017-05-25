@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import TangramKit
 
 class TLTest1ViewController: UIViewController {
 

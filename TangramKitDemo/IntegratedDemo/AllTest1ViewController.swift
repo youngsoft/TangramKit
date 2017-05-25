@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import TangramKit
 
 /**
  *1.UITableView - Dynamic height
@@ -48,8 +49,50 @@ class AllTest1ViewController: UITableViewController {
     }()
 
     
+    var titleLabel:UILabel! = nil
+    var displayLink:CADisplayLink!=nil;
+    var count:Int = 0
+    var lastTime:TimeInterval = 0.0
+    var llll:TimeInterval = 0.0
+   
+    func tick(sender:CADisplayLink)
+    {
+       
+            if (self.lastTime == 0) {
+                self.lastTime = sender.timestamp
+                return
+            }
+            
+            self.count += 1
+            let  delta = sender.timestamp - self.lastTime
+            if (delta < 1)
+            {
+                return
+        }
+            self.lastTime = sender.timestamp
+            let fps = Double(self.count) / delta
+            self.count = 0
+        
+            
+        
+        self.titleLabel.text = "\(round(fps)) FPS"
+        
+
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.view.backgroundColor = .white
+        self.titleLabel = UILabel(frame:CGRect(x: 0, y: 0, width: 80, height: 40))
+        self.navigationItem.titleView = self.titleLabel
+        
+        self.displayLink = CADisplayLink(target: self, selector: #selector(tick))
+        self.displayLink.add(to:.main, forMode: .commonModes)
+        
+        
+        
+        
         
         self.tableView.separatorStyle = .none
         self.tableView.register(AllTest1TableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "headerfooterview")
@@ -91,7 +134,7 @@ class AllTest1ViewController: UITableViewController {
         //这个例子用来构建一个自适应高度的头部布局视图。
         let tableHeaderViewLayout = TGLinearLayout(.vert)
         tableHeaderViewLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
-        tableHeaderViewLayout.frame = CGRect(x: 0, y: 0, width: self.tableView.bounds.width, height: 0) //这里没有设置高度
+        tableHeaderViewLayout.frame = CGRect(x: 0, y: 0, width: self.tableView.bounds.width, height: 0) //这里没有设置高度，但设置了明确的宽度
         //高度不确定可以设置为0。尽量不要在代码中使用kScreenWidth,kScreenHeight，SCREEN_WIDTH。之类这样的宏来设定视图的宽度和高度。要充分利用Tangram的特性，减少常数的使用。
         tableHeaderViewLayout.tg_width.equal(.fill) //这里注意设置宽度和父布局保持一致。
         tableHeaderViewLayout.tg_height.equal(.wrap)
@@ -120,9 +163,22 @@ class AllTest1ViewController: UITableViewController {
         label2.tg_top.equal(10)
         
         tableHeaderViewLayout.addSubview(label2)
-        tableHeaderViewLayout.layoutIfNeeded() //因为高度是.wrap的，所以这里必须要在加入前执行这句！！！
+        tableHeaderViewLayout.layoutIfNeeded() //因为高度是.wrap的，所以这里必须要在加入前执行这句！！！ 原因是tableHeaderView必须要明确的指定frame。所以通过layoutIfNeeded来算出真实视图真实的frame值。因为tableHeaderViewLayout这时候并没有父视图，所以这里必须要明确的通过frame指定宽度，这样最终的计算结果才正确。
         
         self.tableView.tableHeaderView = tableHeaderViewLayout
+        
+        weak var weakTableview = self.tableView
+        
+        //因为tableHeaderViewLayout的高度是通过layoutIfNeed来确定的。因此在屏幕旋转时我们需要手动再次调整tableHeaderViewLayout的frame值。
+        //因此您需要实现这个block来实现当布局视图在横竖屏切换时的frame的动态更新。。。
+        //注意这个block不会只执行一次，而是长期存在，因此要注意block内对象的引用的问题。
+        tableHeaderViewLayout.tg_rotationToDeviceOrientationDo { (_, isFirst:Bool, _ ) in
+            if !isFirst
+            {
+                weakTableview?.tableHeaderView?.layoutIfNeeded()
+                weakTableview?.tableHeaderView = weakTableview?.tableHeaderView
+            }
+        }
     }
     
     
@@ -182,7 +238,7 @@ class AllTest1ViewController: UITableViewController {
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         // 注意这里。为了达到动态高度TableViewCell的加载性能最高以及高性能，一定要实现estimatedHeightForRowAtIndexPath这个方法。这个方法用来评估
         //UITableViewCell的高度。如果实现了这个方法，系统会根据数量重复调用这个方法，得出评估的总体高度。然后再根据显示的需要调用heightForRowAtIndexPath方法来确定真实的高度。如果您不实现estimatedHeightForRowAtIndexPath这个方法，加载性能将非常的低下！！！！
-        return 40;  //这个评估尺寸你可以根据你的cell的一般高度来设置一个最合适的值。
+        return 80;  //这个评估尺寸你可以根据你的cell的一般高度来设置一个最合适的值。
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -244,7 +300,14 @@ class AllTest1ViewController: UITableViewController {
     {
         if  let label1 = sender.viewWithTag(1000)
         {
-            label1.isHidden = !label1.isHidden
+            if label1.tg_visibility == .visible
+            {
+                label1.tg_visibility = .gone
+            }
+            else
+            {
+                label1.tg_visibility = .visible
+            }
             
             UIView.animate(withDuration: 0.3) {
                 self.tableView.tableHeaderView?.layoutIfNeeded()

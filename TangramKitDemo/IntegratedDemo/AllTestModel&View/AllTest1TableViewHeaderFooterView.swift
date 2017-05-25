@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 class AllTest1TableViewHeaderFooterView: UITableViewHeaderFooterView {
 

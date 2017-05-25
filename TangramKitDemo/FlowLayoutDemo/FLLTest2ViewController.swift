@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 /**
  *2.FlowLayout - Tag cloud
@@ -26,6 +28,7 @@ class FLLTest2ViewController: UIViewController {
 
         
         let rootLayout = TGFlowLayout(.vert,arrangedCount:2)
+        rootLayout.backgroundColor = .white
         rootLayout.tg_arrangedGravity = TGGravity.vert.center
         rootLayout.tg_vspace = 4
         rootLayout.tg_hspace = 4

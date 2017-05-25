@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 
 class FOLTest3DataModel : NSObject
@@ -60,6 +62,7 @@ class FOLTest3ViewController: UIViewController {
         super.viewDidLoad()
         
         let floatLayout = TGFloatLayout(.vert)
+        floatLayout.backgroundColor = .white
         floatLayout.tg_width.equal(.fill)
         floatLayout.tg_height.equal(.fill)
         //通过智能分界线的使用，浮动布局里面的所有子布局视图的分割线都会进行智能的设置，从而解决了我们需求中需要提供边界线的问题。

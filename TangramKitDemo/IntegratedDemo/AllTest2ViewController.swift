@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import TangramKit
 
 /**
  *2.UITableView - Static height
@@ -50,7 +51,7 @@ class AllTest2ViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.view.backgroundColor = .white
         self.tableView.separatorStyle = .none
         self.tableView.register(AllTest2TableViewCell.self, forCellReuseIdentifier:AllTest2ViewController.tablecell)
 

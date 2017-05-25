@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 /**
  *2.LinearLayout - Combine with UIScrollView
@@ -428,7 +430,7 @@ extension LLTest2ViewController
         
         let hiddenView = UIView()
         hiddenView.backgroundColor = CFTool.color(3)
-        hiddenView.isHidden = true
+        hiddenView.tg_visibility = .gone
         hiddenView.tg_top.equal(20)
         hiddenView.tg_width.equal(.fill)
         hiddenView.tg_height.equal(800)
@@ -462,16 +464,17 @@ extension LLTest2ViewController
     func handleShowMore(_ sender: UIButton)
     {
         //布局里面，如果子视图被隐藏则会引起布局视图的自动布局。
-        if self.hiddenView.isHidden
+        if self.hiddenView.tg_visibility == .visible
         {
             sender.setTitle(NSLocalizedString("Close up《", comment:"") ,for:.normal)
+            self.hiddenView.tg_visibility = .gone
         }
         else
         {
             sender.setTitle(NSLocalizedString("Show more》", comment:"") ,for:.normal)
+            self.hiddenView.tg_visibility = .visible
         }
         
-        self.hiddenView.isHidden = !hiddenView.isHidden;
     }
     
 

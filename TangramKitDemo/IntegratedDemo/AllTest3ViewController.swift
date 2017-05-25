@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 /**
  *3.Replacement of UITableView
@@ -23,14 +25,14 @@ class AllTest3ViewController: UIViewController {
     var  popmenuItemLayout:TGFlowLayout!
     
     
-    //用来测试隐藏子视图时重新布局一些视图
-    var hideSubviewRelayoutLayout:TGBaseLayout!
-    var hiddenTestButton:UIButton!
-    
     //浮动文本的布局
     var flexedLayout:TGBaseLayout!
     var leftFlexedLabel:UILabel!
     var rightFlexedLabel:UILabel!
+    
+    //视图的显示和隐藏
+    var invisibleButton:UIButton!
+    var goneButton:UIButton!
     
     //伸缩布局
     var shrinkLayout:TGBaseLayout!
@@ -80,7 +82,7 @@ class AllTest3ViewController: UIViewController {
         //添加，左右浮动间距，以及宽度最大限制的布局
         self.addFlexedWidthLayout(contentLayout)
         //添加，隐藏重新布局的布局。
-        self.addHideSubviewReLayoutLayout(contentLayout)
+        self.addVisibilityTestLayout(contentLayout)
         //添加，自动伸缩布局
         self.addShrinkLayout(contentLayout)
         //测试布局位置和布局尺寸的isActive属性
@@ -185,15 +187,9 @@ extension AllTest3ViewController
         contentLayout.addSubview(layout)
     }
     
-    //添加隐藏重新布局的布局
-    func addHideSubviewReLayoutLayout(_ contentLayout: TGLinearLayout)
+    //添加可视化设置的布局
+    func addVisibilityTestLayout(_ contentLayout: TGLinearLayout)
     {
-        //下面两个布局用来测试布局视图的tg_layoutHiddenSubviews属性。
-        let switchLayout = self.createSwitchLayout(title: NSLocalizedString("relayout switch when subview hidden&show", comment:""), action: #selector(handleReLayoutSwitch))
-        switchLayout.tg_bottomBorderline = TGBorderline(color: .red, headIndent:10, tailIndent:10) //底部边界线设置可以缩进
-        switchLayout.tg_top.equal(10)
-        contentLayout.addSubview(switchLayout)
-        
         let testLayout = TGLinearLayout(.horz)
         testLayout.backgroundColor = .white
         testLayout.tg_leadingPadding = 10
@@ -201,32 +197,39 @@ extension AllTest3ViewController
         testLayout.tg_height.equal(50)
         testLayout.tg_gravity = TGGravity.vert.fill
         testLayout.tg_hspace = 10
+        testLayout.tg_top.equal(10)
         contentLayout.addSubview(testLayout)
-        self.hideSubviewRelayoutLayout = testLayout
         
-        let leftButton = UIButton()
-        leftButton.tg_width.equal(50)
-        leftButton.backgroundColor = CFTool.color(5)
-        testLayout.addSubview(leftButton)
+        let showButton = UIButton()
+        showButton.setTitle(NSLocalizedString("reset show", comment:""), for: .normal)
+        showButton.addTarget(self, action: #selector(handleResetShow), for: .touchUpInside)
+        showButton.backgroundColor = CFTool.color(6)
+        showButton.titleLabel!.font = CFTool.font(14)
+        showButton.titleLabel!.adjustsFontSizeToFitWidth = true
+        showButton.tg_width.equal(50)
+        showButton.backgroundColor = CFTool.color(5)
+        testLayout.addSubview(showButton)
         
-        let centerButton = UIButton()
-        centerButton.setTitle(NSLocalizedString("touch hide me", comment:""), for: .normal)
-        centerButton.addTarget(self, action: #selector(handleHideSelf), for: .touchUpInside)
-        centerButton.backgroundColor = CFTool.color(6)
-        centerButton.titleLabel!.font = CFTool.font(14)
-        centerButton.tg_height.equal(.wrap)
-        centerButton.tg_width.equal(.average)
-        testLayout.addSubview(centerButton)
-        self.hiddenTestButton = centerButton
+        let invisibleButton = UIButton()
+        invisibleButton.setTitle(NSLocalizedString("invisible", comment:""), for: .normal)
+        invisibleButton.addTarget(self, action: #selector(handleInvisible), for: .touchUpInside)
+        invisibleButton.backgroundColor = CFTool.color(6)
+        invisibleButton.titleLabel!.font = CFTool.font(14)
+        invisibleButton.tg_height.equal(.wrap)
+        invisibleButton.tg_width.equal(.average)
+        testLayout.addSubview(invisibleButton)
+        self.invisibleButton = invisibleButton
         
-        let rightButton = UIButton()
-        rightButton.setTitle(NSLocalizedString("touch show me", comment:""), for: .normal)
-        rightButton.addTarget(self, action: #selector(handleShowBrother), for: .touchUpInside)
-        rightButton.backgroundColor = CFTool.color(7)
-        rightButton.titleLabel!.font = CFTool.font(14)
-        rightButton.tg_height.equal(.wrap)
-        rightButton.tg_width.equal(.average)
-        testLayout.addSubview(rightButton)
+        let goneButton = UIButton()
+        goneButton.setTitle(NSLocalizedString("gone", comment:""), for: .normal)
+        goneButton.addTarget(self, action: #selector(handleGone), for: .touchUpInside)
+        goneButton.backgroundColor = CFTool.color(7)
+        goneButton.titleLabel!.font = CFTool.font(14)
+        goneButton.tg_height.equal(.wrap)
+        goneButton.tg_width.equal(.average)
+        testLayout.addSubview(goneButton)
+        self.goneButton = goneButton
+        
     }
     
     //添加一个左右视图的内容宽度自适应的水平线性布局。
@@ -423,19 +426,20 @@ extension AllTest3ViewController
         print("按下取消")
     }
     
-    func handleReLayoutSwitch(sender:TGBaseLayout)
+    func handleResetShow(sender:UIButton)
     {
-        self.hideSubviewRelayoutLayout.tg_layoutHiddenSubviews = !self.hideSubviewRelayoutLayout.tg_layoutHiddenSubviews
+        self.invisibleButton.tg_visibility = .visible
+        self.goneButton.tg_visibility = .visible
     }
     
-    func handleHideSelf(sender:UIButton)
+    func handleInvisible(sender:UIButton)
     {
-        self.hiddenTestButton.isHidden = true
+        sender.tg_visibility = .invisible
     }
     
-    func handleShowBrother(sender:UIButton)
+    func handleGone(sender:UIButton)
     {
-        self.hiddenTestButton.isHidden = false
+        sender.tg_visibility = .gone
     }
     
     func handleLeftFlexed(segmented: UISegmentedControl)

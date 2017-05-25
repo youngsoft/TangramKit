@@ -153,21 +153,21 @@ open class TGTableLayout: TGLinearLayout {
         {
             if (rowsc.tg_orientation == .horz)
             {
-                colsc.tg_width.tgEqual(val:rowView.colSize)
+                colsc.tg_width.equalHelper(val:rowView.colSize)
             }
             else
             {
-                colsc.tg_height.tgEqual(val:rowView.colSize)
+                colsc.tg_height.equalHelper(val:rowView.colSize)
             }
         }
         
         if (rowsc.tg_orientation == .horz)
         {
-            if (colView.bounds.size.height == 0 && !(colsc.tgHeight?.hasValue ?? false))
+            if (colView.bounds.size.height == 0 && !colsc.height.hasValue)
             {
                 if colView is TGBaseLayout
                 {
-                    if (!(colsc.tgHeight?.isWrap ?? false))
+                    if !colsc.height.isWrap
                     {
                         colsc.tg_height.equal(rowsc.tg_height);
                     }
@@ -180,12 +180,12 @@ open class TGTableLayout: TGLinearLayout {
         }
         else
         {
-            if (colView.bounds.size.width == 0 && !(colsc.tgWidth?.hasValue ?? false))
+            if (colView.bounds.size.width == 0 && !colsc.width.hasValue)
             {
                 
                 if colView is TGBaseLayout
                 {
-                    if (!(colsc.tgWidth?.isWrap ?? false))
+                    if !colsc.width.isWrap
                     {
                         colsc.tg_width.equal(rowsc.tg_width)
                     }
@@ -378,11 +378,11 @@ private class TGTableRowLayout: TGLinearLayout,TGTableLayoutViewSizeClass {
         {
             if (orientation == .horz)
             {
-                lsc.tg_height.tgEqual(val:rowSize)
+                lsc.tg_height.equalHelper(val:rowSize)
             }
             else
             {
-                lsc.tg_width.tgEqual(val:rowSize)
+                lsc.tg_width.equalHelper(val:rowSize)
             }
         }
         
@@ -390,13 +390,13 @@ private class TGTableRowLayout: TGLinearLayout,TGTableLayoutViewSizeClass {
         {
             if (orientation == .horz)
             {
-                lsc.tgWidth?.equal(nil)
+                lsc.width.realSize?.equal(nil)
                 lsc.tg_leading.equal(0);
                 lsc.tg_trailing.equal(0);
             }
             else
             {
-                lsc.tgHeight?.equal(nil)
+                lsc.height.realSize?.equal(nil)
                 lsc.tg_top.equal(0);
                 lsc.tg_bottom.equal(0);
             }

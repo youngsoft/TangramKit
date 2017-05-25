@@ -7,13 +7,16 @@
 //
 
 import UIKit
+import TangramKit
+
 
 /**
  * 2.RelativeLayout - Prorate size
  */
 class RLTest2ViewController: UIViewController {
 
-    weak var hiddenButton: UIButton!
+    weak var visiblityButton: UIButton!
+    weak var visiblitySwitch: UISwitch!
     
     
     func createButton(_ title: String, backgroundColor color: UIColor) -> UIButton {
@@ -45,20 +48,20 @@ class RLTest2ViewController: UIViewController {
         rootLayout.backgroundColor = .white
         self.view = rootLayout
         
-        let hiddenSwitch = UISwitch()
-        hiddenSwitch.addTarget(self, action:#selector(handleSwitch), for: .valueChanged)
-        hiddenSwitch.tg_trailing.equal(0)
-        hiddenSwitch.tg_top.equal(10)
-        rootLayout.addSubview(hiddenSwitch)
+        let visiblitySwitch = UISwitch()
+        visiblitySwitch.tg_trailing.equal(0)
+        visiblitySwitch.tg_top.equal(10)
+        rootLayout.addSubview(visiblitySwitch)
+        self.visiblitySwitch = visiblitySwitch
         
-        let hiddenSwitchLabel = UILabel()
-        hiddenSwitchLabel.text = NSLocalizedString("flex size when subview hidden switch:", comment:"")
-        hiddenSwitchLabel.textColor = CFTool.color(4)
-        hiddenSwitchLabel.font = CFTool.font(15)
-        hiddenSwitchLabel.sizeToFit()
-        hiddenSwitchLabel.tg_leading.equal(10)
-        hiddenSwitchLabel.tg_centerY.equal(hiddenSwitch.tg_centerY)
-        rootLayout.addSubview(hiddenSwitchLabel)
+        let visiblitySwitchLabel = UILabel()
+        visiblitySwitchLabel.text = NSLocalizedString("flex size when subview hidden switch:", comment:"")
+        visiblitySwitchLabel.textColor = CFTool.color(4)
+        visiblitySwitchLabel.font = CFTool.font(15)
+        visiblitySwitchLabel.sizeToFit()
+        visiblitySwitchLabel.tg_leading.equal(10)
+        visiblitySwitchLabel.tg_centerY.equal(visiblitySwitch.tg_centerY)
+        rootLayout.addSubview(visiblitySwitchLabel)
         
         /**水平平分3个子视图**/
         let v1 = self.createButton(NSLocalizedString("average 1/3 width\nturn above switch", comment: ""), backgroundColor: CFTool.color(5))
@@ -73,6 +76,7 @@ class RLTest2ViewController: UIViewController {
         v2.tg_top.equal(v1.tg_top)
         v2.tg_leading.equal(v1.tg_trailing, offset:10)
         rootLayout.addSubview(v2)
+        self.visiblityButton = v2
         
         let v3 = self.createButton(NSLocalizedString("average 1/3 width\nshow me", comment: ""), backgroundColor: CFTool.color(7))
         v3.addTarget(self, action:#selector(handleShow), for: .touchUpInside)
@@ -189,25 +193,23 @@ class RLTest2ViewController: UIViewController {
 //MARK: - Handle Method
 extension RLTest2ViewController
 {
-    func handleSwitch(_ sender: UISwitch) {
- 
-        //tg_autoLayoutViewGroupWidth这个相对布局的属性表示当某个均分宽度的视图隐藏后，是否会激发剩余的子视图重新均分宽度。
-        let rl = self.view as! TGRelativeLayout
-        rl.tg_autoLayoutViewGroupWidth = !rl.tg_autoLayoutViewGroupWidth
-    }
     
     func handleHidden(_ sender: UIButton) {
         
-        sender.isHidden = true
-        self.hiddenButton = sender
+        if self.visiblitySwitch.isOn
+        {
+            self.visiblityButton.tg_visibility = .gone
+        }
+        else
+        {
+            self.visiblityButton.tg_visibility = .invisible
+        }
+        
     }
     
     func handleShow(_ sender: UIButton) {
         
-        if self.hiddenButton != nil {
-            self.hiddenButton.isHidden = false
-            self.hiddenButton = nil
-        }
+        self.visiblityButton.tg_visibility = .visible
     }
 
 }

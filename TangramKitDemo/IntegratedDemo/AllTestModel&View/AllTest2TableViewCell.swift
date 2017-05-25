@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 class AllTest2TableViewCell: UITableViewCell {
 

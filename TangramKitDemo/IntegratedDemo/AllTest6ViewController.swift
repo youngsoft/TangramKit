@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 /**
  *2.SizeClass - Demo2
@@ -33,6 +35,7 @@ class AllTest6ViewController: UIViewController {
 
         
         let rootLayout = TGLinearLayout(.vert)
+        rootLayout.backgroundColor = .white
         rootLayout.tg_gravity = TGGravity.horz.fill
         self.view = rootLayout;
         

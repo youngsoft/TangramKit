@@ -228,8 +228,9 @@
 "please touch here(highlighted background color)"="请单击这里(有高亮颜色)";
 "please touch here(highlighted background image)"="请单击这里(有高亮图片)";
 "please touch here(will pop menu)"="请单击这里(弹出可伸缩的菜单视图)";
-"relayout switch when subview hidden&show"="下面的子视图隐藏重新布局开关";
-"touch hide me"="点击我隐藏";
+"reset show" = "恢复显示";
+"invisible"="占位隐藏";
+"gone"="不占位隐藏";
 "touch show me"="点击我显示";
 "show all switch"="显示全部开关";
 "add item"="添加条目";

@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 /**
  * 1.FloatLayout - Float
@@ -29,6 +31,7 @@ class FOLTest1ViewController: UIViewController {
 
         
         let rootLayout = TGFloatLayout(.vert)
+        rootLayout.backgroundColor = .white
         self.view = rootLayout
         
         let adjOriButton = UIButton(type:.system)

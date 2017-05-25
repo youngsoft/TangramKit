@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 /**
  * 7.LinearLayout - Average size&space
@@ -57,7 +59,7 @@ class LLTest7ViewController: UIViewController {
         action2Layout.tg_height.equal(.wrap)
         rootLayout.addSubview(action2Layout)
         
-        action2Layout.addSubview(self.createActionButton(NSLocalizedString("average sizecentered",comment:""), tag:400))
+        action2Layout.addSubview(self.createActionButton(NSLocalizedString("average size centered",comment:""), tag:400))
         action2Layout.addSubview(self.createActionButton(NSLocalizedString("average space no centered",comment:""), tag:500))
         action2Layout.addSubview(self.createActionButton(NSLocalizedString("average space centered",comment:""), tag:600))
         action2Layout.tg_equalizeSubviews(centered: false, withSpace: 5) //均分action1Layout中的所有子视图的宽度

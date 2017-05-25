@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 /**
  * 1.LinearLayout - Vert&Horz
@@ -72,7 +74,7 @@ class LLTest1ViewController: UIViewController {
         let rootLayout = TGLinearLayout(.vert)
         rootLayout.backgroundColor = .white
         self.view = rootLayout;
-        
+                
         //下面的例子中vertLayout是一个垂直线性布局，垂直线性布局中的子视图按照添加的顺序依次从上到下排列。
 
         let vertTitleLabel = self.createSectionLabel(NSLocalizedString("vertical(from top to bottom)",comment:""))
@@ -83,9 +85,13 @@ class LLTest1ViewController: UIViewController {
          * 系统会自动检测如果您的导航条是半透明的那么这个视图的位置总是会在导航条下面出现，而如果不是半透明导航条也会在导航条下面出现，而如果没有导航条时则
          * 就出现在屏幕的顶部。
          */
+        
+        
         vertTitleLabel.tg_top.equal(self.topLayoutGuide, offset:10)  //顶部距离前面的视图10
        // vertTitleLabel.tg_top.equal(10)  //您可以注释上面，解开这句看看运行效果
         rootLayout.addSubview(vertTitleLabel)
+        
+        
         
         let vertLayout = createVertSubviewLayout()
         vertLayout.tg_size(width:.fill, height: .wrap) //宽度和父视图保持一致，高度由子视图决定
@@ -96,6 +102,7 @@ class LLTest1ViewController: UIViewController {
         //vertLayout.tg_width ~= .fill
         //vertLayout.tg_height ~= .wrap
         rootLayout.addSubview(vertLayout)
+        
         
         
         let horzTitleLabel = self.createSectionLabel(NSLocalizedString("horizontal(from left to right)",comment:""))

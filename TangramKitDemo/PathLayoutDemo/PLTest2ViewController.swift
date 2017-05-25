@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 /**
  * 您可以重载TGPathLayout，并重载其中的layerClass属性，返回一个CAShapeLayer类，并且在初始化时设置这个类的属性，这样系统和就会自动生成一条和路径布局一致的曲线了。

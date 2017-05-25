@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 /**
  * ❁2.Screen perfect fit - Demo2
@@ -34,6 +36,9 @@ class AllTest8ViewController: UIViewController {
 
         
         super.viewDidLoad()
+        
+        self.view.backgroundColor = .white
+
 
         // Do any additional setup after loading the view.
         /*

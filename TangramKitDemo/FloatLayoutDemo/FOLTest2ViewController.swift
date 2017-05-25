@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 //布局模型类,用于实现不同的布局展示风格
 struct FOLTest2LayoutTemplate

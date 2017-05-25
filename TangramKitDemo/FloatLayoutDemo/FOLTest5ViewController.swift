@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 /**
  *5.FloatLayout - Title & Description
@@ -22,6 +24,7 @@ class FOLTest5ViewController: UIViewController {
         */
         
         let scrollView = UIScrollView(frame:self.view.bounds)
+        scrollView.backgroundColor = .white
         scrollView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         self.view.addSubview(scrollView)
         

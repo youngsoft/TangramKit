@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 private let sBaseTag:NSInteger = 100000
 
@@ -51,6 +53,7 @@ class AllTest4ViewController: UIViewController {
         
         
         rootLayout = TGLinearLayout(.vert)
+        rootLayout.backgroundColor = .white
         rootLayout.tg_gravity = TGGravity.horz.fill //设置垂直线性布局的水平填充值表明布局视图里面的所有子视图的宽度都和布局视图相等。
         rootLayout.tg_width.equal(.fill)
         rootLayout.tg_height.equal(.wrap)

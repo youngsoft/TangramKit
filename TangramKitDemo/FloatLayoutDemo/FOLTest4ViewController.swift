@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 /**
  *4.FloatLayout - Tag cloud
@@ -39,6 +41,7 @@ class FOLTest4ViewController: UIViewController {
         
         
         let rootLayout = TGLinearLayout(.vert)
+        rootLayout.backgroundColor = .white
         rootLayout.tg_width.equal(.fill)
         rootLayout.tg_height.equal(.wrap)
         rootLayout.tg_gravity = TGGravity.horz.fill

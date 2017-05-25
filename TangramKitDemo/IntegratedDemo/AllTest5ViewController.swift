@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 /**
  *1.SizeClass - Demo1
@@ -24,6 +26,7 @@ class AllTest5ViewController: UIViewController {
         
         //默认设置为垂直布局
         let rootLayout = TGLinearLayout(.vert)
+        rootLayout.backgroundColor = .white
         rootLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10);
         rootLayout.tg_vspace = 10
         rootLayout.tg_hspace = 10
@@ -55,9 +58,9 @@ class AllTest5ViewController: UIViewController {
         rootLayout.addSubview(v3)
         
         //v3视图在其他任何iPhone设备横屏都不参与布局
-        v3.tg_fetchSizeClass(with: .comb(.any, .compact, nil)).isHidden = true
+        v3.tg_fetchSizeClass(with: .comb(.any, .compact, nil)).tg_visibility = .gone
         //只有iphone6Plus的横屏才参与布局
-        v3.tg_fetchSizeClass(with: .comb(.regular, .compact, nil), from: .default).isHidden = false
+        v3.tg_fetchSizeClass(with: .comb(.regular, .compact, nil), from: .default).tg_visibility = .visible
         
         //针对iPhone设备的所有横屏的高度都是Compact的，而宽度则是任意，因此下面的设置横屏情况下布局变为水平布局。
         let lsc = rootLayout.tg_fetchSizeClass(with: .comb(.any, .compact, nil), from:.default) as! TGLinearLayoutViewSizeClass

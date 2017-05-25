@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TangramKit
+
 
 class AllTest1TableViewCell: UITableViewCell {
     
@@ -54,13 +56,23 @@ class AllTest1TableViewCell: UITableViewCell {
         self.nickNameLabel.text = model.nickName
         self.nickNameLabel.sizeToFit()
         self.textMessageLabel.text = model.textMessage
-        self.imageMessageImageView.isHidden = model.imageMessage.isEmpty
-        
-        if !model.imageMessage.isEmpty
+        if model.imageMessage.isEmpty
+        {
+            self.imageMessageImageView.tg_visibility = .gone
+        }
+        else
         {
             self.imageMessageImageView.image = UIImage(named: model.imageMessage)
             self.imageMessageImageView.sizeToFit()
-            self.imageMessageImageView.isHidden = isImageMessageHidden
+            
+            if isImageMessageHidden
+            {
+                self.imageMessageImageView.tg_visibility = .gone
+            }
+            else
+            {
+                self.imageMessageImageView.tg_visibility = .visible
+            }
         }
     }
     
@@ -107,14 +119,15 @@ extension AllTest1TableViewCell
         
         
         let nickNameLabel = UILabel()
-        nickNameLabel.textColor = .blue
-        nickNameLabel.font = .systemFont(ofSize: 15)
+        nickNameLabel.textColor = CFTool.color(3)
+        nickNameLabel.font = CFTool.font(17)
         messageLayout.addSubview(nickNameLabel)
         self.nickNameLabel = nickNameLabel
         
         
         let textMessageLabel = UILabel()
-        textMessageLabel.font = .systemFont(ofSize: 13)
+        textMessageLabel.font = CFTool.font(15)
+        textMessageLabel.textColor = CFTool.color(4)
         textMessageLabel.tg_width.equal(.fill)
         textMessageLabel.tg_height.equal(.wrap)  //高度为包裹，也就是动态高度。
         messageLayout.addSubview(textMessageLabel)

@@ -72,6 +72,15 @@ public enum TGOrientation {
 }
 
 
+/**
+ *视图的可见性枚举类型定义。用来指定视图是否在布局中可见，他是对hidden属性的扩展设置。
+ */
+public enum TGVisibility {
+    case visible     /**视图可见，等价于hidden = false*/
+    case invisible   /**视图隐藏，等价于hidden = true, 但是会在父布局视图中占位空白区域*/
+    case gone        /**视图隐藏，等价于hidden = true, 但是不会在父视图中占位空白区域*/
+}
+
 
 /**
  *布局视图内所有子视图的停靠方向和填充拉伸属性以及对齐方式的枚举类型定义。

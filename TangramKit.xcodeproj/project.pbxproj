@@ -12,31 +12,18 @@
 		18BCBD461E1336D900AC7766 /* AllTest8ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BCBD451E1336D900AC7766 /* AllTest8ViewController.swift */; };
 		681BD8DF1E0B91A500403A1F /* TangramKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 681BD8DD1E0B91A500403A1F /* TangramKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		681BD8E31E0B91A500403A1F /* TangramKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 681BD8DB1E0B91A500403A1F /* TangramKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		681BD90E1E0B92E100403A1F /* TangramKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9011E0B92E100403A1F /* TangramKit.swift */; };
 		681BD90F1E0B92E100403A1F /* TangramKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9011E0B92E100403A1F /* TangramKit.swift */; };
-		681BD9101E0B92E100403A1F /* TGBaseLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9021E0B92E100403A1F /* TGBaseLayout.swift */; };
 		681BD9111E0B92E100403A1F /* TGBaseLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9021E0B92E100403A1F /* TGBaseLayout.swift */; };
-		681BD9121E0B92E100403A1F /* TGDimeAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9031E0B92E100403A1F /* TGDimeAdapter.swift */; };
 		681BD9131E0B92E100403A1F /* TGDimeAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9031E0B92E100403A1F /* TGDimeAdapter.swift */; };
-		681BD9141E0B92E100403A1F /* TGFloatLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9041E0B92E100403A1F /* TGFloatLayout.swift */; };
 		681BD9151E0B92E100403A1F /* TGFloatLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9041E0B92E100403A1F /* TGFloatLayout.swift */; };
-		681BD9161E0B92E100403A1F /* TGFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9051E0B92E100403A1F /* TGFlowLayout.swift */; };
 		681BD9171E0B92E100403A1F /* TGFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9051E0B92E100403A1F /* TGFlowLayout.swift */; };
-		681BD9181E0B92E100403A1F /* TGFrameLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9061E0B92E100403A1F /* TGFrameLayout.swift */; };
 		681BD9191E0B92E100403A1F /* TGFrameLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9061E0B92E100403A1F /* TGFrameLayout.swift */; };
-		681BD91A1E0B92E100403A1F /* TGLayoutPos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9071E0B92E100403A1F /* TGLayoutPos.swift */; };
 		681BD91B1E0B92E100403A1F /* TGLayoutPos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9071E0B92E100403A1F /* TGLayoutPos.swift */; };
-		681BD91C1E0B92E100403A1F /* TGLayoutSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9081E0B92E100403A1F /* TGLayoutSize.swift */; };
 		681BD91D1E0B92E100403A1F /* TGLayoutSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9081E0B92E100403A1F /* TGLayoutSize.swift */; };
-		681BD91E1E0B92E100403A1F /* TGLayoutSizeClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9091E0B92E100403A1F /* TGLayoutSizeClass.swift */; };
 		681BD91F1E0B92E100403A1F /* TGLayoutSizeClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9091E0B92E100403A1F /* TGLayoutSizeClass.swift */; };
-		681BD9201E0B92E100403A1F /* TGLinearLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD90A1E0B92E100403A1F /* TGLinearLayout.swift */; };
 		681BD9211E0B92E100403A1F /* TGLinearLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD90A1E0B92E100403A1F /* TGLinearLayout.swift */; };
-		681BD9221E0B92E100403A1F /* TGPathLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD90B1E0B92E100403A1F /* TGPathLayout.swift */; };
 		681BD9231E0B92E100403A1F /* TGPathLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD90B1E0B92E100403A1F /* TGPathLayout.swift */; };
-		681BD9241E0B92E100403A1F /* TGRelativeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD90C1E0B92E100403A1F /* TGRelativeLayout.swift */; };
 		681BD9251E0B92E100403A1F /* TGRelativeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD90C1E0B92E100403A1F /* TGRelativeLayout.swift */; };
-		681BD9261E0B92E100403A1F /* TGTableLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD90D1E0B92E100403A1F /* TGTableLayout.swift */; };
 		681BD9271E0B92E100403A1F /* TGTableLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD90D1E0B92E100403A1F /* TGTableLayout.swift */; };
 		681BD9281E0B930800403A1F /* TangramKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 681BD8DB1E0B91A500403A1F /* TangramKit.framework */; };
 		68F0363C1E0B7D2700CEBAEF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F035E71E0B7D2700CEBAEF /* AppDelegate.swift */; };
@@ -123,7 +110,7 @@
 
 /* Begin PBXFileReference section */
 		18058AAE1E63B4EA00EAECDC /* FLLTest6ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLLTest6ViewController.swift; sourceTree = "<group>"; };
-		18270C241C954B3C00CBCC92 /* TangramKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TangramKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		18270C241C954B3C00CBCC92 /* TangramKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TangramKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		184243071E327F0800E2CCE1 /* FLLTest5ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLLTest5ViewController.swift; sourceTree = "<group>"; };
 		18BCBD451E1336D900AC7766 /* AllTest8ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllTest8ViewController.swift; sourceTree = "<group>"; };
 		681BD8DB1E0B91A500403A1F /* TangramKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TangramKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -233,7 +220,7 @@
 		18270C251C954B3C00CBCC92 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				18270C241C954B3C00CBCC92 /* TangramKit.app */,
+				18270C241C954B3C00CBCC92 /* TangramKitDemo.app */,
 				681BD8DB1E0B91A500403A1F /* TangramKit.framework */,
 			);
 			name = Products;
@@ -440,7 +427,7 @@
 			);
 			name = TangramKitDemo;
 			productName = TangramKit;
-			productReference = 18270C241C954B3C00CBCC92 /* TangramKit.app */;
+			productReference = 18270C241C954B3C00CBCC92 /* TangramKitDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
 		681BD8DA1E0B91A500403A1F /* TangramKit */ = {
@@ -551,47 +538,34 @@
 				68F036741E0B7D2700CEBAEF /* RLTest3ViewController.swift in Sources */,
 				68F036681E0B7D2700CEBAEF /* LLTest2ViewController.swift in Sources */,
 				68F036591E0B7D2700CEBAEF /* AllTestDataModel.swift in Sources */,
-				681BD9141E0B92E100403A1F /* TGFloatLayout.swift in Sources */,
 				68F036441E0B7D2700CEBAEF /* FOLTest4ViewController.swift in Sources */,
 				68F0366C1E0B7D2700CEBAEF /* LLTest6ViewController.swift in Sources */,
 				18BCBD461E1336D900AC7766 /* AllTest8ViewController.swift in Sources */,
 				68F036541E0B7D2700CEBAEF /* AllTest6ViewController.swift in Sources */,
 				68F036801E0B7D2700CEBAEF /* TLTest3ViewController.swift in Sources */,
 				68F036811E0B7D2700CEBAEF /* ViewController.swift in Sources */,
-				681BD9201E0B92E100403A1F /* TGLinearLayout.swift in Sources */,
 				68F036451E0B7D2700CEBAEF /* FOLTest5ViewController.swift in Sources */,
-				681BD91A1E0B92E100403A1F /* TGLayoutPos.swift in Sources */,
 				68F036421E0B7D2700CEBAEF /* FOLTest3ViewController.swift in Sources */,
 				68F036701E0B7D2700CEBAEF /* PLTest3ViewController.swift in Sources */,
-				681BD9101E0B92E100403A1F /* TGBaseLayout.swift in Sources */,
 				68F0366A1E0B7D2700CEBAEF /* LLTest4ViewController.swift in Sources */,
 				68F036521E0B7D2700CEBAEF /* AllTest4ViewController.swift in Sources */,
 				68F036411E0B7D2700CEBAEF /* FOLTest2ViewController.swift in Sources */,
 				68F036531E0B7D2700CEBAEF /* AllTest5ViewController.swift in Sources */,
 				68F036671E0B7D2700CEBAEF /* LLTest1ViewController.swift in Sources */,
-				681BD91E1E0B92E100403A1F /* TGLayoutSizeClass.swift in Sources */,
-				681BD9181E0B92E100403A1F /* TGFrameLayout.swift in Sources */,
 				68F036461E0B7D2700CEBAEF /* FOLTest6ViewController.swift in Sources */,
-				681BD9161E0B92E100403A1F /* TGFlowLayout.swift in Sources */,
 				68F036551E0B7D2700CEBAEF /* AllTest7ViewController.swift in Sources */,
 				68F036751E0B7D2700CEBAEF /* RLTest4ViewController.swift in Sources */,
-				681BD9221E0B92E100403A1F /* TGPathLayout.swift in Sources */,
-				681BD91C1E0B92E100403A1F /* TGLayoutSize.swift in Sources */,
-				681BD9261E0B92E100403A1F /* TGTableLayout.swift in Sources */,
 				68F0366F1E0B7D2700CEBAEF /* PLTest2ViewController.swift in Sources */,
 				68F036721E0B7D2700CEBAEF /* RLTest1ViewController.swift in Sources */,
 				68F036761E0B7D2700CEBAEF /* RLTest5ViewController.swift in Sources */,
 				68F0366B1E0B7D2700CEBAEF /* LLTest5ViewController.swift in Sources */,
 				68F036711E0B7D2700CEBAEF /* PLTest4ViewController.swift in Sources */,
-				681BD90E1E0B92E100403A1F /* TangramKit.swift in Sources */,
 				68F0364C1E0B7D2700CEBAEF /* FLTest2ViewController.swift in Sources */,
-				681BD9241E0B92E100403A1F /* TGRelativeLayout.swift in Sources */,
 				68F036471E0B7D2700CEBAEF /* FLLTest1ViewController.swift in Sources */,
 				68F036691E0B7D2700CEBAEF /* LLTest3ViewController.swift in Sources */,
 				68F036511E0B7D2700CEBAEF /* AllTest3ViewController.swift in Sources */,
 				68F0364B1E0B7D2700CEBAEF /* FLTest1ViewController.swift in Sources */,
 				68F0363C1E0B7D2700CEBAEF /* AppDelegate.swift in Sources */,
-				681BD9121E0B92E100403A1F /* TGDimeAdapter.swift in Sources */,
 				68F036571E0B7D2700CEBAEF /* AllTest1TableViewHeaderFooterView.swift in Sources */,
 				68F036481E0B7D2700CEBAEF /* FLLTest2ViewController.swift in Sources */,
 				68F0367E1E0B7D2700CEBAEF /* TLTest1ViewController.swift in Sources */,
@@ -771,7 +745,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bbae.TangramKit;
-				PRODUCT_NAME = TangramKit;
+				PRODUCT_NAME = TangramKitDemo;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -791,7 +765,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bbae.TangramKit;
-				PRODUCT_NAME = TangramKit;
+				PRODUCT_NAME = TangramKitDemo;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0;

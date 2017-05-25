@@ -154,33 +154,6 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
         }
     }
     
-    /**
-     *浮动布局内所有子视图的整体停靠对齐位置设定，默认是.none
-     *如果视图方向为.vert时则水平方向的停靠失效。只能设置：
-     TGGravity.vert.top  整体顶部停靠
-     TGGravity.vert.center  整体垂直居中停靠
-     TGGravity.vert.bottom  整体底部停靠
-     *如果视图方向为.horz时则垂直方向的停靠失效。只能设置：
-     TGGravity.horz.left 整体左边停靠
-     TGGravity.horz.center 整体水平居中停靠
-     TGGravity.horz.right 整体右边停靠
-     */
-    public var tg_gravity:TGGravity
-        {
-        get
-        {
-            return (self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass).tg_gravity
-        }
-        set
-        {
-            let lsc = self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass
-            if lsc.tg_gravity != newValue
-            {
-                lsc.tg_gravity = newValue
-                setNeedsLayout()
-            }
-        }
-    }
     
     /**
      *不做布局边界尺寸的限制，子视图不会自动换行，因此当设置为true时，子视图需要设置tg_clearFloat来实现主动换行的处理。默认为false。
@@ -216,9 +189,9 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
     public func tg_setSubviews(size:CGFloat, minSpace:CGFloat, maxSpace:CGFloat = .greatestFiniteMagnitude, inSizeClass type:TGSizeClassType = .default)
     {
         let lsc = self.tg_fetchSizeClass(with: type) as! TGFloatLayoutViewSizeClassImpl
-        lsc.tgSubviewSize = size
-        lsc.tgMinSpace = minSpace
-        lsc.tgMaxSpace = maxSpace
+        lsc.subviewSize = size
+        lsc.minSpace = minSpace
+        lsc.maxSpace = maxSpace
         
         self.setNeedsLayout()
     }
@@ -240,8 +213,7 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
         
         for sbv in sbs
         {
-            let sbvsc = sbv.tgCurrentSizeClass as! TGViewSizeClassImpl
-            let sbvtgFrame = sbv.tgFrame
+            let (sbvtgFrame, sbvsc) = self.tgGetSubviewFrameAndSizeClass(sbv)
             
             if (!isEstimate)
             {
@@ -252,15 +224,12 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
             
             if let sbvl:TGBaseLayout = sbv as? TGBaseLayout
             {
-                let sbvtgWidthIsWrap = sbvsc.tgWidth?.isWrap ?? false
-                let sbvtgHeightIsWrap = sbvsc.tgHeight?.isWrap ?? false
-
-                if sbvtgWidthIsWrap || sbvtgHeightIsWrap
+                 if sbvsc.isSomeSizeWrap
                 {
                    hasSubLayout = true
                 }
                 
-                if isEstimate && (sbvtgWidthIsWrap || sbvtgHeightIsWrap)
+                if isEstimate && (sbvsc.isSomeSizeWrap)
                 {
                     _ = sbvl.tg_sizeThatFits(sbvtgFrame.frame.size,inSizeClass:type)
                     if sbvtgFrame.multiple
@@ -462,10 +431,7 @@ extension TGFloatLayout
     {
         var selfSize = selfSize
         var hasBoundaryLimit = true
-        let selftgWidthIsWrap = lsc.tgWidth?.isWrap ?? false
-        let selftgHeightIsWrap = lsc.tgHeight?.isWrap ?? false
-        
-        if selftgWidthIsWrap && lsc.tg_noBoundaryLimit
+        if lsc.width.isWrap && lsc.tg_noBoundaryLimit
         {
             hasBoundaryLimit = false
         }
@@ -477,47 +443,46 @@ extension TGFloatLayout
         
         
         //遍历所有的子视图，查看是否有子视图的宽度会比视图自身要宽，如果有且有包裹属性则扩充自身的宽度
-        if (selftgWidthIsWrap && hasBoundaryLimit)
+        if (lsc.width.isWrap && hasBoundaryLimit)
         {
             var maxContentWidth = selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding;
             for sbv in sbs
             {
-                let sbvsc = sbv.tgCurrentSizeClass as! TGViewSizeClassImpl
-                let leadingSpace = (sbvsc.tgLeading?.margin ?? 0)
-                let trailingSpace = (sbvsc.tgTrailing?.margin ?? 0)
-                let sbvtgWidthIsFill = sbvsc.tgWidth?.isFill ?? false
-                var rect = sbv.tgFrame.frame;
+                let (sbvtgFrame, sbvsc) = self.tgGetSubviewFrameAndSizeClass(sbv)
+                let leadingSpace = sbvsc.leading.absPos
+                let trailingSpace = sbvsc.trailing.absPos
+                var rect = sbvtgFrame.frame;
                 
                 //这里有可能设置了固定的宽度
-                if (sbvsc.tgWidth?.dimeNumVal != nil)
+                if sbvsc.width.numberVal != nil
                 {
-                    rect.size.width = sbvsc.tgWidth!.measure;
+                    rect.size.width = sbvsc.width.measure
                 }
                 
                 //有可能宽度是和他的高度相等。
-                if sbvsc.tgWidth?.dimeRelaVal != nil  && sbvsc.tgWidth!.dimeRelaVal === sbvsc.tgHeight
+                if sbvsc.width.isRelaSizeEqualTo(sbvsc.height)
                 {
-                    if (sbvsc.tgHeight?.dimeNumVal != nil)
+                    if (sbvsc.height.numberVal != nil)
                     {
-                        rect.size.height = sbvsc.tgHeight!.measure;
+                        rect.size.height = sbvsc.height.measure;
                     }
                     
-                    if (sbvsc.tgHeight?.dimeRelaVal != nil && sbvsc.tgHeight!.dimeRelaVal === lsc.tgHeight)
+                    if sbvsc.height.isRelaSizeEqualTo(lsc.height)
                     {
-                        rect.size.height = sbvsc.tgHeight!.measure(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
+                        rect.size.height = sbvsc.height.measure(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
                     }
                     
-                    rect.size.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.height = self.tgValidMeasure(sbvsc.height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
-                    rect.size.width = sbvsc.tgWidth!.measure(rect.size.height)
+                    rect.size.width = sbvsc.width.measure(rect.size.height)
                 }
                 
-                rect.size.width = self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+                rect.size.width = self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
                 
                 if (leadingSpace + rect.size.width + trailingSpace > maxContentWidth &&
-                    (sbvsc.tgWidth?.dimeRelaVal == nil || sbvsc.tgWidth!.dimeRelaVal !== lsc.tgWidth) &&
-                    sbvsc.tgWidth?.dimeWeightVal == nil &&
-                    !sbvtgWidthIsFill)
+                    (sbvsc.width.sizeVal == nil || sbvsc.width.sizeVal !== lsc.width.realSize) &&
+                    sbvsc.width.weightVal == nil &&
+                    !sbvsc.width.isFill)
                 {
                     maxContentWidth = leadingSpace + rect.size.width + trailingSpace;
                 }
@@ -528,7 +493,7 @@ extension TGFloatLayout
         
         let vertSpace = lsc.tg_vspace;
         var horzSpace = lsc.tg_hspace;
-        var subviewSize = lsc.tgSubviewSize
+        var subviewSize = lsc.subviewSize
         if (subviewSize != 0)
         {
             #if DEBUG
@@ -536,8 +501,8 @@ extension TGFloatLayout
                 assert(hasBoundaryLimit, "Constraint exception！！, vertical float layout:\(self) can not set tg_noBoundaryLimit to true when call  tg_setSubviews(size:CGFloat,minSpace:CGFloat,maxSpace:CGFloat)  method")
             #endif
             
-            let minSpace = lsc.tgMinSpace
-            let maxSpace = lsc.tgMaxSpace
+            let minSpace = lsc.minSpace
+            let maxSpace = lsc.maxSpace
 
             
             let rowCount =  floor((selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding  + minSpace) / (subviewSize + minSpace));
@@ -577,17 +542,14 @@ extension TGFloatLayout
         
         for sbv in sbs
         {
-            let sbvsc = sbv.tgCurrentSizeClass as! TGViewSizeClassImpl
-            let sbvtgFrame = sbv.tgFrame
-            let topSpace = (sbvsc.tgTop?.margin ?? 0)
-            let leadingSpace = (sbvsc.tgLeading?.margin ?? 0)
-            let bottomSpace = (sbvsc.tgBottom?.margin ?? 0)
-            let trailingSpace = (sbvsc.tgTrailing?.margin ?? 0)
+            let (sbvtgFrame, sbvsc) = self.tgGetSubviewFrameAndSizeClass(sbv)
+            let topSpace = sbvsc.top.absPos
+            let leadingSpace = sbvsc.leading.absPos
+            let bottomSpace = sbvsc.bottom.absPos
+            let trailingSpace = sbvsc.trailing.absPos
             var rect = sbvtgFrame.frame;
-            let sbvtgWidthIsFill = sbvsc.tgWidth?.isFill ?? false
-            let sbvtgHeightIsFill = sbvsc.tgHeight?.isFill ?? false
-            let isWidthWeight = sbvsc.tgWidth?.dimeWeightVal != nil || sbvtgWidthIsFill
-            let isHeightWeight = sbvsc.tgHeight?.dimeWeightVal != nil || sbvtgHeightIsFill
+            let isWidthWeight = sbvsc.width.weightVal != nil || sbvsc.width.isFill
+            let isHeightWeight = sbvsc.height.weightVal != nil || sbvsc.height.isFill
             
             
             if subviewSize != 0
@@ -595,66 +557,65 @@ extension TGFloatLayout
                 rect.size.width = subviewSize
             }
             
-            if (sbvsc.tgWidth?.dimeNumVal != nil)
+            if sbvsc.width.numberVal != nil
             {
-                rect.size.width = sbvsc.tgWidth!.measure;
+                rect.size.width = sbvsc.width.measure;
             }
             
-            if (sbvsc.tgHeight?.dimeNumVal != nil)
+            if (sbvsc.height.numberVal != nil)
             {
-                rect.size.height = sbvsc.tgHeight!.measure;
+                rect.size.height = sbvsc.height.measure;
             }
             
-            if isHeightWeight && !selftgHeightIsWrap
+            if isHeightWeight && !lsc.height.isWrap
             {
 
-                rect.size.height = sbvsc.tgHeight!.measure((selfSize.height - maxHeight - lsc.tg_bottomPadding) * (sbvtgHeightIsFill ? 1.0 : sbvsc.tgHeight!.dimeWeightVal.rawValue/100) - topSpace - bottomSpace)
+                rect.size.height = sbvsc.height.measure((selfSize.height - maxHeight - lsc.tg_bottomPadding) * (sbvsc.height.isFill ? 1.0 : sbvsc.height.weightVal.rawValue/100) - topSpace - bottomSpace)
             }
             
-            if (sbvsc.tgHeight?.dimeRelaVal != nil && sbvsc.tgHeight!.dimeRelaVal === lsc.tgHeight && !selftgHeightIsWrap)
+            if sbvsc.height.isRelaSizeEqualTo(lsc.height) && !lsc.height.isWrap
             {
-                rect.size.height = sbvsc.tgHeight!.measure(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
+                rect.size.height = sbvsc.height.measure(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
             }
             
-            if (sbvsc.tgWidth?.dimeRelaVal != nil && sbvsc.tgWidth!.dimeRelaVal === lsc.tgWidth)
+            if sbvsc.width.isRelaSizeEqualTo(lsc.width)
             {
-                rect.size.width = sbvsc.tgWidth!.measure(selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding)
+                rect.size.width = sbvsc.width.measure(selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding)
             }
             
-            rect.size.width = self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.width = self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
             
-            if (sbvsc.tgHeight?.dimeRelaVal != nil && sbvsc.tgHeight!.dimeRelaVal === sbvsc.tgWidth)
+            if sbvsc.height.isRelaSizeEqualTo(sbvsc.width)
             {
-                rect.size.height = sbvsc.tgHeight!.measure(rect.size.width)
+                rect.size.height = sbvsc.height.measure(rect.size.width)
             }
             
-            rect.size.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.height = self.tgValidMeasure(sbvsc.height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
-            if (sbvsc.tgWidth?.dimeRelaVal != nil && sbvsc.tgWidth!.dimeRelaVal === sbvsc.tgHeight)
+            if sbvsc.width.isRelaSizeEqualTo(sbvsc.height)
             {
-                rect.size.width = sbvsc.tgWidth!.measure(rect.size.height)
+                rect.size.width = sbvsc.width.measure(rect.size.height)
             }
             
-            if (sbvsc.tgWidth?.dimeRelaVal != nil &&  sbvsc.tgWidth!.dimeRelaVal.view != nil &&  sbvsc.tgWidth!.dimeRelaVal.view != self && sbvsc.tgWidth!.dimeRelaVal.view != sbv)
+            if let t = sbvsc.width.sizeVal, t.view != nil &&  t.view !== self && t.view != sbv
             {
-                rect.size.width = sbvsc.tgWidth!.measure(sbvsc.tgWidth!.dimeRelaVal.view.tgFrame.width)
+                rect.size.width = sbvsc.width.measure(t.view.tgFrame.width)
             }
             
-            if (sbvsc.tgHeight?.dimeRelaVal != nil &&  sbvsc.tgHeight!.dimeRelaVal.view != nil &&  sbvsc.tgHeight!.dimeRelaVal.view != self && sbvsc.tgHeight!.dimeRelaVal.view != sbv)
+            if let t = sbvsc.height.sizeVal, t.view != nil &&  t.view !== self && t.view != sbv
             {
-                rect.size.height = sbvsc.tgHeight!.measure(sbvsc.tgHeight!.dimeRelaVal.view.tgFrame.height)
+                rect.size.height = sbvsc.height.measure(t.view.tgFrame.height)
             }
             
-            rect.size.width = self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.width = self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
             
             //如果高度是浮动的则需要调整高度。
-            if let t = sbvsc.tgHeight, t.isFlexHeight
+            if sbvsc.height.isFlexHeight
             {
-                
                 rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, sbvsc:sbvsc, width: rect.size.width)
             }
             
-            rect.size.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.height = self.tgValidMeasure(sbvsc.height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
             if (sbvsc.tg_reverseFloat)
             {
@@ -701,25 +662,25 @@ extension TGFloatLayout
                 if isWidthWeight
                 {
                     var widthWeight:CGFloat = 1.0
-                    if sbvsc.tgWidth?.dimeWeightVal != nil
+                    if let t = sbvsc.width.weightVal
                     {
-                        widthWeight = sbvsc.tgWidth!.dimeWeightVal.rawValue / 100
+                        widthWeight = t.rawValue / 100
                     }
                     
-                    rect.size.width =  self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: (nextPoint.x - leadingCandidateXBoundary + sbvsc.tgWidth!.addVal) * widthWeight - leadingSpace - trailingSpace, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.width =  self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: (nextPoint.x - leadingCandidateXBoundary + sbvsc.width.increment) * widthWeight - leadingSpace - trailingSpace, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
-                    if (sbvsc.tgHeight?.dimeRelaVal != nil && sbvsc.tgHeight!.dimeRelaVal === sbvsc.tgWidth)
+                    if sbvsc.height.isRelaSizeEqualTo(sbvsc.width)
                     {
-                        rect.size.height = sbvsc.tgHeight!.measure(rect.size.width)
+                        rect.size.height = sbvsc.height.measure(rect.size.width)
                     }
                     
-                    if let t = sbvsc.tgHeight, t.isFlexHeight
+                    if sbvsc.height.isFlexHeight
                     {
                         
                         rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, sbvsc:sbvsc, width: rect.size.width)
                     }
                     
-                    rect.size.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.height = self.tgValidMeasure(sbvsc.height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
                 }
                 
                 
@@ -829,26 +790,26 @@ extension TGFloatLayout
                     
                     
                     var widthWeight:CGFloat = 1.0
-                    if sbvsc.tgWidth?.dimeWeightVal != nil
+                    if let t = sbvsc.width.weightVal
                     {
-                        widthWeight = sbvsc.tgWidth!.dimeWeightVal.rawValue / 100
+                        widthWeight = t.rawValue / 100
                     }
 
                     
-                    rect.size.width =  self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: (trailingCandidateXBoundary - nextPoint.x + sbvsc.tgWidth!.addVal) * widthWeight - leadingSpace - trailingSpace, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.width =  self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: (trailingCandidateXBoundary - nextPoint.x + sbvsc.width.increment) * widthWeight - leadingSpace - trailingSpace, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
-                    if (sbvsc.tgHeight?.dimeRelaVal != nil && sbvsc.tgHeight!.dimeRelaVal === sbvsc.tgWidth)
+                    if sbvsc.height.isRelaSizeEqualTo(sbvsc.width)
                     {
-                        rect.size.height = sbvsc.tgHeight!.measure(rect.size.width)
+                        rect.size.height = sbvsc.height.measure(rect.size.width)
                     }
                     
-                    if let t = sbvsc.tgHeight, t.isFlexHeight
+                    if sbvsc.height.isFlexHeight
                     {
                         
                         rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, sbvsc:sbvsc,width: rect.size.width)
                     }
                     
-                    rect.size.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.height = self.tgValidMeasure(sbvsc.height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
                 }
                 
@@ -932,7 +893,7 @@ extension TGFloatLayout
             selfSize.width = maxWidth
         }
         
-        if selftgHeightIsWrap
+        if lsc.height.isWrap
         {
             selfSize.height = maxHeight
         }
@@ -967,12 +928,8 @@ extension TGFloatLayout
         
         var selfSize = selfSize
         
-        let selftgWidthIsWrap = lsc.tgWidth?.isWrap ?? false
-        let selftgHeightIsWrap = lsc.tgHeight?.isWrap ?? false
-        
-        
         var hasBoundaryLimit = true
-        if (selftgHeightIsWrap && lsc.tg_noBoundaryLimit)
+        if (lsc.height.isWrap && lsc.tg_noBoundaryLimit)
         {
             hasBoundaryLimit = false
         }
@@ -983,60 +940,57 @@ extension TGFloatLayout
         }
         
         //遍历所有的子视图，查看是否有子视图的宽度会比视图自身要宽，如果有且有包裹属性则扩充自身的宽度
-        if (selftgHeightIsWrap && hasBoundaryLimit)
+        if (lsc.height.isWrap && hasBoundaryLimit)
         {
             var maxContentHeight = selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding;
             for sbv in sbs
             {
-                let sbvsc = sbv.tgCurrentSizeClass as! TGViewSizeClassImpl
-                let sbvtgFrame = sbv.tgFrame
-                
-                let topSpace = (sbvsc.tgTop?.margin ?? 0)
-                let bottomSpace = (sbvsc.tgBottom?.margin ?? 0)
-                let sbvtgHeightIsFill = sbvsc.tgHeight?.isFill ?? false
+                let (sbvtgFrame, sbvsc) = self.tgGetSubviewFrameAndSizeClass(sbv)
+                let topSpace = sbvsc.top.absPos
+                let bottomSpace = sbvsc.bottom.absPos
                 var rect = sbvtgFrame.frame;
                 
                 
                 //这里有可能设置了固定的高度
-                if (sbvsc.tgHeight?.dimeNumVal != nil)
+                if (sbvsc.height.numberVal != nil)
                 {
-                    rect.size.height = sbvsc.tgHeight!.measure
+                    rect.size.height = sbvsc.height.measure
                 }
                 
-                rect.size.width = self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+                rect.size.width = self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
                 
                 //有可能高度是和他的宽度相等。
-                if (sbvsc.tgHeight?.dimeRelaVal != nil && sbvsc.tgHeight!.dimeRelaVal === sbvsc.tgWidth)
+                if sbvsc.height.isRelaSizeEqualTo(sbvsc.width)
                 {
                     
-                    if (sbvsc.tgWidth?.dimeNumVal != nil)
+                    if sbvsc.width.numberVal != nil
                     {
-                        rect.size.width = sbvsc.tgWidth!.measure;
+                        rect.size.width = sbvsc.width.measure;
                     }
                     
-                    if (sbvsc.tgWidth?.dimeRelaVal != nil && sbvsc.tgWidth!.dimeRelaVal === lsc.tgWidth)
+                    if sbvsc.width.isRelaSizeEqualTo(lsc.width)
                     {
-                        rect.size.width = sbvsc.tgWidth!.measure(selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding)
+                        rect.size.width = sbvsc.width.measure(selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding)
                     }
                     
-                    rect.size.width = self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.width = self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
                     
-                    rect.size.height = sbvsc.tgHeight!.measure(rect.size.width)
+                    rect.size.height = sbvsc.height.measure(rect.size.width)
                 }
                 
-                if let t = sbvsc.tgHeight, t.isFlexHeight
+                if sbvsc.height.isFlexHeight
                 {
                     
                     rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, sbvsc:sbvsc, width: rect.size.width)
                 }
                 
-                rect.size.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+                rect.size.height = self.tgValidMeasure(sbvsc.height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
                 
                 if (topSpace + rect.size.height + bottomSpace > maxContentHeight &&
-                    (sbvsc.tgHeight?.dimeRelaVal == nil || sbvsc.tgHeight!.dimeRelaVal !== lsc.tgHeight) &&
-                    sbvsc.tgHeight?.dimeWeightVal == nil &&
-                    !sbvtgHeightIsFill)
+                    (sbvsc.height.sizeVal == nil || sbvsc.height.sizeVal !== lsc.height.realSize) &&
+                    sbvsc.height.weightVal == nil &&
+                    !sbvsc.height.isFill)
                 {
                     maxContentHeight = topSpace + rect.size.height + bottomSpace;
                 }
@@ -1049,7 +1003,7 @@ extension TGFloatLayout
         //支持浮动垂直间距。
         let horzSpace = lsc.tg_hspace
         var vertSpace = lsc.tg_vspace
-        var subviewSize = lsc.tgSubviewSize;
+        var subviewSize = lsc.subviewSize;
         if (subviewSize != 0)
         {
             #if DEBUG
@@ -1057,8 +1011,8 @@ extension TGFloatLayout
                 assert(hasBoundaryLimit, "Constraint exception！！, horizontal float layout:\(self) can not set tg_noBoundaryLimit to true when call  tg_setSubviews(size:CGFloat,minSpace:CGFloat,maxSpace:CGFloat)  method");
             #endif
             
-            let minSpace = lsc.tgMinSpace
-            let maxSpace = lsc.tgMaxSpace
+            let minSpace = lsc.minSpace
+            let maxSpace = lsc.maxSpace
 
             let rowCount =  floor((selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding  + minSpace) / (subviewSize + minSpace))
             if (rowCount > 1)
@@ -1100,22 +1054,19 @@ extension TGFloatLayout
         
         for sbv in sbs
         {
-            let sbvsc = sbv.tgCurrentSizeClass as! TGViewSizeClassImpl
-            let sbvtgFrame = sbv.tgFrame
-            let  topSpace = (sbvsc.tgTop?.margin ?? 0)
-            let leadingSpace = (sbvsc.tgLeading?.margin ?? 0)
-            let bottomSpace = (sbvsc.tgBottom?.margin ?? 0)
-            let trailingSpace = (sbvsc.tgTrailing?.margin ?? 0)
+            let (sbvtgFrame, sbvsc) = self.tgGetSubviewFrameAndSizeClass(sbv)
+            let  topSpace = sbvsc.top.absPos
+            let leadingSpace = sbvsc.leading.absPos
+            let bottomSpace = sbvsc.bottom.absPos
+            let trailingSpace = sbvsc.trailing.absPos
             var rect = sbvtgFrame.frame;
-            let sbvtgWidthIsFill = sbvsc.tgWidth?.isFill ?? false
-            let sbvtgHeightIsFill = sbvsc.tgHeight?.isFill ?? false
-            let isWidthWeight = sbvsc.tgWidth?.dimeWeightVal != nil || sbvtgWidthIsFill
-            let isHeightWeight = sbvsc.tgHeight?.dimeWeightVal != nil || sbvtgHeightIsFill
-          
+            let isWidthWeight = sbvsc.width.weightVal != nil || sbvsc.width.isFill
+            let isHeightWeight = sbvsc.height.weightVal != nil || sbvsc.height.isFill
+
             
-            if (sbvsc.tgWidth?.dimeNumVal != nil)
+            if sbvsc.width.numberVal != nil
             {
-                rect.size.width = sbvsc.tgWidth!.measure;
+                rect.size.width = sbvsc.width.measure;
             }
             
             if subviewSize != 0
@@ -1123,59 +1074,59 @@ extension TGFloatLayout
                 rect.size.height = subviewSize
             }
             
-            if (sbvsc.tgHeight?.dimeNumVal != nil)
+            if (sbvsc.height.numberVal != nil)
             {
-                rect.size.height = sbvsc.tgHeight!.measure;
+                rect.size.height = sbvsc.height.measure;
             }
             
-            if (sbvsc.tgHeight?.dimeRelaVal != nil && sbvsc.tgHeight!.dimeRelaVal === lsc.tgHeight)
+            if sbvsc.height.isRelaSizeEqualTo(lsc.height)
             {
-                rect.size.height = sbvsc.tgHeight!.measure(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
+                rect.size.height = sbvsc.height.measure(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
             }
             
-            if (sbvsc.tgWidth?.dimeRelaVal != nil && sbvsc.tgWidth!.dimeRelaVal === lsc.tgWidth && !selftgWidthIsWrap)
+            if sbvsc.width.isRelaSizeEqualTo(lsc.width) && !lsc.width.isWrap
             {
-                rect.size.width = sbvsc.tgWidth!.measure(selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding)
+                rect.size.width = sbvsc.width.measure(selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding)
             }
             
-            if isWidthWeight && !selftgWidthIsWrap
+            if isWidthWeight && !lsc.width.isWrap
             {
-                rect.size.width = sbvsc.tgWidth!.measure((selfSize.width - maxWidth - lsc.tg_trailingPadding) * (sbvtgWidthIsFill ? 1.0 : sbvsc.tgWidth!.dimeWeightVal.rawValue/100) - leadingSpace - trailingSpace)
+                rect.size.width = sbvsc.width.measure((selfSize.width - maxWidth - lsc.tg_trailingPadding) * (sbvsc.width.isFill ? 1.0 : sbvsc.width.weightVal.rawValue/100) - leadingSpace - trailingSpace)
 
             }
             
-            rect.size.width = self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.width = self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
             
-            if (sbvsc.tgHeight?.dimeRelaVal != nil && sbvsc.tgHeight!.dimeRelaVal === sbvsc.tgWidth)
+            if sbvsc.height.isRelaSizeEqualTo(sbvsc.width)
             {
-                rect.size.height = sbvsc.tgHeight!.measure(rect.size.width)
+                rect.size.height = sbvsc.height.measure(rect.size.width)
             }
             
-            rect.size.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.height = self.tgValidMeasure(sbvsc.height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
-            if (sbvsc.tgWidth?.dimeRelaVal != nil && sbvsc.tgWidth!.dimeRelaVal === sbvsc.tgHeight)
+            if sbvsc.width.isRelaSizeEqualTo(sbvsc.height)
             {
-                rect.size.width = sbvsc.tgWidth!.measure(rect.size.height)
+                rect.size.width = sbvsc.width.measure(rect.size.height)
             }
             
-            if (sbvsc.tgWidth?.dimeRelaVal != nil &&  sbvsc.tgWidth!.dimeRelaVal.view != nil &&  sbvsc.tgWidth!.dimeRelaVal.view != self && sbvsc.tgWidth!.dimeRelaVal.view != sbv)
+            if let t = sbvsc.width.sizeVal, t.view != nil &&  t.view !== self && t.view !== sbv
             {
-                rect.size.width = sbvsc.tgWidth!.measure(sbvsc.tgWidth!.dimeRelaVal.view.tgFrame.width)
+                rect.size.width = sbvsc.width.measure(t.view.tgFrame.width)
             }
             
-            if (sbvsc.tgHeight?.dimeRelaVal != nil &&  sbvsc.tgHeight!.dimeRelaVal.view != nil &&  sbvsc.tgHeight!.dimeRelaVal.view != self && sbvsc.tgHeight!.dimeRelaVal.view != sbv)
+            if let t = sbvsc.height.sizeVal, t.view != nil &&  t.view !== self && t.view !== sbv
             {
-                rect.size.height = sbvsc.tgHeight!.measure(sbvsc.tgHeight!.dimeRelaVal.view.tgFrame.height)
+                rect.size.height = sbvsc.height.measure(t.view.tgFrame.height)
             }
             
             
             //如果高度是浮动的则需要调整高度。
-            if let t = sbvsc.tgHeight, t.isFlexHeight
+            if sbvsc.height.isFlexHeight
             {
                 rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, sbvsc:sbvsc, width: rect.size.width)
             }
             
-            rect.size.height = self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
+            rect.size.height = self.tgValidMeasure(sbvsc.height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
             if (sbvsc.tg_reverseFloat)
             {
@@ -1221,16 +1172,16 @@ extension TGFloatLayout
                 {
                     
                     var heightWeight:CGFloat = 1.0
-                    if sbvsc.tgHeight?.dimeWeightVal != nil
+                    if let t = sbvsc.height.weightVal
                     {
-                        heightWeight = sbvsc.tgHeight!.dimeWeightVal.rawValue/100
+                        heightWeight = t.rawValue/100
                     }
                     
-                    rect.size.height =  self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: (nextPoint.y - topCandidateYBoundary + sbvsc.tgHeight!.addVal) * heightWeight - topSpace - bottomSpace, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.height =  self.tgValidMeasure(sbvsc.height, sbv: sbv, calcSize: (nextPoint.y - topCandidateYBoundary + sbvsc.height.increment) * heightWeight - topSpace - bottomSpace, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
-                    if (sbvsc.tgWidth?.dimeRelaVal != nil && sbvsc.tgWidth!.dimeRelaVal === sbvsc.tgHeight)
+                    if sbvsc.width.isRelaSizeEqualTo(sbvsc.height)
                     {
-                        rect.size.width = self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: sbvsc.tgWidth!.measure(rect.size.height), sbvSize: rect.size, selfLayoutSize: selfSize)
+                        rect.size.width = self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: sbvsc.width.measure(rect.size.height), sbvSize: rect.size, selfLayoutSize: selfSize)
                     }
                     
                 }
@@ -1338,16 +1289,16 @@ extension TGFloatLayout
                     
                     
                     var heightWeight:CGFloat = 1.0
-                    if sbvsc.tgHeight?.dimeWeightVal != nil
+                    if let t = sbvsc.height.weightVal
                     {
-                        heightWeight = sbvsc.tgHeight!.dimeWeightVal.rawValue/100
+                        heightWeight = t.rawValue/100
                     }
                     
-                    rect.size.height =  self.tgValidMeasure(sbvsc.tgHeight, sbv: sbv, calcSize: (bottomCandidateYBoundary - nextPoint.y + sbvsc.tgHeight!.addVal) * heightWeight - topSpace - bottomSpace, sbvSize: rect.size, selfLayoutSize: selfSize)
+                    rect.size.height =  self.tgValidMeasure(sbvsc.height, sbv: sbv, calcSize: (bottomCandidateYBoundary - nextPoint.y + sbvsc.height.increment) * heightWeight - topSpace - bottomSpace, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
-                    if (sbvsc.tgWidth?.dimeRelaVal != nil && sbvsc.tgWidth!.dimeRelaVal === sbvsc.tgHeight)
+                    if sbvsc.width.isRelaSizeEqualTo(sbvsc.height)
                     {
-                        rect.size.width = self.tgValidMeasure(sbvsc.tgWidth, sbv: sbv, calcSize: sbvsc.tgWidth!.measure(rect.size.height), sbvSize: rect.size, selfLayoutSize: selfSize)
+                        rect.size.width = self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: sbvsc.width.measure(rect.size.height), sbvSize: rect.size, selfLayoutSize: selfSize)
                     }
                     
                     
@@ -1435,7 +1386,7 @@ extension TGFloatLayout
             selfSize.height = maxHeight
         }
         
-        if selftgWidthIsWrap
+        if lsc.width.isWrap
         {
             selfSize.width = maxWidth;
         }

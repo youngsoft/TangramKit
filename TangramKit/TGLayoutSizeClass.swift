@@ -105,7 +105,7 @@ public enum TGSizeClassType
 /**
  * 定义SizeClass中普通视图的具有的布局属性接口
  */
-public protocol TGViewSizeClass:NSObjectProtocol
+public protocol TGViewSizeClass:class
 {
     var tg_top:TGLayoutPos{get}
     var tg_leading:TGLayoutPos{get}
@@ -122,10 +122,13 @@ public protocol TGViewSizeClass:NSObjectProtocol
     
     var tg_useFrame:Bool{get set}
     var tg_noLayout:Bool{get set}
-    var isHidden:Bool{get set}
-    
     var tg_reverseFloat:Bool{get set}
     var tg_clearFloat:Bool{get set}
+    
+    var tg_visibility:TGVisibility{get set}
+
+    var tg_alignment:TGGravity{get set}
+
     
 }
 
@@ -149,7 +152,9 @@ public protocol TGLayoutViewSizeClass:TGViewSizeClass
     var tg_hspace:CGFloat{get set}
     var tg_space:CGFloat{get set}
     var tg_reverseLayout: Bool{get set}
-    var tg_layoutHiddenSubviews:Bool{get set}
+    
+    var tg_gravity:TGGravity{get set}
+
 }
 
 /**
@@ -158,7 +163,6 @@ public protocol TGLayoutViewSizeClass:TGViewSizeClass
 public protocol TGSequentLayoutViewSizeClass:TGLayoutViewSizeClass
 {
     var tg_orientation:TGOrientation{get set}
-    var tg_gravity:TGGravity{get set}
 }
 
 /**
@@ -202,9 +206,6 @@ public protocol TGFloatLayoutViewSizeClass:TGSequentLayoutViewSizeClass
  */
 public protocol TGRelativeLayoutViewSizeClass:TGLayoutViewSizeClass
 {
-    var tg_autoLayoutViewGroupWidth:Bool{get set}
-    var tg_autoLayoutViewGroupHeight:Bool{get set}
-
 }
 
 /**
@@ -224,81 +225,81 @@ public protocol TGPathLayoutViewSizeClass : TGLayoutViewSizeClass{
 
 
 //TGSizeClass Implemention
-internal class TGViewSizeClassImpl:NSObject,NSCopying,TGViewSizeClass {
+internal class TGViewSizeClassImpl:NSCopying,TGViewSizeClass {
     
     required init(view:UIView) {
-        super.init()
+     //   super.init()
         self.view = view
     }
     
     
     var tg_top:TGLayoutPos
     {
-        if tgTop == nil
+        if top.realPos == nil
         {
-            tgTop = TGLayoutPos(TGGravity.vert.top).belong(to: self.view)
+            top.realPos = TGLayoutPos(TGGravity.vert.top, view:self.view)
         }
         
-        return tgTop!
+        return top.realPos
     }
     
     var tg_leading:TGLayoutPos {
         
-        if tgLeading == nil
+        if leading.realPos == nil
         {
-            tgLeading = TGLayoutPos(TGGravity.horz.leading).belong(to: self.view)
+            leading.realPos = TGLayoutPos(TGGravity.horz.leading, view:self.view)
         }
         
-        return tgLeading!
+        return leading.realPos
     }
 
     var tg_bottom:TGLayoutPos
     {
-        if tgBottom == nil
+        if bottom.realPos == nil
         {
-            tgBottom = TGLayoutPos(TGGravity.vert.bottom).belong(to: self.view)
+            bottom.realPos = TGLayoutPos(TGGravity.vert.bottom, view:self.view)
         }
         
-        return tgBottom!
+        return bottom.realPos
     }
 
     
     var tg_trailing:TGLayoutPos
     {
-        if tgTrailing == nil
+        if trailing.realPos == nil
         {
-            tgTrailing = TGLayoutPos(TGGravity.horz.trailing).belong(to: self.view)
+            trailing.realPos = TGLayoutPos(TGGravity.horz.trailing, view:self.view)
         }
         
-        return tgTrailing!
+        return trailing.realPos
     }
 
   
 
     var tg_centerX:TGLayoutPos
     {
-        if tgCenterX == nil
+        if centerX.realPos == nil
         {
-            tgCenterX = TGLayoutPos(TGGravity.horz.center).belong(to: self.view)
+            centerX.realPos = TGLayoutPos(TGGravity.horz.center, view:self.view)
         }
         
-        return tgCenterX!
+        return centerX.realPos
     }
 
     var tg_centerY:TGLayoutPos
     {
-        if tgCenterY == nil
+        if centerY.realPos == nil
         {
-            tgCenterY = TGLayoutPos(TGGravity.vert.center).belong(to: self.view)
+            centerY.realPos = TGLayoutPos(TGGravity.vert.center, view:self.view)
         }
         
-        return tgCenterY!
+        return centerY.realPos
     }
     
     
     var tg_left:TGLayoutPos {
         
-        if (TGViewSizeClassImpl.tgIsRTL)
+        if (TGViewSizeClassImpl.IsRTL)
         {
             return self.tg_trailing
         }
@@ -311,7 +312,7 @@ internal class TGViewSizeClassImpl:NSObject,NSCopying,TGViewSizeClass {
     
     var tg_right:TGLayoutPos
     {
-        if (TGViewSizeClassImpl.tgIsRTL)
+        if (TGViewSizeClassImpl.IsRTL)
         {
             return self.tg_leading
         }
@@ -325,142 +326,172 @@ internal class TGViewSizeClassImpl:NSObject,NSCopying,TGViewSizeClass {
 
     var tg_width:TGLayoutSize
     {
-        if tgWidth == nil
+        if width.realSize == nil
         {
-            tgWidth = TGLayoutSize(TGGravity.horz.fill).belong(to: self.view)
+            width.realSize = TGLayoutSize(TGGravity.horz.fill, view:self.view)
         }
         
-        return tgWidth!
+        return width.realSize
     }
     
     var tg_height:TGLayoutSize
     {
-        if tgHeight == nil
+        if height.realSize == nil
         {
-            tgHeight = TGLayoutSize(TGGravity.vert.fill).belong(to: self.view)
+            height.realSize = TGLayoutSize(TGGravity.vert.fill, view:self.view)
         }
         
-        return tgHeight!
+        return height.realSize
     }
 
-    static var tgIsRTL:Bool = false
 
     var tg_useFrame:Bool = false
     var tg_noLayout:Bool = false
-    var isHidden:Bool = false
     
     var tg_reverseFloat:Bool = false
     var tg_clearFloat:Bool = false
     
+    var tg_visibility: TGVisibility = .visible
+    var tg_alignment: TGGravity = .none
+    
+    static var IsRTL:Bool = false
+
+    
     weak var view:UIView!
     
-    var tgLayoutCompletedAction:((_ layout:TGBaseLayout,_ view:UIView)->Void)? = nil
+    var layoutCompletedAction:((_ layout:TGBaseLayout,_ view:UIView)->Void)? = nil
+    
+    internal lazy var top:TGLayoutPosValue2 = TGLayoutPosWrapper()
+    internal lazy var leading:TGLayoutPosValue2 = TGLayoutPosWrapper()
+    internal lazy var bottom:TGLayoutPosValue2 = TGLayoutPosWrapper()
+    internal lazy var trailing:TGLayoutPosValue2 = TGLayoutPosWrapper()
+    internal lazy var centerX:TGLayoutPosValue2 = TGLayoutPosWrapper()
+    internal lazy var centerY:TGLayoutPosValue2 = TGLayoutPosWrapper()
+    internal lazy var width:TGLayoutSizeValue2 = TGLayoutSizeWrapper()
+    internal lazy var height:TGLayoutSizeValue2 = TGLayoutSizeWrapper()
+    
+    
+    
+    internal var left:TGLayoutPosValue2
+        {
+        get{
+            if (TGViewSizeClassImpl.IsRTL)
+            {
+                return trailing
+            }
+            else
+            {
+                return leading
+            }
+        }
+        set
+        {
+            if (TGViewSizeClassImpl.IsRTL)
+            {
+                trailing = newValue
+            }
+            else
+            {
+                leading = newValue
+            }
+        }
+    }
+    
+    
+    internal var right:TGLayoutPosValue2
+        {
+        get{
+            if (TGViewSizeClassImpl.IsRTL)
+            {
+                return leading
+            }
+            else
+            {
+                return trailing
+            }
+        }
+        set
+        {
+            if (TGViewSizeClassImpl.IsRTL)
+            {
+                leading = newValue
+            }
+            else
+            {
+                trailing = newValue
+            }
+        }
+    }
+    
+    internal var isVertMarginHasValue:Bool
+        {
+         return top.hasValue && bottom.hasValue
+    }
+    
+    internal var isHorzMarginHasValue:Bool
+        {
+        
+        return leading.hasValue && trailing.hasValue
 
+    }
+    
+    internal var isSomeSizeWrap:Bool
+        {
+            return width.isWrap || height.isWrap
+    }
+    
+    internal var isAllSizeWrap:Bool
+        {
+            return width.isWrap && height.isWrap
+    }
+
+    
     func copy(with zone: NSZone? = nil) -> Any
     {
         let tsc:TGViewSizeClassImpl = type(of: self).init(view: self.view)
         
-        if self.tgTop != nil
+        
+        if self.top.realPos != nil
         {
-            tsc.tgTop = self.tgTop!.copy() as? TGLayoutPos
+            tsc.top.realPos = self.top.realPos.copy() as? TGLayoutPos
         }
-        if self.tgLeading != nil
+        if self.leading.realPos != nil
         {
-            tsc.tgLeading = self.tgLeading!.copy() as? TGLayoutPos
+            tsc.leading.realPos = self.leading.realPos.copy() as? TGLayoutPos
         }
-        if self.tgBottom != nil
+        if self.bottom.realPos != nil
         {
-            tsc.tgBottom = self.tgBottom!.copy() as? TGLayoutPos
+            tsc.bottom.realPos = self.bottom.realPos.copy() as? TGLayoutPos
         }
-        if self.tgTrailing != nil
+        if self.trailing.realPos != nil
         {
-            tsc.tgTrailing = self.tgTrailing!.copy() as? TGLayoutPos
+            tsc.trailing.realPos = self.trailing.realPos.copy() as? TGLayoutPos
         }
-        if self.tgCenterX != nil
+        if self.centerX.realPos != nil
         {
-            tsc.tgCenterX = self.tgCenterX!.copy() as? TGLayoutPos
+            tsc.centerX.realPos = self.centerX.realPos.copy() as? TGLayoutPos
         }
-        if self.tgCenterY != nil
+        if self.centerY.realPos != nil
         {
-            tsc.tgCenterY = self.tgCenterY!.copy() as? TGLayoutPos
+            tsc.centerY.realPos = self.centerY.realPos.copy() as? TGLayoutPos
         }
-        if self.tgWidth != nil
+        if self.width.realSize != nil
         {
-            tsc.tgWidth = self.tgWidth!.copy() as? TGLayoutSize
+            tsc.width.realSize = self.width.realSize.copy() as? TGLayoutSize
         }
-        if self.tgHeight != nil
+        if self.height.realSize != nil
         {
-            tsc.tgHeight = self.tgHeight!.copy() as? TGLayoutSize
+            tsc.height.realSize = self.height.realSize.copy() as? TGLayoutSize
         }
-      
+        
         tsc.tg_useFrame = self.tg_useFrame
         tsc.tg_noLayout = self.tg_noLayout
-        tsc.isHidden = self.isHidden
+        tsc.tg_visibility = self.tg_visibility
+        tsc.tg_alignment = self.tg_alignment
         tsc.tg_reverseFloat = self.tg_reverseFloat
         tsc.tg_clearFloat = self.tg_clearFloat
-
+        
         return tsc
-    }
-    
-    internal  var tgTop:TGLayoutPos? = nil
-    internal  var tgLeading:TGLayoutPos? = nil
-    internal  var tgBottom:TGLayoutPos? = nil
-    internal  var tgTrailing:TGLayoutPos? = nil
-    internal  var tgCenterX:TGLayoutPos? = nil
-    internal  var tgCenterY:TGLayoutPos? = nil
-    internal  var tgWidth:TGLayoutSize? = nil
-    internal  var tgHeight:TGLayoutSize? = nil
-    
-    
-    internal var tgLeft:TGLayoutPos?
-        {
-        get{
-            if (TGViewSizeClassImpl.tgIsRTL)
-            {
-                return tgTrailing
-            }
-            else
-            {
-                return tgLeading
-            }
-        }
-        set
-        {
-            if (TGViewSizeClassImpl.tgIsRTL)
-            {
-                tgTrailing = newValue
-            }
-            else
-            {
-                tgLeading = newValue
-            }
-        }
-    }
-    
-    
-    internal var tgRight:TGLayoutPos?
-        {
-        get{
-            if (TGViewSizeClassImpl.tgIsRTL)
-            {
-                return tgLeading
-            }
-            else
-            {
-                return tgTrailing
-            }
-        }
-        set
-        {
-            if (TGViewSizeClassImpl.tgIsRTL)
-            {
-                tgLeading = newValue
-            }
-            else
-            {
-                tgTrailing = newValue
-            }
-        }
     }
 
 }
@@ -489,7 +520,7 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
     var tg_leftPadding:CGFloat
         {
         get{
-            if (TGViewSizeClassImpl.tgIsRTL)
+            if (TGViewSizeClassImpl.IsRTL)
             {
                 return self.tg_trailingPadding
             }
@@ -500,7 +531,7 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
         }
         set
         {
-            if (TGViewSizeClassImpl.tgIsRTL)
+            if (TGViewSizeClassImpl.IsRTL)
             {
                 self.tg_trailingPadding = newValue
             }
@@ -515,7 +546,7 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
     var tg_rightPadding:CGFloat
         {
         get{
-            if (TGViewSizeClassImpl.tgIsRTL)
+            if (TGViewSizeClassImpl.IsRTL)
             {
                 return self.tg_leadingPadding
             }
@@ -526,7 +557,7 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
         }
         set
         {
-            if (TGViewSizeClassImpl.tgIsRTL)
+            if (TGViewSizeClassImpl.IsRTL)
             {
                 self.tg_leadingPadding = newValue
             }
@@ -557,9 +588,7 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
     }
 
     var tg_reverseLayout: Bool = false
-    
-    var tg_layoutHiddenSubviews:Bool = false
-    
+    var tg_gravity: TGGravity = .none
     
     override func copy(with zone: NSZone?) -> Any {
         
@@ -573,7 +602,7 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
         tsc.tg_vspace = self.tg_vspace
         tsc.tg_hspace = self.tg_hspace
         tsc.tg_reverseLayout = self.tg_reverseLayout
-        tsc.tg_layoutHiddenSubviews = self.tg_layoutHiddenSubviews
+        tsc.tg_gravity = self.tg_gravity
         
         return tsc
     }
@@ -583,14 +612,12 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
 internal class TGSequentLayoutViewSizeClassImpl:TGLayoutViewSizeClassImpl,TGSequentLayoutViewSizeClass
 {
     var tg_orientation:TGOrientation = .vert
-    var tg_gravity:TGGravity = .none
     
     override func copy(with zone: NSZone?) -> Any {
         
         let tsc = super.copy(with: zone) as! TGSequentLayoutViewSizeClassImpl
         
         tsc.tg_orientation = self.tg_orientation
-        tsc.tg_gravity = self.tg_gravity
         
         return tsc
     }
@@ -622,18 +649,18 @@ internal class TGFloatLayoutViewSizeClassImpl : TGSequentLayoutViewSizeClassImpl
 {
     var tg_noBoundaryLimit:Bool = false
     
-    var tgSubviewSize:CGFloat = 0
-    var tgMinSpace:CGFloat = 0
-    var tgMaxSpace:CGFloat = .greatestFiniteMagnitude
+    var subviewSize:CGFloat = 0
+    var minSpace:CGFloat = 0
+    var maxSpace:CGFloat = .greatestFiniteMagnitude
 
     override func copy(with zone: NSZone?) -> Any {
         
         let tsc = super.copy(with: zone) as! TGFloatLayoutViewSizeClassImpl
         
         tsc.tg_noBoundaryLimit = self.tg_noBoundaryLimit
-        tsc.tgSubviewSize = self.tgSubviewSize
-        tsc.tgMinSpace = self.tgMinSpace
-        tsc.tgMaxSpace = self.tgMaxSpace
+        tsc.subviewSize = self.subviewSize
+        tsc.minSpace = self.minSpace
+        tsc.maxSpace = self.maxSpace
         
         return tsc
     }
@@ -649,9 +676,9 @@ internal class TGFlowLayoutViewSizeClassImpl:TGSequentLayoutViewSizeClassImpl,TG
     var tg_arrangedGravity:TGGravity = .none
     var tg_autoArrange:Bool = false
     
-    var tgSubviewSize:CGFloat = 0
-    var tgMinSpace:CGFloat = 0
-    var tgMaxSpace:CGFloat = .greatestFiniteMagnitude
+    var subviewSize:CGFloat = 0
+    var minSpace:CGFloat = 0
+    var maxSpace:CGFloat = .greatestFiniteMagnitude
 
     
     override func copy(with zone: NSZone?) -> Any {
@@ -662,9 +689,9 @@ internal class TGFlowLayoutViewSizeClassImpl:TGSequentLayoutViewSizeClassImpl,TG
         tsc.tg_pagedCount = self.tg_pagedCount
         tsc.tg_arrangedGravity = self.tg_arrangedGravity
         tsc.tg_autoArrange = self.tg_autoArrange
-        tsc.tgSubviewSize = self.tgSubviewSize
-        tsc.tgMinSpace = self.tgMinSpace
-        tsc.tgMaxSpace = self.tgMaxSpace
+        tsc.subviewSize = self.subviewSize
+        tsc.minSpace = self.minSpace
+        tsc.maxSpace = self.maxSpace
 
         return tsc
     }
@@ -679,21 +706,313 @@ internal class TGFrameLayoutViewSizeClassImpl:TGLayoutViewSizeClassImpl,TGFrameL
 
 internal class TGRelativeLayoutViewSizeClassImpl:TGLayoutViewSizeClassImpl,TGRelativeLayoutViewSizeClass
 {
-     var tg_autoLayoutViewGroupWidth:Bool = false
-     var tg_autoLayoutViewGroupHeight:Bool = false
-    
-     override func copy(with zone: NSZone?) -> Any {
-        
-        let tsc = super.copy(with: zone) as! TGRelativeLayoutViewSizeClassImpl
-        
-        tsc.tg_autoLayoutViewGroupWidth = self.tg_autoLayoutViewGroupWidth
-        tsc.tg_autoLayoutViewGroupHeight = self.tg_autoLayoutViewGroupHeight
-        
-        return tsc
-    }
 }
 
 internal class TGPathLayoutViewSizeClassImpl: TGLayoutViewSizeClassImpl,TGPathLayoutViewSizeClass
 {
+
+}
+
+protocol TGLayoutPosValue2:TGLayoutPosValue {
+    
+    var realPos:TGLayoutPos! {get set}
+    
+    var floatNumber:CGFloat{get}
+}
+
+protocol TGLayoutSizeValue2:TGLayoutSizeValue {
+    
+    var realSize:TGLayoutSize! {get set}
+    
+    func isRelaSizeEqualTo(_ size:TGLayoutSizeValue2) -> Bool
+    
+    func isDependOther(_ size:TGLayoutSizeValue2) -> Bool
+    
+}
+
+
+internal class TGLayoutPosWrapper:TGLayoutPosValue2
+{
+    var realPos:TGLayoutPos! = nil
+
+    
+    var hasValue:Bool
+    {
+        guard let p = self.realPos else {
+            return false
+        }
+        
+        return p.hasValue
+    }
+    
+    var numberVal:CGFloat!
+    {
+        guard let p = self.realPos else {
+            return nil
+        }
+        
+        return p.numberVal
+    }
+    
+    var floatNumber:CGFloat
+    {
+        guard let p = self.realPos else {
+            return 0
+        }
+        
+        if let t = p.numberVal
+        {
+            return t
+        }
+        else
+        {
+            return 0
+        }
+        
+    }
+    
+    var weightVal:TGWeight!
+    {
+        guard let p = self.realPos else {
+            return nil
+        }
+        
+        return p.weightVal
+        
+    }
+    
+    var posVal:TGLayoutPos!
+    {
+        guard let p = self.realPos else {
+            return nil
+        }
+        
+        return p.posVal
+    }
+    
+    var arrayVal:[TGLayoutPos]!
+    {
+        guard let p = self.realPos else {
+            return nil
+        }
+        
+        return p.arrayVal
+    }
+    
+    var offset:CGFloat
+    {
+        guard let p = self.realPos else {
+            return 0
+        }
+        
+        return p.offset
+    }
+    
+    var minVal:TGLayoutPos?
+    {
+        guard let p = self.realPos else {
+            return nil
+        }
+        
+        return p.min
+    }
+    
+    var maxVal:TGLayoutPos?
+    {
+        guard let p = self.realPos else {
+            return nil
+        }
+        
+        return p.maxVal
+        
+    }
+    
+    var absPos:CGFloat
+    {
+        guard let p = self.realPos else {
+            return 0
+        }
+        
+        return p.absPos
+    }
+    
+    func weightPosIn(_ contentSize:CGFloat) -> CGFloat
+    {
+        guard let p = self.realPos else {
+            return 0
+        }
+        
+        return p.weightPosIn(contentSize)
+    }
+}
+
+
+internal class TGLayoutSizeWrapper:TGLayoutSizeValue2
+{
+    var realSize:TGLayoutSize! = nil
+    
+    var hasValue:Bool
+    {
+        guard let p = self.realSize else {
+            return false
+        }
+        
+        return p.hasValue
+    }
+    
+    var isWrap:Bool
+    {
+        guard let p = self.realSize else {
+            return false
+        }
+        
+        return p.isWrap
+    }
+    
+    var isFill:Bool
+    {
+        guard let p = self.realSize else {
+            return false
+        }
+        
+        return p.isFill
+    }
+    
+    var numberVal:CGFloat!
+    {
+        
+        guard let p = self.realSize else {
+            return nil
+        }
+        
+        return p.numberVal
+        
+    }
+    
+    var sizeVal:TGLayoutSize! {
+        
+        guard let p = self.realSize else {
+            return nil
+        }
+        
+        return p.sizeVal
+    }
+    
+    var arrayVal:[TGLayoutSize]! {
+        
+        guard let p = self.realSize else {
+            return nil
+        }
+        
+        return p.arrayVal
+        
+    }
+    
+    var weightVal:TGWeight! {
+        
+        guard let p = self.realSize else {
+            return nil
+        }
+        
+        return p.weightVal
+    }
+    
+    var increment:CGFloat {
+        
+        guard let p = self.realSize else {
+            return 0
+        }
+        
+        return p.increment
+    }
+    
+    var multiple:CGFloat
+    {
+        
+        guard let p = self.realSize else {
+            return 1
+        }
+        
+        return p.multiple
+    }
+    
+    var minVal:TGLayoutSize? {
+        
+        guard let p = self.realSize else {
+            return nil
+        }
+        
+        return p.minVal
+    }
+    
+    var maxVal:TGLayoutSize? {
+        
+        guard let p = self.realSize else {
+            return nil
+        }
+        
+        return p.maxVal
+        
+    }
+    
+    var isFlexHeight:Bool
+    {
+        guard let p = self.realSize else {
+            return false
+        }
+        
+        return p.isFlexHeight
+    }
+    
+    var measure:CGFloat
+    {
+        guard let p = self.realSize else {
+            return 0
+        }
+
+        return p.measure
+    }
+    
+    func measure(_ size:CGFloat) -> CGFloat
+    {
+        guard let p = self.realSize else {
+            return size
+        }
+        
+        return p.measure(size)
+    }
+
+    
+    func isRelaSizeEqualTo(_ size:TGLayoutSizeValue2) -> Bool
+    {
+        guard let p = self.realSize else {
+            return false
+        }
+        
+        guard let rela = p.sizeVal else {
+            return false
+        }
+        
+        return rela === size.realSize
+    }
+    
+    func isDependOther(_ size: TGLayoutSizeValue2) -> Bool {
+        
+        guard let p = self.realSize else {
+            return false
+        }
+        
+        return p.isFill || p.weightVal != nil || (p.sizeVal != nil && p.sizeVal === size.realSize)
+        
+        
+    }
+    
+    func resetValue() {
+        
+        if let p = self.realSize
+        {
+            p.resetValue()
+        }
+    }
 
 }
