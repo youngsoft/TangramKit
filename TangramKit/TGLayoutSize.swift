@@ -40,6 +40,10 @@ protocol TGLayoutSizeValue
     func measure(_ size:CGFloat) -> CGFloat
     
     func resetValue()
+    
+    func numberSize(_ size:CGFloat) ->CGFloat
+    func fillSize(_ size:CGFloat, in containerSize:CGFloat) ->CGFloat
+    func weightSize(_ size:CGFloat, in containerSize:CGFloat)->CGFloat
 
 }
 
@@ -648,8 +652,53 @@ extension TGLayoutSize
         {
             return size
         }
-        
     }
+    
+    
+    func numberSize(_ size:CGFloat) ->CGFloat
+    {
+        guard let t = _val,_active else {
+            return size
+        }
+        
+        switch t {
+        case .floatV(let v):
+            return v * _multiple + _increment
+        default:
+            return size
+        }
+    }
+    
+    func fillSize(_ size:CGFloat, in containerSize:CGFloat) ->CGFloat
+    {
+        guard let t = _val,_active else {
+            return size
+        }
+        
+        switch t {
+        case .fillV:
+            return containerSize * _multiple + _increment
+        default:
+            return size
+        }
+
+    }
+    
+    func weightSize(_ size:CGFloat, in containerSize:CGFloat) ->CGFloat
+    {
+        guard let t = _val,_active else {
+            return size
+        }
+        
+        switch t {
+        case .weightV(let v):
+            return (containerSize * v.rawValue / 100) * _multiple + _increment
+        default:
+            return size
+        }
+
+    }
+    
     
     internal func resetValue() {
         _val = nil

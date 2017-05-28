@@ -25,6 +25,8 @@ open class TGRelativeLayout: TGBaseLayout,TGRelativeLayoutViewSizeClass {
         }
         set {
             
+            print("tg_autoLayoutViewGroupWidth is invalid please use subview's tg_visibility to instead")
+
         }
     }
     
@@ -39,6 +41,8 @@ open class TGRelativeLayout: TGBaseLayout,TGRelativeLayoutViewSizeClass {
         }
         
         set {
+            print("tg_autoLayoutViewGroupHeight is invalid please use subview's tg_visibility to instead")
+
             }
     }
     

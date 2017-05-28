@@ -15,8 +15,8 @@ import TangramKit
  */
 class RLTest2ViewController: UIViewController {
 
-    weak var visiblityButton: UIButton!
-    weak var visiblitySwitch: UISwitch!
+    weak var visibilityButton: UIButton!
+    weak var visibilitySwitch: UISwitch!
     
     
     func createButton(_ title: String, backgroundColor color: UIColor) -> UIButton {
@@ -48,20 +48,20 @@ class RLTest2ViewController: UIViewController {
         rootLayout.backgroundColor = .white
         self.view = rootLayout
         
-        let visiblitySwitch = UISwitch()
-        visiblitySwitch.tg_trailing.equal(0)
-        visiblitySwitch.tg_top.equal(10)
-        rootLayout.addSubview(visiblitySwitch)
-        self.visiblitySwitch = visiblitySwitch
+        let visibilitySwitch = UISwitch()
+        visibilitySwitch.tg_trailing.equal(0)
+        visibilitySwitch.tg_top.equal(10)
+        rootLayout.addSubview(visibilitySwitch)
+        self.visibilitySwitch = visibilitySwitch
         
-        let visiblitySwitchLabel = UILabel()
-        visiblitySwitchLabel.text = NSLocalizedString("flex size when subview hidden switch:", comment:"")
-        visiblitySwitchLabel.textColor = CFTool.color(4)
-        visiblitySwitchLabel.font = CFTool.font(15)
-        visiblitySwitchLabel.sizeToFit()
-        visiblitySwitchLabel.tg_leading.equal(10)
-        visiblitySwitchLabel.tg_centerY.equal(visiblitySwitch.tg_centerY)
-        rootLayout.addSubview(visiblitySwitchLabel)
+        let visibilitySwitchLabel = UILabel()
+        visibilitySwitchLabel.text = NSLocalizedString("flex size when subview hidden switch:", comment:"")
+        visibilitySwitchLabel.textColor = CFTool.color(4)
+        visibilitySwitchLabel.font = CFTool.font(15)
+        visibilitySwitchLabel.sizeToFit()
+        visibilitySwitchLabel.tg_leading.equal(10)
+        visibilitySwitchLabel.tg_centerY.equal(visibilitySwitch.tg_centerY)
+        rootLayout.addSubview(visibilitySwitchLabel)
         
         /**水平平分3个子视图**/
         let v1 = self.createButton(NSLocalizedString("average 1/3 width\nturn above switch", comment: ""), backgroundColor: CFTool.color(5))
@@ -76,7 +76,7 @@ class RLTest2ViewController: UIViewController {
         v2.tg_top.equal(v1.tg_top)
         v2.tg_leading.equal(v1.tg_trailing, offset:10)
         rootLayout.addSubview(v2)
-        self.visiblityButton = v2
+        self.visibilityButton = v2
         
         let v3 = self.createButton(NSLocalizedString("average 1/3 width\nshow me", comment: ""), backgroundColor: CFTool.color(7))
         v3.addTarget(self, action:#selector(handleShow), for: .touchUpInside)
@@ -196,20 +196,20 @@ extension RLTest2ViewController
     
     func handleHidden(_ sender: UIButton) {
         
-        if self.visiblitySwitch.isOn
+        if self.visibilitySwitch.isOn
         {
-            self.visiblityButton.tg_visibility = .gone
+            self.visibilityButton.tg_visibility = .gone
         }
         else
         {
-            self.visiblityButton.tg_visibility = .invisible
+            self.visibilityButton.tg_visibility = .invisible
         }
         
     }
     
     func handleShow(_ sender: UIButton) {
         
-        self.visiblityButton.tg_visibility = .visible
+        self.visibilityButton.tg_visibility = .visible
     }
 
 }

@@ -465,10 +465,8 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             
             //计算得到最大的高度和最大的宽度。
             var rect = sbv.tgFrame.frame
+            rect.size.width = sbvsc.width.numberSize(rect.size.width)
             
-            if sbvsc.width.numberVal != nil{
-                rect.size.width = sbvsc.width.measure
-            }
             
             if let t = sbvsc.width.sizeVal
             {
@@ -481,10 +479,8 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             
             rect.size.width = tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
             
-            if sbvsc.height.numberVal != nil{
-                rect.size.height = sbvsc.height.measure
-            }
-            
+           
+            rect.size.height = sbvsc.height.numberSize(rect.size.height)
             if let t = sbvsc.height.sizeVal
             {
                 if t === lsc.height.realSize{
@@ -540,10 +536,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             
 
             
-            if sbvsc.width.numberVal != nil{
-                rect.size.width = sbvsc.width.measure
-            }
-            
+            rect.size.width = sbvsc.width.numberSize(rect.size.width)
             if let t = sbvsc.width.sizeVal
             {
                 if t === lsc.width.realSize {
@@ -555,10 +548,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             
             rect.size.width = tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
             
-            if (sbvsc.height.numberVal != nil){
-                rect.size.height = sbvsc.height.measure
-            }
-            
+            rect.size.height = sbvsc.height.numberSize(rect.size.height)
             if let t = sbvsc.height.sizeVal
             {
                 if (t === lsc.height.realSize){

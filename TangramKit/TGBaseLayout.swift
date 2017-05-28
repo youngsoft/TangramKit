@@ -931,7 +931,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         }
         set
         {
-            
+           print("tg_layoutHiddenSubviews is invalid please use subview's tg_visibility to instead")
         }
     }
     
@@ -965,7 +965,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
      */
     public func tg_sizeThatFits(_ size:CGSize = .zero, inSizeClass type:TGSizeClassType = .default) -> CGSize
     {
-        return self.tgSizeThatFits(size:size,sbs:nil, inSizeClass: type)
+        return _tgRoundSize(self.tgSizeThatFits(size:size,sbs:nil, inSizeClass: type))
     }
     
     
@@ -1094,7 +1094,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 _tgBorderlineLayerDelegate = TGBorderlineLayerDelegate(self)
             }
             
-            _tgBorderlineLayerDelegate?.topBorderline = newValue
+            _tgBorderlineLayerDelegate.topBorderline = newValue
         }
     }
     
@@ -1111,7 +1111,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 _tgBorderlineLayerDelegate = TGBorderlineLayerDelegate(self)
             }
             
-            _tgBorderlineLayerDelegate?.leadingBorderline = newValue
+            _tgBorderlineLayerDelegate.leadingBorderline = newValue
         }
     }
 
@@ -1128,7 +1128,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 _tgBorderlineLayerDelegate = TGBorderlineLayerDelegate(self)
             }
             
-            _tgBorderlineLayerDelegate?.bottomBorderline = newValue
+            _tgBorderlineLayerDelegate.bottomBorderline = newValue
         }
     }
 
@@ -1145,7 +1145,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 _tgBorderlineLayerDelegate = TGBorderlineLayerDelegate(self)
             }
             
-            _tgBorderlineLayerDelegate?.trailingBorderline = newValue
+            _tgBorderlineLayerDelegate.trailingBorderline = newValue
         }
     }
 
@@ -1164,7 +1164,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 _tgBorderlineLayerDelegate = TGBorderlineLayerDelegate(self)
             }
             
-            _tgBorderlineLayerDelegate?.leftBorderline = newValue
+            _tgBorderlineLayerDelegate.leftBorderline = newValue
         }
     }
 
@@ -1182,7 +1182,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 _tgBorderlineLayerDelegate = TGBorderlineLayerDelegate(self)
             }
             
-            _tgBorderlineLayerDelegate?.rightBorderline = newValue
+            _tgBorderlineLayerDelegate.rightBorderline = newValue
         }
     }
 
@@ -1192,7 +1192,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         {
         get
         {
-            return self.tg_topBorderline
+            return self.tg_bottomBorderline
         }
         set
         {
@@ -1275,7 +1275,10 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         _tgBeginLayoutAction = nil
         _tgRotationToDeviceOrientationAction = nil
         _tgTouchEventDelegate = nil
-       // _tgBorderlineLayerDelegate = nil
+    }
+    
+    override open func setNeedsLayout() {
+        super.setNeedsLayout()
     }
     
     override open func layoutSubviews() {
@@ -1349,6 +1352,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             else
             {
                (newSelfSize,_) = self.tgCalcLayoutRect(self.tgCalcSizeInNoLayout(newSuperview: self.superview, currentSize: oldSelfSize),isEstimate: false, sbs:nil, type:sizeClassType)
+                newSelfSize = _tgRoundSize(newSelfSize)
             }
             _tgUseCacheRects = false
             
@@ -1369,8 +1373,18 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                         sbvtgFrame.height = 0
                     }
                     
-                    sbv.center = CGPoint(x: sbvtgFrame.leading + sbv.layer.anchorPoint.x * sbvtgFrame.width, y: sbvtgFrame.top + sbv.layer.anchorPoint.y * sbvtgFrame.height)
-                    sbv.bounds = CGRect(origin: ptOrigin, size: sbvtgFrame.frame.size)
+                    if sbv.transform.isIdentity
+                    {
+                        sbv.frame = _tgRoundRect(sbvtgFrame.frame)
+                    }
+                    else
+                    {
+                        let rc = _tgRoundRect(sbvtgFrame.frame)
+                        sbv.center = CGPoint(x: _tgRoundNumber(rc.origin.x + sbv.layer.anchorPoint.x * rc.size.width), y: _tgRoundNumber( rc.origin.y + sbv.layer.anchorPoint.y * rc.size.height))
+                        sbv.bounds = CGRect(origin: ptOrigin, size: rc.size)
+
+                    }
+                    
                     
                 }
                 
@@ -1415,7 +1429,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                     }
                     
                     self.bounds = CGRect(origin:self.bounds.origin, size:newSelfSize)
-                    self.center = CGPoint(x:self.center.x + (newSelfSize.width - oldSelfSize.width) * self.layer.anchorPoint.x, y:self.center.y + (newSelfSize.height - oldSelfSize.height) * self.layer.anchorPoint.y)
+                    self.center = CGPoint(x:_tgRoundNumber(self.center.x + (newSelfSize.width - oldSelfSize.width) * self.layer.anchorPoint.x), y:_tgRoundNumber(self.center.y + (newSelfSize.height - oldSelfSize.height) * self.layer.anchorPoint.y))
                 }
             }
             
@@ -1477,7 +1491,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                         //如果有变化则只调整自己的center。而不变化
                         if (!self.center.equalTo(centerPonintSelf))
                         {
-                            self.center = centerPonintSelf
+                            self.center = _tgRoundPoint(centerPonintSelf)
                         }
                     }
                     
@@ -1515,8 +1529,8 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                         
                         if (!supv.bounds.equalTo(superBounds))
                         {
-                            supv.center = superCenter
-                            supv.bounds = superBounds
+                            supv.center = _tgRoundPoint(superCenter)
+                            supv.bounds = _tgRoundRect(superBounds)
                             
                         }
                         
@@ -1599,6 +1613,10 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     override open func didAddSubview(_ subview: UIView) {
         super.didAddSubview(subview)
         
+        if let lv = subview as? TGBaseLayout
+        {
+            lv.tg_cacheEstimatedRect = self.tg_cacheEstimatedRect
+        }
     }
     
     override open func willRemoveSubview(_ subview: UIView) {
@@ -1865,7 +1883,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     //边界线处理的代理对象。
     private var _tgBorderlineLayerDelegate:TGBorderlineLayerDelegate!
     //触摸事件处理代理对象。
-    private var _tgTouchEventDelegate:TGTouchEventDelegate?
+    private var _tgTouchEventDelegate:TGTouchEventDelegate!
     //布局回调处理
     private lazy var _tgBeginLayoutAction:(()->Void)? = nil
     private lazy var _tgEndLayoutAction:(()->Void)? = nil
@@ -2369,8 +2387,9 @@ extension TGBaseLayout
                 rectSelf.size.height = 0
             }
             
-            self.bounds = CGRect(x:self.bounds.origin.x, y:self.bounds.origin.y,width:rectSelf.width, height:rectSelf.height)
-            self.center = CGPoint(x:rectSelf.origin.x + self.layer.anchorPoint.x * rectSelf.width, y:rectSelf.origin.y + self.layer.anchorPoint.y * rectSelf.height)
+            rectSelf = _tgRoundRect(rectSelf)
+            self.bounds = CGRect(x:self.bounds.origin.x, y:self.bounds.origin.y, width:rectSelf.width, height:rectSelf.height)
+            self.center = CGPoint(x:_tgRoundNumber(rectSelf.origin.x + self.layer.anchorPoint.x * rectSelf.width), y:_tgRoundNumber( rectSelf.origin.y + self.layer.anchorPoint.y * rectSelf.height))
         }
         else if lsc.isSomeSizeWrap
         {
@@ -2425,7 +2444,7 @@ extension TGBaseLayout
                 contSize.width = newSize.width + leadingMargin + trailingMargin
             }
             
-            scrolv.contentSize = contSize
+            scrolv.contentSize = _tgRoundSize(contSize)
             
         }
     }
@@ -3192,8 +3211,8 @@ class TGBorderlineLayerDelegate:NSObject,CALayerDelegate
      private weak var _trailingBorderlineLayer:CAShapeLayer! = nil
     
     
-    init(_ layout:TGBaseLayout) {
-        super.init()
+    convenience init(_ layout:TGBaseLayout) {
+        self.init()
 
         _layout = layout
     }
@@ -3391,12 +3410,12 @@ class TGBorderlineLayerDelegate:NSObject,CALayerDelegate
         
         
         //把动画效果取消。
+        layerRect = _tgRoundRect(layerRect)
         if (!layer.frame.equalTo(layerRect))
         {
             
             CATransaction.begin()
-            CATransaction.setValue(kCFBooleanTrue,forKey:kCATransactionDisableActions);
-            
+            CATransaction.setDisableActions(true)
             let shapeLayer:CAShapeLayer = layer as! CAShapeLayer
             
             if shapeLayer.lineDashPhase == 0
@@ -3413,7 +3432,6 @@ class TGBorderlineLayerDelegate:NSObject,CALayerDelegate
             }
             
             layer.frame = layerRect
-            
             CATransaction.commit()
         }
         
@@ -3443,7 +3461,7 @@ class TGBorderlineLayerDelegate:NSObject,CALayerDelegate
             {
                 retLayer = CAShapeLayer()
                 _layout.layer.addSublayer(retLayer!)
-              //  retLayer.delegate = self
+                retLayer.delegate = self
                 
             }
             
@@ -3843,6 +3861,46 @@ internal func _tgCGFloatGreatOrEqual(_ f1:CGFloat, _ f2:CGFloat) -> Bool
         
     }
     
+}
+
+let _tgrScale = UIScreen.main.scale
+let _tgrInc = 0.5 / _tgrScale
+internal func _tgRoundNumber(_ f :CGFloat) ->CGFloat
+{
+    guard f != CGFloat.greatestFiniteMagnitude else
+    {
+        return f
+    }
+    
+    return  floor((f + _tgrInc) * _tgrScale)/_tgrScale
+}
+
+internal func _tgRoundRect(_ rect:CGRect) ->CGRect
+{
+    var rect = rect
+    rect.origin.x = _tgRoundNumber(rect.origin.x)
+    rect.origin.y = _tgRoundNumber(rect.origin.y)
+    rect.size.width = _tgRoundNumber(rect.size.width)
+    rect.size.height = _tgRoundNumber(rect.size.height)
+    
+    return rect
+}
+
+internal func _tgRoundSize(_ size:CGSize) ->CGSize
+{
+    var size = size
+    size.width = _tgRoundNumber(size.width)
+    size.height = _tgRoundNumber(size.height)
+    return size
+}
+
+internal func _tgRoundPoint(_ point:CGPoint) ->CGPoint
+{
+    var point = point
+    point.x = _tgRoundNumber(point.x)
+    point.y = _tgRoundNumber(point.y)
+    
+    return point
 }
 
 

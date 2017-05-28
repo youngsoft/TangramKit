@@ -16,16 +16,7 @@ public class TGDimeAdapter
     static private var _wrate:CGFloat = 1
     static private var _hrate:CGFloat = 1
     
-    //保持缩放值精确到0.5
-    private class func roundNumber(_ num:CGFloat) ->CGFloat
-    {
-        var retNum = num
-        retNum += 0.49999;
-        retNum *= 2;
-        return floor(retNum) / 2.0;
-    }
 
-    
     /**
      *指定UI设计原型图所用的设备尺寸。请在- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions方法的开始处调用这个方法，比如当UI设计人员用iPhone6作为界面的原型尺寸则将size设置为375,667。
      */
@@ -45,7 +36,7 @@ public class TGDimeAdapter
      */
     public class func size(_ val:CGFloat) ->CGFloat
     {
-        return self.roundNumber(val * _rate)
+        return _tgRoundNumber(val * _rate)
     }
     
     
@@ -54,7 +45,7 @@ public class TGDimeAdapter
      */
     public class func width(_ val:CGFloat) ->CGFloat
     {
-        return self.roundNumber(val * _wrate)
+        return _tgRoundNumber(val * _wrate)
     }
     
     /**
@@ -62,7 +53,7 @@ public class TGDimeAdapter
      */
     public class func height(_ val:CGFloat) ->CGFloat
     {
-        return self.roundNumber(val * _hrate)
+        return _tgRoundNumber(val * _hrate)
     }
 }
 

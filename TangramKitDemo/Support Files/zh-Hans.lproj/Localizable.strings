@@ -94,7 +94,8 @@
 "space" = "间距设置";
 "between" = "间距拉伸";
 "test text1"="测试文本1";
-"test text2 test text2"="测试文本2测试文本2";
+"always alignment to left"="总是停靠在左边";
+"always alignment to top"="总是停靠在上边";
 "test text3 test text3 test text3"="测试文本3测试文本3测试文本3";
 "set left and right margin to determine width"="你可以自定义左右边距和宽度";
 "set top and bottom margin to determine height"="您可以自定义上下边距和高度";

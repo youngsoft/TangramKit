@@ -53,8 +53,6 @@ class AllTest1ViewController: UITableViewController {
     var displayLink:CADisplayLink!=nil;
     var count:Int = 0
     var lastTime:TimeInterval = 0.0
-    var llll:TimeInterval = 0.0
-   
     func tick(sender:CADisplayLink)
     {
        
@@ -80,19 +78,28 @@ class AllTest1ViewController: UITableViewController {
 
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.displayLink = CADisplayLink(target: self, selector: #selector(tick))
+        self.displayLink.add(to:.main, forMode: .commonModes)
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.displayLink.invalidate()
+        self.displayLink = nil
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.view.backgroundColor = .white
         self.titleLabel = UILabel(frame:CGRect(x: 0, y: 0, width: 80, height: 40))
         self.navigationItem.titleView = self.titleLabel
-        
-        self.displayLink = CADisplayLink(target: self, selector: #selector(tick))
-        self.displayLink.add(to:.main, forMode: .commonModes)
-        
-        
-        
-        
+                
         
         self.tableView.separatorStyle = .none
         self.tableView.register(AllTest1TableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "headerfooterview")
@@ -238,7 +245,7 @@ class AllTest1ViewController: UITableViewController {
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         // 注意这里。为了达到动态高度TableViewCell的加载性能最高以及高性能，一定要实现estimatedHeightForRowAtIndexPath这个方法。这个方法用来评估
         //UITableViewCell的高度。如果实现了这个方法，系统会根据数量重复调用这个方法，得出评估的总体高度。然后再根据显示的需要调用heightForRowAtIndexPath方法来确定真实的高度。如果您不实现estimatedHeightForRowAtIndexPath这个方法，加载性能将非常的低下！！！！
-        return 80;  //这个评估尺寸你可以根据你的cell的一般高度来设置一个最合适的值。
+        return 60;  //这个评估尺寸你可以根据你的cell的一般高度来设置一个最合适的值。
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

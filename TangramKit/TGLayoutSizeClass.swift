@@ -1007,6 +1007,34 @@ internal class TGLayoutSizeWrapper:TGLayoutSizeValue2
         
     }
     
+    func numberSize(_ size:CGFloat) ->CGFloat
+    {
+        guard let p = self.realSize else {
+            return size
+        }
+        
+        return p.numberSize(size)
+    }
+    
+    func fillSize(_ size:CGFloat, in containerSize:CGFloat) ->CGFloat
+    {
+        guard let p = self.realSize else {
+            return size
+        }
+        
+        return p.fillSize(size, in:containerSize)
+    }
+    
+    func weightSize(_ size:CGFloat, in containerSize:CGFloat)->CGFloat
+    {
+        guard let p = self.realSize else {
+            return size
+        }
+        
+        return p.weightSize(size, in:containerSize)
+    }
+
+    
     func resetValue() {
         
         if let p = self.realSize

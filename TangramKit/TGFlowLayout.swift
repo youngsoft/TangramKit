@@ -332,10 +332,7 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
                         let trailingSpace = sbvsc.trailing.absPos
                         var rect = sbvtgFrame.frame
                         
-                        if (sbvsc.width.numberVal != nil)
-                        {
-                            rect.size.width = sbvsc.width.measure;
-                        }
+                        rect.size.width = sbvsc.width.numberSize(rect.size.width)
                         
                         
                         rect = tgSetSubviewRelativeSize(sbvsc.width, selfSize: selfSize, sbvsc:sbvsc, lsc:lsc, rect: rect)
@@ -379,15 +376,10 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
                         let bottomSpace = sbvsc.bottom.absPos
                         var rect = sbvtgFrame.frame;
                         
-                        if (sbvsc.width.numberVal != nil)
-                        {
-                            rect.size.width = sbvsc.width.measure;
-                        }
+                        rect.size.width = sbvsc.width.numberSize(rect.size.width)
                         
-                        if (sbvsc.height.numberVal != nil)
-                        {
-                            rect.size.height = sbvsc.height.measure;
-                        }
+                        rect.size.height = sbvsc.height.numberSize(rect.size.height)
+
                         
                         
                         rect = tgSetSubviewRelativeSize(sbvsc.height, selfSize: selfSize, sbvsc:sbvsc, lsc:lsc, rect: rect)
@@ -1080,9 +1072,8 @@ extension TGFlowLayout
             }
 
 
-            if sbvsc.height.numberVal != nil {
-                rect.size.height = sbvsc.height.measure
-            }
+            rect.size.height = sbvsc.height.numberSize(rect.size.height)
+
             
             if averageArrange {
                 rect.size.width = self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: averageWidth - leadingSpace - trailingSpace, sbvSize: rect.size, selfLayoutSize:selfSize)
@@ -1272,12 +1263,9 @@ extension TGFlowLayout
                 rect.size.width = subviewSize
             }
             
-            if sbvsc.width.numberVal != nil {
-                rect.size.width = sbvsc.width.measure
-            }
-            if sbvsc.height.numberVal != nil {
-                rect.size.height = sbvsc.height.measure
-            }
+            rect.size.width = sbvsc.width.numberSize(rect.size.width)
+            rect.size.height = sbvsc.height.numberSize(rect.size.height)
+
             
             rect = tgSetSubviewRelativeSize(sbvsc.width, selfSize: selfSize, sbvsc:sbvsc, lsc:lsc, rect: rect)
             rect = tgSetSubviewRelativeSize(sbvsc.height, selfSize: selfSize, sbvsc:sbvsc, lsc:lsc, rect: rect)
@@ -1551,11 +1539,7 @@ extension TGFlowLayout
                 rect.size.width = pagingItemWidth
             }
             
-            if sbvsc.width.numberVal != nil
-            {
-                rect.size.width = sbvsc.width.measure
-            }
-            
+            rect.size.width = sbvsc.width.numberSize(rect.size.width)
             
             rect = tgSetSubviewRelativeSize(sbvsc.width, selfSize: selfSize,sbvsc:sbvsc,lsc:lsc, rect: rect)
             
@@ -1881,13 +1865,10 @@ extension TGFlowLayout
             var rect:CGRect = sbvtgFrame.frame
             
             
-            if sbvsc.width.numberVal != nil {
-                rect.size.width = sbvsc.width.measure
-            }
+            rect.size.width = sbvsc.width.numberSize(rect.size.width)
             
-            if sbvsc.height.numberVal != nil {
-                rect.size.height = sbvsc.height.measure
-            }
+            rect.size.height = sbvsc.height.numberSize(rect.size.height)
+
             
             rect = tgSetSubviewRelativeSize(sbvsc.height, selfSize: selfSize, sbvsc:sbvsc, lsc:lsc, rect: rect)
             

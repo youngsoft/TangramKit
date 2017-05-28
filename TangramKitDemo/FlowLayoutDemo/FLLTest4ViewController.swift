@@ -128,6 +128,7 @@ extension FLLTest4ViewController {
         rememberLabel.textColor = CFTool.color(4)
         rememberLabel.font = CFTool.font(15)
         rememberLabel.tg_width.equal(.fill)
+        rememberLabel.tg_alignment = TGGravity.vert.bottom   //流式布局通过tg_arrangedGravity设置每行的对齐方式，如果某个子视图不想使用默认的对齐方式则可以通过tg_alignment属性来单独设置对齐方式，这个例子中所有都是居中对齐，但是这个标题则是底部对齐。
         rememberLabel.sizeToFit()
         flowLayout.addSubview(rememberLabel)
         

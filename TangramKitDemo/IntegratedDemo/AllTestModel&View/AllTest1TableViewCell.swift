@@ -95,7 +95,9 @@ extension AllTest1TableViewCell
         self.rootLayout.tg_bottomPadding = 5
         self.rootLayout.tg_width.equal(.fill)
         self.rootLayout.tg_height.equal(.wrap)
+        self.rootLayout.tg_cacheEstimatedRect = true
         self.contentView.addSubview(self.rootLayout)
+        
         //如果您将布局视图作为子视图添加到UITableViewCell本身，并且同时设置了布局视图的宽度等于父布局的情况下，那么有可能最终展示的宽度会不正确。经过试验是因为对UITableViewCell本身的KVO监控所得到的新老尺寸的问题导致的这应该是iOS的一个BUG。所以这里建议最好是把布局视图添加到UITableViewCell的子视图contentView里面去。
         
 
@@ -152,6 +154,7 @@ extension AllTest1TableViewCell
         self.rootLayout.tg_bottomPadding = 5
         self.rootLayout.tg_width.equal(.fill)
         self.rootLayout.tg_height.equal(.wrap)
+        self.rootLayout.tg_cacheEstimatedRect = true
         self.contentView.addSubview(self.rootLayout)
         
         /*
@@ -162,15 +165,16 @@ extension AllTest1TableViewCell
         self.headImageView = headImageView
         
         let nickNameLabel = UILabel()
-        nickNameLabel.textColor = .blue
-        nickNameLabel.font = .systemFont(ofSize: 15)
+        nickNameLabel.textColor = CFTool.color(3)
+        nickNameLabel.font = CFTool.font(17)
         nickNameLabel.tg_leading.equal(self.headImageView.tg_trailing, offset:5) //昵称文本的左边在头像视图的右边并偏移5个点。
         rootLayout.addSubview(nickNameLabel)
         self.nickNameLabel = nickNameLabel
         
         //昵称文本的左边在头像视图的右边并偏移5个点。
         let textMessageLabel = UILabel()
-        textMessageLabel.font = .systemFont(ofSize: 13)
+        textMessageLabel.font = CFTool.font(15)
+        textMessageLabel.textColor = CFTool.color(4)
         textMessageLabel.tg_leading.equal(self.headImageView.tg_trailing, offset:5) //文本消息的左边在头像视图的右边并偏移5个点。
         textMessageLabel.tg_trailing.equal(rootLayout.tg_trailing) //文本消息的右边和父布局的右边对齐。上面2行代码也同时确定了文本消息的宽度。
         textMessageLabel.tg_top.equal(self.nickNameLabel.tg_bottom,offset:5) //文本消息的顶部在昵称文本的底部并偏移5个点
@@ -199,6 +203,7 @@ extension AllTest1TableViewCell
         self.rootLayout.tg_bottomPadding = 5
         self.rootLayout.tg_width.equal(.fill)
         self.rootLayout.tg_height.equal(.wrap)
+        self.rootLayout.tg_cacheEstimatedRect = true
         self.contentView.addSubview(self.rootLayout)
  
         /*
@@ -211,15 +216,16 @@ extension AllTest1TableViewCell
         self.headImageView = headImageView
         
         let nickNameLabel = UILabel()
-        nickNameLabel.textColor = UIColor.lightGray
-        nickNameLabel.font = UIFont.systemFont(ofSize: 13)
+        nickNameLabel.textColor = CFTool.color(3)
+        nickNameLabel.font = CFTool.font(17)
         nickNameLabel.tg_bottom.equal(5)  //下边保留出5个点的视图间距。
         nickNameLabel.tg_width.equal(.fill) //占用剩余宽度。
         rootLayout.addSubview(nickNameLabel)
         self.nickNameLabel = nickNameLabel
         
         let textMessageLabel = UILabel()
-        textMessageLabel.font = UIFont.systemFont(ofSize: 14)
+        textMessageLabel.font = CFTool.font(15)
+        textMessageLabel.textColor = CFTool.color(4)
         textMessageLabel.tg_width.equal(.fill)  //占用剩余宽度。
         textMessageLabel.tg_height.equal(.wrap) //高度包裹
         rootLayout.addSubview(textMessageLabel)

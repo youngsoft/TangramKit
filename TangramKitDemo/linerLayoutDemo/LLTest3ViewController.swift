@@ -172,8 +172,9 @@ extension LLTest3ViewController
         v1.tg_height.equal(20)
         vertGravityLayout.addSubview(v1)
         
-        let v2 = self.createLabel(NSLocalizedString("test text2 test text2", comment:""), color: CFTool.color(6))
+        let v2 = self.createLabel(NSLocalizedString("always alignment to left", comment:""), color: CFTool.color(6))
         v2.tg_height.equal(20)
+        v2.tg_alignment = TGGravity.horz.left  //对于垂直布局里面的子视图可以通过这个属性来设置水平对齐的方位，这样即使布局视图设置了gravity属性，这个视图的对齐都不会受到影响
         vertGravityLayout.addSubview(v2)
         
         
@@ -258,9 +259,10 @@ extension LLTest3ViewController
         v1.tg_width.equal(60)
         horzGravityLayout.addSubview(v1)
         
-        let v2 = self.createLabel(NSLocalizedString("test text2 test text2", comment:""), color: CFTool.color(6))
+        let v2 = self.createLabel(NSLocalizedString("always alignment to top", comment:""), color: CFTool.color(6))
         v2.tg_height.equal(.wrap)
         v2.tg_width.equal(60)
+        v2.tg_alignment = TGGravity.vert.top  //对于水平布局里面的子视图可以通过这个属性来设置垂直对齐的方位，这样即使布局视图设置了gravity属性，这个视图的对齐都不会受到影响。
         horzGravityLayout.addSubview(v2)
         
         

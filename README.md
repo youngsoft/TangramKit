@@ -587,7 +587,7 @@ To integrate TangramKit into your Xcode project using CocoaPods, specify it in y
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 
-pod 'TangramKit', '~> 1.0.6'
+pod 'TangramKit', '~> 1.0.7'
 ```
    
 Then, run the following command:

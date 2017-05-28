@@ -203,7 +203,6 @@ extension AllTest3ViewController
         let showButton = UIButton()
         showButton.setTitle(NSLocalizedString("reset show", comment:""), for: .normal)
         showButton.addTarget(self, action: #selector(handleResetShow), for: .touchUpInside)
-        showButton.backgroundColor = CFTool.color(6)
         showButton.titleLabel!.font = CFTool.font(14)
         showButton.titleLabel!.adjustsFontSizeToFitWidth = true
         showButton.tg_width.equal(50)

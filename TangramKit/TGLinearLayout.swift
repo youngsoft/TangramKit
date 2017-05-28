@@ -523,11 +523,7 @@ extension TGLinearLayout {
                 if (sbvsc.width.sizeVal == nil || sbvsc.width.sizeVal !== lsc.width.realSize) && !(sbvsc.isHorzMarginHasValue) && !sbvsc.width.isFill && sbvsc.width.weightVal == nil
                 {
                     
-                    var vWidth = sbvtgFrame.width
-                    if sbvsc.width.numberVal != nil
-                    {
-                        vWidth = sbvsc.width.measure
-                    }
+                    var vWidth = sbvsc.width.numberSize(sbvtgFrame.width)
                     
                     vWidth = self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: vWidth, sbvSize: sbvtgFrame.frame.size, selfLayoutSize: selfSize)
                     
@@ -659,11 +655,7 @@ extension TGLinearLayout {
             
             self.tgCalcLeadingTrailingRect(horzGravity: horzGravity, selfSize: selfSize, sbv: sbv, sbvsc: sbvsc, lsc: lsc, rect:&rect)
             
-            if sbvsc.height.numberVal != nil
-            {
-                rect.size.height = sbvsc.height.measure
-            }
-            
+            rect.size.height = sbvsc.height.numberSize(rect.size.height)
             if (sbvsc.height.isRelaSizeEqualTo(lsc.height) && !lsc.height.isWrap)
             {
                 rect.size.height = sbvsc.height.measure(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
@@ -1032,12 +1024,7 @@ extension TGLinearLayout {
             }
             else
             {
-                var vWidth = sbvtgFrame.width;
-                if sbvsc.width.numberVal != nil
-                {
-                    vWidth = sbvsc.width.measure;
-                }
-                
+                var vWidth = sbvsc.width.numberSize(sbvtgFrame.width)
                 if (sbvsc.width.isRelaSizeEqualTo(lsc.width) && !lsc.width.isWrap)
                 {
                     vWidth = sbvsc.width.measure(selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding)
@@ -1205,10 +1192,8 @@ extension TGLinearLayout {
             var rect:CGRect =  sbvtgFrame.frame;
             
         
-            if sbvsc.height.numberVal != nil
-            {
-                rect.size.height = sbvsc.height.measure;
-            }
+            rect.size.height = sbvsc.height.numberSize(rect.size.height)
+
             
             
             if sbvsc.height.isRelaSizeEqualTo(lsc.height)
@@ -1410,10 +1395,8 @@ extension TGLinearLayout {
             
              self.tgCalcLeadingTrailingRect(horzGravity: horzGravity , selfSize: selfSize, sbv: sbv, sbvsc: sbvsc, lsc: lsc, rect: &rect)
             
-            if sbvsc.height.numberVal != nil
-            {
-                rect.size.height = sbvsc.height.measure
-            }
+            rect.size.height = sbvsc.height.numberSize(rect.size.height)
+
             
             
             if (sbvsc.height.isRelaSizeEqualTo(lsc.height) && !lsc.height.isWrap)
@@ -1584,15 +1567,10 @@ extension TGLinearLayout {
             
             var rect = sbvtgFrame.frame;
             
-            if sbvsc.width.numberVal != nil
-            {
-                rect.size.width = sbvsc.width.measure;
-            }
+            rect.size.width = sbvsc.width.numberSize(rect.size.width)
             
-            if sbvsc.height.numberVal != nil
-            {
-                rect.size.height = sbvsc.height.measure
-            }
+            rect.size.height = sbvsc.height.numberSize(rect.size.height)
+
             
             if (sbvsc.width.isRelaSizeEqualTo(lsc.width) && !lsc.width.isWrap)
             {
@@ -1795,10 +1773,7 @@ extension TGLinearLayout {
         let realLeadingMargin = sbvsc.leading.weightPosIn(floatingWidth)
         let realTrailingMargin = sbvsc.trailing.weightPosIn(floatingWidth)
         
-        if sbvsc.width.numberVal != nil
-        {
-            rect.size.width = sbvsc.width.measure
-        }
+        rect.size.width = sbvsc.width.numberSize(rect.size.width)
         
         //和父视图保持一致。
         if sbvsc.width.isRelaSizeEqualTo(lsc.width)
@@ -1807,17 +1782,9 @@ extension TGLinearLayout {
         }
         
         //占用父视图的宽度的比例。
-        if let t = sbvsc.width.weightVal
-        {
-            rect.size.width = sbvsc.width.measure(floatingWidth*t.rawValue / 100)
-        }
-        
+        rect.size.width = sbvsc.width.weightSize(rect.size.width, in: floatingWidth)
         //如果填充
-        if sbvsc.width.isFill
-        {
-            rect.size.width = sbvsc.width.measure(floatingWidth - realLeadingMargin - realTrailingMargin)
-        }
-        
+        rect.size.width = sbvsc.width.fillSize(rect.size.width, in: floatingWidth - realLeadingMargin - realTrailingMargin)
         
         if sbvsc.isHorzMarginHasValue
         {
@@ -1835,19 +1802,17 @@ extension TGLinearLayout {
         let realTopMargin = sbvsc.top.weightPosIn(floatingHeight)
         let realBottomMargin = sbvsc.bottom.weightPosIn(floatingHeight)
         
+        rect.size.height = sbvsc.height.numberSize(rect.size.height)
+
         if sbvsc.height.isRelaSizeEqualTo(lsc.height)
         {
             rect.size.height = sbvsc.height.measure(floatingHeight)
         }
-        else if let t = sbvsc.height.weightVal
-        {
-            rect.size.height = sbvsc.height.measure(floatingHeight * t.rawValue/100)
-        }
-        else if sbvsc.height.isFill
-        {
-            rect.size.height = sbvsc.height.measure(floatingHeight - realTopMargin - realBottomMargin)
-        }
-        
+            
+        //占用父视图的高度的比例。
+        rect.size.height = sbvsc.height.weightSize(rect.size.height, in: floatingHeight)
+        //如果填充
+        rect.size.height = sbvsc.height.fillSize(rect.size.height, in: floatingHeight - realTopMargin - realBottomMargin)
         
         if sbvsc.isVertMarginHasValue
         {

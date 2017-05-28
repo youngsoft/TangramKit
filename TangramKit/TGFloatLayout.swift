@@ -454,19 +454,11 @@ extension TGFloatLayout
                 var rect = sbvtgFrame.frame;
                 
                 //这里有可能设置了固定的宽度
-                if sbvsc.width.numberVal != nil
-                {
-                    rect.size.width = sbvsc.width.measure
-                }
-                
+                rect.size.width = sbvsc.width.numberSize(rect.size.width)
                 //有可能宽度是和他的高度相等。
                 if sbvsc.width.isRelaSizeEqualTo(sbvsc.height)
                 {
-                    if (sbvsc.height.numberVal != nil)
-                    {
-                        rect.size.height = sbvsc.height.measure;
-                    }
-                    
+                    rect.size.height = sbvsc.height.numberSize(rect.size.height)
                     if sbvsc.height.isRelaSizeEqualTo(lsc.height)
                     {
                         rect.size.height = sbvsc.height.measure(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
@@ -557,15 +549,8 @@ extension TGFloatLayout
                 rect.size.width = subviewSize
             }
             
-            if sbvsc.width.numberVal != nil
-            {
-                rect.size.width = sbvsc.width.measure;
-            }
-            
-            if (sbvsc.height.numberVal != nil)
-            {
-                rect.size.height = sbvsc.height.measure;
-            }
+            rect.size.width = sbvsc.width.numberSize(rect.size.width)
+            rect.size.height = sbvsc.height.numberSize(rect.size.height)
             
             if isHeightWeight && !lsc.height.isWrap
             {
@@ -952,10 +937,7 @@ extension TGFloatLayout
                 
                 
                 //这里有可能设置了固定的高度
-                if (sbvsc.height.numberVal != nil)
-                {
-                    rect.size.height = sbvsc.height.measure
-                }
+                rect.size.height = sbvsc.height.numberSize(rect.size.height)
                 
                 rect.size.width = self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
                 
@@ -963,10 +945,7 @@ extension TGFloatLayout
                 if sbvsc.height.isRelaSizeEqualTo(sbvsc.width)
                 {
                     
-                    if sbvsc.width.numberVal != nil
-                    {
-                        rect.size.width = sbvsc.width.measure;
-                    }
+                    rect.size.width = sbvsc.width.numberSize(rect.size.width)
                     
                     if sbvsc.width.isRelaSizeEqualTo(lsc.width)
                     {
@@ -1064,20 +1043,14 @@ extension TGFloatLayout
             let isHeightWeight = sbvsc.height.weightVal != nil || sbvsc.height.isFill
 
             
-            if sbvsc.width.numberVal != nil
-            {
-                rect.size.width = sbvsc.width.measure;
-            }
+            rect.size.width = sbvsc.width.numberSize(rect.size.width)
             
             if subviewSize != 0
             {
                 rect.size.height = subviewSize
             }
             
-            if (sbvsc.height.numberVal != nil)
-            {
-                rect.size.height = sbvsc.height.measure;
-            }
+            rect.size.height = sbvsc.height.numberSize(rect.size.height)
             
             if sbvsc.height.isRelaSizeEqualTo(lsc.height)
             {
