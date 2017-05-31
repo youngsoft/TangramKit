@@ -99,7 +99,18 @@ class AllTest1ViewController: UITableViewController {
         self.view.backgroundColor = .white
         self.titleLabel = UILabel(frame:CGRect(x: 0, y: 0, width: 80, height: 40))
         self.navigationItem.titleView = self.titleLabel
-                
+        
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // 注意这里。为了达到动态高度UITableviewCell的加载性能最高以及高性能，一定要设置estimatedRowHeight这个属性。这个属性用来评估
+        //UITableViewCell的高度。如果实现了这个方法，系统会根据数量重复调用这个方法，得出评估的总体高度。然后再根据显示的需要调用tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath)方法来确定真实的高度。如果您不设置estimatedRowHeight，加载性能将非常的低下！！！！
+        //如果不同的cell有差异那么可以通过实现协议方法tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath)来定制化
+        self.tableView.estimatedRowHeight = 60
+        
+        //设置所有cell的高度为高度自适应，如果cell高度是动态的请这么设置。 如果不同的cell有差异那么可以通过实现协议方法tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath)来定制化处理。
+        self.tableView.rowHeight = UITableViewAutomaticDimension
+        
+        //不仅是UITableviewCell的高度可以自适应，sectionHeader以及sectionFooter也一样的可以实现自适应高度，您同样的可以用相似的方法来进行处理。
         
         self.tableView.separatorStyle = .none
         self.tableView.register(AllTest1TableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "headerfooterview")
@@ -235,11 +246,14 @@ class AllTest1ViewController: UITableViewController {
         
         
     }
+ 
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 44.0
     }
     
+    /*
+      //如果每个cell的评估尺寸都是一样的那么你可以直接设置tableview.estimatedRowHeight的值。如果不同的cell的评估高度不一致那么请实现这个委托方法。
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -247,19 +261,27 @@ class AllTest1ViewController: UITableViewController {
         //UITableViewCell的高度。如果实现了这个方法，系统会根据数量重复调用这个方法，得出评估的总体高度。然后再根据显示的需要调用heightForRowAtIndexPath方法来确定真实的高度。如果您不实现estimatedHeightForRowAtIndexPath这个方法，加载性能将非常的低下！！！！
         return 60;  //这个评估尺寸你可以根据你的cell的一般高度来设置一个最合适的值。
     }
+    */
+    
+    /*
+     //如果您的不同的cell里面有一些是高度自适应的，而有一些则是静态高度那么就需要实现这个函数即可，否则你可以直接设置tableview的rowHeight属性。
+     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+     
+     return UITableViewAutomaticDimension
+     
+     }
+     */
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        //如果使用了布局来评估cell高度的话，那么请不要使用- open func dequeueReusableCell(withIdentifier identifier: String, for indexPath: IndexPath) -> UITableViewCell 这个方法，否则可能造成系统崩溃！！！
         
-        
-        let cell:AllTest1TableViewCell = tableView.dequeueReusableCell(withIdentifier: "alltest1_cell") as! AllTest1TableViewCell
+        let cell:AllTest1TableViewCell = tableView.dequeueReusableCell(withIdentifier: "alltest1_cell", for:indexPath) as! AllTest1TableViewCell
         
         let model = self.datas[indexPath.row]
         
         cell.setModel(model: model,isImageMessageHidden:self.imageHiddenFlags[indexPath.row])
         
-        //这里最后一行没有下划线
+        //这里设置其他位置有间隔线而最后一行没有下划线。我们可以借助布局视图本身所提供的边界线来代替掉系统默认的cell之间的间隔线，因为布局视图的边界线所提供的能力要大于默认的间隔线。
         if (indexPath.row  == self.datas.count - 1)
         {
             cell.rootLayout.tg_bottomBorderline = nil;
@@ -270,6 +292,7 @@ class AllTest1ViewController: UITableViewController {
             cell.rootLayout.tg_bottomBorderline = bld;
         }
         
+        
         return cell;
         
     }
@@ -278,19 +301,7 @@ class AllTest1ViewController: UITableViewController {
         return self.datas.count
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
-        let cell = self.tableView(tableView,cellForRowAt:indexPath) as! AllTest1TableViewCell
-        
-        
-        /*
-         通过布局视图的tg_sizeThatFits方法能够评估出UITableViewCell的动态高度。tg_sizeThatFits并不会进行布局而只是评估布局的尺寸。
-         这里的宽度不传0的原因是上面的UITableViewCell在建立时默认的宽度是320(不管任何尺寸都如此),因此如果我们传递了宽度为0的话则会按320的宽度来评估UITableViewCell的动态高度，这样当在375和414的宽度时评估出来的高度将不会正确。因此这里需要指定出真实的宽度尺寸，而高度设置为0的意思是表示高度不是固定值需要评估出来。
-        */
-        let size = cell.rootLayout.tg_sizeThatFits(CGSize(width:tableView.frame.width, height:0))
-        return size.height;  //如果使用系统自带的分割线，请返回rect.size.height+1
-
-    }
+   
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         

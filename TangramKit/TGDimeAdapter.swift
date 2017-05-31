@@ -55,6 +55,39 @@ public class TGDimeAdapter
     {
         return _tgRoundNumber(val * _hrate)
     }
+    
+    /**
+     *根据屏幕清晰度将带小数的入参返回能转化为有效物理像素的最接近的设备点值。
+     *比如当入参为1.3时，那么在1倍屏幕下的有效值就是1,而在2倍屏幕下的有效值就是1.5,而在3倍屏幕下的有效值就是1.3333333了
+     */
+    public class func round(_ val:CGFloat) ->CGFloat
+    {
+        return _tgRoundNumber(val)
+    }
+    
+    /**
+     *根据屏幕清晰度将带小数的point入参返回能转化为有效物理像素的最接近的设备point点值。
+     */
+    public class func round(_ val:CGPoint) ->CGPoint
+    {
+        return _tgRoundPoint(val)
+    }
+    
+    /**
+     *根据屏幕清晰度将带小数的size入参返回能转化为有效物理像素的最接近的设备size点值。
+     */
+    public class func round(_ val:CGSize) ->CGSize
+    {
+        return _tgRoundSize(val)
+    }
+    
+    /**
+     *根据屏幕清晰度将带小数的rect入参返回能转化为有效物理像素的最接近的设备rect点值。
+     */
+    public class func round(_ val:CGRect) ->CGRect
+    {
+        return _tgRoundRect(val)
+    }
 }
 
 

@@ -569,6 +569,11 @@ public class TGBorderline
     public init(color:UIColor, thick:CGFloat=1, dash:CGFloat = 0, headIndent:CGFloat = 0, tailIndent:CGFloat = 0, offset:CGFloat = 0)
     {
         self.color = color
+        var thick = thick
+        if thick < 1
+        {
+            thick = 1
+        }
         self.thick = thick
         self.dash = dash
         self.headIndent = headIndent
@@ -579,7 +584,7 @@ public class TGBorderline
     
     //边界线颜色
     public var color:UIColor
-    //边界线粗细
+    //边界线粗细，最小单位为1，表示像素，请不要设置小于1的值。
     public var thick:CGFloat = 1
     //边界线头部缩进单位
     public var headIndent:CGFloat = 0
@@ -965,7 +970,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
      */
     public func tg_sizeThatFits(_ size:CGSize = .zero, inSizeClass type:TGSizeClassType = .default) -> CGSize
     {
-        return _tgRoundSize(self.tgSizeThatFits(size:size,sbs:nil, inSizeClass: type))
+        return self.tgSizeThatFits(size:size,sbs:nil, inSizeClass: type)
     }
     
     
@@ -1277,10 +1282,6 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         _tgTouchEventDelegate = nil
     }
     
-    override open func setNeedsLayout() {
-        super.setNeedsLayout()
-    }
-    
     override open func layoutSubviews() {
         
         if !self.autoresizesSubviews
@@ -1345,14 +1346,13 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             
             let oldSelfSize = self.bounds.size
             var newSelfSize:CGSize
-            if _tgUseCacheRects
+            if _tgUseCacheRects && tgFrame.width != .greatestFiniteMagnitude && tgFrame.height != .greatestFiniteMagnitude
             {
-               newSelfSize = oldSelfSize
+                newSelfSize = CGSize(width: tgFrame.width, height: tgFrame.height)
             }
             else
             {
                (newSelfSize,_) = self.tgCalcLayoutRect(self.tgCalcSizeInNoLayout(newSuperview: self.superview, currentSize: oldSelfSize),isEstimate: false, sbs:nil, type:sizeClassType)
-                newSelfSize = _tgRoundSize(newSelfSize)
             }
             _tgUseCacheRects = false
             
@@ -1373,14 +1373,19 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                         sbvtgFrame.height = 0
                     }
                     
+                    var rc = sbvtgFrame.frame
+                    if sbv as? TGBaseLayout == nil
+                    {
+                        rc = _tgRoundRect(rc)
+                    }
+                    
                     if sbv.transform.isIdentity
                     {
-                        sbv.frame = _tgRoundRect(sbvtgFrame.frame)
+                        sbv.frame = rc
                     }
                     else
                     {
-                        let rc = _tgRoundRect(sbvtgFrame.frame)
-                        sbv.center = CGPoint(x: _tgRoundNumber(rc.origin.x + sbv.layer.anchorPoint.x * rc.size.width), y: _tgRoundNumber( rc.origin.y + sbv.layer.anchorPoint.y * rc.size.height))
+                        sbv.center = CGPoint(x:rc.origin.x + sbv.layer.anchorPoint.x * rc.size.width, y:rc.origin.y + sbv.layer.anchorPoint.y * rc.size.height)
                         sbv.bounds = CGRect(origin: ptOrigin, size: rc.size)
 
                     }
@@ -1428,13 +1433,20 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                         newSelfSize.height = 0
                     }
                     
-                    self.bounds = CGRect(origin:self.bounds.origin, size:newSelfSize)
-                    self.center = CGPoint(x:_tgRoundNumber(self.center.x + (newSelfSize.width - oldSelfSize.width) * self.layer.anchorPoint.x), y:_tgRoundNumber(self.center.y + (newSelfSize.height - oldSelfSize.height) * self.layer.anchorPoint.y))
+                    if self.transform.isIdentity
+                    {
+                        self.frame = CGRect(origin: self.frame.origin, size: newSelfSize)
+                    }
+                    else
+                    {
+                        self.bounds = CGRect(origin:self.bounds.origin, size:newSelfSize)
+                        self.center = CGPoint(x:self.center.x + (newSelfSize.width - oldSelfSize.width) * self.layer.anchorPoint.x, y:self.center.y + (newSelfSize.height - oldSelfSize.height) * self.layer.anchorPoint.y)
+                    }
                 }
             }
             
             
-            _tgBorderlineLayerDelegate?.setNeedLayout()
+            _tgBorderlineLayerDelegate?.setNeedsLayout()
             
             
             if newSelfSize.width != CGFloat.greatestFiniteMagnitude
@@ -1491,7 +1503,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                         //如果有变化则只调整自己的center。而不变化
                         if (!self.center.equalTo(centerPonintSelf))
                         {
-                            self.center = _tgRoundPoint(centerPonintSelf)
+                            self.center = centerPonintSelf
                         }
                     }
                     
@@ -1529,8 +1541,8 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                         
                         if (!supv.bounds.equalTo(superBounds))
                         {
-                            supv.center = _tgRoundPoint(superCenter)
-                            supv.bounds = _tgRoundRect(superBounds)
+                            supv.center = superCenter
+                            supv.bounds = superBounds
                             
                         }
                         
@@ -1589,7 +1601,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         {
             if !self.isHidden
             {
-                _tgBorderlineLayerDelegate?.setNeedLayout()
+                _tgBorderlineLayerDelegate?.setNeedsLayout()
                 
                 if (self.superview as? TGBaseLayout) != nil
                 {
@@ -2387,9 +2399,16 @@ extension TGBaseLayout
                 rectSelf.size.height = 0
             }
             
-            rectSelf = _tgRoundRect(rectSelf)
-            self.bounds = CGRect(x:self.bounds.origin.x, y:self.bounds.origin.y, width:rectSelf.width, height:rectSelf.height)
-            self.center = CGPoint(x:_tgRoundNumber(rectSelf.origin.x + self.layer.anchorPoint.x * rectSelf.width), y:_tgRoundNumber( rectSelf.origin.y + self.layer.anchorPoint.y * rectSelf.height))
+            
+            if self.transform.isIdentity
+            {
+                self.frame = rectSelf
+            }
+            else
+            {
+                self.bounds = CGRect(x:self.bounds.origin.x, y:self.bounds.origin.y, width:rectSelf.width, height:rectSelf.height)
+                self.center = CGPoint(x:rectSelf.origin.x + self.layer.anchorPoint.x * rectSelf.width, y:rectSelf.origin.y + self.layer.anchorPoint.y * rectSelf.height)
+            }
         }
         else if lsc.isSomeSizeWrap
         {
@@ -2444,7 +2463,7 @@ extension TGBaseLayout
                 contSize.width = newSize.width + leadingMargin + trailingMargin
             }
             
-            scrolv.contentSize = _tgRoundSize(contSize)
+            scrolv.contentSize = contSize
             
         }
     }
@@ -3331,7 +3350,7 @@ class TGBorderlineLayerDelegate:NSObject,CALayerDelegate
         
     }
     
-    func setNeedLayout()
+    func setNeedsLayout()
     {
         if _topBorderlineLayer != nil
         {
@@ -3341,6 +3360,7 @@ class TGBorderlineLayerDelegate:NSObject,CALayerDelegate
         if _leadingBorderlineLayer != nil
         {
             _leadingBorderlineLayer.setNeedsLayout()
+
         }
         
         if _bottomBorderlineLayer != nil
@@ -3362,35 +3382,40 @@ class TGBorderlineLayerDelegate:NSObject,CALayerDelegate
             return
         }
         
-        let layoutSize:CGSize = self._layout.layer.bounds.size;
+        let layoutSize:CGSize = self._layout.bounds.size
+        if layoutSize.height == 0 || layoutSize.width == 0
+        {
+            return
+        }
         
-        var layerRect:CGRect;
-        var fromPoint:CGPoint;
-        var toPoint:CGPoint;
+        var layerRect:CGRect
+        var fromPoint:CGPoint
+        var toPoint:CGPoint
+        let scale = UIScreen.main.scale
         
         if _leadingBorderlineLayer != nil && layer === _leadingBorderlineLayer
         {
-            layerRect = CGRect(x: leadingBorderline.offset, y: leadingBorderline.headIndent, width: leadingBorderline.thick/2, height: layoutSize.height - leadingBorderline.headIndent - leadingBorderline.tailIndent);
+            layerRect = CGRect(x: leadingBorderline.offset, y: leadingBorderline.headIndent, width: leadingBorderline.thick/scale, height: layoutSize.height - leadingBorderline.headIndent - leadingBorderline.tailIndent);
             fromPoint = CGPoint(x: 0, y: 0);
             toPoint = CGPoint(x: 0, y: layerRect.size.height);
             
         }
         else if _trailingBorderlineLayer != nil && layer === _trailingBorderlineLayer
         {
-            layerRect = CGRect(x: layoutSize.width - trailingBorderline.thick / 2 - trailingBorderline.offset, y: trailingBorderline.headIndent, width: trailingBorderline.thick / 2, height: layoutSize.height - trailingBorderline.headIndent - trailingBorderline.tailIndent);
+            layerRect = CGRect(x: layoutSize.width - trailingBorderline.thick / scale - trailingBorderline.offset, y: trailingBorderline.headIndent, width: trailingBorderline.thick / scale, height: layoutSize.height - trailingBorderline.headIndent - trailingBorderline.tailIndent);
             fromPoint = CGPoint(x: 0, y: 0);
             toPoint = CGPoint(x: 0, y: layerRect.size.height);
             
         }
         else if _topBorderlineLayer != nil && layer === _topBorderlineLayer
         {
-            layerRect = CGRect(x: topBorderline.headIndent, y: topBorderline.offset, width: layoutSize.width - topBorderline.headIndent - topBorderline.tailIndent, height: topBorderline.thick/2);
+            layerRect = CGRect(x: topBorderline.headIndent, y: topBorderline.offset, width: layoutSize.width - topBorderline.headIndent - topBorderline.tailIndent, height: topBorderline.thick/scale);
             fromPoint = CGPoint(x: 0, y: 0);
             toPoint = CGPoint(x: layerRect.size.width, y: 0);
         }
         else if _bottomBorderlineLayer != nil && layer === _bottomBorderlineLayer
         {
-            layerRect = CGRect(x:bottomBorderline.headIndent, y: layoutSize.height - bottomBorderline.thick / 2 - bottomBorderline.offset, width: layoutSize.width - bottomBorderline.headIndent - bottomBorderline.tailIndent, height: bottomBorderline.thick/2);
+            layerRect = CGRect(x:bottomBorderline.headIndent, y: layoutSize.height - bottomBorderline.thick/scale - bottomBorderline.offset, width: layoutSize.width - bottomBorderline.headIndent - bottomBorderline.tailIndent, height: bottomBorderline.thick / scale);
             fromPoint = CGPoint(x: 0, y: 0);
             toPoint = CGPoint(x: layerRect.size.width, y: 0);
         }
@@ -3410,12 +3435,9 @@ class TGBorderlineLayerDelegate:NSObject,CALayerDelegate
         
         
         //把动画效果取消。
-        layerRect = _tgRoundRect(layerRect)
         if (!layer.frame.equalTo(layerRect))
         {
             
-            CATransaction.begin()
-            CATransaction.setDisableActions(true)
             let shapeLayer:CAShapeLayer = layer as! CAShapeLayer
             
             if shapeLayer.lineDashPhase == 0
@@ -3432,11 +3454,14 @@ class TGBorderlineLayerDelegate:NSObject,CALayerDelegate
             }
             
             layer.frame = layerRect
-            CATransaction.commit()
         }
         
     }
     
+    
+    func action(for layer: CALayer, forKey event: String) -> CAAction? {
+        return NSNull()
+    }
     
     
     fileprivate func updateBorderLayer(_ layer:CAShapeLayer!, borderline:TGBorderline!) ->CAShapeLayer!
@@ -3447,8 +3472,8 @@ class TGBorderlineLayerDelegate:NSObject,CALayerDelegate
         {
             if retLayer != nil
             {
-                retLayer.delegate = nil
                 retLayer.removeFromSuperlayer()
+                retLayer.delegate = nil
             }
             
             retLayer = nil
@@ -3460,9 +3485,9 @@ class TGBorderlineLayerDelegate:NSObject,CALayerDelegate
             if retLayer == nil
             {
                 retLayer = CAShapeLayer()
-                _layout.layer.addSublayer(retLayer!)
+                retLayer.zPosition = 1000
                 retLayer.delegate = self
-                
+                _layout.layer.addSublayer(retLayer!)
             }
             
             if borderline.dash != 0

@@ -170,7 +170,7 @@ final public class TGLayoutPos:TGLayoutPosValue
         if _offset != val
         {
             _offset = val
-            setNeedLayout()
+            setNeedsLayout()
         }
         
         return self
@@ -191,7 +191,7 @@ final public class TGLayoutPos:TGLayoutPosValue
     public func min(_ val:CGFloat, offset:CGFloat = 0) ->TGLayoutPos
     {
         self.min.equal(val, offset:offset)
-        setNeedLayout()
+        setNeedsLayout()
         return self
     }
     
@@ -199,7 +199,7 @@ final public class TGLayoutPos:TGLayoutPosValue
     public func min(_ val:TGLayoutPos!, offset:CGFloat = 0) ->TGLayoutPos
     {
         self.min.equal(val, offset:offset)
-        setNeedLayout()
+        setNeedsLayout()
         return self
     }
     
@@ -220,7 +220,7 @@ final public class TGLayoutPos:TGLayoutPosValue
     public func max(_ val:CGFloat, offset:CGFloat = 0) ->TGLayoutPos
     {
         self.max.equal(val, offset:offset)
-        setNeedLayout()
+        setNeedsLayout()
         
         return self
     }
@@ -229,7 +229,7 @@ final public class TGLayoutPos:TGLayoutPosValue
     public func max(_ val:TGLayoutPos!, offset:CGFloat = 0) ->TGLayoutPos
     {
         self.max.equal(val, offset:offset)
-        setNeedLayout()
+        setNeedsLayout()
         
         return self
     }
@@ -252,7 +252,7 @@ final public class TGLayoutPos:TGLayoutPosValue
         _offset = 0
         _min = nil
         _max = nil
-        setNeedLayout()
+        setNeedsLayout()
     }
     
     /**
@@ -278,7 +278,7 @@ final public class TGLayoutPos:TGLayoutPosValue
                 {
                     _max._active = newValue
                 }
-                setNeedLayout()
+                setNeedsLayout()
             }
         }
     }
@@ -509,7 +509,7 @@ extension TGLayoutPos
         }
         
         
-        setNeedLayout()
+        setNeedsLayout()
         
         return self
     }
@@ -526,7 +526,7 @@ extension TGLayoutPos
         _offset = offset
         _val = .layoutSupport(val)
         
-        setNeedLayout()
+        setNeedsLayout()
 
         return self
     }
@@ -615,7 +615,7 @@ extension TGLayoutPos
     
 
  
-    internal func setNeedLayout()
+    internal func setNeedsLayout()
     {
         if (_view == nil)
         {

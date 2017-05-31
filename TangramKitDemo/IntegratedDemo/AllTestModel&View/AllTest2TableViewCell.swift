@@ -112,7 +112,8 @@ extension AllTest2TableViewCell
         
         
         let nameLabel = UILabel()
-        nameLabel.font = UIFont.systemFont(ofSize: 16)
+        nameLabel.font = CFTool.font(17)
+        nameLabel.textColor = CFTool.color(3)
         //_nameLabel的宽度根据内容自适应，但是最大的宽度是父视图的宽度的1倍，再减去5+14+5+14。这里的5是视图之间的间距，14是后面两个图片的宽度。
         //这个设置的意思是_nameLabel的宽可以动态增长，但是不能超过父视图的宽度，并且要保证后面的2个图片视图显示出来。
         //您可以通过max方法设置尺寸的最大上边界。具体参见对max的方法的详细介绍。
@@ -129,8 +130,8 @@ extension AllTest2TableViewCell
        
         //描述部分
         let descLabel = UILabel()
-        descLabel.textColor = .darkGray
-        descLabel.font = UIFont.systemFont(ofSize: 13)
+        descLabel.textColor = CFTool.color(4)
+        descLabel.font = CFTool.font(15);
         descLabel.adjustsFontSizeToFitWidth = true
         descLabel.numberOfLines = 2
         descLabel.tg_height.equal(.wrap)  //2行高度，高度根据内容确定。
@@ -139,10 +140,10 @@ extension AllTest2TableViewCell
         
         //右边的价格。
         let priceLabel = UILabel()
-        priceLabel.textColor = .orange
+        priceLabel.textColor = CFTool.color(4)
         priceLabel.textAlignment = .right
         priceLabel.adjustsFontSizeToFitWidth = true
-        priceLabel.font = UIFont.systemFont(ofSize: 14)
+        priceLabel.font = CFTool.font(14)
         priceLabel.tg_width.equal(.wrap).max(TGDimeAdapter.width(100)).min(TGDimeAdapter.width(50))
         //宽度最宽为100,注意到这里使用了TGDimeAdapter.width表示会根据屏幕的宽度来对100进行缩放。这个100是按iPhone6为标准设置的。具体请参考TGDimeAdapter类。
         priceLabel.tg_leading.equal(10)

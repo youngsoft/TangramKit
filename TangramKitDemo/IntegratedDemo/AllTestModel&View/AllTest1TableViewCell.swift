@@ -12,6 +12,10 @@ import TangramKit
 
 class AllTest1TableViewCell: UITableViewCell {
     
+    //对于需要动态评估高度的UITableViewCell来说可以把布局视图暴露出来。用于高度评估和边界线处理。以及事件处理的设置。
+    fileprivate(set) var rootLayout:TGBaseLayout!
+
+    
     weak var headImageView:UIImageView!
     weak var nickNameLabel:UILabel!
     weak var textMessageLabel:UILabel!
@@ -42,12 +46,19 @@ class AllTest1TableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+        
     }
     
     
-    //对于需要动态评估高度的UITableViewCell来说可以把布局视图暴露出来。用于高度评估和边界线处理。以及事件处理的设置。
-    fileprivate(set) var rootLayout:TGBaseLayout!
-
+    //iOS8以后您可以重载这个方法来动态的评估cell的高度，Autolayout内部是通过这个方法来评估高度的，因此如果用TangramKit实现的话就不需要调用基类的方法，而是调用根布局视图的sizeThatFits来评估获取动态的高度。
+    override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize
+    {
+        /*
+         通过布局视图的sizeThatFits方法能够评估出UITableViewCell的动态高度。sizeThatFits并不会进行布局而只是评估布局的尺寸。
+         因为cell的高度是自适应的，因此这里通过调用高度为wrap的布局视图的sizeThatFits来获取真实的高度。
+         */
+        return self.rootLayout.sizeThatFits(targetSize)  //如果使用系统自带的分割线，请记得将返回的高度height+1
+    }
     
     func setModel(model: AllTest1DataModel, isImageMessageHidden: Bool)
     {

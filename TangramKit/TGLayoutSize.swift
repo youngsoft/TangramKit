@@ -142,7 +142,7 @@ final public class TGLayoutSize:TGLayoutSizeValue
         if _increment != val
         {
             _increment = val
-            setNeedLayout()
+            setNeedsLayout()
         }
         
         return self
@@ -155,7 +155,7 @@ final public class TGLayoutSize:TGLayoutSizeValue
         if _multiple != val
         {
             _multiple = val
-            setNeedLayout()
+            setNeedsLayout()
         }
         
         return self
@@ -180,7 +180,7 @@ final public class TGLayoutSize:TGLayoutSizeValue
     public func min(_ size:CGFloat, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
         self.min.equal(size, increment:increment, multiple:multiple)
-        setNeedLayout()
+        setNeedsLayout()
         return self
     }
     
@@ -195,7 +195,7 @@ final public class TGLayoutSize:TGLayoutSizeValue
         }
         
         self.min.equal(dime,increment:increment, multiple:multiple)
-        setNeedLayout()
+        setNeedsLayout()
         
         return self
     }
@@ -205,7 +205,7 @@ final public class TGLayoutSize:TGLayoutSizeValue
     public func min(_ view:UIView, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
         self.min.equal(view,increment:increment, multiple:multiple)
-        setNeedLayout()
+        setNeedsLayout()
         
         return self
     }
@@ -230,7 +230,7 @@ final public class TGLayoutSize:TGLayoutSizeValue
     public func max(_ size:CGFloat, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
         self.max.equal(size,increment:increment, multiple:multiple)
-        setNeedLayout()
+        setNeedsLayout()
         return self
     }
     
@@ -239,7 +239,7 @@ final public class TGLayoutSize:TGLayoutSizeValue
     public func max(_ view:UIView, increment:CGFloat = 0, multiple:CGFloat = 1) ->TGLayoutSize
     {
         self.max.equal(view ,increment:increment, multiple:multiple)
-        setNeedLayout()
+        setNeedsLayout()
         
         return self
     }
@@ -255,7 +255,7 @@ final public class TGLayoutSize:TGLayoutSizeValue
         }
 
         self.max.equal(dime ,increment:increment, multiple:multiple)
-        setNeedLayout()
+        setNeedsLayout()
         
         return self
     }
@@ -278,7 +278,7 @@ final public class TGLayoutSize:TGLayoutSizeValue
         _multiple = 1
         _min = nil
         _max = nil
-        setNeedLayout()
+        setNeedsLayout()
         
     }
     
@@ -307,7 +307,7 @@ final public class TGLayoutSize:TGLayoutSizeValue
                 {
                   _max._active = newValue
                 }
-                setNeedLayout()
+                setNeedsLayout()
             }
         }
         
@@ -598,7 +598,7 @@ extension TGLayoutSize
             assert(false , "oops!")
         }
         
-        setNeedLayout()
+        setNeedsLayout()
         
         return self
     }
@@ -715,7 +715,7 @@ extension TGLayoutSize
     }
     
     
-    fileprivate func setNeedLayout()
+    fileprivate func setNeedsLayout()
     {
         if _view == nil
         {

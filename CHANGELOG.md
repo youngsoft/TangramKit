@@ -3,12 +3,14 @@
 
 --- 
 
-## [V1.0.7](https://github.com/youngsoft/TangramKit/releases/tag/1.0.7)(2017/5/30)
+## [V1.0.7](https://github.com/youngsoft/TangramKit/releases/tag/1.0.7)(2017/6/1)
 
 
 #### Added
 1. 对视图添加了属性`tg_visibility`，这个属性是对视图的hidden属性的扩展，除了可以控制视图的隐藏和显示外还可以控制视图隐藏时是否仍然占位布局。（具体参见RLTest2ViewController）
 2. 对视图添加了属性`tg_alignment`，这个属性只在线性布局、框架布局、表格布局、流式布局中起作用，它用来设置某个视图的停靠和对齐属性。当对某个布局视图设置`gravity`属性实现整体的停靠和对齐时，如果某个子视图想单独处理停靠则可以用这个属性来单独设置。（具体参见LLTest3ViewController）
+3. 添加了`TGDimeAdapter`的方法：`round`来分别实现入参为小数时的设备逻辑点值到最小可转化为物理像素的有效设备点值的转化。
+
 
 #### Changed
 1. 将布局视图的属性`tg_layoutHiddenSubviews`置为无效，布局视图不再提供对隐藏视图的是否占位的处理了，而是通过新增加的视图的扩展属性`tg_visibility`来实现。
@@ -16,12 +18,16 @@
 3. 将原先线性布局、流式布局、浮动布局中的`gravity`属性提升到了布局基类中，目前线性布局、流式布局、浮动布局、和框架布局都支持`gravity`的设置。
 4. 进一步优化了布局视图的性能，表现为对KVO监听的延迟处理和优化。经过试验发现当对UILabel调用sizeToFit时，并且使用的是系统字体时将非常消耗性能。因此新版本也对UILabel动态高度计算进行了优化:[#issue9](https://github.com/youngsoft/TangramKit/issues/9)
 5. 进一步优化了布局视图的内存占用尺寸，将布局视图中对触摸事件处理时的变量变为按需要才创建，以及布局视图的边界线对象也改为了按需要才建立，这两部分按需的处理机制将有效的减少了布局视图的内存占用。
+6. 为了更进一步的优化和简化MyLayout对UITableviewCell高度自适应的处理，新版本中对实现的解决方案进行优化处理，具体详情请参考：[AllTest1ViewController](https://github.com/youngsoft/TangramKit/blob/master/TangramKit/AllTest1ViewController.m)中的介绍
 
 
 #### Fixed
-1. 修复了[#BUG37](https://github.com/youngsoft/MyLinearLayout/issues/37)原因是对视图进行尺寸和位置计算时如果得到值并不是最小的有效的逻辑点，导致当逻辑点映射到像素显示时将无法清晰显示。对于2倍像素的设备来说要求逻辑点的值必须是1/2的倍数。而对于3倍像素的设备来说要求逻辑点的值必须是1/3的倍数。
+1. 修复了[#BUG37](https://github.com/youngsoft/MyLinearLayout/issues/37)原因是对`UILabel`或者`UITextView`或者`UIButton`进行尺寸和位置计算时如果得到值并不是最小的有效的设备逻辑点，导致当逻辑点映射到像素显示时将无法清晰显示。对于2倍像素的设备来说要求逻辑点的值必须是1/2的倍数。而对于3倍像素的设备来说要求逻辑点的值必须是1/3的倍数。
 2. 修复了路径布局`TGPathLayout`中的一个子视图位置可能显示不正确的BUG。原因就是在进行子视图之间的间距的长度逼近时有可能步长再小也无法满足条件时造成子视图显示重叠的问题。
-3. 修复了UILabel设置宽度为wrap时而没有指定高度时不显示的BUG。
+3. 修复了UILabel设置宽度为wrap时而没有指定高度时有可能不显示的BUG。原因是使用者可能没有指定高度，这次系统默认为他指定高度来解决这个问题。
+4. 修复了边界线`TGBorderline`的`thick`属性如果设置小于1而出现移动时不停闪烁的[#BUG38](https://github.com/youngsoft/MyLinearLayout/issues/38)。同时修复了边界线在不同分辨率设备下的显示的粗细不同问题。原因是如果thick过小则因为设备逻辑点映射到物理像素的问题导致刷新闪烁的问题。
+6. 修复了路径布局`TGPathLayout`的中心点子视图`tg_originView`的`layer.anchorPoint`的设置不为默认值时的位置frame显示不正确的问题。
+7. 修复了当使用1.0.6版本中的`tg_cacheEstimatedRect`属性来缓存UITableviewCell高度时的UITableviewCell的高度可能为0的BUG。
 
 
 

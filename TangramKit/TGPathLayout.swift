@@ -571,8 +571,8 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             let rightMargin = sbvsc.right.absPos
             let bottomMargin = sbvsc.bottom.absPos
             
-            rect.origin.x = (selfSize.width - lsc.tg_leftPadding - lsc.tg_rightPadding)*tg_coordinateSetting.origin.x - rect.size.width / 2 + leftMargin - rightMargin + lsc.tg_leftPadding
-            rect.origin.y = (selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)*tg_coordinateSetting.origin.y - rect.size.height / 2 + topMargin - bottomMargin + lsc.tg_topPadding
+            rect.origin.x = (selfSize.width - lsc.tg_leftPadding - lsc.tg_rightPadding)*tg_coordinateSetting.origin.x - rect.size.width * sbv.layer.anchorPoint.x + leftMargin - rightMargin + lsc.tg_leftPadding
+            rect.origin.y = (selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)*tg_coordinateSetting.origin.y - rect.size.height * sbv.layer.anchorPoint.y + topMargin - bottomMargin + lsc.tg_topPadding
             
             if (rect.minY < minYPos)
             {
