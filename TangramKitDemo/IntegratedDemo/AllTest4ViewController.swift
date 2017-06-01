@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import TangramKit
+
 
 
 private let sBaseTag:NSInteger = 100000

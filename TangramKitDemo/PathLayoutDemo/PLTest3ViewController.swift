@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import TangramKit
+
 
 
 class PLTest3View: TGRelativeLayout {

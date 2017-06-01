@@ -101,66 +101,57 @@ extension UIView:TGViewSizeClass
      
      */
     
-    /**
-     *视图的上边布局位置对象。(top layout position of the view.)
-     */
+    
+    /// 视图的上边布局位置对象。(top layout position of the view.)
     public var tg_top:TGLayoutPos
     {
         return self.tgCurrentSizeClass.tg_top
     }
     
-    /**
-     *视图的头部布局位置对象,对于非阿拉伯国家就是左边，对于阿拉伯国家就是右边(leading layout position of the view.)
-     */
+    
+    /// 视图的头部布局位置对象,对于非阿拉伯国家就是左边，对于阿拉伯国家就是右边(leading layout position of the view.)
     public var tg_leading:TGLayoutPos
     {
         return self.tgCurrentSizeClass.tg_leading
     }
     
-    /**
-     *视图的下边布局位置对象。(bottom layout position of the view.)
-     */
+    
+    /// 视图的下边布局位置对象。(bottom layout position of the view.)
     public var tg_bottom:TGLayoutPos
     {
         return self.tgCurrentSizeClass.tg_bottom
     }
     
-    /**
-     *视图的尾部布局位置对象,对于非阿拉伯国家就是右边，对于阿拉伯国家就是左边。(trailing layout position of the view.)
-     */
+    
+    /// 视图的尾部布局位置对象,对于非阿拉伯国家就是右边，对于阿拉伯国家就是左边。(trailing layout position of the view.)
     public var tg_trailing:TGLayoutPos
     {
         return self.tgCurrentSizeClass.tg_trailing
     }
     
-    /**
-     *视图的水平中心布局位置对象。(horizontal center layout position of the view.)
-     */
+    
+    /// 视图的水平中心布局位置对象。(horizontal center layout position of the view.)
     public var tg_centerX:TGLayoutPos
     {
         return self.tgCurrentSizeClass.tg_centerX
     }
     
-    /**
-     *视图的垂直中心布局位置对象。(vertical center layout position of the view.)
-     */
+    
+    /// 视图的垂直中心布局位置对象。(vertical center layout position of the view.)
     public var tg_centerY:TGLayoutPos
     {
         return self.tgCurrentSizeClass.tg_centerY
     }
     
     
-    /**
-     *视图的左边布局位置对象。(left layout position of the view.)
-     */
+    /// 视图的左边布局位置对象。(left layout position of the view.)
     public var tg_left:TGLayoutPos
     {
         return self.tgCurrentSizeClass.tg_left
     }
     
-    /**
-     *视图的右边布局位置对象。(right layout position of the view.)
-     */
+
+    /// 视图的右边布局位置对象。(right layout position of the view.)
     public var tg_right:TGLayoutPos
     {
         return self.tgCurrentSizeClass.tg_right
@@ -232,35 +223,37 @@ extension UIView:TGViewSizeClass
     
     
     
-    /**
-     *视图的宽度布局尺寸对象，可以通过其中的euqal方法来设置CGFloat,TGLayoutSize,[MyLayoutSize],TGWeight,TGLayoutSize.Special,nil这六种值
-     */
+    
+    /// 视图的宽度布局尺寸对象，可以通过其中的euqal方法来设置CGFloat,TGLayoutSize,[MyLayoutSize],TGWeight,TGLayoutSize.Special,nil这六种值
     public var tg_width:TGLayoutSize
     {
         return self.tgCurrentSizeClass.tg_width
     }
     
-    /**
-     *视图的高度布局尺寸对象，可以通过其中的euqal方法来设置CGFloat,TGLayoutSize,[MyLayoutSize],TGWeight,TGLayoutSize.Special,nil这六种值
-     */
+    
+    /// 视图的高度布局尺寸对象，可以通过其中的euqal方法来设置CGFloat,TGLayoutSize,[MyLayoutSize],TGWeight,TGLayoutSize.Special,nil这六种值
     public var tg_height:TGLayoutSize
     {
         return self.tgCurrentSizeClass.tg_height
     }
     
+    
     /**
-     *设置视图不受布局父视图的布局约束控制和不再参与视图的布局，所有设置的其他扩展属性都将失效而必须用frame来设置视图的位置和尺寸，默认值是false。这个属性主要用于某些视图希望在布局视图中进行特殊处理和进行自定义的设置的场景。比如一个垂直线性布局下有A,B,C三个子视图设置如下：
+     设置视图不受布局父视图的布局约束控制和不再参与视图的布局，所有设置的其他扩展属性都将失效而必须用frame来设置视图的位置和尺寸，默认值是false。这个属性主要用于某些视图希望在布局视图中进行特殊处理和进行自定义的设置的场景。比如一个垂直线性布局下有A,B,C三个子视图设置如下：
+   
      A.tg_size(width:100,height:100)
      B.tg_size(width:100,height:50)
      C.tg_size(width:100,height:200)
      B.frame = CGRect(x:20,y:20,width:200,height:100)
      
      正常情况下当布局完成后:
+     
      A.frame == {0,0,100,100}
      B.frame == {0,100,100,50}  //可以看出即使B设置了frame值，但是因为布局约束属性优先级高所以对B设置的frame值是无效的。
      C.frame == {0,150,100,200}
      
      而当我们设置如下时：
+     
      A.tg_size(width:100,height:100)
      B.tg_size(width:100,height:50)
      C.tg_size(width:100,height:200)
@@ -268,13 +261,13 @@ extension UIView:TGViewSizeClass
      B.tg_useFrame = true
      
      那么在布局完成后：
+     
      A.frame == {0, 0, 100, 100}
      B.frame == {20,20,200,100}   //可以看出B并没有受到约束的限制，结果就是B设置的frame值。
      C.frame == {0, 100,100,200}  //因为B不再参与布局了，所以C就往上移动了，由原来的150变为了100.
-     
-     *tg_useFrame的应用场景是某个视图虽然是布局视图的子视图但不想受到父布局视图的约束，而是可以通过frame进行自由位置和尺寸调整的场景。
-     
-     */
+
+     tg_useFrame的应用场景是某个视图虽然是布局视图的子视图但不想受到父布局视图的约束，而是可以通过frame进行自由位置和尺寸调整的场景。
+    */
     public var tg_useFrame:Bool
         {
         get
@@ -297,18 +290,21 @@ extension UIView:TGViewSizeClass
     }
     
     /**
-     *设置视图在进行布局时只会参与布局但不会真实的调整位置和尺寸，默认值是false。当设置为YES时会在布局时保留出视图的布局位置和布局尺寸的空间，但不会更新视图的位置和尺寸，也就是说只会占位但不会更新。因此你可以通过frame值来进行位置和尺寸的任意设置，而不会受到你的布局视图的影响。这个属性主要用于某些视图希望在布局视图中进行特殊处理和进行自定义的设置的场景。比如一个垂直线性布局下有A,B,C三个子视图设置如下：
+     设置视图在进行布局时只会参与布局但不会真实的调整位置和尺寸，默认值是false。当设置为YES时会在布局时保留出视图的布局位置和布局尺寸的空间，但不会更新视图的位置和尺寸，也就是说只会占位但不会更新。因此你可以通过frame值来进行位置和尺寸的任意设置，而不会受到你的布局视图的影响。这个属性主要用于某些视图希望在布局视图中进行特殊处理和进行自定义的设置的场景。比如一个垂直线性布局下有A,B,C三个子视图设置如下：
+   
      A.tg_size(width:100,height:100)
      B.tg_size(width:100,height:50)
      C.tg_size(width:100,height:200)
      B.frame = CGRect(x:20,y:20,width:200,height:100)
      
      正常情况下当布局完成后:
+     
      A.frame == {0,0,100,100}
      B.frame == {0,100,100,50}  //可以看出即使B设置了frame值，但是因为布局约束属性优先级高所以对B设置的frame值是无效的。
      C.frame == {0,150,100,200}
      
      而当我们设置如下时：
+     
      A.tg_size(width:100,height:100)
      B.tg_size(width:100,height:50)
      C.tg_size(width:100,height:200)
@@ -316,16 +312,18 @@ extension UIView:TGViewSizeClass
      B.tg_noLayout = true
      
      那么在布局完成后：
+    
      A.frame == {0,0,100,100}
      B.frame == {20,20,200,100}  //可以看出虽然B参与了布局，但是并没有更新B的frame值，而是保持为通过frame设置的原始值。
      C.frame == {0,150,100,200}  //因为B参与了布局，占用了50的高度，所以这里C的位置还是150，而不是100.
      
      
-     * tg_useFrame和tg_noLayout的区别是：
-     1.前者不会参与布局而必须要通过frame值进行设置，而后者则会参与布局但是不会将布局的结果更新到frame中。
-     2.当前者设置为true时后者的设置将无效，而后者的设置并不会影响前者的设置。
+    tg_useFrame和tg_noLayout的区别是：
+    
+     1. 前者不会参与布局而必须要通过frame值进行设置，而后者则会参与布局但是不会将布局的结果更新到frame中。
+     2. 当前者设置为true时后者的设置将无效，而后者的设置并不会影响前者的设置。
      
-     *tg_noLayout的应用场景是那些想在运行时动态调整某个视图的位置和尺寸，但是又不想破坏布局视图中其他子视图的布局结构的场景，也就是调整了视图的位置和尺寸，但是不会调整其他的兄弟子视图的位置和尺寸。
+     tg_noLayout的应用场景是那些想在运行时动态调整某个视图的位置和尺寸，但是又不想破坏布局视图中其他子视图的布局结构的场景，也就是调整了视图的位置和尺寸，但是不会调整其他的兄弟子视图的位置和尺寸。
      
      */
     public var tg_noLayout:Bool
@@ -351,14 +349,15 @@ extension UIView:TGViewSizeClass
     }
     
     /**
-     *指定视图的可见性，默认是visible。这个属性是对视图hidden属性的扩展，布局系统对视图的hidden属性设置后，视图将不再参与布局。但在实际中有些场景我们希望视图隐藏后
-     *仍然会占用空间仍然会参与布局。因此我们可以用这个属性来设置当视图隐藏后是否继续参与布局。
-     *如果您使用了这个属性来对视图进行隐藏和取消隐藏操作则请不要再去操作hidden属性，否则可能出现二者效果不一致的情况。因此建议视图的隐藏和显示用这个属性进行设置。
-     *在老版本中布局中的子视图隐藏时要么都参与布局，要么都不参与布局，这是通过布局属性tg_layoutHiddenSubviews来设置，新版本中这个属性将会设置为无效了！
-     *tg_visiblity可以设置的值如下：
-     * visible     视图可见，等价于hidden = false
-     * invisible   视图不可见，等价于hidden = true, 但是会在父布局视图中占位空白区域
-     * gone        视图不可见，等价于hidden = true, 但是不会在父视图中占位空白区域
+     指定视图的可见性，默认是visible。这个属性是对视图hidden属性的扩展，布局系统对视图的hidden属性设置后，视图将不再参与布局。但在实际中有些场景我们希望视图隐藏后
+     仍然会占用空间仍然会参与布局。因此我们可以用这个属性来设置当视图隐藏后是否继续参与布局。
+     如果您使用了这个属性来对视图进行隐藏和取消隐藏操作则请不要再去操作hidden属性，否则可能出现二者效果不一致的情况。因此建议视图的隐藏和显示用这个属性进行设置。
+     在老版本中布局中的子视图隐藏时要么都参与布局，要么都不参与布局，这是通过布局属性tg_layoutHiddenSubviews来设置，新版本中这个属性将会设置为无效了！
+     
+     tg_visiblity可以设置的值如下：
+       - visible:     视图可见，等价于hidden = false
+       - invisible:   视图不可见，等价于hidden = true, 但是会在父布局视图中占位空白区域
+       - gone:        视图不可见，等价于hidden = true, 但是不会在父视图中占位空白区域
      */
     public var tg_visibility:TGVisibility
         {
@@ -390,12 +389,12 @@ extension UIView:TGViewSizeClass
     }
     
     /**
-     *指定子在布局视图上的对齐方式，默认是.none表示未指定，这个属性目前只支持框架布局，线性布局，流式布局下的属性设置
-     *在框架布局中支持上、中、下、垂直拉伸和左、中、右、水平拉伸8个设置
-     *在垂直线性布局中只支持左、中、右、水平拉伸对齐。(如果父布局视图设置了gravity，子视图设置了这个属性则这个属性优先级最高)
-     *在水平线性布局中只支持上、中、下、垂直拉伸对齐。(如果父布局视图设置了gravity，子视图设置了这个属性则这个属性优先级最高)
-     *在垂直流式布局中用来设置一行内的上、中、下、垂直拉伸对齐。(如果父布局视图设置了arrangedGravity，子视图设置了这个属性则这个属性优先级最高)
-     *在水平流式布局中用来设置一列内的左、中、右、水平拉伸对齐。(如果父布局视图设置了arrangedGravity，子视图时设置了这个属性则这个属性优先级最高)
+     指定子在布局视图上的对齐方式，默认是.none表示未指定，这个属性目前只支持框架布局，线性布局，流式布局下的属性设置
+    - 在框架布局中支持上、中、下、垂直拉伸和左、中、右、水平拉伸8个设置
+    - 在垂直线性布局中只支持左、中、右、水平拉伸对齐。(如果父布局视图设置了gravity，子视图设置了这个属性则这个属性优先级最高)
+    - 在水平线性布局中只支持上、中、下、垂直拉伸对齐。(如果父布局视图设置了gravity，子视图设置了这个属性则这个属性优先级最高)
+    - 在垂直流式布局中用来设置一行内的上、中、下、垂直拉伸对齐。(如果父布局视图设置了arrangedGravity，子视图设置了这个属性则这个属性优先级最高)
+    - 在水平流式布局中用来设置一列内的左、中、右、水平拉伸对齐。(如果父布局视图设置了arrangedGravity，子视图时设置了这个属性则这个属性优先级最高)
      */
     public var tg_alignment:TGGravity
         {
@@ -424,63 +423,102 @@ extension UIView:TGViewSizeClass
 //视图的布局扩展方法。
 extension UIView
 {
-    /**
-     *设置开始位置的快捷方法。
-     */
+    
+    /// 设置开始位置的快捷方法。
+    ///
+    /// - Parameter point: 左上角原点的位置
     public func tg_origin(_ point:CGPoint)
     {
         self.tg_leading.equal(point.x)
         self.tg_top.equal(point.y)
     }
     
+    
+    /// 设置开始位置的快捷方法。
+    ///
+    /// - Parameters:
+    ///   - x: 水平方向的位置
+    ///   - y: 垂直方向的位置
     public func tg_origin(x:TGLayoutPosType, y:TGLayoutPosType)
     {
         self.tg_leading.equalHelper(val: x)
         self.tg_top.equalHelper(val: y)
     }
     
-    /**
-     *设置结束位置的快捷方式
-     */
+
+    
+    ///
+    ///
+    /// - Parameter point: 右下角的结束位置
     public func tg_end(_ point:CGPoint)
     {
         self.tg_trailing.equal(point.x)
         self.tg_bottom.equal(point.y)
     }
     
+    
+    /// 设置结束位置的快捷方式
+    ///
+    /// - Parameters:
+    ///   - x: 水平方向的位置
+    ///   - y: 垂直方向的位置
     public func tg_end(x:TGLayoutPosType, y:TGLayoutPosType)
     {
         self.tg_trailing.equalHelper(val:x)
         self.tg_bottom.equalHelper(val:y)
     }
     
-    /**
-     *同时设置tg_width和tg_height的简化方法。
-     */
+    /// 同时设置tg_width和tg_height的简化方法。
+    ///
+    /// - Parameter size: 宽度和高度值
     public func tg_size(_ size: CGSize)
     {
         self.tg_width.equal(size.width)
         self.tg_height.equal(size.height)
     }
     
+    
+    /// 同时设置tg_width和tg_height的简化方法。
+    ///
+    /// - Parameters:
+    ///   - width: 宽度
+    ///   - height: 高度
     public func tg_size(width:TGLayoutSize, height:TGLayoutSize)
     {
         self.tg_width.equal(width)
         self.tg_height.equal(height)
     }
     
+    
+    /// 同时设置tg_width和tg_height的简化方法。
+    ///
+    /// - Parameters:
+    ///   - width: 宽度
+    ///   - height: 高度
     public func tg_size(width:TGLayoutSizeType, height:TGLayoutSize)
     {
         self.tg_width.equalHelper(val: width)
         self.tg_height.equal(height)
     }
     
+    
+    /// 同时设置tg_width和tg_height的简化方法。
+    ///
+    /// - Parameters:
+    ///   - width: 宽度
+    ///   - height: 高度
     public func tg_size(width:TGLayoutSize, height:TGLayoutSizeType)
     {
         self.tg_width.equal(width)
         self.tg_height.equalHelper(val: height)
     }
     
+    
+    /// 同时设置tg_width和tg_height的简化方法。
+    ///
+    /// - Parameters:
+    ///   - width: 宽度
+    ///   - height: 高度
     public func tg_size(width:TGLayoutSizeType, height:TGLayoutSizeType)
     {
         self.tg_width.equalHelper(val: width)
@@ -491,7 +529,7 @@ extension UIView
     
     
     /**
-     *视图的在父布局视图调用完评估尺寸的方法后，可以通过这个方法来获取评估的CGRect值。评估的CGRect值是在布局前评估计算的值，而frame则是视图真正完成布局后的真实的CGRect值。在调用这个方法前请先调用父布局视图的tg_sizeThatFits方法进行布局视图的尺寸评估，否则此方法返回的值未可知。这个方法主要用于在视图布局前而想得到其在父布局视图中的位置和尺寸的场景。
+     视图的在父布局视图调用完评估尺寸的方法后，可以通过这个方法来获取评估的CGRect值。评估的CGRect值是在布局前评估计算的值，而frame则是视图真正完成布局后的真实的CGRect值。在调用这个方法前请先调用父布局视图的tg_sizeThatFits方法进行布局视图的尺寸评估，否则此方法返回的值未可知。这个方法主要用于在视图布局前而想得到其在父布局视图中的位置和尺寸的场景。
      */
     public var tg_estimatedFrame:CGRect
     {
@@ -504,19 +542,19 @@ extension UIView
         return rect;
     }
     
-    /**
-     *视图在父布局视图中布局完成后也就是视图的frame更新完成后执行的block，执行完block后会被重置为nil。通过在tg_layoutCompletedDo中我们可以得到这个视图真实的frame值,当然您也可以在里面进行其他业务逻辑的操作和属性的获取和更新。block方法中layout参数就是父布局视图，而v就是视图本身，block中这两个参数目的是为了防止循环引用的问题。
-     */
+    
+    /// 视图在父布局视图中布局完成后也就是视图的frame更新完成后执行的block，执行完block后会被重置为nil。通过在tg_layoutCompletedDo中我们可以得到这个视图真实的frame值,当然您也可以在里面进行其他业务逻辑的操作和属性的获取和更新。block方法中layout参数就是父布局视图，而v就是视图本身，block中这两个参数目的是为了防止循环引用的问题。
+    ///
+    /// - Parameter action: 布局完成执行的action
     public func tg_layoutCompletedDo(_ action:((_ layout:TGBaseLayout, _ view:UIView)->Void)?)
     {
         (self.tgCurrentSizeClass as! TGViewSizeClassImpl).layoutCompletedAction = action
     }
     
     
-    /**
-     *清除视图所有为布局而设置的扩展属性值。如果是布局视图调用这个方法则同时会清除布局视图中所有关于布局设置的属性值。
-     *@type: 清除某个TGSizeClassType下设置的视图布局属性值。
-     */
+    /// 清除视图所有为布局而设置的扩展属性值。如果是布局视图调用这个方法则同时会清除布局视图中所有关于布局设置的属性值。
+    ///
+    /// - Parameter type: 清除某个TGSizeClassType下设置的视图布局属性值。
     public func tg_clearLayout(inSizeClass type:TGSizeClassType = .default)
     {
         if let dict = self.tgFrame.sizeClasses
@@ -525,10 +563,14 @@ extension UIView
         }
     }
     
-    /**
-     *获取视图在某个SizeClassType下的TGViewSizeClass对象。视图可以通过得到的TGViewSizeClass对象来设置视图在对应SizeClass下的各种布局约束属性。
-     *@srcType:如果视图指定的type不存在则会拷贝srcType中定义的约束值，如果存在则不拷贝直接返回type中指定的SizeClass。
-     */
+
+    
+    /// 获取视图在某个SizeClassType下的TGViewSizeClass对象。视图可以通过得到的TGViewSizeClass对象来设置视图在对应SizeClass下的各种布局约束属性。
+    ///
+    /// - Parameters:
+    ///   - type: Size Class的类型
+    ///   - srcType: 源Size Class的类型，如果视图指定的type不存在则会拷贝srcType中定义的约束值，如果存在则不拷贝直接返回type中指定的SizeClass
+    /// - Returns: Size Class对象
     public func tg_fetchSizeClass(with type:TGSizeClassType, from srcType:TGSizeClassType! = nil) ->TGViewSizeClass
     {
         
@@ -562,7 +604,7 @@ extension UIView
 }
 
 /**
- *布局的边界画线类，用于实现绘制布局的四周的边界线的功能。一个布局视图中提供了上下左右4个方向的边界画线类对象。
+ 布局的边界画线类，用于实现绘制布局的四周的边界线的功能。一个布局视图中提供了上下左右4个方向的边界画线类对象。
  */
 public class TGBorderline
 {
@@ -582,17 +624,17 @@ public class TGBorderline
         
     }
     
-    //边界线颜色
+    /// 边界线颜色
     public var color:UIColor
-    //边界线粗细，最小单位为1，表示像素，请不要设置小于1的值。
+    /// 边界线粗细，最小单位为1，单位是像素。请不要设置小于1的值。
     public var thick:CGFloat = 1
-    //边界线头部缩进单位
+    /// 边界线头部缩进单位
     public var headIndent:CGFloat = 0
-    //边界线尾部缩进单位
+    /// 边界线尾部缩进单位
     public var tailIndent:CGFloat = 0
-    //设置边界线为点划线,如果是0则边界线是实线
+    /// 设置边界线为点划线,如果是0则边界线是实线
     public var dash:CGFloat = 0
-    
+    /// 边界线的偏移量
     public var offset:CGFloat = 0
     
 }
@@ -601,7 +643,8 @@ public class TGBorderline
 public typealias TGLayoutBorderline = TGBorderline
 
 /**
- *布局视图基类，基类不支持实例化对象。在编程时我们经常会用到一些视图，这种视图只是负责将里面的子视图按照某种规则进行排列和布局，而别无其他的作用。因此我们称这种视图为容器视图或者称为布局视图。
+ 布局视图基类，基类不支持实例化对象。在编程时我们经常会用到一些视图，这种视图只是负责将里面的子视图按照某种规则进行排列和布局，而别无其他的作用。因此我们称这种视图为容器视图或者称为布局视图。
+
  布局视图通过重载layoutSubviews方法来完成子视图的布局和排列的工作。对于每个加入到布局视图中的子视图，都会在加入时通过KVO机制监控子视图的center和bounds以及frame值的变化，每当子视图的这些属性一变化时就又会重新引发布局视图的布局动作。同时对每个视图的布局扩展属性的设置以及对布局视图的布局属性的设置都会引发布局视图的布局动作。布局视图在添加到非布局父视图时也会通过KVO机制来监控非布局父视图的frame值和bounds值，这样每当非布局父视图的尺寸变更时也会引发布局视图的布局动作。前面说的引起变动的方法就是会在KVO处理逻辑以及布局扩展属性和布局属性设置完毕后通过调用setNeedLayout来实现的，当布局视图收到setNeedLayout的请求后，会在下一个runloop中对布局视图进行重新布局而这就是通过调用layoutSubviews方法来实现的。布局视图基类只提供了更新所有子视图的位置和尺寸以及一些基础的设置，而至于如何排列和布局这些子视图则要根据应用的场景和需求来确定，因此布局基类视图提供了一个：
  internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, type:TGSizeClassType) ->(selfSize:CGSize, hasSubLayout:Bool)
  的方法，要求派生类去重载这个方法，这样不同的派生类就可以实现不同的应用场景，这就是布局视图的核心实现机制。
@@ -611,7 +654,7 @@ public typealias TGLayoutBorderline = TGBorderline
 open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     
     /**
-     * 用于实现对阿拉伯国家的布局适配。对于非阿拉伯国家来说，界面布局都是默认从左到右排列。而对于阿拉伯国家来说界面布局则默认是从右往左排列。默认这个属性是NO，您可以将这个属性设置为YES，这样布局里面的所有视图都将从右到左进行排列布局。如果您需要考虑国际化布局的问题，那么您应该用tg_leading来表示头部的位置，而用tg_trailing来表示尾部的位置，这样当布局方向是LTR时那么tg_leading就表示的是左边而tg_trailing则表示的是右边；而当布局方向是RTL时那么tg_leading表示的是右边而tg_trailing则表示的是左边。如果您的界面布局不会考虑到国际化以及不需要考虑RTL时那么您可以用tg_left和tg_right来表示左右而不需要用tg_leading和tg_trailing。
+      用于实现对阿拉伯国家的布局适配。对于非阿拉伯国家来说，界面布局都是默认从左到右排列。而对于阿拉伯国家来说界面布局则默认是从右往左排列。默认这个属性是NO，您可以将这个属性设置为YES，这样布局里面的所有视图都将从右到左进行排列布局。如果您需要考虑国际化布局的问题，那么您应该用tg_leading来表示头部的位置，而用tg_trailing来表示尾部的位置，这样当布局方向是LTR时那么tg_leading就表示的是左边而tg_trailing则表示的是右边；而当布局方向是RTL时那么tg_leading表示的是右边而tg_trailing则表示的是左边。如果您的界面布局不会考虑到国际化以及不需要考虑RTL时那么您可以用tg_left和tg_right来表示左右而不需要用tg_leading和tg_trailing。
      */
     public static var tg_isRTL:Bool
     {
@@ -659,7 +702,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     
     
     /**
-     * 设置布局视图四周的内边距值。所谓内边距是指布局视图内的所有子视图离布局视图四周的边距。通过为布局视图设置内边距可以减少为所有子视图设置外边距的工作，而外边距则是指视图离父视图四周的距离。
+      设置布局视图四周的内边距值。所谓内边距是指布局视图内的所有子视图离布局视图四周的边距。通过为布局视图设置内边距可以减少为所有子视图设置外边距的工作，而外边距则是指视图离父视图四周的距离。
      */
     public var tg_padding:UIEdgeInsets
         {
@@ -678,7 +721,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         
     }
     
-    /**顶部内边距*/
+    /// 顶部内边距
     public var tg_topPadding:CGFloat
         {
         get{
@@ -695,7 +738,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         }
     }
     
-    /**头部内边距，用来设置子视图离自身头部的边距值。对于LTR方向的布局来说就是指的左边内边距，而对于RTL方向的布局来说就是指的右边内边距。*/
+    /// 头部内边距，用来设置子视图离自身头部的边距值。对于LTR方向的布局来说就是指的左边内边距，而对于RTL方向的布局来说就是指的右边内边距。
     public var tg_leadingPadding:CGFloat
         {
         get{
@@ -714,7 +757,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     }
 
     
-    /**底部内边距*/
+    /// 底部内边距
     public var tg_bottomPadding:CGFloat
         {
         get{
@@ -731,7 +774,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         }
     }
     
-    /**尾部内边距，用来设置子视图离自身尾部的边距值。对于LTR方向的布局来说就是指的右边内边距，而对于RTL方向的布局来说就是指的左边内边距*/
+    /// 尾部内边距，用来设置子视图离自身尾部的边距值。对于LTR方向的布局来说就是指的右边内边距，而对于RTL方向的布局来说就是指的左边内边距。
     public var tg_trailingPadding:CGFloat
         {
         get{
@@ -750,7 +793,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     }
     
     
-    /**左边内边距*/
+    /// 左边内边距。
     public var tg_leftPadding:CGFloat
         {
         get{
@@ -768,7 +811,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         }
     }
     
-    /**右边内边距*/
+    /// 右边内边距
     public var tg_rightPadding:CGFloat
         {
         get{
@@ -789,9 +832,10 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
 
     
     /**
-     * 设置当布局的尺寸由子视图决定并且在没有子视图的情况下tg_padding的设置值是否会加入到布局的尺寸值里面。默认是true，表示当布局视图没有子视图时tg_padding值也会加入到尺寸里面。
-     * 举例来说假设某个布局视图的高度是.wrap,并且设置了tg_topPadding为10，tg_bottomPadding为20。那么默认情况下当没有任何子视图时布局视图的高度是30；而当我们将这个属性设置为false时，那么在没有任何子视图时布局视图的高度就是0，也就是说tg_padding不会参与高度的计算了。
-     */
+      设置当布局的尺寸由子视图决定并且在没有子视图的情况下tg_padding的设置值是否会加入到布局的尺寸值里面。默认是true，表示当布局视图没有子视图时tg_padding值也会加入到尺寸里面。
+     
+     举例来说假设某个布局视图的高度是.wrap,并且设置了tg_topPadding为10，tg_bottomPadding为20。那么默认情况下当没有任何子视图时布局视图的高度是30；而当我们将这个属性设置为false时，那么在没有任何子视图时布局视图的高度就是0，也就是说tg_padding不会参与高度的计算了。
+    */
     public var tg_zeroPadding:Bool
         {
         get{
@@ -810,7 +854,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     
     
     /**
-     *定义布局视图内子视图之间的间距，所谓间距就是子视图之间的间隔距离。
+     定义布局视图内子视图之间的间距，所谓间距就是子视图之间的间隔距离。
      */
     public var tg_space:CGFloat {
         get {
@@ -829,7 +873,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     
     
     /**
-     *定义布局视图内子视图之间的上下垂直间距。只有顺序布局这个属性才有意义。
+     定义布局视图内子视图之间的上下垂直间距。只有顺序布局这个属性才有意义。
      */
     public var tg_vspace:CGFloat {
         get {
@@ -848,7 +892,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     }
     
     /**
-     *定义布局视图内子视图之间的左右水平间距。只有顺序布局这个属性才有意义。
+     定义布局视图内子视图之间的左右水平间距。只有顺序布局这个属性才有意义。
      */
     public var tg_hspace:CGFloat {
         get {
@@ -866,7 +910,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     }
     
     /**
-     *布局里面的所有子视图按添加的顺序逆序进行布局。默认是false，表示按子视图添加的顺序排列。比如一个垂直线性布局依次添加A,B,C三个子视图，那么在布局时则A,B,C从上到下依次排列。当这个属性设置为YES时，则布局时C,B,A依次从上到下排列。
+     布局里面的所有子视图按添加的顺序逆序进行布局。默认是false，表示按子视图添加的顺序排列。比如一个垂直线性布局依次添加A,B,C三个子视图，那么在布局时则A,B,C从上到下依次排列。当这个属性设置为YES时，则布局时C,B,A依次从上到下排列。
      */
     public var tg_reverseLayout:Bool
         {
@@ -886,14 +930,15 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     
     
     /**
-     *布局里面的所有子视图的整体停靠方向以及填充，所谓停靠是指布局视图里面的所有子视图整体在布局视图中的位置，系统默认的停靠是在布局视图的左上角。
-     *只有框架布局、线性布局、表格布局、流式布局、浮动布局支持tg_gravity属性，相对布局和路径布局不支持。
-     *TGGravity.vert.top,TGGravity.vert.center,TGGravity.vert.bottom 表示整体垂直居上，居中，居下 (支持：框架布局,线性布局,表格布局,流式布局,垂直浮动布局)
-     *TGGravity.horz.left,TGGravity.horz.center,TGGravity.horz.right 表示整体水平居左，居中，居右 (支持：框架布局,线性布局,表格布局,流式布局,水平浮动布局)
-     *TGGravity.vert.between 表示每行之间的行间距都被拉伸，以便使里面的子视图垂直方向填充满整个布局视图。 (支持：垂直线性布局,垂直表格布局，流式布局)
-     *TGGravity.horz.between 表示每列之间的列间距都被拉伸，以便使里面的子视图水平方向填充满整个布局视图。 (支持：水平线性布局,水平表格布局，流式布局)
-     *TGGravity.vert.fill 表示布局会拉伸子视图的高度，以便使里面的子视图垂直方向填充满整个布局视图的高度或者子视图平分布局视图的高度。(支持：框架布局，水平线性布局，水平表格布局，流式布局)
-     *TGGravity.horz.fill 表示布局会拉伸子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度或者子视图平分布局视图的宽度。 (支持：框架布局，垂直线性布局，垂直表格布局，流式布局)
+     布局里面的所有子视图的整体停靠方向以及填充，所谓停靠是指布局视图里面的所有子视图整体在布局视图中的位置，系统默认的停靠是在布局视图的左上角。
+     
+     只有框架布局、线性布局、表格布局、流式布局、浮动布局支持tg_gravity属性，相对布局和路径布局不支持。
+     * TGGravity.vert.top,TGGravity.vert.center,TGGravity.vert.bottom 表示整体垂直居上，居中，居下 (支持：框架布局,线性布局,表格布局,流式布局,垂直浮动布局)
+     * TGGravity.horz.left,TGGravity.horz.center,TGGravity.horz.right 表示整体水平居左，居中，居右 (支持：框架布局,线性布局,表格布局,流式布局,水平浮动布局)
+     * TGGravity.vert.between 表示每行之间的行间距都被拉伸，以便使里面的子视图垂直方向填充满整个布局视图。 (支持：垂直线性布局,垂直表格布局，流式布局)
+     * TGGravity.horz.between 表示每列之间的列间距都被拉伸，以便使里面的子视图水平方向填充满整个布局视图。 (支持：水平线性布局,水平表格布局，流式布局)
+     * TGGravity.vert.fill 表示布局会拉伸子视图的高度，以便使里面的子视图垂直方向填充满整个布局视图的高度或者子视图平分布局视图的高度。(支持：框架布局，水平线性布局，水平表格布局，流式布局)
+     * TGGravity.horz.fill 表示布局会拉伸子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度或者子视图平分布局视图的宽度。 (支持：框架布局，垂直线性布局，垂直表格布局，流式布局)
      */
     public var tg_gravity:TGGravity
         {
@@ -915,17 +960,17 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     
     
     /**
-     *把一个布局视图放入到UIScrollView(UITableView和UICollectionView除外)内时是否自动调整UIScrollView的contentSize值。默认是.auto表示布局视图会自动接管UIScrollView的contentSize的值。 你可以将这个属性设置.no而不调整和控制contentSize的值，设置为.yes则一定会调整contentSize.
+     把一个布局视图放入到UIScrollView(UITableView和UICollectionView除外)内时是否自动调整UIScrollView的contentSize值。默认是.auto表示布局视图会自动接管UIScrollView的contentSize的值。 你可以将这个属性设置.no而不调整和控制contentSize的值，设置为.yes则一定会调整contentSize.
      */
     public var tg_adjustScrollViewContentSizeMode:TGAdjustScrollViewContentSizeMode = .auto
     
     /**
-     *在布局视图进行布局时是否调用基类的layoutSubviews方法，默认设置为false。
+     在布局视图进行布局时是否调用基类的layoutSubviews方法，默认设置为false。
      */
     public var tg_priorAutoresizingMask:Bool = false
     
     /**
-    *这个属性在新版本将失效并且无任何意义了。如果想让子视图隐藏时是否继续占据位置则请参考使用子视图的tg_visibility属性来设置。
+     这个属性在新版本将失效并且无任何意义了。如果想让子视图隐藏时是否继续占据位置则请参考使用子视图的tg_visibility属性来设置。
      */
     @available(*, deprecated:1.0.6, message: "this property was invalid, please use subview's tg_visibility to instead")
     public var tg_layoutHiddenSubviews:Bool
@@ -940,11 +985,14 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         }
     }
     
-    //返回当前布局视图是否正在执行布局。
+    /// 返回当前布局视图是否正在执行布局。
     public private(set) var tg_isLayouting = false
     
     
-    //执行布局动画。在布局视图的某个子视图设置完布局属性后，调用布局的这个方法可以让布局里面的子视图在布局时实现动画效果。
+    
+    /// 执行布局动画。在布局视图的某个子视图设置完布局属性后，调用布局的这个方法可以让布局里面的子视图在布局时实现动画效果。
+    ///
+    /// - Parameter duration: 动画时长
     public func tg_layoutAnimationWithDuration(_ duration:TimeInterval)
     {
         self.tg_beginLayoutDo{
@@ -960,14 +1008,16 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         
     }
     
-    /**
-     *评估布局视图的尺寸,这个方法并不会进行真正的布局，只是对布局的尺寸进行评估，主要用于在布局前想预先知道布局尺寸的场景。通过对布局进行尺寸的评估，可以在不进行布局的情况下动态的计算出布局的位置和大小，但需要注意的是这个评估值有可能不是真实显示的实际位置和尺寸。
-     *@size：指定期望的宽度或者高度，如果size中对应的值设置为0则根据布局自身的高度和宽度来进行评估，而设置为非0则固定指定的高度或者宽度来进行评估。比如下面的例子：
-     * tg_sizeThatFits() 表示按布局的位置和尺寸根据布局的子视图来进行动态评估。
-     * tg_sizeThatFits(CGSize(width:320,height:0)) 表示布局的宽度固定为320,而高度则根据布局的子视图来进行动态评估。这个情况非常适用于UITableViewCell的动态高度的计算评估。
-     * tg_sizeThatFits(CGSize(width:0,height:100)) 表示布局的高度固定为100,而宽度则根据布局的子视图来进行动态评估。
-     *@type:参数表示评估某个sizeClass下的尺寸值，如果没有找到指定的sizeClass则会根据继承规则得到最合适的sizeClass
-     */
+    
+    /// 评估布局视图的尺寸,这个方法并不会进行真正的布局，只是对布局的尺寸进行评估，主要用于在布局前想预先知道布局尺寸的场景。通过对布局进行尺寸的评估，可以在不进行布局的情况下动态的计算出布局的位置和大小，但需要注意的是这个评估值有可能不是真实显示的实际位置和尺寸。
+    /// - tg_sizeThatFits() 表示按布局的位置和尺寸根据布局的子视图来进行动态评估。
+    /// - tg_sizeThatFits(CGSize(width:320,height:0)) 表示布局的宽度固定为320,而高度则根据布局的子视图来进行动态评估。这个情况非常适用于UITableViewCell的动态高度的计算评估。
+    /// - tg_sizeThatFits(CGSize(width:0,height:100)) 表示布局的高度固定为100,而宽度则根据布局的子视图来进行动态评估。
+    ///
+    /// - Parameters:
+    ///   - size: 希望的尺寸
+    ///   - type: size class的类型，他表示评估某个sizeClass下的尺寸值，如果没有找到指定的sizeClass则会根据继承规则得到最合适的sizeClass
+    /// - Returns: 评估后的尺寸
     public func tg_sizeThatFits(_ size:CGSize = .zero, inSizeClass type:TGSizeClassType = .default) -> CGSize
     {
         return self.tgSizeThatFits(size:size,sbs:nil, inSizeClass: type)
@@ -975,7 +1025,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     
     
     /**
-     * 是否缓存经过tg_sizeThatFits方法评估后的所有子视图的位置和尺寸一次!，默认设置为false不缓存。当我们用tg_sizeThatFits方法评估布局视图的尺寸后，所有子视图都会生成评估的位置和尺寸，因为此时并没有执行布局所以子视图并没有真实的更新frame值。而当布局视图要进行真实布局时又会重新计算所有子视图的位置和尺寸，因此为了优化性能当我们对布局进行评估后在下次真实布局时我们可以不再重新计算子视图的位置和尺寸而是用前面评估的值来设置位置和尺寸。这个属性设置为true时则每次评估后到下一次布局时不会再重新计算子视图的布局了，而是用评估值来布局子视图的位置和尺寸。而当这个属性设置为false时则每次布局都会重新计算子视图的位置和布局。
+      是否缓存经过tg_sizeThatFits方法评估后的所有子视图的位置和尺寸一次!，默认设置为false不缓存。当我们用tg_sizeThatFits方法评估布局视图的尺寸后，所有子视图都会生成评估的位置和尺寸，因为此时并没有执行布局所以子视图并没有真实的更新frame值。而当布局视图要进行真实布局时又会重新计算所有子视图的位置和尺寸，因此为了优化性能当我们对布局进行评估后在下次真实布局时我们可以不再重新计算子视图的位置和尺寸而是用前面评估的值来设置位置和尺寸。这个属性设置为true时则每次评估后到下一次布局时不会再重新计算子视图的布局了，而是用评估值来布局子视图的位置和尺寸。而当这个属性设置为false时则每次布局都会重新计算子视图的位置和布局。
      这个属性一般用在那些动态高度UITableviewCell中进行配合使用，我们一般将布局视图作为UITableviewCell的contentView的子视图:
      
      let rootLayout= TGXXXLayout()
@@ -1009,13 +1059,11 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     
     
     /**
-     *评估计算一个未加入到布局视图中的子视图subview在加入后的frame值。在实践中我们希望得到某个未加入的子视图在添加到布局视图后的应该具有的frame值，这时候就可以用这个方法来获取。比如我们希望把一个子视图从一个布局视图里面移到另外一个布局视图的末尾时希望能够提供动画效果,这时候就可以通过这个方法来得到加入后的子视图的位置和尺寸。
-     *这个方法只有针对那些通过添加顺序进行约束的布局视图才有意义，相对布局和框架布局则没有意义。
-     *@subview: 一个未加入布局视图的子视图，如果子视图已经加入则直接返回子视图的frame值。
-     *@size:指定布局视图期望的宽度或者高度，一般请将这个值设置为.zero。 具体请参考tg_sizeThatFits方法中的size的说明。
-     *@return: 子视图在布局视图最后一个位置(假如加入后)的frame值。
+     评估计算一个未加入到布局视图中的子视图subview在加入后的frame值。在实践中我们希望得到某个未加入的子视图在添加到布局视图后的应该具有的frame值，这时候就可以用这个方法来获取。比如我们希望把一个子视图从一个布局视图里面移到另外一个布局视图的末尾时希望能够提供动画效果,这时候就可以通过这个方法来得到加入后的子视图的位置和尺寸。
      
-     *使用示例：假设存在两个布局视图L1,L2他们的父视图是S，现在要实现将L1中的任意一个子视图A移动到L2的末尾中去，而且要带动画效果，那么代码如下：
+     这个方法只有针对那些通过添加顺序进行约束的布局视图才有意义，相对布局和框架布局则没有意义。
+     
+     使用示例：假设存在两个布局视图L1,L2他们的父视图是S，现在要实现将L1中的任意一个子视图A移动到L2的末尾中去，而且要带动画效果，那么代码如下：
      
      //得到A在S中的frame，这里需要进行坐标转换为S在中的frame
      let rectOld = L1.convert(A.frame, to: S)
@@ -1040,6 +1088,10 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
      L2.addSubview(A)
      }
      
+     - Parameters:
+     - subview: 一个未加入布局视图的子视图，如果子视图已经加入则直接返回子视图的frame值。
+     - size:指定布局视图期望的宽度或者高度，一般请将这个值设置为.zero。 具体请参考tg_sizeThatFits方法中的size的说明。
+     - Returns: 子视图在布局视图最后一个位置(假如加入后)的frame值。
      */
     public func tg_estimatedFrame(of subview:UIView, inLayoutSize size:CGSize = .zero) -> CGRect
     {
@@ -1060,7 +1112,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     
     
     /**
-     *设置布局视图在布局开始之前和布局完成之后的处理块。系统会在每次布局完成前后分别执行对应的处理块后将处理块清空为nil。您也可以在tg_endLayoutDo块内取到所有子视图真实布局后的frame值。系统会在调用layoutSubviews方法前执行tg_beginLayoutDo，而在layoutSubviews方法执行后执行tg_endLayoutDo。
+     设置布局视图在布局开始之前和布局完成之后的处理块。系统会在每次布局完成前后分别执行对应的处理块后将处理块清空为nil。您也可以在tg_endLayoutDo块内取到所有子视图真实布局后的frame值。系统会在调用layoutSubviews方法前执行tg_beginLayoutDo，而在layoutSubviews方法执行后执行tg_endLayoutDo。
      */
     public func tg_beginLayoutDo(_ action:(()->Void)?)
     {
@@ -1073,12 +1125,12 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     }
     
     /**
-     *设置布局视图在第一次布局完成之后或者有横竖屏切换时进行处理的动作块。这个block不像tg_beginLayoutDo以及tg_endLayoutDo那样只会执行一次,而是会一直存在
-     *因此需要注意代码块里面的循环引用的问题。这个block调用的时机是第一次布局完成或者每次横竖屏切换时布局完成被调用。
-     *这个方法会在tg_endLayoutDo执行后调用。
-     *layout参数就是布局视图本身
-     *isFirst表明当前是否是第一次布局时调用。
-     *isPortrait表明当前是横屏还是竖屏。
+      设置布局视图在第一次布局完成之后或者有横竖屏切换时进行处理的动作块。这个block不像tg_beginLayoutDo以及tg_endLayoutDo那样只会执行一次,而是会一直存在
+      因此需要注意代码块里面的循环引用的问题。这个block调用的时机是第一次布局完成或者每次横竖屏切换时布局完成被调用。
+      这个方法会在tg_endLayoutDo执行后调用。
+      - layout: 参数就是布局视图本身
+      - isFirst: 表明当前是否是第一次布局时调用。
+      - isPortrait: 表明当前是横屏还是竖屏。
      */
     public func tg_rotationToDeviceOrientationDo(_ action:((_ layout:TGBaseLayout, _ isFirst:Bool, _ isPortrait:Bool)->Void)?)
     {
@@ -1086,7 +1138,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     }
     
     
-    /**设置布局视图的顶部边界线对象,默认是nil。*/
+    /// 设置布局视图的顶部边界线对象,默认是nil。
     public var tg_topBorderline:TGBorderline!
     {
         get {
@@ -1103,7 +1155,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         }
     }
     
-    /**设置布局视图的头部边界线对象，默认是nil。*/
+    /// 设置布局视图的头部边界线对象，默认是nil。
     public var tg_leadingBorderline:TGBorderline!
     {
         get {
@@ -1120,7 +1172,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         }
     }
 
-    /**设置布局视图的底部边界线对象，默认是nil。*/
+    /// 设置布局视图的底部边界线对象，默认是nil。
     public var tg_bottomBorderline:TGBorderline!
     {
         get {
@@ -1137,7 +1189,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         }
     }
 
-    /**设置布局视图的尾部边界线对象，默认是nil。*/
+    /// 设置布局视图的尾部边界线对象，默认是nil。
     public var tg_trailingBorderline:TGBorderline!
     {
         get {
@@ -1156,7 +1208,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
 
     
     
-    /**设置布局视图的左边边界线对象，默认是nil。*/
+    /// 设置布局视图的左边边界线对象，默认是nil。
     public var tg_leftBorderline:TGBorderline!
     {
         get {
@@ -1174,7 +1226,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     }
 
 
-    /**设置布局视图的右边边界线对象，默认是nil。*/
+    /// 设置布局视图的右边边界线对象，默认是nil。
     public var tg_rightBorderline:TGBorderline!
     {
         get {
@@ -1192,7 +1244,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     }
 
     
-    /**设置布局视图的四周边界线对象，默认是nil。*/
+    /// 设置布局视图的四周边界线对象，默认是nil。
     public var tg_boundBorderline:TGBorderline!
         {
         get
@@ -1209,23 +1261,25 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     }
     
     /**
-     *智能边界线，智能边界线不是设置布局自身的边界线而是对添加到布局视图里面的子布局视图根据子视图之间的关系智能的生成边界线，对于布局视图里面的非布局子视图则不会生成边界线。目前的版本只支持线性布局，表格布局，流式布局和浮动布局这四种布局。
-     *举例来说如果为某个垂直线性布局设置了智能边界线，那么当这垂直线性布局里面添加了A和B两个子布局视图时，系统会智能的在A和B之间绘制一条边界线。
+     智能边界线，智能边界线不是设置布局自身的边界线而是对添加到布局视图里面的子布局视图根据子视图之间的关系智能的生成边界线，对于布局视图里面的非布局子视图则不会生成边界线。目前的版本只支持线性布局，表格布局，流式布局和浮动布局这四种布局。
+     
+     举例来说如果为某个垂直线性布局设置了智能边界线，那么当这垂直线性布局里面添加了A和B两个子布局视图时，系统会智能的在A和B之间绘制一条边界线。
      */
     public var tg_intelligentBorderline:TGBorderline! = nil
     
     /**
-     *不使用父布局视图提供的智能边界线功能。当布局视图的父布局视图设置了tg_intelligentBorderline时但是布局视图又想自己定义边界线时则将这个属性设置为true
+     不使用父布局视图提供的智能边界线功能。当布局视图的父布局视图设置了tg_intelligentBorderline时但是布局视图又想自己定义边界线时则将这个属性设置为true
      */
     public var tg_notUseIntelligentBorderline:Bool = false
     
     
-    /**
-     *设置布局的按下抬起、按下、取消事件的处理动作,后两个事件的处理必须依赖于第一个事件的处理。请不要在这些处理动作中修改背景色，不透明度，以及背景图片。如果您只想要高亮效果但是不想处理事件则将action设置为nil即可了。
-     * @target: 事件的处理对象，如果设置为nil则表示取消事件。
-     * @action: 事件的处理动作，格式为：func handleAction(sender:TGBaseLayout)
-     * @controlEvents:支持的事件类型，目前只支持：touchDown、touchUpInside、touchCancel这三个事件。
-     */
+    
+    /// 设置布局的按下抬起、按下、取消事件的处理动作,后两个事件的处理必须依赖于第一个事件的处理。请不要在这些处理动作中修改背景色，不透明度，以及背景图片。如果您只想要高亮效果但是不想处理事件则将action设置为nil即可了。
+    ///
+    /// - Parameters:
+    ///   - target: 事件的处理对象，如果设置为nil则表示取消事件。
+    ///   - action: 事件的处理动作，格式为：func handleAction(sender:TGBaseLayout)
+    ///   - controlEvents: 支持的事件类型，目前只支持：touchDown、touchUpInside、touchCancel这三个事件。
     public func tg_setTarget(_ target: NSObjectProtocol?, action: Selector?, for controlEvents: UIControlEvents)
     {
         if _tgTouchEventDelegate == nil
@@ -1237,17 +1291,17 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     }
     
     /**
-     *设置布局按下时背景的高亮的颜色。只有设置了tg_setTarget方法后此属性才生效。
+     设置布局按下时背景的高亮的颜色。只有设置了tg_setTarget方法后此属性才生效。
      */
     public var tg_highlightedBackgroundColor:UIColor! = nil
     
     /**
-     *设置布局按下时的高亮不透明度。值的范围是[0,1]，默认是0表示完全不透明，为1表示完全透明。只有设置了tg_setTarget方法此属性才生效。
+     设置布局按下时的高亮不透明度。值的范围是[0,1]，默认是0表示完全不透明，为1表示完全透明。只有设置了tg_setTarget方法此属性才生效。
      */
     public var tg_highlightedOpacity:CGFloat = 0
     
     /**
-     *设置布局的背景图片。这个属性的设置就是设置了布局的layer.contents的值，因此如果要实现背景图的局部拉伸请用layer.contentsXXX这些属性进行调整
+     设置布局的背景图片。这个属性的设置就是设置了布局的layer.contents的值，因此如果要实现背景图的局部拉伸请用layer.contentsXXX这些属性进行调整
      */
     public var tg_backgroundImage:UIImage! = nil
         {
@@ -1265,7 +1319,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     }
     
     /**
-     *设置布局按下时的高亮背景图片。只有设置了tg_setTarget方法此属性才生效。
+     设置布局按下时的高亮背景图片。只有设置了tg_setTarget方法此属性才生效。
      */
     public var tg_highlightedBackgroundImage:UIImage! = nil
     

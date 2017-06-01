@@ -28,6 +28,7 @@
 4. 修复了边界线`TGBorderline`的`thick`属性如果设置小于1而出现移动时不停闪烁的[#BUG38](https://github.com/youngsoft/MyLinearLayout/issues/38)。同时修复了边界线在不同分辨率设备下的显示的粗细不同问题。原因是如果thick过小则因为设备逻辑点映射到物理像素的问题导致刷新闪烁的问题。
 6. 修复了路径布局`TGPathLayout`的中心点子视图`tg_originView`的`layer.anchorPoint`的设置不为默认值时的位置frame显示不正确的问题。
 7. 修复了当使用1.0.6版本中的`tg_cacheEstimatedRect`属性来缓存UITableviewCell高度时的UITableviewCell的高度可能为0的BUG。
+8. 修复了对carthage的支持。
 
 
 

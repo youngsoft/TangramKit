@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import TangramKit
+
 
 class TLTest1ViewController: UIViewController {
 
@@ -107,6 +107,7 @@ class TLTest1ViewController: UIViewController {
         row4.tg_padding = UIEdgeInsetsMake(3, 3, 3, 3);
         row4.tg_topBorderline = TGBorderline(color: UIColor.black, thick: 2)
         row4.backgroundColor = UIColor(white: 0.5, alpha: 1)
+        
         
         colView = self.createLabel("Cell40", backgroundColor: CFTool.color(1))
         tableLayout.tg_addCol(colView, inRow:4)

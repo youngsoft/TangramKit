@@ -9,10 +9,20 @@
 /* Begin PBXBuildFile section */
 		18058AAF1E63B4EA00EAECDC /* FLLTest6ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18058AAE1E63B4EA00EAECDC /* FLLTest6ViewController.swift */; };
 		184243081E327F0800E2CCE1 /* FLLTest5ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184243071E327F0800E2CCE1 /* FLLTest5ViewController.swift */; };
-		18939F561ED6E8F5008B8064 /* TangramKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 681BD8DB1E0B91A500403A1F /* TangramKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		1890A21A1EDF96C800D61C1A /* TangramKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9011E0B92E100403A1F /* TangramKit.swift */; };
+		1890A21B1EDF96C800D61C1A /* TGBaseLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9021E0B92E100403A1F /* TGBaseLayout.swift */; };
+		1890A21C1EDF96C800D61C1A /* TGDimeAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9031E0B92E100403A1F /* TGDimeAdapter.swift */; };
+		1890A21D1EDF96C800D61C1A /* TGFloatLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9041E0B92E100403A1F /* TGFloatLayout.swift */; };
+		1890A21E1EDF96C800D61C1A /* TGFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9051E0B92E100403A1F /* TGFlowLayout.swift */; };
+		1890A21F1EDF96C800D61C1A /* TGFrameLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9061E0B92E100403A1F /* TGFrameLayout.swift */; };
+		1890A2201EDF96C800D61C1A /* TGLayoutPos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9071E0B92E100403A1F /* TGLayoutPos.swift */; };
+		1890A2211EDF96C800D61C1A /* TGLayoutSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9081E0B92E100403A1F /* TGLayoutSize.swift */; };
+		1890A2221EDF96C800D61C1A /* TGLayoutSizeClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9091E0B92E100403A1F /* TGLayoutSizeClass.swift */; };
+		1890A2231EDF96C800D61C1A /* TGLinearLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD90A1E0B92E100403A1F /* TGLinearLayout.swift */; };
+		1890A2241EDF96C800D61C1A /* TGPathLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD90B1E0B92E100403A1F /* TGPathLayout.swift */; };
+		1890A2251EDF96C800D61C1A /* TGRelativeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD90C1E0B92E100403A1F /* TGRelativeLayout.swift */; };
+		1890A2261EDF96C800D61C1A /* TGTableLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD90D1E0B92E100403A1F /* TGTableLayout.swift */; };
 		18BCBD461E1336D900AC7766 /* AllTest8ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BCBD451E1336D900AC7766 /* AllTest8ViewController.swift */; };
-		18DC3C821ED87EFF00489EFD /* TangramKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 681BD8DB1E0B91A500403A1F /* TangramKit.framework */; };
-		18DC3C831ED87EFF00489EFD /* TangramKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 681BD8DB1E0B91A500403A1F /* TangramKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		681BD8DF1E0B91A500403A1F /* TangramKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 681BD8DD1E0B91A500403A1F /* TangramKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		681BD90F1E0B92E100403A1F /* TangramKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9011E0B92E100403A1F /* TangramKit.swift */; };
 		681BD9111E0B92E100403A1F /* TGBaseLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9021E0B92E100403A1F /* TGBaseLayout.swift */; };
@@ -84,30 +94,6 @@
 		68F036801E0B7D2700CEBAEF /* TLTest3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F0363A1E0B7D2700CEBAEF /* TLTest3ViewController.swift */; };
 		68F036811E0B7D2700CEBAEF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F0363B1E0B7D2700CEBAEF /* ViewController.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		18DC3C801ED87C4B00489EFD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 18270C1C1C954B3C00CBCC92 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 681BD8DA1E0B91A500403A1F;
-			remoteInfo = TangramKit;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		18DC3C841ED87EFF00489EFD /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				18DC3C831ED87EFF00489EFD /* TangramKit.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		18058AAE1E63B4EA00EAECDC /* FLLTest6ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLLTest6ViewController.swift; sourceTree = "<group>"; };
@@ -195,8 +181,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18DC3C821ED87EFF00489EFD /* TangramKit.framework in Frameworks */,
-				18939F561ED6E8F5008B8064 /* TangramKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -420,12 +404,10 @@
 				18270C201C954B3C00CBCC92 /* Sources */,
 				18270C211C954B3C00CBCC92 /* Frameworks */,
 				18270C221C954B3C00CBCC92 /* Resources */,
-				18DC3C841ED87EFF00489EFD /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				18DC3C811ED87C4B00489EFD /* PBXTargetDependency */,
 			);
 			name = TangramKitDemo;
 			productName = TangramKit;
@@ -526,6 +508,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1890A21A1EDF96C800D61C1A /* TangramKit.swift in Sources */,
+				1890A21B1EDF96C800D61C1A /* TGBaseLayout.swift in Sources */,
+				1890A21C1EDF96C800D61C1A /* TGDimeAdapter.swift in Sources */,
+				1890A21D1EDF96C800D61C1A /* TGFloatLayout.swift in Sources */,
+				1890A21E1EDF96C800D61C1A /* TGFlowLayout.swift in Sources */,
+				1890A21F1EDF96C800D61C1A /* TGFrameLayout.swift in Sources */,
+				1890A2201EDF96C800D61C1A /* TGLayoutPos.swift in Sources */,
+				1890A2211EDF96C800D61C1A /* TGLayoutSize.swift in Sources */,
+				1890A2221EDF96C800D61C1A /* TGLayoutSizeClass.swift in Sources */,
+				1890A2231EDF96C800D61C1A /* TGLinearLayout.swift in Sources */,
+				1890A2241EDF96C800D61C1A /* TGPathLayout.swift in Sources */,
+				1890A2251EDF96C800D61C1A /* TGRelativeLayout.swift in Sources */,
+				1890A2261EDF96C800D61C1A /* TGTableLayout.swift in Sources */,
 				68F0366E1E0B7D2700CEBAEF /* PLTest1ViewController.swift in Sources */,
 				68F0364A1E0B7D2700CEBAEF /* FLLTest4ViewController.swift in Sources */,
 				68F036561E0B7D2700CEBAEF /* AllTest1TableViewCell.swift in Sources */,
@@ -598,14 +593,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		18DC3C811ED87C4B00489EFD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 681BD8DA1E0B91A500403A1F /* TangramKit */;
-			targetProxy = 18DC3C801ED87C4B00489EFD /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		68F035E91E0B7D2700CEBAEF /* LaunchScreen.storyboard */ = {
@@ -737,7 +724,6 @@
 		18270C371C954B3C00CBCC92 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = Q5MFLFRY64;
@@ -758,7 +744,6 @@
 		18270C381C954B3C00CBCC92 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = Q5MFLFRY64;

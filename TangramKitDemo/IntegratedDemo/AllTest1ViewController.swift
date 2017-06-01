@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import TangramKit
+
 
 /**
  *1.UITableView - Dynamic height

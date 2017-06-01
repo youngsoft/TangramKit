@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import TangramKit
+
 
 /**
  *2.UITableView - Static height
