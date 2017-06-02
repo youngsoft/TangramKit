@@ -2871,12 +2871,6 @@ extension TGBaseLayout
             {
                 sbvtgFrame.height = sbvsc.height.measure(fitSize.height)
             }
-            
-            if sbvsc.height.realSize == nil
-            {
-                sbvtgFrame.height = fitSize.height
-            }
-            
         }
     }
     

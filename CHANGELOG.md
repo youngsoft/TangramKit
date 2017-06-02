@@ -3,6 +3,11 @@
 
 --- 
 
+## [V1.0.8](https://github.com/youngsoft/TangramKit/releases/tag/1.0.8)(2017/6/2)
+
+#### Fixed
+1. 修复了1.0.7中对UILabel的tg_width设置为`wrap`时又同时在相对布局中同时设置了`tg_top`和`tg_bottom`时高度不正确的问题。这个问题在1.3.7中的Fixed#3条目中没有修复正确。
+
 ## [V1.0.7](https://github.com/youngsoft/TangramKit/releases/tag/1.0.7)(2017/6/1)
 
 

@@ -117,8 +117,8 @@ extension AllTest2TableViewCell
         //_nameLabel的宽度根据内容自适应，但是最大的宽度是父视图的宽度的1倍，再减去5+14+5+14。这里的5是视图之间的间距，14是后面两个图片的宽度。
         //这个设置的意思是_nameLabel的宽可以动态增长，但是不能超过父视图的宽度，并且要保证后面的2个图片视图显示出来。
         //您可以通过max方法设置尺寸的最大上边界。具体参见对max的方法的详细介绍。
-        nameLabel.tg_width.equal(.wrap)
-        nameLabel.tg_width.max(userNameLayout.tg_width, increment:-(5 + 14 + 5 + 14))
+        nameLabel.tg_width.equal(.wrap).max(userNameLayout.tg_width, increment:-(5 + 14 + 5 + 14))
+        nameLabel.tg_height.equal(25)
         userNameLayout.addSubview(nameLabel)
         self.nameLabel = nameLabel
         
@@ -141,11 +141,12 @@ extension AllTest2TableViewCell
         //右边的价格。
         let priceLabel = UILabel()
         priceLabel.textColor = CFTool.color(4)
-        priceLabel.textAlignment = .right
-        priceLabel.adjustsFontSizeToFitWidth = true
         priceLabel.font = CFTool.font(14)
+        priceLabel.adjustsFontSizeToFitWidth = true
+        priceLabel.textAlignment = .right
         priceLabel.tg_width.equal(.wrap).max(TGDimeAdapter.width(100)).min(TGDimeAdapter.width(50))
         //宽度最宽为100,注意到这里使用了TGDimeAdapter.width表示会根据屏幕的宽度来对100进行缩放。这个100是按iPhone6为标准设置的。具体请参考TGDimeAdapter类。
+        priceLabel.tg_height.equal(25)
         priceLabel.tg_leading.equal(10)
         rootLayout.addSubview(priceLabel)
         self.priceLabel = priceLabel
@@ -175,21 +176,24 @@ extension AllTest2TableViewCell
         self.headImageView = headImageView
         
         let priceLabel = UILabel()
-        priceLabel.textColor = UIColor.orange
+        priceLabel.textColor = CFTool.color(4)
+        priceLabel.font = CFTool.font(14)
         priceLabel.textAlignment = .right
         priceLabel.adjustsFontSizeToFitWidth = true
-        priceLabel.font = UIFont.systemFont(ofSize: 14)
         priceLabel.tg_trailing.equal(rootLayout.tg_trailing)
         priceLabel.tg_centerY.equal(rootLayout.tg_centerY)
         //priceLabel的宽度根据内容自适应，但是最大的宽度是100，最小的宽度是50。注意到这里使用了类TGDimeAdapter表示会根据屏幕的宽度来对100进行缩放。这个100是在DEMO中是按iPhone6为标准设置的。具体请参考TGDimeAdapter类的介绍。
         priceLabel.tg_width.equal(.wrap).max(TGDimeAdapter.width(100)).min(TGDimeAdapter.width(50))
+        priceLabel.tg_height.equal(25)
         rootLayout.addSubview(priceLabel)
         self.priceLabel = priceLabel
         
         let nameLabel = UILabel()
-        nameLabel.font = UIFont.systemFont(ofSize: 16)
+        nameLabel.font = CFTool.font(17)
+        nameLabel.textColor = CFTool.color(3)
         //相对布局在后续的版本中会增加对边界的限制方法来实现更加灵活的尺寸限制，这里暂时先设置为140经过测试效果最好。
         nameLabel.tg_width.equal(.wrap)
+        nameLabel.tg_height.equal(25)
         nameLabel.tg_leading.equal(headImageView.tg_trailing)
         //设置nameLabel的右边距最大是priceLabel的左边距，再偏移两个小图标和间距的距离。这样当nameLabel的尺寸超过这个最大的右边距时就会自动的缩小视图的宽度。
         nameLabel.tg_trailing.max(priceLabel.tg_leading, offset:(5 + 14 + 5 + 14))
@@ -209,8 +213,8 @@ extension AllTest2TableViewCell
         rootLayout.addSubview(delImageView)
         
         let descLabel = UILabel()
-        descLabel.textColor = UIColor.darkGray
-        descLabel.font = UIFont.systemFont(ofSize: 13)
+        descLabel.textColor = CFTool.color(4)
+        descLabel.font = CFTool.font(15);
         descLabel.adjustsFontSizeToFitWidth = true
         descLabel.numberOfLines = 2
         descLabel.tg_height.equal(.wrap)
@@ -251,10 +255,10 @@ extension AllTest2TableViewCell
         self.headImageView = headImageView
         
         let priceLabel = UILabel()
-        priceLabel.textColor = UIColor.orange
+        priceLabel.textColor = CFTool.color(4)
+        priceLabel.font = CFTool.font(14)
         priceLabel.textAlignment = .right
         priceLabel.adjustsFontSizeToFitWidth = true
-        priceLabel.font = UIFont.systemFont(ofSize: 14)
         priceLabel.tg_reverseFloat = true
         priceLabel.tg_leading.equal(10)
         
@@ -272,12 +276,13 @@ extension AllTest2TableViewCell
         rootLayout.addSubview(userInfoLayout)
         
         let nameLabel = UILabel()
-        nameLabel.font = UIFont.systemFont(ofSize: 16)
+        nameLabel.font = CFTool.font(17)
+        nameLabel.textColor = CFTool.color(3)
         //_nameLabel的宽度根据内容自适应，但是最大的宽度是父视图的宽度的1倍，再减去5+14+5+14。这里的5是视图之间的间距，14是后面两个图片的宽度。
         //这个设置的意思是_nameLabel的宽可以动态增长，但是不能超过父视图的宽度，并且要保证后面的2个图片视图显示出来。
         //您可以通过max方法设置尺寸的最大上边界。具体参见对max的方法的详细介绍。
-        nameLabel.tg_width.equal(.wrap)
-        nameLabel.tg_width.max(userInfoLayout.tg_width, increment:-(5 + 14 + 5 + 14))
+        nameLabel.tg_width.equal(.wrap).max(userInfoLayout.tg_width, increment:-(5 + 14 + 5 + 14))
+        nameLabel.tg_height.equal(25)
         userInfoLayout.addSubview(nameLabel)
         self.nameLabel = nameLabel
         
@@ -287,8 +292,8 @@ extension AllTest2TableViewCell
         userInfoLayout.addSubview(delImageView)
         
         let descLabel = UILabel()
-        descLabel.textColor = UIColor.darkGray
-        descLabel.font = UIFont.systemFont(ofSize: 13)
+        descLabel.textColor = CFTool.color(4)
+        descLabel.font = CFTool.font(15);
         descLabel.adjustsFontSizeToFitWidth = true
         descLabel.numberOfLines = 2
         descLabel.tg_height.equal(.wrap)
