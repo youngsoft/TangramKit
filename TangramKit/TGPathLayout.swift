@@ -49,7 +49,7 @@ open class TGCoordinateSetting {
     public var origin : CGPoint = .zero {
         
         didSet{
-            if !oldValue.equalTo(origin){
+            if !_tgCGPointEqual(oldValue, origin){
                 pathLayout?.setNeedsLayout()
             }
         }

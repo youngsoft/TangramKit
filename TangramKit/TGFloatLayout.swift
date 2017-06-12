@@ -40,7 +40,7 @@ extension UIView
      
      */
     public var tg_reverseFloat:Bool
-        {
+    {
         get
         {
             return self.tgCurrentSizeClass.tg_reverseFloat
@@ -77,7 +77,7 @@ extension UIView
      
      */
     public var tg_clearFloat:Bool
-        {
+    {
         get
         {
             return self.tgCurrentSizeClass.tg_clearFloat
@@ -96,7 +96,7 @@ extension UIView
             }
         }
     }
-
+    
 }
 
 /**
@@ -138,7 +138,7 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
      *如果是.horz则表示里面的子视图可以进行上下的浮动，整体从左到右进行排列的布局方式，这个方式是默认方式。
      */
     public var tg_orientation:TGOrientation
-        {
+    {
         get
         {
             return (self.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass).tg_orientation
@@ -196,9 +196,9 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
         self.setNeedsLayout()
     }
     
-
+    
     //MARK: override method
-
+    
     override internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, sbs:[UIView]!, type :TGSizeClassType) ->(selfSize:CGSize, hasSubLayout:Bool)
     {
         var (selfSize, hasSubLayout) = super.tgCalcLayoutRect(size, isEstimate:isEstimate, sbs:sbs, type:type)
@@ -224,9 +224,9 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
             
             if let sbvl:TGBaseLayout = sbv as? TGBaseLayout
             {
-                 if sbvsc.isSomeSizeWrap
+                if sbvsc.isSomeSizeWrap
                 {
-                   hasSubLayout = true
+                    hasSubLayout = true
                 }
                 
                 if isEstimate && (sbvsc.isSomeSizeWrap)
@@ -495,7 +495,7 @@ extension TGFloatLayout
             
             let minSpace = lsc.minSpace
             let maxSpace = lsc.maxSpace
-
+            
             
             let rowCount =  floor((selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding  + minSpace) / (subviewSize + minSpace));
             if (rowCount > 1)
@@ -554,7 +554,7 @@ extension TGFloatLayout
             
             if isHeightWeight && !lsc.height.isWrap
             {
-
+                
                 rect.size.height = sbvsc.height.measure((selfSize.height - maxHeight - lsc.tg_bottomPadding) * (sbvsc.height.isFill ? 1.0 : sbvsc.height.weightVal.rawValue/100) - topSpace - bottomSpace)
             }
             
@@ -707,7 +707,7 @@ extension TGFloatLayout
                 
                 
                 //这里有可能子视图本身的宽度会超过布局视图本身，但是我们的候选区域则不存储超过的宽度部分。
-                let cRect = CGRect(x: max(rect.origin.x - leadingSpace - horzSpace,lsc.tg_leadingPadding), y: rect.origin.y - topSpace, width: min((rect.size.width + leadingSpace + trailingSpace),(selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding)), height: rect.size.height + topSpace + bottomSpace + vertSpace);
+                var cRect = CGRect(x: max(rect.origin.x - leadingSpace - horzSpace,lsc.tg_leadingPadding), y: rect.origin.y - topSpace, width: min((rect.size.width + leadingSpace + trailingSpace),(selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding)), height: rect.size.height + topSpace + bottomSpace + vertSpace);
                 
                 
                 //把新的候选区域添加到数组中去。并删除高度小于新候选区域的其他区域
@@ -715,9 +715,31 @@ extension TGFloatLayout
                 
                 
                 //删除左边高度小于新添加区域的顶部的候选区域
-                leadingCandidateRects = leadingCandidateRects.filter({$0.maxY > cRect.minY})
-               
-            
+                leadingCandidateRects = leadingCandidateRects.filter({ (rc) -> Bool in
+                    
+                    
+                    let cMinX = cRect.minX
+                    
+                    if _tgCGFloatLessOrEqual(rc.maxY, cRect.minY)
+                    {
+                        return false
+                    }
+                    else if _tgCGFloatEqual(rc.maxY, cRect.maxY) && _tgCGFloatLessOrEqual(cMinX, rc.maxX)
+                    {
+                        cRect = cRect.union(rc)
+                        cRect.size.width += rc.maxX - cMinX
+                        
+                        return false
+                    }
+                    else
+                    {
+                        return true
+                    }
+                    
+                    
+                })
+                
+                
                 trailingCandidateRects.append(cRect)
                 trailingLastYOffset = rect.origin.y - topSpace;
                 
@@ -779,7 +801,7 @@ extension TGFloatLayout
                     {
                         widthWeight = t.rawValue / 100
                     }
-
+                    
                     
                     rect.size.width =  self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: (trailingCandidateXBoundary - nextPoint.x + sbvsc.width.increment) * widthWeight - leadingSpace - trailingSpace, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
@@ -831,14 +853,36 @@ extension TGFloatLayout
                 
                 
                 
-                let cRect = CGRect(x: rect.origin.x - leadingSpace, y: rect.origin.y - topSpace, width: min((rect.size.width + leadingSpace + trailingSpace + horzSpace),(selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding)), height: rect.size.height + topSpace + bottomSpace + vertSpace);
+                var cRect = CGRect(x: rect.origin.x - leadingSpace, y: rect.origin.y - topSpace, width: min((rect.size.width + leadingSpace + trailingSpace + horzSpace),(selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding)), height: rect.size.height + topSpace + bottomSpace + vertSpace);
                 
                 
                 //把新添加到候选中去。并删除高度小于的候选键。和高度
                 leadingCandidateRects = leadingCandidateRects.filter({$0.maxY > cRect.maxY})
                 //删除右边高度小于新添加区域的顶部的候选区域
-                trailingCandidateRects = trailingCandidateRects.filter({$0.maxY > cRect.minY})
-               
+                trailingCandidateRects = trailingCandidateRects.filter({ (rc) -> Bool in
+                    
+                    
+                    let cMaxX = cRect.maxX
+                    
+                    if _tgCGFloatLessOrEqual(rc.maxY, cRect.minY)
+                    {
+                        return false
+                    }
+                    else if _tgCGFloatEqual(rc.maxY, cRect.maxY) && _tgCGFloatLessOrEqual(rc.minX, cMaxX)
+                    {
+                        cRect = cRect.union(rc)
+                        cRect.size.width += cMaxX - rc.minX
+                        
+                        return false
+                    }
+                    else
+                    {
+                        return true
+                    }
+                    
+                    
+                })
+                
                 
                 leadingCandidateRects.append(cRect);
                 leadingLastYOffset = rect.origin.y - topSpace;
@@ -992,7 +1036,7 @@ extension TGFloatLayout
             
             let minSpace = lsc.minSpace
             let maxSpace = lsc.maxSpace
-
+            
             let rowCount =  floor((selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding  + minSpace) / (subviewSize + minSpace))
             if (rowCount > 1)
             {
@@ -1005,7 +1049,7 @@ extension TGFloatLayout
                     subviewSize =  (selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding -  vertSpace * (rowCount - 1)) / rowCount
                     
                 }
-
+                
             }
         }
         
@@ -1041,7 +1085,7 @@ extension TGFloatLayout
             var rect = sbvtgFrame.frame;
             let isWidthWeight = sbvsc.width.weightVal != nil || sbvsc.width.isFill
             let isHeightWeight = sbvsc.height.weightVal != nil || sbvsc.height.isFill
-
+            
             
             rect.size.width = sbvsc.width.numberSize(rect.size.width)
             
@@ -1065,7 +1109,7 @@ extension TGFloatLayout
             if isWidthWeight && !lsc.width.isWrap
             {
                 rect.size.width = sbvsc.width.measure((selfSize.width - maxWidth - lsc.tg_trailingPadding) * (sbvsc.width.isFill ? 1.0 : sbvsc.width.weightVal.rawValue/100) - leadingSpace - trailingSpace)
-
+                
             }
             
             rect.size.width = self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
@@ -1199,13 +1243,35 @@ extension TGFloatLayout
                 
                 
                 //这里有可能子视图本身的宽度会超过布局视图本身，但是我们的候选区域则不存储超过的宽度部分。
-                let cRect = CGRect(x: rect.origin.x - leadingSpace, y: max(rect.origin.y - topSpace - vertSpace, lsc.tg_topPadding), width: rect.size.width + leadingSpace + trailingSpace + horzSpace, height: min((rect.size.height + topSpace + bottomSpace),(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)));
+                var cRect = CGRect(x: rect.origin.x - leadingSpace, y: max(rect.origin.y - topSpace - vertSpace, lsc.tg_topPadding), width: rect.size.width + leadingSpace + trailingSpace + horzSpace, height: min((rect.size.height + topSpace + bottomSpace),(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)));
                 
                 //把新的候选区域添加到数组中去。并删除高度小于新候选区域的其他区域
                 bottomCandidateRects = bottomCandidateRects.filter({$0.maxX > cRect.maxX})
                 
                 //删除顶部宽度小于新添加区域的顶部的候选区域
-                topCandidateRects = topCandidateRects.filter({$0.maxX > cRect.minX})
+                topCandidateRects = topCandidateRects.filter({ (rc) -> Bool in
+                    
+                    
+                    let cMinY = cRect.minY
+                    
+                    if _tgCGFloatLessOrEqual(rc.maxX, cRect.minX)
+                    {
+                        return false
+                    }
+                    else if _tgCGFloatEqual(rc.maxX, cRect.maxX) && _tgCGFloatLessOrEqual(cMinY, rc.maxY)
+                    {
+                        cRect = cRect.union(rc)
+                        cRect.size.height += rc.maxY - cMinY
+                        
+                        return false
+                    }
+                    else
+                    {
+                        return true
+                    }
+                    
+                    
+                })
                 
                 bottomCandidateRects.append(cRect)
                 bottomLastXOffset = rect.origin.x - leadingSpace;
@@ -1309,14 +1375,36 @@ extension TGFloatLayout
                 }
                 
                 
-                let cRect = CGRect(x: rect.origin.x - leadingSpace, y: rect.origin.y - topSpace,width: rect.size.width + leadingSpace + trailingSpace + horzSpace,height: min((rect.size.height + topSpace + bottomSpace + vertSpace),(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)));
+                var cRect = CGRect(x: rect.origin.x - leadingSpace, y: rect.origin.y - topSpace,width: rect.size.width + leadingSpace + trailingSpace + horzSpace,height: min((rect.size.height + topSpace + bottomSpace + vertSpace),(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)));
                 
                 
                 //把新添加到候选中去。并删除宽度小于的最新候选区域的候选区域
                 topCandidateRects = topCandidateRects.filter({$0.maxX > cRect.maxX})
                 
                 //删除顶部宽度小于新添加区域的顶部的候选区域
-                bottomCandidateRects = bottomCandidateRects.filter({$0.maxX > cRect.minX})
+                bottomCandidateRects = bottomCandidateRects.filter({ (rc) -> Bool in
+                    
+                    
+                    let cMaxY = cRect.maxY
+                    
+                    if _tgCGFloatLessOrEqual(rc.maxX, cRect.minX)
+                    {
+                        return false
+                    }
+                    else if _tgCGFloatEqual(rc.maxX, cRect.maxX) && _tgCGFloatLessOrEqual(rc.minY, cMaxY)
+                    {
+                        cRect = cRect.union(rc)
+                        cRect.size.height += cMaxY - rc.minY
+                        
+                        return false
+                    }
+                    else
+                    {
+                        return true
+                    }
+                    
+                    
+                })
                 
                 topCandidateRects.append(cRect)
                 topLastXOffset = rect.origin.x - leadingSpace;
@@ -1337,7 +1425,7 @@ extension TGFloatLayout
             {
                 maxWidth = rect.origin.x + rect.size.width + trailingSpace + horzSpace
             }
-
+            
             
             
             

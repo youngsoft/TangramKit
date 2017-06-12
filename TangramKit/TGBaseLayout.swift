@@ -1408,6 +1408,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             {
                (newSelfSize,_) = self.tgCalcLayoutRect(self.tgCalcSizeInNoLayout(newSuperview: self.superview, currentSize: oldSelfSize),isEstimate: false, sbs:nil, type:sizeClassType)
             }
+            newSelfSize = _tgRoundSize(newSelfSize)
             _tgUseCacheRects = false
             
             for sbv:UIView in self.subviews
@@ -1427,23 +1428,23 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                         sbvtgFrame.height = 0
                     }
                     
-                    var rc = sbvtgFrame.frame
-                    if sbv as? TGBaseLayout == nil
+                    //这里的位置需要进行有效像素的舍入处理，否则可能出现文本框模糊，以及视图显示可能多出一条黑线的问题。
+                    //原因是当frame中的值不能有效的转化为最小可绘制的物理像素时就会出现模糊，虚化，多出黑线，以及layer处理圆角不圆的情况。
+                    //所以这里要将frame中的点转化为有效的点。
+                    //这里之所以讲布局子视图的转化方法和一般子视图的转化方法区分开来是因为。我们要保证布局子视图不能出现细微的重叠，因为布局子视图有边界线
+                    //如果有边界线而又出现细微重叠的话，那么边界线将无法正常显示，因此这里做了一个特殊的处理。
+                    var rc:CGRect
+                    if sbv.isKind(of: TGBaseLayout.self)
                     {
-                        rc = _tgRoundRect(rc)
-                    }
-                    
-                    if sbv.transform.isIdentity
-                    {
-                        sbv.frame = rc
+                        rc = _tgRoundRectForLayout(sbvtgFrame.frame)
                     }
                     else
                     {
-                        sbv.center = CGPoint(x:rc.origin.x + sbv.layer.anchorPoint.x * rc.size.width, y:rc.origin.y + sbv.layer.anchorPoint.y * rc.size.height)
-                        sbv.bounds = CGRect(origin: ptOrigin, size: rc.size)
-
+                        rc = _tgRoundRect(sbvtgFrame.frame)
                     }
                     
+                    sbv.center = CGPoint(x:rc.origin.x + sbv.layer.anchorPoint.x * rc.size.width, y:rc.origin.y + sbv.layer.anchorPoint.y * rc.size.height)
+                    sbv.bounds = CGRect(origin: ptOrigin, size: rc.size)
                     
                 }
                 
@@ -1464,8 +1465,15 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 
             }
             
-            if !oldSelfSize.equalTo(newSelfSize) && newSelfSize.width != CGFloat.greatestFiniteMagnitude
+            if newSelfSize.width != CGFloat.greatestFiniteMagnitude && lsc.isSomeSizeWrap
             {
+                
+                //因为布局子视图的新老尺寸计算在上面有两种不同的方法，因此这里需要考虑两种计算的误差值，而这两种计算的误差值是不超过1/屏幕精度的。
+                //因此我们认为当二者的值超过误差时我们才认为有尺寸变化。
+                let isWidthAlter = fabs(newSelfSize.width - oldSelfSize.width) > _tgrSizeError
+                let isHeightAlter = fabs(newSelfSize.height - oldSelfSize.height) > _tgrSizeError
+
+                
                 //如果父视图也是布局视图，并且自己隐藏则不调整自身的尺寸和位置。
                 var isAdjustSelf = true
                 if let supl = self.superview as? TGBaseLayout
@@ -1475,7 +1483,8 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                         isAdjustSelf = false
                     }
                 }
-                if (isAdjustSelf)
+                
+                if isAdjustSelf && (isWidthAlter || isHeightAlter)
                 {
                     if (newSelfSize.width < 0)
                     {
@@ -1489,12 +1498,39 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                     
                     if self.transform.isIdentity
                     {
-                        self.frame = CGRect(origin: self.frame.origin, size: newSelfSize)
+                        var currentFrame = self.frame
+                        
+                        if (isWidthAlter && lsc.tg_width.isWrap)
+                        {
+                          currentFrame.size.width = newSelfSize.width
+                        }
+                        
+                        if (isHeightAlter && lsc.tg_height.isWrap)
+                        {
+                            currentFrame.size.height = newSelfSize.height
+                        }
+                        
+                        self.frame = currentFrame
                     }
                     else
                     {
-                        self.bounds = CGRect(origin:self.bounds.origin, size:newSelfSize)
-                        self.center = CGPoint(x:self.center.x + (newSelfSize.width - oldSelfSize.width) * self.layer.anchorPoint.x, y:self.center.y + (newSelfSize.height - oldSelfSize.height) * self.layer.anchorPoint.y)
+                        var currentBounds = self.bounds;
+                        var currentCenter = self.center;
+                        
+                        if (isWidthAlter && lsc.tg_width.isWrap)
+                        {
+                            currentBounds.size.width = newSelfSize.width
+                            currentCenter.x += (newSelfSize.width - oldSelfSize.width) * self.layer.anchorPoint.x
+                        }
+                        
+                        if (isHeightAlter && lsc.tg_height.isWrap)
+                        {
+                            currentBounds.size.height = newSelfSize.height
+                            currentCenter.y += (newSelfSize.height - oldSelfSize.height) * self.layer.anchorPoint.y
+                        }
+                        
+                        self.bounds = currentBounds
+                        self.center = currentCenter
                     }
                 }
             }
@@ -1555,7 +1591,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
 
                         
                         //如果有变化则只调整自己的center。而不变化
-                        if (!self.center.equalTo(centerPonintSelf))
+                        if  !_tgCGPointEqual(self.center, centerPonintSelf)
                         {
                             self.center = centerPonintSelf
                         }
@@ -1593,7 +1629,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                             superCenter.x += (superBounds.width - supv.bounds.width) * supv.layer.anchorPoint.x
                         }
                         
-                        if (!supv.bounds.equalTo(superBounds))
+                        if !_tgCGRectEqual(supv.bounds, superBounds)
                         {
                             supv.center = superCenter
                             supv.bounds = superBounds
@@ -1846,7 +1882,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 rcNew = (change![.newKey] as! NSValue).cgRectValue
             }
             
-            if !rcOld!.size.equalTo(rcNew!.size)
+            if  !_tgCGSizeEqual(rcOld!.size, rcNew!.size)
             {
                 let _ = self.tgUpdateLayoutRectInNoLayoutSuperview(self.superview!)
             }
@@ -2442,7 +2478,8 @@ extension TGBaseLayout
             rectSelf.origin.x = rectSuper.size.width - rectSelf.origin.x - rectSelf.size.width
         }
         
-        if (!rectSelf.equalTo(oldSelfRect))
+        rectSelf = _tgRoundRect(rectSelf)
+        if !_tgCGRectEqual(rectSelf, oldSelfRect)
         {
             if (rectSelf.size.width < 0)
             {
@@ -2570,7 +2607,7 @@ extension TGBaseLayout
             _tgUseCacheRects = true
         }
         
-        return selfSize
+        return _tgRoundSize(selfSize)
         
     }
     
@@ -3483,7 +3520,7 @@ class TGBorderlineLayerDelegate:NSObject,CALayerDelegate
         
         
         //把动画效果取消。
-        if (!layer.frame.equalTo(layerRect))
+        if !_tgCGRectEqual(layer.frame, layerRect)
         {
             
             let shapeLayer:CAShapeLayer = layer as! CAShapeLayer
@@ -3936,21 +3973,71 @@ internal func _tgCGFloatGreatOrEqual(_ f1:CGFloat, _ f2:CGFloat) -> Bool
     
 }
 
+internal func _tgCGSizeEqual(_ sz1:CGSize, _ sz2:CGSize) ->Bool
+{
+    return _tgCGFloatEqual(sz1.width, sz2.width) && _tgCGFloatEqual(sz1.height, sz2.height)
+}
+
+internal func _tgCGPointEqual(_ pt1:CGPoint, _ pt2:CGPoint) ->Bool
+{
+    return _tgCGFloatEqual(pt1.x, pt2.x) && _tgCGFloatEqual(pt1.y, pt2.y)
+}
+
+internal func _tgCGRectEqual(_ rect1:CGRect, _ rect2:CGRect) ->Bool
+{
+    return _tgCGSizeEqual(rect1.size, rect2.size) && _tgCGPointEqual(rect1.origin, rect2.origin)
+}
+
 let _tgrScale = UIScreen.main.scale
-let _tgrInc = 0.5 / _tgrScale
+let _tgrSizeError = 1.0 / _tgrScale + 0.0001
+
 internal func _tgRoundNumber(_ f :CGFloat) ->CGFloat
 {
-    guard f != CGFloat.greatestFiniteMagnitude else
+    guard f != 0 && f != CGFloat.greatestFiniteMagnitude && f != -CGFloat.greatestFiniteMagnitude  else
     {
         return f
     }
     
-    return  floor((f + _tgrInc) * _tgrScale)/_tgrScale
+    //按精度四舍五入
+    //正确的算法应该是。x = 0; y = 0;  0<x<0.5 y = 0;   x = 0.5 y = 0.5;  0.5<x<1 y = 0.5; x=1 y = 1;
+    
+    if (f < 0)
+    {
+        return ceil(f * _tgrScale) / _tgrScale;
+    }
+    else
+    {
+        return  floor(f * _tgrScale) / _tgrScale;
+    }
+    
+}
+
+internal func _tgRoundRectForLayout(_ rect:CGRect) ->CGRect
+{
+    let  x1 = rect.origin.x
+    let  y1 = rect.origin.y
+    let  w1 = rect.size.width
+    let  h1 = rect.size.height
+    
+    var rect = rect
+    
+    rect.origin.x =  _tgRoundNumber(x1)
+    rect.origin.y = _tgRoundNumber(y1)
+    
+    let mx = _tgRoundNumber(x1 + w1)
+    let my = _tgRoundNumber(y1 + h1)
+    
+    rect.size.width = mx - rect.origin.x
+    rect.size.height = my - rect.origin.y
+    
+    return rect;
+
 }
 
 internal func _tgRoundRect(_ rect:CGRect) ->CGRect
 {
     var rect = rect
+    
     rect.origin.x = _tgRoundNumber(rect.origin.x)
     rect.origin.y = _tgRoundNumber(rect.origin.y)
     rect.size.width = _tgRoundNumber(rect.size.width)
