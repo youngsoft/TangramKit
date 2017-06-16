@@ -291,12 +291,22 @@ extension TGFloatLayout
             //CGFloat
             let trailingCandidateRect = trailingCandidateRects[i]
             //如果有比重则不能相等只能小于。
-            if (hasWeight ? leadingCandidateRect.maxX + width < trailingCandidateRect.minX : _tgCGFloatLessOrEqual(leadingCandidateRect.maxX + width, trailingCandidateRect.minX)) &&
-                leadingCandidateRect.maxY > lastHeight
+            if (hasWeight ? _tgCGFloatLess(leadingCandidateRect.maxX + width , trailingCandidateRect.minX) : _tgCGFloatLessOrEqual(leadingCandidateRect.maxX + width, trailingCandidateRect.minX)) &&
+                _tgCGFloatGreat(leadingCandidateRect.maxY , lastHeight)
             {
                 
                 retPoint.y = max(leadingCandidateRect.minY,lastHeight);
                 retPoint.x = trailingCandidateRect.minX;
+                
+                if (hasWeight &&
+                    leadingCandidateRect.height == CGFloat.greatestFiniteMagnitude &&
+                    leadingCandidateRect.width == 0 &&
+                    _tgCGFloatGreatOrEqual(leadingCandidateRect.minY, trailingCandidateRect.maxY))
+                {
+                    retPoint.x = trailingBoundary
+                }
+
+                
                 break;
             }
             
@@ -306,8 +316,8 @@ extension TGFloatLayout
         
         if retPoint.y == CGFloat.greatestFiniteMagnitude
         {
-            if (hasWeight ? leadingCandidateRect.maxX + width < trailingBoundary : _tgCGFloatLessOrEqual(leadingCandidateRect.maxX + width, trailingBoundary) ) &&
-                leadingCandidateRect.maxY > lastHeight
+            if (hasWeight ? _tgCGFloatLess(leadingCandidateRect.maxX + width , trailingBoundary) : _tgCGFloatLessOrEqual(leadingCandidateRect.maxX + width, trailingBoundary) ) &&
+                _tgCGFloatGreat(leadingCandidateRect.maxY , lastHeight)
             {
                 retPoint.y =  max(leadingCandidateRect.minY,lastHeight);
             }
@@ -329,11 +339,21 @@ extension TGFloatLayout
             
             let bottomCandidateRect = bottomCandidateRects[i]
             
-            if (hasWeight ? topCandidateRect.maxY + height < bottomCandidateRect.minY :  _tgCGFloatLessOrEqual(topCandidateRect.maxY + height, bottomCandidateRect.minY) ) &&
-                topCandidateRect.maxX > lastWidth
+            if (hasWeight ? _tgCGFloatLess(topCandidateRect.maxY + height , bottomCandidateRect.minY) :  _tgCGFloatLessOrEqual(topCandidateRect.maxY + height, bottomCandidateRect.minY) ) &&
+                _tgCGFloatGreat(topCandidateRect.maxX , lastWidth)
             {
                 retPoint.x = max(topCandidateRect.minX,lastWidth);
                 retPoint.y = bottomCandidateRect.minY;
+                
+                if (hasWeight &&
+                    topCandidateRect.width == CGFloat.greatestFiniteMagnitude &&
+                    topCandidateRect.height == 0 &&
+                    _tgCGFloatGreatOrEqual(topCandidateRect.minX, bottomCandidateRect.maxX))
+                {
+                    retPoint.y = bottomBoundary
+                }
+
+                
                 break;
             }
             
@@ -343,8 +363,8 @@ extension TGFloatLayout
         
         if (retPoint.x == CGFloat.greatestFiniteMagnitude)
         {
-            if ((hasWeight ? topCandidateRect.maxY + height < bottomBoundary :  _tgCGFloatLessOrEqual(topCandidateRect.maxY + height, bottomBoundary) ) &&
-                topCandidateRect.maxX > lastWidth)
+            if ((hasWeight ? _tgCGFloatLess(topCandidateRect.maxY + height , bottomBoundary) :  _tgCGFloatLessOrEqual(topCandidateRect.maxY + height, bottomBoundary) ) &&
+                _tgCGFloatGreat(topCandidateRect.maxX , lastWidth))
             {
                 retPoint.x =  max(topCandidateRect.minX,lastWidth);
             }
@@ -365,11 +385,20 @@ extension TGFloatLayout
         {
             
             let  leadingCandidateRect = leadingCandidateRects[i]
-            if ((hasWeight ? trailingCandidateRect.minX - width > leadingCandidateRect.maxX :  _tgCGFloatGreatOrEqual(trailingCandidateRect.minX - width, leadingCandidateRect.maxX)) &&
-                trailingCandidateRect.maxY > lastHeight)
+            if ((hasWeight ? _tgCGFloatGreat(trailingCandidateRect.minX - width , leadingCandidateRect.maxX) :  _tgCGFloatGreatOrEqual(trailingCandidateRect.minX - width, leadingCandidateRect.maxX)) &&
+                _tgCGFloatGreat(trailingCandidateRect.maxY , lastHeight))
             {
-                retPoint.y = max(trailingCandidateRect.minY,lastHeight);
-                retPoint.x = leadingCandidateRect.maxX;
+                retPoint.y = max(trailingCandidateRect.minY,lastHeight)
+                retPoint.x = leadingCandidateRect.maxX
+                
+                if (hasWeight &&
+                    trailingCandidateRect.height == CGFloat.greatestFiniteMagnitude &&
+                    trailingCandidateRect.width == 0 &&
+                    _tgCGFloatGreatOrEqual(trailingCandidateRect.minY, leadingCandidateRect.maxY))
+                {
+                    retPoint.x = leadingBoundary
+                }
+                
                 break;
             }
             
@@ -380,8 +409,8 @@ extension TGFloatLayout
         
         if (retPoint.y == CGFloat.greatestFiniteMagnitude)
         {
-            if ((hasWeight ? trailingCandidateRect.minX - width > leadingBoundary : _tgCGFloatGreatOrEqual(trailingCandidateRect.minX - width, leadingBoundary)) &&
-                trailingCandidateRect.maxY > lastHeight)
+            if ((hasWeight ? _tgCGFloatGreat(trailingCandidateRect.minX - width , leadingBoundary) : _tgCGFloatGreatOrEqual(trailingCandidateRect.minX - width, leadingBoundary)) &&
+                _tgCGFloatGreat(trailingCandidateRect.maxY , lastHeight))
             {
                 retPoint.y =  max(trailingCandidateRect.minY,lastHeight);
             }
@@ -401,11 +430,21 @@ extension TGFloatLayout
         {
             
             let topCandidateRect = topCandidateRects[i]
-            if ((hasWeight ? bottomCandidateRect.minY - height > topCandidateRect.maxY :  _tgCGFloatGreatOrEqual(bottomCandidateRect.minY - height, topCandidateRect.maxY)) &&
-                bottomCandidateRect.maxX > lastWidth)
+            if ((hasWeight ? _tgCGFloatGreat(bottomCandidateRect.minY - height, topCandidateRect.maxY) :  _tgCGFloatGreatOrEqual(bottomCandidateRect.minY - height, topCandidateRect.maxY)) &&
+                _tgCGFloatGreat(bottomCandidateRect.maxX,lastWidth))
             {
-                retPoint.x = max(bottomCandidateRect.minX,lastWidth);
-                retPoint.y = topCandidateRect.maxY;
+                retPoint.x = max(bottomCandidateRect.minX,lastWidth)
+                retPoint.y = topCandidateRect.maxY
+                
+                if (hasWeight &&
+                    bottomCandidateRect.width == CGFloat.greatestFiniteMagnitude &&
+                    bottomCandidateRect.height == 0 &&
+                    _tgCGFloatGreatOrEqual(bottomCandidateRect.minX, topCandidateRect.maxX))
+                {
+                    retPoint.y = topBoundary
+                }
+                
+                
                 break;
             }
             
@@ -416,8 +455,8 @@ extension TGFloatLayout
         
         if (retPoint.x == CGFloat.greatestFiniteMagnitude)
         {
-            if ((hasWeight ? bottomCandidateRect.minY - height > topBoundary :  _tgCGFloatGreatOrEqual(bottomCandidateRect.minY - height, topBoundary)) &&
-                bottomCandidateRect.maxX > lastWidth)
+            if ((hasWeight ? _tgCGFloatGreat(bottomCandidateRect.minY - height,topBoundary) :  _tgCGFloatGreatOrEqual(bottomCandidateRect.minY - height, topBoundary)) &&
+                _tgCGFloatGreat(bottomCandidateRect.maxX, lastWidth))
             {
                 retPoint.x =  max(bottomCandidateRect.minX,lastWidth);
             }
@@ -471,7 +510,7 @@ extension TGFloatLayout
                 
                 rect.size.width = self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: rect.size.width, sbvSize: rect.size, selfLayoutSize: selfSize)
                 
-                if (leadingSpace + rect.size.width + trailingSpace > maxContentWidth &&
+                if (_tgCGFloatGreat(leadingSpace + rect.size.width + trailingSpace, maxContentWidth) &&
                     (sbvsc.width.sizeVal == nil || sbvsc.width.sizeVal !== lsc.width.realSize) &&
                     sbvsc.width.weightVal == nil &&
                     !sbvsc.width.isFill)
@@ -502,7 +541,7 @@ extension TGFloatLayout
             {
                 horzSpace = (selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding - subviewSize * rowCount)/(rowCount - 1);
                 
-                if horzSpace > maxSpace
+                if _tgCGFloatGreat(horzSpace , maxSpace)
                 {
                     horzSpace = maxSpace
                     
@@ -616,7 +655,7 @@ extension TGFloatLayout
                     
                     //找到最底部的位置。
                     nextPoint.y = max(trailingMaxHeight, leadingLastYOffset);
-                    let leftPoint = self.tgFindLeadingCandidatePoint(CGRect(x: selfSize.width - lsc.tg_trailingPadding, y: nextPoint.y, width: 0, height: CGFloat.greatestFiniteMagnitude), width:leadingSpace + (isWidthWeight ? 0 : rect.size.width) + trailingSpace,leadingBoundary:lsc.tg_leadingPadding,leadingCandidateRects:leadingCandidateRects,hasWeight:false, lsc:lsc)
+                    let leftPoint = self.tgFindLeadingCandidatePoint(CGRect(x: selfSize.width - lsc.tg_trailingPadding, y: nextPoint.y, width: 0, height: CGFloat.greatestFiniteMagnitude), width:leadingSpace + (isWidthWeight ? 0 : rect.size.width) + trailingSpace,leadingBoundary:lsc.tg_leadingPadding,leadingCandidateRects:leadingCandidateRects,hasWeight:isWidthWeight, lsc:lsc)
                     if (leftPoint.y != CGFloat.greatestFiniteMagnitude)
                     {
                         nextPoint.y = max(trailingMaxHeight, leftPoint.y);
@@ -685,17 +724,17 @@ extension TGFloatLayout
                             sbvl.tg_trailingBorderline = nil;
                             sbvl.tg_leadingBorderline = nil;
                             
-                            if (rect.origin.x + rect.size.width + trailingSpace < selfSize.width - lsc.tg_trailingPadding)
+                            if _tgCGFloatLess(rect.origin.x + rect.size.width + trailingSpace , selfSize.width - lsc.tg_trailingPadding)
                             {
                                 sbvl.tg_trailingBorderline = self.tg_intelligentBorderline;
                             }
                             
-                            if (rect.origin.y + rect.size.height + bottomSpace < selfSize.height - lsc.tg_bottomPadding)
+                            if _tgCGFloatLess(rect.origin.y + rect.size.height + bottomSpace , selfSize.height - lsc.tg_bottomPadding)
                             {
                                 sbvl.tg_bottomBorderline = self.tg_intelligentBorderline;
                             }
                             
-                            if (rect.origin.x > leadingCandidateXBoundary && sbvl == sbs.last)
+                            if (_tgCGFloatGreat(rect.origin.x, leadingCandidateXBoundary) && sbvl == sbs.last)
                             {
                                 sbvl.tg_leadingBorderline = self.tg_intelligentBorderline;
                             }
@@ -711,7 +750,7 @@ extension TGFloatLayout
                 
                 
                 //把新的候选区域添加到数组中去。并删除高度小于新候选区域的其他区域
-                trailingCandidateRects = trailingCandidateRects.filter({$0.maxY > cRect.maxY})
+                trailingCandidateRects = trailingCandidateRects.filter({_tgCGFloatGreat($0.maxY, cRect.maxY)})
                 
                 
                 //删除左边高度小于新添加区域的顶部的候选区域
@@ -743,7 +782,7 @@ extension TGFloatLayout
                 trailingCandidateRects.append(cRect)
                 trailingLastYOffset = rect.origin.y - topSpace;
                 
-                if (rect.origin.y + rect.size.height + bottomSpace + vertSpace > trailingMaxHeight)
+                if (_tgCGFloatGreat(rect.origin.y + rect.size.height + bottomSpace + vertSpace, trailingMaxHeight))
                 {
                     trailingMaxHeight = rect.origin.y + rect.size.height + bottomSpace + vertSpace;
                 }
@@ -759,7 +798,7 @@ extension TGFloatLayout
                     //找到最低点。
                     nextPoint.y = max(leadingMaxHeight, trailingLastYOffset);
                     
-                    let rightPoint = self.tgFindTrailingCandidatePoint(CGRect(x: lsc.tg_leadingPadding, y: nextPoint.y, width: 0, height: CGFloat.greatestFiniteMagnitude), width:leadingSpace + (isWidthWeight ? 0 : rect.size.width) + trailingSpace, trailingBoundary:trailingCandidateXBoundary, trailingCandidateRects:trailingCandidateRects, hasWeight:false, lsc:lsc)
+                    let rightPoint = self.tgFindTrailingCandidatePoint(CGRect(x: lsc.tg_leadingPadding, y: nextPoint.y, width: 0, height: CGFloat.greatestFiniteMagnitude), width:leadingSpace + (isWidthWeight ? 0 : rect.size.width) + trailingSpace, trailingBoundary:trailingCandidateXBoundary, trailingCandidateRects:trailingCandidateRects, hasWeight:isWidthWeight, lsc:lsc)
                     if (rightPoint.y != CGFloat.greatestFiniteMagnitude)
                     {
                         nextPoint.y = max(leadingMaxHeight, rightPoint.y);
@@ -837,12 +876,12 @@ extension TGFloatLayout
                             sbvl.tg_leadingBorderline = nil;
                             
                             //如果自己的上边和左边有子视图。
-                            if (rect.origin.x - leadingSpace > lsc.tg_leadingPadding)
+                            if _tgCGFloatGreat(rect.origin.x - leadingSpace, lsc.tg_leadingPadding)
                             {
                                 sbvl.tg_leadingBorderline = self.tg_intelligentBorderline;
                             }
                             
-                            if (rect.origin.y - topSpace > lsc.tg_topPadding)
+                            if _tgCGFloatGreat(rect.origin.y - topSpace, lsc.tg_topPadding)
                             {
                                 sbvl.tg_topBorderline = self.tg_intelligentBorderline;
                             }
@@ -857,7 +896,7 @@ extension TGFloatLayout
                 
                 
                 //把新添加到候选中去。并删除高度小于的候选键。和高度
-                leadingCandidateRects = leadingCandidateRects.filter({$0.maxY > cRect.maxY})
+                leadingCandidateRects = leadingCandidateRects.filter({_tgCGFloatGreat($0.maxY , cRect.maxY)})
                 //删除右边高度小于新添加区域的顶部的候选区域
                 trailingCandidateRects = trailingCandidateRects.filter({ (rc) -> Bool in
                     
@@ -887,19 +926,19 @@ extension TGFloatLayout
                 leadingCandidateRects.append(cRect);
                 leadingLastYOffset = rect.origin.y - topSpace;
                 
-                if (rect.origin.y + rect.size.height + bottomSpace + vertSpace > leadingMaxHeight)
+                if _tgCGFloatGreat(rect.origin.y + rect.size.height + bottomSpace + vertSpace, leadingMaxHeight)
                 {
                     leadingMaxHeight = rect.origin.y + rect.size.height + bottomSpace + vertSpace;
                 }
                 
             }
             
-            if rect.origin.y + rect.size.height + bottomSpace + vertSpace > maxHeight
+            if _tgCGFloatGreat(rect.origin.y + rect.size.height + bottomSpace + vertSpace , maxHeight)
             {
                 maxHeight = rect.origin.y + rect.size.height + bottomSpace + vertSpace;
             }
             
-            if rect.origin.x + rect.size.width + trailingSpace + horzSpace > maxWidth
+            if _tgCGFloatGreat(rect.origin.x + rect.size.width + trailingSpace + horzSpace , maxWidth)
             {
                 maxWidth = rect.origin.x + rect.size.width + trailingSpace + horzSpace
             }
@@ -1010,7 +1049,7 @@ extension TGFloatLayout
                 
                 rect.size.height = self.tgValidMeasure(sbvsc.height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
                 
-                if (topSpace + rect.size.height + bottomSpace > maxContentHeight &&
+                if (_tgCGFloatGreat(topSpace + rect.size.height + bottomSpace , maxContentHeight) &&
                     (sbvsc.height.sizeVal == nil || sbvsc.height.sizeVal !== lsc.height.realSize) &&
                     sbvsc.height.weightVal == nil &&
                     !sbvsc.height.isFill)
@@ -1042,7 +1081,7 @@ extension TGFloatLayout
             {
                 vertSpace = (selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding - subviewSize * rowCount)/(rowCount - 1)
                 
-                if (vertSpace > maxSpace)
+                if _tgCGFloatGreat(vertSpace , maxSpace)
                 {
                     vertSpace = maxSpace
                     
@@ -1158,7 +1197,7 @@ extension TGFloatLayout
                 {
                     //找到最底部的位置。
                     nextPoint.x = max(bottomMaxWidth, topLastXOffset);
-                    let topPoint = self.tgFindTopCandidatePoint(CGRect(x: nextPoint.x, y: selfSize.height - lsc.tg_bottomPadding, width: CGFloat.greatestFiniteMagnitude, height: 0), height:topSpace + (isHeightWeight ? 0 : rect.size.height) + bottomSpace,topBoundary:topCandidateYBoundary,topCandidateRects:topCandidateRects,hasWeight:false,lsc:lsc)
+                    let topPoint = self.tgFindTopCandidatePoint(CGRect(x: nextPoint.x, y: selfSize.height - lsc.tg_bottomPadding, width: CGFloat.greatestFiniteMagnitude, height: 0), height:topSpace + (isHeightWeight ? 0 : rect.size.height) + bottomSpace,topBoundary:topCandidateYBoundary,topCandidateRects:topCandidateRects,hasWeight:isHeightWeight,lsc:lsc)
                     if (topPoint.x != CGFloat.greatestFiniteMagnitude)
                     {
                         nextPoint.x = max(bottomMaxWidth, topPoint.x);
@@ -1222,17 +1261,17 @@ extension TGFloatLayout
                             sbvl.tg_leadingBorderline = nil;
                             
                             //如果自己的上边和左边有子视图。
-                            if (rect.origin.x + rect.size.width + trailingSpace < selfSize.width - lsc.tg_trailingPadding)
+                            if _tgCGFloatLess(rect.origin.x + rect.size.width + trailingSpace , selfSize.width - lsc.tg_trailingPadding)
                             {
                                 sbvl.tg_trailingBorderline = self.tg_intelligentBorderline;
                             }
                             
-                            if (rect.origin.y + rect.size.height + bottomSpace < selfSize.height - lsc.tg_bottomPadding)
+                            if _tgCGFloatLess(rect.origin.y + rect.size.height + bottomSpace , selfSize.height - lsc.tg_bottomPadding)
                             {
                                 sbvl.tg_bottomBorderline = self.tg_intelligentBorderline;
                             }
                             
-                            if (rect.origin.y > topCandidateYBoundary && sbvl == sbs.last)
+                            if (_tgCGFloatGreat(rect.origin.y , topCandidateYBoundary) && sbvl == sbs.last)
                             {
                                 sbvl.tg_topBorderline = self.tg_intelligentBorderline;
                             }
@@ -1246,7 +1285,7 @@ extension TGFloatLayout
                 var cRect = CGRect(x: rect.origin.x - leadingSpace, y: max(rect.origin.y - topSpace - vertSpace, lsc.tg_topPadding), width: rect.size.width + leadingSpace + trailingSpace + horzSpace, height: min((rect.size.height + topSpace + bottomSpace),(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)));
                 
                 //把新的候选区域添加到数组中去。并删除高度小于新候选区域的其他区域
-                bottomCandidateRects = bottomCandidateRects.filter({$0.maxX > cRect.maxX})
+                bottomCandidateRects = bottomCandidateRects.filter({_tgCGFloatGreat($0.maxX , cRect.maxX)})
                 
                 //删除顶部宽度小于新添加区域的顶部的候选区域
                 topCandidateRects = topCandidateRects.filter({ (rc) -> Bool in
@@ -1276,7 +1315,7 @@ extension TGFloatLayout
                 bottomCandidateRects.append(cRect)
                 bottomLastXOffset = rect.origin.x - leadingSpace;
                 
-                if (rect.origin.x + rect.size.width + trailingSpace + horzSpace > bottomMaxWidth)
+                if _tgCGFloatGreat(rect.origin.x + rect.size.width + trailingSpace + horzSpace , bottomMaxWidth)
                 {
                     bottomMaxWidth = rect.origin.x + rect.size.width + trailingSpace + horzSpace;
                 }
@@ -1291,7 +1330,7 @@ extension TGFloatLayout
                     //找到最低点。
                     nextPoint.x = max(topMaxWidth, bottomLastXOffset);
                     
-                    let bottomPoint = self.tgFindBottomCandidatePoint(CGRect(x: nextPoint.x, y: lsc.tg_topPadding,width: CGFloat.greatestFiniteMagnitude,height: 0),height:topSpace + (isHeightWeight ? 0: rect.size.height) + bottomSpace,bottomBoundary:bottomCandidateYBoundary,bottomCandidateRects:bottomCandidateRects,hasWeight:false,lsc:lsc)
+                    let bottomPoint = self.tgFindBottomCandidatePoint(CGRect(x: nextPoint.x, y: lsc.tg_topPadding,width: CGFloat.greatestFiniteMagnitude,height: 0),height:topSpace + (isHeightWeight ? 0: rect.size.height) + bottomSpace,bottomBoundary:bottomCandidateYBoundary,bottomCandidateRects:bottomCandidateRects,hasWeight:isHeightWeight,lsc:lsc)
                     if (bottomPoint.x != CGFloat.greatestFiniteMagnitude)
                     {
                         nextPoint.x = max(topMaxWidth, bottomPoint.x);
@@ -1360,12 +1399,12 @@ extension TGFloatLayout
                             sbvl.tg_leadingBorderline = nil;
                             
                             //如果自己的上边和左边有子视图。
-                            if (rect.origin.x - leadingSpace > lsc.tg_leadingPadding)
+                            if _tgCGFloatGreat(rect.origin.x - leadingSpace , lsc.tg_leadingPadding)
                             {
                                 sbvl.tg_leadingBorderline = self.tg_intelligentBorderline;
                             }
                             
-                            if (rect.origin.y - topSpace > lsc.tg_topPadding)
+                            if _tgCGFloatGreat(rect.origin.y - topSpace , lsc.tg_topPadding)
                             {
                                 sbvl.tg_topBorderline = self.tg_intelligentBorderline;
                             }
@@ -1379,7 +1418,7 @@ extension TGFloatLayout
                 
                 
                 //把新添加到候选中去。并删除宽度小于的最新候选区域的候选区域
-                topCandidateRects = topCandidateRects.filter({$0.maxX > cRect.maxX})
+                topCandidateRects = topCandidateRects.filter({_tgCGFloatGreat($0.maxX , cRect.maxX)})
                 
                 //删除顶部宽度小于新添加区域的顶部的候选区域
                 bottomCandidateRects = bottomCandidateRects.filter({ (rc) -> Bool in
@@ -1409,19 +1448,19 @@ extension TGFloatLayout
                 topCandidateRects.append(cRect)
                 topLastXOffset = rect.origin.x - leadingSpace;
                 
-                if (rect.origin.x + rect.size.width + trailingSpace + horzSpace > topMaxWidth)
+                if _tgCGFloatGreat(rect.origin.x + rect.size.width + trailingSpace + horzSpace , topMaxWidth)
                 {
-                    topMaxWidth = rect.origin.x + rect.size.width + trailingSpace + horzSpace;
+                    topMaxWidth = rect.origin.x + rect.size.width + trailingSpace + horzSpace
                 }
                 
             }
             
-            if rect.origin.y + rect.size.height + bottomSpace + vertSpace > maxHeight
+            if _tgCGFloatGreat(rect.origin.y + rect.size.height + bottomSpace + vertSpace , maxHeight)
             {
-                maxHeight = rect.origin.y + rect.size.height + bottomSpace + vertSpace;
+                maxHeight = rect.origin.y + rect.size.height + bottomSpace + vertSpace
             }
             
-            if rect.origin.x + rect.size.width + trailingSpace + horzSpace > maxWidth
+            if _tgCGFloatGreat(rect.origin.x + rect.size.width + trailingSpace + horzSpace , maxWidth)
             {
                 maxWidth = rect.origin.x + rect.size.width + trailingSpace + horzSpace
             }

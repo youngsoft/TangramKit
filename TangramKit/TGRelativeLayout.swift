@@ -323,7 +323,7 @@ extension TGRelativeLayout
             
             
             //用maxTrailing减去minLeading得到的宽度再减去视图的宽度，然后让其居中。。如果宽度超过则缩小视图的宽度。
-            if (maxTrailing - minLeading < sbvtgFrame.width)
+            if _tgCGFloatLess(maxTrailing - minLeading , sbvtgFrame.width)
             {
                 sbvtgFrame.width = maxTrailing - minLeading
                 sbvtgFrame.leading = minLeading
@@ -341,7 +341,7 @@ extension TGRelativeLayout
             //得到左边的最小位置。如果当前的左边距小于这个位置则缩小视图的宽度。
             let minLeading = self.tgCalcRelationalSubview(t.view, lsc:lsc, gravity: t.type, selfSize: selfSize) + sbvsc.leading.minVal!.offset
             
-            if (sbvtgFrame.leading < minLeading)
+            if _tgCGFloatLess(sbvtgFrame.leading , minLeading)
             {
                 sbvtgFrame.leading = minLeading
                 sbvtgFrame.width = sbvtgFrame.trailing - sbvtgFrame.leading
@@ -353,7 +353,7 @@ extension TGRelativeLayout
             //得到右边的最大位置。如果当前的右边距大于了这个位置则缩小视图的宽度。
             let maxTrailing = self.tgCalcRelationalSubview(t.view, lsc:lsc, gravity: t.type, selfSize: selfSize) - sbvsc.trailing.maxVal!.offset
             
-            if (sbvtgFrame.trailing > maxTrailing)
+            if _tgCGFloatGreat(sbvtgFrame.trailing , maxTrailing)
             {
                 sbvtgFrame.trailing = maxTrailing;
                 sbvtgFrame.width = sbvtgFrame.trailing - sbvtgFrame.leading
@@ -525,7 +525,7 @@ extension TGRelativeLayout
             
             
             //用maxBottom减去minTop得到的高度再减去视图的高度，然后让其居中。。如果高度超过则缩小视图的高度。
-            if (maxBottom - minTop < sbvtgFrame.height)
+            if _tgCGFloatLess(maxBottom - minTop , sbvtgFrame.height)
             {
                 sbvtgFrame.height = maxBottom - minTop
                 sbvtgFrame.top = minTop
@@ -544,7 +544,7 @@ extension TGRelativeLayout
             let minTop = self.tgCalcRelationalSubview(t.view, lsc:lsc, gravity: t.type, selfSize: selfSize) + sbvsc.top.minVal!.offset
         
             
-            if (sbvtgFrame.top < minTop)
+            if _tgCGFloatLess(sbvtgFrame.top , minTop)
             {
                 sbvtgFrame.top = minTop
                 sbvtgFrame.height = sbvtgFrame.bottom - sbvtgFrame.top
@@ -556,7 +556,7 @@ extension TGRelativeLayout
             //得到下边的最大位置。如果当前的下边距大于了这个位置则缩小视图的高度。
             let maxBottom = self.tgCalcRelationalSubview(t.view, lsc:lsc, gravity: t.type, selfSize: selfSize) - sbvsc.bottom.maxVal!.offset
             
-            if (sbvtgFrame.bottom > maxBottom)
+            if _tgCGFloatGreat(sbvtgFrame.bottom, maxBottom)
             {
                 sbvtgFrame.bottom = maxBottom;
                 sbvtgFrame.height = sbvtgFrame.bottom - sbvtgFrame.top
@@ -1106,7 +1106,7 @@ extension TGRelativeLayout
             }
             
             
-            if maxSize < headMargin + tailMargin + headPadding + tailPadding
+            if _tgCGFloatLess(maxSize , headMargin + tailMargin + headPadding + tailPadding)
             {
                 maxSize = headMargin + tailMargin + headPadding + tailPadding
             }
@@ -1120,34 +1120,34 @@ extension TGRelativeLayout
                 
                 if sbvCenter.hasValue
                 {
-                    if maxSize < sbvMeasure + headMargin + tailMargin + headPadding + tailPadding
+                    if _tgCGFloatLess(maxSize , sbvMeasure + headMargin + tailMargin + headPadding + tailPadding)
                     {
                         maxSize = sbvMeasure + headMargin + tailMargin + headPadding + tailPadding
                     }
                 }
                 else if sbvHead.hasValue && sbvTail.hasValue
                 {
-                    if maxSize < fabs(sbvMaxPos) + headMargin + headPadding
+                    if _tgCGFloatLess(maxSize , fabs(sbvMaxPos) + headMargin + headPadding)
                     {
                         maxSize = fabs(sbvMaxPos) + headMargin + headPadding
                     }
                 }
                 else if sbvTail.hasValue
                 {
-                    if maxSize < fabs(sbvMinPos) + headPadding
+                    if _tgCGFloatLess(maxSize , fabs(sbvMinPos) + headPadding)
                     {
                         maxSize = fabs(sbvMinPos) + headPadding
                     }
                 }
                 else
                 {
-                    if maxSize < fabs(sbvMaxPos) + tailPadding
+                    if _tgCGFloatLess(maxSize , fabs(sbvMaxPos) + tailPadding)
                     {
                         maxSize = fabs(sbvMaxPos) + tailPadding
                     }
                 }
                 
-                if maxSize < sbvMaxPos + tailMargin + tailPadding
+                if _tgCGFloatLess(maxSize , sbvMaxPos + tailMargin + tailPadding)
                 {
                     maxSize = sbvMaxPos + tailMargin + tailPadding
                 }

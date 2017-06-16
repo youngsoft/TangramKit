@@ -505,22 +505,22 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             rect.origin.x = pt.x - rect.size.width * sbv.layer.anchorPoint.x + leftMargin - rightMargin
             rect.origin.y = pt.y - rect.size.height * sbv.layer.anchorPoint.y + topMargin - bottomMargin
            
-            if (rect.minY < minYPos)
+            if _tgCGFloatLess(rect.minY , minYPos)
             {
                 minYPos = rect.minY
             }
             
-            if (rect.maxY > maxYPos)
+            if _tgCGFloatGreat(rect.maxY , maxYPos)
             {
                 maxYPos = rect.maxY
             }
             
-            if (rect.minX < minXPos)
+            if _tgCGFloatLess(rect.minX , minXPos)
             {
                 minXPos = rect.minX
             }
             
-            if (rect.maxX > maxXPos)
+            if _tgCGFloatGreat(rect.maxX , maxXPos)
             {
                 maxXPos = rect.maxX
             }
@@ -574,22 +574,22 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             rect.origin.x = (selfSize.width - lsc.tg_leftPadding - lsc.tg_rightPadding)*tg_coordinateSetting.origin.x - rect.size.width * sbv.layer.anchorPoint.x + leftMargin - rightMargin + lsc.tg_leftPadding
             rect.origin.y = (selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)*tg_coordinateSetting.origin.y - rect.size.height * sbv.layer.anchorPoint.y + topMargin - bottomMargin + lsc.tg_topPadding
             
-            if (rect.minY < minYPos)
+            if _tgCGFloatLess(rect.minY , minYPos)
             {
                 minYPos = rect.minY
             }
             
-            if (rect.maxY > maxYPos)
+            if _tgCGFloatGreat(rect.maxY , maxYPos)
             {
                 maxYPos = rect.maxY
             }
             
-            if (rect.minX < minXPos)
+            if _tgCGFloatLess(rect.minX , minXPos)
             {
                 minXPos = rect.minX
             }
             
-            if (rect.maxX > maxXPos)
+            if _tgCGFloatGreat(rect.maxX , maxXPos)
             {
                 maxXPos = rect.maxX
             }

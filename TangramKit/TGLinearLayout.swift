@@ -616,7 +616,7 @@ extension TGLinearLayout {
         
         var retMeasure = selfMeasure
         
-        if temp > retMeasure
+        if _tgCGFloatGreat(temp , retMeasure)
         {
             retMeasure = temp
         }
@@ -1116,15 +1116,15 @@ extension TGLinearLayout {
                             let  layoutWidth = floatingWidth + leftWidth + righWidth
                             let halfLayoutWidth = layoutWidth / 2
                             
-                            if leftWidth > halfLayoutWidth && righWidth > halfLayoutWidth
+                            if _tgCGFloatGreat(leftWidth, halfLayoutWidth) && _tgCGFloatGreat(righWidth , halfLayoutWidth)
                             {
                                 leftView.tgFrame.width = halfLayoutWidth
                                 rightView.tgFrame.width = halfLayoutWidth
                             }
-                            else if ((leftWidth > halfLayoutWidth || righWidth > halfLayoutWidth) && (leftWidth + righWidth > layoutWidth))
+                            else if ((_tgCGFloatGreat(leftWidth , halfLayoutWidth) || _tgCGFloatGreat(righWidth , halfLayoutWidth)) && _tgCGFloatGreat(leftWidth + righWidth , layoutWidth))
                             {
                                 
-                                if (leftWidth > halfLayoutWidth)
+                                if _tgCGFloatGreat(leftWidth , halfLayoutWidth)
                                 {
                                     rightView.tgFrame.width = righWidth
                                     leftView.tgFrame.width = layoutWidth - righWidth

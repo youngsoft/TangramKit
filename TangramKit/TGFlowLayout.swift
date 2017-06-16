@@ -341,7 +341,7 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
                         
                         //暂时把宽度存放sbvtgFrame.trailing上。因为浮动布局来说这个属性无用。
                         sbvtgFrame.trailing = leadingSpace + rect.size.width + trailingSpace;
-                        if (sbvtgFrame.trailing > selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding)
+                        if _tgCGFloatGreat(sbvtgFrame.trailing , selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding)
                         {
                             sbvtgFrame.trailing = selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding;
                         }
@@ -402,7 +402,7 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
                         
                         //暂时把宽度存放sbvtgFrame.trailing上。因为浮动布局来说这个属性无用。
                         sbvtgFrame.trailing = topSpace + rect.size.height + bottomSpace;
-                        if (sbvtgFrame.trailing > selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
+                        if _tgCGFloatGreat(sbvtgFrame.trailing, selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
                         {
                             sbvtgFrame.trailing = selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding;
                         }
@@ -493,7 +493,7 @@ extension TGFlowLayout
         {
             let s1 = self.tgCalcSinglelineSize(calcArray, space:space)
             let s2 = self.tgCalcSinglelineSize(bestSinglelineArray, space:space)
-            if (fabs(selfSize - s1) < fabs(selfSize - s2) && _tgCGFloatLessOrEqual(s1, selfSize))
+            if _tgCGFloatLess(fabs(selfSize - s1) , fabs(selfSize - s2)) && _tgCGFloatLessOrEqual(s1, selfSize)
             {
                 bestSinglelineArray.setArray(calcArray as [AnyObject])
             }
@@ -513,7 +513,7 @@ extension TGFlowLayout
             if ( _tgCGFloatLessOrEqual(s1, selfSize))
             {
                 let s2 = self.tgCalcSinglelineSize(bestSinglelineArray,space:space)
-                if (fabs(selfSize - s1) < fabs(selfSize - s2))
+                if _tgCGFloatLess(fabs(selfSize - s1) , fabs(selfSize - s2))
                 {
                     bestSinglelineArray.setArray(calcArray2 as [AnyObject])
                 }
@@ -1109,14 +1109,15 @@ extension TGFlowLayout
                 xPos += horzSpace
             }
             
-            if rowMaxHeight < (topSpace + bottomSpace + rect.size.height) {
-                rowMaxHeight = (topSpace + bottomSpace + rect.size.height)
+            if _tgCGFloatLess(rowMaxHeight , topSpace + bottomSpace + rect.size.height) {
+                rowMaxHeight = topSpace + bottomSpace + rect.size.height
             }
             
-            if rowMaxWidth < (xPos - lsc.tg_leadingPadding) {
-                rowMaxWidth = (xPos - lsc.tg_leadingPadding)
+            if _tgCGFloatLess(rowMaxWidth , xPos - lsc.tg_leadingPadding) {
+                rowMaxWidth = xPos - lsc.tg_leadingPadding
             }
-            if maxWidth < xPos {
+            if _tgCGFloatLess(maxWidth , xPos)
+            {
                 maxWidth = xPos
             }
             
@@ -1136,7 +1137,7 @@ extension TGFlowLayout
             {
                 //算出页数来。如果包裹计算出来的宽度小于指定页数的宽度，因为要分页滚动所以这里会扩充布局的宽度。
                 let totalPages:CGFloat = floor(CGFloat(sbs.count + lsc.tg_pagedCount - 1 ) / CGFloat(lsc.tg_pagedCount))
-                if (selfSize.height < totalPages * self.superview!.bounds.height)
+                if _tgCGFloatLess(selfSize.height , totalPages * self.superview!.bounds.height)
                 {
                     selfSize.height = totalPages * self.superview!.bounds.height
                 }
@@ -1198,7 +1199,7 @@ extension TGFlowLayout
             {
                 //算出页数来。如果包裹计算出来的宽度小于指定页数的宽度，因为要分页滚动所以这里会扩充布局的宽度。
                 let totalPages:CGFloat = floor(CGFloat(sbs.count + lsc.tg_pagedCount - 1 ) / CGFloat(lsc.tg_pagedCount))
-                if (selfSize.width < totalPages * self.superview!.bounds.width)
+                if _tgCGFloatLess(selfSize.width , totalPages * self.superview!.bounds.width)
                 {
                     selfSize.width = totalPages * self.superview!.bounds.width
                 }
@@ -1236,9 +1237,9 @@ extension TGFlowLayout
             {
                 horzSpace = (selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding - subviewSize * rowCount)/(rowCount - 1)
                 
-                if (horzSpace > maxSpace)
+                if _tgCGFloatGreat(horzSpace , maxSpace)
                 {
-                    horzSpace = maxSpace;
+                    horzSpace = maxSpace
                     
                     subviewSize =  (selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding -  horzSpace * (rowCount - 1)) / rowCount;
                     
@@ -1341,7 +1342,7 @@ extension TGFlowLayout
                 self .tgCalcVertLayoutSinglelineAlignment(selfSize, rowMaxHeight: rowMaxHeight, rowMaxWidth: rowMaxWidth, horzGravity: horzGravity, vertAlignment: vertAlignment, sbs: sbs, startIndex: i, count: arrangeIndex, vertSpace: vertSpace, horzSpace: horzSpace, isEstimate: isEstimate, lsc:lsc)
                 
                 //计算单独的sbv的宽度是否大于整体的宽度。如果大于则缩小宽度。
-                if leadingSpace + trailingSpace + rect.size.width > selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding
+                if _tgCGFloatGreat(leadingSpace + trailingSpace + rect.size.width , selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding)
                 {
                     rect.size.width = self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding - leadingSpace - trailingSpace, sbvSize: rect.size, selfLayoutSize: selfSize)
                     
@@ -1366,11 +1367,11 @@ extension TGFlowLayout
             rect.origin.y = yPos + topSpace
             xPos += leadingSpace + rect.size.width + trailingSpace
             
-            if rowMaxHeight < topSpace + bottomSpace + rect.size.height {
+            if _tgCGFloatLess(rowMaxHeight , topSpace + bottomSpace + rect.size.height) {
                 rowMaxHeight = topSpace + bottomSpace + rect.size.height;
             }
-            if rowMaxWidth < (xPos - lsc.tg_leadingPadding) {
-                rowMaxWidth = (xPos - lsc.tg_leadingPadding);
+            if _tgCGFloatLess(rowMaxWidth , xPos - lsc.tg_leadingPadding) {
+                rowMaxWidth = xPos - lsc.tg_leadingPadding
             }
             
             sbvtgFrame.frame = rect;
@@ -1714,13 +1715,16 @@ extension TGFlowLayout
                 yPos += vertSpace
             }
             
-            if colMaxWidth < (leadingSpace + trailingSpace + rect.size.width) {
+            if _tgCGFloatLess(colMaxWidth , leadingSpace + trailingSpace + rect.size.width)
+            {
                 colMaxWidth = leadingSpace + trailingSpace + rect.size.width
             }
-            if colMaxHeight < (yPos - lsc.tg_topPadding) {
+            
+            if _tgCGFloatLess(colMaxHeight , (yPos - lsc.tg_topPadding)) {
                 colMaxHeight = yPos - lsc.tg_topPadding
             }
-            if maxHeight < yPos {
+            if _tgCGFloatLess(maxHeight , yPos)
+            {
                 maxHeight = yPos
             }
             
@@ -1741,7 +1745,7 @@ extension TGFlowLayout
             {
                 //算出页数来。如果包裹计算出来的宽度小于指定页数的宽度，因为要分页滚动所以这里会扩充布局的宽度。
                 let totalPages:CGFloat = floor(CGFloat(sbs.count + lsc.tg_pagedCount - 1 ) / CGFloat(lsc.tg_pagedCount))
-                if (selfSize.height < totalPages * self.superview!.bounds.height)
+                if _tgCGFloatLess(selfSize.height , totalPages * self.superview!.bounds.height)
                 {
                     selfSize.height = totalPages * self.superview!.bounds.height
                 }
@@ -1758,7 +1762,7 @@ extension TGFlowLayout
             {
                 //算出页数来。如果包裹计算出来的宽度小于指定页数的宽度，因为要分页滚动所以这里会扩充布局的宽度。
                 let totalPages:CGFloat = floor(CGFloat(sbs.count + lsc.tg_pagedCount - 1 ) / CGFloat(lsc.tg_pagedCount))
-                if (selfSize.width < totalPages * self.superview!.bounds.width)
+                if _tgCGFloatLess(selfSize.width , totalPages * self.superview!.bounds.width)
                 {
                     selfSize.width = totalPages * self.superview!.bounds.width
                 }
@@ -1840,7 +1844,7 @@ extension TGFlowLayout
             {
                 vertSpace = (selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding - subviewSize * rowCount)/(rowCount - 1)
                 
-                if (vertSpace > maxSpace)
+                if _tgCGFloatGreat(vertSpace , maxSpace)
                 {
                     vertSpace = maxSpace
                     
@@ -1956,7 +1960,7 @@ extension TGFlowLayout
                 self.tgCalcHorzLayoutSinglelineAlignment(selfSize, colMaxHeight: colMaxHeight, colMaxWidth: colMaxWidth, vertGravity: vertGravity, horzAlignment: horzAlignment, sbs: sbs, startIndex: i, count: arrangedIndex, vertSpace: vertSpace, horzSpace: horzSpace, isEstimate: isEstimate, lsc:lsc)
                 
                 //计算单独的sbv的高度是否大于整体的高度。如果大于则缩小高度。
-                if (topSpace + bottomSpace + rect.size.height > selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
+                if _tgCGFloatGreat(topSpace + bottomSpace + rect.size.height , selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
                 {
                     rect.size.height = selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding - topSpace - bottomSpace
                     rect.size.height = self.tgValidMeasure(sbvsc.height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
@@ -1974,11 +1978,13 @@ extension TGFlowLayout
             rect.origin.y = yPos + topSpace
             yPos += topSpace + rect.size.height + bottomSpace
             
-            if (colMaxWidth < leadingSpace + trailingSpace + rect.size.width) {
-                colMaxWidth = leadingSpace + trailingSpace + rect.size.width;
+            if _tgCGFloatLess(colMaxWidth , leadingSpace + trailingSpace + rect.size.width)
+            {
+                colMaxWidth = leadingSpace + trailingSpace + rect.size.width
             }
             
-            if (colMaxHeight < (yPos - lsc.tg_topPadding)) {
+            if _tgCGFloatLess(colMaxHeight , (yPos - lsc.tg_topPadding))
+            {
                 colMaxHeight = (yPos - lsc.tg_topPadding);
             }
             sbvtgFrame.frame = rect;

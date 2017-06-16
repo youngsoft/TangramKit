@@ -297,7 +297,7 @@ extension TGFrameLayout
             if sbvHead.hasValue && sbvTail.hasValue
             {
                 let m1 = sbvHeadMargin + sbvTailMargin + headPadding + tailPadding
-                if maxSize < m1
+                if _tgCGFloatLess(maxSize , m1)
                 {
                     maxSize = m1
                 }
@@ -310,13 +310,13 @@ extension TGFrameLayout
                 sbvSize.weightVal == nil
             {
                 let m1 = sbvMeasure + sbvHeadMargin + sbvCenterMargin + sbvTailMargin + headPadding + tailPadding
-                if maxSize < m1
+                if _tgCGFloatLess(maxSize , m1)
                 {
                    maxSize = m1
                 }
                 
                 let m2 = sbvMaxPos + sbvTailMargin + tailPadding
-                if maxSize < m2
+                if _tgCGFloatLess(maxSize , m2)
                 {
                     maxSize = m2
                 }

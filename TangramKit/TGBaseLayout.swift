@@ -989,6 +989,18 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     public private(set) var tg_isLayouting = false
     
     
+    ///设置是否选中状态。您可以用这个状态来记录布局的扩展属性。
+    public var isSelected:Bool = false
+    
+    
+    ///删除所有子视图
+    public func tg_removeAllSubviews()
+    {
+        for sbv:UIView in self.subviews
+        {
+            sbv.removeFromSuperview()
+        }
+    }
     
     /// 执行布局动画。在布局视图的某个子视图设置完布局属性后，调用布局的这个方法可以让布局里面的子视图在布局时实现动画效果。
     ///
@@ -1619,13 +1631,13 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                         
                         if suplsc.height.isWrap
                         {
-                            superBounds.size.height = selftgTopMargin + newSelfSize.height + selftgBottomMargin
+                            superBounds.size.height = self.tgValidMeasure(suplsc.height, sbv: supv, calcSize: selftgTopMargin + newSelfSize.height + selftgBottomMargin, sbvSize: superBounds.size, selfLayoutSize: newSelfSize)
                             superCenter.y += (superBounds.height - supv.bounds.height) * supv.layer.anchorPoint.y
                         }
                         
                         if suplsc.width.isWrap
                         {
-                            superBounds.size.width = selftgLeadingMargin + newSelfSize.width + selftgTrailingMargin
+                            superBounds.size.width = self.tgValidMeasure(suplsc.width, sbv: supv, calcSize: selftgLeadingMargin + newSelfSize.width + selftgTrailingMargin, sbvSize: superBounds.size, selfLayoutSize: newSelfSize)
                             superCenter.x += (superBounds.width - supv.bounds.width) * supv.layer.anchorPoint.x
                         }
                         
@@ -2631,13 +2643,14 @@ extension TGBaseLayout
                 sbvVertGravity = sbvVertAlignment
             }
             
-            if sbvsc.centerY.hasValue
-            {
-                sbvVertGravity = TGGravity.vert.center;
-            }
-            else if sbvsc.isVertMarginHasValue
+            
+            if sbvsc.isVertMarginHasValue
             {
                 sbvVertGravity = TGGravity.vert.fill;
+            }
+            else if sbvsc.centerY.hasValue
+            {
+                sbvVertGravity = TGGravity.vert.center;
             }
             else if sbvsc.top.hasValue
             {
@@ -2711,13 +2724,13 @@ extension TGBaseLayout
                 sbvHorzGravity = sbvHorzAligement
             }
             
-            if sbvsc.centerX.hasValue
-            {
-                sbvHorzGravity = TGGravity.horz.center
-            }
-            else if sbvsc.isHorzMarginHasValue
+            if sbvsc.isHorzMarginHasValue
             {
                 sbvHorzGravity = TGGravity.horz.fill;
+            }
+            else if sbvsc.centerX.hasValue
+            {
+                sbvHorzGravity = TGGravity.horz.center
             }
             else if sbvsc.leading.hasValue
             {
@@ -3570,7 +3583,7 @@ class TGBorderlineLayerDelegate:NSObject,CALayerDelegate
             if retLayer == nil
             {
                 retLayer = CAShapeLayer()
-                retLayer.zPosition = 1000
+                retLayer.zPosition = 10000
                 retLayer.delegate = self
                 _layout.layer.addSublayer(retLayer!)
             }
@@ -3922,7 +3935,7 @@ internal func _tgCGFloatEqual(_ f1:CGFloat, _ f2:CGFloat) -> Bool
     
     if CGFloat.NativeType.self == Double.self
     {
-        return abs(f1 - f2) < 1e-6
+        return abs(f1 - f2) < 1e-7
         
     }
     else
@@ -3938,7 +3951,7 @@ internal func _tgCGFloatNotEqual(_ f1:CGFloat, _ f2:CGFloat) -> Bool
 {
     if CGFloat.NativeType.self == Double.self
     {
-        return abs(f1 - f2) > 1e-6
+        return abs(f1 - f2) > 1e-7
     }
     else
     {
@@ -3946,15 +3959,40 @@ internal func _tgCGFloatNotEqual(_ f1:CGFloat, _ f2:CGFloat) -> Bool
     }
 }
 
+internal func _tgCGFloatLess(_ f1:CGFloat, _ f2:CGFloat) ->Bool
+{
+    if CGFloat.NativeType.self == Double.self
+    {
+        return f2 - f1 > 1e-7
+    }
+    else
+    {
+        return f2 - f1 > 1e-4
+    }
+
+}
+
+internal func _tgCGFloatGreat(_ f1:CGFloat, _ f2:CGFloat) ->Bool
+{
+    if CGFloat.NativeType.self == Double.self
+    {
+        return f1 - f2 > 1e-7
+    }
+    else
+    {
+        return f1 - f2 > 1e-4
+    }
+}
+
 internal func _tgCGFloatLessOrEqual(_ f1:CGFloat, _ f2:CGFloat) -> Bool
 {
     if CGFloat.NativeType.self == Double.self
     {
-        return f1 < f2 || abs(f1 - f2) < 1e-6
+        return f1 < f2 || abs(f1 - f2) < 1e-7
     }
     else
     {
-        return f1 < f2 || abs(f1 - f2) < 1e-4
+        return f1 < f2 || abs(f1 - f2) < 1e-7
         
     }
 }
@@ -3963,11 +4001,11 @@ internal func _tgCGFloatGreatOrEqual(_ f1:CGFloat, _ f2:CGFloat) -> Bool
 {
     if CGFloat.NativeType.self == Double.self
     {
-        return f1 > f2 || abs(f1 - f2) < 1e-6
+        return f1 > f2 || abs(f1 - f2) < 1e-7
     }
     else
     {
-        return f1 > f2 || abs(f1 - f2) < 1e-4
+        return f1 > f2 || abs(f1 - f2) < 1e-7
         
     }
     
@@ -3998,6 +4036,13 @@ internal func _tgRoundNumber(_ f :CGFloat) ->CGFloat
         return f
     }
     
+    
+    let fi = round(f)
+    if _tgCGFloatEqual(fi, f)
+    {
+        return fi
+    }
+ 
     //按精度四舍五入
     //正确的算法应该是。x = 0; y = 0;  0<x<0.5 y = 0;   x = 0.5 y = 0.5;  0.5<x<1 y = 0.5; x=1 y = 1;
     
