@@ -3,6 +3,11 @@
 
 --- 
 
+## [V1.1.1](https://github.com/youngsoft/TangramKit/releases/tag/1.1.1)(2017/6/22)
+#### Fixed
+1. 修复了布局视图套布局视图，并且尺寸是.wrap时界面有可能进入死循环的问题，尤其是iPhonePlus设备。
+
+
 ## [V1.1.0](https://github.com/youngsoft/TangramKit/releases/tag/1.1.0)(2017/6/16)
 
 #### Added

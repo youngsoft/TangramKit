@@ -1427,7 +1427,9 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             {
                 let (sbvtgFrame, sbvsc) = self.tgGetSubviewFrameAndSizeClass(sbv)
                 
-                let ptOrigin = sbv.bounds.origin
+                let sbvOldBounds = sbv.bounds
+                let sbvOldCenter = sbv.center
+                
                 if sbvtgFrame.leading != CGFloat.greatestFiniteMagnitude && sbvtgFrame.top != CGFloat.greatestFiniteMagnitude && !sbvsc.tg_noLayout && !sbvsc.tg_useFrame
                 {
                     if sbvtgFrame.width < 0
@@ -1449,20 +1451,60 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                     if sbv.isKind(of: TGBaseLayout.self)
                     {
                         rc = _tgRoundRectForLayout(sbvtgFrame.frame)
+                        
+                        var sbvTempBounds = CGRect(origin:sbvOldBounds.origin, size:rc.size)
+                        
+                        if (_tgCGFloatErrorEqual(sbvTempBounds.size.width, sbvOldBounds.size.width, _tgrSizeError))
+                        {
+                          sbvTempBounds.size.width = sbvOldBounds.size.width
+                        }
+                        
+                        if (_tgCGFloatErrorEqual(sbvTempBounds.size.height, sbvOldBounds.size.height, _tgrSizeError))
+                        {
+                            sbvTempBounds.size.height = sbvOldBounds.size.height
+                        }
+                        
+                        
+                        if (_tgCGFloatErrorNotEqual(sbvTempBounds.size.width, sbvOldBounds.size.width, _tgrSizeError) ||
+                            _tgCGFloatErrorNotEqual(sbvTempBounds.size.height, sbvOldBounds.size.height, _tgrSizeError))
+                        {
+                            sbv.bounds = sbvTempBounds
+                        }
+                        
+                        var sbvTempCenter = CGPoint(x:rc.origin.x + sbv.layer.anchorPoint.x * sbvTempBounds.size.width, y:rc.origin.y + sbv.layer.anchorPoint.y * sbvTempBounds.size.height);
+                        
+                        if (_tgCGFloatErrorEqual(sbvTempCenter.x, sbvOldCenter.x, _tgrSizeError))
+                        {
+                         sbvTempCenter.x = sbvOldCenter.x
+                        }
+                        
+                        if (_tgCGFloatErrorEqual(sbvTempCenter.y, sbvOldCenter.y, _tgrSizeError))
+                        {
+                            sbvTempCenter.y = sbvOldCenter.y
+                        }
+                        
+                        
+                        if (_tgCGFloatErrorNotEqual(sbvTempCenter.x, sbvOldCenter.x, _tgrSizeError) ||
+                            _tgCGFloatErrorNotEqual(sbvTempCenter.y, sbvOldCenter.y, _tgrSizeError))
+                        {
+                            sbv.center = sbvTempCenter
+                        }
+                        
                     }
                     else
                     {
                         rc = _tgRoundRect(sbvtgFrame.frame)
+                        
+                        sbv.center = CGPoint(x:rc.origin.x + sbv.layer.anchorPoint.x * rc.size.width, y:rc.origin.y + sbv.layer.anchorPoint.y * rc.size.height)
+                        sbv.bounds = CGRect(origin: sbvOldBounds.origin, size: rc.size)
+
                     }
-                    
-                    sbv.center = CGPoint(x:rc.origin.x + sbv.layer.anchorPoint.x * rc.size.width, y:rc.origin.y + sbv.layer.anchorPoint.y * rc.size.height)
-                    sbv.bounds = CGRect(origin: ptOrigin, size: rc.size)
                     
                 }
                 
                 if sbvsc.tg_visibility == .gone && !sbv.isHidden
                 {
-                    sbv.bounds = CGRect(origin: ptOrigin, size: .zero)
+                    sbv.bounds = CGRect(origin: sbvOldBounds.origin, size: .zero)
                 }
             
                 
@@ -1482,8 +1524,8 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 
                 //因为布局子视图的新老尺寸计算在上面有两种不同的方法，因此这里需要考虑两种计算的误差值，而这两种计算的误差值是不超过1/屏幕精度的。
                 //因此我们认为当二者的值超过误差时我们才认为有尺寸变化。
-                let isWidthAlter = fabs(newSelfSize.width - oldSelfSize.width) > _tgrSizeError
-                let isHeightAlter = fabs(newSelfSize.height - oldSelfSize.height) > _tgrSizeError
+                let isWidthAlter = _tgCGFloatErrorNotEqual(newSelfSize.width,  oldSelfSize.width, _tgrSizeError)
+                let isHeightAlter = _tgCGFloatErrorNotEqual(newSelfSize.height, oldSelfSize.height, _tgrSizeError)
 
                 
                 //如果父视图也是布局视图，并且自己隐藏则不调整自身的尺寸和位置。
@@ -3930,6 +3972,18 @@ extension UIView
 }
 
 
+internal func _tgCGFloatErrorEqual(_ f1:CGFloat, _ f2:CGFloat, _ error:CGFloat) -> Bool
+{
+    
+   return abs(f1 - f2) < error
+}
+
+internal func _tgCGFloatErrorNotEqual(_ f1:CGFloat, _ f2:CGFloat, _ error:CGFloat) -> Bool
+{
+    return abs(f1 - f2) > error
+}
+
+
 internal func _tgCGFloatEqual(_ f1:CGFloat, _ f2:CGFloat) -> Bool
 {
     
@@ -4037,7 +4091,7 @@ internal func _tgRoundNumber(_ f :CGFloat) ->CGFloat
     }
     
     
-    let fi = round(f)
+    let fi = rint(f)
     if _tgCGFloatEqual(fi, f)
     {
         return fi
