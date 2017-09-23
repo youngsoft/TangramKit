@@ -303,6 +303,16 @@ final public class TGLayoutPos:TGLayoutPosValue
         case .floatV(let v):
             return v
         case .layoutSupport(let v):
+            //只有在11以后并且是设置了safearea缩进才忽略UILayoutSupport。
+            if let superlayout = self.view.superview as? TGBaseLayout, #available(iOS 11.0, *)
+            {
+                let edge = superlayout.tg_insetsPaddingFromSafeArea.rawValue
+                if ((_type == TGGravity.vert.top && (edge & UIRectEdge.top.rawValue) == UIRectEdge.top.rawValue) ||
+                    (_type == TGGravity.vert.bottom && (edge & UIRectEdge.bottom.rawValue) == UIRectEdge.bottom.rawValue))
+                {
+                    return 0
+                }
+            }
             return v.length
         default:
             return nil
@@ -635,7 +645,7 @@ extension TGLayoutPos:NSCopying
 {
     public func copy(with zone: NSZone? = nil) -> Any
     {
-        let ls:TGLayoutPos = type(of: self).init(_type, view:_view)
+        let ls:TGLayoutPos = Swift.type(of: self).init(_type, view:_view)
         ls._active = self._active
         ls._val = self._val
         ls._offset = self._offset

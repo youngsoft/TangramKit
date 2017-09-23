@@ -130,7 +130,7 @@ class PLTest3ViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-    func handleClick(sender: UIButton) {
+    @objc func handleClick(sender: UIButton) {
         
         //例子中一共有7个子视图。因此每次旋转都是增加 360 / 7度。如果您要实现拖拽进行调整位置时，也只需要动态改变坐标的开始和结束位置就可以了。
         myPathLayout.tg_coordinateSetting.start! += 2 * CGFloat.pi / CGFloat(myPathLayout.tg_pathSubviews.count)

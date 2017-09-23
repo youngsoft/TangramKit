@@ -3,6 +3,30 @@
 
 --- 
 
+## [V1.1.2](https://github.com/youngsoft/TangramKit/releases/tag/1.1.2)(2017/9/23)
+
+#### Added
+1. 添加对Swift4的兼容支持
+2. 添加适配iOS11的能力以及**iPhoneX**的方法。基本不需要改动当前代码。如果需要改动只需要设置根布局视图的一些属性即可。
+  	1. 新增布局视图属性：`tg_insetsPaddingFromSafeArea`用来设置在哪个方向缩进对应方向的安全区域。
+  	2. 新增布局视图属性：`tg_insetLandscapeFringePadding`用来设置当支持横屏时，并且tg_insetsPaddingFromSafeArea设置为左右缩进时，是否只缩进有刘海的那一边。这个属性默认设置为NO，表示两边都缩进。您可以在特殊需要时将这个属性设置为YES表示只缩进刘海那一边，非刘海那一边则不缩进。具体参考使用DEMO：[LLTest1ViewController](https://github.com/youngsoft/TangramKit/blob/master/TangramKitDemo/linerLayoutDemo/LLTest1ViewController.swift)
+
+3. 表格布局TGTableLayout添加了`tg_addRow:colCount:`方法，目的是为了支持那些列数固定并且宽度固定的需求，具体例子见DEMO：[TLTest1ViewController](https://github.com/youngsoft/TangramKit/blob/master/TangramKitDemo/TableLayoutDemo/TLTest1ViewController.swift)中的第五行的代码。
+4. 添加了布局视图的高度等于非布局父视图宽度以及布局视图宽度等于非布局父视图高度的支持，目的是为了支持对布局视图进行旋转`transform`的支持。
+5. 添加了框架布局MyFrameLayout中子视图的高度等于另外视图宽度以及宽度等于另外视图高度的支持。
+6. 下一个版本将会有重大功能的添加：栅格布局的支持、基线对齐的支持、均分的再次优化等等功能，敬请期待吧。。
+
+
+
+#### Fixed
+1. 修复了流式布局`MyFlowLayout`中当使用`pageCount`设置分页而里面的子视图是布局视图并设置了wrapContentHeight或wrapContentWidth方法时有可能会导致约束冲突而产生死循环的问题。
+
+2. 修复了线性布局中的子视图设置为weight=1来均分布局视图的尺寸时，有可能导致产生中间缝隙的BUG。以及子视图的总尺寸和布局视图尺寸不相等的BUG。
+3. 修复了当对布局视图进行多点触摸且设置了布局视图的触摸事件时，有可能会对对应的触摸动作不调用而产生触摸状态无法被恢复的问题。
+4. 调整了将原始逻辑点转化为可显示逻辑点的算法，老算法计算可能不精确。
+
+
+
 ## [V1.1.1](https://github.com/youngsoft/TangramKit/releases/tag/1.1.1)(2017/6/22)
 #### Fixed
 1. 修复了布局视图套布局视图，并且尺寸是.wrap时界面有可能进入死循环的问题，尤其是iPhonePlus设备。

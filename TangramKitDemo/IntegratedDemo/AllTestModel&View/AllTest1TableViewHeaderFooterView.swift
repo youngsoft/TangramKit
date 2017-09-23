@@ -82,7 +82,7 @@ class AllTest1TableViewHeaderFooterView: UITableViewHeaderFooterView {
     }
     
     
-    func handleTap(_ sender: TGBaseLayout) {
+    @objc func handleTap(_ sender: TGBaseLayout) {
         switch sender.tag {
         case 0:
             self.underLineView.tg_leading.equal(0)

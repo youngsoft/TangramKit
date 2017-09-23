@@ -735,7 +735,7 @@ extension TGLayoutSize:NSCopying
 {
     public func copy(with zone: NSZone? = nil) -> Any
     {
-        let ls:TGLayoutSize = type(of: self).init(_type, view:_view)
+        let ls:TGLayoutSize = Swift.type(of: self).init(_type, view:_view)
         ls._active = self._active
         ls._val = self._val
         ls._increment = self._increment

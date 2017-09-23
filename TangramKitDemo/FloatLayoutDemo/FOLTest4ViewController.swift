@@ -323,7 +323,7 @@ extension FOLTest4ViewController
 //MARK: Handle Method
 extension FOLTest4ViewController
 {
-    func handleTagViewTap(sender:UIView!)
+    @objc func handleTagViewTap(sender:UIView!)
     {
         let  partIndex = sender.tag / 1000 / 1000;
         let  sectionIndex = (sender.tag / 1000) % 1000;
@@ -335,7 +335,7 @@ extension FOLTest4ViewController
         
     }
     
-    func handleSectionViewTap(sender:UIView!)
+    @objc func handleSectionViewTap(sender:UIView!)
     {
         let  partIndex = sender.tag / 1000;
         let  sectionIndex = sender.tag % 1000;
@@ -345,7 +345,7 @@ extension FOLTest4ViewController
         
     }
     
-    func handleStyleChange(sender:UIButton!)
+    @objc func handleStyleChange(sender:UIButton!)
     {
         self.contentLayout.subviews.forEach {$0.removeFromSuperview()}
         

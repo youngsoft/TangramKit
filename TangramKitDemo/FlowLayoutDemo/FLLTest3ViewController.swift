@@ -90,8 +90,10 @@ class FLLTest3ViewController: UIViewController {
         tagButton.backgroundColor = UIColor(red: CGFloat(arc4random()%256)/255.0, green: CGFloat(arc4random()%256)/255.0, blue: CGFloat(arc4random()%256)/255.0, alpha: 1.0)
         tagButton.tg_height.equal(44)
         tagButton.addTarget(self, action: #selector(handleTouchDrag(sender:event:)), for: .touchDragInside) //注册拖动事件。
+        tagButton.addTarget(self, action: #selector(handleTouchDrag(sender:event:)), for: .touchDragOutside) //注册拖动事件。
         tagButton.addTarget(self, action: #selector(handleTouchDown(sender:event:)), for: .touchDown) //注册按下事件
         tagButton.addTarget(self, action: #selector(handleTouchUp), for: .touchUpInside)  //注册抬起事件
+        tagButton.addTarget(self, action: #selector(handleTouchUp), for: .touchCancel)  //注册抬起事件
         tagButton.addTarget(self, action: #selector(handleTouchDownRepeat(sender:event:)), for: .touchDownRepeat) //注册多次点击事件
         return tagButton;
     }
@@ -114,13 +116,13 @@ class FLLTest3ViewController: UIViewController {
 
 extension FLLTest3ViewController {
     
-    func handleAddTagButton(sender: AnyObject)
+    @objc func handleAddTagButton(sender: AnyObject)
     {
         let label = NSLocalizedString("drag me \(self.flowLayout.subviews.count-1)", comment: "")
         self.flowLayout.insertSubview(self.createTagButton(text: label), at: self.flowLayout.subviews.count-1)
     }
     
-    func handleTouchDrag(sender: UIButton, event: UIEvent) {
+    @objc func handleTouchDrag(sender: UIButton, event: UIEvent) {
         self.hasDrag = true
         
         //取出拖动时当前的位置点。
@@ -180,7 +182,7 @@ extension FLLTest3ViewController {
         sender.center = pt  //因为tg_useFrame设置为了YES所有这里可以直接调整center，从而实现了位置的自定义设置。
     }
     
-    func handleTouchDown(sender: UIButton, event: UIEvent)
+    @objc func handleTouchDown(sender: UIButton, event: UIEvent)
     {
         //在按下时记录当前要拖动的控件的索引。
         self.oldIndex = self.flowLayout.subviews.index(of: sender)!
@@ -188,7 +190,7 @@ extension FLLTest3ViewController {
         self.hasDrag = false
     }
     
-    func handleTouchUp(sender: UIButton, event: UIEvent) {
+    @objc func handleTouchUp(sender: UIButton, event: UIEvent) {
         if !self.hasDrag {
             return
         }
@@ -206,7 +208,7 @@ extension FLLTest3ViewController {
 
     }
     
-    func handleTouchDownRepeat(sender: UIButton, event: UIEvent) {
+    @objc func handleTouchDownRepeat(sender: UIButton, event: UIEvent) {
         sender.removeFromSuperview()
         self.flowLayout.tg_layoutAnimationWithDuration(0.2)
     }

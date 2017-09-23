@@ -143,6 +143,8 @@ public protocol TGLayoutViewSizeClass:TGViewSizeClass
     var tg_bottomPadding:CGFloat{get set}
     var tg_trailingPadding:CGFloat{get set}
     var tg_zeroPadding:Bool{get set}
+    var tg_insetsPaddingFromSafeArea:UIRectEdge{get set}
+    var tg_insetLandscapeFringePadding:Bool {get set}
     
     var tg_leftPadding:CGFloat{get set}
     var tg_rightPadding:CGFloat{get set}
@@ -571,6 +573,9 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
     
     var tg_zeroPadding: Bool = true
     
+    var tg_insetsPaddingFromSafeArea: UIRectEdge = .all
+    var tg_insetLandscapeFringePadding: Bool = false
+    
     var tg_vspace:CGFloat = 0
     var tg_hspace:CGFloat = 0
     
@@ -590,15 +595,195 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
     var tg_reverseLayout: Bool = false
     var tg_gravity: TGGravity = .none
     
+    
+    internal var tgTopPadding:CGFloat
+    {
+        if ((self.tg_insetsPaddingFromSafeArea.rawValue & UIRectEdge.top.rawValue) == UIRectEdge.top.rawValue)
+        {
+            if #available(iOS 11.0, *) {
+                return self.tg_topPadding + self.view.safeAreaInsets.top
+            }
+        }
+        return self.tg_topPadding
+        
+    }
+    
+    internal var tgLeadingPadding:CGFloat
+    {
+        var inset:CGFloat = 0
+        
+        if #available(iOS 11.0, *) {
+            
+            var edge:UIRectEdge
+            var devori:UIDeviceOrientation
+            if TGViewSizeClassImpl.IsRTL
+            {
+                edge = .right
+                devori = .landscapeLeft
+            }
+            else
+            {
+                edge = .left
+                devori = .landscapeRight
+            }
+            
+            if (self.tg_insetsPaddingFromSafeArea.rawValue & edge.rawValue) == edge.rawValue
+            {
+                //如果只缩进刘海那一边。并且同时设置了左右缩进，并且当前刘海方向是右边那么就不缩进了。
+                if (self.tg_insetLandscapeFringePadding &&
+                    (self.tg_insetsPaddingFromSafeArea.rawValue & (UIRectEdge.left.rawValue | UIRectEdge.right.rawValue)) == (UIRectEdge.left.rawValue | UIRectEdge.right.rawValue) &&
+                    UIDevice.current.orientation == devori)
+                {
+                    inset = 0
+                }
+                else
+                {
+                    if TGViewSizeClassImpl.IsRTL
+                    {
+                        inset = self.view.safeAreaInsets.right
+                    }
+                    else
+                    {
+                        inset = self.view.safeAreaInsets.left
+                    }
+                }
+            }
+        }
+        
+        if TGViewSizeClassImpl.IsRTL
+        {
+            return self.tg_rightPadding + inset
+        }
+        else
+        {
+            return self.tg_leftPadding + inset
+        }
+    }
+    
+    internal var tgBottomPadding:CGFloat
+    {
+        if ((self.tg_insetsPaddingFromSafeArea.rawValue & UIRectEdge.bottom.rawValue) == UIRectEdge.bottom.rawValue)
+        {
+            if #available(iOS 11.0, *) {
+                return self.tg_bottomPadding + self.view.safeAreaInsets.bottom
+            }
+        }
+        return self.tg_bottomPadding
+    }
+    
+    
+    internal var tgTrailingPadding:CGFloat
+    {
+        var inset:CGFloat = 0
+        
+        if #available(iOS 11.0, *) {
+            
+            var edge:UIRectEdge
+            var devori:UIDeviceOrientation
+            if TGViewSizeClassImpl.IsRTL
+            {
+                edge = .left
+                devori = .landscapeRight
+            }
+            else
+            {
+                edge = .right
+                devori = .landscapeLeft
+            }
+            
+            if (self.tg_insetsPaddingFromSafeArea.rawValue & edge.rawValue) == edge.rawValue
+            {
+                //如果只缩进刘海那一边。并且同时设置了左右缩进，并且当前刘海方向是右边那么就不缩进了。
+                if (self.tg_insetLandscapeFringePadding &&
+                    (self.tg_insetsPaddingFromSafeArea.rawValue & (UIRectEdge.left.rawValue | UIRectEdge.right.rawValue)) == (UIRectEdge.left.rawValue | UIRectEdge.right.rawValue) &&
+                    UIDevice.current.orientation == devori)
+                {
+                    inset = 0
+                }
+                else
+                {
+                    if TGViewSizeClassImpl.IsRTL
+                    {
+                        inset = self.view.safeAreaInsets.left
+                    }
+                    else
+                    {
+                        inset = self.view.safeAreaInsets.right
+                    }
+                }
+            }
+        }
+        
+        if TGViewSizeClassImpl.IsRTL
+        {
+            return self.tg_leftPadding + inset
+        }
+        else
+        {
+            return self.tg_rightPadding + inset
+        }
+    }
+    
+    internal var tgLeftPadding:CGFloat
+    {
+        var inset:CGFloat = 0
+        
+        if #available(iOS 11.0, *) {
+            if (self.tg_insetsPaddingFromSafeArea.rawValue & UIRectEdge.left.rawValue) == UIRectEdge.left.rawValue
+            {
+                //如果只缩进刘海那一边。并且同时设置了左右缩进，并且当前刘海方向是右边那么就不缩进了。
+                if (self.tg_insetLandscapeFringePadding &&
+                    (self.tg_insetsPaddingFromSafeArea.rawValue & (UIRectEdge.left.rawValue | UIRectEdge.right.rawValue)) == (UIRectEdge.left.rawValue | UIRectEdge.right.rawValue) &&
+                    UIDevice.current.orientation == .landscapeRight)
+                {
+                    inset = 0
+                }
+                else
+                {
+                    inset = self.view.safeAreaInsets.left
+                }
+            }
+        }
+        
+        return self.tg_leftPadding + inset
+    }
+    
+    internal var tgRightPadding:CGFloat
+    {
+        var inset:CGFloat = 0
+        
+        if #available(iOS 11.0, *) {
+            if (self.tg_insetsPaddingFromSafeArea.rawValue & UIRectEdge.right.rawValue) == UIRectEdge.right.rawValue
+            {
+                //如果只缩进刘海那一边。并且同时设置了左右缩进，并且当前刘海方向是右边那么就不缩进了。
+                if (self.tg_insetLandscapeFringePadding &&
+                    (self.tg_insetsPaddingFromSafeArea.rawValue & (UIRectEdge.left.rawValue | UIRectEdge.right.rawValue)) == (UIRectEdge.left.rawValue | UIRectEdge.right.rawValue) &&
+                    UIDevice.current.orientation == .landscapeLeft)
+                {
+                    inset = 0
+                }
+                else
+                {
+                    inset = self.view.safeAreaInsets.right
+                }
+            }
+        }
+        
+        return self.tg_rightPadding + inset
+    }
+
+    
     override func copy(with zone: NSZone?) -> Any {
         
         let tsc = super.copy(with: zone) as! TGLayoutViewSizeClassImpl
 
-        tsc.tg_topPadding = self.tg_topPadding
+        tsc.tg_topPadding = self.tgTopPadding
         tsc.tg_leadingPadding = self.tg_leadingPadding
         tsc.tg_bottomPadding = self.tg_bottomPadding
         tsc.tg_trailingPadding = self.tg_trailingPadding
         tsc.tg_zeroPadding = self.tg_zeroPadding
+        tsc.tg_insetsPaddingFromSafeArea = self.tg_insetsPaddingFromSafeArea
+        tsc.tg_insetLandscapeFringePadding = self.tg_insetLandscapeFringePadding
         tsc.tg_vspace = self.tg_vspace
         tsc.tg_hspace = self.tg_hspace
         tsc.tg_reverseLayout = self.tg_reverseLayout

@@ -18,8 +18,7 @@ class ViewController: UITableViewController {
         super.viewDidLoad()
 
         self.title = NSLocalizedString("Category",comment:"")
-        self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName:CFTool.font(15),NSForegroundColorAttributeName:CFTool.color(4)]
-
+   
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "test")
         
         let tipLabel = UILabel(frame:CGRect(x:0, y:0, width:0, height:50))
@@ -173,7 +172,7 @@ class ViewController: UITableViewController {
     
     // MARK: - Handle Method
     
-    func handleRTL(_ sender:UIBarButtonItem)
+    @objc func handleRTL(_ sender:UIBarButtonItem)
     {
      
         if TGBaseLayout.tg_isRTL

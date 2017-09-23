@@ -23,6 +23,12 @@ class PLTest1ViewController: UIViewController {
         
         self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
 
+        //为了支持iPhoneX而设置附加的安全区缩进。否则根视图将延伸到工具栏下面去了。
+        if #available(iOS 11.0, *) {
+            self.additionalSafeAreaInsets = UIEdgeInsetsMake(0, 0, 44, 0)
+        } else {
+            // Fallback on earlier versions
+        }
         
         myPathLayout = TGPathLayout()
         myPathLayout.backgroundColor = UIColor.white
@@ -168,7 +174,7 @@ class PLTest1ViewController: UIViewController {
     
     // MARK: - Actions
     
-    func addAction() {
+    @objc func addAction() {
         let btn = UIButton(type: .custom)
         btn.center = myPathLayout.tg_originView!.center
         btn.tg_width.equal(40)
@@ -182,7 +188,7 @@ class PLTest1ViewController: UIViewController {
         btn.addTarget(self, action: #selector(PLTest1ViewController.handleDrag(sender:)), for: .touchDragInside)
     }
     
-    func handleDel(sender: UIButton) {
+    @objc func handleDel(sender: UIButton) {
         sender.tg_useFrame = true
         
         UIView.animate(withDuration: 0.3, animations: {
@@ -198,13 +204,13 @@ class PLTest1ViewController: UIViewController {
         myPathLayout.tg_layoutAnimationWithDuration(0.5)
     }
     
-    func handleDrag(sender: UIButton) {
+    @objc func handleDrag(sender: UIButton) {
         //这个效果只有在圆环中才有效果，你拖动时可以通过调整坐标的开始和结束点来很轻易的实现转动的效果。
         myPathLayout.tg_coordinateSetting.start! += .pi/180.0
         myPathLayout.tg_coordinateSetting.end! += .pi/180.0
     }
     
-    func handleStretch1(sender: UIBarButtonItem) {
+    @objc func handleStretch1(sender: UIBarButtonItem) {
         guard let originView = myPathLayout.tg_originView else {
             return
         }
@@ -253,7 +259,7 @@ class PLTest1ViewController: UIViewController {
         }
     }
     
-    func handleStretch2(sender: UIBarButtonItem) {
+    @objc func handleStretch2(sender: UIBarButtonItem) {
         guard let _ = myPathLayout.tg_originView else {
             return
         }
@@ -315,7 +321,7 @@ class PLTest1ViewController: UIViewController {
 
     }
     
-    func handleCircle(sender: UIBarButtonItem) {
+    @objc func handleCircle(sender: UIBarButtonItem) {
         toolbarItems?[0].style = .done
         toolbarItems?[1].style = .plain
         toolbarItems?[2].style = .plain
@@ -327,7 +333,7 @@ class PLTest1ViewController: UIViewController {
         myPathLayout.tg_layoutAnimationWithDuration(0.5)
     }
     
-    func handleArc(sender: UIBarButtonItem) {
+    @objc func handleArc(sender: UIBarButtonItem) {
         toolbarItems?[0].style = .plain
         toolbarItems?[1].style = .done
         toolbarItems?[2].style = .plain
@@ -339,7 +345,7 @@ class PLTest1ViewController: UIViewController {
         myPathLayout.tg_layoutAnimationWithDuration(0.5)
     }
 
-    func handleArc2(sender: UIBarButtonItem) {
+    @objc func handleArc2(sender: UIBarButtonItem) {
         toolbarItems?[0].style = .plain
         toolbarItems?[1].style = .plain
         toolbarItems?[2].style = .done
@@ -351,7 +357,7 @@ class PLTest1ViewController: UIViewController {
         myPathLayout.tg_layoutAnimationWithDuration(0.5)
     }
     
-    func handleLine1(sender: UIBarButtonItem) {
+    @objc func handleLine1(sender: UIBarButtonItem) {
         toolbarItems?[0].style = .plain
         toolbarItems?[1].style = .plain
         toolbarItems?[2].style = .plain
@@ -363,7 +369,7 @@ class PLTest1ViewController: UIViewController {
         myPathLayout.tg_layoutAnimationWithDuration(0.5)
     }
     
-    func handleLine2(sender: UIBarButtonItem) {
+    @objc func handleLine2(sender: UIBarButtonItem) {
         toolbarItems?[0].style = .plain
         toolbarItems?[1].style = .plain
         toolbarItems?[2].style = .plain
@@ -376,7 +382,7 @@ class PLTest1ViewController: UIViewController {
     }
     
     
-    func handleFlexed(sender: UIBarButtonItem) {
+    @objc func handleFlexed(sender: UIBarButtonItem) {
         toolbarItems?[6].style = .done
         toolbarItems?[7].style = .plain
         toolbarItems?[8].style = .plain
@@ -385,7 +391,7 @@ class PLTest1ViewController: UIViewController {
         myPathLayout.tg_layoutAnimationWithDuration(0.5)
     }
     
-    func handleFixed(sender: UIBarButtonItem) {
+    @objc func handleFixed(sender: UIBarButtonItem) {
         toolbarItems?[6].style = .plain
         toolbarItems?[7].style = .done
         toolbarItems?[8].style = .plain
@@ -394,7 +400,7 @@ class PLTest1ViewController: UIViewController {
         myPathLayout.tg_layoutAnimationWithDuration(0.5)
     }
     
-    func handleCount(sender: UIBarButtonItem) {
+    @objc func handleCount(sender: UIBarButtonItem) {
         toolbarItems?[6].style = .plain
         toolbarItems?[7].style = .plain
         toolbarItems?[8].style = .done

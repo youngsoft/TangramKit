@@ -300,7 +300,7 @@ extension LLTest3ViewController
 //MARK: - Handle Method
 extension LLTest3ViewController
 {
-    func handleVertLayoutGravity(_ button:UIButton)
+    @objc func handleVertLayoutGravity(_ button:UIButton)
     {
         //分别取出垂直和水平方向的停靠设置。
         var vertGravity = self.vertGravityLayout.tg_gravity & TGGravity.horz.mask
@@ -352,7 +352,7 @@ extension LLTest3ViewController
         
     }
     
-    func handleHorzLayoutGravity(_ button:UIButton)
+    @objc func handleHorzLayoutGravity(_ button:UIButton)
     {
         //分别取出垂直和水平方向的停靠设置。
         var vertGravity = self.horzGravityLayout.tg_gravity & TGGravity.horz.mask
@@ -406,7 +406,7 @@ extension LLTest3ViewController
     }
 
     
-    func handleNavigationTitleCentre(_ sender: AnyObject!)
+    @objc func handleNavigationTitleCentre(_ sender: AnyObject!)
     {
         let navigationItemLayout = TGLinearLayout(.vert)
         //通过TGGravity.horz.windowCenter的设置总是保证在窗口的中间而不是布局视图的中间。
@@ -434,7 +434,7 @@ extension LLTest3ViewController
         
     }
     
-    func handleNavigationTitleRestore(_ sender: AnyObject!)
+    @objc func handleNavigationTitleRestore(_ sender: AnyObject!)
     {
         let topLabel = UILabel()
         topLabel.text = NSLocalizedString("title not center in the screen", comment:"")

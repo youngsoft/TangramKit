@@ -171,7 +171,7 @@ extension AllTest4ViewController
 //MARK: - Handle Method
 extension AllTest4ViewController
 {
-    func handleReverse(_ sender:UIView) -> Void {
+    @objc func handleReverse(_ sender:UIView) -> Void {
         //TGBaseLayout的属性tg_reverseLayout可以将子视图按照添加的顺序逆序布局。
         for layout in self.containerLayouts
         {
@@ -231,7 +231,7 @@ extension AllTest4ViewController
         
     }
     
-    func handleCellLayoutTap(_ sender:UIView) -> Void {
+    @objc func handleCellLayoutTap(_ sender:UIView) -> Void {
         
         //这里是为了节省，所以将两个不同的功能放在一起。。。
         

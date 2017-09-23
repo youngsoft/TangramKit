@@ -53,7 +53,7 @@
  
  */
 
-//Current version is 1.1.1, please open: https://github.com/youngsoft/TangramKit/blob/master/CHANGELOG.md to show the changes.
+//Current version is 1.1.2, please open: https://github.com/youngsoft/TangramKit/blob/master/CHANGELOG.md to show the changes.
 
 
 
@@ -283,6 +283,11 @@ public func ==(lhs: TGWeight, rhs: TGWeight) -> Bool
 public func +=( lhs:inout TGWeight, rhs:TGWeight)
 {
     lhs.rawValue += rhs.rawValue
+}
+
+public func -=( lhs:inout TGWeight, rhs:TGWeight)
+{
+    lhs.rawValue -= rhs.rawValue
 }
 
 public func +(lhs:TGWeight, rhs:TGWeight) ->TGWeight

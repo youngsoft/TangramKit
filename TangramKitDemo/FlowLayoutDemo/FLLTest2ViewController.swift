@@ -142,7 +142,7 @@ extension FLLTest2ViewController
     }
     
     
-    func handleAddTag(sender:Any!)
+    @objc func handleAddTag(sender:Any!)
     {
         if let text = self.tagTextField.text
         {
@@ -154,7 +154,7 @@ extension FLLTest2ViewController
         }
     }
     
-    func handleStretchSpace(sender:UISwitch!)
+    @objc func handleStretchSpace(sender:UISwitch!)
     {
         
         //间距拉伸
@@ -170,7 +170,7 @@ extension FLLTest2ViewController
         self.flowLayout.tg_layoutAnimationWithDuration(0.2)
     }
     
-    func handleStretchContent(sender:UISwitch!)
+    @objc func handleStretchContent(sender:UISwitch!)
     {
         
         //内容拉伸
@@ -187,7 +187,7 @@ extension FLLTest2ViewController
         
     }
     
-    func handleAutoArrange(sender:UISwitch!)
+    @objc func handleAutoArrange(sender:UISwitch!)
     {
         
         //自动调整位置。
@@ -204,7 +204,7 @@ extension FLLTest2ViewController
         
     }
     
-    func handleDelTag(sender:UIButton!)
+    @objc func handleDelTag(sender:UIButton!)
     {
         sender.removeFromSuperview()
         self.flowLayout.tg_layoutAnimationWithDuration(0.2)

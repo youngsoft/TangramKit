@@ -210,7 +210,7 @@ class FOLTest1ViewController: UIViewController {
         self.floatLayout.tg_layoutAnimationWithDuration(0.3)
     }
     
-    func handleAddSubview(_ sender: AnyObject) {
+    @objc func handleAddSubview(_ sender: AnyObject) {
         
         if (self.whTextField.text!.isEmpty)
         {
@@ -223,7 +223,7 @@ class FOLTest1ViewController: UIViewController {
         
     }
     
-    func handleChangeOrientation(_ sender: AnyObject) {
+    @objc func handleChangeOrientation(_ sender: AnyObject) {
         
         //调整布局方向
         if (self.floatLayout.tg_orientation == .vert)
@@ -239,7 +239,7 @@ class FOLTest1ViewController: UIViewController {
         
     }
     
-    func handleWeightStepper(_ sender: UIStepper) {
+    @objc func handleWeightStepper(_ sender: UIStepper) {
         
         if sender == self.widthWeightStepper
         {
@@ -256,7 +256,7 @@ class FOLTest1ViewController: UIViewController {
         
     }
     
-    func handleDelTag(_ sender:UIButton)
+    @objc func handleDelTag(_ sender:UIButton)
     {
         sender.removeFromSuperview()
         

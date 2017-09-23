@@ -406,42 +406,42 @@ extension AllTest3ViewController
 extension AllTest3ViewController
 {
     
-    func handleTap(sender:TGBaseLayout)
+    @objc func handleTap(sender:TGBaseLayout)
     {
         UIAlertView(title:"test", message:"you touched this section", delegate:nil, cancelButtonTitle:"OK").show()
     }
     
-    func handleTouchDown(sender:TGBaseLayout)
+    @objc func handleTouchDown(sender:TGBaseLayout)
     {
         let label = sender.viewWithTag(1000) as! UILabel
         label.textColor = .blue
          print("按下动作")
     }
     
-    func handleTouchCancel(sender:TGBaseLayout)
+    @objc func handleTouchCancel(sender:TGBaseLayout)
     {
         let label = sender.viewWithTag(1000) as! UILabel
         label.textColor = .black
         print("按下取消")
     }
     
-    func handleResetShow(sender:UIButton)
+    @objc func handleResetShow(sender:UIButton)
     {
         self.invisibleButton.tg_visibility = .visible
         self.goneButton.tg_visibility = .visible
     }
     
-    func handleInvisible(sender:UIButton)
+    @objc func handleInvisible(sender:UIButton)
     {
         sender.tg_visibility = .invisible
     }
     
-    func handleGone(sender:UIButton)
+    @objc func handleGone(sender:UIButton)
     {
         sender.tg_visibility = .gone
     }
     
-    func handleLeftFlexed(segmented: UISegmentedControl)
+    @objc func handleLeftFlexed(segmented: UISegmentedControl)
     {
         
         if (segmented.selectedSegmentIndex == 0)
@@ -468,7 +468,7 @@ extension AllTest3ViewController
     }
     
     
-    func handleRightFlexed(segmented: UISegmentedControl) {
+    @objc func handleRightFlexed(segmented: UISegmentedControl) {
         if segmented.selectedSegmentIndex == 0 {
             let strs = "01234567890"
             
@@ -489,7 +489,7 @@ extension AllTest3ViewController
         }
     }
     
-    func handleShrinkSwitch(sender: UISwitch) {
+    @objc func handleShrinkSwitch(sender: UISwitch) {
         if sender.isOn {
             self.shrinkLayout.tg_height.equal(.wrap)
         }
@@ -500,7 +500,7 @@ extension AllTest3ViewController
         self.shrinkLayout.tg_layoutAnimationWithDuration(0.3)
     }
     
-    func handleShowPopMenu(sender: TGBaseLayout) {
+    @objc func handleShowPopMenu(sender: TGBaseLayout) {
         
         if self.popmenuLayout != nil &&  self.popmenuLayout.superview != nil
         {
@@ -599,7 +599,7 @@ extension AllTest3ViewController
         self.frameLayout.tg_layoutAnimationWithDuration(0.3)
     }
     
-    func handleAddMe(sender: UIButton) {
+    @objc func handleAddMe(sender: UIButton) {
         
         let button = UIButton()
         button.setTitle(NSLocalizedString("double tap remove:\(sender.superview!.subviews.count)", comment:""), for: .normal)
@@ -620,7 +620,7 @@ extension AllTest3ViewController
         self.popmenuContainerLayout.tg_layoutAnimationWithDuration(0.3)
     }
     
-    func handleDelMe(sender: UIButton!)
+    @objc func handleDelMe(sender: UIButton!)
     {
         sender.removeFromSuperview()
         let size = self.popmenuItemLayout.tg_sizeThatFits()
@@ -630,7 +630,7 @@ extension AllTest3ViewController
         self.popmenuContainerLayout.tg_layoutAnimationWithDuration(0.3)
     }
     
-    func handleClosePopmenu(sender: UIButton!) {
+    @objc func handleClosePopmenu(sender: UIButton!) {
         //因为popmenuLayout的设置会激发frameLayout的重新布局，所以这里用这个方法进行动画消失处理。
         self.popmenuLayout.tg_top.equal(self.frameLayout.frame.size.height)
         UIView.animate(withDuration: 0.3, animations: {
@@ -640,7 +640,7 @@ extension AllTest3ViewController
         })
     }
     
-    func handleActiveTest(sender:UIButton!)
+    @objc func handleActiveTest(sender:UIButton!)
     {
         //下面代码中布局位置的active属性设置的变化所产生的效果。
         if (sender.tg_leading.isActive && sender.tg_trailing.isActive)

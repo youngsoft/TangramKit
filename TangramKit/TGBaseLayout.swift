@@ -852,6 +852,44 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         }
     }
     
+    /**
+     指定padding内边距的缩进是在SafeArea基础之上进行的。默认是.all表示四周都会缩进SafeArea所指定的区域。你也可以设置只缩进某一个或则几个方向，或者不缩进任何一个方向。这个属性是为了支持iPoneX而设置的。为了支持iPhoneX的全屏幕适配。我们只需要对根布局视图设置这个扩展属性，默认情况下是不需要进行特殊设置的，TangramKit自动会对iPhoneX进行适配。我们知道iOS11中引入了安全区域的概念，TangramKit中的根布局视图会自动将安全区域叠加到设置的padding中去。默认情况下四周的安全区域都会叠加到padding中去，因此您可以根据特殊情况来设置只需要叠加哪一个方向的安全区域。
+     */
+    public var tg_insetsPaddingFromSafeArea:UIRectEdge
+    {
+        get{
+            return (self.tgCurrentSizeClass as! TGLayoutViewSizeClass).tg_insetsPaddingFromSafeArea
+        }
+        set
+        {
+            let lsc = self.tgCurrentSizeClass as! TGLayoutViewSizeClass
+            if lsc.tg_insetsPaddingFromSafeArea != newValue
+            {
+                lsc.tg_insetsPaddingFromSafeArea = newValue
+                setNeedsLayout()
+            }
+        }
+    }
+    
+    /**
+     *当tg_insetsPaddingFromSafeArea同时设置有左右方向同时缩进并且在横屏时是否只缩进有刘海方向的内边距。默认是false，表示两边都会缩进。如果你想让没有刘海的那一边延伸到屏幕的安全区外，请将这个属性设置为true。iPhoneX设备中具有一个尺寸为44的刘海区域。当您横屏时为了对齐，左右两边的安全缩进区域都是44。但是有些时候我们希望没有刘海的那一边不需要缩进对齐而是延伸到安全区域以外。这时候您可以通过给根布局视图设置这个属性来达到效果。注意这个属性只有tg_insetsPaddingFromSafeArea设置了左右都缩进时才有效。
+     */
+    public var tg_insetLandscapeFringePadding:Bool
+    {
+        get{
+            return (self.tgCurrentSizeClass as! TGLayoutViewSizeClass).tg_insetLandscapeFringePadding
+        }
+        set
+        {
+            let lsc = self.tgCurrentSizeClass as! TGLayoutViewSizeClass
+            if lsc.tg_insetLandscapeFringePadding != newValue
+            {
+                lsc.tg_insetLandscapeFringePadding = newValue
+                setNeedsLayout()
+            }
+        }
+    }
+    
     
     /**
      定义布局视图内子视图之间的间距，所谓间距就是子视图之间的间隔距离。
@@ -2116,11 +2154,13 @@ extension TGBaseLayout
             {
                 if (t.type == TGGravity.horz.fill)
                 {
-                    value = selfLayoutSize.width - (t.view == self ? (self.tg_leadingPadding + self.tg_trailingPadding) : 0);
+                    let lsc = self.tgCurrentSizeClass as! TGLayoutViewSizeClassImpl
+                    value = selfLayoutSize.width - (t.view == self ? (lsc.tgLeadingPadding + lsc.tgTrailingPadding) : 0);
                 }
                 else
                 {
-                    value = selfLayoutSize.height - (t.view == self ? (self.tg_topPadding + self.tg_bottomPadding) :0);
+                    let lsc = self.tgCurrentSizeClass as! TGLayoutViewSizeClassImpl
+                    value = selfLayoutSize.height - (t.view == self ? (lsc.tgTopPadding + lsc.tgBottomPadding) :0);
                 }
             }
             else if (t.view == sbv)
@@ -2407,7 +2447,15 @@ extension TGBaseLayout
             {
                 if t.view === newSuperview
                 {
-                    rectSelf.size.width = lsc.width.measure(rectSuper.width)
+                    if t.type == TGGravity.horz.fill
+                    {
+                        rectSelf.size.width = lsc.width.measure(rectSuper.width)
+                    }
+                    else
+                    {
+                        rectSelf.size.width = lsc.width.measure(rectSuper.height)
+                    }
+                    
                 }
                 else
                 {
@@ -2476,7 +2524,14 @@ extension TGBaseLayout
             {
                 if t.view === newSuperview
                 {
-                    rectSelf.size.height = lsc.height.measure(rectSuper.height)
+                    if t.type == TGGravity.vert.fill
+                    {
+                        rectSelf.size.height = lsc.height.measure(rectSuper.height)
+                    }
+                    else
+                    {
+                        rectSelf.size.height = lsc.height.measure(rectSuper.width)
+                    }
                 }
                 else
                 {
@@ -2573,11 +2628,11 @@ extension TGBaseLayout
         {
             if lsc.width.isWrap
             {
-                size.width -= (lsc.tg_leadingPadding + lsc.tg_trailingPadding)
+                size.width -= (lsc.tgLeadingPadding + lsc.tgTrailingPadding)
             }
             if lsc.height.isWrap
             {
-                size.height -= (lsc.tg_topPadding + lsc.tg_bottomPadding)
+                size.height -= (lsc.tgTopPadding + lsc.tgBottomPadding)
             }
         }
         
@@ -2711,19 +2766,19 @@ extension TGBaseLayout
     
     internal func tgCalcVertGravity(_ vert:TGGravity, selfSize:CGSize, sbv:UIView, sbvsc:TGViewSizeClassImpl, lsc:TGLayoutViewSizeClassImpl, rect:inout CGRect)
     {
-        let fixedHeight = lsc.tg_topPadding + lsc.tg_bottomPadding
+        let fixedHeight = lsc.tgTopPadding + lsc.tgBottomPadding
         let topMargin =  sbvsc.top.weightPosIn(selfSize.height - fixedHeight)
         let centerMargin = sbvsc.centerY.weightPosIn(selfSize.height - fixedHeight)
         let bottomMargin = sbvsc.bottom.weightPosIn(selfSize.height - fixedHeight)
         
         if vert == TGGravity.vert.fill
         {
-            rect.origin.y = lsc.tg_topPadding + topMargin;
+            rect.origin.y = lsc.tgTopPadding + topMargin;
             rect.size.height = self.tgValidMeasure(sbvsc.height, sbv: sbv, calcSize:selfSize.height - fixedHeight - topMargin - bottomMargin , sbvSize: rect.size, selfLayoutSize: selfSize)
         }
         else if vert == TGGravity.vert.center
         {
-            rect.origin.y = (selfSize.height - fixedHeight - topMargin - bottomMargin - rect.size.height)/2 + lsc.tg_topPadding + topMargin + centerMargin;
+            rect.origin.y = (selfSize.height - fixedHeight - topMargin - bottomMargin - rect.size.height)/2 + lsc.tgTopPadding + topMargin + centerMargin;
         }
         else if vert == TGGravity.vert.windowCenter
         {
@@ -2737,11 +2792,11 @@ extension TGBaseLayout
         else if vert == TGGravity.vert.bottom
         {
             
-            rect.origin.y = selfSize.height - lsc.tg_bottomPadding - bottomMargin - rect.size.height;
+            rect.origin.y = selfSize.height - lsc.tgBottomPadding - bottomMargin - rect.size.height;
         }
         else
         {
-            rect.origin.y = lsc.tg_topPadding + topMargin;
+            rect.origin.y = lsc.tgTopPadding + topMargin;
         }
     }
     
@@ -2790,7 +2845,7 @@ extension TGBaseLayout
     
     internal func tgCalcHorzGravity(_ horz:TGGravity, selfSize:CGSize, sbv:UIView, sbvsc:TGViewSizeClassImpl, lsc:TGLayoutViewSizeClassImpl, rect:inout CGRect)
     {
-        let fixedWidth = lsc.tg_leadingPadding + lsc.tg_trailingPadding
+        let fixedWidth = lsc.tgLeadingPadding + lsc.tgTrailingPadding
         let leadingMargin = sbvsc.leading.weightPosIn(selfSize.width - fixedWidth)
         let centerMargin = sbvsc.centerX.weightPosIn(selfSize.width - fixedWidth)
         let trailingMargin = sbvsc.trailing.weightPosIn(selfSize.width - fixedWidth)
@@ -2798,12 +2853,12 @@ extension TGBaseLayout
         if horz == TGGravity.horz.fill
         {
             
-            rect.origin.x = lsc.tg_leadingPadding + leadingMargin;
+            rect.origin.x = lsc.tgLeadingPadding + leadingMargin;
             rect.size.width =  self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize:selfSize.width - fixedWidth - leadingMargin - trailingMargin , sbvSize: rect.size, selfLayoutSize: selfSize)
         }
         else if horz == TGGravity.horz.center
         {
-            rect.origin.x = (selfSize.width - fixedWidth - leadingMargin - trailingMargin - rect.size.width)/2 + lsc.tg_leadingPadding + leadingMargin + centerMargin;
+            rect.origin.x = (selfSize.width - fixedWidth - leadingMargin - trailingMargin - rect.size.width)/2 + lsc.tgLeadingPadding + leadingMargin + centerMargin;
         }
         else if horz == TGGravity.horz.windowCenter
         {
@@ -2822,11 +2877,11 @@ extension TGBaseLayout
         else if horz == TGGravity.horz.trailing
         {
             
-            rect.origin.x = selfSize.width - lsc.tg_trailingPadding - trailingMargin - rect.size.width;
+            rect.origin.x = selfSize.width - lsc.tgTrailingPadding - trailingMargin - rect.size.width;
         }
         else
         {
-            rect.origin.x = lsc.tg_leadingPadding  + leadingMargin;
+            rect.origin.x = lsc.tgLeadingPadding  + leadingMargin;
         }
         
     }
@@ -2899,11 +2954,11 @@ extension TGBaseLayout
             
             if t === lsc.width.realSize && !lsc.width.isWrap
             {
-                rect.size.width = dime.measure(selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding)
+                rect.size.width = dime.measure(selfSize.width - lsc.tgLeadingPadding - lsc.tgTrailingPadding)
             }
             else if t === lsc.height.realSize
             {
-                rect.size.width = dime.measure(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
+                rect.size.width = dime.measure(selfSize.height - lsc.tgTopPadding - lsc.tgBottomPadding)
             }
             else if t === sbvsc.height.realSize
             {
@@ -2922,11 +2977,11 @@ extension TGBaseLayout
         {
             if t === lsc.height.realSize && !lsc.height.isWrap
             {
-                rect.size.height = dime.measure(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
+                rect.size.height = dime.measure(selfSize.height - lsc.tgTopPadding - lsc.tgBottomPadding)
             }
             else if t === lsc.width.realSize
             {
-                rect.size.height = dime.measure(selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding)
+                rect.size.height = dime.measure(selfSize.width - lsc.tgLeadingPadding - lsc.tgTrailingPadding)
             }
             else if t ===  sbvsc.width.realSize
             {
@@ -3168,16 +3223,18 @@ private class TGTouchEventDelegate
     private var _hasDoCancel:Bool = false
     private var _oldBackgroundColor:UIColor?=nil
     private var _oldBackgroundImage:UIImage?=nil
-    private var _oldAlpha:CGFloat = 0
+    private var _oldAlpha:CGFloat = 1
     
     private var _forbidTouch:Bool = false
     private var _canCallAction:Bool = false
     private var _beginPoint:CGPoint = .zero
     
     static  var _HasBegin:Bool = false
+    static weak var _CurrentLayout:TGBaseLayout! = nil
     
     init(_ layout: TGBaseLayout) {
         _layout = layout
+        TGTouchEventDelegate._CurrentLayout = nil
     }
     
     func setTarget(_ target: NSObjectProtocol?, action: Selector?, for controlEvents: UIControlEvents)
@@ -3209,6 +3266,7 @@ private class TGTouchEventDelegate
         if _layout != nil && _touchUpTarget != nil && !_forbidTouch && touch.tapCount == 1 && !TGTouchEventDelegate._HasBegin
         {
             TGTouchEventDelegate._HasBegin = true
+            TGTouchEventDelegate._CurrentLayout = _layout
             _canCallAction = true
             _beginPoint =  touch.location(in: _layout)
             
@@ -3223,7 +3281,7 @@ private class TGTouchEventDelegate
     
     func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?)
     {
-        if _layout != nil && _touchUpTarget != nil && TGTouchEventDelegate._HasBegin
+        if _layout != nil && _touchUpTarget != nil && TGTouchEventDelegate._HasBegin && (_layout ===  TGTouchEventDelegate._CurrentLayout || TGTouchEventDelegate._CurrentLayout == nil)
         {
             if _canCallAction
             {
@@ -3248,7 +3306,7 @@ private class TGTouchEventDelegate
     
     func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?)
     {
-        if _layout != nil &&  _touchUpTarget != nil && TGTouchEventDelegate._HasBegin
+        if _layout != nil &&  _touchUpTarget != nil && TGTouchEventDelegate._HasBegin && (_layout ===  TGTouchEventDelegate._CurrentLayout || TGTouchEventDelegate._CurrentLayout == nil)
         {
             //设置一个延时.
             _forbidTouch = true
@@ -3261,19 +3319,21 @@ private class TGTouchEventDelegate
             })
             
             TGTouchEventDelegate._HasBegin = false
+            TGTouchEventDelegate._CurrentLayout = nil
         }
         
     }
     
     func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?)
     {
-        if _layout != nil && _touchUpTarget != nil && TGTouchEventDelegate._HasBegin
+        if _layout != nil && _touchUpTarget != nil && TGTouchEventDelegate._HasBegin && (_layout ===  TGTouchEventDelegate._CurrentLayout || TGTouchEventDelegate._CurrentLayout == nil)
         {
            
             self.resetTouchHighlighted()
             
             TGTouchEventDelegate._HasBegin = false
-            
+            TGTouchEventDelegate._CurrentLayout = nil
+
             if !_hasDoCancel
             {
                 _ = _touchCancelTarget?.perform(_touchCancelAction, with: _layout)
@@ -3293,7 +3353,7 @@ private class TGTouchEventDelegate
             
             //距离太远则不会处理
             let pt:CGPoint = touch.location(in: _layout)
-            if _touchUpTarget != nil && _canCallAction && _layout.bounds.contains(pt)
+            if _touchUpTarget != nil && _touchUpAction != nil && _canCallAction && _layout.bounds.contains(pt)
             {
                 _ = _touchUpTarget?.perform(_touchUpAction, with: _layout)
             }
@@ -3964,7 +4024,7 @@ extension UIView
     
     
     
-    func tgCreateInstance() -> AnyObject
+    @objc func tgCreateInstance() -> AnyObject
     {
         return TGViewSizeClassImpl(view:self)
     }
@@ -4091,22 +4151,16 @@ internal func _tgRoundNumber(_ f :CGFloat) ->CGFloat
     }
     
     
-    let fi = rint(f)
-    if _tgCGFloatEqual(fi, f)
-    {
-        return fi
-    }
- 
     //按精度四舍五入
     //正确的算法应该是。x = 0; y = 0;  0<x<0.5 y = 0;   x = 0.5 y = 0.5;  0.5<x<1 y = 0.5; x=1 y = 1;
     
     if (f < 0)
     {
-        return ceil(f * _tgrScale) / _tgrScale;
+        return ceil(fma(f, _tgrScale, -0.5)) / _tgrScale
     }
     else
     {
-        return  floor(f * _tgrScale) / _tgrScale;
+        return floor(fma(f, _tgrScale, 0.5)) / _tgrScale
     }
     
 }

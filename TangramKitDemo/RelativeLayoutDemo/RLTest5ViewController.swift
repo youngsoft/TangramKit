@@ -45,7 +45,7 @@ class RLTest5ViewController: UIViewController {
     }
     
     
-    func handleButtonSelect(_ button: UIButton) {
+    @objc func handleButtonSelect(_ button: UIButton) {
         if button.isSelected {
             return
         }
@@ -182,7 +182,7 @@ class RLTest5ViewController: UIViewController {
     }
     
     
-    func handleClick(_ sender: UITapGestureRecognizer) {
+    @objc func handleClick(_ sender: UITapGestureRecognizer) {
         
         let label = (sender.view as! UILabel)
         let text = label.text

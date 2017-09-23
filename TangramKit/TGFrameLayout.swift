@@ -43,7 +43,7 @@ open class TGFrameLayout: TGBaseLayout,TGFrameLayoutViewSizeClass {
         var maxWrapSize:CGSize! = nil
         if lsc.isSomeSizeWrap
         {
-           maxWrapSize = CGSize(width: lsc.tg_leadingPadding + lsc.tg_trailingPadding, height: lsc.tg_topPadding + lsc.tg_bottomPadding)
+           maxWrapSize = CGSize(width: lsc.tgLeadingPadding + lsc.tgTrailingPadding, height: lsc.tgTopPadding + lsc.tgBottomPadding)
         }
         
         for sbv in sbs
@@ -160,8 +160,8 @@ extension TGFrameLayout
                                        maxWrapSize:inout CGSize!)
     {
         
-        let selfFloatWidth = selfSize.width - lsc.tg_leadingPadding - lsc.tg_trailingPadding
-        let selfFloatHeight = selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding
+        let selfFloatWidth = selfSize.width - lsc.tgLeadingPadding - lsc.tgTrailingPadding
+        let selfFloatHeight = selfSize.height - lsc.tgTopPadding - lsc.tgBottomPadding
         let leadingMargin = sbvsc.leading.weightPosIn(selfFloatWidth)
         let trailingMargin = sbvsc.trailing.weightPosIn(selfFloatWidth)
         let topMargin = sbvsc.top.weightPosIn(selfFloatHeight)
@@ -180,6 +180,10 @@ extension TGFrameLayout
             {
                 rect.size.width =  sbvsc.width.measure(selfFloatWidth)
             }
+            else if t === lsc.height.realSize
+            {
+                rect.size.width =  sbvsc.width.measure(selfFloatHeight)
+            }
             else
             {
                 rect.size.width = sbvsc.width.measure(t.view.tg_estimatedFrame.width)
@@ -197,6 +201,10 @@ extension TGFrameLayout
             if t === lsc.height.realSize
             {
                 rect.size.height =  sbvsc.height.measure(selfFloatHeight)
+            }
+            else if t === lsc.width.realSize
+            {
+                rect.size.height =  sbvsc.height.measure(selfFloatWidth)
             }
             else
             {
@@ -258,8 +266,8 @@ extension TGFrameLayout
                                                         sbvSize:sbvsc.width,
                                                         sbvMeasure:sbvtgFrame.width,
                                                         sbvMaxPos:sbvtgFrame.trailing,
-                                                        headPadding:lsc.tg_leadingPadding,
-                                                        tailPadding:lsc.tg_trailingPadding,
+                                                        headPadding:lsc.tgLeadingPadding,
+                                                        tailPadding:lsc.tgTrailingPadding,
                                                         lscSize:lsc.width,
                                                         maxSize:maxWrapSize.width)
             
@@ -269,8 +277,8 @@ extension TGFrameLayout
                                                         sbvSize:sbvsc.height,
                                                         sbvMeasure:sbvtgFrame.height,
                                                         sbvMaxPos:sbvtgFrame.bottom,
-                                                        headPadding:lsc.tg_topPadding,
-                                                        tailPadding:lsc.tg_bottomPadding,
+                                                        headPadding:lsc.tgTopPadding,
+                                                        tailPadding:lsc.tgBottomPadding,
                                                         lscSize:lsc.height,
                                                         maxSize:maxWrapSize.height)
         }

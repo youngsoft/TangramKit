@@ -101,7 +101,7 @@ extension TLTest2ViewController
 extension TLTest2ViewController
 {
     
-    func handleAddColLayout(_ sender:AnyObject?)
+    @objc func handleAddColLayout(_ sender:AnyObject?)
     {
         //获取表格布局中的每行的高度，找到高度最小的一行，如果高度都相等则选择索引号小的行。
         var  minHeight:CGFloat = CGFloat.greatestFiniteMagnitude
@@ -138,7 +138,7 @@ extension TLTest2ViewController
         self.rootLayout.tg_addCol(colLayout, inRow:rowIndex)
     }
     
-    func handleColLayoutTap(sender:UIView!)
+    @objc func handleColLayoutTap(sender:UIView!)
     {
         let alertView = UIAlertView(title:"", message: String(format:NSLocalizedString("cell:%03ld be selected", comment:""), sender.tag), delegate: nil, cancelButtonTitle: "OK")
         

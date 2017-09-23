@@ -125,7 +125,7 @@ extension FLLTest1ViewController
 //MARK: -Handle Method
 extension FLLTest1ViewController
 {
-    func handleAdjustOrientation(_ sender:AnyObject?)
+    @objc func handleAdjustOrientation(_ sender:AnyObject?)
     {
         //调整流式布局的方向。
         if (self.flowLayout.tg_orientation == .vert)
@@ -143,7 +143,7 @@ extension FLLTest1ViewController
 
     }
     
-    func handleAdjustArrangedCount(_ sender:AnyObject?)
+    @objc func handleAdjustArrangedCount(_ sender:AnyObject?)
     {
         
         //调整流式布局的每行的数量。
@@ -154,7 +154,7 @@ extension FLLTest1ViewController
 
     }
     
-    func handleAdjustVertGravity(_ sender:AnyObject?)
+    @objc func handleAdjustVertGravity(_ sender:AnyObject?)
     {
         //调整整体垂直方向的停靠
         
@@ -196,7 +196,7 @@ extension FLLTest1ViewController
 
     
     
-    func handleAdjustHorzGravity(_ sender:AnyObject?)
+    @objc func handleAdjustHorzGravity(_ sender:AnyObject?)
     {
         //调整整体水平方向的停靠。
         
@@ -237,7 +237,7 @@ extension FLLTest1ViewController
         
     }
     
-    func handleAdjustArrangeGravity(_ sender:AnyObject?)
+    @objc func handleAdjustArrangeGravity(_ sender:AnyObject?)
     {
         var vertArrangeGravity = self.flowLayout.tg_arrangedGravity & TGGravity.horz.mask
         var horzArrangeGravity = self.flowLayout.tg_arrangedGravity & TGGravity.vert.mask
@@ -301,7 +301,7 @@ extension FLLTest1ViewController
         self.flowlayoutInfo()
     }
     
-    func handleAdjustSpace(_ sender:AnyObject?)
+    @objc func handleAdjustSpace(_ sender:AnyObject?)
     {
         //调整子视图之间的间距
         

@@ -69,7 +69,7 @@ class PLTest2ViewController: UIViewController {
         changeFunc(index: .straight_line)
     }
     
-    func handleRevrse(sender: UIBarButtonItem) {
+    @objc func handleRevrse(sender: UIBarButtonItem) {
         myPathLayout.tg_coordinateSetting.isReverse = !myPathLayout.tg_coordinateSetting.isReverse
         myPathLayout.tg_layoutAnimationWithDuration(0.3)
     }
@@ -86,7 +86,7 @@ class PLTest2ViewController: UIViewController {
     
     let titles: [CurveType] = [.straight_line, .sin, .cycloid, .spiral_like, .cardioid, .astroid, .cancle]
     
-    func handleAction(sender: UIBarButtonItem) {
+    @objc func handleAction(sender: UIBarButtonItem) {
         
         let sheet = UIAlertController(title: "Curve Type", message: nil, preferredStyle: .actionSheet)
         
@@ -129,7 +129,7 @@ class PLTest2ViewController: UIViewController {
         return colors[Int(arc4random_uniform(UInt32(colors.count)))]
     }
     
-    func handleAdd(sender: UIBarButtonItem) {
+    @objc func handleAdd(sender: UIBarButtonItem) {
         
         var pt = CGPoint.zero
         if myPathLayout.tg_pathSubviews.count > 0 {
@@ -151,7 +151,7 @@ class PLTest2ViewController: UIViewController {
         myPathLayout.tg_layoutAnimationWithDuration(0.3)
     }
     
-    func handleDel(sender: UIButton) {
+    @objc func handleDel(sender: UIButton) {
         sender.removeFromSuperview()
         myPathLayout.tg_layoutAnimationWithDuration(0.3)
     }

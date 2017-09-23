@@ -71,7 +71,7 @@ class PLTest4ViewController: UIViewController {
         
     }
     
-    func handleAction(sender: UIButton) {
+    @objc func handleAction(sender: UIButton) {
         
         if sender.isSelected {
             

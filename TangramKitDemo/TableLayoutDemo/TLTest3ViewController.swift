@@ -160,7 +160,7 @@ extension TLTest3ViewController
 //MARK: - Handle Method
 extension TLTest3ViewController
 {
-    func handleCellTap(sender:TGBaseLayout)
+    @objc func handleCellTap(sender:TGBaseLayout)
     {
         let label = sender.subviews.first as! UILabel
         let  message = "您单击了:\(label.text!)"
@@ -168,7 +168,7 @@ extension TLTest3ViewController
         alert.show()
     }
     
-    func handleSpace(sender:Any?)
+    @objc func handleSpace(sender:Any?)
     {
         //执行间距调整的逻辑。
         if self.rootLayout.tg_vspace == 0

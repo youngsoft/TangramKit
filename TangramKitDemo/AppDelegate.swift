@@ -18,6 +18,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool
     {
+        
+        
+       // TGBaseLayout.appearance().TG
         TGDimeAdapter.template(CGSize(width: 375, height: 667))
         
         self.window =  UIWindow(frame: UIScreen.main.bounds)

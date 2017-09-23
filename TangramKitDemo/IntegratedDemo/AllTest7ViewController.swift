@@ -174,13 +174,13 @@ extension AllTest7ViewController
     }
     
     
-    func handleAdd(_ sender: UIButton) {
+    @objc func handleAdd(_ sender: UIButton) {
         
         let label1 = sender.superview!.viewWithTag(1000) as! UILabel
         label1.text = label1.text!.appending("/您好！")
     }
     
-    func handleDel(_ sender: UIButton) {
+    @objc func handleDel(_ sender: UIButton) {
         
         let label1 = sender.superview!.viewWithTag(1000) as! UILabel
         label1.text = "/您好！"
@@ -241,7 +241,7 @@ extension AllTest7ViewController
     }
     
     
-    func handleChangeText(_ sender: UIButton) {
+    @objc func handleChangeText(_ sender: UIButton) {
     
          let texts = ["这是一段很长的文本，目的是为了实现最大限度的利用整个空间而不出现多余的缝隙","您好","北京市朝阳区三里屯SOHO城","我是醉里挑灯看键","欧阳大哥","Tangram是一套功能强大的综合界面布局库"]
         
@@ -324,7 +324,7 @@ extension AllTest7ViewController
      * 下面这个DEMO实现子视图之间的间距压缩，来达到最完美的适配。
      */
     
-    func handleAddButton(_ sender: UIButton) {
+    @objc func handleAddButton(_ sender: UIButton) {
         let button = UIButton(type: .system)
         button.layer.cornerRadius = 6
         button.layer.borderWidth = 0.5
@@ -337,7 +337,7 @@ extension AllTest7ViewController
         sender.superview!.addSubview(button)
     }
     
-    func handleDelButton(_ sender: UIButton) {
+    @objc func handleDelButton(_ sender: UIButton) {
         sender.removeFromSuperview()
     }
     
@@ -378,7 +378,7 @@ extension AllTest7ViewController
      * 下面这个DEMO实现子视图之间的尺寸压缩，来达到最完美的适配。
      */
     
-    func handleAddCell(_ sender: UIButton) {
+    @objc func handleAddCell(_ sender: UIButton) {
         //在创建时指定了6000.所以这里为了方便使用。
         let tableLayout = sender.superview!.viewWithTag(6000) as! TGTableLayout
         let cellLabel = UILabel()

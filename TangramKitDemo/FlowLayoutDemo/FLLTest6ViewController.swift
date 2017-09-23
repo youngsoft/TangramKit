@@ -60,7 +60,7 @@ class FLLTest6ViewController: UIViewController {
     }
     
     
-    func handleTap(sender:UIButton!)
+    @objc func handleTap(sender:UIButton!)
     {
         //这里实现单击里面控件按钮来实现多行多列到单行单列的切换。多行多列时布局视图的宽度和父视图相等，而单行单列时布局视图的高度和父视图的高度相等。
         //下面这段话就是用来设置每次切换时的布局尺寸的处理。

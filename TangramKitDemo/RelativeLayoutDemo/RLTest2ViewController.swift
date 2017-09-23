@@ -194,7 +194,7 @@ class RLTest2ViewController: UIViewController {
 extension RLTest2ViewController
 {
     
-    func handleHidden(_ sender: UIButton) {
+    @objc func handleHidden(_ sender: UIButton) {
         
         if self.visibilitySwitch.isOn
         {
@@ -207,7 +207,7 @@ extension RLTest2ViewController
         
     }
     
-    func handleShow(_ sender: UIButton) {
+    @objc func handleShow(_ sender: UIButton) {
         
         self.visibilityButton.tg_visibility = .visible
     }

@@ -445,7 +445,7 @@ extension LLTest2ViewController
 // MARK: - Handle Method
 extension LLTest2ViewController
 {
-    func handleLabelShrink(_ sender :UIButton)
+    @objc func handleLabelShrink(_ sender :UIButton)
     {
     
         //如果当前高度是包裹值，则设置为0让高度变为0，否则再设置为.wrap。这样实现文本的高度伸缩。
@@ -461,7 +461,7 @@ extension LLTest2ViewController
         self.contentLayout.tg_layoutAnimationWithDuration(0.3) //设置完成布局中子视图的属性后可以调用布局视图的这个方法来实现动画效果。
     }
     
-    func handleShowMore(_ sender: UIButton)
+    @objc func handleShowMore(_ sender: UIButton)
     {
         //布局里面，如果子视图被隐藏则会引起布局视图的自动布局。
         if self.hiddenView.tg_visibility == .visible

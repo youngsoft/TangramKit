@@ -424,13 +424,13 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
                     _ = sbvl.tg_sizeThatFits(sbvtgFrame.frame.size, inSizeClass: type)
                     if sbvtgFrame.multiple
                     {
-                        sbvtgFrame.sizeClass = sbv.tgMatchBestSizeClass(type)  //因为estimateLayoutRect执行后会还原，所以这里要重新设置
+                        sbvtgFrame.sizeClass = sbv.tgMatchBestSizeClass(type)  //因为tg_sizeThatFits执行后会还原，所以这里要重新设置
                     }
                 }
             }
         }
         
-       // var maxSize = CGSize(width: lsc.tg_leftPadding, height: lsc.tg_topPadding)
+       // var maxSize = CGSize(width: lsc.tgLeftPadding, height: lsc.tgTopPadding)
         //记录最小的y值和最大的y值
         var minYPos = CGFloat.greatestFiniteMagnitude
         var maxYPos = -CGFloat.greatestFiniteMagnitude
@@ -471,7 +471,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             if let t = sbvsc.width.sizeVal
             {
                 if t === lsc.width.realSize{
-                    rect.size.width =  sbvsc.width.measure(selfSize.width - lsc.tg_leftPadding - lsc.tg_rightPadding)
+                    rect.size.width =  sbvsc.width.measure(selfSize.width - lsc.tgLeftPadding - lsc.tgRightPadding)
                 }else{
                     rect.size.width = sbvsc.width.measure(t.view.tg_estimatedFrame.size.width)
                 }
@@ -484,7 +484,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             if let t = sbvsc.height.sizeVal
             {
                 if t === lsc.height.realSize{
-                    rect.size.height = sbvsc.height.measure(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
+                    rect.size.height = sbvsc.height.measure(selfSize.height - lsc.tgTopPadding - lsc.tgBottomPadding)
                 }else{
                     rect.size.height = sbvsc.height.measure(t.view.tg_estimatedFrame.size.height)
                 }
@@ -540,7 +540,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             if let t = sbvsc.width.sizeVal
             {
                 if t === lsc.width.realSize {
-                    rect.size.width = sbvsc.width.measure(selfSize.width - lsc.tg_leftPadding - lsc.tg_rightPadding)
+                    rect.size.width = sbvsc.width.measure(selfSize.width - lsc.tgLeftPadding - lsc.tgRightPadding)
                 }else{
                     rect.size.width = sbvsc.width.measure(t.view.tg_estimatedFrame.size.width)
                 }
@@ -552,7 +552,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             if let t = sbvsc.height.sizeVal
             {
                 if (t === lsc.height.realSize){
-                    rect.size.height = sbvsc.height.measure(selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)
+                    rect.size.height = sbvsc.height.measure(selfSize.height - lsc.tgTopPadding - lsc.tgBottomPadding)
                 }else{
                     rect.size.height = sbvsc.height.measure(t.view.tg_estimatedFrame.size.height)
                 }
@@ -571,8 +571,8 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             let rightMargin = sbvsc.right.absPos
             let bottomMargin = sbvsc.bottom.absPos
             
-            rect.origin.x = (selfSize.width - lsc.tg_leftPadding - lsc.tg_rightPadding)*tg_coordinateSetting.origin.x - rect.size.width * sbv.layer.anchorPoint.x + leftMargin - rightMargin + lsc.tg_leftPadding
-            rect.origin.y = (selfSize.height - lsc.tg_topPadding - lsc.tg_bottomPadding)*tg_coordinateSetting.origin.y - rect.size.height * sbv.layer.anchorPoint.y + topMargin - bottomMargin + lsc.tg_topPadding
+            rect.origin.x = (selfSize.width - lsc.tgLeftPadding - lsc.tgRightPadding)*tg_coordinateSetting.origin.x - rect.size.width * sbv.layer.anchorPoint.x + leftMargin - rightMargin + lsc.tgLeftPadding
+            rect.origin.y = (selfSize.height - lsc.tgTopPadding - lsc.tgBottomPadding)*tg_coordinateSetting.origin.y - rect.size.height * sbv.layer.anchorPoint.y + topMargin - bottomMargin + lsc.tgTopPadding
             
             if _tgCGFloatLess(rect.minY , minYPos)
             {
@@ -604,7 +604,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
         
         if maxYPos == -.greatestFiniteMagnitude
         {
-            maxYPos = lsc.tg_topPadding + lsc.tg_bottomPadding
+            maxYPos = lsc.tgTopPadding + lsc.tgBottomPadding
         }
         
         if minXPos == .greatestFiniteMagnitude
@@ -614,7 +614,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
         
         if maxXPos == -.greatestFiniteMagnitude
         {
-            maxXPos = lsc.tg_leftPadding + lsc.tg_rightPadding
+            maxXPos = lsc.tgLeftPadding + lsc.tgRightPadding
         }
  
         
@@ -693,8 +693,9 @@ extension TGPathLayout{
         ->[CGPoint]
     {
         var pathPointArray = [CGPoint]()
-        let selfWidth = bounds.width - self.tg_leftPadding - self.tg_rightPadding
-        let selfHeight = bounds.height - self.tg_topPadding - self.tg_bottomPadding
+        let lsc = self.tgCurrentSizeClass as! TGLayoutViewSizeClassImpl
+        let selfWidth = bounds.width - lsc.tgLeftPadding - lsc.tgRightPadding
+        let selfHeight = bounds.height - lsc.tgTopPadding - lsc.tgBottomPadding
         var startArg : CGFloat
         var endArg : CGFloat
         if let rectangularEquation = tg_rectangularEquation{
@@ -728,12 +729,12 @@ extension TGPathLayout{
                 arg in
                 if let val = rectangularEquation(arg){
                     if tg_coordinateSetting.isReverse{
-                        let x = val + selfWidth * tg_coordinateSetting.origin.x + self.tg_leftPadding
-                        let y = (tg_coordinateSetting.isMath ? -arg : arg) + selfHeight * tg_coordinateSetting.origin.y + self.tg_topPadding
+                        let x = val + selfWidth * tg_coordinateSetting.origin.x + lsc.tgLeftPadding
+                        let y = (tg_coordinateSetting.isMath ? -arg : arg) + selfHeight * tg_coordinateSetting.origin.y + lsc.tgTopPadding
                         return CGPoint(x: x, y: y)
                     }else{
-                        let x = arg + selfWidth * tg_coordinateSetting.origin.x + self.tg_leftPadding
-                        let y = (tg_coordinateSetting.isMath ? -val : val) + selfHeight * tg_coordinateSetting.origin.y + self.tg_topPadding
+                        let x = arg + selfWidth * tg_coordinateSetting.origin.x + lsc.tgLeftPadding
+                        let y = (tg_coordinateSetting.isMath ? -val : val) + selfHeight * tg_coordinateSetting.origin.y + lsc.tgTopPadding
                         return CGPoint(x: x, y: y)
                     }
                     
@@ -772,13 +773,13 @@ extension TGPathLayout{
                 arg in
                 if let val = parametricEquation(arg){
                     if tg_coordinateSetting.isReverse{
-                        let x = val.y + selfWidth * tg_coordinateSetting.origin.x + self.tg_leftPadding
-                        let y = (tg_coordinateSetting.isMath ? -val.x : val.x) + selfHeight * tg_coordinateSetting.origin.y + self.tg_topPadding
+                        let x = val.y + selfWidth * tg_coordinateSetting.origin.x + lsc.tgLeftPadding
+                        let y = (tg_coordinateSetting.isMath ? -val.x : val.x) + selfHeight * tg_coordinateSetting.origin.y + lsc.tgTopPadding
                         return CGPoint(x: x, y: y)
                         
                     }else{
-                        let x = val.x + selfWidth * tg_coordinateSetting.origin.x + self.tg_leftPadding
-                        let y = (tg_coordinateSetting.isMath ? -val.y : val.y) + selfHeight * tg_coordinateSetting.origin.y + self.tg_topPadding
+                        let x = val.x + selfWidth * tg_coordinateSetting.origin.x + lsc.tgLeftPadding
+                        let y = (tg_coordinateSetting.isMath ? -val.y : val.y) + selfHeight * tg_coordinateSetting.origin.y + lsc.tgTopPadding
                         return CGPoint(x: x, y: y)
                     }
                     
@@ -805,13 +806,13 @@ extension TGPathLayout{
                 if let r = polarEquation(rad){
                     if tg_coordinateSetting.isReverse{
                         let y = r * cos(rad.value)
-                        let x = r * sin(rad.value) + selfWidth * tg_coordinateSetting.origin.x + self.tg_leftPadding
-                        let y1 =  (tg_coordinateSetting.isMath ? -y : y) + selfHeight * tg_coordinateSetting.origin.y + self.tg_topPadding
+                        let x = r * sin(rad.value) + selfWidth * tg_coordinateSetting.origin.x + lsc.tgLeftPadding
+                        let y1 =  (tg_coordinateSetting.isMath ? -y : y) + selfHeight * tg_coordinateSetting.origin.y + lsc.tgTopPadding
                         return CGPoint(x: x, y: y1)
                     }else{
                         let y = r * sin(rad.value)
-                        let x = r * cos(rad.value) + selfWidth * tg_coordinateSetting.origin.x + self.tg_leftPadding
-                        let y1 =  (tg_coordinateSetting.isMath ? -y : y) + selfHeight * tg_coordinateSetting.origin.y + self.tg_topPadding
+                        let x = r * cos(rad.value) + selfWidth * tg_coordinateSetting.origin.x + lsc.tgLeftPadding
+                        let y1 =  (tg_coordinateSetting.isMath ? -y : y) + selfHeight * tg_coordinateSetting.origin.y + lsc.tgTopPadding
                         return CGPoint(x: x, y: y1)
                     }
                 }else{

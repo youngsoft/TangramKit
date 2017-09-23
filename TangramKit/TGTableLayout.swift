@@ -50,6 +50,11 @@ open class TGTableLayout: TGLinearLayout {
         return tg_insertRow(size: rowSize, colSize:colSize, rowIndex: self.tg_rowCount)
     }
     
+    public func tg_addRow(size rowSize:TGTableRowColSizeType, colCount:UInt) ->TGLinearLayout
+    {
+        return tg_insertRow(size: rowSize, colSize:TGTableLayout._stgColCountTag - CGFloat(colCount), rowIndex: self.tg_rowCount)
+    }
+    
     /**
      * 在指定的位置插入一个新行
      */
@@ -82,6 +87,13 @@ open class TGTableLayout: TGLinearLayout {
         return rowView
         
     }
+    
+    public func tg_insertRow(size rowSize: TGTableRowColSizeType, colCount : UInt, rowIndex : Int) ->TGLinearLayout
+    {
+        //这里特殊处理用-100000 - colCount 来表示一个特殊的列尺寸。其实是数量。
+        return tg_insertRow(size: rowSize, colSize: TGTableLayout._stgColCountTag - CGFloat(colCount), rowIndex: rowIndex)
+    }
+
     
     /**
      * 删除一行
@@ -151,13 +163,31 @@ open class TGTableLayout: TGLinearLayout {
         }
         else
         {
-            if (rowsc.tg_orientation == .horz)
+            if let v = rowView.colSize as? CGFloat
             {
-                colsc.tg_width.equalHelper(val:rowView.colSize)
-            }
-            else
-            {
-                colsc.tg_height.equalHelper(val:rowView.colSize)
+                if v < TGTableLayout._stgColCountTag
+                {
+                    let colCount = TGTableLayout._stgColCountTag - v
+                    if rowsc.tg_orientation == .horz
+                    {
+                        colsc.tg_width.equalHelper(val:rowView.tg_width, increment:-1 * rowView.tg_hspace * (colCount - 1.0) / colCount, multiple:1.0 / colCount)
+                    }
+                    else
+                    {
+                        colsc.tg_height.equalHelper(val:rowView.tg_height,increment:-1 * rowView.tg_vspace * (colCount - 1.0) / colCount, multiple:1.0 / colCount)
+                    }
+                }
+                else
+                {
+                    if (rowsc.tg_orientation == .horz)
+                    {
+                        colsc.tg_width.equalHelper(val:rowView.colSize)
+                    }
+                    else
+                    {
+                        colsc.tg_height.equalHelper(val:rowView.colSize)
+                    }
+                }
             }
         }
         
@@ -319,6 +349,7 @@ open class TGTableLayout: TGLinearLayout {
         return TGTableLayoutViewSizeClassImpl(view:self)
     }
     
+    static fileprivate let _stgColCountTag:CGFloat = -100000
 }
 
 /**
@@ -343,9 +374,14 @@ extension IndexPath {
     }
 }
 
+
+
 private class TGTableRowLayout: TGLinearLayout,TGTableLayoutViewSizeClass {
+    
+
+    
     var rowSize: TGTableRowColSizeType
-    var colSize: TGTableRowColSizeType
+    var colSize:TGTableRowColSizeType
     
     init(orientation:TGOrientation,rowSize:TGTableRowColSizeType, colSize:TGTableRowColSizeType)
     {
@@ -386,7 +422,19 @@ private class TGTableRowLayout: TGLinearLayout,TGTableLayoutViewSizeClass {
             }
         }
         
+        
+        var isNoWrap = false
         if let v = colSize as? TGLayoutSize, v === TGLayoutSize.average || v === TGLayoutSize.fill
+        {
+            isNoWrap = true
+        }
+        
+        if let v = colSize as? CGFloat, v < TGTableLayout._stgColCountTag
+        {
+            isNoWrap = true
+        }
+        
+        if isNoWrap
         {
             if (orientation == .horz)
             {

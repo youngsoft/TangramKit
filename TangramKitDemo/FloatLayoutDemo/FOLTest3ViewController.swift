@@ -187,7 +187,7 @@ extension FOLTest3ViewController
 {
     
     
-    func handleChangeStyle(_ sender:AnyObject!)
+    @objc func handleChangeStyle(_ sender:AnyObject!)
     {
         
         //zaker的每页新闻中都有6条新闻，其中一条图片新闻和5条文字新闻。在布局上则高度分为5份，其中的图片新闻则占据了2/5，而高度则是全屏。
@@ -249,7 +249,7 @@ extension FOLTest3ViewController
     }
     
     
-    func handleItemLayoutClick(_ sender:UIView!)
+    @objc func handleItemLayoutClick(_ sender:UIView!)
     {
         let message = "You click:\(sender.tag)"
         UIAlertView(title: nil, message: message, delegate: nil, cancelButtonTitle: "OK").show()

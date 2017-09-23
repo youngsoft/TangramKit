@@ -56,62 +56,62 @@ class FOLTest2ViewController: UIViewController {
                 [
                     "selector":#selector(createItemLayout1_1),
                     "width":CGFloat(0.5),
-                    "height":CGFloat(sItemLayoutHeight*2)
+                    "height":CGFloat(FOLTest2ViewController.sItemLayoutHeight*2)
                     ],
                 [
                     "selector":#selector(createItemLayout1_2),
                     "width":CGFloat(0.5),
-                    "height":CGFloat(sItemLayoutHeight),
+                    "height":CGFloat(FOLTest2ViewController.sItemLayoutHeight),
                     ],
                 [
                     "selector":#selector(createItemLayout1_3),
                     "width":CGFloat(0.5),
-                    "height":CGFloat(sItemLayoutHeight),
+                    "height":CGFloat(FOLTest2ViewController.sItemLayoutHeight),
                     ],
                 [
                     "selector":#selector(createItemLayout2_1),
                     "width":CGFloat(0.5),
-                    "height":CGFloat(sItemLayoutHeight * 2),
+                    "height":CGFloat(FOLTest2ViewController.sItemLayoutHeight * 2),
                     ],
                 [
                     "selector":#selector(createItemLayout2_1),
                     "width":CGFloat(0.25),
-                    "height":CGFloat(sItemLayoutHeight * 2),
+                    "height":CGFloat(FOLTest2ViewController.sItemLayoutHeight * 2),
                     ],
                 [
                     "selector":#selector(createItemLayout2_1),
                     "width":CGFloat(1.0),
-                    "height":CGFloat(sItemLayoutHeight),
+                    "height":CGFloat(FOLTest2ViewController.sItemLayoutHeight),
                     ],
                 [
                     "selector":#selector(createItemLayout3_1),
                     "width":CGFloat(0.4),
-                    "height":CGFloat(sItemLayoutHeight * 2),
+                    "height":CGFloat(FOLTest2ViewController.sItemLayoutHeight * 2),
                     ],
                 [
                     "selector":#selector(createItemLayout3_2),
                     "width":CGFloat(0.6),
-                    "height":CGFloat(sItemLayoutHeight),
+                    "height":CGFloat(FOLTest2ViewController.sItemLayoutHeight),
                     ],
                 [
                     "selector":#selector(createItemLayout3_2),
                     "width":CGFloat(0.4),
-                    "height":CGFloat(sItemLayoutHeight),
+                    "height":CGFloat(FOLTest2ViewController.sItemLayoutHeight),
                     ],
                 [
                     "selector":#selector(createItemLayout4_1),
                     "width":CGFloat(0.5),
-                    "height":CGFloat(sItemLayoutHeight),
+                    "height":CGFloat(FOLTest2ViewController.sItemLayoutHeight),
                     ],
                 [
                     "selector":#selector(createItemLayout4_2),
                     "width":CGFloat(0.25),
-                    "height":CGFloat(sItemLayoutHeight + 20),
+                    "height":CGFloat(FOLTest2ViewController.sItemLayoutHeight + 20),
                     ],
                 [
                     "selector":#selector(createItemLayout5_1),
                     "width":CGFloat(0.25),
-                    "height":CGFloat(sItemLayoutHeight + 20),
+                    "height":CGFloat(FOLTest2ViewController.sItemLayoutHeight + 20),
                     ]
         ]
         
@@ -288,7 +288,7 @@ extension FOLTest2ViewController
     
     
     //品牌特卖主条目布局,这是一个从上到下的布局,因此可以用上下浮动来实现。
-    func createItemLayout1_1(_ dataModel:FOLTest2DataModel) ->TGFloatLayout
+    @objc func createItemLayout1_1(_ dataModel:FOLTest2DataModel) ->TGFloatLayout
     {
         /*
          这个例子是为了重点演示浮动布局，所以里面的所有条目布局都用了浮动布局。您也可以使用其他布局来建立您的条目布局。
@@ -325,7 +325,7 @@ extension FOLTest2ViewController
     }
     
     //天猫超时条目布局，这是一个整体左右结构，因此用左右浮动布局来实现。
-    func createItemLayout1_2(_ dataModel:FOLTest2DataModel) ->TGFloatLayout
+    @objc func createItemLayout1_2(_ dataModel:FOLTest2DataModel) ->TGFloatLayout
     {
         //建立左右浮动布局
         let itemLayout = TGFloatLayout(.vert)
@@ -362,7 +362,7 @@ extension FOLTest2ViewController
     }
     
     //建立品牌特卖的其他条目布局，这种布局整体是左右结构，因此建立左右浮动布局。
-    func createItemLayout1_3(_ dataModel:FOLTest2DataModel) ->TGFloatLayout
+    @objc func createItemLayout1_3(_ dataModel:FOLTest2DataModel) ->TGFloatLayout
     {
         let itemLayout = TGFloatLayout(.vert)
         
@@ -409,7 +409,7 @@ extension FOLTest2ViewController
     }
     
     //建立超级品牌日布局，这里因为就只有一张图，所以设置布局的背景图片即可。
-    func createItemLayout2_1(_ dataModel:FOLTest2DataModel) ->TGFloatLayout
+    @objc func createItemLayout2_1(_ dataModel:FOLTest2DataModel) ->TGFloatLayout
     {
         let itemLayout = TGFloatLayout(.vert)
         //直接设置背景图片。
@@ -420,7 +420,7 @@ extension FOLTest2ViewController
     
     
     //精选市场主条目布局，这个布局整体从上到下因此用上下浮动布局建立。
-    func createItemLayout3_1(_ dataModel:FOLTest2DataModel) ->TGFloatLayout
+    @objc func createItemLayout3_1(_ dataModel:FOLTest2DataModel) ->TGFloatLayout
     {
         let itemLayout = TGFloatLayout(.horz)
         
@@ -473,7 +473,7 @@ extension FOLTest2ViewController
     }
     
     //建立精选市场其他条目布局，这个布局整体还是从上到下，因此用上下浮动布局
-    func createItemLayout3_2(_ dataModel:FOLTest2DataModel) ->TGFloatLayout
+    @objc func createItemLayout3_2(_ dataModel:FOLTest2DataModel) ->TGFloatLayout
     {
         let itemLayout = TGFloatLayout(.horz)
         
@@ -483,7 +483,7 @@ extension FOLTest2ViewController
         titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
         titleLabel.tg_leading.equal(5)
         titleLabel.tg_top.equal(5)
-        titleLabel.tg_width.equal(itemLayout.tg_width,multiple:0.5)
+        titleLabel.tg_width.equal(itemLayout.tg_width,increment:-2.5, multiple:0.5)
         titleLabel.sizeToFit()
         itemLayout.addSubview(titleLabel)
         
@@ -493,7 +493,7 @@ extension FOLTest2ViewController
         subTitleLabel.font = UIFont.systemFont(ofSize: 11)
         subTitleLabel.tg_leading.equal(5)
         subTitleLabel.tg_top.equal(5)
-        subTitleLabel.tg_width.equal(itemLayout.tg_width,multiple:0.5)
+        subTitleLabel.tg_width.equal(itemLayout.tg_width,increment:-2.5,multiple:0.5)
         subTitleLabel.sizeToFit()
         itemLayout.addSubview(subTitleLabel)
         
@@ -505,7 +505,7 @@ extension FOLTest2ViewController
         priceLabel.tg_leading.equal(5)
         priceLabel.tg_bottom.equal(5)
         priceLabel.tg_reverseFloat = true
-        priceLabel.tg_width.equal(itemLayout.tg_width,multiple:0.5)
+        priceLabel.tg_width.equal(itemLayout.tg_width,increment:-2.5,multiple:0.5)
         priceLabel.sizeToFit()
         itemLayout.addSubview(priceLabel)
         
@@ -516,13 +516,13 @@ extension FOLTest2ViewController
         descLabel.textColor = UIColor.lightGray
         descLabel.tg_leading.equal(5)
         descLabel.tg_reverseFloat = true
-        descLabel.tg_width.equal(itemLayout.tg_width,multiple:0.5)
+        descLabel.tg_width.equal(itemLayout.tg_width,increment:-2.5,multiple:0.5)
         descLabel.sizeToFit()
         itemLayout.addSubview(descLabel)
         
         //向上浮动，因为宽度无法再容纳，所以这里会换列继续向上浮动。
         let imageView = UIImageView(image:UIImage(named:dataModel.image))
-        imageView.tg_width.equal(itemLayout.tg_width,multiple:0.5)
+        imageView.tg_width.equal(itemLayout.tg_width,increment:-2.5,multiple:0.5)
         imageView.tg_height.equal(itemLayout.tg_height);
         itemLayout.addSubview(imageView)
         
@@ -532,7 +532,7 @@ extension FOLTest2ViewController
     }
     
     //热门市场主条目布局，这个结构可以用上下浮动布局也可以用左右浮动布局。
-    func createItemLayout4_1(_ dataModel:FOLTest2DataModel) ->TGFloatLayout
+    @objc func createItemLayout4_1(_ dataModel:FOLTest2DataModel) ->TGFloatLayout
     {
         let itemLayout = TGFloatLayout(.horz)
         
@@ -541,7 +541,7 @@ extension FOLTest2ViewController
         titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
         titleLabel.tg_leading.equal(5)
         titleLabel.tg_top.equal(5)
-        titleLabel.tg_width.equal(itemLayout.tg_width,multiple:0.5)
+        titleLabel.tg_width.equal(itemLayout.tg_width,increment:-2.5,multiple:0.5)
         titleLabel.sizeToFit()
         itemLayout.addSubview(titleLabel)
 
@@ -551,13 +551,13 @@ extension FOLTest2ViewController
         subTitleLabel.font = UIFont.systemFont(ofSize: 11)
         subTitleLabel.tg_leading.equal(5)
         subTitleLabel.tg_top.equal(5)
-        subTitleLabel.tg_width.equal(itemLayout.tg_width,multiple:0.5)
+        subTitleLabel.tg_width.equal(itemLayout.tg_width,increment:-2.5,multiple:0.5)
         subTitleLabel.sizeToFit()
         itemLayout.addSubview(subTitleLabel)
         
         //继续向上浮动，这里因为高度和父布局高度一致，因此会换列浮动。
         let imageView = UIImageView(image:UIImage(named:dataModel.image))
-        imageView.tg_width.equal(itemLayout.tg_width,multiple:0.5)
+        imageView.tg_width.equal(itemLayout.tg_width,increment:-2.5,multiple:0.5)
         imageView.tg_height.equal(itemLayout.tg_height);
         itemLayout.addSubview(imageView)
         
@@ -565,7 +565,7 @@ extension FOLTest2ViewController
     }
     
     //热门市场其他条目布局，这个整体是上下布局，因此用上下浮动布局。
-    func createItemLayout4_2(_ dataModel:FOLTest2DataModel) ->TGFloatLayout
+    @objc func createItemLayout4_2(_ dataModel:FOLTest2DataModel) ->TGFloatLayout
     {
         let itemLayout = TGFloatLayout(.horz)
         
@@ -597,7 +597,7 @@ extension FOLTest2ViewController
     
     
     //主题市场条目布局，这个整体就是上下浮动布局
-    func createItemLayout5_1(_ dataModel:FOLTest2DataModel) ->TGFloatLayout
+    @objc func createItemLayout5_1(_ dataModel:FOLTest2DataModel) ->TGFloatLayout
     {
         let itemLayout = TGFloatLayout(.horz)
         
@@ -634,7 +634,7 @@ extension FOLTest2ViewController
 extension FOLTest2ViewController
 {
     
-    func handleItemLayoutTap(sender:UIView!)
+    @objc func handleItemLayoutTap(sender:UIView!)
     {
         let  sectionIndex = sender.tag / FOLTest2ViewController.sBaseTag;
         let  itemIndex = sender.tag % FOLTest2ViewController.sBaseTag;

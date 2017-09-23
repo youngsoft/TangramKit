@@ -152,7 +152,7 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
     
    // MARK: Handle Method
     
-    func handleHideKeyboard(_ sender: AnyObject)
+    @objc func handleHideKeyboard(_ sender: AnyObject)
     {
         self.view.endEditing(true)
     }

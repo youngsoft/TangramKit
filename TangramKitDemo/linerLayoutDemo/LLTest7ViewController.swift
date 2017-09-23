@@ -141,7 +141,7 @@ extension LLTest7ViewController
 extension LLTest7ViewController
 {
     
-    func handleAction(_ sender: UIButton)
+   @objc func handleAction(_ sender: UIButton)
     {
         //恢复原来的设置。
         let arr = self.testLayout.subviews;

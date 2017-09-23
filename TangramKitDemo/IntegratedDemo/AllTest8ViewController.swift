@@ -131,7 +131,7 @@ class AllTest8ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    func handleDemo1AddTest(sender:UIButton!)
+    @objc func handleDemo1AddTest(sender:UIButton!)
     {
         if let label = sender.superview?.superview?.subviews[1] as? UILabel
         {
@@ -140,14 +140,14 @@ class AllTest8ViewController: UIViewController {
         
     }
     
-    func handleDemo1RemoveLayout(sender:UIButton!)
+    @objc func handleDemo1RemoveLayout(sender:UIButton!)
     {
        UIView.perform(.delete, on: [sender.superview!.superview!], options: .curveLinear, animations: nil, completion: nil)
     }
 
     
     
-    func handleDemo1(sener:UIButton!)
+    @objc func handleDemo1(sener:UIButton!)
     {
         //布局视图用来实现弹框，这里把一个布局视图放入一个非布局视图里面。
         let layout = TGLinearLayout(.vert)

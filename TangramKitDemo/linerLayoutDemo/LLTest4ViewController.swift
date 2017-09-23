@@ -133,7 +133,7 @@ extension LLTest4ViewController
 //MARK: - Handle Method
 extension LLTest4ViewController
 {
-    internal func handleAction(_ sender :UIButton)
+    @objc internal func handleAction(_ sender :UIButton)
     {
         if (sender.tag == 100)
         {

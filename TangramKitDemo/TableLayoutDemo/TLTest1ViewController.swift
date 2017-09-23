@@ -115,20 +115,34 @@ class TLTest1ViewController: UIViewController {
         colView = self.createLabel("Cell41", backgroundColor: CFTool.color(2))
         tableLayout.tg_addCol(colView, inRow:4)
         
-        //第六行高度由子视图的高度决定，列均分宽度
-        _ = tableLayout.tg_addRow(size:TGLayoutSize.wrap, colSize:TGLayoutSize.average)
+        
+        //第六行高度固定为30, 列数固定为4。这里只添加了3列，可见列宽是固定的。
+        _ = tableLayout.tg_addRow(size:30, colCount:4)
         
         colView = self.createLabel("Cell50", backgroundColor: CFTool.color(1))
-        colView.tg_height.equal(80)
         tableLayout.tg_addCol(colView, inRow:5)
         
         colView = self.createLabel("Cell51", backgroundColor: CFTool.color(2))
-        colView.tg_height.equal(120)
         tableLayout.tg_addCol(colView, inRow:5)
         
         colView = self.createLabel("Cell52", backgroundColor: CFTool.color(3))
-        colView.tg_height.equal(70)
         tableLayout.tg_addCol(colView, inRow:5)
+        
+        
+        //第七行高度由子视图的高度决定，列均分宽度
+        _ = tableLayout.tg_addRow(size:TGLayoutSize.wrap, colSize:TGLayoutSize.average)
+        
+        colView = self.createLabel("Cell60", backgroundColor: CFTool.color(1))
+        colView.tg_height.equal(80)
+        tableLayout.tg_addCol(colView, inRow:6)
+        
+        colView = self.createLabel("Cell61", backgroundColor: CFTool.color(2))
+        colView.tg_height.equal(120)
+        tableLayout.tg_addCol(colView, inRow:6)
+        
+        colView = self.createLabel("Cell62", backgroundColor: CFTool.color(3))
+        colView.tg_height.equal(70)
+        tableLayout.tg_addCol(colView, inRow:6)
     
         
     }
