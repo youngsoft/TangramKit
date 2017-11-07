@@ -123,11 +123,14 @@ left     |  a   |               |   P   |
         /*垂直线性布局套水平线性布局，水平线性布局利用相对边距实现左右布局*/
         createSection5(in: contentLayout)
         
-        /*对子视图的高度的缩放调整*/
+        /*水平线性布局中的基线对齐*/
         createSection6(in: contentLayout)
         
-        /*子视图的显示和隐藏*/
+        /*对子视图的高度的缩放调整*/
         createSection7(in: contentLayout)
+        
+        /*子视图的显示和隐藏*/
+        createSection8(in: contentLayout)
 
         
          }
@@ -387,8 +390,47 @@ extension LLTest2ViewController
 
     }
     
-    //线性布局片段6：实现子视图的缩放。
+    //建立一个基线对齐的水平线性布局
     func createSection6(in contentLayout:TGLinearLayout)
+    {
+        //这个例子主要介绍基线对齐的使用方法，目前只有水平线性布局和相对布局是支持基线对齐的。水平线性布局里面要实现基线对齐，必须要设置一个基线对齐的标准视图。
+        //线性布局里面的tg_baselineBaseView属性用来指定基线的标准视图，设置为tg_baselineBaseView的子视图必须是一个UILabel或者UITextField或者UITextView，并且只能是一行。
+        //除了指定基线对齐的标准视图外，还需要为线性布局的tg_gravity属性设置上TGGravity.vert.baseline才可以完成基线对齐的设置。所有其他的UILabel，UITextField，UITextView都将和标准视图的基线进行对齐，而其他类型的子视图则忽略。
+        //基线对齐对于中文来说基本没有什么效果，主要是针对英文以及具有基线的字符集。
+        
+        let baselineLayout = TGLinearLayout(.horz)
+        baselineLayout.layer.borderColor = UIColor.lightGray.cgColor
+        baselineLayout.layer.borderWidth = 0.5
+        baselineLayout.layer.cornerRadius = 4
+        baselineLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        baselineLayout.tg_top.equal(20)
+        baselineLayout.tg_horzMargin(0)
+        baselineLayout.tg_height.equal(50)
+        baselineLayout.tg_gravity = [TGGravity.horz.center, TGGravity.vert.baseline]
+        contentLayout.addSubview(baselineLayout)
+        
+        let baselineLabel = UILabel()
+        baselineLabel.text = "Baseline view"
+        baselineLabel.tg_size(width: .wrap, height: .wrap)
+        baselineLabel.font = CFTool.font(20)
+        baselineLabel.backgroundColor = CFTool.color(5)
+        baselineLabel.tg_alignment = TGGravity.vert.center  //标准视图垂直居中。
+        baselineLayout.addSubview(baselineLabel)
+        
+        let rightLabel = UILabel()
+        rightLabel.text = "Right view"
+        rightLabel.tg_size(width: .wrap, height: .wrap)
+        rightLabel.font = CFTool.font(32)
+        rightLabel.backgroundColor = CFTool.color(6)
+        baselineLayout.addSubview(rightLabel)
+        
+        baselineLayout.tg_baselineBaseView = baselineLabel  //这里将左边的视图设置为基线对齐的标准视图。
+        
+    }
+
+    
+    //线性布局片段7：实现子视图的缩放。
+    func createSection7(in contentLayout:TGLinearLayout)
     {
         let shrinkLabel = UILabel()
         shrinkLabel.text = NSLocalizedString("This is a can automatically wrap text.To realize this function, you need to set the clear width, and set the flexedHeight to YES and set the numberOfLines to 0.You can try to switch different simulator or different orientation screen to see the effect.", comment:"")
@@ -414,8 +456,8 @@ extension LLTest2ViewController
        
     }
     
-    //线性布局片段7：子视图的隐藏设置能够激发布局视图的重新布局。
-    func createSection7(in contentLayout:TGLinearLayout)
+    //线性布局片段8：子视图的隐藏设置能够激发布局视图的重新布局。
+    func createSection8(in contentLayout:TGLinearLayout)
     {
         
         let button = UIButton(type:.system)

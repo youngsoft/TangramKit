@@ -62,11 +62,13 @@ class FLTest1ViewController: UIViewController {
 
         self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
 
+        super.loadView()
         
         let frameLayout = TGFrameLayout()
         frameLayout.backgroundColor = .white
+        frameLayout.tg_margin(TGLayoutPos.tg_safeAreaMargin)
         frameLayout.tg_padding = UIEdgeInsetsMake(20, 20, 20, 20)
-        self.view = frameLayout
+        self.view.addSubview(frameLayout)
         
         //全部填充。 all fill subview
         let fill = self.createLabel("", backgroundColor: CFTool.color(0))

@@ -116,6 +116,7 @@ public protocol TGViewSizeClass:class
     
     var tg_left:TGLayoutPos{get}
     var tg_right:TGLayoutPos{get}
+    var tg_baseline:TGLayoutPos{get}
     
     var tg_width:TGLayoutSize{get}
     var tg_height:TGLayoutSize{get}
@@ -324,6 +325,16 @@ internal class TGViewSizeClassImpl:NSCopying,TGViewSizeClass {
         }
 
     }
+    
+    var tg_baseline: TGLayoutPos
+    {
+        if baseline.realPos == nil
+        {
+            baseline.realPos = TGLayoutPos(TGGravity.vert.baseline, view:self.view)
+        }
+        
+        return baseline.realPos
+    }
 
 
     var tg_width:TGLayoutSize
@@ -369,6 +380,7 @@ internal class TGViewSizeClassImpl:NSCopying,TGViewSizeClass {
     internal lazy var trailing:TGLayoutPosValue2 = TGLayoutPosWrapper()
     internal lazy var centerX:TGLayoutPosValue2 = TGLayoutPosWrapper()
     internal lazy var centerY:TGLayoutPosValue2 = TGLayoutPosWrapper()
+    internal lazy var baseline:TGLayoutPosValue2 = TGLayoutPosWrapper()
     internal lazy var width:TGLayoutSizeValue2 = TGLayoutSizeWrapper()
     internal lazy var height:TGLayoutSizeValue2 = TGLayoutSizeWrapper()
     
@@ -477,6 +489,10 @@ internal class TGViewSizeClassImpl:NSCopying,TGViewSizeClass {
         {
             tsc.centerY.realPos = self.centerY.realPos.copy() as? TGLayoutPos
         }
+        if self.baseline.realPos != nil
+        {
+            tsc.baseline.realPos = self.baseline.realPos.copy() as? TGLayoutPos
+        }
         if self.width.realSize != nil
         {
             tsc.width.realSize = self.width.realSize.copy() as? TGLayoutSize
@@ -573,7 +589,7 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
     
     var tg_zeroPadding: Bool = true
     
-    var tg_insetsPaddingFromSafeArea: UIRectEdge = .all
+    var tg_insetsPaddingFromSafeArea: UIRectEdge = [.left, .right]
     var tg_insetLandscapeFringePadding: Bool = false
     
     var tg_vspace:CGFloat = 0
@@ -598,6 +614,11 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
     
     internal var tgTopPadding:CGFloat
     {
+        if self.tg_topPadding >= TGLayoutPos.tg_safeAreaMargin - 2000 && self.tg_topPadding <= TGLayoutPos.tg_safeAreaMargin + 2000
+        {
+            return self.tg_topPadding - TGLayoutPos.tg_safeAreaMargin + UIApplication.shared.statusBarFrame.height
+        }
+        
         if ((self.tg_insetsPaddingFromSafeArea.rawValue & UIRectEdge.top.rawValue) == UIRectEdge.top.rawValue)
         {
             if #available(iOS 11.0, *) {
@@ -610,6 +631,24 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
     
     internal var tgLeadingPadding:CGFloat
     {
+        if self.tg_leadingPadding >= TGLayoutPos.tg_safeAreaMargin - 2000 && self.tg_leadingPadding <= TGLayoutPos.tg_safeAreaMargin + 2000
+        {
+            var leadingPaddingAdd:CGFloat = 0.0
+            if UIScreen.main.bounds.height == 812 || UIScreen.main.bounds.width == 812
+            {
+                if UIDevice.current.orientation.isLandscape
+                {
+                    leadingPaddingAdd = 44
+                }
+                else
+                {
+                    leadingPaddingAdd = 0
+                }
+            }
+            
+            return self.tg_leadingPadding - TGLayoutPos.tg_safeAreaMargin + leadingPaddingAdd
+        }
+        
         var inset:CGFloat = 0
         
         if #available(iOS 11.0, *) {
@@ -662,6 +701,25 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
     
     internal var tgBottomPadding:CGFloat
     {
+        
+        if self.tg_bottomPadding >= TGLayoutPos.tg_safeAreaMargin - 2000 && self.tg_bottomPadding <= TGLayoutPos.tg_safeAreaMargin + 2000
+        {
+            var bottomPaddingAdd:CGFloat = 0.0
+            //如果设备是iPhoneX就特殊处理。竖屏是34，横屏是21
+            if UIScreen.main.bounds.height == 812 || UIScreen.main.bounds.width == 812
+            {
+                if UIDevice.current.orientation.isLandscape
+                {
+                    bottomPaddingAdd = 21
+                }
+                else
+                {
+                    bottomPaddingAdd = 34
+                }
+            }
+            return self.tg_bottomPadding - TGLayoutPos.tg_safeAreaMargin + bottomPaddingAdd
+        }
+        
         if ((self.tg_insetsPaddingFromSafeArea.rawValue & UIRectEdge.bottom.rawValue) == UIRectEdge.bottom.rawValue)
         {
             if #available(iOS 11.0, *) {
@@ -674,6 +732,25 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
     
     internal var tgTrailingPadding:CGFloat
     {
+        
+        if self.tg_trailingPadding >= TGLayoutPos.tg_safeAreaMargin - 2000 && self.tg_trailingPadding <= TGLayoutPos.tg_safeAreaMargin + 2000
+        {
+            var trailingPaddingAdd:CGFloat = 0.0
+            if UIScreen.main.bounds.height == 812 || UIScreen.main.bounds.width == 812
+            {
+                if UIDevice.current.orientation.isLandscape
+                {
+                    trailingPaddingAdd = 44
+                }
+                else
+                {
+                    trailingPaddingAdd = 0
+                }
+            }
+            
+            return self.tg_trailingPadding - TGLayoutPos.tg_safeAreaMargin + trailingPaddingAdd
+        }
+        
         var inset:CGFloat = 0
         
         if #available(iOS 11.0, *) {
@@ -726,50 +803,12 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
     
     internal var tgLeftPadding:CGFloat
     {
-        var inset:CGFloat = 0
-        
-        if #available(iOS 11.0, *) {
-            if (self.tg_insetsPaddingFromSafeArea.rawValue & UIRectEdge.left.rawValue) == UIRectEdge.left.rawValue
-            {
-                //如果只缩进刘海那一边。并且同时设置了左右缩进，并且当前刘海方向是右边那么就不缩进了。
-                if (self.tg_insetLandscapeFringePadding &&
-                    (self.tg_insetsPaddingFromSafeArea.rawValue & (UIRectEdge.left.rawValue | UIRectEdge.right.rawValue)) == (UIRectEdge.left.rawValue | UIRectEdge.right.rawValue) &&
-                    UIDevice.current.orientation == .landscapeRight)
-                {
-                    inset = 0
-                }
-                else
-                {
-                    inset = self.view.safeAreaInsets.left
-                }
-            }
-        }
-        
-        return self.tg_leftPadding + inset
+        return TGLayoutViewSizeClassImpl.IsRTL ? self.tgTrailingPadding : self.tgLeadingPadding
     }
     
     internal var tgRightPadding:CGFloat
     {
-        var inset:CGFloat = 0
-        
-        if #available(iOS 11.0, *) {
-            if (self.tg_insetsPaddingFromSafeArea.rawValue & UIRectEdge.right.rawValue) == UIRectEdge.right.rawValue
-            {
-                //如果只缩进刘海那一边。并且同时设置了左右缩进，并且当前刘海方向是右边那么就不缩进了。
-                if (self.tg_insetLandscapeFringePadding &&
-                    (self.tg_insetsPaddingFromSafeArea.rawValue & (UIRectEdge.left.rawValue | UIRectEdge.right.rawValue)) == (UIRectEdge.left.rawValue | UIRectEdge.right.rawValue) &&
-                    UIDevice.current.orientation == .landscapeLeft)
-                {
-                    inset = 0
-                }
-                else
-                {
-                    inset = self.view.safeAreaInsets.right
-                }
-            }
-        }
-        
-        return self.tg_rightPadding + inset
+        return TGLayoutViewSizeClassImpl.IsRTL ? self.tgLeadingPadding : self.tgTrailingPadding
     }
 
     
@@ -1019,6 +1058,15 @@ internal class TGLayoutPosWrapper:TGLayoutPosValue2
         }
         
         return p.absPos
+    }
+    
+    var isSafeAreaPos: Bool
+    {
+        guard let p = self.realPos else {
+            return false
+        }
+        
+        return p.isSafeAreaPos
     }
     
     func weightPosIn(_ contentSize:CGFloat) -> CGFloat

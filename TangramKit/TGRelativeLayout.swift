@@ -48,9 +48,9 @@ open class TGRelativeLayout: TGBaseLayout,TGRelativeLayoutViewSizeClass {
     
     //MARK: override method
     
-    override func tgCalcLayoutRect(_ size: CGSize, isEstimate: Bool, sbs:[UIView]!, type: TGSizeClassType) -> (selfSize: CGSize, hasSubLayout: Bool) {
-        
-        var (selfSize, hasSubLayout) = super.tgCalcLayoutRect(size, isEstimate: isEstimate, sbs:sbs, type: type)
+    override internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, hasSubLayout:inout Bool!, sbs:[UIView]!, type :TGSizeClassType) -> CGSize
+    {
+        var selfSize = super.tgCalcLayoutRect(size, isEstimate:isEstimate, hasSubLayout:&hasSubLayout, sbs:sbs, type:type)
         
         let lsc = self.tgCurrentSizeClass as! TGRelativeLayoutViewSizeClassImpl
         
@@ -64,7 +64,7 @@ open class TGRelativeLayout: TGBaseLayout,TGRelativeLayoutViewSizeClass {
                 continue
             }
             
-            if !isEstimate {
+            if !isEstimate || (hasSubLayout != nil && hasSubLayout) {
                 sbvtgFrame.reset()
             }
             
@@ -83,7 +83,7 @@ open class TGRelativeLayout: TGBaseLayout,TGRelativeLayoutViewSizeClass {
             if let sbvl: TGBaseLayout = sbv as? TGBaseLayout
             {
                 
-                if sbvsc.isSomeSizeWrap
+                if hasSubLayout != nil && sbvsc.isSomeSizeWrap
                 {
                     hasSubLayout = true
                 }
@@ -152,7 +152,7 @@ open class TGRelativeLayout: TGBaseLayout,TGRelativeLayoutViewSizeClass {
         
         tgAdjustSubviewsRTLPos(sbs: sbs2, selfWidth: selfSize.width)
         
-        return (self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs2, lsc:lsc), hasSubLayout)
+        return self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs2, lsc:lsc)
     }
     
     internal override func tgCreateInstance() -> AnyObject
@@ -392,7 +392,48 @@ extension TGRelativeLayout
                 sbvtgFrame.height = sbvsc.height.measure(selfSize.height - lsc.tgTopPadding - lsc.tgBottomPadding)
             }
         }
-        if let t = sbvsc.centerY.posVal
+        if let t = sbvsc.baseline.posVal
+        {
+            //得到基线的位置。基线的位置等于top + (子视图的高度 - 字体的高度) / 2 + 字体基线以上的高度。
+            let sbvFont:UIFont! = self.tgGetSubviewFont(sbv)
+            
+            if sbvFont != nil
+            {
+                //得到基线的位置。
+                let relaView = t.view
+                sbvtgFrame.top = self.tgCalcRelationalSubview(relaView, lsc:lsc, gravity:t.type,selfSize:selfSize) - sbvFont.ascender - (sbvtgFrame.height - sbvFont.lineHeight) / 2.0 + sbvsc.baseline.absPos
+                
+                if  relaView != self && self.tgIsNoLayoutSubview(relaView)
+                {
+                    sbvtgFrame.top -= sbvsc.baseline.absPos
+                }
+            }
+            else
+            {
+                sbvtgFrame.top =  lsc.tgTopPadding + sbvsc.baseline.absPos
+            }
+            
+            sbvtgFrame.bottom = sbvtgFrame.top + sbvtgFrame.height
+            
+        }
+        else if let t = sbvsc.baseline.numberVal
+        {
+            //得到基线的位置。基线的位置等于top + (子视图的高度 - 字体的高度) / 2 + 字体基线以上的高度。
+            let sbvFont:UIFont! = self.tgGetSubviewFont(sbv)
+            
+            if sbvFont != nil
+            {
+                //得到基线的位置。
+                sbvtgFrame.top =  lsc.tgTopPadding - sbvFont.ascender - (sbvtgFrame.height - sbvFont.lineHeight) / 2.0 + t
+            }
+            else
+            {
+                sbvtgFrame.top =  lsc.tgTopPadding + t
+            }
+            
+            sbvtgFrame.bottom = sbvtgFrame.top + sbvtgFrame.height
+        }
+        else if let t = sbvsc.centerY.posVal
         {
             let relaView = t.view
             
@@ -771,55 +812,66 @@ extension TGRelativeLayout
                     {
                         isViewHidden = self.tgIsNoLayoutSubview(dime.view)
                         if !isViewHidden {
-                            if dime.numberVal != nil {
-                                totalAdd += (-1 * dime.numberVal)
-                            }
-                            else if (dime.view as? TGBaseLayout) == nil && dime.isWrap
+                            
+                            
+                            if dime.hasValue
                             {
-                                totalAdd += -1 * dime.view.tgFrame.width
+                              _ = self.tgCalcSubviewWidth(dime.view, sbvsc:dime.view.tgCurrentSizeClass as! TGViewSizeClassImpl, sbvtgFrame:dime.view.tgFrame, lsc:lsc, selfSize:selfSize)
+                                
+                                totalAdd += -1.0 * dime.view.tgFrame.width
                             }
-                            else {
+                            else
+                            {
                                 totalMulti += dime.multiple
                             }
                             
                             totalAdd += dime.increment
+                    
                         }
                     }
                 }
                 
-                var floatWidth: CGFloat = selfSize.width - lsc.tgLeadingPadding - lsc.tgTrailingPadding + totalAdd
-                if _tgCGFloatLessOrEqual(floatWidth, 0)
+                var floatingWidth: CGFloat = selfSize.width - lsc.tgLeadingPadding - lsc.tgTrailingPadding + totalAdd
+                if _tgCGFloatLessOrEqual(floatingWidth, 0)
                 {
-                    floatWidth = 0
+                    floatingWidth = 0
                 }
                 
                 if totalMulti != 0 {
-                    sbvtgFrame.width = self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: floatWidth * (sbvsc.width.multiple / totalMulti), sbvSize: sbvtgFrame.frame.size, selfLayoutSize: selfSize)
+                    
+                    var tempWidth = _tgRoundNumber(floatingWidth * (sbvsc.width.multiple / totalMulti))
+                    sbvtgFrame.width = self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: tempWidth, sbvSize: sbvtgFrame.frame.size, selfLayoutSize: selfSize)
                     
                     if self.tgIsNoLayoutSubview(sbv)
                     {
                         sbvtgFrame.width = 0
                     }
+                    else
+                    {
+                        floatingWidth -= tempWidth
+                        totalMulti -= sbvsc.width.multiple
+                    }
                     
                     for dime:TGLayoutSize in dimeArray
                     {
-                        if dime.isActive
+                        if dime.isActive && !self.tgIsNoLayoutSubview(dime.view)
                         {
                             let (dimetgFrame, dimesbvsc) = self.tgGetSubviewFrameAndSizeClass(dime.view)
-                            
-                            if dime.numberVal == nil {
-                                dimetgFrame.width = floatWidth * (dime.multiple / totalMulti)
+                        
+                            if !dime.hasValue
+                            {
+                                tempWidth = _tgRoundNumber(floatingWidth * (dime.multiple / totalMulti))
+                                floatingWidth -= tempWidth
+                                totalMulti -= dime.multiple
+                                dimetgFrame.width = tempWidth
                             }
-                            else {
-                                dimetgFrame.width = dime.numberVal
-                            }
-                            
+                           
                             dimetgFrame.width = self.tgValidMeasure(dimesbvsc.width, sbv: dime.view, calcSize: dimetgFrame.width, sbvSize: dimetgFrame.frame.size, selfLayoutSize: selfSize)
                             
-                            if self.tgIsNoLayoutSubview(dime.view)
-                            {
-                                dimetgFrame.width = 0
-                            }
+                        }
+                        else
+                        {
+                            dime.view.tgFrame.width = 0
                         }
                         
                     }
@@ -840,14 +892,15 @@ extension TGRelativeLayout
                     {
                         isViewHidden =  self.tgIsNoLayoutSubview(dime.view)
                         if !isViewHidden {
-                            if dime.numberVal != nil {
-                                totalAdd += (-1 * dime.numberVal!)
-                            }
-                            else if (dime.view as? TGBaseLayout) == nil && dime.isWrap
+                            
+                            if dime.hasValue
                             {
-                                totalAdd += -1 * dime.view.tgFrame.height;
+                                _ = self.tgCalcSubviewHeight(dime.view, sbvsc:dime.view.tgCurrentSizeClass as! TGViewSizeClassImpl, sbvtgFrame:dime.view.tgFrame, lsc:lsc, selfSize:selfSize)
+                                
+                                totalAdd += -1.0 * dime.view.tgFrame.height
                             }
-                            else {
+                            else
+                            {
                                 totalMulti += dime.multiple
                             }
                             
@@ -856,38 +909,47 @@ extension TGRelativeLayout
                     }
                 }
                 
-                var floatHeight = selfSize.height - lsc.tgTopPadding - lsc.tgBottomPadding + totalAdd
-                if _tgCGFloatLessOrEqual(floatHeight, 0)
+                var floatingHeight = selfSize.height - lsc.tgTopPadding - lsc.tgBottomPadding + totalAdd
+                if _tgCGFloatLessOrEqual(floatingHeight, 0)
                 {
-                    floatHeight = 0
+                    floatingHeight = 0
                 }
                 if totalMulti != 0 {
-                    sbvtgFrame.height = self.tgValidMeasure(sbvsc.height, sbv: sbv, calcSize: floatHeight * (sbvsc.height.multiple / totalMulti), sbvSize: sbvtgFrame.frame.size, selfLayoutSize: selfSize)
+                    
+                    var tempHeight = _tgRoundNumber(floatingHeight * (sbvsc.height.multiple / totalMulti))
+
+                    sbvtgFrame.height = self.tgValidMeasure(sbvsc.height, sbv: sbv, calcSize: floatingHeight * (sbvsc.height.multiple / totalMulti), sbvSize: sbvtgFrame.frame.size, selfLayoutSize: selfSize)
                     
                     if self.tgIsNoLayoutSubview(sbv)
                     {
                         sbvtgFrame.height = 0
                     }
+                    else
+                    {
+                        floatingHeight -= tempHeight
+                        totalMulti -= sbvsc.height.multiple
+                    }
                     
                     for dime: TGLayoutSize in dimeArray
                     {
-                        if dime.isActive
+                        if dime.isActive && !self.tgIsNoLayoutSubview(dime.view)
                         {
                             let (dimetgFrame, dimesbvsc) = self.tgGetSubviewFrameAndSizeClass(dime.view)
-
-                            if dime.numberVal == nil {
-                                dimetgFrame.height = floatHeight * (dime.multiple / totalMulti)
-                            }
-                            else {
-                                dimetgFrame.height = dime.numberVal
+                            
+                            if !dime.hasValue
+                            {
+                                tempHeight = _tgRoundNumber(floatingHeight * (dime.multiple / totalMulti))
+                                floatingHeight -= tempHeight
+                                totalMulti -= dime.multiple
+                                dimetgFrame.height = tempHeight
                             }
                             
                             dimetgFrame.height = self.tgValidMeasure(dimesbvsc.height, sbv: dime.view, calcSize: dimetgFrame.height, sbvSize: dimetgFrame.frame.size, selfLayoutSize: selfSize)
                             
-                            if self.tgIsNoLayoutSubview(dime.view)
-                            {
-                                dimetgFrame.height = 0
-                            }
+                        }
+                        else
+                        {
+                            dime.view.tgFrame.height = 0
                         }
                         
                     }
@@ -1219,6 +1281,35 @@ extension TGRelativeLayout
             
             return sbvtgFrame.bottom
             
+        case TGGravity.vert.baseline:
+            if sbv == self || sbv == nil
+            {
+                return lsc.tgTopPadding
+            }
+            
+            let sbvFont:UIFont! = self.tgGetSubviewFont(sbv)
+            if sbvFont != nil
+            {
+                if sbvtgFrame.top == CGFloat.greatestFiniteMagnitude || sbvtgFrame.height == CGFloat.greatestFiniteMagnitude
+                {
+                   self.tgCalcSubviewTopBottom(sbv,sbvsc:sbvsc,sbvtgFrame:sbvtgFrame,lsc:lsc,selfSize:selfSize)
+                }
+                
+                //得到基线的位置。
+                return sbvtgFrame.top + (sbvtgFrame.height - sbvFont.lineHeight)/2.0 + sbvFont.ascender
+                
+            }
+            else
+            {
+                if sbvtgFrame.top != CGFloat.greatestFiniteMagnitude
+                {
+                  return sbvtgFrame.top
+                }
+                
+                self.tgCalcSubviewTopBottom(sbv,sbvsc:sbvsc,sbvtgFrame:sbvtgFrame,lsc:lsc,selfSize:selfSize)
+                
+                return sbvtgFrame.top
+            }
         case TGGravity.horz.fill:
             
             if sbv == self || sbv == nil {

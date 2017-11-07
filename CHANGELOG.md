@@ -3,6 +3,33 @@
 
 --- 
 
+## [V1.1.3](https://github.com/youngsoft/TangramKit/releases/tag/1.1.3)(2017/11/08)
+
+#### Added
+1. 添加了对**基线对齐baseline**的支持[issue:#43](https://github.com/youngsoft/MyLinearLayout/issues/43)，目前只有**水平线性布局(TGLinearLayout)**和**相对布局(TGRelativeLayout)**支持基线对齐。
+    1. 在**TGGravity**中添加了`TGGravity.vert.baseline`的枚举定义来支持线性布局的基线对齐，并且在线性布局中添加了一个属性：`tg_baselineBaseView`来指定某个基线基准视图。同时在布局视图的tg_gravity属性中支持对`TGGravity.vert.baseline`的设置。具体例子参考：[LLTest1ViewController](https://github.com/youngsoft/TangramKit/blob/master/TangramKitDemo/linerLayoutDemo/LLTest1ViewController.swift)
+
+    2. 在UIView的扩展属性中增加了一个扩展属性：`tg_baseline`。你可以在相对布局中的子视图使用这个属性来进行基线对齐的设置。具体例子请参考：[RLTest1ViewController](https://github.com/youngsoft/TangramKit/blob/master/TangramKitDemo/linerLayoutDemo/RLTest1ViewController.swift)
+
+2. **TGLayoutPos**中增加了一个特殊的值`tg_safeAreaMargin`用来支持对iOS11应用的适配。
+3. 添加对所有设备完美适配的例子，具体看各个DEMO。
+
+#### Change
+1. 优化DEMO的目录结构。以便展示更加合理和查找方便。
+2. 支持在XCODE8下编译MyLayout的能力。[issue:#54](https://github.com/youngsoft/MyLinearLayout/issues/54)
+3. 优化在iPhoneX的横屏下UITableViewCell的动态高度的计算的问题，请参考[AllTest1TableViewCell.swift](https://github.com/youngsoft/TangramKit/blob/master/TangramKitDemo/IntegratedDemo/AllTestModel&View/AllTest1TableViewCell.swift)
+
+#### Fixed
+1. 修复各种布局下均分尺寸时可能会中间留出一个像素空间的问题。
+2. 修复相对布局下某个子视图固定，其他子视图均分剩余尺寸的问题[BUG#53](https://github.com/youngsoft/MyLinearLayout/issues/53)
+3. 优化V1.4.3版本中insetsPaddingFromSafeArea的默认属性设置导致UITableView的中的cell往下偏移，以及iOS11下的多余偏移的问题。
+4. 修复表格布局TGTableLayout中的添加行方法`tg_addRow`的列参数设置为整数时无法显示列宽或者列高的问题。
+5. 修复了一个当子视图不设置任何约束时，在进行布局时可能出现错误的问题。
+6. 修复了路径布局中的子视图在执行动画时可能会产生崩溃的问题。
+
+
+
+
 ## [V1.1.2](https://github.com/youngsoft/TangramKit/releases/tag/1.1.2)(2017/9/23)
 
 #### Added

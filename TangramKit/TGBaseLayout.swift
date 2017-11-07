@@ -156,6 +156,12 @@ extension UIView:TGViewSizeClass
     {
         return self.tgCurrentSizeClass.tg_right
     }
+    
+    /// 视图的基线位置对象。目前只支持相对布局里面的视图的设置并且调用视图或者被调用视图都只能是UILabel和UITextField和UITextView三个只支持单行文本的视图。
+    public var tg_baseline:TGLayoutPos
+    {
+        return self.tgCurrentSizeClass.tg_baseline
+    }
 
     
     /*
@@ -388,14 +394,13 @@ extension UIView:TGViewSizeClass
         }
     }
     
-    /**
-     指定子在布局视图上的对齐方式，默认是.none表示未指定，这个属性目前只支持框架布局，线性布局，流式布局下的属性设置
-    - 在框架布局中支持上、中、下、垂直拉伸和左、中、右、水平拉伸8个设置
-    - 在垂直线性布局中只支持左、中、右、水平拉伸对齐。(如果父布局视图设置了gravity，子视图设置了这个属性则这个属性优先级最高)
-    - 在水平线性布局中只支持上、中、下、垂直拉伸对齐。(如果父布局视图设置了gravity，子视图设置了这个属性则这个属性优先级最高)
-    - 在垂直流式布局中用来设置一行内的上、中、下、垂直拉伸对齐。(如果父布局视图设置了arrangedGravity，子视图设置了这个属性则这个属性优先级最高)
-    - 在水平流式布局中用来设置一列内的左、中、右、水平拉伸对齐。(如果父布局视图设置了arrangedGravity，子视图时设置了这个属性则这个属性优先级最高)
-     */
+    
+    ///指定子在布局视图上的对齐方式，默认是.none表示未指定，这个属性目前只支持框架布局，线性布局，流式布局下的属性设置.
+    /// - 在框架布局中支持上、中、下、垂直拉伸和左、中、右、水平拉伸8个设置
+    /// - 在垂直线性布局中只支持左、中、右、水平拉伸对齐。(如果父布局视图设置了gravity，子视图设置了这个属性则这个属性优先级最高)
+    /// - 在水平线性布局中只支持上、中、下、垂直拉伸对齐。(如果父布局视图设置了gravity，子视图设置了这个属性则这个属性优先级最高)
+    /// - 在垂直流式布局中用来设置一行内的上、中、下、垂直拉伸对齐。(如果父布局视图设置了arrangedGravity，子视图设置了这个属性则这个属性优先级最高)
+    /// - 在水平流式布局中用来设置一列内的左、中、右、水平拉伸对齐。(如果父布局视图设置了arrangedGravity，子视图时设置了这个属性则这个属性优先级最高)
     public var tg_alignment:TGGravity
         {
         get
@@ -526,6 +531,36 @@ extension UIView
     }
     
     
+    /// 四周边距或者间距设置的简化方法
+    ///
+    /// - Parameter val: 距离父视图四周的边距或者兄弟视图四周间距的值
+    public func tg_margin(_ val:CGFloat)
+    {
+        self.tg_leading.equal(val)
+        self.tg_trailing.equal(val)
+        self.tg_top.equal(val)
+        self.tg_bottom.equal(val)
+    }
+    
+    
+    /// 水平边距或者间距设置的简化方法
+    ///
+    /// - Parameter val: 距离父视图左右水平边距或者兄弟视图左右间距的值
+    public func tg_horzMargin(_ val:CGFloat)
+    {
+        self.tg_leading.equal(val)
+        self.tg_trailing.equal(val)
+    }
+    
+    
+    /// 垂直边距或者间距设置的简化方法
+    ///
+    /// - Parameter val: 距离父视图上下垂直边距或者兄弟视图上下间距的值
+    public func tg_vertMargin(_ val:CGFloat)
+    {
+        self.tg_top.equal(val)
+        self.tg_bottom.equal(val)
+    }
     
     
     /**
@@ -646,7 +681,7 @@ public typealias TGLayoutBorderline = TGBorderline
  布局视图基类，基类不支持实例化对象。在编程时我们经常会用到一些视图，这种视图只是负责将里面的子视图按照某种规则进行排列和布局，而别无其他的作用。因此我们称这种视图为容器视图或者称为布局视图。
 
  布局视图通过重载layoutSubviews方法来完成子视图的布局和排列的工作。对于每个加入到布局视图中的子视图，都会在加入时通过KVO机制监控子视图的center和bounds以及frame值的变化，每当子视图的这些属性一变化时就又会重新引发布局视图的布局动作。同时对每个视图的布局扩展属性的设置以及对布局视图的布局属性的设置都会引发布局视图的布局动作。布局视图在添加到非布局父视图时也会通过KVO机制来监控非布局父视图的frame值和bounds值，这样每当非布局父视图的尺寸变更时也会引发布局视图的布局动作。前面说的引起变动的方法就是会在KVO处理逻辑以及布局扩展属性和布局属性设置完毕后通过调用setNeedLayout来实现的，当布局视图收到setNeedLayout的请求后，会在下一个runloop中对布局视图进行重新布局而这就是通过调用layoutSubviews方法来实现的。布局视图基类只提供了更新所有子视图的位置和尺寸以及一些基础的设置，而至于如何排列和布局这些子视图则要根据应用的场景和需求来确定，因此布局基类视图提供了一个：
- internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, type:TGSizeClassType) ->(selfSize:CGSize, hasSubLayout:Bool)
+ internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, hasSubLayout:inout Bool!, sbs:[UIView]!, type:TGSizeClassType) ->CGSize
  的方法，要求派生类去重载这个方法，这样不同的派生类就可以实现不同的应用场景，这就是布局视图的核心实现机制。
  
  TangramKit布局库根据实际中常见的场景实现了7种不同的布局视图派生类他们分别是：线性布局、表格布局、相对布局、框架布局、流式布局、浮动布局、路径布局。
@@ -853,7 +888,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     }
     
     /**
-     指定padding内边距的缩进是在SafeArea基础之上进行的。默认是.all表示四周都会缩进SafeArea所指定的区域。你也可以设置只缩进某一个或则几个方向，或者不缩进任何一个方向。这个属性是为了支持iPoneX而设置的。为了支持iPhoneX的全屏幕适配。我们只需要对根布局视图设置这个扩展属性，默认情况下是不需要进行特殊设置的，TangramKit自动会对iPhoneX进行适配。我们知道iOS11中引入了安全区域的概念，TangramKit中的根布局视图会自动将安全区域叠加到设置的padding中去。默认情况下四周的安全区域都会叠加到padding中去，因此您可以根据特殊情况来设置只需要叠加哪一个方向的安全区域。
+     指定padding内边距的缩进是在SafeArea基础之上进行的。默认是.all表示四周都会缩进SafeArea所指定的区域。你也可以设置只缩进某一个或则几个方向，或者不缩进任何一个方向。这个属性是为了支持iPoneX而设置的。为了支持iPhoneX的全屏幕适配。我们只需要对根布局视图设置这个扩展属性，默认情况下是不需要进行特殊设置的，TangramKit自动会对iPhoneX进行适配。我们知道iOS11中引入了安全区域的概念，TangramKit中的根布局视图会自动将安全区域叠加到设置的padding中去。默认情况下左右的安全区域都会叠加到padding中去，因此您可以根据特殊情况来设置只需要叠加哪一个方向的安全区域。
      */
     public var tg_insetsPaddingFromSafeArea:UIRectEdge
     {
@@ -1386,6 +1421,30 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         _tgTouchEventDelegate = nil
     }
     
+    open override func safeAreaInsetsDidChange() {
+        
+        if #available(iOS 11.0, *) {
+            super.safeAreaInsetsDidChange()
+        } else {
+            // Fallback on earlier versions
+        }
+        
+        if self.superview != nil && !self.superview!.isKind(of: TGBaseLayout.self)
+        {
+            let lsc = self.tgCurrentSizeClass as! TGLayoutViewSizeClassImpl
+            if lsc.leading.isSafeAreaPos || lsc.trailing.isSafeAreaPos || lsc.top.isSafeAreaPos || lsc.bottom.isSafeAreaPos
+            {
+                 if !self.tg_isLayouting
+                 {
+                    self.tg_isLayouting = true
+                   _ = self.tgUpdateLayoutRectInNoLayoutSuperview(self.superview!)
+                    self.tg_isLayouting = false
+                }
+            }
+        }
+        
+    }
+    
     override open func layoutSubviews() {
         
         if !self.autoresizesSubviews
@@ -1456,7 +1515,8 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             }
             else
             {
-               (newSelfSize,_) = self.tgCalcLayoutRect(self.tgCalcSizeInNoLayout(newSuperview: self.superview, currentSize: oldSelfSize),isEstimate: false, sbs:nil, type:sizeClassType)
+               var hasSubLayout:Bool! = nil
+               newSelfSize = self.tgCalcLayoutRect(self.tgCalcSizeInNoLayout(newSuperview: self.superview, currentSize: oldSelfSize),isEstimate: false, hasSubLayout:&hasSubLayout, sbs:nil, type:sizeClassType)
             }
             newSelfSize = _tgRoundSize(newSelfSize)
             _tgUseCacheRects = false
@@ -1636,14 +1696,33 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                 let supv:UIView! = self.superview
                 
                 //如果自己的父视图是非UIScrollView以及非布局视图。以及自己的宽度是.wrap或者高度是.wrap时，并且如果设置了在父视图居中或者居下或者居右时要在父视图中更新自己的位置。
-                if supv != nil && !supv.isKind(of: TGBaseLayout.self) && !supv.isKind(of: UIScrollView.self)
+                if supv != nil && !supv.isKind(of: TGBaseLayout.self)
                 {
                     
-                    if lsc.isSomeSizeWrap
+                    let rectSuper = supv.bounds
+                    let rectSelf = self.bounds
+                    var centerPonintSelf = self.center
+                    
+                    //特殊处理低版本下的top和bottom的两种安全区域的场景。
+                    if #available(iOS 11.0, *){}
+                    else {
+                        if lsc.top.isSafeAreaPos || lsc.bottom.isSafeAreaPos
+                        {
+                            if (lsc.top.isSafeAreaPos)
+                            {
+                                centerPonintSelf.y = lsc.top.weightPosIn(rectSuper.height) + self.layer.anchorPoint.y * rectSelf.height
+                            }
+                            else
+                            {
+                                centerPonintSelf.y  = rectSuper.height - rectSelf.height - lsc.bottom.weightPosIn(rectSuper.height) + self.layer.anchorPoint.y * rectSelf.height
+                            }
+                        }
+                    }
+                    
+                    
+                    if !supv.isKind(of: UIScrollView.self) && lsc.isSomeSizeWrap
                     {
-                        let rectSuper = supv.bounds
-                        let rectSelf = self.bounds
-                        var centerPonintSelf = self.center
+                       
                         
                         if TGBaseLayout.tg_isRTL
                         {
@@ -1681,12 +1760,12 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                            centerPonintSelf.x = rectSuper.size.width - centerPonintSelf.x
                         }
 
-                        
-                        //如果有变化则只调整自己的center。而不变化
-                        if  !_tgCGPointEqual(self.center, centerPonintSelf)
-                        {
-                            self.center = centerPonintSelf
-                        }
+                    }
+                    
+                    //如果有变化则只调整自己的center。而不变化
+                    if  !_tgCGPointEqual(self.center, centerPonintSelf)
+                    {
+                        self.center = centerPonintSelf
                     }
                     
                 }
@@ -1829,6 +1908,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         
         if (newSuperview != nil)
         {
+            let defRectEdge:UIRectEdge = [.left, .right]
             if self.value(forKey: "viewDelegate") != nil
             {
                 if lsc.width.isWrap
@@ -1841,7 +1921,20 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                     lsc.tg_height.equal(nil)
                 }
                 
+                if lsc.tg_insetsPaddingFromSafeArea.rawValue == defRectEdge.rawValue
+                {
+                    lsc.tg_insetsPaddingFromSafeArea = [.left, .right, .bottom]
+                }
+                
                 self.tg_adjustScrollViewContentSizeMode = .no
+            }
+            
+            if ((newSuperview as? UIScrollView) != nil && (newSuperview as? UITableView) == nil && (newSuperview as? UICollectionView) == nil)
+            {
+                if lsc.tg_insetsPaddingFromSafeArea.rawValue == defRectEdge.rawValue
+                {
+                    lsc.tg_insetsPaddingFromSafeArea = [.left, .right, .bottom]
+                }
             }
             
         }
@@ -1948,6 +2041,17 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             {
                 if self.tg_adjustScrollViewContentSizeMode == .auto
                 {
+                    //这里预先设置一下contentSize主要是为了解决contentOffset在后续计算contentSize的偏移错误的问题。
+                    UIView.performWithoutAnimation {
+                        
+                       // UIScrollView *scrollSuperView = (UIScrollView*)newSuperview;
+                        if let scrollSuperView = newSuperview as? UIScrollView, scrollSuperView.contentSize.equalTo(.zero)
+                        {
+                            let screenSize = UIScreen.main.bounds.size
+                            scrollSuperView.contentSize =  CGSize(width:0, height:screenSize.height + 0.1)
+                        }
+                    }
+                    
                     self.tg_adjustScrollViewContentSizeMode = .yes
                 }
             }
@@ -2041,7 +2145,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         super.touchesCancelled(touches,with:event)
     }
     
-    internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, sbs:[UIView]!, type:TGSizeClassType) ->(selfSize:CGSize, hasSubLayout:Bool)
+    internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, hasSubLayout:inout Bool!, sbs:[UIView]!, type:TGSizeClassType) ->CGSize
     {
         var selfSize:CGSize
         
@@ -2063,7 +2167,12 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
             }
         }
         
-        return (selfSize, false)
+        if hasSubLayout != nil
+        {
+            hasSubLayout = false
+        }
+        
+        return selfSize
         
     }
     
@@ -2368,7 +2477,15 @@ extension TGBaseLayout
             
             if (lsc.width.sizeVal != nil && lsc.width.sizeVal.view  === newSuperview) || lsc.width.isFill
             {
-                size.width = lsc.width.measure(rectSuper.width)
+                
+                if  lsc.width.isFill || lsc.width.sizeVal.type == TGGravity.horz.fill
+                {
+                    size.width = lsc.width.measure(rectSuper.width)
+                }
+                else
+                {
+                    size.width = lsc.width.measure(rectSuper.height)
+                }
                 size.width = self.tgValidMeasure(lsc.width, sbv: self, calcSize: size.width, sbvSize: size, selfLayoutSize: rectSuper.size)
             }
             
@@ -2391,7 +2508,15 @@ extension TGBaseLayout
            
             if  (lsc.height.sizeVal != nil && lsc.height.sizeVal.view  === newSuperview) || lsc.height.isFill
             {
-                size.height = lsc.height.measure(rectSuper.height)
+                if  lsc.height.isFill || lsc.height.sizeVal.type == TGGravity.vert.fill
+                {
+                    size.height = lsc.height.measure(rectSuper.height)
+                }
+                else
+                {
+                    size.height = lsc.height.measure(rectSuper.width)
+                }
+                
                 size.height = self.tgValidMeasure(lsc.height, sbv: self, calcSize: size.height, sbvSize: size, selfLayoutSize: rectSuper.size)
             }
             
@@ -2423,9 +2548,9 @@ extension TGBaseLayout
         let lsc = self.tgCurrentSizeClass as! TGLayoutViewSizeClassImpl
         
         let rectSuper = newSuperview.bounds
-        let leadingMargin = lsc.leading.weightPosIn(rectSuper.width)
+        var leadingMargin = lsc.leading.weightPosIn(rectSuper.width)
         let trailingMargin = lsc.trailing.weightPosIn(rectSuper.width)
-        let topMargin = lsc.top.weightPosIn(rectSuper.height)
+        var topMargin = lsc.top.weightPosIn(rectSuper.height)
         let bottomMargin = lsc.bottom.weightPosIn(rectSuper.height)
     
         var rectSelf = self.bounds
@@ -2491,6 +2616,14 @@ extension TGBaseLayout
             rectSelf.size.width = rectSuper.width - leadingMargin - trailingMargin
             rectSelf.size.width = self.tgValidMeasure(lsc.width,sbv:self,calcSize:rectSelf.width,sbvSize:rectSelf.size,selfLayoutSize:rectSuper.size);
             
+            if let scrollSuperView = newSuperview as? UIScrollView, #available(iOS 11.0, *) {
+
+                if lsc.leading.isSafeAreaPos
+                {
+                    leadingMargin = lsc.leading.offset + (TGBaseLayout.tg_isRTL ? scrollSuperView.safeAreaInsets.right : scrollSuperView.safeAreaInsets.left) - (TGBaseLayout.tg_isRTL ? scrollSuperView.adjustedContentInset.right : scrollSuperView.adjustedContentInset.left)
+                }
+            }
+            
             rectSelf.origin.x = leadingMargin
         }
         else if lsc.centerX.hasValue
@@ -2500,6 +2633,14 @@ extension TGBaseLayout
         }
         else if lsc.leading.hasValue
         {
+            if let scrollSuperView = newSuperview as? UIScrollView, #available(iOS 11.0, *) {
+                
+                if lsc.leading.isSafeAreaPos
+                {
+                    leadingMargin = lsc.leading.offset + (TGBaseLayout.tg_isRTL ? scrollSuperView.safeAreaInsets.right : scrollSuperView.safeAreaInsets.left) - (TGBaseLayout.tg_isRTL ? scrollSuperView.adjustedContentInset.right : scrollSuperView.adjustedContentInset.left)
+                }
+            }
+            
             rectSelf.origin.x = leadingMargin
         }
         else if lsc.trailing.hasValue
@@ -2561,6 +2702,14 @@ extension TGBaseLayout
             rectSelf.size.height = rectSuper.height - topMargin - topMargin
             rectSelf.size.height = self.tgValidMeasure(lsc.height,sbv:self,calcSize:rectSelf.height,sbvSize:rectSelf.size,selfLayoutSize:rectSuper.size)
             
+            if let scrollSuperView = newSuperview as? UIScrollView, #available(iOS 11.0, *) {
+                
+                if lsc.top.isSafeAreaPos
+                {
+                    topMargin = lsc.top.offset + scrollSuperView.safeAreaInsets.top - scrollSuperView.adjustedContentInset.top
+                }
+            }
+            
             rectSelf.origin.y = topMargin
         }
         else if lsc.centerY.hasValue
@@ -2570,6 +2719,14 @@ extension TGBaseLayout
         }
         else if lsc.top.hasValue
         {
+            if let scrollSuperView = newSuperview as? UIScrollView, #available(iOS 11.0, *) {
+                
+                if lsc.top.isSafeAreaPos
+                {
+                    topMargin = lsc.top.offset + scrollSuperView.safeAreaInsets.top - scrollSuperView.adjustedContentInset.top
+                }
+            }
+            
             rectSelf.origin.y = topMargin
         }
         else if lsc.bottom.hasValue
@@ -2649,10 +2806,34 @@ extension TGBaseLayout
             let rectSuper = scrolv.bounds
             
             //这里把自己在父视图中的上下左右边距也算在contentSize的包容范围内。
-            let leadingMargin = lsc.leading.weightPosIn(rectSuper.width)
-            let trailingMargin = lsc.trailing.weightPosIn(rectSuper.width)
-            let topMargin = lsc.top.weightPosIn(rectSuper.height)
-            let bottomMargin = lsc.bottom.weightPosIn(rectSuper.height)
+            var leadingMargin = lsc.leading.weightPosIn(rectSuper.width)
+            var trailingMargin = lsc.trailing.weightPosIn(rectSuper.width)
+            var topMargin = lsc.top.weightPosIn(rectSuper.height)
+            var bottomMargin = lsc.bottom.weightPosIn(rectSuper.height)
+            
+            
+            if #available(iOS 11.0, *){
+                
+                if lsc.leading.isSafeAreaPos
+                {
+                    leadingMargin = lsc.leading.offset
+                }
+                
+                if lsc.trailing.isSafeAreaPos
+                {
+                    trailingMargin = lsc.trailing.offset
+                }
+                
+                if lsc.top.isSafeAreaPos
+                {
+                    topMargin = lsc.top.offset
+                }
+                
+                if lsc.bottom.isSafeAreaPos
+                {
+                    bottomMargin = lsc.bottom.offset
+                }
+            }
             
             if contSize.height != newSize.height + topMargin + bottomMargin
             {
@@ -2663,8 +2844,22 @@ extension TGBaseLayout
                 contSize.width = newSize.width + leadingMargin + trailingMargin
             }
             
-            scrolv.contentSize = contSize
             
+            //因为调整contentsize可能会调整contentOffset，所以为了保持一致性这里要还原掉原来的contentOffset
+            let oldOffset = scrolv.contentOffset
+            if !scrolv.contentSize.equalTo(contSize)
+            {
+               scrolv.contentSize =  contSize
+            }
+            
+            if (oldOffset.x <= 0.0 || oldOffset.x <= contSize.width - rectSuper.size.width) &&
+                (oldOffset.y <= 0.0 || oldOffset.y <= contSize.height - rectSuper.size.height)
+            {
+                if  !scrolv.contentOffset.equalTo(oldOffset)
+                {
+                    scrolv.contentOffset = oldOffset;
+                }
+            }
         }
     }
     
@@ -2687,12 +2882,13 @@ extension TGBaseLayout
             }
         }
         
-        var (selfSize, hasSubLayout) = self.tgCalcLayoutRect(size, isEstimate: false, sbs:sbs, type: type)
+        var hasSubLayout:Bool! = false
+        var selfSize = self.tgCalcLayoutRect(size, isEstimate: false, hasSubLayout:&hasSubLayout, sbs:sbs, type: type)
         if hasSubLayout
         {
             tgFrame.width = selfSize.width
             tgFrame.height = selfSize.height
-            (selfSize,_) = self.tgCalcLayoutRect(.zero, isEstimate: true, sbs:sbs, type: type)
+            selfSize = self.tgCalcLayoutRect(.zero, isEstimate: true, hasSubLayout:&hasSubLayout, sbs:sbs, type: type)
         }
         tgFrame.width = selfSize.width
         tgFrame.height = selfSize.height
@@ -2718,6 +2914,22 @@ extension TGBaseLayout
         
         return _tgRoundSize(selfSize)
         
+    }
+    
+    
+    internal func tgGetSubviewFont(_ sbv:UIView) ->UIFont!
+    {
+        var sbvFont:UIFont! = nil;
+        
+        if sbv.isKind(of: UILabel.self) ||
+            sbv.isKind(of: UITextField.self) ||
+            sbv.isKind(of: UITextView.self) ||
+            sbv.isKind(of: UIButton.self)
+        {
+            sbvFont = sbv.value(forKey: "font") as! UIFont
+        }
+        
+        return sbvFont;
     }
     
     internal func tgGetSubviewVertGravity(_ sbv:UIView, sbvsc:TGViewSizeClassImpl, vertGravity:TGGravity)->TGGravity
@@ -2764,21 +2976,40 @@ extension TGBaseLayout
 
     
     
-    internal func tgCalcVertGravity(_ vert:TGGravity, selfSize:CGSize, sbv:UIView, sbvsc:TGViewSizeClassImpl, lsc:TGLayoutViewSizeClassImpl, rect:inout CGRect)
+    internal func tgCalcVertGravity(_ vert:TGGravity, selfSize:CGSize, topPadding:CGFloat, bottomPadding:CGFloat, baselinePos:CGFloat!, sbv:UIView, sbvsc:TGViewSizeClassImpl, lsc:TGLayoutViewSizeClassImpl, rect:inout CGRect)
     {
-        let fixedHeight = lsc.tgTopPadding + lsc.tgBottomPadding
+        let fixedHeight = topPadding + bottomPadding
         let topMargin =  sbvsc.top.weightPosIn(selfSize.height - fixedHeight)
         let centerMargin = sbvsc.centerY.weightPosIn(selfSize.height - fixedHeight)
         let bottomMargin = sbvsc.bottom.weightPosIn(selfSize.height - fixedHeight)
         
+        var vert = vert
+        
+        //确保设置基线对齐的视图都是UILabel,UITextField,UITextView
+        if baselinePos == nil && vert == TGGravity.vert.baseline
+        {
+            vert = TGGravity.vert.top
+        }
+        
+        var sbvFont:UIFont! = nil
+        if vert == TGGravity.vert.baseline
+        {
+            sbvFont = self.tgGetSubviewFont(sbv)
+        }
+        
+        if sbvFont == nil && vert == TGGravity.vert.baseline
+        {
+            vert = TGGravity.vert.top
+        }
+        
         if vert == TGGravity.vert.fill
         {
-            rect.origin.y = lsc.tgTopPadding + topMargin;
+            rect.origin.y = topPadding + topMargin;
             rect.size.height = self.tgValidMeasure(sbvsc.height, sbv: sbv, calcSize:selfSize.height - fixedHeight - topMargin - bottomMargin , sbvSize: rect.size, selfLayoutSize: selfSize)
         }
         else if vert == TGGravity.vert.center
         {
-            rect.origin.y = (selfSize.height - fixedHeight - topMargin - bottomMargin - rect.size.height)/2 + lsc.tgTopPadding + topMargin + centerMargin;
+            rect.origin.y = (selfSize.height - fixedHeight - topMargin - bottomMargin - rect.size.height)/2 + topPadding + topMargin + centerMargin;
         }
         else if vert == TGGravity.vert.windowCenter
         {
@@ -2792,11 +3023,16 @@ extension TGBaseLayout
         else if vert == TGGravity.vert.bottom
         {
             
-            rect.origin.y = selfSize.height - lsc.tgBottomPadding - bottomMargin - rect.size.height;
+            rect.origin.y = selfSize.height - bottomPadding - bottomMargin - rect.size.height;
+        }
+        else if vert == TGGravity.vert.baseline
+        {
+            //得到基线位置。
+            rect.origin.y = baselinePos - sbvFont.ascender - (rect.height - sbvFont.lineHeight) / 2.0
         }
         else
         {
-            rect.origin.y = lsc.tgTopPadding + topMargin;
+            rect.origin.y = topPadding + topMargin;
         }
     }
     
@@ -2843,9 +3079,9 @@ extension TGBaseLayout
     }
 
     
-    internal func tgCalcHorzGravity(_ horz:TGGravity, selfSize:CGSize, sbv:UIView, sbvsc:TGViewSizeClassImpl, lsc:TGLayoutViewSizeClassImpl, rect:inout CGRect)
+    internal func tgCalcHorzGravity(_ horz:TGGravity, selfSize:CGSize, leadingPadding:CGFloat, trailingPadding:CGFloat, sbv:UIView, sbvsc:TGViewSizeClassImpl, lsc:TGLayoutViewSizeClassImpl, rect:inout CGRect)
     {
-        let fixedWidth = lsc.tgLeadingPadding + lsc.tgTrailingPadding
+        let fixedWidth = leadingPadding + trailingPadding
         let leadingMargin = sbvsc.leading.weightPosIn(selfSize.width - fixedWidth)
         let centerMargin = sbvsc.centerX.weightPosIn(selfSize.width - fixedWidth)
         let trailingMargin = sbvsc.trailing.weightPosIn(selfSize.width - fixedWidth)
@@ -2853,12 +3089,12 @@ extension TGBaseLayout
         if horz == TGGravity.horz.fill
         {
             
-            rect.origin.x = lsc.tgLeadingPadding + leadingMargin;
+            rect.origin.x = leadingPadding + leadingMargin;
             rect.size.width =  self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize:selfSize.width - fixedWidth - leadingMargin - trailingMargin , sbvSize: rect.size, selfLayoutSize: selfSize)
         }
         else if horz == TGGravity.horz.center
         {
-            rect.origin.x = (selfSize.width - fixedWidth - leadingMargin - trailingMargin - rect.size.width)/2 + lsc.tgLeadingPadding + leadingMargin + centerMargin;
+            rect.origin.x = (selfSize.width - fixedWidth - leadingMargin - trailingMargin - rect.size.width)/2 + leadingPadding + leadingMargin + centerMargin;
         }
         else if horz == TGGravity.horz.windowCenter
         {
@@ -2876,12 +3112,11 @@ extension TGBaseLayout
         }
         else if horz == TGGravity.horz.trailing
         {
-            
-            rect.origin.x = selfSize.width - lsc.tgTrailingPadding - trailingMargin - rect.size.width;
+            rect.origin.x = selfSize.width - trailingPadding - trailingMargin - rect.size.width;
         }
         else
         {
-            rect.origin.x = lsc.tgLeadingPadding  + leadingMargin;
+            rect.origin.x = leadingPadding  + leadingMargin;
         }
         
     }
@@ -3077,7 +3312,7 @@ extension TGBaseLayout
         let  sbvtgFrame = subview.tgFrame
         if sbvtgFrame.sizeClass == nil
         {
-            sbvtgFrame.sizeClass = self.tgDefaultSizeClass
+            sbvtgFrame.sizeClass = subview.tgDefaultSizeClass
         }
         
         return (sbvtgFrame, sbvtgFrame.sizeClass as! TGViewSizeClassImpl)

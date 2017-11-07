@@ -163,30 +163,28 @@ open class TGTableLayout: TGLinearLayout {
         }
         else
         {
-            if let v = rowView.colSize as? CGFloat
+            if let v = rowView.colSize as? CGFloat, v < TGTableLayout._stgColCountTag
             {
-                if v < TGTableLayout._stgColCountTag
+                
+                let colCount = TGTableLayout._stgColCountTag - v
+                if rowsc.tg_orientation == .horz
                 {
-                    let colCount = TGTableLayout._stgColCountTag - v
-                    if rowsc.tg_orientation == .horz
-                    {
-                        colsc.tg_width.equalHelper(val:rowView.tg_width, increment:-1 * rowView.tg_hspace * (colCount - 1.0) / colCount, multiple:1.0 / colCount)
-                    }
-                    else
-                    {
-                        colsc.tg_height.equalHelper(val:rowView.tg_height,increment:-1 * rowView.tg_vspace * (colCount - 1.0) / colCount, multiple:1.0 / colCount)
-                    }
+                    colsc.tg_width.equalHelper(val:rowView.tg_width, increment:-1 * rowView.tg_hspace * (colCount - 1.0) / colCount, multiple:1.0 / colCount)
                 }
                 else
                 {
-                    if (rowsc.tg_orientation == .horz)
-                    {
-                        colsc.tg_width.equalHelper(val:rowView.colSize)
-                    }
-                    else
-                    {
-                        colsc.tg_height.equalHelper(val:rowView.colSize)
-                    }
+                    colsc.tg_height.equalHelper(val:rowView.tg_height,increment:-1 * rowView.tg_vspace * (colCount - 1.0) / colCount, multiple:1.0 / colCount)
+                }
+            }
+            else
+            {
+                if (rowsc.tg_orientation == .horz)
+                {
+                    colsc.tg_width.equalHelper(val:rowView.colSize)
+                }
+                else
+                {
+                    colsc.tg_height.equalHelper(val:rowView.colSize)
                 }
             }
         }

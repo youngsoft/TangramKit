@@ -63,8 +63,7 @@ class FOLTest3ViewController: UIViewController {
         
         let floatLayout = TGFloatLayout(.vert)
         floatLayout.backgroundColor = .white
-        floatLayout.tg_width.equal(.fill)
-        floatLayout.tg_height.equal(.fill)
+        floatLayout.tg_margin(TGLayoutPos.tg_safeAreaMargin) ////浮动布局和父视图四周的边界是安全区，也就是说浮动布局的宽度和高度和父视图的安全区相等。 您可以将tg_margin设置为0并在iPhoneX上看看效果和区别。
         //通过智能分界线的使用，浮动布局里面的所有子布局视图的分割线都会进行智能的设置，从而解决了我们需求中需要提供边界线的问题。
         floatLayout.tg_intelligentBorderline = TGBorderline(color: UIColor.lightGray.withAlphaComponent(0.2))
         self.view.addSubview(floatLayout)

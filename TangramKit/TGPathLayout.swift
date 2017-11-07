@@ -315,6 +315,10 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
                 start = realFromIndex
                 end = realToIndex
             }else{
+                if tgPointIndexs!.count <= realFromIndex || tgPointIndexs!.count <= realToIndex
+                {
+                    return nil
+                }
                 start = tgPointIndexs![realFromIndex]
                 end = tgPointIndexs![realToIndex]
             }
@@ -323,6 +327,10 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
                 retPoints.append(tgPathPoints![i])
             }
         }else{
+            if tgPointIndexs!.count <= realFromIndex || tgPointIndexs!.count <= realToIndex
+            {
+                return nil
+            }
             var end = tgPointIndexs![realFromIndex]
             let start = tgPointIndexs![realToIndex]
             while end >= start {
@@ -391,8 +399,9 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     }
 
     
-    override func tgCalcLayoutRect(_ size: CGSize, isEstimate: Bool, sbs:[UIView]!, type: TGSizeClassType) -> (selfSize: CGSize, hasSubLayout: Bool) {
-        var (selfSize,hasSubLayout) = super.tgCalcLayoutRect(size, isEstimate: isEstimate, sbs:sbs,type: type)
+    override internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, hasSubLayout:inout Bool!, sbs:[UIView]!, type :TGSizeClassType) -> CGSize
+    {
+        var selfSize = super.tgCalcLayoutRect(size, isEstimate:isEstimate, hasSubLayout:&hasSubLayout, sbs:sbs, type:type)
         
         var sbs:[UIView]! = sbs
         if sbs == nil
@@ -416,7 +425,9 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
                 
                 
                 let sbvl = sbv as! TGBaseLayout
-                if hasSubLayout && (sbvsc.isSomeSizeWrap){
+                
+                if hasSubLayout != nil && sbvsc.isSomeSizeWrap
+                {
                     hasSubLayout = true
                 }
                 
@@ -629,7 +640,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
         tgAdjustLayoutSelfSize(selfSize: &selfSize, lsc: lsc)
         
         
-        return (self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs2, lsc:lsc),hasSubLayout)
+        return self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs2, lsc:lsc)
     }
     
     override func tgCreateInstance() -> AnyObject {

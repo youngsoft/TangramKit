@@ -43,6 +43,8 @@ class RLTest1ViewController: UIViewController {
         let rootLayout: TGRelativeLayout = TGRelativeLayout()
         rootLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
         rootLayout.backgroundColor = .white
+        
+        rootLayout.tg_insetsPaddingFromSafeArea = [.top, .left, .right]  //默认情况下底部的安全区会和布局视图的底部padding进行叠加，当这样设置后底部安全区将不会叠加到底部的padding上去。您可以注释这句代码看看效果。
         self.view = rootLayout
         
         /*
@@ -184,7 +186,7 @@ class RLTest1ViewController: UIViewController {
         rootLayout.addSubview(lineView3)
         
         let walkLabel2 = UILabel()
-        walkLabel2.text = "walk"
+        walkLabel2.text = "Weight"
         walkLabel2.font = CFTool.font(15)
         walkLabel2.textColor = CFTool.color(11)
         walkLabel2.sizeToFit()
@@ -193,12 +195,12 @@ class RLTest1ViewController: UIViewController {
         rootLayout.addSubview(walkLabel2)
         
         let walkLabel3 = UILabel()
-        walkLabel3.text = "18 Min"
-        walkLabel3.font = CFTool.font(15)
+        walkLabel3.text = "70 kg"
+        walkLabel3.font = CFTool.font(20)
         walkLabel3.textColor = CFTool.color(12)
         walkLabel3.sizeToFit()
         walkLabel3.tg_leading.equal(walkLabel2.tg_trailing,offset:5)
-        walkLabel3.tg_centerY.equal(walkLabel2.tg_centerY)
+        walkLabel3.tg_baseline.equal(walkLabel2.tg_baseline)
         rootLayout.addSubview(walkLabel3)
         
         let timeLabel1 = UILabel()

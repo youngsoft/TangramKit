@@ -23,6 +23,7 @@
 		1890A2251EDF96C800D61C1A /* TGRelativeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD90C1E0B92E100403A1F /* TGRelativeLayout.swift */; };
 		1890A2261EDF96C800D61C1A /* TGTableLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD90D1E0B92E100403A1F /* TGTableLayout.swift */; };
 		18BCBD461E1336D900AC7766 /* AllTest8ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BCBD451E1336D900AC7766 /* AllTest8ViewController.swift */; };
+		20B6C6E71FA40AEC001D51C7 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B6C6E61FA40AEC001D51C7 /* DetailViewController.swift */; };
 		681BD8DF1E0B91A500403A1F /* TangramKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 681BD8DD1E0B91A500403A1F /* TangramKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		681BD90F1E0B92E100403A1F /* TangramKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9011E0B92E100403A1F /* TangramKit.swift */; };
 		681BD9111E0B92E100403A1F /* TGBaseLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9021E0B92E100403A1F /* TGBaseLayout.swift */; };
@@ -100,6 +101,7 @@
 		18270C241C954B3C00CBCC92 /* TangramKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TangramKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		184243071E327F0800E2CCE1 /* FLLTest5ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLLTest5ViewController.swift; sourceTree = "<group>"; };
 		18BCBD451E1336D900AC7766 /* AllTest8ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllTest8ViewController.swift; sourceTree = "<group>"; };
+		20B6C6E61FA40AEC001D51C7 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		681BD8DB1E0B91A500403A1F /* TangramKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TangramKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		681BD8DD1E0B91A500403A1F /* TangramKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TangramKit.h; sourceTree = "<group>"; };
 		681BD8DE1E0B91A500403A1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -250,6 +252,7 @@
 				68F035E71E0B7D2700CEBAEF /* AppDelegate.swift */,
 				68F035E81E0B7D2700CEBAEF /* CFTool.swift */,
 				68F0363B1E0B7D2700CEBAEF /* ViewController.swift */,
+				20B6C6E61FA40AEC001D51C7 /* DetailViewController.swift */,
 				68F035FC1E0B7D2700CEBAEF /* Images.xcassets */,
 				68F035E91E0B7D2700CEBAEF /* LaunchScreen.storyboard */,
 				68F036AE1E0B800000CEBAEF /* TangramKitPrefix.pch */,
@@ -444,6 +447,7 @@
 				TargetAttributes = {
 					18270C231C954B3C00CBCC92 = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = Q5MFLFRY64;
 						LastSwiftMigration = 0900;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -530,6 +534,7 @@
 				68F036731E0B7D2700CEBAEF /* RLTest2ViewController.swift in Sources */,
 				18058AAF1E63B4EA00EAECDC /* FLLTest6ViewController.swift in Sources */,
 				68F036501E0B7D2700CEBAEF /* AllTest2ViewController.swift in Sources */,
+				20B6C6E71FA40AEC001D51C7 /* DetailViewController.swift in Sources */,
 				184243081E327F0800E2CCE1 /* FLLTest5ViewController.swift in Sources */,
 				68F0363D1E0B7D2700CEBAEF /* CFTool.swift in Sources */,
 				68F036581E0B7D2700CEBAEF /* AllTest2TableViewCell.swift in Sources */,
@@ -729,7 +734,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = Q5MFLFRY64;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = TangramKit/TangramKitDemo/TangramKitPrefix.pch;
@@ -750,7 +755,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = Q5MFLFRY64;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = TangramKit/TangramKitDemo/TangramKitPrefix.pch;

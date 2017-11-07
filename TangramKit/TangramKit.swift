@@ -53,7 +53,7 @@
  
  */
 
-//Current version is 1.1.2, please open: https://github.com/youngsoft/TangramKit/blob/master/CHANGELOG.md to show the changes.
+//Current version is 1.1.3, please open: https://github.com/youngsoft/TangramKit/blob/master/CHANGELOG.md to show the changes.
 
 
 
@@ -137,6 +137,8 @@ public struct TGGravity : OptionSet{
         public static let between = TGGravity(rawValue: 16 << 8)
         /// 垂直高度填充
         public static let fill:TGGravity = [vert.top, vert.center, vert.bottom]
+        /// 基线对齐,只支持水平线性布局，指定基线对齐必须要指定出一个基线标准的子视图
+        public static let baseline = TGGravity(rawValue: 32 << 8)
         /// 垂直掩码，用来获取垂直方向的枚举值
         public static let mask = TGGravity(rawValue:0x00FF)
         
@@ -148,8 +150,6 @@ public struct TGGravity : OptionSet{
     public static let fill:TGGravity = [horz.fill, vert.fill]
     /// 全部拉伸
     public static let between:TGGravity = [horz.between, vert.between]
-    /// 基线对齐，暂时不支持
-    public static let baseline = TGGravity(rawValue: 32 << 8)
 }
 
 

@@ -199,9 +199,9 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
     
     //MARK: override method
     
-    override internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, sbs:[UIView]!, type :TGSizeClassType) ->(selfSize:CGSize, hasSubLayout:Bool)
+    override internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, hasSubLayout:inout Bool!, sbs:[UIView]!, type :TGSizeClassType) -> CGSize
     {
-        var (selfSize, hasSubLayout) = super.tgCalcLayoutRect(size, isEstimate:isEstimate, sbs:sbs, type:type)
+        var selfSize = super.tgCalcLayoutRect(size, isEstimate:isEstimate, hasSubLayout:&hasSubLayout, sbs:sbs, type:type)
         
         var sbs:[UIView]! = sbs
         if sbs == nil
@@ -224,7 +224,7 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
             
             if let sbvl:TGBaseLayout = sbv as? TGBaseLayout
             {
-                if sbvsc.isSomeSizeWrap
+                if hasSubLayout != nil && sbvsc.isSomeSizeWrap
                 {
                     hasSubLayout = true
                 }
@@ -258,7 +258,7 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
         tgAdjustSubviewsRTLPos(sbs: sbs, selfWidth: selfSize.width)
         
         
-        return (self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs, lsc:lsc),hasSubLayout)
+        return self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs, lsc:lsc)
     }
     
     

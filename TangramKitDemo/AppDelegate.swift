@@ -57,6 +57,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        
+        if let pt = touches.first?.location(in: self.window), pt.y < 20.0 && pt.x > 0.0 && pt.x < 100.0
+        {
+            self.window?.rootViewController?.dismiss(animated: true, completion: nil)
+        }
+    }
 
 }
 

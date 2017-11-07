@@ -42,6 +42,12 @@ class RLTest4ViewController: UIViewController {
         self.view = scrollView;
         scrollView.delegate = self;
         
+        if #available(iOS 11.0, *) {
+            scrollView.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
+        
         let rootLayout = TGRelativeLayout()
         rootLayout.tg_padding = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         rootLayout.tg_height.equal(.wrap)

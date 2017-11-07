@@ -260,8 +260,9 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
     
     
     
-    override internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, sbs:[UIView]!, type:TGSizeClassType) ->(selfSize:CGSize, hasSubLayout:Bool) {
-        var (selfSize, hasSubLayout) = super.tgCalcLayoutRect(size, isEstimate: isEstimate, sbs:sbs, type: type)
+    override internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, hasSubLayout:inout Bool!, sbs:[UIView]!, type :TGSizeClassType) -> CGSize
+    {
+        var selfSize = super.tgCalcLayoutRect(size, isEstimate:isEstimate, hasSubLayout:&hasSubLayout, sbs:sbs, type:type)
         
         var sbs:[UIView]! = sbs
         if sbs == nil
@@ -285,8 +286,6 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
             
             if let sbvl:TGBaseLayout = sbv as? TGBaseLayout
             {
-                hasSubLayout = true
-                
                 if sbvsc.width.isWrap
                 {
                     if (lsc.tg_pagedCount > 0 || (lsc.tg_orientation == .horz && (lsc.tg_arrangedGravity & TGGravity.vert.mask) == TGGravity.horz.fill) ||
@@ -305,7 +304,10 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
                     }
                 }
                 
-                
+                if hasSubLayout != nil && sbvsc.isSomeSizeWrap
+                {
+                    hasSubLayout = true
+                }
                 
                 if isEstimate && sbvsc.isSomeSizeWrap
                 {
@@ -425,7 +427,7 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
         
         tgAdjustSubviewsRTLPos(sbs: sbs, selfWidth: selfSize.width)
         
-        return (self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs, lsc:lsc),hasSubLayout)
+        return self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs, lsc:lsc)
     }
     
     
@@ -805,6 +807,8 @@ extension TGFlowLayout
     
     fileprivate func tgCalcVertLayoutSinglelineWeight(selfSize:CGSize, totalFloatWidth:CGFloat, totalWeight:CGFloat,sbs:[UIView],startIndex:NSInteger, count:NSInteger)
     {
+        var totalFloatWidth = totalFloatWidth
+        var totalWeight = totalWeight
         for j in startIndex - count ..< startIndex {
             let sbv:UIView = sbs[j]
             
@@ -817,7 +821,12 @@ extension TGFlowLayout
                     widthWeight = t.rawValue/100
                 }
                 
-                sbvtgFrame.width =  self.tgValidMeasure(sbvsc.width, sbv:sbv,calcSize:sbvsc.width.measure(totalFloatWidth * widthWeight / totalWeight),sbvSize:sbvtgFrame.frame.size,selfLayoutSize:selfSize)
+                let tempWidth = sbvsc.width.measure(_tgRoundNumber(totalFloatWidth * ( widthWeight / totalWeight)))
+                
+                totalFloatWidth -= tempWidth
+                totalWeight -= widthWeight
+                
+                sbvtgFrame.width =  self.tgValidMeasure(sbvsc.width, sbv:sbv,calcSize:tempWidth,sbvSize:sbvtgFrame.frame.size,selfLayoutSize:selfSize)
                 sbvtgFrame.trailing = sbvtgFrame.leading + sbvtgFrame.width;
             }
         }
@@ -825,6 +834,9 @@ extension TGFlowLayout
     
     fileprivate func tgCalcHorzLayoutSinglelineWeight(selfSize:CGSize, totalFloatHeight:CGFloat, totalWeight:CGFloat,sbs:[UIView],startIndex:NSInteger, count:NSInteger)
     {
+        var totalFloatHeight = totalFloatHeight
+        var totalWeight = totalWeight
+        
         for j in startIndex - count ..< startIndex {
             let sbv:UIView = sbs[j]
             let (sbvtgFrame, sbvsc) = self.tgGetSubviewFrameAndSizeClass(sbv)
@@ -837,7 +849,12 @@ extension TGFlowLayout
                     heightWeight = t.rawValue / 100
                 }
                 
-                sbvtgFrame.height =  self.tgValidMeasure(sbvsc.height,sbv:sbv,calcSize:sbvsc.height.measure(totalFloatHeight * heightWeight / totalWeight),sbvSize:sbvtgFrame.frame.size,selfLayoutSize:selfSize)
+                let tempHeight = sbvsc.height.measure(_tgRoundNumber(totalFloatHeight * ( heightWeight / totalWeight)))
+                
+                totalFloatHeight -= tempHeight
+                totalWeight -= heightWeight
+                
+                sbvtgFrame.height =  self.tgValidMeasure(sbvsc.height,sbv:sbv,calcSize:tempHeight,sbvSize:sbvtgFrame.frame.size,selfLayoutSize:selfSize)
                 sbvtgFrame.bottom = sbvtgFrame.top + sbvtgFrame.height;
                 
                 if sbvsc.width.isRelaSizeEqualTo(sbvsc.height)

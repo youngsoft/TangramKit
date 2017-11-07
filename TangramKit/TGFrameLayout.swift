@@ -23,9 +23,9 @@ open class TGFrameLayout: TGBaseLayout,TGFrameLayoutViewSizeClass {
     }
     
     
-    internal override func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool , sbs:[UIView]!, type:TGSizeClassType) -> (selfSize:CGSize, hasSubLayout:Bool)
+    override internal func tgCalcLayoutRect(_ size:CGSize, isEstimate:Bool, hasSubLayout:inout Bool!, sbs:[UIView]!, type :TGSizeClassType) -> CGSize
     {
-        var (selfSize,hasSubLayout) = super.tgCalcLayoutRect(size, isEstimate: isEstimate, sbs:sbs, type: type)
+        var selfSize = super.tgCalcLayoutRect(size, isEstimate:isEstimate, hasSubLayout:&hasSubLayout, sbs:sbs, type:type)
         
         var sbs:[UIView]! = sbs
         if sbs == nil
@@ -37,13 +37,16 @@ open class TGFrameLayout: TGBaseLayout,TGFrameLayoutViewSizeClass {
         
         let horzGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.vert.mask)
         let vertGravity = lsc.tg_gravity & TGGravity.horz.mask
-
+        let topPadding = lsc.tgTopPadding
+        let bottomPadding = lsc.tgBottomPadding
+        let leadingPadding = lsc.tgLeadingPadding
+        let trailingPadding = lsc.tgTrailingPadding
         
-        
+    
         var maxWrapSize:CGSize! = nil
         if lsc.isSomeSizeWrap
         {
-           maxWrapSize = CGSize(width: lsc.tgLeadingPadding + lsc.tgTrailingPadding, height: lsc.tgTopPadding + lsc.tgBottomPadding)
+           maxWrapSize = CGSize(width: leadingPadding + trailingPadding, height: topPadding + bottomPadding)
         }
         
         for sbv in sbs
@@ -70,7 +73,7 @@ open class TGFrameLayout: TGBaseLayout,TGFrameLayoutViewSizeClass {
             if let sbvl = sbv as? TGBaseLayout
             {
                 
-                if sbvsc.isSomeSizeWrap
+                if hasSubLayout != nil && sbvsc.isSomeSizeWrap
                 {
                     hasSubLayout = true
                 }
@@ -94,6 +97,10 @@ open class TGFrameLayout: TGBaseLayout,TGFrameLayoutViewSizeClass {
                                    vertGravity:vertGravity,
                                    horzGravity:horzGravity,
                                    selfSize:selfSize,
+                                   leadingPadding:leadingPadding,
+                                   trailingPadding:trailingPadding,
+                                   topPadding:topPadding,
+                                   bottomPadding:bottomPadding,
                                    maxWrapSize:&maxWrapSize)
             
         }
@@ -133,6 +140,10 @@ open class TGFrameLayout: TGBaseLayout,TGFrameLayoutViewSizeClass {
                                            vertGravity:vertGravity,
                                            horzGravity:horzGravity,
                                            selfSize:selfSize,
+                                           leadingPadding:leadingPadding,
+                                           trailingPadding:trailingPadding,
+                                           topPadding:topPadding,
+                                           bottomPadding:bottomPadding,
                                            maxWrapSize:&maxWrapSize)
 
                 }
@@ -141,7 +152,7 @@ open class TGFrameLayout: TGBaseLayout,TGFrameLayoutViewSizeClass {
         
         tgAdjustSubviewsRTLPos(sbs: sbs, selfWidth: selfSize.width)
         
-        return (self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs, lsc:lsc),hasSubLayout)
+        return self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs, lsc:lsc)
         
     }
     
@@ -157,11 +168,15 @@ extension TGFrameLayout
                                        vertGravity:TGGravity,
                                        horzGravity:TGGravity,
                                        selfSize:CGSize,
+                                       leadingPadding:CGFloat,
+                                       trailingPadding:CGFloat,
+                                       topPadding:CGFloat,
+                                       bottomPadding:CGFloat,
                                        maxWrapSize:inout CGSize!)
     {
         
-        let selfFloatWidth = selfSize.width - lsc.tgLeadingPadding - lsc.tgTrailingPadding
-        let selfFloatHeight = selfSize.height - lsc.tgTopPadding - lsc.tgBottomPadding
+        let selfFloatWidth = selfSize.width - leadingPadding - trailingPadding
+        let selfFloatHeight = selfSize.height - topPadding - bottomPadding
         let leadingMargin = sbvsc.leading.weightPosIn(selfFloatWidth)
         let trailingMargin = sbvsc.trailing.weightPosIn(selfFloatWidth)
         let topMargin = sbvsc.top.weightPosIn(selfFloatHeight)
@@ -215,7 +230,7 @@ extension TGFrameLayout
         
         //宽度有效性调整。
         rect.size.width = self.tgValidMeasure(sbvsc.width, sbv:sbv, calcSize:rect.size.width, sbvSize:rect.size, selfLayoutSize:selfSize)
-        self.tgCalcHorzGravity(self.tgGetSubviewHorzGravity(sbv, sbvsc: sbvsc, horzGravity: horzGravity), selfSize:selfSize, sbv: sbv, sbvsc:sbvsc, lsc:lsc, rect: &rect)
+        self.tgCalcHorzGravity(self.tgGetSubviewHorzGravity(sbv, sbvsc: sbvsc, horzGravity: horzGravity), selfSize:selfSize,leadingPadding:leadingPadding,trailingPadding:trailingPadding, sbv: sbv, sbvsc:sbvsc, lsc:lsc, rect: &rect)
         
         
         if sbvsc.height.isFlexHeight
@@ -226,7 +241,7 @@ extension TGFrameLayout
         rect.size.height = self.tgValidMeasure(sbvsc.height,sbv:sbv,calcSize:rect.size.height,sbvSize:rect.size, selfLayoutSize:selfSize)
         
         
-        self.tgCalcVertGravity(self.tgGetSubviewVertGravity(sbv, sbvsc: sbvsc, vertGravity: vertGravity), selfSize:selfSize, sbv: sbv, sbvsc:sbvsc, lsc:lsc,rect: &rect)
+        self.tgCalcVertGravity(self.tgGetSubviewVertGravity(sbv, sbvsc: sbvsc, vertGravity: vertGravity), selfSize:selfSize,topPadding:topPadding,bottomPadding: bottomPadding,baselinePos:nil, sbv: sbv, sbvsc:sbvsc, lsc:lsc,rect: &rect)
         
         
         //特殊处理宽度等于自身高度的情况。
@@ -234,7 +249,7 @@ extension TGFrameLayout
         {
             rect.size.width =  self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: sbvsc.width.measure(rect.size.height), sbvSize: rect.size, selfLayoutSize: selfSize)
             
-            self.tgCalcHorzGravity(self.tgGetSubviewHorzGravity(sbv, sbvsc: sbvsc, horzGravity: horzGravity), selfSize:selfSize, sbv: sbv, sbvsc:sbvsc, lsc:lsc, rect: &rect)
+            self.tgCalcHorzGravity(self.tgGetSubviewHorzGravity(sbv, sbvsc: sbvsc, horzGravity: horzGravity), selfSize:selfSize, leadingPadding:leadingPadding,trailingPadding:trailingPadding, sbv: sbv, sbvsc:sbvsc, lsc:lsc, rect: &rect)
 
         }
         
@@ -251,7 +266,7 @@ extension TGFrameLayout
             
             rect.size.height = self.tgValidMeasure(sbvsc.height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
             
-             self.tgCalcVertGravity(self.tgGetSubviewVertGravity(sbv, sbvsc: sbvsc, vertGravity: vertGravity), selfSize:selfSize, sbv: sbv,sbvsc:sbvsc, lsc:lsc, rect: &rect)
+             self.tgCalcVertGravity(self.tgGetSubviewVertGravity(sbv, sbvsc: sbvsc, vertGravity: vertGravity), selfSize:selfSize, topPadding:topPadding,bottomPadding: bottomPadding,baselinePos:nil,sbv: sbv,sbvsc:sbvsc, lsc:lsc, rect: &rect)
             
         }
         
@@ -266,8 +281,8 @@ extension TGFrameLayout
                                                         sbvSize:sbvsc.width,
                                                         sbvMeasure:sbvtgFrame.width,
                                                         sbvMaxPos:sbvtgFrame.trailing,
-                                                        headPadding:lsc.tgLeadingPadding,
-                                                        tailPadding:lsc.tgTrailingPadding,
+                                                        headPadding:leadingPadding,
+                                                        tailPadding:trailingPadding,
                                                         lscSize:lsc.width,
                                                         maxSize:maxWrapSize.width)
             
@@ -277,8 +292,8 @@ extension TGFrameLayout
                                                         sbvSize:sbvsc.height,
                                                         sbvMeasure:sbvtgFrame.height,
                                                         sbvMaxPos:sbvtgFrame.bottom,
-                                                        headPadding:lsc.tgTopPadding,
-                                                        tailPadding:lsc.tgBottomPadding,
+                                                        headPadding:topPadding,
+                                                        tailPadding:bottomPadding,
                                                         lscSize:lsc.height,
                                                         maxSize:maxWrapSize.height)
         }

@@ -29,6 +29,8 @@ protocol TGLayoutPosValue
     
     var absPos:CGFloat {get}
     
+    var isSafeAreaPos:Bool{get}
+    
     func weightPosIn(_ contentSize:CGFloat) -> CGFloat
     
     
@@ -103,6 +105,46 @@ extension UIView:TGLayoutPosType{}
 final public class TGLayoutPos:TGLayoutPosValue
 {
     
+    /**
+     特殊的位置。只用在布局视图和非布局父视图之间的位置约束和没有导航条时的布局视图内子视图的padding设置上。
+     iOS11以后提出了安全区域的概念，因此对于iOS11以下的版本就需要兼容处理，尤其是在那些没有导航条的情况下。通过将布局视图的边距设置为这个特殊值就可以实现在任何版本中都能完美的实现位置的偏移而且各版本保持统一。比如下面的例子：
+     
+     @code
+     
+     //这里设置布局视图的左边和右边以及顶部的边距都是在父视图的安全区域外再缩进10个点的位置。你会注意到这里面定义了一个特殊的位置TGLayoutPos.tg_safeAreaMargin。
+     //TGLayoutPos.tg_safeAreaMargin表示视图的边距不是一个固定的值而是所在的父视图的安全区域。这样布局视图就不会延伸到安全区域以外去了。
+     //TGLayoutPos.tg_safeAreaMargin是同时支持iOS11和以下的版本的，对于iOS11以下的版本则顶部安全区域是状态栏以下的位置。
+     //因此只要你设置边距为TGLayoutPos.tg_safeAreaMargin则可以同时兼容所有iOS的版本。。
+     layoutView.tg_leading.equal(TGLayoutPos.tg_safeAreaMargin, offset:10)
+     layoutView.tg_trailing.equal(TGLayoutPos.tg_safeAreaMargin,offset:10)
+     layoutView.tg_top.equal(TGLayoutPos.tg_safeAreaMargin,offset:10)
+     
+     //如果你的左右边距都是安全区域，那么可以用下面的方法来简化设置。您可以注释掉这下面两句看看效果。
+     //layoutView.tg_leading.equal(TGLayoutPos.tg_safeAreaMargin)
+     //layoutView.tg_trailing.equal(TGLayoutPos.tg_safeAreaMargin)
+     @endcode
+     
+     @code
+     
+     //在一个没有导航条的界面中，因为iPhoneX和其他设备的状态栏的高度不一致。所以你可以让布局视图的topPadding设置如下：
+     layoutView.tg_topPadding = TGLayoutPos.tg_safeAreaMargin + 10  //顶部内边距是安全区域外加10。那么这个和设置如下的：
+     layoutView.tg_topPadding = CGRectGetHeight([UIApplication sharedApplication].statusBarFrame) + 10;
+     
+     //这两者之间的区别后者是一个设置好的常数，一旦你的设备要支持横竖屏则不管横屏下是否有状态栏都会缩进固定的内边距，而前者则会根据当前是否状态栏而进行动态调整。
+     //当然如果你的顶部就是要固定缩进状态栏的高度的话那么你可以直接直接用后者。
+     
+     
+     @endcode
+     
+     @note
+     需要注意的是这个值并不是一个真值，只是一个特殊值，不能用于读取。而且只能用于在MyLayoutPos的equalTo方法和布局视图上的padding属性上使用，其他地方使用后果未可知。
+     
+     */
+    public static var tg_safeAreaMargin:CGFloat
+    {
+        //在2017年10月3号定义的一个数字，没有其他特殊意义。
+        return -20171003.0;
+    }
 
     //设置位置的值为数值类型，offset是在设置值的基础上的偏移量。
     @discardableResult
@@ -314,6 +356,42 @@ final public class TGLayoutPos:TGLayoutPosValue
                 }
             }
             return v.length
+        case .safePosV(_):
+            if #available(iOS 11.0, *)
+            {
+                if let superView = _view.superview
+                {
+                    switch (_type) {
+                    case TGGravity.horz.leading:
+                        return  TGBaseLayout.tg_isRTL ? superView.safeAreaInsets.right : superView.safeAreaInsets.left
+                    case TGGravity.horz.trailing:
+                        return  TGBaseLayout.tg_isRTL ? superView.safeAreaInsets.left : superView.safeAreaInsets.right
+                    case TGGravity.vert.top:
+                        return superView.safeAreaInsets.top
+                    case TGGravity.vert.bottom:
+                        return superView.safeAreaInsets.bottom
+                    default:
+                        return 0.0
+                    }
+                }
+            }
+            else
+            {
+                if let vc = self.findContainerVC()
+                {
+                    if _type == TGGravity.vert.top
+                    {
+                        return vc.topLayoutGuide.length
+                    }
+                    else if _type == TGGravity.vert.bottom
+                    {
+                        return vc.bottomLayoutGuide.length
+                    }
+                }
+            }
+            
+            return 0
+            
         default:
             return nil
         }
@@ -414,6 +492,7 @@ final public class TGLayoutPos:TGLayoutPosValue
         case posV(TGLayoutPos)
         case arrayV([TGLayoutPos])
         case weightV(TGWeight)
+        case safePosV(CGFloat)
         case layoutSupport(UILayoutSupport)
     }
     
@@ -442,7 +521,14 @@ extension TGLayoutPos
         
         if let v = val as? CGFloat
         {
-           _val = .floatV(v)
+            if v == TGLayoutPos.tg_safeAreaMargin
+            {
+                _val = .safePosV(v)
+            }
+            else
+            {
+                _val = .floatV(v)
+            }
         }
         else if let v = val as? Double
         {
@@ -589,6 +675,24 @@ extension TGLayoutPos
         }
     }
     
+    internal var isSafeAreaPos:Bool
+    {
+        
+        guard _active && _val != nil else {
+            
+            return false
+        }
+        
+        switch _val! {
+        case .safePosV(_):
+            return true
+        case .layoutSupport(_):
+            return true
+        default:
+            return false
+        }
+    }
+    
         
     internal func weightPosIn(_ contentSize:CGFloat) -> CGFloat
     {
@@ -637,6 +741,23 @@ extension TGLayoutPos
         {
             baseLayout.setNeedsLayout()
         }
+    }
+    
+    internal func findContainerVC() -> UIViewController!
+    {
+        var vc:UIViewController! = nil;
+        var v:UIView! = self.view;
+        while v != nil
+        {
+            vc = v.value(forKey: "viewDelegate") as? UIViewController
+            if (vc != nil)
+            {
+                break
+            }
+            
+            v = v.superview
+        }
+        return vc
     }
 
 }
