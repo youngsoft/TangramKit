@@ -3,6 +3,17 @@
 
 --- 
 
+
+## [V1.1.4](https://github.com/youngsoft/TangramKit/releases/tag/1.1.4)(2018/04/23)
+
+#### Added
+1. 添加了对浮动布局TGFloatLayout中的子视图的行或者列内对齐方式的设置，您可以借助子视图的tg_alignment属性来设置行或者列内的对齐方式，具体的DEMO请参考：[FOLTest7ViewController](https://github.com/youngsoft/TangramKit/blob/master/TangramKitDemo/FloatLayoutDemo/FOLTest7ViewController.swift) 中的介绍。
+2. 修复方向旋转时有可能不调用`rotationToDeviceOrientationBlock`的问题。
+3. 修正一些注释上的不提示问题。
+4. 修正TGLayoutPos无法使用~=，+=, >=, <= 运算符的问题。
+
+
+
 ## [V1.1.3](https://github.com/youngsoft/TangramKit/releases/tag/1.1.3)(2017/11/08)
 
 #### Added

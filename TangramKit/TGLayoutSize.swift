@@ -85,9 +85,13 @@ final public class TGLayoutSize:TGLayoutSizeValue
 {
     
     //定义三个特殊类型的值。
-    public static let wrap = TGLayoutSize(.none, view: nil)  //视图的尺寸由内容或者子视图包裹。
-    public static let fill = TGLayoutSize(.none, view: nil)  //视图的尺寸填充父视图的剩余空间。
-    public static let average = TGLayoutSize(.none, view:nil) //视图的尺寸会平分父视图的剩余空间。
+    
+    /// 视图的尺寸由内容或者子视图包裹。
+    public static let wrap = TGLayoutSize(.none, view: nil)
+    /// 视图的尺寸填充父视图的剩余空间。
+    public static let fill = TGLayoutSize(.none, view: nil)
+    /// 视图的尺寸会平分父视图的剩余空间。
+    public static let average = TGLayoutSize(.none, view:nil)
     
     //设置尺寸值为一个具体的数值。
     @discardableResult

@@ -53,7 +53,7 @@
  
  */
 
-//Current version is 1.1.3, please open: https://github.com/youngsoft/TangramKit/blob/master/CHANGELOG.md to show the changes.
+//Current version is 1.1.4, please open: https://github.com/youngsoft/TangramKit/blob/master/CHANGELOG.md to show the changes.
 
 
 
@@ -66,7 +66,9 @@ import UIKit
 /// - vert: 垂直方向，布局视图内所有子视图整体从上到下排列布局。
 /// - horz: 水平方向，布局视图内所有子视图整体从左到右排列布局。
 public enum TGOrientation {
+    /// 垂直方向，布局视图内所有子视图整体从上到下排列布局。
     case vert
+    /// 水平方向，布局视图内所有子视图整体从左到右排列布局。
     case horz
 }
 
@@ -77,8 +79,11 @@ public enum TGOrientation {
 /// - invisible: 视图隐藏，等价于hidden = true, 但是会在父布局视图中占位空白区域
 /// - gone: 视图隐藏，等价于hidden = true, 但是不会在父视图中占位空白区域
 public enum TGVisibility {
+    /// 视图可见，等价于hidden = false
     case visible
+    /// 视图隐藏，等价于hidden = true, 但是会在父布局视图中占位空白区域
     case invisible
+    /// 视图隐藏，等价于hidden = true, 但是不会在父视图中占位空白区域
     case gone
 }
 
@@ -155,6 +160,10 @@ public struct TGGravity : OptionSet{
 
 public func &(left: TGGravity, right: TGGravity) -> TGGravity {
     return TGGravity(rawValue: left.rawValue & right.rawValue)
+}
+
+public func >(left: TGGravity, right: TGGravity) -> Bool {
+    return left.rawValue > right.rawValue
 }
 
 
@@ -319,8 +328,11 @@ public postfix func %(val:Int) ->TGWeight
 /// - yes: 一定会调整contentSize
 public enum TGAdjustScrollViewContentSizeMode {
    
+    /// 自动调整，在添加到UIScrollView之前(UITableView, UICollectionView除外)。如果值被设置auto则自动会变化yes。如果值被设置为no则不进行任何调整
     case auto
+    /// 不会调整contentSize
     case no
+    /// 一定会调整contentSize
     case yes
 }
 

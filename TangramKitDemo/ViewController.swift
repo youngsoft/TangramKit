@@ -144,6 +144,9 @@ class ViewController: UITableViewController {
         demoVCList6.append(["title":NSLocalizedString("6.FloatLayout - User Profiles",comment:""),
                             "class":FOLTest6ViewController.self]
         )
+        demoVCList6.append(["title":NSLocalizedString("7.FloatLayout - Alignment",comment:""),
+                            "class":FOLTest7ViewController.self]
+        )
         
 
         //path layout list

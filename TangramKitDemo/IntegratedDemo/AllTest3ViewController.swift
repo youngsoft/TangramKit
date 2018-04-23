@@ -446,7 +446,7 @@ extension AllTest3ViewController
         
         if (segmented.selectedSegmentIndex == 0)
         {
-            if (self.leftFlexedLabel.text!.characters.count > 1)
+            if (self.leftFlexedLabel.text!.count > 1)
             {
                 let text = self.leftFlexedLabel.text!
                 self.leftFlexedLabel.text =  text.substring(to: text.index(text.endIndex, offsetBy: -1))
@@ -456,7 +456,7 @@ extension AllTest3ViewController
         {
             let strs = "abcdefghijklmnopqrstuvwxyz";
             //真他妈的扯，取一个子字符串还这么麻烦。swift也有够垃圾的。
-            let rand = arc4random_uniform(UInt32(strs.characters.count))
+            let rand = arc4random_uniform(UInt32(strs.count))
             let start = strs.index(strs.startIndex, offsetBy: String.IndexDistance(rand))
             let end = strs.index(strs.startIndex, offsetBy: String.IndexDistance(rand) + 1)
             let rg = Range(uncheckedBounds: (lower: start, upper: end))
@@ -473,7 +473,7 @@ extension AllTest3ViewController
             let strs = "01234567890"
             
             //真他妈的扯，取一个子字符串还这么麻烦。swift也有够垃圾的。
-            let rand = arc4random_uniform(UInt32(strs.characters.count))
+            let rand = arc4random_uniform(UInt32(strs.count))
             let start = strs.index(strs.startIndex, offsetBy: String.IndexDistance(rand))
             let end = strs.index(strs.startIndex, offsetBy: String.IndexDistance(rand) + 1)
             let rg = Range(uncheckedBounds: (lower: start, upper: end))
@@ -481,7 +481,7 @@ extension AllTest3ViewController
             self.rightFlexedLabel.text = self.rightFlexedLabel.text!.appending(str)
         }
         else {
-            if self.rightFlexedLabel.text!.characters.count > 1 {
+            if self.rightFlexedLabel.text!.count > 1 {
                 
                 let text = self.rightFlexedLabel.text!
                 self.rightFlexedLabel.text =  text.substring(to: text.index(text.endIndex, offsetBy: -1))

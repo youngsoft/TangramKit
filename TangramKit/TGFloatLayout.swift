@@ -571,7 +571,10 @@ extension TGFloatLayout
         var maxHeight = lsc.tgTopPadding
         var maxWidth = lsc.tgLeadingPadding
         
-        for sbv in sbs
+        var sbvHasAlignment = false
+        var lineIndexes:[Int] = [Int]()
+        
+        for (idx,sbv) in sbs.enumerated()
         {
             let (sbvtgFrame, sbvsc) = self.tgGetSubviewFrameAndSizeClass(sbv)
             let topSpace = sbvsc.top.absPos
@@ -581,6 +584,9 @@ extension TGFloatLayout
             var rect = sbvtgFrame.frame;
             let isWidthWeight = sbvsc.width.weightVal != nil || sbvsc.width.isFill
             let isHeightWeight = sbvsc.height.weightVal != nil || sbvsc.height.isFill
+            
+            //只要有一个子视图设置了对齐，就会做对齐处理，否则不会，这里这样做是为了对后面的对齐计算做优化。
+            sbvHasAlignment = sbvHasAlignment || ((sbvsc.tg_alignment & TGGravity.horz.mask) > TGGravity.vert.top)
             
             
             if subviewSize != 0
@@ -778,19 +784,24 @@ extension TGFloatLayout
                     
                 })
                 
+                //记录每一行的最大子视图位置的索引值。
+                if (trailingLastYOffset != rect.origin.y - topSpace)
+                {
+                    lineIndexes.append(idx - 1)
+                }
                 
                 trailingCandidateRects.append(cRect)
-                trailingLastYOffset = rect.origin.y - topSpace;
+                trailingLastYOffset = rect.origin.y - topSpace
                 
                 if (_tgCGFloatGreat(rect.origin.y + rect.size.height + bottomSpace + vertSpace, trailingMaxHeight))
                 {
-                    trailingMaxHeight = rect.origin.y + rect.size.height + bottomSpace + vertSpace;
+                    trailingMaxHeight = rect.origin.y + rect.size.height + bottomSpace + vertSpace
                 }
             }
             else
             {
                 var nextPoint = CGPoint(x: lsc.tgLeadingPadding, y: trailingLastYOffset)
-                var trailingCandidateXBoundary = selfSize.width - lsc.tgTrailingPadding;
+                var trailingCandidateXBoundary = selfSize.width - lsc.tgTrailingPadding
                 
                 //如果是清除了浮动则直换行移动到最下面。
                 if (sbvsc.tg_clearFloat)
@@ -801,7 +812,7 @@ extension TGFloatLayout
                     let rightPoint = self.tgFindTrailingCandidatePoint(CGRect(x: lsc.tgLeadingPadding, y: nextPoint.y, width: 0, height: CGFloat.greatestFiniteMagnitude), width:leadingSpace + (isWidthWeight ? 0 : rect.size.width) + trailingSpace, trailingBoundary:trailingCandidateXBoundary, trailingCandidateRects:trailingCandidateRects, hasWeight:isWidthWeight, lsc:lsc)
                     if (rightPoint.y != CGFloat.greatestFiniteMagnitude)
                     {
-                        nextPoint.y = max(leadingMaxHeight, rightPoint.y);
+                        nextPoint.y = max(leadingMaxHeight, rightPoint.y)
                         trailingCandidateXBoundary = rightPoint.x;
                     }
                 }
@@ -816,12 +827,12 @@ extension TGFloatLayout
                         let rightPoint = self.tgFindTrailingCandidatePoint(candidateRect, width:leadingSpace + (isWidthWeight ? 0 : rect.size.width) + trailingSpace,trailingBoundary:selfSize.width - lsc.tgTrailingPadding,trailingCandidateRects:trailingCandidateRects,hasWeight:isWidthWeight,lsc:lsc)
                         if (rightPoint.y != CGFloat.greatestFiniteMagnitude)
                         {
-                            nextPoint = CGPoint(x: candidateRect.maxX, y: max(nextPoint.y, rightPoint.y));
-                            trailingCandidateXBoundary = rightPoint.x;
+                            nextPoint = CGPoint(x: candidateRect.maxX, y: max(nextPoint.y, rightPoint.y))
+                            trailingCandidateXBoundary = rightPoint.x
                             break;
                         }
                         
-                        nextPoint.y = candidateRect.maxY;
+                        nextPoint.y = candidateRect.maxY
                         i -= 1
                     }
                 }
@@ -859,8 +870,8 @@ extension TGFloatLayout
                     
                 }
                 
-                rect.origin.x = nextPoint.x + leadingSpace;
-                rect.origin.y = min(nextPoint.y,maxHeight) + topSpace;
+                rect.origin.x = nextPoint.x + leadingSpace
+                rect.origin.y = min(nextPoint.y,maxHeight) + topSpace
                 
                 
                 if (!isEstimate && self.tg_intelligentBorderline != nil)
@@ -892,7 +903,7 @@ extension TGFloatLayout
                 
                 
                 
-                var cRect = CGRect(x: rect.origin.x - leadingSpace, y: rect.origin.y - topSpace, width: min((rect.size.width + leadingSpace + trailingSpace + horzSpace),(selfSize.width - lsc.tgLeadingPadding - lsc.tgTrailingPadding)), height: rect.size.height + topSpace + bottomSpace + vertSpace);
+                var cRect = CGRect(x: rect.origin.x - leadingSpace, y: rect.origin.y - topSpace, width: min((rect.size.width + leadingSpace + trailingSpace + horzSpace),(selfSize.width - lsc.tgLeadingPadding - lsc.tgTrailingPadding)), height: rect.size.height + topSpace + bottomSpace + vertSpace)
                 
                 
                 //把新添加到候选中去。并删除高度小于的候选键。和高度
@@ -922,20 +933,24 @@ extension TGFloatLayout
                     
                 })
                 
-                
-                leadingCandidateRects.append(cRect);
-                leadingLastYOffset = rect.origin.y - topSpace;
+                //记录每一行的最大子视图位置的索引值。
+                if (leadingLastYOffset != rect.origin.y - topSpace)
+                {
+                    lineIndexes.append(idx - 1)
+                }
+                leadingCandidateRects.append(cRect)
+                leadingLastYOffset = rect.origin.y - topSpace
                 
                 if _tgCGFloatGreat(rect.origin.y + rect.size.height + bottomSpace + vertSpace, leadingMaxHeight)
                 {
-                    leadingMaxHeight = rect.origin.y + rect.size.height + bottomSpace + vertSpace;
+                    leadingMaxHeight = rect.origin.y + rect.size.height + bottomSpace + vertSpace
                 }
                 
             }
             
             if _tgCGFloatGreat(rect.origin.y + rect.size.height + bottomSpace + vertSpace , maxHeight)
             {
-                maxHeight = rect.origin.y + rect.size.height + bottomSpace + vertSpace;
+                maxHeight = rect.origin.y + rect.size.height + bottomSpace + vertSpace
             }
             
             if _tgCGFloatGreat(rect.origin.x + rect.size.width + trailingSpace + horzSpace , maxWidth)
@@ -987,6 +1002,65 @@ extension TGFloatLayout
             }
             
         }
+        
+        //如果有子视图设置了对齐属性，那么就要对处在同一行内的子视图进行对齐设置。
+        //对齐的规则是以行内最高的子视图作为参考的对象，其他的子视图按照行内最高子视图进行垂直对齐的调整。
+        if sbvHasAlignment
+        {
+            //最后一行。
+            if sbs.count > 0
+            {
+                lineIndexes.append(sbs.count - 1)
+            }
+            
+            var lineFirstIndex = 0
+            for idxnum in lineIndexes
+            {
+                var lineHasAlignment:Bool = false
+                
+                //计算每行内的最高的子视图，作为行对齐的标准。
+                var lineMaxHeight:CGFloat = 0
+                for  i in lineFirstIndex ... idxnum
+                {
+                    let sbv = sbs[i]
+                    let (sbvtgFrame, sbvsc) = self.tgGetSubviewFrameAndSizeClass(sbv)
+                    
+                    if sbvtgFrame.height > lineMaxHeight
+                    {
+                        lineMaxHeight = sbvtgFrame.height
+                    }
+                    
+                    lineHasAlignment = lineHasAlignment || ((sbvsc.tg_alignment & TGGravity.horz.mask) > TGGravity.vert.top)
+                }
+                
+                //设置行内的对齐
+                if lineHasAlignment
+                {
+                    for i in lineFirstIndex ... idxnum
+                    {
+                        let sbv = sbs[i]
+                        let (sbvtgFrame, sbvsc) = self.tgGetSubviewFrameAndSizeClass(sbv)
+                        
+                        switch (sbvsc.tg_alignment & TGGravity.horz.mask) {
+                        case TGGravity.vert.center:
+                            sbvtgFrame.top += (lineMaxHeight - sbvtgFrame.height) / 2.0
+                            break
+                        case TGGravity.vert.bottom:
+                            sbvtgFrame.top += (lineMaxHeight - sbvtgFrame.height)
+                            break
+                        case TGGravity.vert.fill:
+                            sbvtgFrame.height = lineMaxHeight
+                            break
+                        default:
+                            break
+                        }
+                    }
+                }
+                
+                lineFirstIndex = idxnum + 1
+            }
+        }
+        
         
         return selfSize;
     }
@@ -1114,7 +1188,10 @@ extension TGFloatLayout
         var maxWidth = lsc.tgLeadingPadding
         var maxHeight = lsc.tgTopPadding
         
-        for sbv in sbs
+        var sbvHasAlignment = false
+        var lineIndexes:[Int] = [Int]()
+        
+        for (idx,sbv) in sbs.enumerated()
         {
             let (sbvtgFrame, sbvsc) = self.tgGetSubviewFrameAndSizeClass(sbv)
             let  topSpace = sbvsc.top.absPos
@@ -1124,6 +1201,9 @@ extension TGFloatLayout
             var rect = sbvtgFrame.frame;
             let isWidthWeight = sbvsc.width.weightVal != nil || sbvsc.width.isFill
             let isHeightWeight = sbvsc.height.weightVal != nil || sbvsc.height.isFill
+            
+            //只要有一个子视图设置了对齐，就会做对齐处理，否则不会，这里这样做是为了对后面的对齐计算做优化。
+            sbvHasAlignment = sbvHasAlignment || ((sbvsc.tg_alignment & TGGravity.vert.mask) > TGGravity.horz.left)
             
             
             rect.size.width = sbvsc.width.numberSize(rect.size.width)
@@ -1312,8 +1392,13 @@ extension TGFloatLayout
                     
                 })
                 
+                //记录每一列的最大子视图位置的索引值。
+                if bottomLastXOffset != rect.origin.x - leadingSpace
+                {
+                    lineIndexes.append(idx - 1)
+                }
                 bottomCandidateRects.append(cRect)
-                bottomLastXOffset = rect.origin.x - leadingSpace;
+                bottomLastXOffset = rect.origin.x - leadingSpace
                 
                 if _tgCGFloatGreat(rect.origin.x + rect.size.width + trailingSpace + horzSpace , bottomMaxWidth)
                 {
@@ -1445,6 +1530,11 @@ extension TGFloatLayout
                     
                 })
                 
+                //记录每一列的最大子视图位置的索引值。
+                if topLastXOffset != rect.origin.x - leadingSpace
+                {
+                    lineIndexes.append(idx - 1)
+                }
                 topCandidateRects.append(cRect)
                 topLastXOffset = rect.origin.x - leadingSpace;
                 
@@ -1497,7 +1587,7 @@ extension TGFloatLayout
             
             if (mghorz == TGGravity.horz.center)
             {
-                addXPos = (selfSize.width - maxWidth) / 2;
+                addXPos = (selfSize.width - maxWidth) / 2
             }
             else if (mghorz == TGGravity.horz.trailing)
             {
@@ -1516,7 +1606,66 @@ extension TGFloatLayout
         }
         
         
-        return selfSize;
+        //如果有子视图设置了对齐属性，那么就要对处在同一列内的子视图进行对齐设置。
+        //对齐的规则是以列内最宽的子视图作为参考的对象，其他的子视图按照列内最宽子视图进行水平对齐的调整。
+        if sbvHasAlignment
+        {
+            //最后一行。
+            if sbs.count > 0
+            {
+                lineIndexes.append(sbs.count - 1)
+            }
+            
+            var lineFirstIndex = 0
+            for idxnum in lineIndexes
+            {
+                var lineHasAlignment:Bool = false
+                
+                //计算每行内的最高的子视图，作为行对齐的标准。
+                var lineMaxWidth:CGFloat = 0
+                for  i in lineFirstIndex ... idxnum
+                {
+                    let sbv = sbs[i]
+                    let (sbvtgFrame, sbvsc) = self.tgGetSubviewFrameAndSizeClass(sbv)
+                    
+                    if sbvtgFrame.width > lineMaxWidth
+                    {
+                        lineMaxWidth = sbvtgFrame.width
+                    }
+                    
+                    lineHasAlignment = lineHasAlignment || ((sbvsc.tg_alignment & TGGravity.vert.mask) > TGGravity.horz.left)
+                }
+                
+                //设置列内的对齐
+                if lineHasAlignment
+                {
+                    for i in lineFirstIndex ... idxnum
+                    {
+                        let sbv = sbs[i]
+                        let (sbvtgFrame, sbvsc) = self.tgGetSubviewFrameAndSizeClass(sbv)
+                        
+                        switch (self.tgConvertLeftRightGravityToLeadingTrailing(sbvsc.tg_alignment & TGGravity.vert.mask)) {
+                        case TGGravity.horz.center:
+                            sbvtgFrame.leading += (lineMaxWidth - sbvtgFrame.width) / 2.0
+                            break
+                        case TGGravity.horz.trailing:
+                            sbvtgFrame.leading += (lineMaxWidth - sbvtgFrame.width)
+                            break
+                        case TGGravity.horz.fill:
+                            sbvtgFrame.width = lineMaxWidth
+                            break
+                        default:
+                            break
+                        }
+                    }
+                }
+                
+                lineFirstIndex = idxnum + 1
+            }
+        }
+        
+        
+        return selfSize
     }
     
     

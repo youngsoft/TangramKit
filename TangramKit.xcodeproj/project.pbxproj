@@ -24,6 +24,7 @@
 		1890A2261EDF96C800D61C1A /* TGTableLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD90D1E0B92E100403A1F /* TGTableLayout.swift */; };
 		18BCBD461E1336D900AC7766 /* AllTest8ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BCBD451E1336D900AC7766 /* AllTest8ViewController.swift */; };
 		20B6C6E71FA40AEC001D51C7 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B6C6E61FA40AEC001D51C7 /* DetailViewController.swift */; };
+		20DCF335208CD022007A879B /* FOLTest7ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DCF334208CD022007A879B /* FOLTest7ViewController.swift */; };
 		681BD8DF1E0B91A500403A1F /* TangramKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 681BD8DD1E0B91A500403A1F /* TangramKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		681BD90F1E0B92E100403A1F /* TangramKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9011E0B92E100403A1F /* TangramKit.swift */; };
 		681BD9111E0B92E100403A1F /* TGBaseLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9021E0B92E100403A1F /* TGBaseLayout.swift */; };
@@ -102,6 +103,7 @@
 		184243071E327F0800E2CCE1 /* FLLTest5ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLLTest5ViewController.swift; sourceTree = "<group>"; };
 		18BCBD451E1336D900AC7766 /* AllTest8ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllTest8ViewController.swift; sourceTree = "<group>"; };
 		20B6C6E61FA40AEC001D51C7 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		20DCF334208CD022007A879B /* FOLTest7ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FOLTest7ViewController.swift; sourceTree = "<group>"; };
 		681BD8DB1E0B91A500403A1F /* TangramKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TangramKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		681BD8DD1E0B91A500403A1F /* TangramKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TangramKit.h; sourceTree = "<group>"; };
 		681BD8DE1E0B91A500403A1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -271,6 +273,7 @@
 				68F035F11E0B7D2700CEBAEF /* FOLTest4ViewController.swift */,
 				68F035F21E0B7D2700CEBAEF /* FOLTest5ViewController.swift */,
 				68F035F31E0B7D2700CEBAEF /* FOLTest6ViewController.swift */,
+				20DCF334208CD022007A879B /* FOLTest7ViewController.swift */,
 			);
 			path = FloatLayoutDemo;
 			sourceTree = "<group>";
@@ -442,7 +445,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0810;
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = youngsoft;
 				TargetAttributes = {
 					18270C231C954B3C00CBCC92 = {
@@ -539,6 +542,7 @@
 				68F0363D1E0B7D2700CEBAEF /* CFTool.swift in Sources */,
 				68F036581E0B7D2700CEBAEF /* AllTest2TableViewCell.swift in Sources */,
 				68F0364F1E0B7D2700CEBAEF /* AllTest1ViewController.swift in Sources */,
+				20DCF335208CD022007A879B /* FOLTest7ViewController.swift in Sources */,
 				68F0366D1E0B7D2700CEBAEF /* LLTest7ViewController.swift in Sources */,
 				68F036741E0B7D2700CEBAEF /* RLTest3ViewController.swift in Sources */,
 				68F036681E0B7D2700CEBAEF /* LLTest2ViewController.swift in Sources */,
@@ -647,14 +651,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -696,14 +706,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -778,6 +794,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
@@ -807,6 +824,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";

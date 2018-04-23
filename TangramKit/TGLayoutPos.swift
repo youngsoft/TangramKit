@@ -793,45 +793,45 @@ extension TGLayoutPos:NSCopying
 
 
 //TGLayoutPos的equal方法的快捷方法。比如a.tg_left.equal(10) <==> a.tg_left ~= 10
-func ~=(oprPos:TGLayoutPos, origin:CGFloat)
+public func ~=(oprPos:TGLayoutPos, origin:CGFloat)
 {
     oprPos.equal(origin)
 }
 
-func ~=(oprPos:TGLayoutPos, weight:TGWeight)
+public func ~=(oprPos:TGLayoutPos, weight:TGWeight)
 {
     oprPos.equal(weight)
 }
 
-func ~=(oprPos:TGLayoutPos, array:[TGLayoutPos])
+public func ~=(oprPos:TGLayoutPos, array:[TGLayoutPos])
 {
     oprPos.equal(array)
 }
 
-func ~=(oprPos:TGLayoutPos, pos:TGLayoutPos!)
+public func ~=(oprPos:TGLayoutPos, pos:TGLayoutPos!)
 {
     oprPos.equal(pos)
 }
 
 //TGLayoutPos的offset方法的快捷方法。比如a.tg_left.offset(10) <==> a.tg_left += 10
-func +=(oprPos:TGLayoutPos, val:CGFloat)
+public func +=(oprPos:TGLayoutPos, val:CGFloat)
 {
     oprPos.offset(val)
 }
 
-func -=(oprPos:TGLayoutPos, val:CGFloat)
+public func -=(oprPos:TGLayoutPos, val:CGFloat)
 {
     oprPos.offset(-1 * val)
 }
 
 //TGLayoutPos的min方法的快捷方法。比如a.tg_left.min(10) <==> a.tg_left >= 10
-func >=(oprPos:TGLayoutPos, size:CGFloat)
+public func >=(oprPos:TGLayoutPos, size:CGFloat)
 {
     oprPos.min(size)
 }
 
 //TGLayoutPos的max方法的快捷方法。比如a.tg_left.max(10) <==> a.tg_left <= 10
-func <=(oprPos:TGLayoutPos, size:CGFloat)
+public func <=(oprPos:TGLayoutPos, size:CGFloat)
 {
     oprPos.max(size)
 }

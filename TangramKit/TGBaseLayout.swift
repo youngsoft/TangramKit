@@ -3365,7 +3365,7 @@ extension TGBaseLayout
             }
             else
             {
-                
+                sizeClassScreenType = .portrait
             }
             
             
