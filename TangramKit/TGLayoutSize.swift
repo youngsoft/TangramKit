@@ -87,11 +87,11 @@ final public class TGLayoutSize:TGLayoutSizeValue
     //定义三个特殊类型的值。
     
     /// 视图的尺寸由内容或者子视图包裹。
-    public static let wrap = TGLayoutSize(.none, view: nil)
+    public static let wrap = TGLayoutSize(TGGravity.none, view: nil)
     /// 视图的尺寸填充父视图的剩余空间。
-    public static let fill = TGLayoutSize(.none, view: nil)
+    public static let fill = TGLayoutSize(TGGravity.none, view: nil)
     /// 视图的尺寸会平分父视图的剩余空间。
-    public static let average = TGLayoutSize(.none, view:nil)
+    public static let average = TGLayoutSize(TGGravity.none, view:nil)
     
     //设置尺寸值为一个具体的数值。
     @discardableResult
@@ -332,7 +332,7 @@ final public class TGLayoutSize:TGLayoutSizeValue
         }
         
         switch _val! {
-        case .wrapV:
+        case ValueType.wrapV:
             return true
         default:
             return false
@@ -348,7 +348,7 @@ final public class TGLayoutSize:TGLayoutSizeValue
         }
         
         switch _val! {
-        case .fillV:
+        case ValueType.fillV:
             return true
         default:
             return false
@@ -366,7 +366,7 @@ final public class TGLayoutSize:TGLayoutSizeValue
         
         
         switch _val! {
-        case .floatV(let v):
+        case ValueType.floatV(let v):
             return v
         default:
             return nil
@@ -383,7 +383,7 @@ final public class TGLayoutSize:TGLayoutSizeValue
         
         
         switch _val! {
-        case .dimeV(let v):
+        case ValueType.dimeV(let v):
             return v
         default:
             return nil
@@ -403,7 +403,7 @@ final public class TGLayoutSize:TGLayoutSizeValue
         
         
         switch _val! {
-        case .arrayV(let v):
+        case ValueType.arrayV(let v):
             return v
         default:
             return nil
@@ -420,7 +420,7 @@ final public class TGLayoutSize:TGLayoutSizeValue
         
         
         switch _val! {
-        case .weightV(let v):
+        case ValueType.weightV(let v):
             return v
         default:
             return nil
@@ -515,27 +515,27 @@ extension TGLayoutSize
         
         if let v = val as? CGFloat
         {
-            _val = .floatV(v)
+            _val = ValueType.floatV(v)
         }
         else if let v = val as? Double
         {
-            _val = .floatV(CGFloat(v))
+            _val = ValueType.floatV(CGFloat(v))
         }
         else if let v = val as? Float
         {
-            _val = .floatV(CGFloat(v))
+            _val = ValueType.floatV(CGFloat(v))
         }
         else if let v = val as? Int
         {
-            _val = .floatV(CGFloat(v))
+            _val = ValueType.floatV(CGFloat(v))
         }
         else if let v = val as? TGWeight
         {
-            _val = .weightV(v)
+            _val = ValueType.weightV(v)
         }
         else if let v = val as? [TGLayoutSize]
         {
-            _val = .arrayV(v)
+            _val = ValueType.arrayV(v)
         }
         else if let v = val as? UIView
         {
@@ -546,10 +546,10 @@ extension TGLayoutSize
             
             switch _type {
             case TGGravity.vert.fill:
-                _val = .dimeV(v.tg_height)
+                _val = ValueType.dimeV(v.tg_height)
                 break
             case TGGravity.horz.fill:
-                _val = .dimeV(v.tg_width)
+                _val = ValueType.dimeV(v.tg_width)
                 break
             default:
                 assert(false, "oops!")
@@ -565,7 +565,7 @@ extension TGLayoutSize
             
             if v === TGLayoutSize.wrap
             {
-                _val = .wrapV
+                _val = ValueType.wrapV
                 
                 if let labelView = _view as? UILabel, _type == TGGravity.vert.fill
                 {
@@ -582,15 +582,15 @@ extension TGLayoutSize
             }
             else if v === TGLayoutSize.fill
             {
-                _val = .fillV
+                _val = ValueType.fillV
             }
             else if v === TGLayoutSize.average
             {
-                _val = .weightV(TGWeight(100))
+                _val = ValueType.weightV(TGWeight(100))
             }
             else
             {
-                _val = .dimeV(v)
+                _val = ValueType.dimeV(v)
             }
         }
         else if val == nil
@@ -666,7 +666,7 @@ extension TGLayoutSize
         }
         
         switch t {
-        case .floatV(let v):
+        case ValueType.floatV(let v):
             return v * _multiple + _increment
         default:
             return size
@@ -680,7 +680,7 @@ extension TGLayoutSize
         }
         
         switch t {
-        case .fillV:
+        case ValueType.fillV:
             return containerSize * _multiple + _increment
         default:
             return size
@@ -695,7 +695,7 @@ extension TGLayoutSize
         }
         
         switch t {
-        case .weightV(let v):
+        case ValueType.weightV(let v):
             return (containerSize * v.rawValue / 100) * _multiple + _increment
         default:
             return size

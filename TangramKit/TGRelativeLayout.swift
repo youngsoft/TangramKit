@@ -15,36 +15,6 @@ import UIKit
  */
 open class TGRelativeLayout: TGBaseLayout,TGRelativeLayoutViewSizeClass {
     
-    /**
-     *这个属性在新版本将失效并且无任何意义了。如果想让子视图隐藏时是否继续占据位置则请参考使用子视图的tg_visibility属性来设置。
-     */
-    @available(*, deprecated:1.0.6, message: "this property was invalid, please use subview's tg_visibility to instead")
-    public var tg_autoLayoutViewGroupWidth: Bool {
-        get {
-            return false
-        }
-        set {
-            
-            print("tg_autoLayoutViewGroupWidth is invalid please use subview's tg_visibility to instead")
-
-        }
-    }
-    
-    /**
-     *这个属性在新版本将失效并且无任何意义了。如果想让子视图隐藏时是否继续占据位置则请参考使用子视图的tg_visibility属性来设置。
-     */
-    @available(*, deprecated:1.0.6, message: "this property was invalid, please use subview's tg_visibility to instead")
-    public var tg_autoLayoutViewGroupHeight: Bool {
-        
-        get {
-            return false
-        }
-        
-        set {
-            print("tg_autoLayoutViewGroupHeight is invalid please use subview's tg_visibility to instead")
-
-            }
-    }
     
     //MARK: override method
     

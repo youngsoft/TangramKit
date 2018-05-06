@@ -43,7 +43,7 @@ open class TGLinearLayout: TGBaseLayout,TGLinearLayoutViewSizeClass {
     
     public  convenience init(_ orientation:TGOrientation) {
         
-        self.init(frame:.zero, orientation:orientation)
+        self.init(frame:CGRect.zero, orientation:orientation)
         
     }
 
@@ -172,10 +172,10 @@ open class TGLinearLayout: TGBaseLayout,TGLinearLayoutViewSizeClass {
      *@space参数指定子视图之间的固定间距。
      *@type参数表示设置在指定sizeClass下进行子视图和间距的均分
      */
-    public func tg_equalizeSubviews(centered:Bool, withSpace space:CGFloat! = nil, inSizeClass type:TGSizeClassType = .default)
+    public func tg_equalizeSubviews(centered:Bool, withSpace space:CGFloat! = nil, inSizeClass type:TGSizeClassType = TGSizeClassType.default)
     {
         switch type {
-        case .default:
+        case TGSizeClassType.default:
             break
         default:
             self.tgFrame.sizeClass = self.tg_fetchSizeClass(with:type)
@@ -185,7 +185,7 @@ open class TGLinearLayout: TGBaseLayout,TGLinearLayoutViewSizeClass {
             }
         }
         
-        if self.tg_orientation == .vert
+        if self.tg_orientation == TGOrientation.vert
         {
             tgEqualizeSubviewsForVert(centered, withSpace: space)
         }
@@ -196,14 +196,14 @@ open class TGLinearLayout: TGBaseLayout,TGLinearLayoutViewSizeClass {
         }
         
         switch type {
-        case .default:
+        case TGSizeClassType.default:
             self.setNeedsLayout()
             break
         default:
-            self.tgFrame.sizeClass = self.tg_fetchSizeClass(with:.default)
+            self.tgFrame.sizeClass = self.tg_fetchSizeClass(with:TGSizeClassType.default)
             for sbv:UIView in self.subviews
             {
-                sbv.tgFrame.sizeClass = sbv.tg_fetchSizeClass(with:.default)
+                sbv.tgFrame.sizeClass = sbv.tg_fetchSizeClass(with:TGSizeClassType.default)
             }
         }
 
@@ -214,11 +214,11 @@ open class TGLinearLayout: TGBaseLayout,TGLinearLayoutViewSizeClass {
      *@centered参数意义同上。
      *@type参数的意义同上。
      */
-    public func tg_equalizeSubviewsSpace(centered:Bool, inSizeClass type:TGSizeClassType = .default)
+    public func tg_equalizeSubviewsSpace(centered:Bool, inSizeClass type:TGSizeClassType = TGSizeClassType.default)
     {
         
         switch type {
-        case .default:
+        case TGSizeClassType.default:
             break
         default:
             self.tgFrame.sizeClass = self.tg_fetchSizeClass(with:type)
@@ -228,7 +228,7 @@ open class TGLinearLayout: TGBaseLayout,TGLinearLayoutViewSizeClass {
             }
         }
         
-        if self.tg_orientation == .vert
+        if self.tg_orientation == TGOrientation.vert
         {
             tgEqualizeSubviewsSpaceForVert(centered)
         }
@@ -239,14 +239,14 @@ open class TGLinearLayout: TGBaseLayout,TGLinearLayoutViewSizeClass {
         
         
         switch type {
-        case .default:
+        case TGSizeClassType.default:
             self.setNeedsLayout()
             break
         default:
-            self.tgFrame.sizeClass = self.tg_fetchSizeClass(with:.default)
+            self.tgFrame.sizeClass = self.tg_fetchSizeClass(with:TGSizeClassType.default)
             for sbv:UIView in self.subviews
             {
-                sbv.tgFrame.sizeClass = sbv.tg_fetchSizeClass(with:.default)
+                sbv.tgFrame.sizeClass = sbv.tg_fetchSizeClass(with:TGSizeClassType.default)
             }
         }
     }
@@ -303,10 +303,10 @@ open class TGLinearLayout: TGBaseLayout,TGLinearLayoutViewSizeClass {
                 
             }
         
-        if lsc.tg_orientation == .vert
+        if lsc.tg_orientation == TGOrientation.vert
         {
             
-            if  vertGravity != .none
+            if  vertGravity != TGGravity.none
             {
                 selfSize = self.tgLayoutSubviewsForVertGravity(selfSize,sbs:sbs, lsc:lsc)
             }
@@ -317,7 +317,7 @@ open class TGLinearLayout: TGBaseLayout,TGLinearLayoutViewSizeClass {
         }
         else
         {
-            if  horzGravity != .none
+            if  horzGravity != TGGravity.none
             {
                 selfSize = self.tgLayoutSubviewsForHorzGravity(selfSize,sbs:sbs, lsc:lsc)
             }
@@ -567,7 +567,7 @@ extension TGLinearLayout {
     {
         
         var  temp:CGFloat = subviewMeasure;
-        var tempWeight:TGWeight = .zeroWeight;
+        var tempWeight:TGWeight = TGWeight.zeroWeight;
         
         let hm:CGFloat = headPos.floatNumber
         let cm:CGFloat = centerPos.floatNumber
@@ -649,7 +649,7 @@ extension TGLinearLayout {
     {
         var fixedHeight:CGFloat = 0   //计算固定部分的高度
         var floatingHeight:CGFloat = 0 //浮动的高度。
-        var totalWeight:TGWeight = .zeroWeight    //剩余部分的总比重
+        var totalWeight:TGWeight = TGWeight.zeroWeight    //剩余部分的总比重
         var selfSize = selfSize
         let horzGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.vert.mask)
         let topPadding = lsc.tgTopPadding
@@ -775,7 +775,7 @@ extension TGLinearLayout {
         
         
         //在包裹宽度且总体比重不为0时则，则需要还原最小的宽度，这样就不会使得宽度在横竖屏或者多次计算后越来越宽。
-        if lsc.height.isWrap && totalWeight != .zeroWeight
+        if lsc.height.isWrap && totalWeight != TGWeight.zeroWeight
         {
             var tempSelfHeight = topPadding + bottomPadding
             if sbs.count > 1
@@ -796,14 +796,14 @@ extension TGLinearLayout {
         let sstContent:TGSubviewsShrinkType = TGSubviewsShrinkType(rawValue: lsc.tg_shrinkType.rawValue & 0xF0) //压缩内容
         if _tgCGFloatLessOrEqual(floatingHeight, 0)
         {
-            if sstMode != .none
+            if sstMode != TGSubviewsShrinkType.none
             {
-                if sstContent != .space
+                if sstContent != TGSubviewsShrinkType.space
                 {
                     
-                    if (fixedSizeSbs.count > 0 && totalWeight != .zeroWeight && floatingHeight < 0 && selfSize.height > 0)
+                    if (fixedSizeSbs.count > 0 && totalWeight != TGWeight.zeroWeight && floatingHeight < 0 && selfSize.height > 0)
                     {
-                        if sstMode == .average
+                        if sstMode == TGSubviewsShrinkType.average
                         {
                             let averageHeight = floatingHeight / CGFloat(fixedSizeSbs.count);
                             for fsbv in fixedSizeSbs
@@ -828,11 +828,11 @@ extension TGLinearLayout {
                 {
                     if (fixedSpaceCount > 0 && floatingHeight < 0 && selfSize.height > 0 && fixedSpaceHeight > 0)
                     {
-                        if (sstMode == .average)
+                        if (sstMode == TGSubviewsShrinkType.average)
                         {
                             addSpace = floatingHeight / CGFloat(fixedSpaceCount)
                         }
-                        else if (sstMode == .weight)
+                        else if (sstMode == TGSubviewsShrinkType.weight)
                         {
                             isWeightShrinkSpace = true
                             weightShrinkSpaceTotalHeight = floatingHeight;
@@ -849,7 +849,7 @@ extension TGLinearLayout {
             floatingHeight = 0;
         }
         
-        if totalWeight != .zeroWeight || (sstMode != .none && _tgCGFloatLessOrEqual(floatingHeight, 0))
+        if totalWeight != TGWeight.zeroWeight || (sstMode != TGSubviewsShrinkType.none && _tgCGFloatLessOrEqual(floatingHeight, 0))
         {
             pos = topPadding
             for sbv in sbs
@@ -989,7 +989,7 @@ extension TGLinearLayout {
         let vertGravity = lsc.tg_gravity & TGGravity.horz.mask
         var fixedWidth:CGFloat = 0;   //计算固定部分的高度
         var floatingWidth:CGFloat = 0; //浮动的高度。
-        var totalWeight:TGWeight = .zeroWeight
+        var totalWeight:TGWeight = TGWeight.zeroWeight
         let topPadding = lsc.tgTopPadding
         let bottomPadding = lsc.tgBottomPadding
         let leadingPadding = lsc.tgLeadingPadding
@@ -1116,19 +1116,19 @@ extension TGLinearLayout {
             let sstContent:TGSubviewsShrinkType = TGSubviewsShrinkType(rawValue: lsc.tg_shrinkType.rawValue & 0xF0) //压缩内容
 
             
-            if sstMode == .auto && flexedSizeSbs.count != 2
+            if sstMode == TGSubviewsShrinkType.auto && flexedSizeSbs.count != 2
             {
-                sstMode = .none
+                sstMode = TGSubviewsShrinkType.none
             }
             
-            if sstMode != .none
+            if sstMode != TGSubviewsShrinkType.none
             {
-                if sstContent != .space
+                if sstContent != TGSubviewsShrinkType.space
                 {
                     
-                    if (fixedSizeSbs.count > 0 && totalWeight != .zeroWeight && floatingWidth < 0 && selfSize.width > 0)
+                    if (fixedSizeSbs.count > 0 && totalWeight != TGWeight.zeroWeight && floatingWidth < 0 && selfSize.width > 0)
                     {
-                        if sstMode == .average
+                        if sstMode == TGSubviewsShrinkType.average
                         {
                             let averageWidth = floatingWidth / CGFloat(fixedSizeSbs.count)
                             for fsbv in fixedSizeSbs
@@ -1136,7 +1136,7 @@ extension TGLinearLayout {
                                 fsbv.tgFrame.width += averageWidth;
                             }
                         }
-                        else if sstMode == .auto
+                        else if sstMode == TGSubviewsShrinkType.auto
                         {
                             let leftView = flexedSizeSbs[0]
                             let rightView = flexedSizeSbs[1]
@@ -1193,11 +1193,11 @@ extension TGLinearLayout {
                 {
                     if (fixedSpaceCount > 0 && floatingWidth < 0 && selfSize.height > 0 && fixedSpaceWidth > 0)
                     {
-                        if (sstMode == .average)
+                        if (sstMode == TGSubviewsShrinkType.average)
                         {
                             addSpace = floatingWidth / CGFloat(fixedSpaceCount)
                         }
-                        else if (sstMode == .weight)
+                        else if (sstMode == TGSubviewsShrinkType.weight)
                         {
                             isWeightShrinkSpace = true
                             weightShrinkSpaceTotalWidth = floatingWidth
@@ -1827,7 +1827,7 @@ extension TGLinearLayout {
        
     fileprivate func tgAdjustSubviewWrapContent(sbvsc:TGViewSizeClassImpl, lsc:TGLinearLayoutViewSizeClassImpl)
     {
-        if lsc.tg_orientation == .vert
+        if lsc.tg_orientation == TGOrientation.vert
         {
             
             if (sbvsc.isHorzMarginHasValue) ||
@@ -1916,7 +1916,7 @@ extension TGLinearLayout {
         }
         
         var subviewSpace =  lsc.tg_vspace
-        if lsc.tg_orientation == .horz
+        if lsc.tg_orientation == TGOrientation.horz
         {
             subviewSpace = lsc.tg_hspace
         }
@@ -1928,7 +1928,7 @@ extension TGLinearLayout {
             {
                 if !sbvl.tg_notUseIntelligentBorderline
                 {
-                    if lsc.tg_orientation == .vert
+                    if lsc.tg_orientation == TGOrientation.vert
                     {
                         sbvl.tg_topBorderline = nil;
                         sbvl.tg_bottomBorderline = nil;
@@ -1966,7 +1966,7 @@ extension TGLinearLayout {
                         
                         if (ok)
                         {
-                            if lsc.tg_orientation == .vert
+                            if lsc.tg_orientation == TGOrientation.vert
                             {
                                 sbvl.tg_topBorderline = self.tg_intelligentBorderline
                             }
@@ -1980,7 +1980,7 @@ extension TGLinearLayout {
                     
                     if nextSiblingView != nil && ((nextSiblingView as? TGBaseLayout) == nil || subviewSpace != 0)
                     {
-                        if lsc.tg_orientation == .vert
+                        if lsc.tg_orientation == TGOrientation.vert
                         {
                             sbvl.tg_bottomBorderline = self.tg_intelligentBorderline;
                         }

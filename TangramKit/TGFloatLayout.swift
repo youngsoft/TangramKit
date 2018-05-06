@@ -114,12 +114,12 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
      }
      */
     
-    public convenience init(_ orientation:TGOrientation = .vert)
+    public convenience init(_ orientation:TGOrientation = TGOrientation.vert)
     {
-        self.init(frame:.zero, orientation:orientation)
+        self.init(frame:CGRect.zero, orientation:orientation)
     }
     
-    public init(frame: CGRect, orientation:TGOrientation = .vert) {
+    public init(frame: CGRect, orientation:TGOrientation = TGOrientation.vert) {
         
         super.init(frame: frame)
         
@@ -186,7 +186,7 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
      2.如果您的布局方向是MyLayoutViewOrientation_Horz表示设置的是子视图的垂直间距，其中的subviewSize指定的是子视图的高度，minSpace指定的是最小的垂直间距，maxSpace指定的是最大的垂直间距，如果指定的subviewSize计算出的间距大于这个值则会调整subviewSize的高度。
      3.如果您不想使用浮动间距则请将subviewSize设置为0就可以了。
      */
-    public func tg_setSubviews(size:CGFloat, minSpace:CGFloat, maxSpace:CGFloat = .greatestFiniteMagnitude, inSizeClass type:TGSizeClassType = .default)
+    public func tg_setSubviews(size:CGFloat, minSpace:CGFloat, maxSpace:CGFloat = CGFloat.greatestFiniteMagnitude, inSizeClass type:TGSizeClassType = TGSizeClassType.default)
     {
         let lsc = self.tg_fetchSizeClass(with: type) as! TGFloatLayoutViewSizeClassImpl
         lsc.subviewSize = size
@@ -241,7 +241,7 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
         }
         
         
-        if (lsc.tg_orientation == .vert)
+        if (lsc.tg_orientation == TGOrientation.vert)
         {
             selfSize = self.tgLayoutSubviewsForVert(selfSize,sbs:sbs, isEstimate:isEstimate, lsc:lsc);
         }

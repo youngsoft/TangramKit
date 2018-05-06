@@ -342,9 +342,9 @@ final public class TGLayoutPos:TGLayoutPosValue
         }
         
         switch _val! {
-        case .floatV(let v):
+        case ValueType.floatV(let v):
             return v
-        case .layoutSupport(let v):
+        case ValueType.layoutSupport(let v):
             //只有在11以后并且是设置了safearea缩进才忽略UILayoutSupport。
             if let superlayout = self.view.superview as? TGBaseLayout, #available(iOS 11.0, *)
             {
@@ -356,7 +356,7 @@ final public class TGLayoutPos:TGLayoutPosValue
                 }
             }
             return v.length
-        case .safePosV(_):
+        case ValueType.safePosV(_):
             if #available(iOS 11.0, *)
             {
                 if let superView = _view.superview
@@ -407,7 +407,7 @@ final public class TGLayoutPos:TGLayoutPosValue
         }
         
         switch _val! {
-        case .weightV(let v):
+        case ValueType.weightV(let v):
             return v
         default:
             return nil
@@ -424,7 +424,7 @@ final public class TGLayoutPos:TGLayoutPosValue
         }
         
         switch _val! {
-        case .posV(let v):
+        case ValueType.posV(let v):
             return v
         default:
             return nil
@@ -441,7 +441,7 @@ final public class TGLayoutPos:TGLayoutPosValue
         }
         
         switch _val! {
-        case .arrayV(let v):
+        case ValueType.arrayV(let v):
             return v
         default:
             return nil
@@ -523,28 +523,28 @@ extension TGLayoutPos
         {
             if v == TGLayoutPos.tg_safeAreaMargin
             {
-                _val = .safePosV(v)
+                _val = ValueType.safePosV(v)
             }
             else
             {
-                _val = .floatV(v)
+                _val = ValueType.floatV(v)
             }
         }
         else if let v = val as? Double
         {
-            _val = .floatV(CGFloat(v))
+            _val = ValueType.floatV(CGFloat(v))
         }
         else if let v = val as? Float
         {
-            _val = .floatV(CGFloat(v))
+            _val = ValueType.floatV(CGFloat(v))
         }
         else if let v = val as? Int
         {
-            _val = .floatV(CGFloat(v))
+            _val = ValueType.floatV(CGFloat(v))
         }
         else if let v = val as? TGWeight
         {
-            _val = .weightV(v)
+            _val = ValueType.weightV(v)
         }
         else if let v = val as? [TGLayoutPos]
         {
@@ -553,7 +553,7 @@ extension TGLayoutPos
                 assert(false, "oops! ");
             }
             
-            _val = .arrayV(v)
+            _val = ValueType.arrayV(v)
         }
         else if let v = val as? UIView
         {
@@ -564,22 +564,22 @@ extension TGLayoutPos
             
             switch _type {
             case TGGravity.vert.top:
-                _val = .posV(v.tg_top)
+                _val = ValueType.posV(v.tg_top)
                 break
             case TGGravity.vert.center:
-                _val = .posV(v.tg_centerY)
+                _val = ValueType.posV(v.tg_centerY)
                 break
             case TGGravity.vert.bottom:
-                _val = .posV(v.tg_bottom)
+                _val = ValueType.posV(v.tg_bottom)
                 break
             case TGGravity.horz.leading:
-                _val = .posV(v.tg_leading)
+                _val = ValueType.posV(v.tg_leading)
                 break
             case TGGravity.horz.center:
-                _val = .posV(v.tg_centerX)
+                _val = ValueType.posV(v.tg_centerX)
                 break
             case TGGravity.horz.trailing:
-                _val = .posV(v.tg_trailing)
+                _val = ValueType.posV(v.tg_trailing)
                 break
             default:
                 assert(false, "oops!");
@@ -592,7 +592,7 @@ extension TGLayoutPos
                 assert(false, "oops!")
             }
             
-            _val = .posV(v)
+            _val = ValueType.posV(v)
             
         }
         else if val == nil
@@ -620,7 +620,7 @@ extension TGLayoutPos
         }
 
         _offset = offset
-        _val = .layoutSupport(val)
+        _val = ValueType.layoutSupport(val)
         
         setNeedsLayout()
 
@@ -684,9 +684,9 @@ extension TGLayoutPos
         }
         
         switch _val! {
-        case .safePosV(_):
+        case ValueType.safePosV(_):
             return true
-        case .layoutSupport(_):
+        case ValueType.layoutSupport(_):
             return true
         default:
             return false

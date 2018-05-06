@@ -50,7 +50,7 @@ open class TGTableLayout: TGLinearLayout {
         return tg_insertRow(size: rowSize, colSize:colSize, rowIndex: self.tg_rowCount)
     }
     
-    public func tg_addRow(size rowSize:TGTableRowColSizeType, colCount:UInt) ->TGLinearLayout
+    public func tg_addRow(size rowSize:TGTableRowColSizeType, colCount:Int) ->TGLinearLayout
     {
         return tg_insertRow(size: rowSize, colSize:TGTableLayout._stgColCountTag - CGFloat(colCount), rowIndex: self.tg_rowCount)
     }
@@ -62,18 +62,18 @@ open class TGTableLayout: TGLinearLayout {
     public func tg_insertRow(size rowSize: TGTableRowColSizeType, colSize : TGTableRowColSizeType, rowIndex : Int) ->TGLinearLayout
     {
         let lsc = self.tgCurrentSizeClass as! TGTableLayoutViewSizeClass
-        var ori:TGOrientation = .vert;
-        if (lsc.tg_orientation == .vert)
+        var ori:TGOrientation = TGOrientation.vert
+        if (lsc.tg_orientation == TGOrientation.vert)
         {
-            ori = .horz;
+            ori = TGOrientation.horz
         }
         else
         {
-            ori = .vert;
+            ori = TGOrientation.vert
         }
         
         let rowView = TGTableRowLayout(orientation: ori, rowSize: rowSize, colSize: colSize)
-        if ori == .horz
+        if ori == TGOrientation.horz
         {
             rowView.tg_hspace = lsc.tg_hspace
         }
@@ -151,7 +151,7 @@ open class TGTableLayout: TGLinearLayout {
         {
             if v === TGLayoutSize.average
             {
-                if (rowsc.tg_orientation == .horz)
+                if (rowsc.tg_orientation == TGOrientation.horz)
                 {
                     colsc.tg_width.equal(v)
                 }
@@ -167,7 +167,7 @@ open class TGTableLayout: TGLinearLayout {
             {
                 
                 let colCount = TGTableLayout._stgColCountTag - v
-                if rowsc.tg_orientation == .horz
+                if rowsc.tg_orientation == TGOrientation.horz
                 {
                     colsc.tg_width.equalHelper(val:rowView.tg_width, increment:-1 * rowView.tg_hspace * (colCount - 1.0) / colCount, multiple:1.0 / colCount)
                 }
@@ -178,7 +178,7 @@ open class TGTableLayout: TGLinearLayout {
             }
             else
             {
-                if (rowsc.tg_orientation == .horz)
+                if (rowsc.tg_orientation == TGOrientation.horz)
                 {
                     colsc.tg_width.equalHelper(val:rowView.colSize)
                 }
@@ -189,7 +189,7 @@ open class TGTableLayout: TGLinearLayout {
             }
         }
         
-        if (rowsc.tg_orientation == .horz)
+        if (rowsc.tg_orientation == TGOrientation.horz)
         {
             if (colView.bounds.size.height == 0 && !colsc.height.hasValue)
             {
@@ -243,8 +243,8 @@ open class TGTableLayout: TGLinearLayout {
      */
     public func tg_exchangeCol(_ indexPath1: IndexPath, with indexPath2: IndexPath) {
         
-        let colView1 = self.tg_colView(at:indexPath1);
-        let colView2 = self.tg_colView(at:indexPath2);
+        let colView1:UIView = self.tg_colView(at:indexPath1);
+        let colView2:UIView = self.tg_colView(at:indexPath2);
         
         if (colView1 == colView2)
         {
@@ -284,7 +284,7 @@ open class TGTableLayout: TGLinearLayout {
         }
         set {
             super.tg_vspace = newValue
-            if self.tg_orientation == .horz
+            if self.tg_orientation == TGOrientation.horz
             {
                 for i in 0 ..< self.tg_rowCount
                 {
@@ -300,7 +300,7 @@ open class TGTableLayout: TGLinearLayout {
         }
         set {
             super.tg_hspace = newValue
-            if self.tg_orientation == .vert
+            if self.tg_orientation == TGOrientation.vert
             {
                 for i in 0 ..< self.tg_rowCount
                 {
@@ -385,7 +385,7 @@ private class TGTableRowLayout: TGLinearLayout,TGTableLayoutViewSizeClass {
     {
         self.rowSize = rowSize
         self.colSize = colSize
-        super.init(frame:.zero, orientation:orientation)
+        super.init(frame:CGRect.zero, orientation:orientation)
         
         let lsc = self.tgCurrentSizeClass as! TGLinearLayoutViewSizeClassImpl
         
@@ -393,7 +393,7 @@ private class TGTableRowLayout: TGLinearLayout,TGTableLayoutViewSizeClass {
         {
             if v === TGLayoutSize.average || v === TGLayoutSize.wrap
             {
-                if (orientation == .horz)
+                if (orientation == TGOrientation.horz)
                 {
                     lsc.tg_height.equal(v)
                 }
@@ -410,7 +410,7 @@ private class TGTableRowLayout: TGLinearLayout,TGTableLayoutViewSizeClass {
         }
         else
         {
-            if (orientation == .horz)
+            if (orientation == TGOrientation.horz)
             {
                 lsc.tg_height.equalHelper(val:rowSize)
             }
@@ -434,7 +434,7 @@ private class TGTableRowLayout: TGLinearLayout,TGTableLayoutViewSizeClass {
         
         if isNoWrap
         {
-            if (orientation == .horz)
+            if (orientation == TGOrientation.horz)
             {
                 lsc.width.realSize?.equal(nil)
                 lsc.tg_leading.equal(0);
@@ -450,13 +450,13 @@ private class TGTableRowLayout: TGLinearLayout,TGTableLayoutViewSizeClass {
         }
         else
         {
-            if (orientation == .horz)
+            if (orientation == TGOrientation.horz)
             {
-                lsc.tg_width.equal(.wrap)
+                lsc.tg_width.equal(TGLayoutSize.wrap)
             }
             else
             {
-                lsc.tg_height.equal(.wrap)
+                lsc.tg_height.equal(TGLayoutSize.wrap)
             }
             
         }
@@ -467,6 +467,32 @@ private class TGTableRowLayout: TGLinearLayout,TGTableLayoutViewSizeClass {
         self.colSize = 0
         super.init(coder:aDecoder)
         //fatalError("init(coder:) has not been implemented")
+    }
+    
+    override internal func tgHook(sublayout:TGBaseLayout, borderlineRect: inout CGRect)
+    {
+        /*
+         如果行布局是包裹的，那么意味着里面的列子视图都需要自己指定行的尺寸，这样列子视图就会有不同的尺寸，如果是有智能边界线时就会出现每个列子视图的边界线的长度不一致的情况。
+         有时候我们希望列子视图的边界线能够布满整个行(比如垂直表格中，所有列子视图的的高度都和所在行的行高是一致的）因此我们需要将列子视图的边界线的可显示范围进行调整。
+         因此我们重载这个方法来解决这个问题，这个方法可以将列子视图的边界线的区域进行扩充和调整，目的是为了让列子视图的边界线能够布满整个行布局上。
+         */
+        if let v = rowSize as? TGLayoutSize, v === TGLayoutSize.wrap
+        {
+            if self.tg_orientation == TGOrientation.horz
+            {
+                //垂直表格下，行是水平的，所以这里需要将列子视图的y轴的位置和行对齐。
+                borderlineRect.origin.y = 0 - sublayout.frame.origin.y
+                //垂直表格下，行是水平的，所以这里需要将子视图的边界线的高度和行的高度保持一致。
+                borderlineRect.size.height = self.bounds.size.height
+            }
+            else
+            {
+                //水平表格下，行是垂直的，所以这里需要将列子视图的x轴的位置和行对齐。
+                borderlineRect.origin.x = 0 - sublayout.frame.origin.x
+                //水平表格下，行是垂直的，所以这里需要将子视图的边界线的宽度和行的宽度保持一致。
+                borderlineRect.size.width = self.bounds.size.width
+            }
+        }
     }
 }
 

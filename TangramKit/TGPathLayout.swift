@@ -27,11 +27,11 @@ public enum TGPathSpaceType{
 extension TGPathSpaceType : Equatable{
     public static func ==(lhs: TGPathSpaceType, rhs: TGPathSpaceType) -> Bool {
         switch (lhs,rhs) {
-        case ( .flexed , .flexed):
+        case ( TGPathSpaceType.flexed , TGPathSpaceType.flexed):
             return true
-        case (let .fixed(value1),let .fixed(value2)):
+        case (let TGPathSpaceType.fixed(value1),let TGPathSpaceType.fixed(value2)):
             return value1 == value2
-        case (let .count(count1),let .count(count2)):
+        case (let TGPathSpaceType.count(count1),let TGPathSpaceType.count(count2)):
             return count1 == count2
         default:
             return false
@@ -49,7 +49,7 @@ open class TGCoordinateSetting {
     /**
      * 坐标原点的位置,位置是相对位置，默认是(0,0), 假如设置为(0.5,0.5)则在视图的中间。
      */
-    public var origin : CGPoint = .zero {
+    public var origin : CGPoint = CGPoint.zero {
         
         didSet{
             if !_tgCGPointEqual(oldValue, origin){
@@ -185,7 +185,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     /**
      * 设置子视图在路径曲线上的距离的类型,一共有flexed, fixed, count,默认是flexed,
      */
-    public var tg_spaceType : TGPathSpaceType = .flexed {
+    public var tg_spaceType : TGPathSpaceType = TGPathSpaceType.flexed {
         didSet{
             if tg_spaceType != oldValue {
                 setNeedsLayout()
@@ -611,22 +611,22 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
             sbv.tgFrame.frame = rect
         }
         
-        if minYPos == .greatestFiniteMagnitude
+        if minYPos == CGFloat.greatestFiniteMagnitude
         {
             minYPos = 0
         }
         
-        if maxYPos == -.greatestFiniteMagnitude
+        if maxYPos == -CGFloat.greatestFiniteMagnitude
         {
             maxYPos = lsc.tgTopPadding + lsc.tgBottomPadding
         }
         
-        if minXPos == .greatestFiniteMagnitude
+        if minXPos == CGFloat.greatestFiniteMagnitude
         {
             minXPos = 0
         }
         
-        if maxXPos == -.greatestFiniteMagnitude
+        if maxXPos == -CGFloat.greatestFiniteMagnitude
         {
             maxXPos = lsc.tgLeftPadding + lsc.tgRightPadding
         }
@@ -670,9 +670,9 @@ extension TGPathLayout{
             var pathLen : CGFloat? = nil
             var sbvcount = sbs.count
             switch tg_spaceType {
-            case let .fixed(value):
+            case let TGPathSpaceType.fixed(value):
                 return tgCalcPathPoints(showPath: path, pPathLen: &pathLen, subviewCount: sbs.count, pointIndexArray: &pointIndexArray, viewSpace: value)
-            case let .count(count):
+            case let TGPathSpaceType.count(count):
                 sbvcount = count
             default:
                 break

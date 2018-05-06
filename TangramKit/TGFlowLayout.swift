@@ -85,12 +85,12 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
     /**
      *初始化一个流式布局并指定布局的方向和布局的数量,如果数量为0则表示内容约束流式布局
      */
-    public convenience init(_ orientation:TGOrientation = .vert, arrangedCount:Int = 0) {
-        self.init(frame:.zero, orientation:orientation, arrangedCount:arrangedCount)
+    public convenience init(_ orientation:TGOrientation = TGOrientation.vert, arrangedCount:Int = 0) {
+        self.init(frame:CGRect.zero, orientation:orientation, arrangedCount:arrangedCount)
     }
     
     
-    public init(frame: CGRect, orientation:TGOrientation = .vert, arrangedCount:Int = 0) {
+    public init(frame: CGRect, orientation:TGOrientation = TGOrientation.vert, arrangedCount:Int = 0) {
         
         super.init(frame:frame)
         let lsc = self.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass
@@ -247,7 +247,7 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
      3.如果您不想使用浮动间距则请将subviewSize设置为0就可以了。
      4.这个方法只在内容约束流式布局里面设置才有意义。
      */
-    public func tg_setSubviews(size:CGFloat, minSpace:CGFloat, maxSpace:CGFloat = .greatestFiniteMagnitude, inSizeClass type:TGSizeClassType = .default)
+    public func tg_setSubviews(size:CGFloat, minSpace:CGFloat, maxSpace:CGFloat = CGFloat.greatestFiniteMagnitude, inSizeClass type:TGSizeClassType = TGSizeClassType.default)
     {
         let lsc = self.tg_fetchSizeClass(with: type) as! TGFlowLayoutViewSizeClassImpl
         lsc.subviewSize = size
@@ -288,8 +288,8 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
             {
                 if sbvsc.width.isWrap
                 {
-                    if (lsc.tg_pagedCount > 0 || (lsc.tg_orientation == .horz && (lsc.tg_arrangedGravity & TGGravity.vert.mask) == TGGravity.horz.fill) ||
-                        (lsc.tg_orientation == .vert && ((lsc.tg_gravity & TGGravity.vert.mask) == TGGravity.horz.fill)))
+                    if (lsc.tg_pagedCount > 0 || (lsc.tg_orientation == TGOrientation.horz && (lsc.tg_arrangedGravity & TGGravity.vert.mask) == TGGravity.horz.fill) ||
+                        (lsc.tg_orientation == TGOrientation.vert && ((lsc.tg_gravity & TGGravity.vert.mask) == TGGravity.horz.fill)))
                     {
                         sbvsc.width.resetValue()
                     }
@@ -297,8 +297,8 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
                 
                 if sbvsc.height.isWrap
                 {
-                    if (lsc.tg_pagedCount > 0 || (lsc.tg_orientation == .vert && (lsc.tg_arrangedGravity & TGGravity.horz.mask) == TGGravity.vert.fill) ||
-                        (lsc.tg_orientation == .horz && ((lsc.tg_gravity & TGGravity.horz.mask) == TGGravity.vert.fill)))
+                    if (lsc.tg_pagedCount > 0 || (lsc.tg_orientation == TGOrientation.vert && (lsc.tg_arrangedGravity & TGGravity.horz.mask) == TGGravity.vert.fill) ||
+                        (lsc.tg_orientation == TGOrientation.horz && ((lsc.tg_gravity & TGGravity.horz.mask) == TGGravity.vert.fill)))
                     {
                         sbvsc.height.resetValue()
                     }
@@ -320,7 +320,7 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
             }
         }
         
-        if lsc.tg_orientation == .vert {
+        if lsc.tg_orientation == TGOrientation.vert {
             if lsc.tg_arrangedCount == 0 {
                 
                 
@@ -632,7 +632,7 @@ extension TGFlowLayout
             //为子视图设置单独的对齐方式
             let sbvVertAlignment = sbvsc.tg_alignment & TGGravity.horz.mask
             var vertAlignment = vertAlignment
-            if sbvVertAlignment != .none
+            if sbvVertAlignment != TGGravity.none
             {
                 vertAlignment = sbvVertAlignment
             }
@@ -761,7 +761,7 @@ extension TGFlowLayout
             //为子视图设置单独的对齐方式
             let sbvHorzAlignment = self.tgConvertLeftRightGravityToLeadingTrailing(sbvsc.tg_alignment & TGGravity.vert.mask)
             var horzAlignment = horzAlignment
-            if sbvHorzAlignment != .none
+            if sbvHorzAlignment != TGGravity.none
             {
                 horzAlignment = sbvHorzAlignment
             }

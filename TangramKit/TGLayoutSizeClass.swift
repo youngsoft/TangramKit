@@ -364,8 +364,8 @@ internal class TGViewSizeClassImpl:NSCopying,TGViewSizeClass {
     var tg_reverseFloat:Bool = false
     var tg_clearFloat:Bool = false
     
-    var tg_visibility: TGVisibility = .visible
-    var tg_alignment: TGGravity = .none
+    var tg_visibility: TGVisibility = TGVisibility.visible
+    var tg_alignment: TGGravity = TGGravity.none
     
     static var IsRTL:Bool = false
 
@@ -589,7 +589,7 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
     
     var tg_zeroPadding: Bool = true
     
-    var tg_insetsPaddingFromSafeArea: UIRectEdge = [.left, .right]
+    var tg_insetsPaddingFromSafeArea: UIRectEdge = [UIRectEdge.left, UIRectEdge.right]
     var tg_insetLandscapeFringePadding: Bool = false
     
     var tg_vspace:CGFloat = 0
@@ -609,7 +609,7 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
     }
 
     var tg_reverseLayout: Bool = false
-    var tg_gravity: TGGravity = .none
+    var tg_gravity: TGGravity = TGGravity.none
     
     
     internal var tgTopPadding:CGFloat
@@ -657,13 +657,13 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
             var devori:UIDeviceOrientation
             if TGViewSizeClassImpl.IsRTL
             {
-                edge = .right
-                devori = .landscapeLeft
+                edge = UIRectEdge.right
+                devori = UIDeviceOrientation.landscapeLeft
             }
             else
             {
-                edge = .left
-                devori = .landscapeRight
+                edge = UIRectEdge.left
+                devori = UIDeviceOrientation.landscapeRight
             }
             
             if (self.tg_insetsPaddingFromSafeArea.rawValue & edge.rawValue) == edge.rawValue
@@ -759,13 +759,13 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
             var devori:UIDeviceOrientation
             if TGViewSizeClassImpl.IsRTL
             {
-                edge = .left
-                devori = .landscapeRight
+                edge = UIRectEdge.left
+                devori = UIDeviceOrientation.landscapeRight
             }
             else
             {
-                edge = .right
-                devori = .landscapeLeft
+                edge = UIRectEdge.right
+                devori = UIDeviceOrientation.landscapeLeft
             }
             
             if (self.tg_insetsPaddingFromSafeArea.rawValue & edge.rawValue) == edge.rawValue
@@ -835,7 +835,7 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
 
 internal class TGSequentLayoutViewSizeClassImpl:TGLayoutViewSizeClassImpl,TGSequentLayoutViewSizeClass
 {
-    var tg_orientation:TGOrientation = .vert
+    var tg_orientation:TGOrientation = TGOrientation.vert
     
     override func copy(with zone: NSZone?) -> Any {
         
@@ -850,7 +850,7 @@ internal class TGSequentLayoutViewSizeClassImpl:TGLayoutViewSizeClassImpl,TGSequ
 
 internal class TGLinearLayoutViewSizeClassImpl:TGSequentLayoutViewSizeClassImpl,TGLinearLayoutViewSizeClass
 {
-    var tg_shrinkType: TGSubviewsShrinkType = .none
+    var tg_shrinkType: TGSubviewsShrinkType = TGSubviewsShrinkType.none
     
     override func copy(with zone: NSZone?) -> Any {
         
@@ -875,7 +875,7 @@ internal class TGFloatLayoutViewSizeClassImpl : TGSequentLayoutViewSizeClassImpl
     
     var subviewSize:CGFloat = 0
     var minSpace:CGFloat = 0
-    var maxSpace:CGFloat = .greatestFiniteMagnitude
+    var maxSpace:CGFloat = CGFloat.greatestFiniteMagnitude
 
     override func copy(with zone: NSZone?) -> Any {
         
@@ -897,12 +897,12 @@ internal class TGFlowLayoutViewSizeClassImpl:TGSequentLayoutViewSizeClassImpl,TG
 {
     var tg_arrangedCount:Int = 0
     var tg_pagedCount:Int = 0
-    var tg_arrangedGravity:TGGravity = .none
+    var tg_arrangedGravity:TGGravity = TGGravity.none
     var tg_autoArrange:Bool = false
     
     var subviewSize:CGFloat = 0
     var minSpace:CGFloat = 0
-    var maxSpace:CGFloat = .greatestFiniteMagnitude
+    var maxSpace:CGFloat = CGFloat.greatestFiniteMagnitude
 
     
     override func copy(with zone: NSZone?) -> Any {

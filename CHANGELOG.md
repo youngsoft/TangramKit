@@ -2,6 +2,11 @@
 **TangramKit**中的所有历史版本变化将会在这个文件中列出。
 
 --- 
+## [V1.1.5](https://github.com/youngsoft/TangramKit/releases/tag/1.1.5)(2018/05/06)
+
+1. 优化了编译时慢的一些代码。
+2. 修复表格布局的行的尺寸设置为TGLayoutSize.wrap时并且同时使用了智能边界线时，其中的列子视图的边界线显示不完整的问题。
+
 
 
 ## [V1.1.4](https://github.com/youngsoft/TangramKit/releases/tag/1.1.4)(2018/04/23)

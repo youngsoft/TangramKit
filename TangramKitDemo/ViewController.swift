@@ -100,6 +100,9 @@ class ViewController: UITableViewController {
         demoVCList4.append(["title":NSLocalizedString("3.TableLayout - Intelligent Borderline",comment:""),
                             "class":TLTest3ViewController.self]
         )
+        demoVCList4.append(["title":NSLocalizedString("4.TableLayout - Sytle&Alignment",comment:""),
+                            "class":TLTest4ViewController.self]
+        )
 
         
         //flow layout list
