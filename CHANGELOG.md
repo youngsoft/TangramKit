@@ -2,6 +2,18 @@
 **TangramKit**中的所有历史版本变化将会在这个文件中列出。
 
 --- 
+
+## [V1.1.6](https://github.com/youngsoft/TangramKit/releases/tag/1.1.6)(2018/05/10)
+
+#### Added
+1.添加了流式布局`TGFlowLayout`对瀑布流的支持，主要是数量约束流式布局来实现，通过设置`tg_autoArrange`为YES或者设置`tg_arrangedGravity`属性为`TGGravity.horz.between或者TGGravity.vert.between`来实现两种不同策略的瀑布流模式，瀑布流模式其实就是一种紧凑的流式布局排列方式。具体的DEMO在新增加的[FLLTest7ViewController](https://github.com/youngsoft/TangramKit/blob/master/TangramKitDemo/FlowLayoutDemo/FLLTest7ViewController.swift)中可以查看。
+
+#### Fixed
+1. 修复了流式布局`TGFlowLayout`中的tg_gravity属性设置后停靠有可能不正确的问题。
+2. 优化和修复了对UIScrollView+布局视图时，设置UIScrollView的高度或者宽度由布局视图的尺寸进行自适应的问题。新版本中UIScrollView的尺寸可以依赖于布局视图的尺寸，同时布局视图的最大最小尺寸可以设置为UIScrollView的尺寸。具体例子参考：[FLLTest7ViewController](https://github.com/youngsoft/TangramKit/blob/master/TangramKitDemo/FlowLayoutDemo/FLLTest7ViewController.swift)
+3. 添加了对布局视图的`tg_cacheEstimatedRect`属性的使用限制说明，这个属性只能用于那些需要高度自适应的UITableViewCell的根布局视图中使用，其他地方如果使用则有可能会出现计算不正确的问题。
+
+
 ## [V1.1.5](https://github.com/youngsoft/TangramKit/releases/tag/1.1.5)(2018/05/06)
 
 1. 优化了编译时慢的一些代码。

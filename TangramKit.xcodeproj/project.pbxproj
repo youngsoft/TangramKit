@@ -26,6 +26,7 @@
 		204DC323209E0BC000F6CB57 /* TLTest4ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204DC322209E0BC000F6CB57 /* TLTest4ViewController.swift */; };
 		20B6C6E71FA40AEC001D51C7 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B6C6E61FA40AEC001D51C7 /* DetailViewController.swift */; };
 		20DCF335208CD022007A879B /* FOLTest7ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DCF334208CD022007A879B /* FOLTest7ViewController.swift */; };
+		20FC8FE220A4241D0029DE31 /* FLLTest7ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FC8FE120A4241D0029DE31 /* FLLTest7ViewController.swift */; };
 		681BD8DF1E0B91A500403A1F /* TangramKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 681BD8DD1E0B91A500403A1F /* TangramKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		681BD90F1E0B92E100403A1F /* TangramKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9011E0B92E100403A1F /* TangramKit.swift */; };
 		681BD9111E0B92E100403A1F /* TGBaseLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9021E0B92E100403A1F /* TGBaseLayout.swift */; };
@@ -106,6 +107,7 @@
 		204DC322209E0BC000F6CB57 /* TLTest4ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TLTest4ViewController.swift; sourceTree = "<group>"; };
 		20B6C6E61FA40AEC001D51C7 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		20DCF334208CD022007A879B /* FOLTest7ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FOLTest7ViewController.swift; sourceTree = "<group>"; };
+		20FC8FE120A4241D0029DE31 /* FLLTest7ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLLTest7ViewController.swift; sourceTree = "<group>"; };
 		681BD8DB1E0B91A500403A1F /* TangramKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TangramKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		681BD8DD1E0B91A500403A1F /* TangramKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TangramKit.h; sourceTree = "<group>"; };
 		681BD8DE1E0B91A500403A1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -289,6 +291,7 @@
 				68F035F81E0B7D2700CEBAEF /* FLLTest4ViewController.swift */,
 				184243071E327F0800E2CCE1 /* FLLTest5ViewController.swift */,
 				18058AAE1E63B4EA00EAECDC /* FLLTest6ViewController.swift */,
+				20FC8FE120A4241D0029DE31 /* FLLTest7ViewController.swift */,
 			);
 			path = FlowLayoutDemo;
 			sourceTree = "<group>";
@@ -553,6 +556,7 @@
 				68F036441E0B7D2700CEBAEF /* FOLTest4ViewController.swift in Sources */,
 				68F0366C1E0B7D2700CEBAEF /* LLTest6ViewController.swift in Sources */,
 				18BCBD461E1336D900AC7766 /* AllTest8ViewController.swift in Sources */,
+				20FC8FE220A4241D0029DE31 /* FLLTest7ViewController.swift in Sources */,
 				68F036541E0B7D2700CEBAEF /* AllTest6ViewController.swift in Sources */,
 				68F036801E0B7D2700CEBAEF /* TLTest3ViewController.swift in Sources */,
 				68F036811E0B7D2700CEBAEF /* ViewController.swift in Sources */,

@@ -125,7 +125,9 @@ class ViewController: UITableViewController {
         demoVCList5.append(["title":NSLocalizedString("6.FlowLayout - Scroll",comment:""),
                             "class":FLLTest6ViewController.self]
         )
-        
+        demoVCList5.append(["title":NSLocalizedString("7.FlowLayout - Auto Arrange",comment:""),
+                            "class":FLLTest7ViewController.self]
+        )
 
         //float layout list
         var demoVCList6 = [[String:Any]]()

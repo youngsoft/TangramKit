@@ -1132,7 +1132,8 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
      return size.height;
      
      }
-
+     
+     这个属性有可能会造成动态高度计算不正确，请只在UITableviewCell的高度为自适应时使用，其他地方不建议设置这个属性！！
      */
     public var tg_cacheEstimatedRect:Bool = false
         {
@@ -2618,6 +2619,16 @@ extension TGBaseLayout
             }
         }
         
+        //这里要判断自己的宽度设置了最小和最大宽度依赖于父视图的情况。如果有这种情况，则父视图在变化时也需要调整自身。
+        if let t = lsc.width.maxVal?.sizeVal, t.view === newSuperview
+        {
+            isAdjust = true
+        }
+        if let t = lsc.width.minVal?.sizeVal, t.view === newSuperview
+        {
+            isAdjust = true
+        }
+        
         rectSelf.size.width = self.tgValidMeasure(lsc.width,sbv:self,calcSize:rectSelf.width,sbvSize:rectSelf.size,selfLayoutSize:rectSuper.size);
         
         if TGBaseLayout.tg_isRTL
@@ -2708,6 +2719,16 @@ extension TGBaseLayout
             {
                 rectSelf.size.height = lsc.height.measure
             }
+        }
+        
+        //这里要判断自己的高度设置了最小和最大高度依赖于父视图的情况。如果有这种情况，则父视图在变化时也需要调整自身。
+        if let t = lsc.height.maxVal?.sizeVal, t.view === newSuperview
+        {
+            isAdjust = true
+        }
+        if let t = lsc.height.minVal?.sizeVal, t.view === newSuperview
+        {
+            isAdjust = true
         }
         
         rectSelf.size.height = self.tgValidMeasure(lsc.height,sbv:self,calcSize:rectSelf.height,sbvSize:rectSelf.size,selfLayoutSize:rectSuper.size);
@@ -3411,6 +3432,10 @@ extension TGBaseLayout
                 {
                     lv.removeObserver(self, forKeyPath: "center")
                 }
+                else if let sv = subview as? UIScrollView
+                {
+                    sv.removeObserver(self, forKeyPath: "center")
+                }
                 else if let lb = subview as? UILabel
                 {
                     lb.removeObserver(self, forKeyPath: "text")
@@ -3438,7 +3463,10 @@ extension TGBaseLayout
             if let lv = subview as? TGBaseLayout
             {
                 lv.addObserver(self, forKeyPath:"center", options:.new, context: &TGBaseLayout._stgObserverCtxA)
-                lv.tg_cacheEstimatedRect = self.tg_cacheEstimatedRect
+            }
+            else if let sv = subview as? UIScrollView
+            {
+                sv.addObserver(self, forKeyPath:"center", options:.new, context: &TGBaseLayout._stgObserverCtxA)
             }
             else if let lb = subview as? UILabel
             {
