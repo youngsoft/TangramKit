@@ -157,6 +157,8 @@ public protocol TGLayoutViewSizeClass:TGViewSizeClass
     var tg_reverseLayout: Bool{get set}
     
     var tg_gravity:TGGravity{get set}
+    
+    var tg_layoutTransform:CGAffineTransform{get set}
 
 }
 
@@ -611,6 +613,7 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
     var tg_reverseLayout: Bool = false
     var tg_gravity: TGGravity = TGGravity.none
     
+    var tg_layoutTransform: CGAffineTransform = CGAffineTransform.identity
     
     internal var tgTopPadding:CGFloat
     {
@@ -827,6 +830,7 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
         tsc.tg_hspace = self.tg_hspace
         tsc.tg_reverseLayout = self.tg_reverseLayout
         tsc.tg_gravity = self.tg_gravity
+        tsc.tg_layoutTransform = self.tg_layoutTransform
         
         return tsc
     }

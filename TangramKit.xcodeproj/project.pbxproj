@@ -27,6 +27,8 @@
 		20B6C6E71FA40AEC001D51C7 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B6C6E61FA40AEC001D51C7 /* DetailViewController.swift */; };
 		20DCF335208CD022007A879B /* FOLTest7ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DCF334208CD022007A879B /* FOLTest7ViewController.swift */; };
 		20FC8FE220A4241D0029DE31 /* FLLTest7ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FC8FE120A4241D0029DE31 /* FLLTest7ViewController.swift */; };
+		4680F8FD211583FF00BFB765 /* FLLTest8ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4680F8FC211583FF00BFB765 /* FLLTest8ViewController.swift */; };
+		4680F8FF2115891600BFB765 /* AllTest9ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4680F8FE2115891600BFB765 /* AllTest9ViewController.swift */; };
 		681BD8DF1E0B91A500403A1F /* TangramKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 681BD8DD1E0B91A500403A1F /* TangramKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		681BD90F1E0B92E100403A1F /* TangramKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9011E0B92E100403A1F /* TangramKit.swift */; };
 		681BD9111E0B92E100403A1F /* TGBaseLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9021E0B92E100403A1F /* TGBaseLayout.swift */; };
@@ -108,6 +110,8 @@
 		20B6C6E61FA40AEC001D51C7 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		20DCF334208CD022007A879B /* FOLTest7ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FOLTest7ViewController.swift; sourceTree = "<group>"; };
 		20FC8FE120A4241D0029DE31 /* FLLTest7ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLLTest7ViewController.swift; sourceTree = "<group>"; };
+		4680F8FC211583FF00BFB765 /* FLLTest8ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLLTest8ViewController.swift; sourceTree = "<group>"; };
+		4680F8FE2115891600BFB765 /* AllTest9ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTest9ViewController.swift; sourceTree = "<group>"; };
 		681BD8DB1E0B91A500403A1F /* TangramKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TangramKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		681BD8DD1E0B91A500403A1F /* TangramKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TangramKit.h; sourceTree = "<group>"; };
 		681BD8DE1E0B91A500403A1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -292,6 +296,7 @@
 				184243071E327F0800E2CCE1 /* FLLTest5ViewController.swift */,
 				18058AAE1E63B4EA00EAECDC /* FLLTest6ViewController.swift */,
 				20FC8FE120A4241D0029DE31 /* FLLTest7ViewController.swift */,
+				4680F8FC211583FF00BFB765 /* FLLTest8ViewController.swift */,
 			);
 			path = FlowLayoutDemo;
 			sourceTree = "<group>";
@@ -316,6 +321,7 @@
 				68F036041E0B7D2700CEBAEF /* AllTest6ViewController.swift */,
 				68F036051E0B7D2700CEBAEF /* AllTest7ViewController.swift */,
 				18BCBD451E1336D900AC7766 /* AllTest8ViewController.swift */,
+				4680F8FE2115891600BFB765 /* AllTest9ViewController.swift */,
 				68F036061E0B7D2700CEBAEF /* AllTestModel&View */,
 			);
 			path = IntegratedDemo;
@@ -544,6 +550,7 @@
 				18058AAF1E63B4EA00EAECDC /* FLLTest6ViewController.swift in Sources */,
 				68F036501E0B7D2700CEBAEF /* AllTest2ViewController.swift in Sources */,
 				20B6C6E71FA40AEC001D51C7 /* DetailViewController.swift in Sources */,
+				4680F8FD211583FF00BFB765 /* FLLTest8ViewController.swift in Sources */,
 				184243081E327F0800E2CCE1 /* FLLTest5ViewController.swift in Sources */,
 				68F0363D1E0B7D2700CEBAEF /* CFTool.swift in Sources */,
 				68F036581E0B7D2700CEBAEF /* AllTest2TableViewCell.swift in Sources */,
@@ -580,6 +587,7 @@
 				68F0364C1E0B7D2700CEBAEF /* FLTest2ViewController.swift in Sources */,
 				68F036471E0B7D2700CEBAEF /* FLLTest1ViewController.swift in Sources */,
 				68F036691E0B7D2700CEBAEF /* LLTest3ViewController.swift in Sources */,
+				4680F8FF2115891600BFB765 /* AllTest9ViewController.swift in Sources */,
 				68F036511E0B7D2700CEBAEF /* AllTest3ViewController.swift in Sources */,
 				68F0364B1E0B7D2700CEBAEF /* FLTest1ViewController.swift in Sources */,
 				68F0363C1E0B7D2700CEBAEF /* AppDelegate.swift in Sources */,

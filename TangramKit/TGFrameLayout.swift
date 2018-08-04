@@ -150,6 +150,7 @@ open class TGFrameLayout: TGBaseLayout,TGFrameLayoutViewSizeClass {
             }
         }
         
+        tgAdjustSubviewsLayoutTransform(sbs: sbs, lsc: lsc, selfSize: selfSize)
         tgAdjustSubviewsRTLPos(sbs: sbs, selfWidth: selfSize.width)
         
         return self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs, lsc:lsc)

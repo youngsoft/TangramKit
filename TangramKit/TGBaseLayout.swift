@@ -1031,6 +1031,24 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     }
 
     
+    public var tg_layoutTransform: CGAffineTransform
+    {
+        get
+        {
+            return (self.tgCurrentSizeClass as! TGLayoutViewSizeClass).tg_layoutTransform
+        }
+        set
+        {
+            let lsc = self.tgCurrentSizeClass as! TGLayoutViewSizeClass
+            if lsc.tg_layoutTransform != newValue
+            {
+                lsc.tg_layoutTransform = newValue
+                setNeedsLayout()
+            }
+            
+        }
+    }
+    
     
     /**
      把一个布局视图放入到UIScrollView(UITableView和UICollectionView除外)内时是否自动调整UIScrollView的contentSize值。默认是.auto表示布局视图会自动接管UIScrollView的contentSize的值。 你可以将这个属性设置.no而不调整和控制contentSize的值，设置为.yes则一定会调整contentSize.
@@ -3285,7 +3303,19 @@ extension TGBaseLayout
         //最终的结果是非布局视图的宽度是wrap的情况下适用。
         if  (sbv as? TGBaseLayout) == nil && sbvsc.width.isWrap
         {
-            let fitSize = sbv.sizeThatFits(CGSize.zero)
+            var fits = CGSize.zero
+            
+            if let t = sbvsc.width.maxVal?.numberVal
+            {
+                fits.width = t
+            }
+            
+            if let t = sbvsc.height.maxVal?.numberVal
+            {
+                fits.height = t
+            }
+            
+            let fitSize = sbv.sizeThatFits(fits)
             sbvtgFrame.width = sbvsc.width.measure(fitSize.width)
             if sbvsc.height.isWrap
             {
@@ -3341,6 +3371,35 @@ extension TGBaseLayout
     
                 sbvtgFrame.leading = selfWidth - sbvtgFrame.leading - sbvtgFrame.width
                 sbvtgFrame.trailing = sbvtgFrame.leading + sbvtgFrame.width
+            }
+        }
+    }
+    
+    internal func tgAdjustSubviewsLayoutTransform(sbs:[UIView], lsc:TGLayoutViewSizeClassImpl, selfSize:CGSize)
+    {
+        let layoutTransform = lsc.tg_layoutTransform
+        if !layoutTransform.isIdentity
+        {
+            for sbv in sbs
+            {
+                let sbvtgFrame = sbv.tgFrame
+                
+                //取子视图中心点坐标。因为这个坐标系的原点是布局视图的左上角，所以要转化为数学坐标系的原点坐标, 才能应用坐标变换。
+                var centerPoint = CGPoint(x:sbvtgFrame.leading + sbvtgFrame.width / 2.0 - selfSize.width / 2.0,
+                                          y:sbvtgFrame.top + sbvtgFrame.height / 2.0 - selfSize.height / 2.0)
+                
+                //应用坐标变换
+                centerPoint = centerPoint.applying(layoutTransform)
+                
+                //还原为左上角坐标系。
+                centerPoint.x +=  selfSize.width / 2.0
+                centerPoint.y += selfSize.height / 2.0
+                
+                //根据中心点的变化调整开始和结束位置。
+                sbvtgFrame.leading = centerPoint.x - sbvtgFrame.width / 2.0
+                sbvtgFrame.trailing = sbvtgFrame.leading + sbvtgFrame.width
+                sbvtgFrame.top = centerPoint.y - sbvtgFrame.height / 2.0
+                sbvtgFrame.bottom = sbvtgFrame.top + sbvtgFrame.height
             }
         }
     }

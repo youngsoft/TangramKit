@@ -642,6 +642,7 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     
         tgAdjustLayoutSelfSize(selfSize: &selfSize, lsc: lsc)
         
+        tgAdjustSubviewsLayoutTransform(sbs: sbs, lsc: lsc, selfSize: selfSize)
         
         return self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs2, lsc:lsc)
     }

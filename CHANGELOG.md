@@ -1,7 +1,17 @@
 # Change Log
 **TangramKit**中的所有历史版本变化将会在这个文件中列出。
 
---- 
+---
+
+## [V1.2.0](https://github.com/youngsoft/TangramKit/releases/tag/1.2.0)(2018/08/04)
+
+#### Added
+1. 添加布局属性`tg_layoutTransform`,用来实现对布局内子视图的整体位置变换，可以通过这个属性来实现一般常见的平移，缩放，水平翻转，垂直翻转等功能。具体的DEMO在新增加的[AllTest9ViewController](https://github.com/youngsoft/TangramKit/blob/master/TangramKitDemo/IntegratedDemo/AllTest9ViewController.swift)中可以查看。
+2. 为流式布局`MyFlowLayout`支持子视图固定尺寸并且间距动态拉伸调整的能力，你可以通过设置流式布局的方法：`tg_setSubviews`来实现，这个方法原先只支持内容约束流式布局，现在新版本对数量约束流式布局也同样支持了。具体的DEMO在新增加的[FLLTest8ViewController](https://github.com/youngsoft/TangramKit/blob/master/TangramKitDemo/FlowLayoutDemo/FLLTest8ViewController.swift)中可以查看。
+
+#### Fixed
+1. 修复了UILabel等控件的尺寸设置了.wrap并且同时又设置了最大最小尺寸时，在相对布局内进行尺寸计算内可能会出现的问题。[#issue25](https://github.com/youngsoft/TangramKit/issues/25)
+
 
 ## [V1.1.6](https://github.com/youngsoft/TangramKit/releases/tag/1.1.6)(2018/05/10)
 

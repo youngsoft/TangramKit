@@ -241,11 +241,11 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
     
     
     /**
-     *在内容约束流式布局的一些应用场景中我们有时候希望某些子视图的宽度是固定的情况下，子视图的间距是浮动的而不是固定的，这样就可以尽可能的容纳更多的子视图。比如每个子视图的宽度是固定80，那么在小屏幕下每行只能放3个，而我们希望大屏幕每行能放4个或者5个子视图。 因此您可以通过如下方法来设置浮动间距，这个方法会根据您当前布局的orientation方向不同而意义不同：
+     *在流式布局的一些应用场景中我们有时候希望某些子视图的宽度或者高度是固定的情况下，子视图的间距是浮动的而不是固定的。比如每个子视图的宽度是固定80，那么在小屏幕下每行只能放3个，而我们希望大屏幕每行能放4个或者5个子视图。 因此您可以通过如下方法来设置浮动间距，这个方法会根据您当前布局的orientation方向不同而意义不同：
      1.如果您的布局方向是.vert表示设置的是子视图的水平间距，其中的size指定的是子视图的宽度，minSpace指定的是最小的水平间距,maxSpace指定的是最大的水平间距，如果指定的subviewSize计算出的间距大于这个值则会调整subviewSize的宽度。
      2.如果您的布局方向是.horz表示设置的是子视图的垂直间距，其中的size指定的是子视图的高度，minSpace指定的是最小的垂直间距,maxSpace指定的是最大的垂直间距，如果指定的subviewSize计算出的间距大于这个值则会调整subviewSize的高度。
      3.如果您不想使用浮动间距则请将subviewSize设置为0就可以了。
-     4.这个方法只在内容约束流式布局里面设置才有意义。
+     4.对于数量约束流式布局来说，因为每行和每列的数量的固定的，因此不存在根据屏幕的大小自动换行的能力以及进行最佳数量的排列，但是可以使用这个方法来实现所有子视图尺寸固定但是间距是浮动的功能需求。
      */
     public func tg_setSubviews(size:CGFloat, minSpace:CGFloat, maxSpace:CGFloat = CGFloat.greatestFiniteMagnitude, inSizeClass type:TGSizeClassType = TGSizeClassType.default)
     {
@@ -424,7 +424,7 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
         }
         
         tgAdjustLayoutSelfSize(selfSize: &selfSize, lsc: lsc)
-        
+        tgAdjustSubviewsLayoutTransform(sbs: sbs, lsc: lsc, selfSize: selfSize)
         tgAdjustSubviewsRTLPos(sbs: sbs, selfWidth: selfSize.width)
         
         return self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs, lsc:lsc)
@@ -888,9 +888,36 @@ extension TGFlowLayout
         let horzGravity:TGGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.vert.mask)
         let vertAlignment:TGGravity = lsc.tg_arrangedGravity & TGGravity.horz.mask
         
-        let horzSpace = lsc.tg_hspace
+        var horzSpace = lsc.tg_hspace
         let vertSpace = lsc.tg_vspace
-        
+        var subviewSize = lsc.subviewSize
+        if (subviewSize != 0)
+        {
+            
+            let minSpace = lsc.minSpace
+            let maxSpace = lsc.maxSpace
+            
+            if arrangedCount > 1
+            {
+                horzSpace = (selfSize.width - lsc.tgLeadingPadding - lsc.tgTrailingPadding - subviewSize * CGFloat(arrangedCount))/CGFloat(arrangedCount - 1)
+                
+                if _tgCGFloatGreat(horzSpace , maxSpace) || _tgCGFloatLess(horzSpace, minSpace)
+                {
+                    if _tgCGFloatGreat(horzSpace , maxSpace)
+                    {
+                      horzSpace = maxSpace
+                    }
+                    
+                    if _tgCGFloatLess(horzSpace, minSpace)
+                    {
+                        horzSpace = minSpace
+                    }
+                    
+                    subviewSize =  (selfSize.width - lsc.tgLeadingPadding - lsc.tgTrailingPadding -  horzSpace * CGFloat(arrangedCount - 1)) / CGFloat(arrangedCount)
+                    
+                }
+            }
+        }
         
         //判断父滚动视图是否分页滚动
         var isPagingScroll = false
@@ -984,12 +1011,17 @@ extension TGFlowLayout
             }
             else
             {
-                if (pagingItemWidth != 0)
+                if subviewSize != 0
+                {
+                    rect.size.width = subviewSize
+                }
+                
+                if pagingItemWidth != 0
                 {
                     rect.size.width = pagingItemWidth
                 }
                 
-                if (sbvsc.width.numberVal != nil && !averageArrange)
+                if sbvsc.width.numberVal != nil && !averageArrange
                 {
                     rect.size.width = sbvsc.width.measure;
                 }
@@ -1553,9 +1585,38 @@ extension TGFlowLayout
         let horzGravity:TGGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.vert.mask)
         let horzAlignment:TGGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_arrangedGravity & TGGravity.vert.mask)
 
-        let vertSpace = lsc.tg_vspace
         let horzSpace = lsc.tg_hspace
-        
+        var vertSpace = lsc.tg_vspace
+        var subviewSize = lsc.subviewSize;
+        if (subviewSize != 0)
+        {
+            
+            let minSpace = lsc.minSpace
+            let maxSpace = lsc.maxSpace
+            
+            if (arrangedCount > 1)
+            {
+                vertSpace = (selfSize.height - lsc.tgTopPadding - lsc.tgBottomPadding - subviewSize * CGFloat(arrangedCount))/CGFloat(arrangedCount - 1)
+                
+                if _tgCGFloatGreat(vertSpace , maxSpace) || _tgCGFloatLess(vertSpace, minSpace)
+                {
+                    if _tgCGFloatGreat(vertSpace , maxSpace)
+                    {
+                       vertSpace = maxSpace
+                    }
+                    
+                    if _tgCGFloatLess(vertSpace , minSpace)
+                    {
+                        vertSpace = minSpace
+                    }
+                    
+                    
+                    subviewSize =  (selfSize.height - lsc.tgTopPadding - lsc.tgBottomPadding -  vertSpace * CGFloat(arrangedCount - 1)) / CGFloat(arrangedCount)
+                    
+                }
+                
+            }
+        }
         
         //判断父滚动视图是否分页滚动
         var isPagingScroll = false
@@ -1659,6 +1720,12 @@ extension TGFlowLayout
             }
             else
             {
+                
+                if subviewSize != 0
+                {
+                  rect.size.height = subviewSize
+                }
+                
                 if (pagingItemHeight != 0)
                 {
                     rect.size.height = pagingItemHeight
@@ -2039,15 +2106,15 @@ extension TGFlowLayout
             
             rect.size.width = sbvsc.width.numberSize(rect.size.width)
             
-            rect.size.height = sbvsc.height.numberSize(rect.size.height)
-
-            
-            rect = tgSetSubviewRelativeSize(sbvsc.height, selfSize: selfSize, sbvsc:sbvsc, lsc:lsc, rect: rect)
-            
             if subviewSize != 0
             {
                 rect.size.height = subviewSize
             }
+            
+            rect.size.height = sbvsc.height.numberSize(rect.size.height)
+
+            
+            rect = tgSetSubviewRelativeSize(sbvsc.height, selfSize: selfSize, sbvsc:sbvsc, lsc:lsc, rect: rect)
             
             rect = tgSetSubviewRelativeSize(sbvsc.width, selfSize: selfSize, sbvsc:sbvsc, lsc:lsc, rect: rect)
             

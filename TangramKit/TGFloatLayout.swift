@@ -254,7 +254,7 @@ open class TGFloatLayout: TGBaseLayout,TGFloatLayoutViewSizeClass {
         
         
         tgAdjustLayoutSelfSize(selfSize: &selfSize, lsc: lsc)
-        
+        tgAdjustSubviewsLayoutTransform(sbs: sbs, lsc: lsc, selfSize: selfSize)
         tgAdjustSubviewsRTLPos(sbs: sbs, selfWidth: selfSize.width)
         
         

@@ -119,7 +119,7 @@ open class TGRelativeLayout: TGBaseLayout,TGRelativeLayoutViewSizeClass {
         
         let sbs2 = self.tgGetLayoutSubviews()
         tgAdjustLayoutSelfSize(selfSize: &selfSize, lsc: lsc)
-        
+        tgAdjustSubviewsLayoutTransform(sbs: sbs2, lsc: lsc, selfSize: selfSize)
         tgAdjustSubviewsRTLPos(sbs: sbs2, selfWidth: selfSize.width)
         
         return self.tgAdjustSizeWhenNoSubviews(size: selfSize, sbs: sbs2, lsc:lsc)

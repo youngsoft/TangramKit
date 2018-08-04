@@ -128,6 +128,9 @@ class ViewController: UITableViewController {
         demoVCList5.append(["title":NSLocalizedString("7.FlowLayout - Auto Arrange",comment:""),
                             "class":FLLTest7ViewController.self]
         )
+        demoVCList5.append(["title":NSLocalizedString("8.FlowLayout - Flex space",comment:""),
+                            "class":FLLTest8ViewController.self]
+        )
 
         //float layout list
         var demoVCList6 = [[String:Any]]()
@@ -195,6 +198,9 @@ class ViewController: UITableViewController {
         )
         demoVCList8.append(["title":NSLocalizedString("❁2.Screen perfect fit - Demo2",comment:""),
                             "class":AllTest8ViewController.self]
+        )
+        demoVCList8.append(["title":NSLocalizedString("❁3.Subviews layout transform",comment:""),
+                            "class":AllTest9ViewController.self]
         )
         
         
