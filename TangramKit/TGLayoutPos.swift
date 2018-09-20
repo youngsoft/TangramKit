@@ -137,7 +137,7 @@ final public class TGLayoutPos:TGLayoutPosValue
      @endcode
      
      @note
-     需要注意的是这个值并不是一个真值，只是一个特殊值，不能用于读取。而且只能用于在MyLayoutPos的equalTo方法和布局视图上的padding属性上使用，其他地方使用后果未可知。
+     需要注意的是这个值并不是一个真值，只是一个特殊值，不能用于读取。而且只能用于在TGLayoutPos的equal方法和布局视图上的tg_padding属性上使用，其他地方使用后果未可知。
      
      */
     public static var tg_safeAreaMargin:CGFloat

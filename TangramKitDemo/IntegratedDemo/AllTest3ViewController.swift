@@ -449,7 +449,7 @@ extension AllTest3ViewController
             if (self.leftFlexedLabel.text!.count > 1)
             {
                 let text = self.leftFlexedLabel.text!
-                self.leftFlexedLabel.text =  text.substring(to: text.index(text.endIndex, offsetBy: -1))
+                self.leftFlexedLabel.text =   String(text[Range(uncheckedBounds: (lower: text.startIndex, upper: text.index(text.endIndex, offsetBy: -1)))])
             }
         }
         else
@@ -460,7 +460,7 @@ extension AllTest3ViewController
             let start = strs.index(strs.startIndex, offsetBy: String.IndexDistance(rand))
             let end = strs.index(strs.startIndex, offsetBy: String.IndexDistance(rand) + 1)
             let rg = Range(uncheckedBounds: (lower: start, upper: end))
-            let str = strs.substring(with: rg)
+            let str = strs[rg]
             self.leftFlexedLabel.text = self.leftFlexedLabel.text!.appending(str)
         }
         
@@ -477,14 +477,14 @@ extension AllTest3ViewController
             let start = strs.index(strs.startIndex, offsetBy: String.IndexDistance(rand))
             let end = strs.index(strs.startIndex, offsetBy: String.IndexDistance(rand) + 1)
             let rg = Range(uncheckedBounds: (lower: start, upper: end))
-            let str = strs.substring(with: rg)
+            let str = strs[rg]
             self.rightFlexedLabel.text = self.rightFlexedLabel.text!.appending(str)
         }
         else {
             if self.rightFlexedLabel.text!.count > 1 {
                 
                 let text = self.rightFlexedLabel.text!
-                self.rightFlexedLabel.text =  text.substring(to: text.index(text.endIndex, offsetBy: -1))
+                self.rightFlexedLabel.text =  String(text[Range(uncheckedBounds: (lower: text.startIndex, upper: text.index(text.endIndex, offsetBy: -1)))])
             }
         }
     }

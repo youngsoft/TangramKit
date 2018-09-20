@@ -93,7 +93,7 @@ extension FOLTest4ViewController
             
             //添加标题文本。
             let titleLabel = UILabel()
-            titleLabel.text = dict["title"] as! String!
+            titleLabel.text = dict["title"] as? String
             titleLabel.textColor = CFTool.color(4)
             titleLabel.font = CFTool.font(16)
             titleLabel.tg_width.equal(100%)  //标题部分占据全部的宽度，独占一行。所以
@@ -181,7 +181,7 @@ extension FOLTest4ViewController
             
             //添加标题文本。
             let titleLabel = UILabel()
-            titleLabel.text = dict["title"] as! String!
+            titleLabel.text = dict["title"] as? String
             titleLabel.textColor = CFTool.color(4)
             titleLabel.font = CFTool.font(16)
             titleLabel.tg_width.equal(100%)  //标题部分占据全部的宽度，独占一行。所以

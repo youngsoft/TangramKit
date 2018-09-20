@@ -974,7 +974,7 @@ extension TGRelativeLayout
                 var leadingOffset: CGFloat = (selfSize.width - lsc.tgLeadingPadding - lsc.tgTrailingPadding - totalWidth - totalOffset) / 2.0
                 leadingOffset += lsc.tgLeadingPadding
                 
-                var prev:AnyObject! = leadingOffset as AnyObject!
+                var prev:AnyObject! = nil
                 sbv.tg_leading.equal(leadingOffset)
                 prev = sbv.tg_trailing
                 
@@ -1042,7 +1042,7 @@ extension TGRelativeLayout
                 var topOffset: CGFloat = (selfSize.height - lsc.tgTopPadding - lsc.tgBottomPadding - totalHeight - totalOffset) / 2.0
                 topOffset += lsc.tgTopPadding
                 
-                var prev:AnyObject! = topOffset as AnyObject!
+                var prev:AnyObject! = nil
                 sbv.tg_top.equal(topOffset)
                 prev = sbv.tg_bottom
                 
@@ -1159,23 +1159,23 @@ extension TGRelativeLayout
                 }
                 else if sbvHead.hasValue && sbvTail.hasValue
                 {
-                    if _tgCGFloatLess(maxSize , fabs(sbvMaxPos) + headMargin + headPadding)
+                    if _tgCGFloatLess(maxSize , abs(sbvMaxPos) + headMargin + headPadding)
                     {
-                        maxSize = fabs(sbvMaxPos) + headMargin + headPadding
+                        maxSize = abs(sbvMaxPos) + headMargin + headPadding
                     }
                 }
                 else if sbvTail.hasValue
                 {
-                    if _tgCGFloatLess(maxSize , fabs(sbvMinPos) + headPadding)
+                    if _tgCGFloatLess(maxSize , abs(sbvMinPos) + headPadding)
                     {
-                        maxSize = fabs(sbvMinPos) + headPadding
+                        maxSize = abs(sbvMinPos) + headPadding
                     }
                 }
                 else
                 {
-                    if _tgCGFloatLess(maxSize , fabs(sbvMaxPos) + tailPadding)
+                    if _tgCGFloatLess(maxSize , abs(sbvMaxPos) + tailPadding)
                     {
-                        maxSize = fabs(sbvMaxPos) + tailPadding
+                        maxSize = abs(sbvMaxPos) + tailPadding
                     }
                 }
                 

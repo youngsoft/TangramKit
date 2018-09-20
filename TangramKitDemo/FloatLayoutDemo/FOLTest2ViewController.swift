@@ -129,7 +129,7 @@ class FOLTest2ViewController: UIViewController {
         return _layoutTemplates;
         
     }()
-    
+   
     lazy var sectionDatas:[FOLTest2SectionModel] = {  //片段数据数组，FOLTest2SectionModel类型的元素。
         
         let file:String! =  Bundle.main.path(forResource: "FOLTest2DataModel",ofType:"plist")
@@ -139,7 +139,7 @@ class FOLTest2ViewController: UIViewController {
         for sectionDict:[String:AnyObject] in dataSources
         {
             let sectionModel = FOLTest2SectionModel()
-            sectionModel.title = sectionDict["title"] as! String!
+            sectionModel.title = sectionDict["title"] as? String
             sectionModel.datas = [FOLTest2DataModel]()
             
             let dicts = sectionDict["datas"] as! [[String:AnyObject]]

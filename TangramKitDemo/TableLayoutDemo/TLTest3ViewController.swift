@@ -53,7 +53,7 @@ class TLTest3ViewController: UIViewController {
         //这里设置表格的左边和右边以及顶部的边距都是在父视图的安全区域外再缩进10个点的位置。你会注意到这里面定义了一个特殊的位置TGLayoutPos.tg_safeAreaMargin。
         //TGLayoutPos.tg_safeAreaMargin表示视图的边距不是一个固定的值而是所在的父视图的安全区域。这样布局视图就不会延伸到安全区域以外去了。
         //TGLayoutPos.tg_safeAreaMargin是同时支持iOS11和以下的版本的，对于iOS11以下的版本则顶部安全区域是状态栏以下的位置。
-        //因此只要你设置边距为MyLayoutPos.safeAreaMargin则可以同时兼容所有iOS的版本。。
+        //因此只要你设置边距为TGLayoutPos.tg_safeAreaMargin则可以同时兼容所有iOS的版本。。
         tableLayout.tg_leading.equal(TGLayoutPos.tg_safeAreaMargin, offset: 10)
         tableLayout.tg_trailing.equal(TGLayoutPos.tg_safeAreaMargin, offset: 10)
         tableLayout.tg_top.equal(TGLayoutPos.tg_safeAreaMargin, offset: 10)

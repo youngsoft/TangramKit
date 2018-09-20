@@ -350,7 +350,7 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
                     }
                     
                     let tempSbs:NSMutableArray = NSMutableArray(array: sbs)
-                    sbs = self.tgGetAutoArrangeSubviews(tempSbs, selfSize:selfSize.width - lsc.tgLeadingPadding - lsc.tgTrailingPadding, space: lsc.tg_hspace) as! [UIView]
+                    sbs = self.tgGetAutoArrangeSubviews(tempSbs, selfSize:selfSize.width - lsc.tgLeadingPadding - lsc.tgTrailingPadding, space: lsc.tg_hspace) as? [UIView]
                     
                 }
                 
@@ -411,7 +411,7 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
                     }
                     
                     let tempSbs:NSMutableArray = NSMutableArray(array: sbs)
-                    sbs = self.tgGetAutoArrangeSubviews(tempSbs, selfSize:selfSize.height - lsc.tgTopPadding - lsc.tgBottomPadding, space: lsc.tg_vspace) as! [UIView]
+                    sbs = self.tgGetAutoArrangeSubviews(tempSbs, selfSize:selfSize.height - lsc.tgTopPadding - lsc.tgBottomPadding, space: lsc.tg_vspace) as? [UIView]
                 }
                 
                 
@@ -495,7 +495,7 @@ extension TGFlowLayout
         {
             let s1 = self.tgCalcSinglelineSize(calcArray, space:space)
             let s2 = self.tgCalcSinglelineSize(bestSinglelineArray, space:space)
-            if _tgCGFloatLess(fabs(selfSize - s1) , fabs(selfSize - s2)) && _tgCGFloatLessOrEqual(s1, selfSize)
+            if _tgCGFloatLess(abs(selfSize - s1) , abs(selfSize - s2)) && _tgCGFloatLessOrEqual(s1, selfSize)
             {
                 bestSinglelineArray.setArray(calcArray as [AnyObject])
             }
@@ -515,7 +515,7 @@ extension TGFlowLayout
             if ( _tgCGFloatLessOrEqual(s1, selfSize))
             {
                 let s2 = self.tgCalcSinglelineSize(bestSinglelineArray,space:space)
-                if _tgCGFloatLess(fabs(selfSize - s1) , fabs(selfSize - s2))
+                if _tgCGFloatLess(abs(selfSize - s1) , abs(selfSize - s2))
                 {
                     bestSinglelineArray.setArray(calcArray2 as [AnyObject])
                 }

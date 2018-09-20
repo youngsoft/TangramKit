@@ -3,6 +3,14 @@
 
 ---
 
+## [V1.3.0](https://github.com/youngsoft/TangramKit/releases/tag/1.3.0)(2018/09/29)
+#### Fixed
+1. 为实现对Swift4.0的支持而修复了所有编译告警的问题。
+2. 修复了浮动布局TGFloatLayout中的子视图在设置尺寸为TGWeight类型时的一个比例计算的错误问题。
+3. 实现对iPhoneXR、iPhoneXS、iPhoneXSMAX的tg_padding的安全区缩进的改进支持。
+4. 实现了在Application Extension中使用布局库时报UIApplication对象不支持或者不存在的问题。
+
+
 ## [V1.2.0](https://github.com/youngsoft/TangramKit/releases/tag/1.2.0)(2018/08/04)
 
 #### Added

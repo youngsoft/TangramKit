@@ -619,7 +619,13 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
     {
         if self.tg_topPadding >= TGLayoutPos.tg_safeAreaMargin - 2000 && self.tg_topPadding <= TGLayoutPos.tg_safeAreaMargin + 2000
         {
-            return self.tg_topPadding - TGLayoutPos.tg_safeAreaMargin + UIApplication.shared.statusBarFrame.height
+            var topPaddingAdd:CGFloat = 20.0  //默认状态栏的高度
+             if #available(iOS 11.0, *) {
+                
+                topPaddingAdd = self.view.safeAreaInsets.top
+            }
+            
+            return self.tg_topPadding - TGLayoutPos.tg_safeAreaMargin + topPaddingAdd
         }
         
         if ((self.tg_insetsPaddingFromSafeArea.rawValue & UIRectEdge.top.rawValue) == UIRectEdge.top.rawValue)
@@ -637,18 +643,11 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
         if self.tg_leadingPadding >= TGLayoutPos.tg_safeAreaMargin - 2000 && self.tg_leadingPadding <= TGLayoutPos.tg_safeAreaMargin + 2000
         {
             var leadingPaddingAdd:CGFloat = 0.0
-            if UIScreen.main.bounds.height == 812 || UIScreen.main.bounds.width == 812
-            {
-                if UIDevice.current.orientation.isLandscape
-                {
-                    leadingPaddingAdd = 44
-                }
-                else
-                {
-                    leadingPaddingAdd = 0
-                }
-            }
             
+            if #available(iOS 11.0, *){
+                
+                leadingPaddingAdd = self.view.safeAreaInsets.left  //因为不管是否是rtl左右的安全区都是一致的所以这里不需要进行区分。
+            }
             return self.tg_leadingPadding - TGLayoutPos.tg_safeAreaMargin + leadingPaddingAdd
         }
         
@@ -708,17 +707,8 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
         if self.tg_bottomPadding >= TGLayoutPos.tg_safeAreaMargin - 2000 && self.tg_bottomPadding <= TGLayoutPos.tg_safeAreaMargin + 2000
         {
             var bottomPaddingAdd:CGFloat = 0.0
-            //如果设备是iPhoneX就特殊处理。竖屏是34，横屏是21
-            if UIScreen.main.bounds.height == 812 || UIScreen.main.bounds.width == 812
-            {
-                if UIDevice.current.orientation.isLandscape
-                {
-                    bottomPaddingAdd = 21
-                }
-                else
-                {
-                    bottomPaddingAdd = 34
-                }
+            if #available(iOS 11.0, *) {
+                bottomPaddingAdd = self.view.safeAreaInsets.bottom
             }
             return self.tg_bottomPadding - TGLayoutPos.tg_safeAreaMargin + bottomPaddingAdd
         }
@@ -739,16 +729,8 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
         if self.tg_trailingPadding >= TGLayoutPos.tg_safeAreaMargin - 2000 && self.tg_trailingPadding <= TGLayoutPos.tg_safeAreaMargin + 2000
         {
             var trailingPaddingAdd:CGFloat = 0.0
-            if UIScreen.main.bounds.height == 812 || UIScreen.main.bounds.width == 812
-            {
-                if UIDevice.current.orientation.isLandscape
-                {
-                    trailingPaddingAdd = 44
-                }
-                else
-                {
-                    trailingPaddingAdd = 0
-                }
+            if #available(iOS 11.0, *) {
+                trailingPaddingAdd = self.view.safeAreaInsets.right
             }
             
             return self.tg_trailingPadding - TGLayoutPos.tg_safeAreaMargin + trailingPaddingAdd

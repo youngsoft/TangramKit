@@ -600,7 +600,7 @@ extension TGFloatLayout
             if isHeightWeight && !lsc.height.isWrap
             {
                 
-                rect.size.height = sbvsc.height.measure((selfSize.height - maxHeight - lsc.tgBottomPadding) * (sbvsc.height.isFill ? 1.0 : sbvsc.height.weightVal.rawValue/100) - topSpace - bottomSpace)
+                rect.size.height = sbvsc.height.measure((selfSize.height - lsc.tgTopPadding - lsc.tgBottomPadding) * (sbvsc.height.isFill ? 1.0 : sbvsc.height.weightVal.rawValue/100) - topSpace - bottomSpace)
             }
             
             if sbvsc.height.isRelaSizeEqualTo(lsc.height) && !lsc.height.isWrap
@@ -1227,7 +1227,7 @@ extension TGFloatLayout
             
             if isWidthWeight && !lsc.width.isWrap
             {
-                rect.size.width = sbvsc.width.measure((selfSize.width - maxWidth - lsc.tgTrailingPadding) * (sbvsc.width.isFill ? 1.0 : sbvsc.width.weightVal.rawValue/100) - leadingSpace - trailingSpace)
+                rect.size.width = sbvsc.width.measure((selfSize.width - lsc.tgLeadingPadding - lsc.tgTrailingPadding) * (sbvsc.width.isFill ? 1.0 : sbvsc.width.weightVal.rawValue/100) - leadingSpace - trailingSpace)
                 
             }
             
