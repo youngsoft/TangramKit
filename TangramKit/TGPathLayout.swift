@@ -385,11 +385,11 @@ open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
         }
     }
     
-    open override func sendSubview(toBack view: UIView) {
+    open override func sendSubviewToBack(_ view: UIView) {
         if tg_originView == view {
             return
         }
-        super.sendSubview(toBack: view)
+        super.sendSubviewToBack(view)
     }
     
     open override func willRemoveSubview(_ subview: UIView) {
