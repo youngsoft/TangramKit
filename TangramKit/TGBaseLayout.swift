@@ -530,6 +530,25 @@ extension UIView
         self.tg_height.equalHelper(val: height)
     }
     
+    /// 高宽相等时设置tg_width和tg_height的简化方法。
+    ///
+    /// - Parameters:
+    ///   - sidelength: 边长
+    public func tg_size(_ sideLength: TGLayoutSize)
+    {
+        self.tg_width.equal(sideLength)
+        self.tg_height.equal(sideLength)
+    }
+    
+    /// 高宽相等时设置tg_width和tg_height的简化方法。
+    ///
+    /// - Parameters:
+    ///   - sidelength: 边长
+    public func tg_size(_ sideLength: TGLayoutSizeType)
+    {
+        self.tg_width.equalHelper(val: sideLength)
+        self.tg_height.equalHelper(val: sideLength)
+    }
     
     /// 四周边距或者间距设置的简化方法
     ///
