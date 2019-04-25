@@ -3,6 +3,11 @@
 
 ---
 
+## [V1.3.2](https://github.com/youngsoft/TangramKit/releases/tag/1.3.2)(2019/04/25)
+#### Fixed
+1. 兼容swift5.0
+
+
 ## [V1.3.1](https://github.com/youngsoft/TangramKit/releases/tag/1.3.1)(2018/09/21)
 #### Fixed
 1. 为实现对Swift4.0/4.2的支持而修复了所有编译告警的问题。
