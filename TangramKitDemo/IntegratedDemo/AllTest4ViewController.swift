@@ -48,7 +48,7 @@ class AllTest4ViewController: UIViewController {
                                 ]
         
         let scrollView = UIScrollView(frame: self.view.bounds)
-        scrollView.autoresizingMask = [UIViewAutoresizing.flexibleWidth, UIViewAutoresizing.flexibleHeight] //让uiscrollView的尺寸总是保持和父视图一致。
+        scrollView.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight] //让uiscrollView的尺寸总是保持和父视图一致。
         self.view.addSubview(scrollView)
         
         
@@ -81,7 +81,7 @@ class AllTest4ViewController: UIViewController {
             }
         }
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title:"Reverse",style:UIBarButtonItemStyle.done, target:self, action:#selector(AllTest4ViewController.handleReverse(_:)));
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title:"Reverse",style:UIBarButtonItem.Style.done, target:self, action:#selector(AllTest4ViewController.handleReverse(_:)));
     }
 
 
@@ -98,7 +98,7 @@ extension AllTest4ViewController
     func createSupplementaryLayout(sectionTitle: String) -> TGRelativeLayout {
         //建立一个相对布局
         let supplementaryLayout = TGRelativeLayout()
-        supplementaryLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        supplementaryLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         supplementaryLayout.tg_height.equal(40)
         supplementaryLayout.tg_boundBorderline = TGBorderline(color: UIColor.lightGray) //设置底部边界线。
         supplementaryLayout.backgroundColor = UIColor.white
@@ -132,7 +132,7 @@ extension AllTest4ViewController
         containerLayout.tg_gravity = TGGravity.horz.fill //平均分配里面每个子视图的宽度或者拉伸子视图的宽度以便填充满整个布局。
         containerLayout.tg_hspace = 5
         containerLayout.tg_vspace = 5
-        containerLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        containerLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         
         return containerLayout
     }

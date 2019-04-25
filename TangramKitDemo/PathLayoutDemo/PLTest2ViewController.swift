@@ -91,7 +91,7 @@ class PLTest2ViewController: UIViewController {
         let sheet = UIAlertController(title: "Curve Type", message: nil, preferredStyle: .actionSheet)
         
         for title in titles {
-            var style: UIAlertActionStyle = .default
+            var style: UIAlertAction.Style = .default
             if title == .cancle {
                 style = .cancel
             }

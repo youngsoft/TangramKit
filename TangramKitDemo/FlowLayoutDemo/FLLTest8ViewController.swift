@@ -45,7 +45,7 @@ class FLLTest8ViewController: UIViewController {
         let vertLayout = TGFlowLayout(.vert, arrangedCount: 4)
         //这个垂直流式布局中，每个子视图之间的水平间距是浮动的，并且子视图的宽度是固定为60。间距最小为10，最大不限制。
         vertLayout.tg_setSubviews(size:60, minSpace:10, maxSpace:CGFloat.greatestFiniteMagnitude)
-        vertLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        vertLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         vertLayout.backgroundColor = CFTool.color(5)
         vertLayout.tg_vspace = 20
         vertLayout.tg_gravity = TGGravity.vert.fill  //因为上面tg_setSubviews设置了固定宽度，这个属性设置子视图的高度是填充满子布局视图，因此系统内部会自动设置每个子视图的高度，如果你不设置这个属性，那么你就需要在下面分别为每个子视图设置高度。
@@ -66,7 +66,7 @@ class FLLTest8ViewController: UIViewController {
         let horzLayout = TGFlowLayout(.horz, arrangedCount: 4)
         //这个水平流式布局中，每个子视图之间的垂直间距是浮动的，并且子视图的高度是固定为60。间距最小为10，最大不限制。
         horzLayout.tg_setSubviews(size:60, minSpace:10, maxSpace:CGFloat.greatestFiniteMagnitude)
-        horzLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        horzLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         horzLayout.backgroundColor = CFTool.color(6)
         horzLayout.tg_hspace = 20
         horzLayout.tg_gravity = TGGravity.horz.fill //因为上面tg_setSubviews设置了固定高度，这个属性设置子视图的宽度是填充满子布局视图，因此系统内部会自动设置每个子视图的宽度，如果你不设置这个属性，那么你就需要在下面分别为每个子视图设置宽度。

@@ -88,7 +88,7 @@ extension AllTest7ViewController
         
         let contentLayout = TGLinearLayout(.horz)
         contentLayout.tg_height.equal(.wrap)
-        contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        contentLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         contentLayout.tg_hspace = 5
         contentLayout.tg_shrinkType = .weight
         //这个属性用来设置当子视图的总尺寸大于布局视图的尺寸时如何压缩这些具有固定尺寸的方法为按比例缩小。您可以分别试试设置为：.weight,.average,.auto,.none四种值的效果。
@@ -141,7 +141,7 @@ extension AllTest7ViewController
         
         let contentLayout = TGLinearLayout(.horz)
         contentLayout.tg_height.equal(.wrap)
-        contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        contentLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         contentLayout.tg_hspace = 5
         contentLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(contentLayout)
@@ -199,7 +199,7 @@ extension AllTest7ViewController
         
         let contentLayout = TGLinearLayout(.horz)
         contentLayout.tg_height.equal(.wrap)
-        contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        contentLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         contentLayout.tg_hspace = 5
         contentLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(contentLayout)
@@ -276,7 +276,7 @@ extension AllTest7ViewController
         
         let contentLayout = TGLinearLayout(.horz)
         contentLayout.tg_height.equal(.wrap)
-        contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        contentLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         contentLayout.tg_hspace = 20
         contentLayout.tg_shrinkType = .auto
         //为了实现左右两边文本的自动缩放调整，必须要将线性布局的属性设置.auto。当设置为.auto属性时，必要要满足当前子视图中只有2个子视图的宽度设置为等于自身内容，否则无效。这个属性用来实现左右2个子视图根据内容来占用最佳的空间的例子。
@@ -354,7 +354,7 @@ extension AllTest7ViewController
         let  subviewWidth: CGFloat = 60 //您可以修改这个宽度值，可以看出不管宽度设置多大都能完美的填充整个屏幕，因为系统会自动调整子视图之间的间距。
         let contentLayout = TGFlowLayout(.vert, arrangedCount:0)
         contentLayout.backgroundColor = CFTool.color(0)
-        contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        contentLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         contentLayout.tg_height.equal(.wrap)
         contentLayout.tg_vspace = 5 //设置流式布局里面子视图之间的垂直间距。
         contentLayout.tg_setSubviews(size: subviewWidth, minSpace: 5, maxSpace:10) //这里面水平间距用浮动间距，浮动间距设置为子视图固定宽度为60，最小的间距为5,最大间距为10。注意这里要求所有子视图的宽度都是60。
@@ -435,7 +435,7 @@ extension AllTest7ViewController
         
         let contentLayout = TGTableLayout(.vert)
         contentLayout.tg_height.equal(.wrap)
-        contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        contentLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         contentLayout.tg_hspace = 5
         contentLayout.tg_vspace = 5
         //设置行间距和列间距都为5.
@@ -457,7 +457,7 @@ extension AllTest7ViewController
         rootLayout.addSubview(tipLabel)
         let contentLayout = TGFlowLayout(.vert, arrangedCount: 0)
         contentLayout.tg_height.equal(.wrap)
-        contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        contentLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         contentLayout.tg_space = 5
         contentLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(contentLayout)
@@ -496,7 +496,7 @@ extension AllTest7ViewController
         contentLayout.backgroundColor = CFTool.color(0)
         contentLayout.tg_height.equal(.fill)
         contentLayout.tg_gravity = TGGravity.vert.fill
-        contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        contentLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         contentLayout.tg_space = 5
         scrollView.addSubview(contentLayout)
         
@@ -548,7 +548,7 @@ extension AllTest7ViewController
         contentLayout.tg_height.equal(.fill)
         contentLayout.tg_width.equal(.wrap).min(scrollView.tg_width) //默认水平线性布局的宽度是wrap的但是最小的宽度和父视图相等，这样对于一些大尺寸屏幕因为能够容纳内容而不会产生滚动。
         contentLayout.tg_gravity = TGGravity.vert.fill
-        contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        contentLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         contentLayout.tg_hspace = 5
         scrollView.addSubview(contentLayout)
       
@@ -607,7 +607,7 @@ extension AllTest7ViewController
         
         
         let contentLayout = TGLinearLayout(.horz)
-        contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        contentLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         contentLayout.tg_height.equal(60)
         contentLayout.tg_gravity = TGGravity.vert.center
         
@@ -681,7 +681,7 @@ extension AllTest7ViewController
         
         
         let contentLayout = TGLinearLayout(.horz)
-        contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        contentLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         contentLayout.tg_height.equal(60)
         contentLayout.tg_gravity = TGGravity.vert.center
         

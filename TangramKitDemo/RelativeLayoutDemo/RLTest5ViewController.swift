@@ -196,7 +196,7 @@ class RLTest5ViewController: UIViewController {
         let  containerLayout = TGRelativeLayout()
         containerLayout.tg_width.equal(.fill)
         containerLayout.tg_height.equal(150)
-        containerLayout.tg_padding = UIEdgeInsetsMake(6, 6, 6, 6)
+        containerLayout.tg_padding = UIEdgeInsets.init(top: 6, left: 6, bottom: 6, right: 6)
         containerLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(containerLayout)
         

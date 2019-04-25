@@ -73,7 +73,7 @@ extension FOLTest6ViewController
         
         contentLayout.tg_leading.equal(0)
         contentLayout.tg_trailing.equal(0)
-        contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5);
+        contentLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5);
         contentLayout.tg_hspace = 5
         contentLayout.tg_vspace = 5
         rootLayout.addSubview(contentLayout)
@@ -144,7 +144,7 @@ extension FOLTest6ViewController
         contentLayout.tg_height.equal(.wrap)
         contentLayout.tg_leading.equal(0)
         contentLayout.tg_trailing.equal(0)
-        contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5);
+        contentLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5);
         rootLayout.addSubview(contentLayout)
         
         let headImageView = UIImageView(image:UIImage(named:"minions4"))
@@ -234,7 +234,7 @@ extension FOLTest6ViewController
         contentLayout.tg_height.equal(.wrap)
         contentLayout.tg_leading.equal(0)
         contentLayout.tg_trailing.equal(0)
-        contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5);
+        contentLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5);
         rootLayout.addSubview(contentLayout)
         
         
@@ -300,7 +300,7 @@ extension FOLTest6ViewController
         contentLayout.tg_height.equal(.wrap)
         contentLayout.tg_leading.equal(0)
         contentLayout.tg_trailing.equal(0)
-        contentLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        contentLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         rootLayout.addSubview(contentLayout)
         
         let headImageView = UIImageView(image:UIImage(named:"minions4"))

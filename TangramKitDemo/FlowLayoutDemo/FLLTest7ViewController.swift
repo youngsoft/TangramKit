@@ -69,7 +69,7 @@ class FLLTest7ViewController: UIViewController {
         flowLayout1.tg_width.equal(.wrap).min(scrollView1.tg_width) //虽然尺寸是包裹的，但是最小宽度不能小于父视图的宽度
         flowLayout1.tg_autoArrange = true  //通过将流式布局的autoArrange属性设置为YES可以实现里面的子视图进行紧凑的自动排列。
         flowLayout1.tg_space = 10;
-        flowLayout1.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10);
+        flowLayout1.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10);
         scrollView1.addSubview(flowLayout1)
         self.createItems(titles, in:flowLayout1)
         
@@ -85,7 +85,7 @@ class FLLTest7ViewController: UIViewController {
         flowLayout2.tg_width.equal(.wrap).min(scrollView2.tg_width) //虽然尺寸是包裹的，但是最小宽度不能小于父视图的宽度
         flowLayout2.tg_arrangedGravity = TGGravity.horz.between //通过将水平流式布局的tg_arrangeGravity属性设置为TGGravity.vert.between，我们将得到里面的子视图在每行都会被紧凑的排列。大家可以看到和上面的将tg_autoArrange设置为true的不同的效果。
         flowLayout2.tg_space = 10;
-        flowLayout2.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10);
+        flowLayout2.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10);
         scrollView2.addSubview(flowLayout2)
         self.createItems(titles, in:flowLayout2)
 
@@ -102,7 +102,7 @@ class FLLTest7ViewController: UIViewController {
         flowLayout3.tg_gravity = TGGravity.horz.fill //均分宽度。
         flowLayout3.tg_autoArrange = true  //通过将流式布局的autoArrange属性设置为YES可以实现里面的子视图进行紧凑的自动排列。
         flowLayout3.tg_space = 10;
-        flowLayout3.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
+        flowLayout3.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
         scrollView3.addSubview(flowLayout3)
         self.createItems(titles, in:flowLayout3)
 
@@ -119,7 +119,7 @@ class FLLTest7ViewController: UIViewController {
         flowLayout4.tg_gravity = TGGravity.horz.fill //均分宽度。
         flowLayout4.tg_arrangedGravity = TGGravity.vert.between
         flowLayout4.tg_space = 10
-        flowLayout4.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
+        flowLayout4.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
         scrollView4.addSubview(flowLayout4)
         self.createItems(titles, in:flowLayout4)
 

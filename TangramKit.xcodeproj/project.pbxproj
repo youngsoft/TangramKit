@@ -463,7 +463,7 @@
 					18270C231C954B3C00CBCC92 = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = BGQ8WB468K;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1020;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -479,7 +479,7 @@
 			};
 			buildConfigurationList = 18270C1F1C954B3C00CBCC92 /* Build configuration list for PBXProject "TangramKit" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -781,8 +781,7 @@
 				PRODUCT_NAME = TangramKitDemo;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -802,8 +801,7 @@
 				PRODUCT_NAME = TangramKitDemo;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

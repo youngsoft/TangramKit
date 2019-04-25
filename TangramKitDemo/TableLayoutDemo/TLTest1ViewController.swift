@@ -103,7 +103,7 @@ class TLTest1ViewController: UIViewController {
         //第五行剩余高度均分。每列的宽度均分,
         let row4 = tableLayout.tg_addRow(size:TGLayoutSize.average, colSize:TGLayoutSize.average)
         //可以设置行的属性.比如padding, 线条颜色，
-        row4.tg_padding = UIEdgeInsetsMake(3, 3, 3, 3);
+        row4.tg_padding = UIEdgeInsets.init(top: 3, left: 3, bottom: 3, right: 3);
         row4.tg_topBorderline = TGBorderline(color: UIColor.black, thick: 2)
         row4.backgroundColor = UIColor(white: 0.5, alpha: 1)
         

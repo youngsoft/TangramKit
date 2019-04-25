@@ -67,7 +67,7 @@ extension FLLTest4ViewController {
         flowLayout.tg_height.equal(.wrap)
         flowLayout.tg_gravity = TGGravity.horz.center  //所有子视图整体水平居中
         flowLayout.tg_arrangedGravity = TGGravity.vert.center  //每行子视图垂直居中对齐。您可以这里尝试设置为：TGGravity.vert.top, TGGravity.vert.bottom的效果。
-        flowLayout.tg_padding = UIEdgeInsetsMake(20, 20, 20, 20)  //四周内边距设置为20
+        flowLayout.tg_padding = UIEdgeInsets.init(top: 20, left: 20, bottom: 20, right: 20)  //四周内边距设置为20
         rootLayout.addSubview(flowLayout)
         
         //the first line: head image
@@ -166,7 +166,7 @@ extension FLLTest4ViewController {
         flowLayout.tg_height.equal(240)
         flowLayout.tg_gravity = [TGGravity.horz.center,TGGravity.vert.bottom]  //子视图整体垂直底部对齐，水平居中对齐。
         flowLayout.tg_arrangedGravity = TGGravity.horz.center //每列子视图水平居中对齐。
-        flowLayout.tg_padding = UIEdgeInsetsMake(10, 10, 5, 10)
+        flowLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 5, right: 10)
         rootLayout.addSubview(flowLayout)
 
         //the first col
@@ -215,7 +215,7 @@ extension FLLTest4ViewController {
         flowLayout.backgroundColor = CFTool.color(0)
         flowLayout.tg_height.equal(.wrap)
         flowLayout.tg_space = 10
-        flowLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
+        flowLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
         rootLayout.addSubview(flowLayout)
         
         //第一行占据全部
@@ -270,7 +270,7 @@ extension FLLTest4ViewController {
         flowLayout.tg_height.equal(.wrap)
         flowLayout.tg_space = 10
         flowLayout.tg_arrangedGravity = TGGravity.vert.center
-        flowLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
+        flowLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
         
         
         //边界线：下面的边界线往上偏移45，头部缩进10，尾部缩进30

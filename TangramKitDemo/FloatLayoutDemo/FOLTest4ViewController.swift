@@ -57,7 +57,7 @@ class FOLTest4ViewController: UIViewController {
         contentLayout.backgroundColor = CFTool.color(0)
         contentLayout.tg_gravity = TGGravity.horz.fill
         contentLayout.tg_vspace = 10
-        contentLayout.tg_padding = UIEdgeInsetsMake(10, 0, 10, 0);
+        contentLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 0, bottom: 10, right: 0);
         rootLayout.addSubview(contentLayout)
         self.contentLayout = contentLayout
         
@@ -85,7 +85,7 @@ extension FOLTest4ViewController
         {
             let floatLayout = TGFloatLayout(.vert)
             floatLayout.backgroundColor = .white
-            floatLayout.tg_padding = UIEdgeInsetsMake(20, 10, 20, 10);
+            floatLayout.tg_padding = UIEdgeInsets.init(top: 20, left: 10, bottom: 20, right: 10);
             floatLayout.tg_height.equal(.wrap)
             floatLayout.tg_hspace = 30 //设置浮动布局里面子视图之间的水平间距。
             floatLayout.tg_vspace = 10 //设置浮动布局里面子视图之间的垂直间距。
@@ -168,7 +168,7 @@ extension FOLTest4ViewController
             let floatLayout = TGFloatLayout(.vert)
             
             floatLayout.backgroundColor = UIColor.white
-            floatLayout.tg_padding = UIEdgeInsetsMake(20, 10, 20, 10);
+            floatLayout.tg_padding = UIEdgeInsets.init(top: 20, left: 10, bottom: 20, right: 10);
             floatLayout.tg_height.equal(.wrap)
             floatLayout.tg_vspace = 10 //设置浮动布局里面子视图之间的垂直间距。
             floatLayout.tg_setSubviews(size:FOLTest4ViewController.sTagWidth, minSpace: 8)
@@ -245,7 +245,7 @@ extension FOLTest4ViewController
     func createActionLayout() -> UIView
     {
         let actionLayout = TGFloatLayout(.vert)
-        actionLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5);
+        actionLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5);
         actionLayout.tg_hspace = 5;
         
         actionLayout.tg_height.equal(.wrap)

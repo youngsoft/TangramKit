@@ -67,7 +67,7 @@ class FLTest1ViewController: UIViewController {
         let frameLayout = TGFrameLayout()
         frameLayout.backgroundColor = .white
         frameLayout.tg_margin(TGLayoutPos.tg_safeAreaMargin)
-        frameLayout.tg_padding = UIEdgeInsetsMake(20, 20, 20, 20)
+        frameLayout.tg_padding = UIEdgeInsets.init(top: 20, left: 20, bottom: 20, right: 20)
         self.view.addSubview(frameLayout)
         
         //全部填充。 all fill subview

@@ -214,7 +214,7 @@ extension FOLTest7ViewController
     func createHorzFloatLayout(_ rootLayout:TGLinearLayout) -> TGFloatLayout {
         
         let floatLayout = TGFloatLayout(.horz)
-        floatLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
+        floatLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
         floatLayout.tg_space = 10
         
         let names = ["minions1","minions3","minions2","minions4","p4-23","p4-11"]

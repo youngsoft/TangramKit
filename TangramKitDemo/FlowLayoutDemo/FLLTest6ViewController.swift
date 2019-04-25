@@ -33,7 +33,7 @@ class FLLTest6ViewController: UIViewController {
         rootLayout.tg_pagedCount = 9
         rootLayout.tg_height.equal(.wrap)  //上下滚动，每页9个。
         rootLayout.tg_space = 10
-        rootLayout.tg_padding = UIEdgeInsetsMake(10, 5, 10, 5)
+        rootLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 5, bottom: 10, right: 5)
         rootLayout.tg_leading.equal(0).isActive = true //active属性用来表示是否让这个属性设置生效。
         rootLayout.tg_trailing.equal(0).isActive = true  //这里设置左右的边距是0并生效，表示宽度和父视图相等。
         rootLayout.tg_top.equal(0).isActive = false
@@ -84,7 +84,7 @@ class FLLTest6ViewController: UIViewController {
             //恢复为多行多列
             self.rootLayout.tg_arrangedCount = 3
             self.rootLayout.tg_pagedCount = 9
-            self.rootLayout.tg_padding = UIEdgeInsetsMake(10, 5, 10, 5);
+            self.rootLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 5, bottom: 10, right: 5);
             self.rootLayout.tg_space = 10
             
         }

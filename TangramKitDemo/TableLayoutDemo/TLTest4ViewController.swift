@@ -33,7 +33,7 @@ class TLTest4ViewController: UIViewController {
         
         let scrollView = UIScrollView()
         scrollView.backgroundColor = .white
-        scrollView.contentInset = UIEdgeInsetsMake(0, 0, 10, 0)
+        scrollView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 10, right: 0)
         self.view = scrollView
         
         

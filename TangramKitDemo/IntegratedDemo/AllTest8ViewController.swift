@@ -101,7 +101,7 @@ class AllTest8ViewController: UIViewController {
         floatLayout.tg_space = 10
         floatLayout.tg_leading.equal(10)
         floatLayout.tg_trailing.equal(10) //同时设定了左边和右边边距，布局视图的宽度就决定了。
-        floatLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10);  //设置内边距。
+        floatLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10);  //设置内边距。
         floatLayout.tg_top.equal(60)
         floatLayout.tg_bottom.equal(10) //底部边距为10，这样同样设置了顶部和底部边距后布局的高度就决定了。
         floatLayout.tg_adjustScrollViewContentSizeMode = .no  //布局视图不控制滚动视图的contentSize。
@@ -159,7 +159,7 @@ class AllTest8ViewController: UIViewController {
         layout.backgroundColor = CFTool.color(14)
         layout.layer.cornerRadius = 5
         layout.tg_height.equal(.wrap)
-        layout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        layout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         //设置布局视图的内边距。
         layout.tg_vspace = 5
         //设置视图之间的间距，这样子视图就不再需要单独设置间距了。

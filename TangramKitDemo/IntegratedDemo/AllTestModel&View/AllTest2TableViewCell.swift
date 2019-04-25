@@ -18,7 +18,7 @@ class AllTest2TableViewCell: UITableViewCell {
     weak var descLabel:UILabel!
     weak var priceLabel:UILabel!
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?)
     {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         

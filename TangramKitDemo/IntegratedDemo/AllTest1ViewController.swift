@@ -82,7 +82,7 @@ class AllTest1ViewController: UITableViewController {
         super.viewWillAppear(animated)
         
         self.displayLink = CADisplayLink(target: self, selector: #selector(tick))
-        self.displayLink.add(to:.main, forMode: .commonModes)
+        self.displayLink.add(to:.main, forMode: RunLoop.Mode.common)
         
     }
     
@@ -108,7 +108,7 @@ class AllTest1ViewController: UITableViewController {
         self.tableView.estimatedRowHeight = 60
         
         //设置所有cell的高度为高度自适应，如果cell高度是动态的请这么设置。 如果不同的cell有差异那么可以通过实现协议方法tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath)来定制化处理。
-        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.rowHeight = UITableView.automaticDimension
         
         //不仅是UITableviewCell的高度可以自适应，sectionHeader以及sectionFooter也一样的可以实现自适应高度，您同样的可以用相似的方法来进行处理。
         
@@ -151,7 +151,7 @@ class AllTest1ViewController: UITableViewController {
     func createTableHeaderView() {
         //这个例子用来构建一个自适应高度的头部布局视图。
         let tableHeaderViewLayout = TGLinearLayout(.vert)
-        tableHeaderViewLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
+        tableHeaderViewLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
         tableHeaderViewLayout.frame = CGRect(x: 0, y: 0, width: self.tableView.bounds.width, height: 0) //这里没有设置高度，但设置了明确的宽度
         //高度不确定可以设置为0。尽量不要在代码中使用kScreenWidth,kScreenHeight，SCREEN_WIDTH。之类这样的宏来设定视图的宽度和高度。要充分利用Tangram的特性，减少常数的使用。
         tableHeaderViewLayout.tg_width.equal(.fill) //这里注意设置宽度和父布局保持一致。
@@ -203,7 +203,7 @@ class AllTest1ViewController: UITableViewController {
     func createTableFooterView() {
         //这个例子用来构建一个固定高度的尾部布局视图。
         let tableFooterViewLayout = TGLinearLayout(.vert)
-        tableFooterViewLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
+        tableFooterViewLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
         tableFooterViewLayout.frame = CGRect(x: 0, y: 0, width: self.tableView.bounds.width, height: 80) ////这里明确设定高度。
         tableFooterViewLayout.tg_width.equal(.fill) //这里注意设置宽度和父布局保持一致。
         tableFooterViewLayout.backgroundColor = CFTool.color(6)

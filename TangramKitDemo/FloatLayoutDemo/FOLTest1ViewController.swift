@@ -143,7 +143,7 @@ class FOLTest1ViewController: UIViewController {
         let floatLayout = TGFloatLayout(.vert)
         floatLayout.backgroundColor = CFTool.color(0)
         floatLayout.tg_clearFloat = true  //换行
-        floatLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        floatLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         floatLayout.tg_width.equal(100%)   //高度和宽度都占用剩余空间。
         floatLayout.tg_height.equal(.fill)
         rootLayout.addSubview(floatLayout)
@@ -168,7 +168,7 @@ class FOLTest1ViewController: UIViewController {
         }
         
         let tagButton = UIButton(frame: CGRect(x: 0,y: 0,width: CGFloat(atof(arr[0])),height: CGFloat(atof(arr[1]))))
-        tagButton.setTitle(text, for: UIControlState())
+        tagButton.setTitle(text, for: UIControl.State())
         tagButton.titleLabel?.adjustsFontSizeToFitWidth = true
         tagButton.backgroundColor = UIColor(red: CGFloat(arc4random_uniform(256)) / 255.0, green: CGFloat(arc4random_uniform(256)) / 255.0, blue: CGFloat(arc4random_uniform(256)) / 255.0, alpha: 1)
         

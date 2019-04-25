@@ -223,7 +223,7 @@ extension LLTest3ViewController
         actionLayout.tg_height.equal(.wrap)
         actionLayout.tg_hspace = 5
         actionLayout.tg_vspace = 5
-        actionLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        actionLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         contentLayout.addSubview(actionLayout)
 
         for i:Int in 0..<actions.count

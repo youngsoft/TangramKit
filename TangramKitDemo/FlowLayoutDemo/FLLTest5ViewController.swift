@@ -103,7 +103,7 @@ extension FLLTest5ViewController {
         
         flowLayout.tg_hspace = 10
         flowLayout.tg_vspace = 10  //设置子视图的水平和垂直间距。
-        flowLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5) //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
+        flowLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5) //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
         scrollView.addSubview(flowLayout)
         flowLayout.backgroundColor = CFTool.color(0)
         
@@ -148,7 +148,7 @@ extension FLLTest5ViewController {
         
         flowLayout.tg_hspace = 10
         flowLayout.tg_vspace = 10  //设置子视图的水平和垂直间距。
-        flowLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5) //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
+        flowLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5) //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
         scrollView.addSubview(flowLayout)
         flowLayout.backgroundColor = CFTool.color(0)
         
@@ -193,7 +193,7 @@ extension FLLTest5ViewController {
         
         flowLayout.tg_hspace = 10
         flowLayout.tg_vspace = 10  //设置子视图的水平和垂直间距。
-        flowLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5) //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
+        flowLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5) //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
         scrollView.addSubview(flowLayout)
         flowLayout.backgroundColor = CFTool.color(0)
         
@@ -240,7 +240,7 @@ extension FLLTest5ViewController {
         
         flowLayout.tg_hspace = 10
         flowLayout.tg_vspace = 10  //设置子视图的水平和垂直间距。
-        flowLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5) //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
+        flowLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5) //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
         scrollView.addSubview(flowLayout)
         flowLayout.backgroundColor = CFTool.color(0)
         

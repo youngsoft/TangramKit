@@ -57,7 +57,7 @@ class FLLTest3ViewController: UIViewController {
         
         let flowLayout = TGFlowLayout.init(.vert, arrangedCount: 4)
         flowLayout.backgroundColor = CFTool.color(0)
-        flowLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
+        flowLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
         flowLayout.tg_space = 10  //流式布局里面的子视图的水平和垂直间距设置为10
         flowLayout.tg_gravity = TGGravity.horz.fill  //流式布局里面的子视图的宽度将平均分配。
         flowLayout.tg_height.equal(.fill) //占用剩余的高度。
@@ -150,7 +150,7 @@ extension FLLTest3ViewController {
             self.flowLayout.tg_layoutAnimationWithDuration(0.2)
             
             //得到要移动的视图的位置索引。
-            self.currentIndex = self.flowLayout.subviews.index(of: sbv2)!
+            self.currentIndex = self.flowLayout.subviews.firstIndex(of: sbv2)!
             if self.oldIndex != self.currentIndex {
                 self.oldIndex = self.currentIndex
             }
@@ -175,7 +175,7 @@ extension FLLTest3ViewController {
         //在进行sender的位置调整时，要把sender移动到最顶端，也就子视图数组的的最后，这时候布局视图不能布局，因此要把autoresizesSubviews设置为false，同时因为要自定义
         //sender的位置，因此要把tg_useFrame设置为true，并且恢复tg_noLayout为false。
 
-        self.flowLayout.bringSubview(toFront: sender)   //把拖动的子视图放在最后，这样这个子视图在移动时就会在所有兄弟视图的上面。
+        self.flowLayout.bringSubviewToFront(sender)   //把拖动的子视图放在最后，这样这个子视图在移动时就会在所有兄弟视图的上面。
         self.flowLayout.autoresizesSubviews = false //在拖动时不要让布局视图激发布局
         sender.tg_useFrame = true //因为拖动时，拖动的控件需要自己确定位置，不能被布局约束，因此必须要将useFrame设置为YES下面的center设置才会有效。
         sender.tg_noLayout = false //因为useFrame设置为了YES所有这里可以直接调整center，从而实现了位置的自定义设置。
@@ -185,7 +185,7 @@ extension FLLTest3ViewController {
     @objc func handleTouchDown(sender: UIButton, event: UIEvent)
     {
         //在按下时记录当前要拖动的控件的索引。
-        self.oldIndex = self.flowLayout.subviews.index(of: sender)!
+        self.oldIndex = self.flowLayout.subviews.firstIndex(of: sender)!
         self.currentIndex = self.oldIndex
         self.hasDrag = false
     }

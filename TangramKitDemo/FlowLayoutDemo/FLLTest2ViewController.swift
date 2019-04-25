@@ -95,7 +95,7 @@ class FLLTest2ViewController: UIViewController {
         let flowLayout = TGFlowLayout()
         flowLayout.backgroundColor = CFTool.color(0)
         flowLayout.tg_space = 10
-        flowLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
+        flowLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
         flowLayout.tg_width.equal(.fill)
         flowLayout.tg_height.equal(.fill)
         rootLayout.addSubview(flowLayout)

@@ -402,7 +402,7 @@ extension LLTest2ViewController
         baselineLayout.layer.borderColor = UIColor.lightGray.cgColor
         baselineLayout.layer.borderWidth = 0.5
         baselineLayout.layer.cornerRadius = 4
-        baselineLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        baselineLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         baselineLayout.tg_top.equal(20)
         baselineLayout.tg_horzMargin(0)
         baselineLayout.tg_height.equal(50)

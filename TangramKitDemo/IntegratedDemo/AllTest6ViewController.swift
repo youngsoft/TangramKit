@@ -44,7 +44,7 @@ class AllTest6ViewController: UIViewController {
         let menuLayout = TGFlowLayout(.vert, arrangedCount:3)
         menuLayout.tg_gravity = TGGravity.fill
         menuLayout.tg_height.equal(.wrap)
-        menuLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
+        menuLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
         menuLayout.tg_space = 10
         rootLayout.addSubview(menuLayout)
         
@@ -81,7 +81,7 @@ class AllTest6ViewController: UIViewController {
         contentLayout.backgroundColor = CFTool.color(0)
         contentLayout.tg_height.equal(.fill)
         contentLayout.tg_width.equal(.fill)
-        contentLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
+        contentLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
         rootLayout.addSubview(contentLayout)
         
         

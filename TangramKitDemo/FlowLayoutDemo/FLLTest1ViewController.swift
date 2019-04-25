@@ -44,7 +44,7 @@ class FLLTest1ViewController: UIViewController {
         let actionLayout = TGFlowLayout(.vert, arrangedCount: 2)
         actionLayout.tg_height.equal(.wrap)
         actionLayout.tg_gravity = TGGravity.horz.fill //所有子视图水平填充，也就是所有子视图的宽度相等。
-        actionLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        actionLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         actionLayout.tg_hspace = 5
         actionLayout.tg_vspace = 5
         rootLayout.addSubview(actionLayout)
@@ -82,7 +82,7 @@ class FLLTest1ViewController: UIViewController {
         flowLayout.backgroundColor = CFTool.color(0)
         flowLayout.tg_width.equal(800)
         flowLayout.tg_height.equal(800)
-        flowLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        flowLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         flowLayout.tg_vspace = 5
         flowLayout.tg_hspace = 5
         scrollView.addSubview(flowLayout)
@@ -109,7 +109,7 @@ extension FLLTest1ViewController
     func createActionButton(_ title:String,action:Selector) ->UIButton
     {
         let button = UIButton(type:.system)
-        button.setTitle(title, for: UIControlState())
+        button.setTitle(title, for: UIControl.State())
         button.titleLabel?.font = CFTool.font(14)
         button.layer.borderColor = UIColor.lightGray.cgColor
         button.layer.borderWidth = 0.5

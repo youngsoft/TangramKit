@@ -48,7 +48,7 @@ class TLTest2ViewController: UIViewController {
         let rootLayout = TGTableLayout(.horz)
         rootLayout.tg_hspace = 5
         rootLayout.tg_vspace = 10  //指定表格中的行间距和列间距。
-        rootLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
+        rootLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         rootLayout.tg_width.equal(.fill)
         rootLayout.tg_height.equal(.wrap)
         scrollView.addSubview(rootLayout)

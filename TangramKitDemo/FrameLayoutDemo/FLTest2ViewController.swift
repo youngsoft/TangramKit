@@ -55,7 +55,7 @@ class FLTest2ViewController: UIViewController {
          */
         
         let backImageView = UIImageView(image: UIImage(named: "bk1"))
-        backImageView.contentMode = UIViewContentMode.scaleToFill
+        backImageView.contentMode = UIView.ContentMode.scaleToFill
         backImageView.tg_height.equal(50%)
         //您也可以采用如下的方法来设置高度：
         //backImageView.tg_height.equal(rootLayout, multiple:0.5)

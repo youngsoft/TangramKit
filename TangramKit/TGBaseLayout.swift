@@ -693,9 +693,6 @@ public class TGBorderline
     
 }
 
-@available(*, deprecated:1.0.5, message: "use TGBorderline to instead", renamed:"TGBorderline")
-public typealias TGLayoutBorderline = TGBorderline
-
 /**
  布局视图基类，基类不支持实例化对象。在编程时我们经常会用到一些视图，这种视图只是负责将里面的子视图按照某种规则进行排列和布局，而别无其他的作用。因此我们称这种视图为容器视图或者称为布局视图。
 
@@ -1078,22 +1075,6 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
      在布局视图进行布局时是否调用基类的layoutSubviews方法，默认设置为false。
      */
     public var tg_priorAutoresizingMask:Bool = false
-    
-    /**
-     这个属性在新版本将失效并且无任何意义了。如果想让子视图隐藏时是否继续占据位置则请参考使用子视图的tg_visibility属性来设置。
-     */
-    @available(*, deprecated:1.0.6, message: "this property was invalid, please use subview's tg_visibility to instead")
-    public var tg_layoutHiddenSubviews:Bool
-        {
-        get
-        {
-             return false
-        }
-        set
-        {
-           print("tg_layoutHiddenSubviews is invalid please use subview's tg_visibility to instead")
-        }
-    }
     
     /// 返回当前布局视图是否正在执行布局。
     public private(set) var tg_isLayouting = false

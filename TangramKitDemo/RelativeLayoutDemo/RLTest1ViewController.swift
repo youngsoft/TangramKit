@@ -41,7 +41,7 @@ class RLTest1ViewController: UIViewController {
 
         
         let rootLayout: TGRelativeLayout = TGRelativeLayout()
-        rootLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
+        rootLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
         rootLayout.backgroundColor = .white
         
         rootLayout.tg_insetsPaddingFromSafeArea = [.top, .left, .right]  //默认情况下底部的安全区会和布局视图的底部padding进行叠加，当这样设置后底部安全区将不会叠加到底部的padding上去。您可以注释这句代码看看效果。

@@ -70,7 +70,7 @@ class AllTest3ViewController: UIViewController {
         contentLayout.tg_width.equal(.fill)
         contentLayout.tg_height.equal(.wrap)
         contentLayout.tg_gravity = TGGravity.horz.fill; //子视图里面的内容的宽度跟布局视图相等，这样子视图就不需要设置宽度了。
-        contentLayout.tg_padding = UIEdgeInsetsMake(10, 10, 60, 10) //这里bottom设置为60的原因是底部有一个50高度的按钮，因此保留这部分空间。
+        contentLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 60, right: 10) //这里bottom设置为60的原因是底部有一个50高度的按钮，因此保留这部分空间。
         scrollView.addSubview(contentLayout)
         
         //头部布局。
@@ -285,7 +285,7 @@ extension AllTest3ViewController
         let testLayout = TGFlowLayout(.vert, arrangedCount:3)
         testLayout.backgroundColor = .white
         testLayout.tg_gravity = TGGravity.horz.fill   //尺寸相等
-        testLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
+        testLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
         testLayout.tg_space = 10
         testLayout.tg_height.equal(50)
         testLayout.clipsToBounds = true
@@ -310,7 +310,7 @@ extension AllTest3ViewController
         let testLayout = TGLinearLayout(.vert)
         testLayout.backgroundColor = .white
         testLayout.tg_height.equal(.wrap)
-        testLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
+        testLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
         testLayout.tg_top.equal(10)
         contentLayout.addSubview(testLayout)
         
@@ -528,7 +528,7 @@ extension AllTest3ViewController
         containerLayout.layer.shadowColor = CFTool.color(4).cgColor
         containerLayout.tg_width.equal(.fill)
         containerLayout.tg_height.equal(.wrap);
-        containerLayout.tg_padding = UIEdgeInsetsMake(10, 10, 10, 10)
+        containerLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
         containerLayout.tg_gravity = TGGravity.horz.fill
         menuLayout.addSubview(containerLayout)
         self.popmenuContainerLayout = containerLayout
