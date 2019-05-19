@@ -1534,7 +1534,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                     
                     if (heightConstraint != nil)
                     {
-                        var dependHeight:CGFloat = UIView.noIntrinsicMetric
+                        var dependHeight:CGFloat = -1
                         if let t = heightConstraint.secondItem as? UIView
                         {
                             let dependViewRect = t.bounds
@@ -1548,7 +1548,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                             }
                             else
                             {
-                                dependHeight = UIView.noIntrinsicMetric
+                                dependHeight = -1
                             }
                         }
                         else if heightConstraint.secondItem == nil
@@ -1560,7 +1560,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                             
                         }
                         
-                        if dependHeight != UIView.noIntrinsicMetric
+                        if dependHeight != -1
                         {
                             dependHeight *= heightConstraint.multiplier
                             dependHeight += heightConstraint.constant
@@ -1596,7 +1596,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                     
                     if (widthConstraint != nil)
                     {
-                        var dependWidth:CGFloat = UIView.noIntrinsicMetric
+                        var dependWidth:CGFloat = -1
                         if let t = widthConstraint.secondItem as? UIView
                         {
                             let dependViewRect = t.bounds
@@ -1610,7 +1610,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                             }
                             else
                             {
-                                dependWidth = UIView.noIntrinsicMetric
+                                dependWidth = -1
                             }
                         }
                         else if widthConstraint.secondItem == nil
@@ -1622,7 +1622,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                             
                         }
                         
-                        if dependWidth != UIView.noIntrinsicMetric
+                        if dependWidth != -1
                         {
                             dependWidth *= widthConstraint.multiplier
                             dependWidth += widthConstraint.constant
