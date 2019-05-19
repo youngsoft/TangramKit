@@ -115,7 +115,8 @@ class AllTest1ViewController: UITableViewController {
         self.tableView.separatorStyle = .none
         self.tableView.register(AllTest1TableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "headerfooterview")
         self.tableView.register(AllTest1TableViewCell.self, forCellReuseIdentifier: "alltest1_cell")
-        
+        self.tableView.register(AllTest1TableViewCellForAutoLayout.self, forCellReuseIdentifier: "alltest1_cell_forautolayout")
+
         //初始化所有图片为未隐藏状态
         for _ in 0 ..< self.datas.count
         {
@@ -274,22 +275,25 @@ class AllTest1ViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        
-        let cell:AllTest1TableViewCell = tableView.dequeueReusableCell(withIdentifier: "alltest1_cell", for:indexPath) as! AllTest1TableViewCell
+        let identifier:[String] = ["alltest1_cell", "alltest1_cell_forautolayout"]
+    
+        let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: identifier[Int(arc4random_uniform(2))], for:indexPath)
         
         let model = self.datas[indexPath.row]
         
-        cell.setModel(model: model,isImageMessageHidden:self.imageHiddenFlags[indexPath.row])
+        let all1cell = cell as! AllTest1Cell
+        
+        all1cell.setModel(model: model,isImageMessageHidden:self.imageHiddenFlags[indexPath.row])
         
         //这里设置其他位置有间隔线而最后一行没有下划线。我们可以借助布局视图本身所提供的边界线来代替掉系统默认的cell之间的间隔线，因为布局视图的边界线所提供的能力要大于默认的间隔线。
         if (indexPath.row  == self.datas.count - 1)
         {
-            cell.rootLayout.tg_bottomBorderline = nil;
+            all1cell.rootLayout.tg_bottomBorderline = nil;
         }
         else
         {
             let bld = TGBorderline(color:UIColor.red)
-            cell.rootLayout.tg_bottomBorderline = bld;
+            all1cell.rootLayout.tg_bottomBorderline = bld;
         }
         
         

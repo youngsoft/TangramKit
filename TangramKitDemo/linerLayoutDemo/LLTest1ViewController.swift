@@ -137,6 +137,9 @@ class LLTest1ViewController: UIViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
+        let RTLBar = UIBarButtonItem(title: "RTL", style: .plain, target: self, action: #selector(RTLAction))
+        let LTRBar = UIBarButtonItem(title: "LTR", style: .plain, target: self, action: #selector(LTRAction))
+        self.navigationItem.rightBarButtonItems = [RTLBar, LTRBar]
     }
     
     override func didReceiveMemoryWarning() {
@@ -144,6 +147,15 @@ class LLTest1ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    @objc func RTLAction()
+    {
+        TGBaseLayout.tg_updateArabicUI(true, inWindow: self.view.window!)
+    }
+    
+    @objc func LTRAction()
+    {
+        TGBaseLayout.tg_updateArabicUI(false, inWindow: self.view.window!)
+    }
     
 }
 

@@ -54,7 +54,7 @@
 "❁1.Screen perfect fit - Demo1" = "❁1.界面的完美适配DEMO";
 "❁2.Screen perfect fit - Demo2" = "❁2.界面的完美适配DEMO2";
 "❁3.Subviews layout transform" = "❁3.布局内子视图的整体变换";
-
+"❁4.TangramKit & AutoLayout" = "❁4.TangramKit 和 AutoLayout的结合";
 //LLTest1ViewController
 "vertical(from top to bottom)" = "垂直布局(从上到下)";
 "left margin" = "左边边距";

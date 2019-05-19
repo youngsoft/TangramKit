@@ -1,5 +1,5 @@
 //
-//  AllTest1TableViewCell.swift
+//  AllTest1TableViewCellForAutoLayout.swift
 //  TangramKit
 //
 //  Created by apple on 16/8/23.
@@ -8,13 +8,9 @@
 
 import UIKit
 
-protocol AllTest1Cell {
-    var rootLayout:TGBaseLayout!{get}
-    func setModel(model: AllTest1DataModel, isImageMessageHidden: Bool)
-}
 
 
-class AllTest1TableViewCell: UITableViewCell,AllTest1Cell {
+class AllTest1TableViewCellForAutoLayout: UITableViewCell,AllTest1Cell {
     
     //对于需要动态评估高度的UITableViewCell来说可以把布局视图暴露出来。用于高度评估和边界线处理。以及事件处理的设置。
     fileprivate(set) var rootLayout:TGBaseLayout!
@@ -35,7 +31,20 @@ class AllTest1TableViewCell: UITableViewCell,AllTest1Cell {
         self.createLinearRootLayout()
       //  self.createRelativeRootLayout()
       //  self.createFloatRootLayout()
-    }
+        
+        if #available(iOS 9.0, *) {
+            //设置布局视图的autolayout约束，这里是用iOS9提供的约束设置方法，您也可以用低级版本设置，以及用masonry来进行设置。
+            self.rootLayout.leftAnchor.constraint(equalTo: self.contentView.leftAnchor).isActive = true
+            self.rootLayout.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
+            self.rootLayout.widthAnchor.constraint(equalTo: self.contentView.widthAnchor).isActive = true
+            
+            //这句代码很关键，表明self.contentView的高度随着子视图_rootLayout的高度自适应。
+            self.contentView.bottomAnchor.constraint(equalTo: self.rootLayout.bottomAnchor).isActive = true
+
+        } else {
+            // Fallback on earlier versions
+        }
+     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
@@ -53,25 +62,7 @@ class AllTest1TableViewCell: UITableViewCell,AllTest1Cell {
         
     }
     
-    
-    //iOS8以后您可以重载这个方法来动态的评估cell的高度，Autolayout内部是通过这个方法来评估高度的，因此如果用TangramKit实现的话就不需要调用基类的方法，而是调用根布局视图的sizeThatFits来评估获取动态的高度。
-    override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize
-    {
-        /*
-         通过布局视图的sizeThatFits方法能够评估出UITableViewCell的动态高度。sizeThatFits并不会进行布局而只是评估布局的尺寸。
-         因为cell的高度是自适应的，因此这里通过调用高度为wrap的布局视图的sizeThatFits来获取真实的高度。
-         */
-        
-        if #available(iOS 11.0, *) {
-            //如果你的界面要支持横屏的话，因为iPhoneX的横屏左右有44的安全区域，所以这里要减去左右的安全区域的值，来作为布局宽度尺寸的评估值。
-            //如果您的界面不需要支持横屏，或者延伸到安全区域外则不需要做这个特殊处理，而直接使用else部分的代码即可。
-            return self.rootLayout.sizeThatFits(CGSize(width:targetSize.width - self.safeAreaInsets.left - self.safeAreaInsets.right, height:targetSize.height))
-        } else {
-            // Fallback on earlier versions
-            return self.rootLayout.sizeThatFits(targetSize)  //如果使用系统自带的分割线，请记得将返回的高度height+1
-        }
-        
-    }
+
     
     func setModel(model: AllTest1DataModel, isImageMessageHidden: Bool)
     {
@@ -103,21 +94,16 @@ class AllTest1TableViewCell: UITableViewCell,AllTest1Cell {
 }
 
 //MARK: Layout Construction
-extension AllTest1TableViewCell
+extension AllTest1TableViewCellForAutoLayout
 {
     
     //用线性布局来实现UI界面
     func createLinearRootLayout()
     {
-        /*
-         在UITableViewCell中使用TGLayout中的布局时请将布局视图作为contentView的子视图。如果我们的UITableViewCell的高度是动态的，请务必在将布局视图添加到contentView之前进行如下设置：
-         self.rootLayout.tg_width.equal(.fill)
-         self.rootLayout.tg_height.equal(.wrap)
-         */
         self.rootLayout = TGLinearLayout(.horz)
+        self.rootLayout.translatesAutoresizingMaskIntoConstraints = false
         self.rootLayout.tg_topPadding = 5
         self.rootLayout.tg_bottomPadding = 5
-        self.rootLayout.tg_width.equal(.fill)
         self.rootLayout.tg_height.equal(.wrap)
         self.rootLayout.tg_cacheEstimatedRect = true //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
         self.contentView.addSubview(self.rootLayout)
@@ -168,15 +154,11 @@ extension AllTest1TableViewCell
     //用相对布局来实现UI界面
     func createRelativeRootLayout() {
         
-        /*
-         在UITableViewCell中使用TGLayout中的布局时请将布局视图作为contentView的子视图。如果我们的UITableViewCell的高度是动态的，请务必在将布局视图添加到contentView之前进行如下设置：
-         self.rootLayout.tg_width.equal(.fill)
-         self.rootLayout.tg_height.equal(.wrap)
-         */
+       
         self.rootLayout = TGRelativeLayout()
+        self.rootLayout.translatesAutoresizingMaskIntoConstraints = false
         self.rootLayout.tg_topPadding = 5
         self.rootLayout.tg_bottomPadding = 5
-        self.rootLayout.tg_width.equal(.fill)
         self.rootLayout.tg_height.equal(.wrap)
         self.rootLayout.tg_cacheEstimatedRect = true //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
         self.contentView.addSubview(self.rootLayout)
@@ -217,15 +199,11 @@ extension AllTest1TableViewCell
     //用浮动布局来实现UI界面
     func createFloatRootLayout()
     {
-        /*
-         在UITableViewCell中使用TGLayout中的布局时请将布局视图作为contentView的子视图。如果我们的UITableViewCell的高度是动态的，请务必在将布局视图添加到contentView之前进行如下设置：
-         self.rootLayout.tg_width.equal(.fill)
-         self.rootLayout.tg_height.equal(.wrap)
-         */
+        
         self.rootLayout = TGFloatLayout(.vert)
+        self.rootLayout.translatesAutoresizingMaskIntoConstraints = false
         self.rootLayout.tg_topPadding = 5
         self.rootLayout.tg_bottomPadding = 5
-        self.rootLayout.tg_width.equal(.fill)
         self.rootLayout.tg_height.equal(.wrap)
         self.rootLayout.tg_cacheEstimatedRect = true //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
         self.contentView.addSubview(self.rootLayout)

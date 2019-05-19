@@ -202,6 +202,9 @@ class ViewController: UITableViewController {
         demoVCList8.append(["title":NSLocalizedString("❁3.Subviews layout transform",comment:""),
                             "class":AllTest9ViewController.self]
         )
+        demoVCList8.append(["title":NSLocalizedString("❁4.TangramKit & AutoLayout",comment:""),
+        "class":AllTest10ViewController.self]
+        )
         
         
         //type list

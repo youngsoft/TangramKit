@@ -60,8 +60,17 @@ open class TGRelativeLayout: TGBaseLayout,TGRelativeLayoutViewSizeClass {
                 
                 if isEstimate && (sbvsc.isSomeSizeWrap)
                 {
+                    var sz = sbvtgFrame.frame.size
+                    if sz.width == CGFloat.greatestFiniteMagnitude
+                    {
+                        sz.width = 0
+                    }
+                    if sz.height == CGFloat.greatestFiniteMagnitude
+                    {
+                        sz.height = 0
+                    }
                     
-                    _ = sbvl.tg_sizeThatFits(sbvtgFrame.frame.size, inSizeClass:type)
+                    _ = sbvl.tg_sizeThatFits(sz, inSizeClass:type)
                     
                     sbvtgFrame.leading = CGFloat.greatestFiniteMagnitude
                     sbvtgFrame.trailing = CGFloat.greatestFiniteMagnitude

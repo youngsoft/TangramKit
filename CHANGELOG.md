@@ -3,6 +3,16 @@
 
 ---
 
+
+## [V1.4.0](https://github.com/youngsoft/TangramKit/releases/tag/1.4.0)(2019/05/19)
+#### Added
+1. 添加了对TangramKit的尺寸自适应和AutoLayout结合的能力。AutoLayout能使用和UILabel一样的TangramKit布局视图中的高度和宽度自适应的设置。具体需求见[issue#79](https://github.com/youngsoft/MyLinearLayout/issues/79)。这个问题的解决得到简化处理。新版本的能力让UITableViewCell的高度自适应的能力得到简化。具体的代码演示见[AllTest1ViewController](https://github.com/youngsoft/TangramKit/blob/master/TangramKitDemo/IntegratedDemo/AllTest1ViewController.swift)，以及[AllTest10ViewController](https://github.com/youngsoft/TangramKit/blob/master/TangramKitDemo/IntegratedDemo/AllTest10ViewController.swift)中的详细介绍。
+
+2.  添加了对RTL设置的即时生效的能力，您可通过方法`public static func tg_updateArabicUI(_ isArabic:Bool, inWindow window:UIWindow)`来设置，具体的功能实现要感谢[LAnqxpp](https://github.com/LAnqxpp)的贡献。
+#### Fixed
+1. 修复了相对布局可能会产生尺寸无限大的问题，尤其是当相对布局的高度为自适应，并且相对布局中同样存在着具有高度自适应的子布局视图的情况。
+
+
 ## [V1.3.2](https://github.com/youngsoft/TangramKit/releases/tag/1.3.2)(2019/04/25)
 #### Fixed
 1. 兼容swift5.0
