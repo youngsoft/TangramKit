@@ -20,6 +20,7 @@ struct FOLTest2LayoutTemplate
 
 
 //数据模型。
+@objcMembers
 class FOLTest2DataModel : NSObject
 {
     
@@ -33,6 +34,7 @@ class FOLTest2DataModel : NSObject
 }
 
 //数据片段模型
+@objcMembers
 class FOLTest2SectionModel:NSObject
 {
     var title:String!

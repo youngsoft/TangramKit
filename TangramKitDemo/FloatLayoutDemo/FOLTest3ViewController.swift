@@ -10,7 +10,7 @@ import UIKit
 
 
 
-
+@objcMembers
 class FOLTest3DataModel : NSObject
 {
     var imageName:String!
