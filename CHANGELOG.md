@@ -2,7 +2,19 @@
 **TangramKit**中的所有历史版本变化将会在这个文件中列出。
 
 ---
+## [V1.4.1](https://github.com/youngsoft/TangramKit/releases/tag/1.4.1)(2019/11/12)
 
+# Fixed
+1. 实现对边界线颜色设置的iOS13黑白模式的适配能力。[issue#38](https://github.com/youngsoft/TangramKit/issues/38)
+2. 修复当将布局视图作为UIScrollView下的容器视图同时UIScrollView支持放大缩小能力时，在屏幕旋转时可能会产生的BUG。[issue#93](https://github.com/youngsoft/MyLinearLayout/issues/93)
+4. 修复了布局视图的尺寸自适应能力和AutoLayout结合后，布局视图添加删除子视图后要手动代码进行布局视图尺寸自适应的刷新问题。[issue#95](https://github.com/youngsoft/MyLinearLayout/issues/95)
+5. 修复相对布局子视图隐藏时，其他依赖这个子视图的子视图的位置和尺寸不正确更新的问题。
+6. 修复UIImageView的宽度固定高度自适应的问题。
+7. 将布局视图的isSelected的变量声明变为open，以便支持派生类对这个属性的重载处理。
+8. 修复流式布局TGFlowLayout的tg_gravity设置右对齐和下对齐时最后一行对齐错误的BUG。[issue#39](https://github.com/youngsoft/TangramKit/issues/39)
+9. 重新命名将一个窗口内所有子视图进行RTL设置的方法,新方法名为：`tg_updateRTL(_ isRTL:Bool, inWindow window:UIWindow)`
+
+**下一个版本将会和OC版本对齐所有功能，并做重大的升级和重构！！**
 
 ## [V1.4.0](https://github.com/youngsoft/TangramKit/releases/tag/1.4.0)(2019/05/19)
 #### Added

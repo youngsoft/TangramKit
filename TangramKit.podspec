@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "TangramKit"
-  s.version      = "1.4.0"
+  s.version      = "1.4.1"
   s.summary      = "TangramKit is A powerful iOS UI framework. It integrated the Android layout,AutoLayout,SizeClass, HTML/CSS float and flexbox functions."
 
   s.description  = <<-DESC
