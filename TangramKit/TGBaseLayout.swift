@@ -718,9 +718,9 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         }
     }
     
-    public static func tg_updateArabicUI(_ isArabic:Bool, inWindow window:UIWindow)
+    public static func tg_updateRTL(_ isRTL:Bool, inWindow window:UIWindow)
     {
-        window.tgUpdateBasisUIView(isArabic)
+        window.tgUpdateRTL(isRTL)
     }
     
     
@@ -1086,7 +1086,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     
     
     ///设置是否选中状态。您可以用这个状态来记录布局的扩展属性。
-    public var isSelected:Bool = false
+    open var isSelected:Bool = false
     
     
     ///删除所有子视图
@@ -1485,14 +1485,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     
     override open func setNeedsLayout() {
         super.setNeedsLayout()
-        if !self.translatesAutoresizingMaskIntoConstraints
-        {
-            let lsc = self.tgCurrentSizeClass as! TGViewSizeClassImpl
-            if lsc.width.isWrap || lsc.height.isWrap
-            {
-                self.invalidateIntrinsicContentSize()
-            }
-        }
+        self.tgInvalidateIntrinsicContentSize()
     }
     
     
@@ -1866,16 +1859,22 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
                         var currentBounds = self.bounds;
                         var currentCenter = self.center;
                         
+                        var superViewZoomScale:CGFloat = 1.0
+                        if let sscrolV = self.superview as? UIScrollView
+                        {
+                           superViewZoomScale = sscrolV.zoomScale
+                        }
+                        
                         if (isWidthAlter && lsc.tg_width.isWrap)
                         {
                             currentBounds.size.width = newSelfSize.width
-                            currentCenter.x += (newSelfSize.width - oldSelfSize.width) * self.layer.anchorPoint.x
+                            currentCenter.x += (newSelfSize.width - oldSelfSize.width) * self.layer.anchorPoint.x * superViewZoomScale
                         }
                         
                         if (isHeightAlter && lsc.tg_height.isWrap)
                         {
                             currentBounds.size.height = newSelfSize.height
-                            currentCenter.y += (newSelfSize.height - oldSelfSize.height) * self.layer.anchorPoint.y
+                            currentCenter.y += (newSelfSize.height - oldSelfSize.height) * self.layer.anchorPoint.y * superViewZoomScale
                         }
                         
                         self.bounds = currentBounds
@@ -2060,6 +2059,15 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         
     }
     
+    override open func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if #available(iOS 12.0, *){
+            if previousTraitCollection != nil && self.traitCollection.userInterfaceStyle != previousTraitCollection?.userInterfaceStyle {
+                _tgBorderlineLayerDelegate?.updateAllBorderlineColor()
+            }
+        }
+    }
+    
     override open func sizeThatFits(_ size: CGSize) -> CGSize {
         
         return self.tg_sizeThatFits(size)
@@ -2099,12 +2107,15 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
         {
             lv.tg_cacheEstimatedRect = self.tg_cacheEstimatedRect
         }
+        
+        self.tgInvalidateIntrinsicContentSize()
     }
     
     override open func willRemoveSubview(_ subview: UIView) {
         super.willRemoveSubview(subview)
         
         self.tgRemoveSubviewObserver(subview: subview)
+        self.tgInvalidateIntrinsicContentSize()
     }
     
     
@@ -2431,7 +2442,7 @@ extension TGBaseLayout
     internal func tgCalcHeightFromHeightWrapView(_ sbv:UIView, sbvsc:TGViewSizeClassImpl, width:CGFloat) ->CGFloat
     {
         var h:CGFloat = sbv.sizeThatFits(CGSize(width: width, height: 0)).height
-        if let sbvimg = sbv as? UIImageView
+        if let sbvimg = sbv as? UIImageView, !sbvsc.width.isWrap
         {
             //根据图片的尺寸进行等比缩放得到合适的高度。
             if let img = sbvimg.image , img.size.width != 0
@@ -2769,8 +2780,15 @@ extension TGBaseLayout
     
         var rectSelf = self.bounds
         
-        rectSelf.origin.x = self.center.x - rectSelf.size.width * self.layer.anchorPoint.x
-        rectSelf.origin.y = self.center.y - rectSelf.size.height * self.layer.anchorPoint.y
+        //针对滚动父视图做特殊处理，如果父视图是滚动视图，而且当前的缩放比例不为1时系统会调整中心点的位置，因此这里需要特殊处理。
+        var superViewZoomScale:CGFloat = 1.0
+        if let sscrolV = self.superview as? UIScrollView
+        {
+            superViewZoomScale = sscrolV.zoomScale
+        }
+        
+        rectSelf.origin.x = self.center.x - rectSelf.size.width * self.layer.anchorPoint.x * superViewZoomScale
+        rectSelf.origin.y = self.center.y - rectSelf.size.height * self.layer.anchorPoint.y * superViewZoomScale
         
         let oldSelfRect = rectSelf
         
@@ -2998,7 +3016,7 @@ extension TGBaseLayout
             else
             {
                 self.bounds = CGRect(x:self.bounds.origin.x, y:self.bounds.origin.y, width:rectSelf.width, height:rectSelf.height)
-                self.center = CGPoint(x:rectSelf.origin.x + self.layer.anchorPoint.x * rectSelf.width, y:rectSelf.origin.y + self.layer.anchorPoint.y * rectSelf.height)
+                self.center = CGPoint(x:rectSelf.origin.x + self.layer.anchorPoint.x * rectSelf.width * superViewZoomScale, y:rectSelf.origin.y + self.layer.anchorPoint.y * rectSelf.height * superViewZoomScale)
             }
         }
         else if lsc.isSomeSizeWrap
@@ -3078,6 +3096,8 @@ extension TGBaseLayout
                 contSize.width = newSize.width + leadingMargin + trailingMargin
             }
             
+            contSize.width *= scrolv.zoomScale
+            contSize.height *= scrolv.zoomScale
             
             //因为调整contentsize可能会调整contentOffset，所以为了保持一致性这里要还原掉原来的contentOffset
             let oldOffset = scrolv.contentOffset
@@ -3352,7 +3372,6 @@ extension TGBaseLayout
         {
             rect.origin.x = leadingPadding  + leadingMargin;
         }
-        
     }
     
     //是否是不参加布局的子视图。
@@ -3474,6 +3493,14 @@ extension TGBaseLayout
     
     internal func tgCalcSizeFromSizeWrapSubview(_ sbv:UIView,sbvsc:TGViewSizeClassImpl, sbvtgFrame:TGFrame)
     {
+        
+        if sbvsc.tg_visibility == TGVisibility.gone
+        {
+            sbvtgFrame.width = 0
+            sbvtgFrame.height = 0
+            return
+        }
+        
         //只有非布局视图才这样处理。
         //如果宽度wrap并且高度wrap的话则直接调用sizeThatFits方法。
         //如果只是宽度wrap高度固定则依然可以调用sizeThatFits方法，不过这种场景基本不存在。
@@ -3719,6 +3746,126 @@ extension TGBaseLayout
 
         }
         
+    }
+    
+    
+    
+    fileprivate func tgInvalidateIntrinsicContentSize()
+    {
+        if !self.translatesAutoresizingMaskIntoConstraints
+        {
+            let lsc:TGViewSizeClassImpl = self.tgCurrentSizeClass as! TGViewSizeClassImpl
+            if lsc.isSomeSizeWrap
+            {
+                self.invalidateIntrinsicContentSize()
+            }
+        }
+    }
+    
+    
+    
+    fileprivate func tgGetSubviewWidthSizeValue(sbv:UIView,
+                                                sbvsc:TGViewSizeClassImpl,
+                                                lsc:TGLayoutViewSizeClassImpl,
+                                                selfSize:CGSize,
+                                                paddingTop:CGFloat,
+                                                paddingLeading:CGFloat,
+                                                paddingBottom:CGFloat,
+                                                paddingTrailing:CGFloat,
+                                                sbvSize:CGSize) -> CGFloat
+    {
+    
+        let dime = sbvsc.width
+        guard dime.hasValue else
+        {
+            return sbvSize.width
+        }
+        
+        
+    var retVal = sbvSize.width
+    
+    
+  
+        if let t = dime.numberVal
+        {
+            retVal = t
+        }
+        else if let t = dime.sizeVal, t.view !== sbv
+        {
+            if t === lsc.width.realSize
+            {
+                retVal = dime.measure(selfSize.width - paddingLeading - paddingTrailing)
+            }
+            else if t === lsc.height.realSize
+            {
+                retVal = dime.measure(selfSize.height - paddingTop - paddingBottom)
+            }
+            else
+            {
+                if (t.type == TGGravity.horz.fill)
+                {
+                    retVal = dime.measure(t.view.tgEstimatedWidth)
+                }
+                else
+                {
+                    retVal = dime.measure(t.view.tgEstimatedHeight)
+                }
+            }
+        }
+        
+        return retVal
+    }
+    
+    fileprivate func tgGetSubviewHeightSizeValue(sbv:UIView,
+                                                sbvsc:TGViewSizeClassImpl,
+                                                lsc:TGLayoutViewSizeClassImpl,
+                                                selfSize:CGSize,
+                                                paddingTop:CGFloat,
+                                                paddingLeading:CGFloat,
+                                                paddingBottom:CGFloat,
+                                                paddingTrailing:CGFloat,
+                                                sbvSize:CGSize) -> CGFloat
+    {
+        let dime = sbvsc.height
+        guard dime.hasValue else
+        {
+            return sbvSize.height
+        }
+        
+        var retVal = sbvSize.height
+        
+        if let t = dime.numberVal
+        {
+            retVal = t
+        }
+        else if let t = dime.sizeVal, t.view !== sbv
+        {
+            if t === lsc.width.realSize
+            {
+                retVal = dime.measure(selfSize.width - paddingLeading - paddingTrailing)
+            }
+            else if t === lsc.height.realSize
+            {
+                retVal = dime.measure(selfSize.height - paddingTop - paddingBottom)
+            }
+            else
+            {
+                if (t.type == TGGravity.horz.fill)
+                {
+                    retVal = dime.measure(t.view.tgEstimatedWidth)
+                }
+                else
+                {
+                    retVal = dime.measure(t.view.tgEstimatedHeight)
+                }
+            }
+        }
+        else if dime.isFlexHeight
+        {
+            retVal = tgCalcHeightFromHeightWrapView(sbv, sbvsc: sbvsc, width: sbvSize.width)
+        }
+        
+        return retVal
     }
 }
 
@@ -4266,12 +4413,26 @@ class TGBorderlineLayerDelegate:NSObject,CALayerDelegate
             retLayer.setNeedsLayout()
         }
         
-        
         return retLayer
-        
-        
     }
     
+    fileprivate func updateAllBorderlineColor(){
+        updateBorderlineColorHelper(_topBorderlineLayer, borderline:self.topBorderline)
+        updateBorderlineColorHelper(_bottomBorderlineLayer, borderline:self.bottomBorderline)
+        updateBorderlineColorHelper(_leadingBorderlineLayer, borderline:self.leadingBorderline)
+        updateBorderlineColorHelper(_trailingBorderlineLayer, borderline:self.trailingBorderline)
+    }
+    
+    private func updateBorderlineColorHelper(_ layer:CAShapeLayer!, borderline:TGBorderline!){
+        
+        guard layer != nil && borderline != nil else{return}
+        
+        if borderline.dash != 0.0 {
+            layer.strokeColor = borderline.color.cgColor
+        }else{
+            layer.backgroundColor = borderline.color.cgColor
+        }
+    }
     
 }
 
@@ -4578,7 +4739,33 @@ extension UIView
         return tgFrame.sizeClass
     }
     
+    internal var tgEstimatedWidth:CGFloat
+    {
+        guard let _ = self.superview as? TGBaseLayout else {
+            return self.bounds.width
+        }
+        
+        let tgFrame = self.tgFrame
+        if tgFrame.width == CGFloat.greatestFiniteMagnitude{
+            return self.bounds.width
+        }else{
+            return tgFrame.width
+        }
+    }
     
+    internal var tgEstimatedHeight:CGFloat
+    {
+        guard let _ = self.superview as? TGBaseLayout else {
+            return self.bounds.height
+        }
+        
+        let tgFrame = self.tgFrame
+        if tgFrame.height == CGFloat.greatestFiniteMagnitude{
+            return self.bounds.height
+        }else{
+            return tgFrame.height
+        }
+    }
     
     @objc func tgCreateInstance() -> AnyObject
     {
@@ -4589,13 +4776,13 @@ extension UIView
 
 extension UIWindow
 {
-    fileprivate func tgUpdateBasisUIView(_ isRTL:Bool)
+    fileprivate func tgUpdateRTL(_ isRTL:Bool)
     {
         TGBaseLayout.tg_isRTL = isRTL
-        self.tgSetBasisUISubviewsNeedLayout(self)
+        self.tgSetNeedLayoutAllSubviews(self)
     }
     
-    fileprivate func tgSetBasisUISubviewsNeedLayout(_ v:UIView)
+    fileprivate func tgSetNeedLayoutAllSubviews(_ v:UIView)
     {
         for sv:UIView in v.subviews
         {
@@ -4604,7 +4791,7 @@ extension UIWindow
                 t.setNeedsLayout()
             }
             
-            tgSetBasisUISubviewsNeedLayout(sv)
+            tgSetNeedLayoutAllSubviews(sv)
         }
     }
 }
@@ -4612,7 +4799,6 @@ extension UIWindow
 
 internal func _tgCGFloatErrorEqual(_ f1:CGFloat, _ f2:CGFloat, _ error:CGFloat) -> Bool
 {
-    
    return abs(f1 - f2) < error
 }
 

@@ -32,6 +32,9 @@ class AllTest1TableViewCellForAutoLayout: UITableViewCell,AllTest1Cell {
       //  self.createRelativeRootLayout()
       //  self.createFloatRootLayout()
         
+        //如果是代码实现autolayout的话必须要将translatesAutoresizingMaskIntoConstraints 设置为NO。
+        self.rootLayout.translatesAutoresizingMaskIntoConstraints = false
+        
         if #available(iOS 9.0, *) {
             //设置布局视图的autolayout约束，这里是用iOS9提供的约束设置方法，您也可以用低级版本设置，以及用masonry来进行设置。
             self.rootLayout.leftAnchor.constraint(equalTo: self.contentView.leftAnchor).isActive = true
@@ -101,7 +104,6 @@ extension AllTest1TableViewCellForAutoLayout
     func createLinearRootLayout()
     {
         self.rootLayout = TGLinearLayout(.horz)
-        self.rootLayout.translatesAutoresizingMaskIntoConstraints = false
         self.rootLayout.tg_topPadding = 5
         self.rootLayout.tg_bottomPadding = 5
         self.rootLayout.tg_height.equal(.wrap)
@@ -156,7 +158,6 @@ extension AllTest1TableViewCellForAutoLayout
         
        
         self.rootLayout = TGRelativeLayout()
-        self.rootLayout.translatesAutoresizingMaskIntoConstraints = false
         self.rootLayout.tg_topPadding = 5
         self.rootLayout.tg_bottomPadding = 5
         self.rootLayout.tg_height.equal(.wrap)
@@ -201,7 +202,6 @@ extension AllTest1TableViewCellForAutoLayout
     {
         
         self.rootLayout = TGFloatLayout(.vert)
-        self.rootLayout.translatesAutoresizingMaskIntoConstraints = false
         self.rootLayout.tg_topPadding = 5
         self.rootLayout.tg_bottomPadding = 5
         self.rootLayout.tg_height.equal(.wrap)

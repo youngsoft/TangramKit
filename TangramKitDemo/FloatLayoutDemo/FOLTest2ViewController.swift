@@ -23,13 +23,13 @@ struct FOLTest2LayoutTemplate
 class FOLTest2DataModel : NSObject
 {
     
-    var title:String!  //标题
-    var subTitle:String!  //副标题
-    var desc:String!      //描述
-    var price:String!     //价格
-    var image:String!      //图片
-    var subImage:String!   //子图片
-    var templateIndex = 0  //数据模型使用布局的索引。通常由服务端决定使用的布局模型，所以这里作为一个属性保存在模型数据结构中。
+    @objc var title:String!  //标题
+    @objc var subTitle:String!  //副标题
+    @objc var desc:String!      //描述
+    @objc var price:String!     //价格
+    @objc var image:String!      //图片
+    @objc var subImage:String!   //子图片
+    @objc var templateIndex = 0  //数据模型使用布局的索引。通常由服务端决定使用的布局模型，所以这里作为一个属性保存在模型数据结构中。
 }
 
 //数据片段模型

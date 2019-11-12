@@ -277,7 +277,7 @@ class AllTest1ViewController: UITableViewController {
         
         let identifier:[String] = ["alltest1_cell", "alltest1_cell_forautolayout"]
     
-        let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: identifier[Int(arc4random_uniform(2))], for:indexPath)
+        let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: identifier[0], for:indexPath)
         
         let model = self.datas[indexPath.row]
         

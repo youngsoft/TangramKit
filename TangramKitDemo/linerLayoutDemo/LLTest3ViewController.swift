@@ -56,7 +56,7 @@ class LLTest3ViewController: UIViewController {
          
          1.当使用tg_gravity属性时意味着布局视图必须要有明确的尺寸才有意义，因为有确定的尺寸才能决定里面的子视图的停靠的方位。
          2.布局视图的tg_height设置为.wrap时是和tg_gravity上设置垂直停靠方向以及垂直填充是互斥的；而布局视图的tg_width设置为.wrap时是和tg_gravity上设置水平停靠方向和水平填充是互斥的。
-         3.布局视图的tg_gravity的属性的优先级要高于子视图的停靠和尺寸设置。
+         3.布局视图的tg_gravity的属性的优先级要高于子视图的停靠和尺寸设置，但是低于子视图的tg_alignment属性的设置。
          */
 
         

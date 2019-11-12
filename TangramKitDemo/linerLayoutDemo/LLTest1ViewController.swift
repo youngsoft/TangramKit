@@ -149,12 +149,12 @@ class LLTest1ViewController: UIViewController {
     
     @objc func RTLAction()
     {
-        TGBaseLayout.tg_updateArabicUI(true, inWindow: self.view.window!)
+        TGBaseLayout.tg_updateRTL(true, inWindow: self.view.window!)
     }
     
     @objc func LTRAction()
     {
-        TGBaseLayout.tg_updateArabicUI(false, inWindow: self.view.window!)
+        TGBaseLayout.tg_updateRTL(false, inWindow: self.view.window!)
     }
     
 }

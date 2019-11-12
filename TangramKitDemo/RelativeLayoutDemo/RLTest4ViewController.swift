@@ -49,6 +49,7 @@ class RLTest4ViewController: UIViewController {
         }
         
         let rootLayout = TGRelativeLayout()
+        rootLayout.tg_insetsPaddingFromSafeArea = [.left, .right, .top] //为了防止拉到底部时iPhoneX设备的抖动发生，不能将底部安全区叠加到padding中去。
         rootLayout.tg_padding = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         rootLayout.tg_height.equal(.wrap)
         rootLayout.tg_width.equal(.fill)

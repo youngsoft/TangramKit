@@ -1013,12 +1013,12 @@ extension TGFlowLayout
             {
                 if subviewSize != 0
                 {
-                    rect.size.width = subviewSize
+                    rect.size.width = subviewSize - leadingSpace - trailingSpace
                 }
                 
                 if pagingItemWidth != 0
                 {
-                    rect.size.width = pagingItemWidth
+                    rect.size.width = pagingItemWidth - leadingSpace - trailingSpace
                 }
                 
                 if sbvsc.width.numberVal != nil && !averageArrange
@@ -1135,7 +1135,7 @@ extension TGFlowLayout
             
             if (pagingItemHeight != 0)
             {
-                rect.size.height = pagingItemHeight
+                rect.size.height = pagingItemHeight - topSpace - bottomSpace
             }
 
 
@@ -1151,7 +1151,6 @@ extension TGFlowLayout
             //如果高度是浮动的 则需要调整陶都
             if sbvsc.height.isFlexHeight
             {
-            
                 rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, sbvsc:sbvsc, width: rect.size.width)
             }
             
@@ -1234,18 +1233,16 @@ extension TGFlowLayout
             rect.origin.y = (yPos + topSpace)
             xPos += (leadingSpace + rect.size.width + trailingSpace)
             
-            if arrangedIndex != (arrangedCount - 1) && !autoArrange {
-                xPos += horzSpace
-            }
-            
-           
-            
             if _tgCGFloatLess(rowMaxWidth , xPos - lsc.tgLeadingPadding) {
                 rowMaxWidth = xPos - lsc.tgLeadingPadding
             }
             if _tgCGFloatLess(maxWidth , xPos)
             {
                 maxWidth = xPos
+            }
+            
+            if arrangedIndex != (arrangedCount - 1) && !autoArrange {
+                xPos += horzSpace
             }
             
             sbvtgFrame.frame = rect
@@ -1390,7 +1387,7 @@ extension TGFlowLayout
             
             if subviewSize != 0
             {
-                rect.size.width = subviewSize
+                rect.size.width = subviewSize - leadingSpace - trailingSpace
             }
             
             rect.size.width = sbvsc.width.numberSize(rect.size.width)
@@ -1414,21 +1411,17 @@ extension TGFlowLayout
             if sbvsc.width.weightVal != nil || sbvsc.width.isFill
             {
                 //如果过了，则表示当前的剩余空间为0了，所以就按新的一行来算。。
-                var floatWidth = selfSize.width - lsc.tgLeadingPadding - lsc.tgTrailingPadding - rowMaxWidth;
-                if  _tgCGFloatLessOrEqual(floatWidth, 0)
-                {
-                    floatWidth += rowMaxWidth
-                    arrangeIndex = 0
-                }
-                
-                if (arrangeIndex != 0)
-                {
+                var floatWidth = selfSize.width - lsc.tgTrailingPadding - xPos - leadingSpace - trailingSpace;
+                if arrangeIndex != 0 {
                     floatWidth -= horzSpace
                 }
                 
+                if  _tgCGFloatLessOrEqual(floatWidth, 0){
+                    floatWidth  = selfSize.width - lsc.tgTrailingPadding - lsc.tgLeadingPadding
+                }
+                
                 var widthWeight:CGFloat = 1.0
-                if let t = sbvsc.width.weightVal
-                {
+                if let t = sbvsc.width.weightVal{
                     widthWeight = t.rawValue/100
                 }
                 
@@ -1446,7 +1439,6 @@ extension TGFlowLayout
             //如果高度是浮动则需要调整
             if sbvsc.height.isFlexHeight
             {
-                
                 rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, sbvsc:sbvsc, width: rect.size.width)
             }
             
@@ -1693,11 +1685,13 @@ extension TGFlowLayout
             
             let  topSpace = sbvsc.top.absPos
             let  bottomSpace = sbvsc.bottom.absPos
-            var  rect = sbvtgFrame.frame;
+            let  leadingSpace = sbvsc.leading.absPos
+            let  trailingSpace = sbvsc.trailing.absPos
+            var  rect = sbvtgFrame.frame
             
             if (pagingItemWidth != 0)
             {
-                rect.size.width = pagingItemWidth
+                rect.size.width = pagingItemWidth - leadingSpace - trailingSpace
             }
             
             rect.size.width = sbvsc.width.numberSize(rect.size.width)
@@ -1723,12 +1717,12 @@ extension TGFlowLayout
                 
                 if subviewSize != 0
                 {
-                  rect.size.height = subviewSize
+                  rect.size.height = subviewSize - topSpace - bottomSpace
                 }
                 
                 if (pagingItemHeight != 0)
                 {
-                    rect.size.height = pagingItemHeight
+                    rect.size.height = pagingItemHeight - topSpace - bottomSpace
                 }
 
             
@@ -1947,12 +1941,7 @@ extension TGFlowLayout
             rect.origin.y = yPos + topSpace
             rect.origin.x = xPos + leadingSpace
             yPos += topSpace + rect.size.height + bottomSpace
-            
-            if arrangedIndex != (arrangedCount - 1) && !autoArrange {
-                yPos += vertSpace
-            }
-            
-            
+        
             if _tgCGFloatLess(colMaxHeight , (yPos - lsc.tgTopPadding)) {
                 colMaxHeight = yPos - lsc.tgTopPadding
             }
@@ -1961,6 +1950,10 @@ extension TGFlowLayout
                 maxHeight = yPos
             }
             
+            if arrangedIndex != (arrangedCount - 1) && !autoArrange {
+                yPos += vertSpace
+            }
+        
             sbvtgFrame.frame = rect
             
             arrangedIndex += 1
@@ -2108,7 +2101,7 @@ extension TGFlowLayout
             
             if subviewSize != 0
             {
-                rect.size.height = subviewSize
+                rect.size.height = subviewSize - topSpace - bottomSpace
             }
             
             rect.size.height = sbvsc.height.numberSize(rect.size.height)
@@ -2121,28 +2114,22 @@ extension TGFlowLayout
             if  sbvsc.height.weightVal != nil || sbvsc.height.isFill
             {
                 //如果过了，则表示当前的剩余空间为0了，所以就按新的一行来算。。
-                var floatHeight = selfSize.height - lsc.tgTopPadding - lsc.tgBottomPadding - colMaxHeight;
-                if (_tgCGFloatLessOrEqual(floatHeight, 0))
-                {
-                    floatHeight += colMaxHeight;
-                    arrangedIndex = 0;
-                }
-                
-                if (arrangedIndex != 0)
-                {
+                var floatHeight = selfSize.height - lsc.tgBottomPadding - yPos - topSpace - bottomSpace
+                if arrangedIndex != 0 {
                     floatHeight -= vertSpace
                 }
                 
+                if (_tgCGFloatLessOrEqual(floatHeight, 0)){
+                    floatHeight = selfSize.height - lsc.tgTopPadding - lsc.tgBottomPadding
+                }
+                
                 var heightWeight:CGFloat = 1.0
-                if let t = sbvsc.height.weightVal
-                {
+                if let t = sbvsc.height.weightVal{
                     heightWeight = t.rawValue/100
                 }
                 
                 rect.size.height = (floatHeight + sbvsc.height.increment) * heightWeight - topSpace - bottomSpace;
-                
             }
-            
             
             
             rect.size.height = self.tgValidMeasure(sbvsc.height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
