@@ -174,8 +174,11 @@ extension FLLTest3ViewController {
         
         //在进行sender的位置调整时，要把sender移动到最顶端，也就子视图数组的的最后，这时候布局视图不能布局，因此要把autoresizesSubviews设置为false，同时因为要自定义
         //sender的位置，因此要把tg_useFrame设置为true，并且恢复tg_noLayout为false。
-
-        self.flowLayout.bringSubviewToFront(sender)   //把拖动的子视图放在最后，这样这个子视图在移动时就会在所有兄弟视图的上面。
+        #if swift(>=4.2)
+            self.flowLayout.bringSubviewToFront(sender)   //把拖动的子视图放在最后，这样这个子视图在移动时就会在所有兄弟视图的上面。
+        #else
+            self.flowLayout.bringSubview(toFront: sender)
+        #endif
         self.flowLayout.autoresizesSubviews = false //在拖动时不要让布局视图激发布局
         sender.tg_useFrame = true //因为拖动时，拖动的控件需要自己确定位置，不能被布局约束，因此必须要将useFrame设置为YES下面的center设置才会有效。
         sender.tg_noLayout = false //因为useFrame设置为了YES所有这里可以直接调整center，从而实现了位置的自定义设置。

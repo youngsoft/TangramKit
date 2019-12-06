@@ -82,7 +82,11 @@ class AllTest1ViewController: UITableViewController {
         super.viewWillAppear(animated)
         
         self.displayLink = CADisplayLink(target: self, selector: #selector(tick))
-        self.displayLink.add(to:.main, forMode: RunLoop.Mode.common)
+        #if swift(>=4.2)
+            self.displayLink.add(to:.main, forMode: RunLoop.Mode.common)
+        #else
+            self.displayLink.add(to: .main, forMode: RunLoopMode.commonModes)
+        #endif
         
     }
     
@@ -108,8 +112,11 @@ class AllTest1ViewController: UITableViewController {
         self.tableView.estimatedRowHeight = 60
         
         //设置所有cell的高度为高度自适应，如果cell高度是动态的请这么设置。 如果不同的cell有差异那么可以通过实现协议方法tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath)来定制化处理。
-        self.tableView.rowHeight = UITableView.automaticDimension
-        
+        #if swift(>=4.2)
+            self.tableView.rowHeight = UITableView.automaticDimension
+        #else
+            self.tableView.rowHeight = UITableViewAutomaticDimension
+        #endif
         //不仅是UITableviewCell的高度可以自适应，sectionHeader以及sectionFooter也一样的可以实现自适应高度，您同样的可以用相似的方法来进行处理。
         
         self.tableView.separatorStyle = .none
