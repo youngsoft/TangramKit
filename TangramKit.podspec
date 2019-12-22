@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "TangramKit"
-  s.version      = "1.4.1"
+  s.version      = "1.4.2"
   s.summary      = "TangramKit is A powerful iOS UI framework. It integrated the Android layout,AutoLayout,SizeClass, HTML/CSS float and flexbox functions."
 
   s.description  = <<-DESC
@@ -56,7 +56,7 @@ Pod::Spec.new do |s|
   s.author             = { "欧阳大哥" => "obq0387_cn@sina.com" }
   # Or just: s.author    = "欧阳大哥"
   # s.authors            = { "欧阳大哥" => "obq0387_cn@sina.com" }
-  # s.social_media_url   = "http://blog.csdn.net/yangtiang"
+   s.social_media_url   = "https://juejin.im/user/593fb40eda2f6000673bdc61"
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #

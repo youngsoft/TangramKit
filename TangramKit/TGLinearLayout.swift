@@ -251,6 +251,35 @@ open class TGLinearLayout: TGBaseLayout,TGLinearLayoutViewSizeClass {
         }
     }
     
+    /**
+     *在一些应用场景中我们有时候希望某些子视图的宽度或者高度是固定的情况下，子视图的间距是浮动的而不是固定的。比如每个子视图的宽度是固定80，那么在小屏幕下每行只能放3个，而我们希望大屏幕每行能放4个或者5个子视图。 因此您可以通过如下方法来设置浮动间距，这个方法会根据您当前布局的orientation方向不同而意义不同：
+     1.如果您的布局方向是.vert表示设置的是子视图的水平间距，其中的size指定的是子视图的宽度，minSpace指定的是最小的水平间距,maxSpace指定的是最大的水平间距，如果指定的subviewSize计算出的间距大于这个值则会调整subviewSize的宽度。
+     2.如果您的布局方向是.horz表示设置的是子视图的垂直间距，其中的size指定的是子视图的高度，minSpace指定的是最小的垂直间距,maxSpace指定的是最大的垂直间距，如果指定的subviewSize计算出的间距大于这个值则会调整subviewSize的高度。
+     3.如果您不想使用浮动间距则请将subviewSize设置为0就可以了。
+     4. centered属性指定这个浮动间距是否包括最左边和最右边两个区域，也就是说当设置为true时视图之间以及视图与父视图之间的间距都是相等的，而设置为false时则只有视图之间的间距相等而视图与父视图之间的间距则为0。
+     */
+    public func tg_setSubviews(size:CGFloat, minSpace:CGFloat, maxSpace:CGFloat = CGFloat.greatestFiniteMagnitude, centered:Bool = false, inSizeClass type:TGSizeClassType = TGSizeClassType.default)
+    {
+        let lsc = self.tg_fetchSizeClass(with: type) as! TGFlowLayoutViewSizeClassImpl
+        
+        if size == 0.0 {
+            lsc.tgFlexSpace = nil
+        }
+        else {
+            
+            if lsc.tgFlexSpace == nil {
+                lsc.tgFlexSpace = TGSequentLayoutFlexSpace()
+            }
+            
+            lsc.tgFlexSpace.subviewSize = size
+            lsc.tgFlexSpace.minSpace = minSpace
+            lsc.tgFlexSpace.maxSpace = maxSpace
+            lsc.tgFlexSpace.centered = centered
+        }
+        
+        self.setNeedsLayout()
+    }
+    
   
     
     
@@ -652,10 +681,16 @@ extension TGLinearLayout {
         var totalWeight:TGWeight = TGWeight.zeroWeight    //剩余部分的总比重
         var selfSize = selfSize
         let horzGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.vert.mask)
-        let topPadding = lsc.tgTopPadding
-        let bottomPadding = lsc.tgBottomPadding
+        var topPadding = lsc.tgTopPadding
+        var bottomPadding = lsc.tgBottomPadding
         let leadingPadding = lsc.tgLeadingPadding
         let trailingPadding = lsc.tgTrailingPadding
+        
+        var vertSpace = lsc.tg_vspace
+        var subviewSize:CGFloat = 0.0
+        if let t = lsc.tgFlexSpace, sbs.count > 0{
+           (subviewSize,topPadding,bottomPadding,vertSpace) = t.calcMaxMinSubviewSize(selfSize.height, arrangedCount: sbs.count, startPadding: topPadding, endPadding: bottomPadding, space: vertSpace)
+        }
         
         selfSize.width = self.tgCalcMaxWrapWidth(sbs, selfSize:selfSize, horzPadding: leadingPadding + trailingPadding, lsc:lsc)   //调整自身的宽度
         
@@ -669,28 +704,30 @@ extension TGLinearLayout {
         {
             let (sbvtgFrame, sbvsc) = self.tgGetSubviewFrameAndSizeClass(sbv)
 
-
-            
             var rect = sbvtgFrame.frame;
-            
             
             self.tgCalcLeadingTrailingRect(horzGravity: horzGravity, selfSize: selfSize, leadingPadding:leadingPadding, trailingPadding:trailingPadding, sbv: sbv, sbvsc: sbvsc, lsc: lsc, rect:&rect)
             
-            rect.size.height = sbvsc.height.numberSize(rect.size.height)
-            if (sbvsc.height.isRelaSizeEqualTo(lsc.height) && !lsc.height.isWrap)
-            {
-                rect.size.height = sbvsc.height.measure(selfSize.height - topPadding - bottomPadding)
+            if subviewSize != 0.0 {
+                rect.size.height = subviewSize
             }
-            
-            if sbvsc.height.isRelaSizeEqualTo(sbvsc.width)
-            {
-                rect.size.height = sbvsc.height.measure(rect.size.width)
-            }
-            
-            //如果子视图需要调整高度则调整高度
-            if sbvsc.height.isFlexHeight
-            {
-                rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, sbvsc:sbvsc, width: rect.size.width)
+            else {
+                rect.size.height = sbvsc.height.numberSize(rect.size.height)
+                if (sbvsc.height.isRelaSizeEqualTo(lsc.height) && !lsc.height.isWrap)
+                {
+                    rect.size.height = sbvsc.height.measure(selfSize.height - topPadding - bottomPadding)
+                }
+                
+                if sbvsc.height.isRelaSizeEqualTo(sbvsc.width)
+                {
+                    rect.size.height = sbvsc.height.measure(rect.size.width)
+                }
+                
+                //如果子视图需要调整高度则调整高度
+                if sbvsc.height.isFlexHeight
+                {
+                    rect.size.height = self.tgCalcHeightFromHeightWrapView(sbv, sbvsc:sbvsc, width: rect.size.width)
+                }
             }
             
             rect.size.height = self.tgValidMeasure(sbvsc.height, sbv: sbv, calcSize: rect.size.height, sbvSize: rect.size, selfLayoutSize: selfSize)
@@ -759,14 +796,14 @@ extension TGLinearLayout {
             
             if sbv != sbs.last
             {
-                fixedHeight += lsc.tg_vspace
+                fixedHeight += vertSpace
                 
-                pos += lsc.tg_vspace
+                pos += vertSpace
                 
-                if lsc.tg_vspace != 0
+                if vertSpace != 0
                 {
                     fixedSpaceCount += 1
-                    fixedSpaceHeight += lsc.tg_vspace
+                    fixedSpaceHeight += vertSpace
                 }
             }
             
@@ -780,7 +817,7 @@ extension TGLinearLayout {
             var tempSelfHeight = topPadding + bottomPadding
             if sbs.count > 1
             {
-              tempSelfHeight += CGFloat(sbs.count - 1) * lsc.tg_vspace
+              tempSelfHeight += CGFloat(sbs.count - 1) * vertSpace
             }
             
             selfSize.height = self.tgValidMeasure(lsc.height,sbv:self,calcSize:tempSelfHeight,sbvSize:selfSize,selfLayoutSize:self.superview!.bounds.size)
@@ -952,15 +989,15 @@ extension TGLinearLayout {
                 
                 if sbv != sbs.last
                 {
-                    pos += lsc.tg_vspace
+                    pos += vertSpace
                     
-                    if (lsc.tg_vspace != 0)
+                    if (vertSpace != 0)
                     {
                         pos += addSpace;
                         
                         if (isWeightShrinkSpace)
                         {
-                            pos += weightShrinkSpaceTotalHeight * lsc.tg_vspace / fixedSpaceHeight;
+                            pos += weightShrinkSpaceTotalHeight * vertSpace / fixedSpaceHeight;
                         }
                     }
                     
@@ -992,12 +1029,18 @@ extension TGLinearLayout {
         var totalWeight:TGWeight = TGWeight.zeroWeight
         let topPadding = lsc.tgTopPadding
         let bottomPadding = lsc.tgBottomPadding
-        let leadingPadding = lsc.tgLeadingPadding
-        let trailingPadding = lsc.tgTrailingPadding
+        var leadingPadding = lsc.tgLeadingPadding
+        var trailingPadding = lsc.tgTrailingPadding
         
         
         var maxSubviewHeight:CGFloat = 0;
         var selfSize = selfSize
+        
+        var horzSpace = lsc.tg_hspace
+        var subviewSize:CGFloat = 0.0
+        if let t = lsc.tgFlexSpace, sbs.count > 0 {
+            (subviewSize,leadingPadding,trailingPadding,horzSpace) = t.calcMaxMinSubviewSize(selfSize.width, arrangedCount: sbs.count, startPadding: leadingPadding, endPadding: trailingPadding, space: horzSpace)
+        }
         
         //计算出固定的子视图宽度的总和以及宽度比例总和
         var addSpace:CGFloat = 0.0   //用于压缩时的间距压缩增量。
@@ -1058,10 +1101,14 @@ extension TGLinearLayout {
             }
             else
             {
-                var vWidth = sbvsc.width.numberSize(sbvtgFrame.width)
-                if (sbvsc.width.isRelaSizeEqualTo(lsc.width) && !lsc.width.isWrap)
-                {
-                    vWidth = sbvsc.width.measure(selfSize.width - leadingPadding - trailingPadding)
+                
+                var vWidth = subviewSize
+                if vWidth == 0 {
+                    vWidth  = sbvsc.width.numberSize(sbvtgFrame.width)
+                    if (sbvsc.width.isRelaSizeEqualTo(lsc.width) && !lsc.width.isWrap)
+                    {
+                        vWidth = sbvsc.width.measure(selfSize.width - leadingPadding - trailingPadding)
+                    }
                 }
                 
                 vWidth = self.tgValidMeasure(sbvsc.width,sbv:sbv,calcSize:vWidth,sbvSize:sbvtgFrame.frame.size,selfLayoutSize:selfSize)
@@ -1084,12 +1131,12 @@ extension TGLinearLayout {
             
             if sbv != sbs.last
             {
-                fixedWidth += lsc.tg_hspace
+                fixedWidth += horzSpace
                 
-                if (lsc.tg_hspace != 0)
+                if (horzSpace != 0)
                 {
                     fixedSpaceCount += 1
-                    fixedSpaceWidth += lsc.tg_hspace
+                    fixedSpaceWidth += horzSpace
                 }
             }
         }
@@ -1100,7 +1147,7 @@ extension TGLinearLayout {
             var tempSelfWidth = leadingPadding + trailingPadding
             if sbs.count > 1
             {
-             tempSelfWidth += CGFloat(sbs.count - 1) * lsc.tg_hspace
+             tempSelfWidth += CGFloat(sbs.count - 1) * horzSpace
             }
             
             selfSize.width = self.tgValidMeasure(lsc.width,sbv:self,calcSize:tempSelfWidth,sbvSize:selfSize,selfLayoutSize:self.superview!.bounds.size)
@@ -1330,15 +1377,15 @@ extension TGLinearLayout {
             
             if sbv != sbs.last
             {
-                pos += lsc.tg_hspace
+                pos += horzSpace
                 
-                if (lsc.tg_hspace != 0)
+                if (horzSpace != 0)
                 {
                     pos += addSpace;
                     
                     if (isWeightShrinkSpace)
                     {
-                        pos += weightShrinkSpaceTotalWidth * lsc.tg_hspace / fixedSpaceWidth
+                        pos += weightShrinkSpaceTotalWidth * horzSpace / fixedSpaceWidth
                     }
                 }
 
@@ -1552,6 +1599,24 @@ extension TGLinearLayout {
               between = (selfSize.height - totalHeight - topPadding - bottomPadding) / CGFloat(sbs.count - 1)
             }
         }
+        else if vertGravity == TGGravity.vert.around
+        {
+            //around停靠中如果子视图数量大于1则间距均分，并且首尾子视图和父视图的间距为均分的一半，如果子视图数量为1则一个子视图垂直居中。
+            if (sbs.count > 1)
+            {
+                between = (selfSize.height - totalHeight - topPadding - bottomPadding) / CGFloat(sbs.count)
+                pos = topPadding + between / 2;
+            }
+            else
+            {
+                pos = (selfSize.height - totalHeight - topPadding - bottomPadding)/2.0 + topPadding;
+            }
+        }
+        else if vertGravity == TGGravity.vert.among
+        {
+            between = (selfSize.height - totalHeight - topPadding - bottomPadding) / CGFloat(sbs.count + 1)
+            pos = topPadding + between;
+        }
         else if vertGravity == TGGravity.vert.fill
         {
             pos = topPadding
@@ -1761,6 +1826,25 @@ extension TGLinearLayout {
             {
                 between = (selfSize.width - totalWidth - leadingPadding - trailingPadding) / CGFloat(sbs.count - 1)
             }
+        }
+        else if horzGravity == TGGravity.horz.around
+        {
+            //around停靠中如果子视图数量大于1则间距均分，并且首尾子视图和父视图的间距为均分的一半，如果子视图数量为1则一个子视图垂直居中。
+            if (sbs.count > 1)
+            {
+                between = (selfSize.width - totalWidth - leadingPadding - trailingPadding) / CGFloat(sbs.count)
+                pos = leadingPadding + between / 2;
+            }
+            else
+            {
+                pos = (selfSize.width - totalWidth - leadingPadding - trailingPadding)/2.0 + leadingPadding;
+            }
+        }
+        else if horzGravity == TGGravity.horz.among
+        {
+            //每个子
+            between = (selfSize.width - totalWidth - leadingPadding - trailingPadding) / CGFloat(sbs.count + 1)
+            pos = leadingPadding + between;
         }
         else if horzGravity == TGGravity.horz.fill
         {

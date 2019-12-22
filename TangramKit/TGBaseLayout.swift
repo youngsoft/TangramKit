@@ -1029,8 +1029,12 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
      只有框架布局、线性布局、表格布局、流式布局、浮动布局支持tg_gravity属性，相对布局和路径布局不支持。
      * TGGravity.vert.top,TGGravity.vert.center,TGGravity.vert.bottom 表示整体垂直居上，居中，居下 (支持：框架布局,线性布局,表格布局,流式布局,垂直浮动布局)
      * TGGravity.horz.left,TGGravity.horz.center,TGGravity.horz.right 表示整体水平居左，居中，居右 (支持：框架布局,线性布局,表格布局,流式布局,水平浮动布局)
-     * TGGravity.vert.between 表示每行之间的行间距都被拉伸，以便使里面的子视图垂直方向填充满整个布局视图。 (支持：垂直线性布局,垂直表格布局，流式布局)
-     * TGGravity.horz.between 表示每列之间的列间距都被拉伸，以便使里面的子视图水平方向填充满整个布局视图。 (支持：水平线性布局,水平表格布局，流式布局)
+     * TGGravity.vert.between 表示每行之间的子视图行间距都被拉伸，以便使里面的子视图垂直方向填充满整个布局视图。 (支持：垂直线性布局,垂直表格布局，流式布局)
+     * TGGravity.horz.between 表示每列之间的子视图列间距都被拉伸，以便使里面的子视图水平方向填充满整个布局视图。 (支持：水平线性布局,水平表格布局，流式布局)
+     * TGGravity.vert.around 表示每行之间的视图行间距都被环绕拉伸，以便使里面的子视图垂直方向填充满整个布局视图。 (支持：垂直线性布局,垂直表格布局，流式布局)
+     * TGGravity.horz.around 表示每列之间的视图列间距都被环绕拉伸，以便使里面的子视图水平方向填充满整个布局视图。 (支持：水平线性布局,水平表格布局，流式布局)
+     * TGGravity.vert.among 表示每行之间的视图行间距都被等分拉伸，以便使里面的子视图垂直方向填充满整个布局视图。 (支持：垂直线性布局,垂直表格布局，流式布局)
+     * TGGravity.horz.among 表示每列之间的视图列间距都被等分拉伸，以便使里面的子视图水平方向填充满整个布局视图。 (支持：水平线性布局,水平表格布局，流式布局)
      * TGGravity.vert.fill 表示布局会拉伸子视图的高度，以便使里面的子视图垂直方向填充满整个布局视图的高度或者子视图平分布局视图的高度。(支持：框架布局，水平线性布局，水平表格布局，流式布局)
      * TGGravity.horz.fill 表示布局会拉伸子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度或者子视图平分布局视图的宽度。 (支持：框架布局，垂直线性布局，垂直表格布局，流式布局)
      */
@@ -3098,21 +3102,9 @@ extension TGBaseLayout
             
             contSize.width *= scrolv.zoomScale
             contSize.height *= scrolv.zoomScale
-            
-            //因为调整contentsize可能会调整contentOffset，所以为了保持一致性这里要还原掉原来的contentOffset
-            let oldOffset = scrolv.contentOffset
             if !scrolv.contentSize.equalTo(contSize)
             {
                scrolv.contentSize =  contSize
-            }
-            
-            if (oldOffset.x <= 0.0 || oldOffset.x <= contSize.width - rectSuper.size.width) &&
-                (oldOffset.y <= 0.0 || oldOffset.y <= contSize.height - rectSuper.size.height)
-            {
-                if  !scrolv.contentOffset.equalTo(oldOffset)
-                {
-                    scrolv.contentOffset = oldOffset;
-                }
             }
         }
     }
@@ -3962,9 +3954,7 @@ private class TGTouchEventDelegate
             
             _hasDoCancel = false
             _ = _touchDownTarget?.perform(_touchDownAction, with: _layout)
-            
         }
-        
     }
     
     func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?)

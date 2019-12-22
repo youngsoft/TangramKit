@@ -122,6 +122,8 @@ extension LLTest3ViewController
             NSLocalizedString("screen vert center",comment:""),
             NSLocalizedString("screen horz center",comment:""),
             NSLocalizedString("between",comment:""),
+            NSLocalizedString("around",comment:""),
+            NSLocalizedString("among",comment:""),
             NSLocalizedString("horz fill",comment:""),
             NSLocalizedString("vert fill",comment:"")
         ]
@@ -213,6 +215,8 @@ extension LLTest3ViewController
             NSLocalizedString("screen vert center",comment:""),
             NSLocalizedString("screen horz center",comment:""),
             NSLocalizedString("between",comment:""),
+            NSLocalizedString("around",comment:""),
+            NSLocalizedString("among",comment:""),
             NSLocalizedString("horz fill",comment:""),
             NSLocalizedString("vert fill",comment:"")
         ]
@@ -334,10 +338,16 @@ extension LLTest3ViewController
         case 9:  //垂直间距拉伸
             vertGravity = TGGravity.vert.between;
             break;
-        case 10:   //水平填充
+        case 10:  //垂直间距环绕
+            vertGravity = TGGravity.vert.around;
+            break;
+        case 11:  //垂直间距等分
+            vertGravity = TGGravity.vert.among;
+            break;
+        case 12:   //水平填充
             horzGravity  = TGGravity.horz.fill;
             break;
-        case 11:  //垂直填充
+        case 13:  //垂直填充
             vertGravity = TGGravity.vert.fill;  //这里模拟器顶部出现黑线，真机是不会出现的。。
             break;
         default:
@@ -386,10 +396,16 @@ extension LLTest3ViewController
         case 9:  //水平间距拉伸
             horzGravity = TGGravity.horz.between;
             break;
-        case 10:   //水平填充
+        case 10:  //水平间距环绕
+            horzGravity = TGGravity.horz.around;
+            break;
+        case 11:  //水平间距等分
+            horzGravity = TGGravity.horz.among;
+            break;
+        case 12:   //水平填充
             horzGravity  = TGGravity.horz.fill;
             break;
-        case 11:  //垂直填充
+        case 13:  //垂直填充
             vertGravity = TGGravity.vert.fill;  //这里模拟器顶部出现黑线，真机是不会出现的。。
             break;
         default:
@@ -470,6 +486,12 @@ extension LLTest3ViewController
         case TGGravity.vert.between:
             vertGravityStr = "TGGravity.vert.between"
             break
+        case TGGravity.vert.around:
+            vertGravityStr = "TGGravity.vert.around"
+            break
+        case TGGravity.vert.among:
+            vertGravityStr = "TGGravity.vert.among"
+            break
         case TGGravity.vert.windowCenter:
             vertGravityStr = "TGGravity.vert.windowCenter"
             break;
@@ -494,6 +516,12 @@ extension LLTest3ViewController
             break
         case TGGravity.horz.between:
             horzGravityStr = "TGGravity.horz.between"
+            break
+        case TGGravity.horz.around:
+            horzGravityStr = "TGGravity.horz.around"
+            break
+        case TGGravity.horz.among:
+            horzGravityStr = "TGGravity.horz.among"
             break
         case TGGravity.horz.windowCenter:
             horzGravityStr = "TGGravity.horz.WindowCenter"

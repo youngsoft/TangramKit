@@ -53,7 +53,7 @@
  
  */
 
-//Current version is 1.4.1, please open: https://github.com/youngsoft/TangramKit/blob/master/CHANGELOG.md to show the changes.
+//Current version is 1.4.2, please open: https://github.com/youngsoft/TangramKit/blob/master/CHANGELOG.md to show the changes.
 
 
 
@@ -96,7 +96,7 @@ public enum TGVisibility {
 /// - 所谓对齐方式就是指多个子视图之间的对齐位置。水平方向一共有左、水平居中、右、左右两端对齐四种对齐方式，垂直方向一共有上、垂直居中、下、向下两端对齐四种方式。
 ///
 /// 在布局基类中有一个gravity属性用来表示布局内所有子视图的停靠方向和填充拉伸属性；在流式布局中有一个arrangedGravity属性用来表示布局内每排子视图的对齐方式。
-public struct TGGravity : OptionSet{
+public struct TGGravity : OptionSet {
     public let rawValue :Int
     public init(rawValue: Int) {self.rawValue = rawValue}
     
@@ -104,9 +104,7 @@ public struct TGGravity : OptionSet{
     public static let none = TGGravity(rawValue:0)
     
     /// 水平方向
-    public struct horz
-    {
-        
+    public struct horz {
         /// 左边停靠或者左对齐
         public static let left = TGGravity(rawValue:1)
         /// 水平中心停靠或者水平居中对齐
@@ -115,12 +113,16 @@ public struct TGGravity : OptionSet{
         public static let right = TGGravity(rawValue:4)
         /// 窗口水平中心停靠，表示在屏幕窗口的水平中心停靠
         public static let windowCenter = TGGravity(rawValue: 8)
-        /// 水平间距拉伸
+        /// 水平间距拉伸，并且头尾部分的间距是0, 如果只有一个子视图则变为左边停靠
         public static let between = TGGravity(rawValue: 16)
         /// 头部对齐,对于阿拉伯国家来说是和Right等价的,对于非阿拉伯国家则是和Left等价的
         public static let leading = TGGravity(rawValue: 32)
         /// 尾部对齐,对于阿拉伯国家来说是和Left等价的,对于非阿拉伯国家则是和Right等价的
         public static let trailing = TGGravity(rawValue:64)
+        /// 水平间距环绕拉伸，并且头尾部分为其他部分间距的一半, 如果只有一个子视图则变为水平居中停靠
+        public static let around = TGGravity(rawValue: 128)
+        /// 水平间距等分拉伸，并且头尾部分和其他部分间距的一样, 如果只有一个子视图则变为水平居中停靠
+        public static let among:TGGravity = [horz.between, horz.around]
         /// 水平宽度填充
         public static let fill:TGGravity = [horz.left, horz.center, horz.right]
         /// 水平掩码，用来获取水平方向的枚举值
@@ -128,8 +130,7 @@ public struct TGGravity : OptionSet{
     }
     
     /// 垂直方向
-    public struct vert
-    {
+    public struct vert {
         /// 上边停靠或者上对齐
         public static let top = TGGravity(rawValue:1 << 8)
         /// 垂直中心停靠或者垂直居中对齐
@@ -138,15 +139,18 @@ public struct TGGravity : OptionSet{
         public static let bottom = TGGravity(rawValue:4 << 8)
         /// 窗口垂直中心停靠，表示在屏幕窗口的垂直中心停靠
         public static let windowCenter = TGGravity(rawValue:8 << 8)
-        /// 垂直间距拉伸
+        /// 垂直间距拉伸，并且头尾部分的间距是0, 如果只有一个子视图则变为上边停靠
         public static let between = TGGravity(rawValue: 16 << 8)
         /// 垂直高度填充
         public static let fill:TGGravity = [vert.top, vert.center, vert.bottom]
         /// 基线对齐,只支持水平线性布局，指定基线对齐必须要指定出一个基线标准的子视图
         public static let baseline = TGGravity(rawValue: 32 << 8)
+        /// 垂直间距环绕拉伸，并且头尾部分为其他部分间距的一半, 如果只有一个子视图则变为垂直居中停靠
+        public static let around = TGGravity(rawValue: 64 << 8)
+        /// 垂直间距等分拉伸，并且头尾部分和其他部分间距的一样, 如果只有一个子视图则变为垂直居中停靠
+        public static let among:TGGravity = [vert.between, vert.around]
         /// 垂直掩码，用来获取垂直方向的枚举值
         public static let mask = TGGravity(rawValue:0x00FF)
-        
     }
     
     /// 整体居中
@@ -155,6 +159,8 @@ public struct TGGravity : OptionSet{
     public static let fill:TGGravity = [horz.fill, vert.fill]
     /// 全部拉伸
     public static let between:TGGravity = [horz.between, vert.between]
+    public static let around:TGGravity = [horz.around, vert.around]
+    public static let among:TGGravity = [horz.among, vert.among]
 }
 
 
@@ -166,9 +172,20 @@ public func >(left: TGGravity, right: TGGravity) -> Bool {
     return left.rawValue > right.rawValue
 }
 
+/// 停靠对齐的生效策略，主要用于流式布局中的最后一行。
+///
+/// - no: 不做任何停靠对齐
+/// - always: 总是停靠对齐
+/// - auto: 自动使用前面的停靠对齐策略
+public enum TGGravityPolicy {
+    case no
+    case always
+    case auto
+}
+
 
 /// 用来设置当线性布局中的子视图的尺寸大于线性布局的尺寸时的子视图的压缩策略枚举类型定义。请参考线性布局的tg_shrinkType属性的定义。
-public struct TGSubviewsShrinkType : OptionSet{
+public struct TGSubviewsShrinkType : OptionSet {
     public let rawValue :Int
     public init(rawValue: Int) {self.rawValue = rawValue}
     
@@ -196,15 +213,13 @@ public struct TGSubviewsShrinkType : OptionSet{
 ///
 /// 比如tg_width.equal(20%) 表示子视图的宽度是父视图的20%的比例。
 /// 请使用  数字% 方法来使用TGWeight类型的值。
-public struct TGWeight:Any
-{
+public struct TGWeight:Any {
     //常用的比重值。
     
     /// 0比重，表示不占用任何位置和尺寸。
     public static let zeroWeight = TGWeight(0)
     
     private var _value:CGFloat = 0
-    
     
     public init(_ value:Int8)
     {

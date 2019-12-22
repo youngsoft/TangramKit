@@ -194,6 +194,7 @@ public protocol TGFlowLayoutViewSizeClass:TGSequentLayoutViewSizeClass
     var tg_arrangedCount:Int {get set}
     var tg_pagedCount:Int {get set}
     var tg_arrangedGravity:TGGravity {get set}
+    var tg_lastlineGravityPolicy:TGGravityPolicy {get set}
     var tg_autoArrange:Bool {get set}
 }
 
@@ -819,15 +820,104 @@ internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeCla
     
 }
 
+internal struct TGSequentLayoutFlexSpace
+{
+    var subviewSize:CGFloat = 0
+    var minSpace:CGFloat = 0
+    var maxSpace:CGFloat = CGFloat.greatestFiniteMagnitude
+    var centered:Bool = false
+    
+    func calcMaxMinSubviewSizeForContent(_ containerSize:CGFloat, startPadding:CGFloat, endPadding:CGFloat, space:CGFloat) -> (CGFloat,CGFloat,CGFloat,CGFloat) {
+        
+        var subviewSize:CGFloat = self.subviewSize
+        var startPadding:CGFloat = startPadding
+        var endPadding:CGFloat = endPadding
+        var space:CGFloat = space
+        
+        var extralSpace = self.minSpace
+        if self.centered {
+            extralSpace *= -1
+        }
+        
+        let rowCount =  max(floor((containerSize - startPadding - endPadding + extralSpace) / (subviewSize + self.minSpace)),1)
+        var spaceCount = rowCount - 1
+        if self.centered {
+            spaceCount += 2
+        }
+        
+        if spaceCount > 0 {
+            space = (containerSize - startPadding - endPadding - subviewSize * rowCount) / spaceCount
+            
+            if _tgCGFloatGreat(space , self.maxSpace) {
+                space = self.maxSpace
+                subviewSize =  (containerSize - startPadding - endPadding - space * spaceCount) / rowCount;
+            }
+            
+            if self.centered {
+                startPadding += space
+                endPadding += space
+            }
+        }
+        
+        return (subviewSize,startPadding,endPadding,space)
+    }
+    
+    func calcMaxMinSubviewSize(_ containerSize:CGFloat, arrangedCount:Int, startPadding:CGFloat, endPadding:CGFloat, space:CGFloat) -> (CGFloat,CGFloat,CGFloat,CGFloat) {
+        
+        var subviewSize:CGFloat = self.subviewSize
+        var startPadding:CGFloat = startPadding
+        var endPadding:CGFloat = endPadding
+        var space:CGFloat = space
+        
+        var spaceCount:Int = arrangedCount - 1
+        if self.centered {
+            spaceCount += 2
+        }
+        
+        if spaceCount > 0 {
+            space = (containerSize - startPadding - endPadding - subviewSize * CGFloat(arrangedCount))/CGFloat(spaceCount)
+            
+            if _tgCGFloatGreat(space , self.maxSpace) || _tgCGFloatLess(space, self.minSpace)
+            {
+                if _tgCGFloatGreat(space , self.maxSpace) {
+                    space = self.maxSpace
+                }
+                
+                if _tgCGFloatLess(space , self.minSpace){
+                    space = self.minSpace
+                }
+                
+                subviewSize =  (containerSize - startPadding - endPadding - space * CGFloat(spaceCount)) / CGFloat(arrangedCount)
+            }
+            
+            if self.centered {
+                startPadding += space
+                endPadding += space
+            }
+        }
+        
+        return (subviewSize,startPadding,endPadding,space)
+    }
+}
+
 internal class TGSequentLayoutViewSizeClassImpl:TGLayoutViewSizeClassImpl,TGSequentLayoutViewSizeClass
 {
     var tg_orientation:TGOrientation = TGOrientation.vert
+    var tgFlexSpace:TGSequentLayoutFlexSpace! = nil
     
     override func copy(with zone: NSZone?) -> Any {
         
         let tsc = super.copy(with: zone) as! TGSequentLayoutViewSizeClassImpl
         
         tsc.tg_orientation = self.tg_orientation
+        
+        if let t = self.tgFlexSpace {
+            tsc.tgFlexSpace = TGSequentLayoutFlexSpace()
+            tsc.tgFlexSpace.subviewSize = t.subviewSize
+            tsc.tgFlexSpace.minSpace = t.minSpace
+            tsc.tgFlexSpace.maxSpace = t.maxSpace
+            tsc.tgFlexSpace.centered = t.centered
+        }
         
         return tsc
     }
@@ -859,18 +949,11 @@ internal class TGFloatLayoutViewSizeClassImpl : TGSequentLayoutViewSizeClassImpl
 {
     var tg_noBoundaryLimit:Bool = false
     
-    var subviewSize:CGFloat = 0
-    var minSpace:CGFloat = 0
-    var maxSpace:CGFloat = CGFloat.greatestFiniteMagnitude
-
     override func copy(with zone: NSZone?) -> Any {
         
         let tsc = super.copy(with: zone) as! TGFloatLayoutViewSizeClassImpl
         
         tsc.tg_noBoundaryLimit = self.tg_noBoundaryLimit
-        tsc.subviewSize = self.subviewSize
-        tsc.minSpace = self.minSpace
-        tsc.maxSpace = self.maxSpace
         
         return tsc
     }
@@ -884,13 +967,9 @@ internal class TGFlowLayoutViewSizeClassImpl:TGSequentLayoutViewSizeClassImpl,TG
     var tg_arrangedCount:Int = 0
     var tg_pagedCount:Int = 0
     var tg_arrangedGravity:TGGravity = TGGravity.none
+    var tg_lastlineGravityPolicy: TGGravityPolicy = TGGravityPolicy.no
     var tg_autoArrange:Bool = false
-    
-    var subviewSize:CGFloat = 0
-    var minSpace:CGFloat = 0
-    var maxSpace:CGFloat = CGFloat.greatestFiniteMagnitude
 
-    
     override func copy(with zone: NSZone?) -> Any {
         
         let tsc = super.copy(with: zone) as! TGFlowLayoutViewSizeClassImpl
@@ -898,11 +977,8 @@ internal class TGFlowLayoutViewSizeClassImpl:TGSequentLayoutViewSizeClassImpl,TG
         tsc.tg_arrangedCount = self.tg_arrangedCount
         tsc.tg_pagedCount = self.tg_pagedCount
         tsc.tg_arrangedGravity = self.tg_arrangedGravity
+        tsc.tg_lastlineGravityPolicy = self.tg_lastlineGravityPolicy
         tsc.tg_autoArrange = self.tg_autoArrange
-        tsc.subviewSize = self.subviewSize
-        tsc.minSpace = self.minSpace
-        tsc.maxSpace = self.maxSpace
-
         return tsc
     }
 

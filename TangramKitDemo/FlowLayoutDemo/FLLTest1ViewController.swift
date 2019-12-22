@@ -59,14 +59,15 @@ class FLLTest1ViewController: UIViewController {
         action:#selector(handleAdjustArrangeGravity)))
         actionLayout.addSubview(self.createActionButton(NSLocalizedString("adjust spacing", comment:""),
         action:#selector(handleAdjustSpace)))
-        
+        actionLayout.addSubview(self.createActionButton(NSLocalizedString("adjust gravity policy", comment:""),
+                                                        action:#selector(handleAdjustGravityPolicy)))
         
         let flowLayoutSetLabel = UILabel()
         flowLayoutSetLabel.font = CFTool.font(13)
         flowLayoutSetLabel.textColor = .red
         flowLayoutSetLabel.adjustsFontSizeToFitWidth = true
         flowLayoutSetLabel.tg_height.equal(.wrap)
-        flowLayoutSetLabel.numberOfLines = 5
+        flowLayoutSetLabel.numberOfLines = 6
         rootLayout.addSubview(flowLayoutSetLabel)
         self.flowLayoutSetLabel = flowLayoutSetLabel
         
@@ -119,7 +120,6 @@ extension FLLTest1ViewController
     
     }
     
-
 }
 
 //MARK: -Handle Method
@@ -140,7 +140,6 @@ extension FLLTest1ViewController
         self.flowLayout.tg_layoutAnimationWithDuration(0.4)
         self.flowlayoutInfo()
 
-
     }
     
     @objc func handleAdjustArrangedCount(_ sender:AnyObject?)
@@ -150,7 +149,6 @@ extension FLLTest1ViewController
         self.flowLayout.tg_arrangedCount = (self.flowLayout.tg_arrangedCount + 1) % 6
         self.flowLayout.tg_layoutAnimationWithDuration(0.4)
         self.flowlayoutInfo()
-
 
     }
     
@@ -175,8 +173,14 @@ extension FLLTest1ViewController
             vertGravity = TGGravity.vert.between;
             break;
         case TGGravity.vert.between:
-            vertGravity = TGGravity.vert.fill;
+            vertGravity = TGGravity.vert.around
             break;
+        case TGGravity.vert.around:
+            vertGravity = TGGravity.vert.among
+            break
+        case TGGravity.vert.among:
+            vertGravity = TGGravity.vert.fill
+            break
         case TGGravity.vert.fill:
                 vertGravity = TGGravity.vert.top;
                 self.flowLayout.subviews.forEach({ (v:UIView) in
@@ -217,8 +221,14 @@ extension FLLTest1ViewController
             horzGravity = TGGravity.horz.between;
             break;
         case TGGravity.horz.between:
-            horzGravity = TGGravity.horz.fill;
+            horzGravity = TGGravity.horz.around;
             break;
+        case TGGravity.horz.around:
+            horzGravity = TGGravity.horz.among;
+            break
+        case TGGravity.horz.among:
+            horzGravity = TGGravity.horz.fill
+            break
         case TGGravity.horz.fill:
             horzGravity = TGGravity.horz.left;
             self.flowLayout.subviews.forEach({ (v:UIView) in
@@ -325,8 +335,28 @@ extension FLLTest1ViewController
         
         self.flowLayout.tg_layoutAnimationWithDuration(0.4)
         self.flowlayoutInfo()
-
-
+    }
+    
+    @objc func handleAdjustGravityPolicy(_ sender:AnyObject?) {
+        
+        switch self.flowLayout.tg_lastlineGravityPolicy {
+        case TGGravityPolicy.always:
+            self.flowLayout.tg_lastlineGravityPolicy = TGGravityPolicy.auto
+            break
+        case TGGravityPolicy.auto:
+            self.flowLayout.tg_lastlineGravityPolicy = TGGravityPolicy.no
+            break
+        case TGGravityPolicy.no:
+            self.flowLayout.tg_lastlineGravityPolicy = TGGravityPolicy.always
+            break
+        }
+        
+        self.flowLayout.subviews.forEach({ (v:UIView) in
+            v.sizeToFit()
+        })
+        
+        self.flowLayout.tg_layoutAnimationWithDuration(0.4)
+        self.flowlayoutInfo()
     }
 
 }
@@ -354,9 +384,23 @@ extension FLLTest1ViewController
         let arrangedGravityStr = self.gravityInfo(self.flowLayout.tg_arrangedGravity)
     
         let subviewSpaceStr = "vert:\(self.flowLayout.tg_vspace), horz:\(self.flowLayout.tg_hspace)"
+        
+        let gravityPolicyStr = self.gravityPolicyInfo(self.flowLayout.tg_lastlineGravityPolicy)
 
     
-        self.flowLayoutSetLabel.text = "flowLayout:\norientation=" + orientationStr + ",arrangedCount=" + arrangeCountStr + "\ngravity="+gravityStr + "\narrangedGravity=" + arrangedGravityStr + "\nsubviewMargin=(" + subviewSpaceStr + ")"
+        self.flowLayoutSetLabel.text = "flowLayout:\norientation=" + orientationStr + ",arrangedCount=" + arrangeCountStr + "\ngravity="+gravityStr + "\narrangedGravity=" + arrangedGravityStr + "\nsubviewMargin=(" + subviewSpaceStr + ")\n " + gravityPolicyStr
+    }
+    
+    func gravityPolicyInfo(_ gravityPolicy:TGGravityPolicy) ->String {
+        
+        switch self.flowLayout.tg_lastlineGravityPolicy {
+        case TGGravityPolicy.always:
+            return "policy:always"
+        case TGGravityPolicy.auto:
+            return "policy:auto"
+        case TGGravityPolicy.no:
+            return "policy:no"
+        }
     }
     
     func gravityInfo(_ gravity:TGGravity) ->String
@@ -382,9 +426,12 @@ extension FLLTest1ViewController
         case TGGravity.vert.between:
             vertGravityStr = "TGGravity.vert.between"
             break
-        case TGGravity.vert.windowCenter:
-            vertGravityStr = "TGGravity.vert.windowCenter"
-            break;
+        case TGGravity.vert.around:
+            vertGravityStr = "TGGravity.vert.around"
+            break
+        case TGGravity.vert.among:
+            vertGravityStr = "TGGravity.vert.among"
+            break
         default:
             vertGravityStr = "TGGravity.vert.top"
             break
@@ -407,8 +454,11 @@ extension FLLTest1ViewController
         case TGGravity.horz.between:
             horzGravityStr = "TGGravity.horz.between"
             break
-        case TGGravity.horz.windowCenter:
-            horzGravityStr = "TGGravity.horz.WindowCenter"
+        case TGGravity.horz.around:
+            horzGravityStr = "TGGravity.horz.around"
+            break
+        case TGGravity.horz.among:
+            horzGravityStr = "TGGravity.horz.among"
             break
         default:
             horzGravityStr = "TGGravity.horz.left"
