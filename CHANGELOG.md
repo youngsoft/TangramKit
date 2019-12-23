@@ -3,16 +3,15 @@
 
 ---
 ## [V1.4.2](https://github.com/youngsoft/TangramKit/releases/tag/1.4.2)(2019/12/23)
+# Added
+1. 流式布局和线性布局添加对停靠属性`tg_gravity`的四个新枚举值： `TGGravity.vert.around、TGGravity.vert.among、TGGravity.horz.around、TGGravity.horz.among`的支持。这四个枚举值可以实现间距的环绕和间距的等分功能。between、around、among这三个拉伸的区别在于和父视图之间的间距上。
+2. 流式布局添加最后一行的停靠策略属性`tg_lastlineGravityPolicy`，用来指定流式布局最后行的停靠策略。
+3. 流式布局、浮动布局、线性布局添加对行内浮动间距的支持。我们可使用`setSubviewsSize`函数中的centered参数来指定每一行的头尾视图和父布局视图之间的间距也是浮动的。
+4. 修复BUG#41, #42。
 
 
 
 ## [V1.4.1](https://github.com/youngsoft/TangramKit/releases/tag/1.4.1)(2019/11/12)
-# Added
-1. 流式布局和线性布局添加对停靠属性TGGravity.vert.around、TGGravity.vert.among、TGGravity.horz.around、TGGravity.horz.among的支持。这四个属性可以实现间距的环绕和间距的等分功能。between、around、among这三个拉伸的区别在于和父视图之间的间距上。
-2. 流式布局添加最后一行的停靠策略属性
-3. 流式布局、浮动布局、线性布局添加对行内浮动间距的支持。
-4. 修复BUG
-
 
 # Fixed
 1. 实现对边界线颜色设置的iOS13黑白模式的适配能力。[issue#38](https://github.com/youngsoft/TangramKit/issues/38)
