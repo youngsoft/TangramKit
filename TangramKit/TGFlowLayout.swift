@@ -241,7 +241,7 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
     
     
     /**
-     * 指定流式布局最后一行的尺寸或间距的拉伸策略。默认值是TGGravityPolicy.no,表示最后一行的尺寸或间接拉伸策略不生效。如果布局只有一行则不会受到这个策略的影响。
+     * 指定流式布局最后一行的尺寸或间距的拉伸策略。默认值是TGGravityPolicy.no表示最后一行的尺寸或间接拉伸策略不生效。
        在流式布局中我们可以通过tg_gravity属性来对每一行的尺寸或间距进行拉伸处理。但是在实际情况中最后一行的子视图数量可能会小于等于前面行的数量。
        在这种情况下如果对最后一行进行相同的尺寸或间距的拉伸处理则有可能会影响整体的布局效果。因此我们可通过这个属性来指定最后一行的尺寸或间距的生效策略。
         这个策略在不同的流式布局中效果不一样：
@@ -591,7 +591,6 @@ extension TGFlowLayout
         //只有最后一行，并且数量小于tg_arrangedCount，并且不是第一行才应用策略。
         let applyLastlineGravityPolicy:Bool = (startIndex == sbs.count &&
             count != lsc.tg_arrangedCount &&
-            (startIndex - count) != 0 &&
         (horzGravity == TGGravity.horz.between || horzGravity == TGGravity.horz.around || horzGravity == TGGravity.horz.among || horzGravity == TGGravity.horz.fill))
         
         
@@ -719,7 +718,7 @@ extension TGFlowLayout
                 else {
                     //只拉伸间距
                     sbvtgFrame.leading += addXPosInc * CGFloat(j - (startIndex - count))
-                    if applyLastlineGravityPolicy && lsc.tg_lastlineGravityPolicy == TGGravityPolicy.auto {
+                    if (startIndex - count) > 0 && applyLastlineGravityPolicy && lsc.tg_lastlineGravityPolicy == TGGravityPolicy.auto {
                         //对齐前一行对应位置的
                         sbvtgFrame.leading = sbs[j - lsc.tg_arrangedCount].tgFrame.leading
                     }
@@ -755,7 +754,6 @@ extension TGFlowLayout
         //只有最后一行，并且数量小于tg_arrangedCount，并且不是第一行才应用策略。
         let applyLastlineGravityPolicy:Bool = (startIndex == sbs.count &&
             count != lsc.tg_arrangedCount &&
-            (startIndex - count) != 0 &&
             (vertGravity == TGGravity.vert.between || vertGravity == TGGravity.vert.around || vertGravity == TGGravity.vert.among || vertGravity == TGGravity.vert.fill))
 
         
@@ -882,7 +880,7 @@ extension TGFlowLayout
                 else {
                     //只拉伸间距
                     sbvtgFrame.top += addYPosInc * CGFloat(j - (startIndex - count))
-                    if applyLastlineGravityPolicy && lsc.tg_lastlineGravityPolicy == TGGravityPolicy.auto {
+                    if (startIndex - count) > 0 && applyLastlineGravityPolicy && lsc.tg_lastlineGravityPolicy == TGGravityPolicy.auto {
                         //对齐前一行对应位置的
                         sbvtgFrame.top = sbs[j - lsc.tg_arrangedCount].tgFrame.top
                     }
