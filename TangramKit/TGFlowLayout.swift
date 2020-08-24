@@ -215,15 +215,15 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
     /**
      *设置流式布局中每排子视图的对齐方式。
      如果布局的方向是.vert则表示每排子视图的上中下对齐方式，这里的对齐基础是以每排中的最高的子视图为基准。这个属性只支持：
-     TGGravity.vert.top     顶部对齐
-     TGGravity.vert.center  垂直居中对齐
-     TGGravity.vert.bottom  底部对齐
-     TGGravity.vert.fill    两端对齐
+     TGGravity.Vertical.top     顶部对齐
+     TGGravity.Vertical.center  垂直居中对齐
+     TGGravity.Vertical.bottom  底部对齐
+     TGGravity.Vertical.fill    两端对齐
      如果布局的方向是.horz则表示每排子视图的左中右对齐方式，这里的对齐基础是以每排中的最宽的子视图为基准。这个属性只支持：
-     TGGravity.horz.left    左边对齐
-     TGGravity.horz.center  水平居中对齐
-     TGGravity.horz.right   右边对齐
-     TGGravity.horz.fill    两端对齐
+     TGGravity.Horizontal.left    左边对齐
+     TGGravity.Horizontal.center  水平居中对齐
+     TGGravity.Horizontal.right   右边对齐
+     TGGravity.Horizontal.fill    两端对齐
      */
     public var tg_arrangedGravity:TGGravity {
         get {
@@ -327,8 +327,8 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
             {
                 if sbvsc.width.isWrap
                 {
-                    if (lsc.tg_pagedCount > 0 || (lsc.tg_orientation == TGOrientation.horz && (lsc.tg_arrangedGravity & TGGravity.vert.mask) == TGGravity.horz.fill) ||
-                        (lsc.tg_orientation == TGOrientation.vert && ((lsc.tg_gravity & TGGravity.vert.mask) == TGGravity.horz.fill)))
+                    if (lsc.tg_pagedCount > 0 || (lsc.tg_orientation == TGOrientation.horz && (lsc.tg_arrangedGravity & TGGravity.Vertical.mask) == TGGravity.Horizontal.fill) ||
+                        (lsc.tg_orientation == TGOrientation.vert && ((lsc.tg_gravity & TGGravity.Vertical.mask) == TGGravity.Horizontal.fill)))
                     {
                         sbvsc.width.resetValue()
                     }
@@ -336,8 +336,8 @@ open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
                 
                 if sbvsc.height.isWrap
                 {
-                    if (lsc.tg_pagedCount > 0 || (lsc.tg_orientation == TGOrientation.vert && (lsc.tg_arrangedGravity & TGGravity.horz.mask) == TGGravity.vert.fill) ||
-                        (lsc.tg_orientation == TGOrientation.horz && ((lsc.tg_gravity & TGGravity.horz.mask) == TGGravity.vert.fill)))
+                    if (lsc.tg_pagedCount > 0 || (lsc.tg_orientation == TGOrientation.vert && (lsc.tg_arrangedGravity & TGGravity.Horizontal.mask) == TGGravity.Vertical.fill) ||
+                        (lsc.tg_orientation == TGOrientation.horz && ((lsc.tg_gravity & TGGravity.Horizontal.mask) == TGGravity.Vertical.fill)))
                     {
                         sbvsc.height.resetValue()
                     }
@@ -587,29 +587,29 @@ extension TGFlowLayout
         var addXPos:CGFloat = 0
         var addXPosInc:CGFloat = 0
         var addXFill:CGFloat = 0
-        let averageArrange = (horzGravity == TGGravity.horz.fill)
+        let averageArrange = (horzGravity == TGGravity.Horizontal.fill)
         //只有最后一行，并且数量小于tg_arrangedCount，并且不是第一行才应用策略。
         let applyLastlineGravityPolicy:Bool = (startIndex == sbs.count &&
             count != lsc.tg_arrangedCount &&
-        (horzGravity == TGGravity.horz.between || horzGravity == TGGravity.horz.around || horzGravity == TGGravity.horz.among || horzGravity == TGGravity.horz.fill))
+        (horzGravity == TGGravity.Horizontal.between || horzGravity == TGGravity.Horizontal.around || horzGravity == TGGravity.Horizontal.among || horzGravity == TGGravity.Horizontal.fill))
         
         
         //处理 对其方式
         if !averageArrange || lsc.tg_arrangedCount == 0 {
             switch horzGravity {
-            case TGGravity.horz.center:
+            case TGGravity.Horizontal.center:
                 addXPos = (selfSize.width - horzPadding - rowMaxWidth)/2
                 break
-            case TGGravity.horz.trailing:
+            case TGGravity.Horizontal.trailing:
                 //不用考虑左边距，而原来的位置增加了左边距 因此不用考虑
                 addXPos = selfSize.width - horzPadding - rowMaxWidth
                 break
-            case TGGravity.horz.between:
+            case TGGravity.Horizontal.between:
                 if count > 1 && (!applyLastlineGravityPolicy || lsc.tg_lastlineGravityPolicy == TGGravityPolicy.always) {
                     addXPosInc = (selfSize.width - horzPadding - rowMaxWidth)/(CGFloat(count) - 1)
                 }
                 break
-            case TGGravity.horz.around:
+            case TGGravity.Horizontal.around:
                 if !applyLastlineGravityPolicy || lsc.tg_lastlineGravityPolicy == TGGravityPolicy.always {
                     if count > 1 {
                         addXPosInc = (selfSize.width - horzPadding - rowMaxWidth)/CGFloat(count)
@@ -619,7 +619,7 @@ extension TGFlowLayout
                     }
                 }
                 break
-            case TGGravity.horz.among:
+            case TGGravity.Horizontal.among:
                 if !applyLastlineGravityPolicy || lsc.tg_lastlineGravityPolicy == TGGravityPolicy.always {
                     if count > 1 {
                         addXPosInc = (selfSize.width - horzPadding - rowMaxWidth)/CGFloat(count + 1)
@@ -692,17 +692,17 @@ extension TGFlowLayout
             }
             
             //为子视图设置单独的对齐方式
-            var sbvVertAlignment = sbvsc.tg_alignment & TGGravity.horz.mask
+            var sbvVertAlignment = sbvsc.tg_alignment & TGGravity.Horizontal.mask
             if sbvVertAlignment == TGGravity.none
             {
                 sbvVertAlignment = vertAlignment
             }
-            if vertAlignment == TGGravity.vert.between
+            if vertAlignment == TGGravity.Vertical.between
             {
                 sbvVertAlignment = vertAlignment
             }
             
-            if (sbvVertAlignment != TGGravity.none && sbvVertAlignment != TGGravity.vert.top) || _tgCGFloatNotEqual(addXPos, 0)  || _tgCGFloatNotEqual(addXFill, 0) || _tgCGFloatNotEqual(addXPosInc, 0) || applyLastlineGravityPolicy
+            if (sbvVertAlignment != TGGravity.none && sbvVertAlignment != TGGravity.Vertical.top) || _tgCGFloatNotEqual(addXPos, 0)  || _tgCGFloatNotEqual(addXFill, 0) || _tgCGFloatNotEqual(addXPosInc, 0) || applyLastlineGravityPolicy
             {
                 sbvtgFrame.leading += addXPos
                 
@@ -728,13 +728,13 @@ extension TGFlowLayout
                 let bottomSpace = sbvsc.bottom.absPos
                 
                 switch sbvVertAlignment {
-                case TGGravity.vert.center:
+                case TGGravity.Vertical.center:
                     sbvtgFrame.top += (rowMaxHeight - topSpace - bottomSpace - sbvtgFrame.height) / 2
                     break
-                case TGGravity.vert.bottom:
+                case TGGravity.Vertical.bottom:
                     sbvtgFrame.top += rowMaxHeight - topSpace - bottomSpace - sbvtgFrame.height
                     break
-                case TGGravity.vert.fill:
+                case TGGravity.Vertical.fill:
                     sbvtgFrame.height =  self.tgValidMeasure(sbvsc.height, sbv: sbv, calcSize: rowMaxHeight - topSpace - bottomSpace, sbvSize: sbvtgFrame.frame.size, selfLayoutSize: selfSize)
                     break
                 default:
@@ -750,27 +750,27 @@ extension TGFlowLayout
         var addYPos:CGFloat = 0
         var addYPosInc:CGFloat = 0
         var addYFill:CGFloat = 0
-        let averageArrange = (vertGravity == TGGravity.vert.fill)
+        let averageArrange = (vertGravity == TGGravity.Vertical.fill)
         //只有最后一行，并且数量小于tg_arrangedCount，并且不是第一行才应用策略。
         let applyLastlineGravityPolicy:Bool = (startIndex == sbs.count &&
             count != lsc.tg_arrangedCount &&
-            (vertGravity == TGGravity.vert.between || vertGravity == TGGravity.vert.around || vertGravity == TGGravity.vert.among || vertGravity == TGGravity.vert.fill))
+            (vertGravity == TGGravity.Vertical.between || vertGravity == TGGravity.Vertical.around || vertGravity == TGGravity.Vertical.among || vertGravity == TGGravity.Vertical.fill))
 
         
         if !averageArrange || lsc.tg_arrangedCount == 0 {
             switch vertGravity {
-            case TGGravity.vert.center:
+            case TGGravity.Vertical.center:
                 addYPos = (selfSize.height - vertPadding - colMaxHeight)/2
                 break
-            case TGGravity.vert.bottom:
+            case TGGravity.Vertical.bottom:
                 addYPos = selfSize.height - vertPadding - colMaxHeight
                 break
-            case TGGravity.vert.between:
+            case TGGravity.Vertical.between:
                 if count > 1 && (!applyLastlineGravityPolicy || lsc.tg_lastlineGravityPolicy == TGGravityPolicy.always) {
                     addYPosInc = (selfSize.height - vertPadding - colMaxHeight)/(CGFloat(count) - 1)
                 }
                 break
-            case TGGravity.vert.around:
+            case TGGravity.Vertical.around:
                 if !applyLastlineGravityPolicy || lsc.tg_lastlineGravityPolicy == TGGravityPolicy.always {
                     if count > 1 {
                         addYPosInc = (selfSize.height - vertPadding - colMaxHeight)/CGFloat(count)
@@ -780,7 +780,7 @@ extension TGFlowLayout
                     }
                 }
                 break
-            case TGGravity.vert.among:
+            case TGGravity.Vertical.among:
                 if !applyLastlineGravityPolicy || lsc.tg_lastlineGravityPolicy == TGGravityPolicy.always {
                     if count > 1 {
                         addYPosInc = (selfSize.height - vertPadding - colMaxHeight)/CGFloat(count + 1)
@@ -853,17 +853,17 @@ extension TGFlowLayout
             }
             
             //为子视图设置单独的对齐方式
-            var sbvHorzAlignment = self.tgConvertLeftRightGravityToLeadingTrailing(sbvsc.tg_alignment & TGGravity.vert.mask)
+            var sbvHorzAlignment = self.tgConvertLeftRightGravityToLeadingTrailing(sbvsc.tg_alignment & TGGravity.Vertical.mask)
             if sbvHorzAlignment == TGGravity.none
             {
                 sbvHorzAlignment = horzAlignment
             }
-            if horzAlignment == TGGravity.vert.between
+            if horzAlignment == TGGravity.Vertical.between
             {
                 sbvHorzAlignment = horzAlignment
             }
             
-            if (sbvHorzAlignment != TGGravity.none && sbvHorzAlignment != TGGravity.horz.leading) || _tgCGFloatNotEqual(addYPos, 0) ||
+            if (sbvHorzAlignment != TGGravity.none && sbvHorzAlignment != TGGravity.Horizontal.leading) || _tgCGFloatNotEqual(addYPos, 0) ||
                _tgCGFloatNotEqual(addYFill, 0) ||
             _tgCGFloatNotEqual(addYPosInc, 0) || applyLastlineGravityPolicy
             {
@@ -890,13 +890,13 @@ extension TGFlowLayout
                 let trailingSpace = sbvsc.trailing.absPos
                 
                 switch sbvHorzAlignment {
-                case TGGravity.horz.center:
+                case TGGravity.Horizontal.center:
                     sbvtgFrame.leading += (colMaxWidth - leadingSpace  - trailingSpace - sbvtgFrame.width)/2
                     break
-                case TGGravity.horz.trailing:
+                case TGGravity.Horizontal.trailing:
                     sbvtgFrame.leading += colMaxWidth - leadingSpace - trailingSpace - sbvtgFrame.width
                     break
-                case TGGravity.horz.fill:
+                case TGGravity.Horizontal.fill:
                     sbvtgFrame.width =  self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: colMaxWidth - leadingSpace - trailingSpace, sbvSize: sbvtgFrame.frame.size, selfLayoutSize: selfSize)
                     break
                 default:
@@ -980,9 +980,9 @@ extension TGFlowLayout
         let topPadding:CGFloat = lsc.tgTopPadding
         let bottomPadding:CGFloat = lsc.tgBottomPadding
         
-        var vertGravity:TGGravity = lsc.tg_gravity & TGGravity.horz.mask
-        let horzGravity:TGGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.vert.mask)
-        let vertAlignment:TGGravity = lsc.tg_arrangedGravity & TGGravity.horz.mask
+        var vertGravity:TGGravity = lsc.tg_gravity & TGGravity.Horizontal.mask
+        let horzGravity:TGGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.Vertical.mask)
+        let vertAlignment:TGGravity = lsc.tg_arrangedGravity & TGGravity.Horizontal.mask
         
         var horzSpace = lsc.tg_hspace
         let vertSpace = lsc.tg_vspace
@@ -1045,7 +1045,7 @@ extension TGFlowLayout
         }
 
         
-        let averageArrange = (horzGravity == TGGravity.horz.fill)
+        let averageArrange = (horzGravity == TGGravity.Horizontal.fill)
         
         var arrangedIndex:Int = 0
         var rowTotalWeight:CGFloat = 0
@@ -1280,7 +1280,7 @@ extension TGFlowLayout
                 }
                 
             }
-            else if vertAlignment == TGGravity.vert.between
+            else if vertAlignment == TGGravity.Vertical.between
             {
                 //当行是紧凑排行时需要特殊处理当前的垂直位置。
                 //第0行特殊处理。
@@ -1354,36 +1354,36 @@ extension TGFlowLayout
             var fill:CGFloat = 0
             let arranges = floor(CGFloat(sbs.count + arrangedCount - 1) / CGFloat(arrangedCount))
             
-            if arranges <= 1 && vertGravity == TGGravity.vert.around
+            if arranges <= 1 && vertGravity == TGGravity.Vertical.around
             {
-                vertGravity = TGGravity.vert.center
+                vertGravity = TGGravity.Vertical.center
             }
             
-            if vertGravity == TGGravity.vert.center {
+            if vertGravity == TGGravity.Vertical.center {
                 addYPos = (selfSize.height - maxHeight)/2
             }
-            else if vertGravity == TGGravity.vert.bottom {
+            else if vertGravity == TGGravity.Vertical.bottom {
                 addYPos = selfSize.height - maxHeight
             }
-            else if (vertGravity == TGGravity.vert.fill)
+            else if (vertGravity == TGGravity.Vertical.fill)
             {
                 if (arranges > 0)
                 {
                    fill = (selfSize.height - maxHeight) / arranges
                 }
             }
-            else if (vertGravity == TGGravity.vert.between)
+            else if (vertGravity == TGGravity.Vertical.between)
             {
                 if (arranges > 1)
                 {
                    between = (selfSize.height - maxHeight) / (arranges - 1)
                 }
             }
-            else if (vertGravity == TGGravity.vert.around)
+            else if (vertGravity == TGGravity.Vertical.around)
             {
                 between = (selfSize.height - maxHeight) / arranges
             }
-            else if (vertGravity == TGGravity.vert.among)
+            else if (vertGravity == TGGravity.Vertical.among)
             {
                 between = (selfSize.height - maxHeight) / (arranges + 1)
             }
@@ -1402,12 +1402,12 @@ extension TGFlowLayout
                     sbvtgFrame.top += between * CGFloat(line)
                     
                     //如果是vert_around那么所有行都应该添加一半的between值。
-                    if (vertGravity == TGGravity.vert.around)
+                    if (vertGravity == TGGravity.Vertical.around)
                     {
                         sbvtgFrame.top += (between / 2.0)
                     }
                     
-                    if (vertGravity == TGGravity.vert.among)
+                    if (vertGravity == TGGravity.Vertical.among)
                     {
                         sbvtgFrame.top += between
                     }
@@ -1441,9 +1441,9 @@ extension TGFlowLayout
         let topPadding:CGFloat = lsc.tgTopPadding
         let bottomPadding:CGFloat = lsc.tgBottomPadding
         
-        var vertGravity:TGGravity = lsc.tg_gravity & TGGravity.horz.mask
-        let horzGravity:TGGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.vert.mask)
-        let vertAlignment:TGGravity = lsc.tg_arrangedGravity & TGGravity.horz.mask
+        var vertGravity:TGGravity = lsc.tg_gravity & TGGravity.Horizontal.mask
+        let horzGravity:TGGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.Vertical.mask)
+        let vertAlignment:TGGravity = lsc.tg_arrangedGravity & TGGravity.Horizontal.mask
     
         
         var horzSpace = lsc.tg_hspace
@@ -1596,36 +1596,36 @@ extension TGFlowLayout
             var between:CGFloat = 0
             var fill:CGFloat = 0
             
-            if arrangeIndexSet.count <= 1 && vertGravity == TGGravity.vert.around
+            if arrangeIndexSet.count <= 1 && vertGravity == TGGravity.Vertical.around
             {
-                vertGravity = TGGravity.vert.center
+                vertGravity = TGGravity.Vertical.center
             }
             
-            if vertGravity == TGGravity.vert.center {
+            if vertGravity == TGGravity.Vertical.center {
                 addYPos = (selfSize.height - bottomPadding - rowMaxHeight - yPos)/2
             }
-            else if vertGravity == TGGravity.vert.bottom {
+            else if vertGravity == TGGravity.Vertical.bottom {
                 addYPos = selfSize.height - bottomPadding - rowMaxHeight - yPos
             }
-            else if vertGravity == TGGravity.vert.fill {
+            else if vertGravity == TGGravity.Vertical.fill {
             
                 if arrangeIndexSet.count > 0
                 {
                    fill = (selfSize.height - bottomPadding - rowMaxHeight - yPos) / CGFloat(arrangeIndexSet.count)
                 }
             }
-            else if (vertGravity == TGGravity.vert.between)
+            else if (vertGravity == TGGravity.Vertical.between)
             {
                 if arrangeIndexSet.count > 1
                 {
                    between = (selfSize.height - bottomPadding - rowMaxHeight - yPos) / CGFloat(arrangeIndexSet.count - 1)
                 }
             }
-            else if (vertGravity == TGGravity.vert.around)
+            else if (vertGravity == TGGravity.Vertical.around)
             {
                 between = (selfSize.height - bottomPadding - rowMaxHeight - yPos) / CGFloat(arrangeIndexSet.count)
             }
-            else if (vertGravity == TGGravity.vert.among)
+            else if (vertGravity == TGGravity.Vertical.among)
             {
                 between = (selfSize.height - bottomPadding - rowMaxHeight - yPos) / CGFloat(arrangeIndexSet.count + 1)
             }
@@ -1653,12 +1653,12 @@ extension TGFlowLayout
                     sbvtgFrame.top += between * line
                     
                     //如果是vert_around那么所有行都应该添加一半的between值。
-                    if (vertGravity == TGGravity.vert.around)
+                    if (vertGravity == TGGravity.Vertical.around)
                     {
                         sbvtgFrame.top += (between / 2.0)
                     }
                     
-                    if (vertGravity == TGGravity.vert.among)
+                    if (vertGravity == TGGravity.Vertical.among)
                     {
                         sbvtgFrame.top += between
                     }
@@ -1680,9 +1680,9 @@ extension TGFlowLayout
         var topPadding:CGFloat = lsc.tgTopPadding
         var bottomPadding:CGFloat = lsc.tgBottomPadding
         
-        let vertGravity:TGGravity = lsc.tg_gravity & TGGravity.horz.mask
-        var horzGravity:TGGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.vert.mask)
-        let horzAlignment:TGGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_arrangedGravity & TGGravity.vert.mask)
+        let vertGravity:TGGravity = lsc.tg_gravity & TGGravity.Horizontal.mask
+        var horzGravity:TGGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.Vertical.mask)
+        let horzAlignment:TGGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_arrangedGravity & TGGravity.Vertical.mask)
 
         let horzSpace = lsc.tg_hspace
         var vertSpace = lsc.tg_vspace
@@ -1747,7 +1747,7 @@ extension TGFlowLayout
         }
 
         
-        let averageArrange = (vertGravity == TGGravity.vert.fill)
+        let averageArrange = (vertGravity == TGGravity.Vertical.fill)
         
         var arrangedIndex:Int = 0
         var rowTotalWeight:CGFloat = 0
@@ -2000,7 +2000,7 @@ extension TGFlowLayout
                 }
 
             }
-            else if horzAlignment == TGGravity.horz.between
+            else if horzAlignment == TGGravity.Horizontal.between
             {
                 //当列是紧凑排列时需要特殊处理当前的水平位置。
                 //第0列特殊处理。
@@ -2092,36 +2092,36 @@ extension TGFlowLayout
             var fill:CGFloat = 0
             let arranges = floor(CGFloat(sbs.count + arrangedCount - 1) / CGFloat(arrangedCount))
 
-            if arranges <= 1 && horzGravity == TGGravity.horz.around
+            if arranges <= 1 && horzGravity == TGGravity.Horizontal.around
             {
-                horzGravity = TGGravity.horz.center
+                horzGravity = TGGravity.Horizontal.center
             }
             
-            if horzGravity == TGGravity.horz.center {
+            if horzGravity == TGGravity.Horizontal.center {
                 addXPos = (selfSize.width - maxWidth) / 2
             }
-            else if horzGravity == TGGravity.horz.trailing {
+            else if horzGravity == TGGravity.Horizontal.trailing {
                 addXPos = selfSize.width - maxWidth
             }
-            else if (horzGravity == TGGravity.horz.fill)
+            else if (horzGravity == TGGravity.Horizontal.fill)
             {
                 if (arranges > 0)
                 {
                     fill = (selfSize.width - maxWidth) / arranges
                 }
             }
-            else if (horzGravity == TGGravity.horz.between)
+            else if (horzGravity == TGGravity.Horizontal.between)
             {
                 if (arranges > 1)
                 {
                    between = (selfSize.width - maxWidth) / (arranges - 1)
                 }
             }
-            else if (horzGravity == TGGravity.horz.around)
+            else if (horzGravity == TGGravity.Horizontal.around)
             {
                 between = (selfSize.width - maxWidth) / arranges
             }
-            else if (horzGravity == TGGravity.horz.among)
+            else if (horzGravity == TGGravity.Horizontal.among)
             {
                 between = (selfSize.width - maxWidth) / (arranges + 1)
             }
@@ -2140,12 +2140,12 @@ extension TGFlowLayout
                     sbvtgFrame.leading += between * CGFloat(line)
                     
                     //如果是vert_around那么所有行都应该添加一半的between值。
-                    if (horzGravity == TGGravity.horz.around)
+                    if (horzGravity == TGGravity.Horizontal.around)
                     {
                         sbvtgFrame.leading += (between / 2.0)
                     }
                     
-                    if (horzGravity == TGGravity.horz.among)
+                    if (horzGravity == TGGravity.Horizontal.among)
                     {
                         sbvtgFrame.leading += between
                     }
@@ -2163,9 +2163,9 @@ extension TGFlowLayout
         var topPadding:CGFloat = lsc.tgTopPadding
         var bottomPadding:CGFloat = lsc.tgBottomPadding
         
-        let vertGravity:TGGravity = lsc.tg_gravity & TGGravity.horz.mask
-        var horzGravity:TGGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.vert.mask)
-        let horzAlignment:TGGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_arrangedGravity & TGGravity.vert.mask)
+        let vertGravity:TGGravity = lsc.tg_gravity & TGGravity.Horizontal.mask
+        var horzGravity:TGGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.Vertical.mask)
+        let horzAlignment:TGGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_arrangedGravity & TGGravity.Vertical.mask)
 
         
         //支持浮动垂直间距。
@@ -2324,38 +2324,38 @@ extension TGFlowLayout
             var between:CGFloat = 0
             var fill:CGFloat = 0
             
-            if arrangeIndexSet.count <= 1 && horzGravity == TGGravity.horz.around
+            if arrangeIndexSet.count <= 1 && horzGravity == TGGravity.Horizontal.around
             {
-                horzGravity = TGGravity.horz.center
+                horzGravity = TGGravity.Horizontal.center
             }
             
-            if (horzGravity == TGGravity.horz.center)
+            if (horzGravity == TGGravity.Horizontal.center)
             {
                 addXPos = (selfSize.width - trailingPadding - colMaxWidth - xPos) / 2;
             }
-            else if (horzGravity == TGGravity.horz.trailing)
+            else if (horzGravity == TGGravity.Horizontal.trailing)
             {
                 addXPos = selfSize.width - trailingPadding - colMaxWidth - xPos;
             }
-            else if (horzGravity == TGGravity.horz.fill)
+            else if (horzGravity == TGGravity.Horizontal.fill)
             {
                 if (arrangeIndexSet.count > 0)
                 {
                    fill = (selfSize.width - trailingPadding - colMaxWidth - xPos) / CGFloat(arrangeIndexSet.count)
                 }
             }
-            else if (horzGravity == TGGravity.horz.between)
+            else if (horzGravity == TGGravity.Horizontal.between)
             {
                 if (arrangeIndexSet.count > 1)
                 {
                   between = (selfSize.width - trailingPadding - colMaxWidth - xPos) / CGFloat(arrangeIndexSet.count - 1)
                 }
             }
-            else if (horzGravity == TGGravity.horz.around)
+            else if (horzGravity == TGGravity.Horizontal.around)
             {
                 between = (selfSize.width - trailingPadding - colMaxWidth - xPos) / CGFloat(arrangeIndexSet.count)
             }
-            else if (horzGravity == TGGravity.horz.among)
+            else if (horzGravity == TGGravity.Horizontal.among)
             {
                 between = (selfSize.width - trailingPadding - colMaxWidth - xPos) / CGFloat(arrangeIndexSet.count + 1)
             }
@@ -2382,12 +2382,12 @@ extension TGFlowLayout
                     sbvtgFrame.leading += fill * line
                     sbvtgFrame.leading += between * line
                     
-                    if (horzGravity == TGGravity.horz.around)
+                    if (horzGravity == TGGravity.Horizontal.around)
                     {
                         sbvtgFrame.leading += (between / 2.0)
                     }
                     
-                    if (horzGravity == TGGravity.horz.among)
+                    if (horzGravity == TGGravity.Horizontal.among)
                     {
                         sbvtgFrame.leading += between
                     }

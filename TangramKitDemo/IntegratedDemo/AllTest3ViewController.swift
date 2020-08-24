@@ -69,7 +69,7 @@ class AllTest3ViewController: UIViewController {
         let  contentLayout = TGLinearLayout(.vert)
         contentLayout.tg_width.equal(.fill)
         contentLayout.tg_height.equal(.wrap)
-        contentLayout.tg_gravity = TGGravity.horz.fill; //子视图里面的内容的宽度跟布局视图相等，这样子视图就不需要设置宽度了。
+        contentLayout.tg_gravity = TGGravity.Horizontal.fill; //子视图里面的内容的宽度跟布局视图相等，这样子视图就不需要设置宽度了。
         contentLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 60, right: 10) //这里bottom设置为60的原因是底部有一个50高度的按钮，因此保留这部分空间。
         scrollView.addSubview(contentLayout)
         
@@ -195,7 +195,7 @@ extension AllTest3ViewController
         testLayout.tg_leadingPadding = 10
         testLayout.tg_trailingPadding = 10
         testLayout.tg_height.equal(50)
-        testLayout.tg_gravity = TGGravity.vert.fill
+        testLayout.tg_gravity = TGGravity.Vertical.fill
         testLayout.tg_hspace = 10
         testLayout.tg_top.equal(10)
         contentLayout.addSubview(testLayout)
@@ -244,7 +244,7 @@ extension AllTest3ViewController
         testLayout.tg_leadingPadding = 10
         testLayout.tg_trailingPadding = 10
         testLayout.tg_height.equal(50)
-        testLayout.tg_gravity = TGGravity.vert.fill
+        testLayout.tg_gravity = TGGravity.Vertical.fill
         testLayout.tg_shrinkType = .auto  //左右2个子视图会根据自身的宽度自动调整。不会产生覆盖和重叠。
         contentLayout.addSubview(testLayout)
         self.flexedLayout = testLayout
@@ -284,7 +284,7 @@ extension AllTest3ViewController
         
         let testLayout = TGFlowLayout(.vert, arrangedCount:3)
         testLayout.backgroundColor = .white
-        testLayout.tg_gravity = TGGravity.horz.fill   //尺寸相等
+        testLayout.tg_gravity = TGGravity.Horizontal.fill   //尺寸相等
         testLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
         testLayout.tg_space = 10
         testLayout.tg_height.equal(50)
@@ -336,7 +336,7 @@ extension AllTest3ViewController
         actionLayout.tg_leadingPadding = 10
         actionLayout.tg_trailingPadding = 10
         actionLayout.tg_height.equal(50)
-        actionLayout.tg_gravity = TGGravity.vert.center //左右内边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
+        actionLayout.tg_gravity = TGGravity.Vertical.center //左右内边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
         
         let label = UILabel()
         label.text = title
@@ -361,7 +361,7 @@ extension AllTest3ViewController
         switchLayout.tg_leadingPadding = 10
         switchLayout.tg_trailingPadding = 10
         switchLayout.tg_height.equal(50)
-        switchLayout.tg_gravity = TGGravity.vert.center //左右边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
+        switchLayout.tg_gravity = TGGravity.Vertical.center //左右边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
         
         let label = UILabel()
         label.text = title
@@ -387,7 +387,7 @@ extension AllTest3ViewController
         segmentedLayout.tg_leadingPadding = 10
         segmentedLayout.tg_trailingPadding = 10
         segmentedLayout.tg_height.equal(50)
-        segmentedLayout.tg_gravity = TGGravity.vert.center //左右边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
+        segmentedLayout.tg_gravity = TGGravity.Vertical.center //左右边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
         //向左浮动
         let leftSegmented = UISegmentedControl(items: ["  -  ", "  +  "])
         leftSegmented.isMomentary = true
@@ -529,7 +529,7 @@ extension AllTest3ViewController
         containerLayout.tg_width.equal(.fill)
         containerLayout.tg_height.equal(.wrap);
         containerLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
-        containerLayout.tg_gravity = TGGravity.horz.fill
+        containerLayout.tg_gravity = TGGravity.Horizontal.fill
         menuLayout.addSubview(containerLayout)
         self.popmenuContainerLayout = containerLayout
         
@@ -540,7 +540,7 @@ extension AllTest3ViewController
         let itemLayout = TGFlowLayout(.vert, arrangedCount:3)
         itemLayout.tg_width.equal(.fill)
         itemLayout.tg_height.equal(.wrap)
-        itemLayout.tg_gravity = TGGravity.horz.fill
+        itemLayout.tg_gravity = TGGravity.Horizontal.fill
         itemLayout.tg_space = 10
         scrollView.addSubview(itemLayout)
         self.popmenuItemLayout = itemLayout

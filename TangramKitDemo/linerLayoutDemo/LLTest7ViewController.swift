@@ -38,7 +38,7 @@ class LLTest7ViewController: UIViewController {
         
         let rootLayout = TGLinearLayout(.vert)
         rootLayout.backgroundColor = .white
-        rootLayout.tg_gravity = TGGravity.horz.fill
+        rootLayout.tg_gravity = TGGravity.Horizontal.fill
         rootLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         self.view = rootLayout
         
@@ -67,7 +67,7 @@ class LLTest7ViewController: UIViewController {
         
     
         let testLayout = TGLinearLayout(.vert)
-        testLayout.tg_gravity = TGGravity.horz.fill  //所有子视图水平宽度充满布局，这样就不需要分别设置每个子视图的宽度了。
+        testLayout.tg_gravity = TGGravity.Horizontal.fill  //所有子视图水平宽度充满布局，这样就不需要分别设置每个子视图的宽度了。
         testLayout.backgroundColor = CFTool.color(0)
         testLayout.tg_height.equal(.fill)   //高度填充父布局的所有剩余空间。
         testLayout.tg_leadingPadding = 10
@@ -78,7 +78,7 @@ class LLTest7ViewController: UIViewController {
         
         let testLayoutLandscapeSC = self.testLayout.tg_fetchSizeClass(with: .landscape, from: .default) as! TGLinearLayoutViewSizeClass
         testLayoutLandscapeSC.tg_orientation = .horz
-        testLayoutLandscapeSC.tg_gravity = TGGravity.vert.fill
+        testLayoutLandscapeSC.tg_gravity = TGGravity.Vertical.fill
         
         
         let v1 = self.createView(CFTool.color(5),title:"A")

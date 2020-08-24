@@ -1206,7 +1206,7 @@ extension TGRelativeLayout
         let (sbvtgFrame, sbvsc) = self.tgGetSubviewFrameAndSizeClass(sbv)
         
         switch gravity {
-        case TGGravity.horz.leading:
+        case TGGravity.Horizontal.leading:
             if sbv == self || sbv == nil {
                 return lsc.tgLeadingPadding
             }
@@ -1221,7 +1221,7 @@ extension TGRelativeLayout
             return sbvtgFrame.leading
             
             
-        case TGGravity.horz.trailing:
+        case TGGravity.Horizontal.trailing:
             if sbv == self || sbv == nil {
                 return selfSize.width - lsc.tgTrailingPadding
             }
@@ -1235,7 +1235,7 @@ extension TGRelativeLayout
             
             return sbvtgFrame.trailing
             
-        case TGGravity.vert.top:
+        case TGGravity.Vertical.top:
             if sbv == self || sbv == nil {
                 return lsc.tgTopPadding
             }
@@ -1248,7 +1248,7 @@ extension TGRelativeLayout
             
             return sbvtgFrame.top
             
-        case TGGravity.vert.bottom:
+        case TGGravity.Vertical.bottom:
             if sbv == self || sbv == nil {
                 return selfSize.height - lsc.tgBottomPadding
             }
@@ -1260,7 +1260,7 @@ extension TGRelativeLayout
             
             return sbvtgFrame.bottom
             
-        case TGGravity.vert.baseline:
+        case TGGravity.Vertical.baseline:
             if sbv == self || sbv == nil
             {
                 return lsc.tgTopPadding
@@ -1289,7 +1289,7 @@ extension TGRelativeLayout
                 
                 return sbvtgFrame.top
             }
-        case TGGravity.horz.fill:
+        case TGGravity.Horizontal.fill:
             
             if sbv == self || sbv == nil {
                 return selfSize.width - lsc.tgLeadingPadding - lsc.tgTrailingPadding
@@ -1302,7 +1302,7 @@ extension TGRelativeLayout
             tgCalcSubviewLeadingTrailing(sbv, sbvsc:sbvsc, sbvtgFrame:sbvtgFrame, lsc:lsc, selfSize: selfSize)
             return sbvtgFrame.width
             
-        case TGGravity.vert.fill:
+        case TGGravity.Vertical.fill:
             if sbv == self || sbv == nil {
                 return selfSize.height - lsc.tgTopPadding - lsc.tgBottomPadding
             }
@@ -1314,7 +1314,7 @@ extension TGRelativeLayout
             tgCalcSubviewTopBottom(sbv, sbvsc:sbvsc, sbvtgFrame:sbvtgFrame, lsc:lsc, selfSize: selfSize)
             return sbvtgFrame.height
             
-        case TGGravity.horz.center:
+        case TGGravity.Horizontal.center:
             if sbv == self || sbv == nil {
                 return (selfSize.width - lsc.tgLeadingPadding - lsc.tgTrailingPadding) / 2 + lsc.tgLeadingPadding
             }
@@ -1328,7 +1328,7 @@ extension TGRelativeLayout
             
             return sbvtgFrame.leading + sbvtgFrame.width / 2.0
             
-        case TGGravity.vert.center:
+        case TGGravity.Vertical.center:
             if sbv == self || sbv == nil {
                 return (selfSize.height - lsc.tgTopPadding - lsc.tgBottomPadding) / 2 + lsc.tgTopPadding
             }

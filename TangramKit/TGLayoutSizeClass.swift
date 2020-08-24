@@ -267,7 +267,7 @@ internal class TGViewSizeClassImpl:NSCopying,TGViewSizeClass {
     {
         if top.realPos == nil
         {
-            top.realPos = TGLayoutPos(TGGravity.vert.top, view:self.view)
+            top.realPos = TGLayoutPos(TGGravity.Vertical.top, view:self.view)
         }
         
         return top.realPos
@@ -277,7 +277,7 @@ internal class TGViewSizeClassImpl:NSCopying,TGViewSizeClass {
         
         if leading.realPos == nil
         {
-            leading.realPos = TGLayoutPos(TGGravity.horz.leading, view:self.view)
+            leading.realPos = TGLayoutPos(TGGravity.Horizontal.leading, view:self.view)
         }
         
         return leading.realPos
@@ -287,7 +287,7 @@ internal class TGViewSizeClassImpl:NSCopying,TGViewSizeClass {
     {
         if bottom.realPos == nil
         {
-            bottom.realPos = TGLayoutPos(TGGravity.vert.bottom, view:self.view)
+            bottom.realPos = TGLayoutPos(TGGravity.Vertical.bottom, view:self.view)
         }
         
         return bottom.realPos
@@ -298,7 +298,7 @@ internal class TGViewSizeClassImpl:NSCopying,TGViewSizeClass {
     {
         if trailing.realPos == nil
         {
-            trailing.realPos = TGLayoutPos(TGGravity.horz.trailing, view:self.view)
+            trailing.realPos = TGLayoutPos(TGGravity.Horizontal.trailing, view:self.view)
         }
         
         return trailing.realPos
@@ -310,7 +310,7 @@ internal class TGViewSizeClassImpl:NSCopying,TGViewSizeClass {
     {
         if centerX.realPos == nil
         {
-            centerX.realPos = TGLayoutPos(TGGravity.horz.center, view:self.view)
+            centerX.realPos = TGLayoutPos(TGGravity.Horizontal.center, view:self.view)
         }
         
         return centerX.realPos
@@ -320,7 +320,7 @@ internal class TGViewSizeClassImpl:NSCopying,TGViewSizeClass {
     {
         if centerY.realPos == nil
         {
-            centerY.realPos = TGLayoutPos(TGGravity.vert.center, view:self.view)
+            centerY.realPos = TGLayoutPos(TGGravity.Vertical.center, view:self.view)
         }
         
         return centerY.realPos
@@ -357,7 +357,7 @@ internal class TGViewSizeClassImpl:NSCopying,TGViewSizeClass {
     {
         if baseline.realPos == nil
         {
-            baseline.realPos = TGLayoutPos(TGGravity.vert.baseline, view:self.view)
+            baseline.realPos = TGLayoutPos(TGGravity.Vertical.baseline, view:self.view)
         }
         
         return baseline.realPos
@@ -368,7 +368,7 @@ internal class TGViewSizeClassImpl:NSCopying,TGViewSizeClass {
     {
         if width.realSize == nil
         {
-            width.realSize = TGLayoutSize(TGGravity.horz.fill, view:self.view)
+            width.realSize = TGLayoutSize(TGGravity.Horizontal.fill, view:self.view)
         }
         
         return width.realSize
@@ -378,7 +378,7 @@ internal class TGViewSizeClassImpl:NSCopying,TGViewSizeClass {
     {
         if height.realSize == nil
         {
-            height.realSize = TGLayoutSize(TGGravity.vert.fill, view:self.view)
+            height.realSize = TGLayoutSize(TGGravity.Vertical.fill, view:self.view)
         }
         
         return height.realSize

@@ -70,7 +70,7 @@ extension TLTest2ViewController
     {
         let colLayout = TGLinearLayout(.vert)
         colLayout.backgroundColor = CFTool.color(0)
-        colLayout.tg_gravity = TGGravity.horz.fill  //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
+        colLayout.tg_gravity = TGGravity.Horizontal.fill  //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
         colLayout.tg_height.equal(.wrap)
         colLayout.tg_vspace = 5 //设置布局视图里面子视图之间的垂直间距为5个点。
         colLayout.tg_setTarget(self,action:#selector(handleColLayoutTap), for:.touchUpInside)

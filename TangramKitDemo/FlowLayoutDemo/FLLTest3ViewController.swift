@@ -35,7 +35,7 @@ class FLLTest3ViewController: UIViewController {
         
         let rootLayout = TGLinearLayout(.vert)
         rootLayout.backgroundColor = .white
-        rootLayout.tg_gravity = TGGravity.horz.fill
+        rootLayout.tg_gravity = TGGravity.Horizontal.fill
         self.view = rootLayout
         
         let tipLabel = UILabel()
@@ -59,7 +59,7 @@ class FLLTest3ViewController: UIViewController {
         flowLayout.backgroundColor = CFTool.color(0)
         flowLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
         flowLayout.tg_space = 10  //流式布局里面的子视图的水平和垂直间距设置为10
-        flowLayout.tg_gravity = TGGravity.horz.fill  //流式布局里面的子视图的宽度将平均分配。
+        flowLayout.tg_gravity = TGGravity.Horizontal.fill  //流式布局里面的子视图的宽度将平均分配。
         flowLayout.tg_height.equal(.fill) //占用剩余的高度。
         flowLayout.tg_top.equal(10)
         rootLayout.addSubview(flowLayout)

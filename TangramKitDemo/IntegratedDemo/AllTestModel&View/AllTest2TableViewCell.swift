@@ -85,7 +85,7 @@ extension AllTest2TableViewCell
         rootLayout.tg_bottomBorderline = TGBorderline(color: UIColor.lightGray,headIndent: 10, tailIndent: 10)
         rootLayout.tg_leadingPadding = 10
         rootLayout.tg_trailingPadding = 10  //两边保留10的内边距。
-        rootLayout.tg_gravity = TGGravity.vert.center //整个布局内容垂直居中。
+        rootLayout.tg_gravity = TGGravity.Vertical.center //整个布局内容垂直居中。
 
         /*
          如果用线性布局的话，分为左中右三段，因此用水平线性布局：左边头像，中间用户信息，右边价格。中间用户信息在用一个垂直线性布局分为上下两部分：上面是用户名称和几个图标，下面是个人介绍。而用户名称和图标部分右通过建立一个水平线性布局来实现。
@@ -99,7 +99,7 @@ extension AllTest2TableViewCell
         let userInfoLayout = TGLinearLayout(.vert)
         userInfoLayout.tg_height.equal(.wrap)
         userInfoLayout.tg_width.equal(.fill)
-        userInfoLayout.tg_gravity = TGGravity.horz.fill
+        userInfoLayout.tg_gravity = TGGravity.Horizontal.fill
         userInfoLayout.tg_vspace = 5
         rootLayout.addSubview(userInfoLayout)
         
@@ -107,7 +107,7 @@ extension AllTest2TableViewCell
         let userNameLayout = TGLinearLayout(.horz)
         userNameLayout.tg_height.equal(.wrap)
         userNameLayout.tg_hspace = 5
-        userNameLayout.tg_gravity = TGGravity.vert.bottom //整体垂直底部对齐。
+        userNameLayout.tg_gravity = TGGravity.Vertical.bottom //整体垂直底部对齐。
         userInfoLayout.addSubview(userNameLayout)
         
         
@@ -271,7 +271,7 @@ extension AllTest2TableViewCell
         let userInfoLayout = TGFloatLayout()
         userInfoLayout.tg_height.equal(.fill)
         userInfoLayout.tg_width.equal(.fill)
-        userInfoLayout.tg_gravity = TGGravity.vert.center
+        userInfoLayout.tg_gravity = TGGravity.Vertical.center
         userInfoLayout.tg_space = 5
         rootLayout.addSubview(userInfoLayout)
         

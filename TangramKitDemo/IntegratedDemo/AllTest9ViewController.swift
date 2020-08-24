@@ -31,7 +31,7 @@ class AllTest9ViewController: UIViewController {
         self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
         
         let rootLayout = TGLinearLayout(.vert)
-        rootLayout.tg_gravity = TGGravity.horz.fill //里面所有子视图的宽度都填充为和父视图一样宽。
+        rootLayout.tg_gravity = TGGravity.Horizontal.fill //里面所有子视图的宽度都填充为和父视图一样宽。
         rootLayout.backgroundColor = .white
         self.view = rootLayout
         
@@ -39,7 +39,7 @@ class AllTest9ViewController: UIViewController {
         //添加操作按钮。
         let actionLayout = TGFlowLayout(.vert, arrangedCount: 2)
         actionLayout.tg_height.equal(.wrap)
-        actionLayout.tg_gravity = TGGravity.horz.fill //所有子视图水平填充，也就是所有子视图的宽度相等。
+        actionLayout.tg_gravity = TGGravity.Horizontal.fill //所有子视图水平填充，也就是所有子视图的宽度相等。
         actionLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         actionLayout.tg_hspace = 5
         actionLayout.tg_vspace = 5

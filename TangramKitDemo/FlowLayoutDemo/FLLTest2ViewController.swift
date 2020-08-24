@@ -29,7 +29,7 @@ class FLLTest2ViewController: UIViewController {
         
         let rootLayout = TGFlowLayout(.vert,arrangedCount:2)
         rootLayout.backgroundColor = .white
-        rootLayout.tg_arrangedGravity = TGGravity.vert.center
+        rootLayout.tg_arrangedGravity = TGGravity.Vertical.center
         rootLayout.tg_vspace = 4
         rootLayout.tg_hspace = 4
         self.view = rootLayout
@@ -160,7 +160,7 @@ extension FLLTest2ViewController
         //间距拉伸
         if sender.isOn
         {
-            self.flowLayout.tg_gravity = TGGravity.horz.between //流式布局的tg_gravity如果设置为TGGravity.horz.between表示子视图的间距会被拉伸，以便填充满整个布局。
+            self.flowLayout.tg_gravity = TGGravity.Horizontal.between //流式布局的tg_gravity如果设置为TGGravity.Horizontal.between表示子视图的间距会被拉伸，以便填充满整个布局。
         }
         else
         {
@@ -176,7 +176,7 @@ extension FLLTest2ViewController
         //内容拉伸
         if sender.isOn
         {
-            self.flowLayout.tg_gravity = TGGravity.horz.fill  //流式布局的gravity如果设置为TGGravity.horz.fill表示子视图的间距会被拉伸，以便填充满整个布局。
+            self.flowLayout.tg_gravity = TGGravity.Horizontal.fill  //流式布局的gravity如果设置为TGGravity.Horizontal.fill表示子视图的间距会被拉伸，以便填充满整个布局。
         }
         else
         {

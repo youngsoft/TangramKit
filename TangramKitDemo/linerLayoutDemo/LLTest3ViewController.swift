@@ -46,11 +46,11 @@ class LLTest3ViewController: UIViewController {
         /*
          这个例子主要用来了解布局视图的tg_gravity这个属性。tg_gravity这个属性主要用来控制布局视图里面的子视图的整体停靠方向以及子视图的填充。我们考虑下面的场景：
          
-         1.假设某个垂直线性布局有A,B,C三个子视图，并且希望这三个子视图都和父视图右对齐。第一个方法是分别为每个子视图设置tg_trailing ~= 0来实现；第二个方法是只需要设置布局视图的tg_gravity的值为TGGravity.horz.right就可以实现了。
-         2.假设某个垂直线性布局有A,B,C三个子视图，并且希望这三个子视图整体水平居中对齐。第一个方法是分别为每个子视图设置tg_centerX~=0来实现；第二个方法是只需要设置布局视图的gravity的值为TGGravity.horz.center就可以实现了。
-         3.假设某个垂直线性布局有A,B,C三个子视图，并且我们希望这三个子视图整体垂直居中。第一个方法是为设置A的tg_top~=50%和设置C的tg_bottom ~=50%;第二个方法是只需要设置布局视图的tg_gravity的值为TGGravity.vert.center就可以实现了。
+         1.假设某个垂直线性布局有A,B,C三个子视图，并且希望这三个子视图都和父视图右对齐。第一个方法是分别为每个子视图设置tg_trailing ~= 0来实现；第二个方法是只需要设置布局视图的tg_gravity的值为TGGravity.Horizontal.right就可以实现了。
+         2.假设某个垂直线性布局有A,B,C三个子视图，并且希望这三个子视图整体水平居中对齐。第一个方法是分别为每个子视图设置tg_centerX~=0来实现；第二个方法是只需要设置布局视图的gravity的值为TGGravity.Horizontal.center就可以实现了。
+         3.假设某个垂直线性布局有A,B,C三个子视图，并且我们希望这三个子视图整体垂直居中。第一个方法是为设置A的tg_top~=50%和设置C的tg_bottom ~=50%;第二个方法是只需要设置布局视图的tg_gravity的值为TGGravity.Vertical.center就可以实现了。
          4.假设某个垂直线性布局有A,B,C三个子视图，我们希望这三个子视图整体居中。我们就只需要将布局视图的tg_gravity值设置为TGGravity.center就可以了。
-         5.假设某个垂直线性布局有A,B,C三个子视图，我们希望这三个子视图的宽度都和布局视图一样宽。第一个方法是分别为每个子视图的tg_leading和tg_trailing设置为0;第二个方法是只需要设置布局视图的tg_gravity的值为TGGravity.horz.fill就可以了。
+         5.假设某个垂直线性布局有A,B,C三个子视图，我们希望这三个子视图的宽度都和布局视图一样宽。第一个方法是分别为每个子视图的tg_leading和tg_trailing设置为0;第二个方法是只需要设置布局视图的tg_gravity的值为TGGravity.Horizontal.fill就可以了。
          
          通过上面的几个场景我们可以看出tg_gravity属性的设置可以在很大程度上简化布局视图里面的子视图的布局属性的设置的，通过tg_gravity属性的设置我们可以控制布局视图里面所有子视图的整体停靠方向和填充的尺寸。在使用tg_gravity属性时需要明确如下几个条件：
          
@@ -67,7 +67,7 @@ class LLTest3ViewController: UIViewController {
         let rootLayout = TGLinearLayout(.vert)
         rootLayout.tg_width.equal(.fill)
         rootLayout.tg_height.equal(.wrap)
-        rootLayout.tg_gravity = TGGravity.horz.fill  //设置这个属性后rootLayout的所有子视图都不需要指定宽度了，这个值的意义是所有子视图的宽度都填充满布局。也就是说设置了这个值后不需要为每个子视图设置tg_leading, tg_trailing来指定宽度了。
+        rootLayout.tg_gravity = TGGravity.Horizontal.fill  //设置这个属性后rootLayout的所有子视图都不需要指定宽度了，这个值的意义是所有子视图的宽度都填充满布局。也就是说设置了这个值后不需要为每个子视图设置tg_leading, tg_trailing来指定宽度了。
         scrollView.addSubview(rootLayout)
         
         //创建垂直布局停靠操作动作布局。
@@ -132,7 +132,7 @@ extension LLTest3ViewController
         let actionLayout = TGFlowLayout(.vert, arrangedCount: 3) //每行3个子视图
         actionLayout.tg_padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         actionLayout.tg_height.equal(.wrap)
-        actionLayout.tg_gravity = TGGravity.horz.fill //里面的子视图的宽度平均分配。
+        actionLayout.tg_gravity = TGGravity.Horizontal.fill //里面的子视图的宽度平均分配。
         actionLayout.tg_hspace = 5
         actionLayout.tg_vspace = 5   //设置子视图之间的水平和垂直间距。
         contentLayout.addSubview(actionLayout)
@@ -176,7 +176,7 @@ extension LLTest3ViewController
         
         let v2 = self.createLabel(NSLocalizedString("always alignment to left", comment:""), color: CFTool.color(6))
         v2.tg_height.equal(20)
-        v2.tg_alignment = TGGravity.horz.left  //对于垂直布局里面的子视图可以通过这个属性来设置水平对齐的方位，这样即使布局视图设置了gravity属性，这个视图的对齐都不会受到影响
+        v2.tg_alignment = TGGravity.Horizontal.left  //对于垂直布局里面的子视图可以通过这个属性来设置水平对齐的方位，这样即使布局视图设置了gravity属性，这个视图的对齐都不会受到影响
         vertGravityLayout.addSubview(v2)
         
         
@@ -223,7 +223,7 @@ extension LLTest3ViewController
         
 
         let actionLayout = TGFlowLayout(.vert, arrangedCount: 3)
-        actionLayout.tg_gravity = TGGravity.horz.fill  //平均分配里面所有子视图的宽度
+        actionLayout.tg_gravity = TGGravity.Horizontal.fill  //平均分配里面所有子视图的宽度
         actionLayout.tg_height.equal(.wrap)
         actionLayout.tg_hspace = 5
         actionLayout.tg_vspace = 5
@@ -266,7 +266,7 @@ extension LLTest3ViewController
         let v2 = self.createLabel(NSLocalizedString("always alignment to top", comment:""), color: CFTool.color(6))
         v2.tg_height.equal(.wrap)
         v2.tg_width.equal(60)
-        v2.tg_alignment = TGGravity.vert.top  //对于水平布局里面的子视图可以通过这个属性来设置垂直对齐的方位，这样即使布局视图设置了gravity属性，这个视图的对齐都不会受到影响。
+        v2.tg_alignment = TGGravity.Vertical.top  //对于水平布局里面的子视图可以通过这个属性来设置垂直对齐的方位，这样即使布局视图设置了gravity属性，这个视图的对齐都不会受到影响。
         horzGravityLayout.addSubview(v2)
         
         
@@ -307,48 +307,48 @@ extension LLTest3ViewController
     @objc func handleVertLayoutGravity(_ button:UIButton)
     {
         //分别取出垂直和水平方向的停靠设置。
-        var vertGravity = self.vertGravityLayout.tg_gravity & TGGravity.horz.mask
-        var horzGravity = self.vertGravityLayout.tg_gravity & TGGravity.vert.mask
+        var vertGravity = self.vertGravityLayout.tg_gravity & TGGravity.Horizontal.mask
+        var horzGravity = self.vertGravityLayout.tg_gravity & TGGravity.Vertical.mask
         
         switch (button.tag) {
         case 1:  //上
-            vertGravity = TGGravity.vert.top;
+            vertGravity = TGGravity.Vertical.top;
             break;
         case 2:  //垂直
-            vertGravity = TGGravity.vert.center;
+            vertGravity = TGGravity.Vertical.center;
             break;
         case 3:   //下
-            vertGravity = TGGravity.vert.bottom;
+            vertGravity = TGGravity.Vertical.bottom;
             break;
         case 4:  //左
-            horzGravity = TGGravity.horz.left;
+            horzGravity = TGGravity.Horizontal.left;
             break;
         case 5:  //水平
-            horzGravity = TGGravity.horz.center;
+            horzGravity = TGGravity.Horizontal.center;
             break;
         case 6:   //右
-            horzGravity =  TGGravity.horz.right;
+            horzGravity =  TGGravity.Horizontal.right;
             break;
         case 7:   //窗口垂直居中
-            vertGravity = TGGravity.vert.windowCenter;
+            vertGravity = TGGravity.Vertical.windowCenter;
             break;
         case 8:   //窗口水平居中
-            horzGravity = TGGravity.horz.windowCenter;
+            horzGravity = TGGravity.Horizontal.windowCenter;
             break;
         case 9:  //垂直间距拉伸
-            vertGravity = TGGravity.vert.between;
+            vertGravity = TGGravity.Vertical.between;
             break;
         case 10:  //垂直间距环绕
-            vertGravity = TGGravity.vert.around;
+            vertGravity = TGGravity.Vertical.around;
             break;
         case 11:  //垂直间距等分
-            vertGravity = TGGravity.vert.among;
+            vertGravity = TGGravity.Vertical.among;
             break;
         case 12:   //水平填充
-            horzGravity  = TGGravity.horz.fill;
+            horzGravity  = TGGravity.Horizontal.fill;
             break;
         case 13:  //垂直填充
-            vertGravity = TGGravity.vert.fill;  //这里模拟器顶部出现黑线，真机是不会出现的。。
+            vertGravity = TGGravity.Vertical.fill;  //这里模拟器顶部出现黑线，真机是不会出现的。。
             break;
         default:
             break;
@@ -365,48 +365,48 @@ extension LLTest3ViewController
     @objc func handleHorzLayoutGravity(_ button:UIButton)
     {
         //分别取出垂直和水平方向的停靠设置。
-        var vertGravity = self.horzGravityLayout.tg_gravity & TGGravity.horz.mask
-        var horzGravity = self.horzGravityLayout.tg_gravity & TGGravity.vert.mask
+        var vertGravity = self.horzGravityLayout.tg_gravity & TGGravity.Horizontal.mask
+        var horzGravity = self.horzGravityLayout.tg_gravity & TGGravity.Vertical.mask
         
         switch (button.tag) {
         case 1:  //上
-            vertGravity = TGGravity.vert.top;
+            vertGravity = TGGravity.Vertical.top;
             break;
         case 2:  //垂直
-            vertGravity = TGGravity.vert.center;
+            vertGravity = TGGravity.Vertical.center;
             break;
         case 3:   //下
-            vertGravity = TGGravity.vert.bottom;
+            vertGravity = TGGravity.Vertical.bottom;
             break;
         case 4:  //左
-            horzGravity = TGGravity.horz.left;
+            horzGravity = TGGravity.Horizontal.left;
             break;
         case 5:  //水平
-            horzGravity = TGGravity.horz.center;
+            horzGravity = TGGravity.Horizontal.center;
             break;
         case 6:   //右
-            horzGravity =  TGGravity.horz.right;
+            horzGravity =  TGGravity.Horizontal.right;
             break;
         case 7:   //窗口垂直居中
-            vertGravity = TGGravity.vert.windowCenter;
+            vertGravity = TGGravity.Vertical.windowCenter;
             break;
         case 8:   //窗口水平居中
-            horzGravity = TGGravity.horz.windowCenter;
+            horzGravity = TGGravity.Horizontal.windowCenter;
             break;
         case 9:  //水平间距拉伸
-            horzGravity = TGGravity.horz.between;
+            horzGravity = TGGravity.Horizontal.between;
             break;
         case 10:  //水平间距环绕
-            horzGravity = TGGravity.horz.around;
+            horzGravity = TGGravity.Horizontal.around;
             break;
         case 11:  //水平间距等分
-            horzGravity = TGGravity.horz.among;
+            horzGravity = TGGravity.Horizontal.among;
             break;
         case 12:   //水平填充
-            horzGravity  = TGGravity.horz.fill;
+            horzGravity  = TGGravity.Horizontal.fill;
             break;
         case 13:  //垂直填充
-            vertGravity = TGGravity.vert.fill;  //这里模拟器顶部出现黑线，真机是不会出现的。。
+            vertGravity = TGGravity.Vertical.fill;  //这里模拟器顶部出现黑线，真机是不会出现的。。
             break;
         default:
             break;
@@ -425,8 +425,8 @@ extension LLTest3ViewController
     @objc func handleNavigationTitleCentre(_ sender: AnyObject!)
     {
         let navigationItemLayout = TGLinearLayout(.vert)
-        //通过TGGravity.horz.windowCenter的设置总是保证在窗口的中间而不是布局视图的中间。
-        navigationItemLayout.tg_gravity = [TGGravity.horz.windowCenter , TGGravity.vert.center]
+        //通过TGGravity.Horizontal.windowCenter的设置总是保证在窗口的中间而不是布局视图的中间。
+        navigationItemLayout.tg_gravity = [TGGravity.Horizontal.windowCenter , TGGravity.Vertical.center]
         navigationItemLayout.frame = self.navigationController!.navigationBar.bounds
         
         let topLabel = UILabel()
@@ -466,68 +466,68 @@ extension LLTest3ViewController
     func gravityText(gravity:TGGravity, prefixText:String) -> String
     {
         //分别取出垂直和水平方向的停靠设置。
-        let vertGravity = gravity & TGGravity.horz.mask
-        let  horzGravity = gravity & TGGravity.vert.mask
+        let vertGravity = gravity & TGGravity.Horizontal.mask
+        let  horzGravity = gravity & TGGravity.Vertical.mask
         
         var vertGravityStr = ""
         switch (vertGravity) {
-        case TGGravity.vert.top:
-            vertGravityStr = "TGGravity.vert.top"
+        case TGGravity.Vertical.top:
+            vertGravityStr = "TGGravity.Vertical.top"
             break
-        case TGGravity.vert.center:
-            vertGravityStr = "TGGravity.vert.center"
+        case TGGravity.Vertical.center:
+            vertGravityStr = "TGGravity.Vertical.center"
             break
-        case TGGravity.vert.bottom:
-            vertGravityStr = "TGGravity.vert.bottom"
+        case TGGravity.Vertical.bottom:
+            vertGravityStr = "TGGravity.Vertical.bottom"
             break
-        case TGGravity.vert.fill:
-            vertGravityStr = "TGGravity.vert.fill"
+        case TGGravity.Vertical.fill:
+            vertGravityStr = "TGGravity.Vertical.fill"
             break
-        case TGGravity.vert.between:
-            vertGravityStr = "TGGravity.vert.between"
+        case TGGravity.Vertical.between:
+            vertGravityStr = "TGGravity.Vertical.between"
             break
-        case TGGravity.vert.around:
-            vertGravityStr = "TGGravity.vert.around"
+        case TGGravity.Vertical.around:
+            vertGravityStr = "TGGravity.Vertical.around"
             break
-        case TGGravity.vert.among:
-            vertGravityStr = "TGGravity.vert.among"
+        case TGGravity.Vertical.among:
+            vertGravityStr = "TGGravity.Vertical.among"
             break
-        case TGGravity.vert.windowCenter:
-            vertGravityStr = "TGGravity.vert.windowCenter"
+        case TGGravity.Vertical.windowCenter:
+            vertGravityStr = "TGGravity.Vertical.windowCenter"
             break;
         default:
-            vertGravityStr = "TGGravity.vert.top"
+            vertGravityStr = "TGGravity.Vertical.top"
             break
         }
         
         var horzGravityStr = ""
         switch (horzGravity) {
-        case TGGravity.horz.left:
-            horzGravityStr = "TGGravity.horz.left"
+        case TGGravity.Horizontal.left:
+            horzGravityStr = "TGGravity.Horizontal.left"
             break
-        case TGGravity.horz.center:
-            horzGravityStr = "TGGravity.horz.center"
+        case TGGravity.Horizontal.center:
+            horzGravityStr = "TGGravity.Horizontal.center"
             break
-        case TGGravity.horz.right:
-            horzGravityStr = "TGGravity.horz.right"
+        case TGGravity.Horizontal.right:
+            horzGravityStr = "TGGravity.Horizontal.right"
             break
-        case TGGravity.horz.fill:
-            horzGravityStr = "TGGravity.horz.fill"
+        case TGGravity.Horizontal.fill:
+            horzGravityStr = "TGGravity.Horizontal.fill"
             break
-        case TGGravity.horz.between:
-            horzGravityStr = "TGGravity.horz.between"
+        case TGGravity.Horizontal.between:
+            horzGravityStr = "TGGravity.Horizontal.between"
             break
-        case TGGravity.horz.around:
-            horzGravityStr = "TGGravity.horz.around"
+        case TGGravity.Horizontal.around:
+            horzGravityStr = "TGGravity.Horizontal.around"
             break
-        case TGGravity.horz.among:
-            horzGravityStr = "TGGravity.horz.among"
+        case TGGravity.Horizontal.among:
+            horzGravityStr = "TGGravity.Horizontal.among"
             break
-        case TGGravity.horz.windowCenter:
-            horzGravityStr = "TGGravity.horz.WindowCenter"
+        case TGGravity.Horizontal.windowCenter:
+            horzGravityStr = "TGGravity.Horizontal.WindowCenter"
             break
         default:
-            horzGravityStr = "TGGravity.horz.left"
+            horzGravityStr = "TGGravity.Horizontal.left"
             break;
         }
         

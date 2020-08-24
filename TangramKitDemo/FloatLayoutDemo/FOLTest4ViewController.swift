@@ -44,7 +44,7 @@ class FOLTest4ViewController: UIViewController {
         rootLayout.backgroundColor = .white
         rootLayout.tg_width.equal(.fill)
         rootLayout.tg_height.equal(.wrap)
-        rootLayout.tg_gravity = TGGravity.horz.fill
+        rootLayout.tg_gravity = TGGravity.Horizontal.fill
         scrollView.addSubview(rootLayout)
         
         //添加操作提示布局
@@ -55,7 +55,7 @@ class FOLTest4ViewController: UIViewController {
         let contentLayout = TGLinearLayout(.vert)
         contentLayout.tg_height.equal(.wrap)
         contentLayout.backgroundColor = CFTool.color(0)
-        contentLayout.tg_gravity = TGGravity.horz.fill
+        contentLayout.tg_gravity = TGGravity.Horizontal.fill
         contentLayout.tg_vspace = 10
         contentLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 0, bottom: 10, right: 0);
         rootLayout.addSubview(contentLayout)

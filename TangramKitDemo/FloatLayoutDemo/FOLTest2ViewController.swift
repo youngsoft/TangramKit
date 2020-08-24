@@ -173,7 +173,7 @@ class FOLTest2ViewController: UIViewController {
         let rootLayout = TGLinearLayout(.vert)
         rootLayout.tg_width.equal(.fill)
         rootLayout.tg_height.equal(.wrap)
-        rootLayout.tg_gravity = TGGravity.horz.fill
+        rootLayout.tg_gravity = TGGravity.Horizontal.fill
         rootLayout.backgroundColor =  UIColor(white:0xe7/255.0, alpha:1)
         rootLayout.tg_intelligentBorderline =  TGBorderline(color: .lightGray) //设置智能边界线，布局里面的子视图会根据布局自动产生边界线。
         scrollView.addSubview(rootLayout)

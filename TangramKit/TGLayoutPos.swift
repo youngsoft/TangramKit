@@ -349,8 +349,8 @@ final public class TGLayoutPos:TGLayoutPosValue
             if let superlayout = self.view.superview as? TGBaseLayout, #available(iOS 11.0, *)
             {
                 let edge = superlayout.tg_insetsPaddingFromSafeArea.rawValue
-                if ((_type == TGGravity.vert.top && (edge & UIRectEdge.top.rawValue) == UIRectEdge.top.rawValue) ||
-                    (_type == TGGravity.vert.bottom && (edge & UIRectEdge.bottom.rawValue) == UIRectEdge.bottom.rawValue))
+                if ((_type == TGGravity.Vertical.top && (edge & UIRectEdge.top.rawValue) == UIRectEdge.top.rawValue) ||
+                    (_type == TGGravity.Vertical.bottom && (edge & UIRectEdge.bottom.rawValue) == UIRectEdge.bottom.rawValue))
                 {
                     return 0
                 }
@@ -362,13 +362,13 @@ final public class TGLayoutPos:TGLayoutPosValue
                 if let superView = _view.superview
                 {
                     switch (_type) {
-                    case TGGravity.horz.leading:
+                    case TGGravity.Horizontal.leading:
                         return  TGBaseLayout.tg_isRTL ? superView.safeAreaInsets.right : superView.safeAreaInsets.left
-                    case TGGravity.horz.trailing:
+                    case TGGravity.Horizontal.trailing:
                         return  TGBaseLayout.tg_isRTL ? superView.safeAreaInsets.left : superView.safeAreaInsets.right
-                    case TGGravity.vert.top:
+                    case TGGravity.Vertical.top:
                         return superView.safeAreaInsets.top
-                    case TGGravity.vert.bottom:
+                    case TGGravity.Vertical.bottom:
                         return superView.safeAreaInsets.bottom
                     default:
                         return 0.0
@@ -379,11 +379,11 @@ final public class TGLayoutPos:TGLayoutPosValue
             {
                 if let vc = self.findContainerVC()
                 {
-                    if _type == TGGravity.vert.top
+                    if _type == TGGravity.Vertical.top
                     {
                         return vc.topLayoutGuide.length
                     }
-                    else if _type == TGGravity.vert.bottom
+                    else if _type == TGGravity.Vertical.bottom
                     {
                         return vc.bottomLayoutGuide.length
                     }
@@ -548,7 +548,7 @@ extension TGLayoutPos
         }
         else if let v = val as? [TGLayoutPos]
         {
-            if _type != TGGravity.vert.center && _type != TGGravity.horz.center
+            if _type != TGGravity.Vertical.center && _type != TGGravity.Horizontal.center
             {
                 assert(false, "oops! ");
             }
@@ -563,22 +563,22 @@ extension TGLayoutPos
             }
             
             switch _type {
-            case TGGravity.vert.top:
+            case TGGravity.Vertical.top:
                 _val = ValueType.posV(v.tg_top)
                 break
-            case TGGravity.vert.center:
+            case TGGravity.Vertical.center:
                 _val = ValueType.posV(v.tg_centerY)
                 break
-            case TGGravity.vert.bottom:
+            case TGGravity.Vertical.bottom:
                 _val = ValueType.posV(v.tg_bottom)
                 break
-            case TGGravity.horz.leading:
+            case TGGravity.Horizontal.leading:
                 _val = ValueType.posV(v.tg_leading)
                 break
-            case TGGravity.horz.center:
+            case TGGravity.Horizontal.center:
                 _val = ValueType.posV(v.tg_centerX)
                 break
-            case TGGravity.horz.trailing:
+            case TGGravity.Horizontal.trailing:
                 _val = ValueType.posV(v.tg_trailing)
                 break
             default:
@@ -614,7 +614,7 @@ extension TGLayoutPos
     internal func equalHelper(val:UILayoutSupport, offset:CGFloat = 0)  ->TGLayoutPos
     {
         
-        if (_type != TGGravity.vert.top && _type != TGGravity.vert.bottom)
+        if (_type != TGGravity.Vertical.top && _type != TGGravity.Vertical.bottom)
         {
             assert(false, "oops! only topPos or bottomPos can set to UILayoutSupport")
         }

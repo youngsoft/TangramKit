@@ -37,7 +37,7 @@ class AllTest7ViewController: UIViewController {
         let  rootLayout = TGLinearLayout(.vert)
         rootLayout.tg_width.equal(.fill)
         rootLayout.tg_height.equal(.wrap)
-        rootLayout.tg_gravity = TGGravity.horz.fill
+        rootLayout.tg_gravity = TGGravity.Horizontal.fill
         scrollView.addSubview(rootLayout)
         
         let tipLabel = UILabel()
@@ -462,7 +462,7 @@ extension AllTest7ViewController
         contentLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(contentLayout)
         contentLayout.tg_autoArrange = true //自动排列，布局视图会根据里面子视图的尺寸进行智能的排列。
-        contentLayout.tg_gravity = TGGravity.horz.fill //对于内容填充流式布局来说会拉升所有子视图的尺寸，以便铺满整个布局视图。
+        contentLayout.tg_gravity = TGGravity.Horizontal.fill //对于内容填充流式布局来说会拉升所有子视图的尺寸，以便铺满整个布局视图。
         //添加N个长短不一的子视图。
         for i in 0..<15 {
             let label = UILabel()
@@ -495,7 +495,7 @@ extension AllTest7ViewController
         contentLayout.tg_width.equal(.wrap).min(scrollView.tg_width) //默认水平线性布局的宽度是wrap的但是最小的宽度和父视图相等，这样对于一些大尺寸屏幕因为能够容纳内容而不会产生滚动。
         contentLayout.backgroundColor = CFTool.color(0)
         contentLayout.tg_height.equal(.fill)
-        contentLayout.tg_gravity = TGGravity.vert.fill
+        contentLayout.tg_gravity = TGGravity.Vertical.fill
         contentLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         contentLayout.tg_space = 5
         scrollView.addSubview(contentLayout)
@@ -547,7 +547,7 @@ extension AllTest7ViewController
         contentLayout.backgroundColor = CFTool.color(0)
         contentLayout.tg_height.equal(.fill)
         contentLayout.tg_width.equal(.wrap).min(scrollView.tg_width) //默认水平线性布局的宽度是wrap的但是最小的宽度和父视图相等，这样对于一些大尺寸屏幕因为能够容纳内容而不会产生滚动。
-        contentLayout.tg_gravity = TGGravity.vert.fill
+        contentLayout.tg_gravity = TGGravity.Vertical.fill
         contentLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         contentLayout.tg_hspace = 5
         scrollView.addSubview(contentLayout)
@@ -609,7 +609,7 @@ extension AllTest7ViewController
         let contentLayout = TGLinearLayout(.horz)
         contentLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         contentLayout.tg_height.equal(60)
-        contentLayout.tg_gravity = TGGravity.vert.center
+        contentLayout.tg_gravity = TGGravity.Vertical.center
         
         contentLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(contentLayout)
@@ -683,7 +683,7 @@ extension AllTest7ViewController
         let contentLayout = TGLinearLayout(.horz)
         contentLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         contentLayout.tg_height.equal(60)
-        contentLayout.tg_gravity = TGGravity.vert.center
+        contentLayout.tg_gravity = TGGravity.Vertical.center
         
         contentLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(contentLayout)

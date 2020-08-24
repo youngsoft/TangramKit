@@ -36,7 +36,7 @@ class AllTest6ViewController: UIViewController {
         
         let rootLayout = TGLinearLayout(.vert)
         rootLayout.backgroundColor = .white
-        rootLayout.tg_gravity = TGGravity.horz.fill
+        rootLayout.tg_gravity = TGGravity.Horizontal.fill
         self.view = rootLayout;
         
         
@@ -119,7 +119,7 @@ class AllTest6ViewController: UIViewController {
         //下面定义iPhone设备横屏时的界面布局。
         let rootLayoutSC = rootLayout.tg_fetchSizeClass(with: .comb(.any,.compact,nil)) as! TGLinearLayoutViewSizeClass
         rootLayoutSC.tg_orientation = .horz
-        rootLayoutSC.tg_gravity = TGGravity.vert.fill;
+        rootLayoutSC.tg_gravity = TGGravity.Vertical.fill;
         
         
         let menuLayoutSC = menuLayout.tg_fetchSizeClass(with: .comb(.any,.compact,nil), from:.default) as! TGFlowLayoutViewSizeClass

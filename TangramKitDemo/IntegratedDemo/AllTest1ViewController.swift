@@ -215,7 +215,7 @@ class AllTest1ViewController: UITableViewController {
         tableFooterViewLayout.frame = CGRect(x: 0, y: 0, width: self.tableView.bounds.width, height: 80) ////这里明确设定高度。
         tableFooterViewLayout.tg_width.equal(.fill) //这里注意设置宽度和父布局保持一致。
         tableFooterViewLayout.backgroundColor = CFTool.color(6)
-        tableFooterViewLayout.tg_gravity = [TGGravity.vert.center, TGGravity.horz.fill]
+        tableFooterViewLayout.tg_gravity = [TGGravity.Vertical.center, TGGravity.Horizontal.fill]
         
         let label3 = UILabel()
         label3.text = NSLocalizedString("add tableFooterView", comment: "")

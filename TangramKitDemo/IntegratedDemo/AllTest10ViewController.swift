@@ -211,7 +211,7 @@ extension AllTest10ViewController
         linelayout.tg_width.equal(.wrap)
         linelayout.tg_padding = UIEdgeInsets(top:10, left:10, bottom:10, right:10)
         linelayout.tg_space = 10
-        linelayout.tg_gravity = TGGravity.vert.fill
+        linelayout.tg_gravity = TGGravity.Vertical.fill
         
         sbv1.tg_width.equal(50)
         sbv2.tg_width.equal(60)

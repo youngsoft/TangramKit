@@ -70,7 +70,7 @@ class TLTest4ViewController: UIViewController {
         
         //第一行
         let row1 = tableLayout.tg_addRow(size:TGLayoutSize.wrap, colCount:titles.count)
-        row1.tg_gravity = TGGravity.vert.top
+        row1.tg_gravity = TGGravity.Vertical.top
         row1.backgroundColor = CFTool.color(8)
         titles.forEach({tableLayout.addSubview(self.itemFrom(text: $0, alignment: .center)) })
         
@@ -78,13 +78,13 @@ class TLTest4ViewController: UIViewController {
         
         //第二行
         let row2 = tableLayout.tg_addRow(size:TGLayoutSize.wrap, colCount:titles.count)
-        row2.tg_gravity = TGGravity.vert.center
+        row2.tg_gravity = TGGravity.Vertical.center
         titles.forEach({tableLayout.addSubview(self.itemFrom(text: $0, alignment: .center)) })
 
         
         //第三行
         let row3 = tableLayout.tg_addRow(size:TGLayoutSize.wrap, colCount:titles.count)
-        row3.tg_gravity = TGGravity.vert.bottom
+        row3.tg_gravity = TGGravity.Vertical.bottom
         titles.forEach({tableLayout.addSubview(self.itemFrom(text: $0, alignment: .center)) })
 
         
@@ -147,7 +147,7 @@ extension TLTest4ViewController
         }
         else
         {
-            itemLayout.tg_gravity = TGGravity.horz.fill
+            itemLayout.tg_gravity = TGGravity.Horizontal.fill
             itemLayout.tg_height.equal(.wrap)
             label.tg_height.equal(.wrap)
         }

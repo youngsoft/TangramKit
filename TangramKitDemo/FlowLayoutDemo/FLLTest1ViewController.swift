@@ -35,7 +35,7 @@ class FLLTest1ViewController: UIViewController {
         self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
 
         let rootLayout = TGLinearLayout(.vert)
-        rootLayout.tg_gravity = TGGravity.horz.fill //里面所有子视图的宽度都填充为和父视图一样宽。
+        rootLayout.tg_gravity = TGGravity.Horizontal.fill //里面所有子视图的宽度都填充为和父视图一样宽。
         rootLayout.backgroundColor = .white
         self.view = rootLayout
 
@@ -43,7 +43,7 @@ class FLLTest1ViewController: UIViewController {
         //添加操作按钮。
         let actionLayout = TGFlowLayout(.vert, arrangedCount: 2)
         actionLayout.tg_height.equal(.wrap)
-        actionLayout.tg_gravity = TGGravity.horz.fill //所有子视图水平填充，也就是所有子视图的宽度相等。
+        actionLayout.tg_gravity = TGGravity.Horizontal.fill //所有子视图水平填充，也就是所有子视图的宽度相等。
         actionLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         actionLayout.tg_hspace = 5
         actionLayout.tg_vspace = 5
@@ -156,33 +156,33 @@ extension FLLTest1ViewController
     {
         //调整整体垂直方向的停靠
         
-        var vertGravity = self.flowLayout.tg_gravity & TGGravity.horz.mask
-        let horzGravity = self.flowLayout.tg_gravity & TGGravity.vert.mask
+        var vertGravity = self.flowLayout.tg_gravity & TGGravity.Horizontal.mask
+        let horzGravity = self.flowLayout.tg_gravity & TGGravity.Vertical.mask
         
         switch (vertGravity) {
         case TGGravity.none:
-            vertGravity = TGGravity.vert.center;
+            vertGravity = TGGravity.Vertical.center;
             break
-        case TGGravity.vert.top:
-            vertGravity = TGGravity.vert.center;
+        case TGGravity.Vertical.top:
+            vertGravity = TGGravity.Vertical.center;
             break;
-        case TGGravity.vert.center:
-            vertGravity = TGGravity.vert.bottom;
+        case TGGravity.Vertical.center:
+            vertGravity = TGGravity.Vertical.bottom;
             break;
-        case TGGravity.vert.bottom:
-            vertGravity = TGGravity.vert.between;
+        case TGGravity.Vertical.bottom:
+            vertGravity = TGGravity.Vertical.between;
             break;
-        case TGGravity.vert.between:
-            vertGravity = TGGravity.vert.around
+        case TGGravity.Vertical.between:
+            vertGravity = TGGravity.Vertical.around
             break;
-        case TGGravity.vert.around:
-            vertGravity = TGGravity.vert.among
+        case TGGravity.Vertical.around:
+            vertGravity = TGGravity.Vertical.among
             break
-        case TGGravity.vert.among:
-            vertGravity = TGGravity.vert.fill
+        case TGGravity.Vertical.among:
+            vertGravity = TGGravity.Vertical.fill
             break
-        case TGGravity.vert.fill:
-                vertGravity = TGGravity.vert.top;
+        case TGGravity.Vertical.fill:
+                vertGravity = TGGravity.Vertical.top;
                 self.flowLayout.subviews.forEach({ (v:UIView) in
                     v.sizeToFit()
                 })
@@ -204,33 +204,33 @@ extension FLLTest1ViewController
     {
         //调整整体水平方向的停靠。
         
-        let vertGravity = self.flowLayout.tg_gravity & TGGravity.horz.mask;
-        var horzGravity = self.flowLayout.tg_gravity & TGGravity.vert.mask;
+        let vertGravity = self.flowLayout.tg_gravity & TGGravity.Horizontal.mask;
+        var horzGravity = self.flowLayout.tg_gravity & TGGravity.Vertical.mask;
         
         switch (horzGravity) {
         case TGGravity.none:
-            horzGravity = TGGravity.horz.center;
+            horzGravity = TGGravity.Horizontal.center;
             break
-        case TGGravity.horz.left:
-            horzGravity = TGGravity.horz.center;
+        case TGGravity.Horizontal.left:
+            horzGravity = TGGravity.Horizontal.center;
             break;
-        case TGGravity.horz.center:
-            horzGravity = TGGravity.horz.right;
+        case TGGravity.Horizontal.center:
+            horzGravity = TGGravity.Horizontal.right;
             break;
-        case TGGravity.horz.right:
-            horzGravity = TGGravity.horz.between;
+        case TGGravity.Horizontal.right:
+            horzGravity = TGGravity.Horizontal.between;
             break;
-        case TGGravity.horz.between:
-            horzGravity = TGGravity.horz.around;
+        case TGGravity.Horizontal.between:
+            horzGravity = TGGravity.Horizontal.around;
             break;
-        case TGGravity.horz.around:
-            horzGravity = TGGravity.horz.among;
+        case TGGravity.Horizontal.around:
+            horzGravity = TGGravity.Horizontal.among;
             break
-        case TGGravity.horz.among:
-            horzGravity = TGGravity.horz.fill
+        case TGGravity.Horizontal.among:
+            horzGravity = TGGravity.Horizontal.fill
             break
-        case TGGravity.horz.fill:
-            horzGravity = TGGravity.horz.left;
+        case TGGravity.Horizontal.fill:
+            horzGravity = TGGravity.Horizontal.left;
             self.flowLayout.subviews.forEach({ (v:UIView) in
                 v.sizeToFit()
             })
@@ -249,29 +249,29 @@ extension FLLTest1ViewController
     
     @objc func handleAdjustArrangeGravity(_ sender:AnyObject?)
     {
-        var vertArrangeGravity = self.flowLayout.tg_arrangedGravity & TGGravity.horz.mask
-        var horzArrangeGravity = self.flowLayout.tg_arrangedGravity & TGGravity.vert.mask
+        var vertArrangeGravity = self.flowLayout.tg_arrangedGravity & TGGravity.Horizontal.mask
+        var horzArrangeGravity = self.flowLayout.tg_arrangedGravity & TGGravity.Vertical.mask
         
         //每行的对齐方式的调整。
         if (self.flowLayout.tg_orientation == .vert)
         {
             
-            if (vertArrangeGravity == .none || vertArrangeGravity == TGGravity.vert.top)
+            if (vertArrangeGravity == .none || vertArrangeGravity == TGGravity.Vertical.top)
             {
-                vertArrangeGravity =  TGGravity.vert.center
+                vertArrangeGravity =  TGGravity.Vertical.center
             }
-            else if (vertArrangeGravity == TGGravity.vert.center)
+            else if (vertArrangeGravity == TGGravity.Vertical.center)
             {
-                vertArrangeGravity =  TGGravity.vert.bottom
+                vertArrangeGravity =  TGGravity.Vertical.bottom
 
             }
-            else if (vertArrangeGravity  == TGGravity.vert.bottom)
+            else if (vertArrangeGravity  == TGGravity.Vertical.bottom)
             {
-                vertArrangeGravity =  TGGravity.vert.fill
+                vertArrangeGravity =  TGGravity.Vertical.fill
             }
-            else if (vertArrangeGravity == TGGravity.vert.fill)
+            else if (vertArrangeGravity == TGGravity.Vertical.fill)
             {
-                vertArrangeGravity = TGGravity.vert.top
+                vertArrangeGravity = TGGravity.Vertical.top
                 
                 self.flowLayout.subviews.forEach({ (v:UIView) in
                     v.sizeToFit()
@@ -282,21 +282,21 @@ extension FLLTest1ViewController
         else
         {
             
-            if (horzArrangeGravity == .none || horzArrangeGravity == TGGravity.horz.left)
+            if (horzArrangeGravity == .none || horzArrangeGravity == TGGravity.Horizontal.left)
             {
-                horzArrangeGravity = TGGravity.horz.center
+                horzArrangeGravity = TGGravity.Horizontal.center
             }
-            else if (horzArrangeGravity == TGGravity.horz.center)
+            else if (horzArrangeGravity == TGGravity.Horizontal.center)
             {
-                horzArrangeGravity = TGGravity.horz.right
+                horzArrangeGravity = TGGravity.Horizontal.right
             }
-            else if (horzArrangeGravity  == TGGravity.horz.right)
+            else if (horzArrangeGravity  == TGGravity.Horizontal.right)
             {
-                horzArrangeGravity = TGGravity.horz.fill
+                horzArrangeGravity = TGGravity.Horizontal.fill
             }
-            else if (horzArrangeGravity == TGGravity.horz.fill)
+            else if (horzArrangeGravity == TGGravity.Horizontal.fill)
             {
-                horzArrangeGravity = TGGravity.horz.left
+                horzArrangeGravity = TGGravity.Horizontal.left
                 
                 self.flowLayout.subviews.forEach({ (v:UIView) in
                     v.sizeToFit()
@@ -406,62 +406,62 @@ extension FLLTest1ViewController
     func gravityInfo(_ gravity:TGGravity) ->String
     {
         //分别取出垂直和水平方向的停靠设置。
-        let vertGravity = gravity & TGGravity.horz.mask
-        let  horzGravity = gravity & TGGravity.vert.mask
+        let vertGravity = gravity & TGGravity.Horizontal.mask
+        let  horzGravity = gravity & TGGravity.Vertical.mask
         
         var vertGravityStr = ""
         switch (vertGravity) {
-        case TGGravity.vert.top:
-            vertGravityStr = "TGGravity.vert.top"
+        case TGGravity.Vertical.top:
+            vertGravityStr = "TGGravity.Vertical.top"
             break
-        case TGGravity.vert.center:
-            vertGravityStr = "TGGravity.vert.center"
+        case TGGravity.Vertical.center:
+            vertGravityStr = "TGGravity.Vertical.center"
             break
-        case TGGravity.vert.bottom:
-            vertGravityStr = "TGGravity.vert.bottom"
+        case TGGravity.Vertical.bottom:
+            vertGravityStr = "TGGravity.Vertical.bottom"
             break
-        case TGGravity.vert.fill:
-            vertGravityStr = "TGGravity.vert.fill"
+        case TGGravity.Vertical.fill:
+            vertGravityStr = "TGGravity.Vertical.fill"
             break
-        case TGGravity.vert.between:
-            vertGravityStr = "TGGravity.vert.between"
+        case TGGravity.Vertical.between:
+            vertGravityStr = "TGGravity.Vertical.between"
             break
-        case TGGravity.vert.around:
-            vertGravityStr = "TGGravity.vert.around"
+        case TGGravity.Vertical.around:
+            vertGravityStr = "TGGravity.Vertical.around"
             break
-        case TGGravity.vert.among:
-            vertGravityStr = "TGGravity.vert.among"
+        case TGGravity.Vertical.among:
+            vertGravityStr = "TGGravity.Vertical.among"
             break
         default:
-            vertGravityStr = "TGGravity.vert.top"
+            vertGravityStr = "TGGravity.Vertical.top"
             break
         }
         
         var horzGravityStr = ""
         switch (horzGravity) {
-        case TGGravity.horz.left:
-            horzGravityStr = "TGGravity.horz.left"
+        case TGGravity.Horizontal.left:
+            horzGravityStr = "TGGravity.Horizontal.left"
             break
-        case TGGravity.horz.center:
-            horzGravityStr = "TGGravity.horz.center"
+        case TGGravity.Horizontal.center:
+            horzGravityStr = "TGGravity.Horizontal.center"
             break
-        case TGGravity.horz.right:
-            horzGravityStr = "TGGravity.horz.right"
+        case TGGravity.Horizontal.right:
+            horzGravityStr = "TGGravity.Horizontal.right"
             break
-        case TGGravity.horz.fill:
-            horzGravityStr = "TGGravity.horz.fill"
+        case TGGravity.Horizontal.fill:
+            horzGravityStr = "TGGravity.Horizontal.fill"
             break
-        case TGGravity.horz.between:
-            horzGravityStr = "TGGravity.horz.between"
+        case TGGravity.Horizontal.between:
+            horzGravityStr = "TGGravity.Horizontal.between"
             break
-        case TGGravity.horz.around:
-            horzGravityStr = "TGGravity.horz.around"
+        case TGGravity.Horizontal.around:
+            horzGravityStr = "TGGravity.Horizontal.around"
             break
-        case TGGravity.horz.among:
-            horzGravityStr = "TGGravity.horz.among"
+        case TGGravity.Horizontal.among:
+            horzGravityStr = "TGGravity.Horizontal.among"
             break
         default:
-            horzGravityStr = "TGGravity.horz.left"
+            horzGravityStr = "TGGravity.Horizontal.left"
             break;
         }
         

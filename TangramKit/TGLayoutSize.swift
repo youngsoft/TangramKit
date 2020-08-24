@@ -545,10 +545,10 @@ extension TGLayoutSize
             }
             
             switch _type {
-            case TGGravity.vert.fill:
+            case TGGravity.Vertical.fill:
                 _val = ValueType.dimeV(v.tg_height)
                 break
-            case TGGravity.horz.fill:
+            case TGGravity.Horizontal.fill:
                 _val = ValueType.dimeV(v.tg_width)
                 break
             default:
@@ -567,7 +567,7 @@ extension TGLayoutSize
             {
                 _val = ValueType.wrapV
                 
-                if let labelView = _view as? UILabel, _type == TGGravity.vert.fill
+                if let labelView = _view as? UILabel, _type == TGGravity.Vertical.fill
                 {
                     if labelView.numberOfLines == 1
                     {

@@ -564,7 +564,7 @@ extension TGFloatLayout
             let isHeightWeight = sbvsc.height.weightVal != nil || sbvsc.height.isFill
             
             //只要有一个子视图设置了对齐，就会做对齐处理，否则不会，这里这样做是为了对后面的对齐计算做优化。
-            sbvHasAlignment = sbvHasAlignment || ((sbvsc.tg_alignment & TGGravity.horz.mask) > TGGravity.vert.top)
+            sbvHasAlignment = sbvHasAlignment || ((sbvsc.tg_alignment & TGGravity.Horizontal.mask) > TGGravity.Vertical.top)
             
             
             if subviewSize != 0
@@ -961,12 +961,12 @@ extension TGFloatLayout
         else
         {
             var addYPos:CGFloat = 0;
-            let mgvert = lsc.tg_gravity & TGGravity.horz.mask;
-            if (mgvert == TGGravity.vert.center)
+            let mgvert = lsc.tg_gravity & TGGravity.Horizontal.mask;
+            if (mgvert == TGGravity.Vertical.center)
             {
                 addYPos = (selfSize.height - maxHeight) / 2;
             }
-            else if (mgvert == TGGravity.vert.bottom)
+            else if (mgvert == TGGravity.Vertical.bottom)
             {
                 addYPos = selfSize.height - maxHeight;
             }
@@ -1008,7 +1008,7 @@ extension TGFloatLayout
                         lineMaxHeight = sbvtgFrame.height
                     }
                     
-                    lineHasAlignment = lineHasAlignment || ((sbvsc.tg_alignment & TGGravity.horz.mask) > TGGravity.vert.top)
+                    lineHasAlignment = lineHasAlignment || ((sbvsc.tg_alignment & TGGravity.Horizontal.mask) > TGGravity.Vertical.top)
                 }
                 
                 //设置行内的对齐
@@ -1019,14 +1019,14 @@ extension TGFloatLayout
                         let sbv = sbs[i]
                         let (sbvtgFrame, sbvsc) = self.tgGetSubviewFrameAndSizeClass(sbv)
                         
-                        switch (sbvsc.tg_alignment & TGGravity.horz.mask) {
-                        case TGGravity.vert.center:
+                        switch (sbvsc.tg_alignment & TGGravity.Horizontal.mask) {
+                        case TGGravity.Vertical.center:
                             sbvtgFrame.top += (lineMaxHeight - sbvtgFrame.height) / 2.0
                             break
-                        case TGGravity.vert.bottom:
+                        case TGGravity.Vertical.bottom:
                             sbvtgFrame.top += (lineMaxHeight - sbvtgFrame.height)
                             break
-                        case TGGravity.vert.fill:
+                        case TGGravity.Vertical.fill:
                             sbvtgFrame.height = lineMaxHeight
                             break
                         default:
@@ -1162,7 +1162,7 @@ extension TGFloatLayout
             let isHeightWeight = sbvsc.height.weightVal != nil || sbvsc.height.isFill
             
             //只要有一个子视图设置了对齐，就会做对齐处理，否则不会，这里这样做是为了对后面的对齐计算做优化。
-            sbvHasAlignment = sbvHasAlignment || ((sbvsc.tg_alignment & TGGravity.vert.mask) > TGGravity.horz.left)
+            sbvHasAlignment = sbvHasAlignment || ((sbvsc.tg_alignment & TGGravity.Vertical.mask) > TGGravity.Horizontal.left)
             
             
             rect.size.width = sbvsc.width.numberSize(rect.size.width)
@@ -1542,13 +1542,13 @@ extension TGFloatLayout
         else
         {
             var addXPos:CGFloat = 0;
-            let mghorz = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.vert.mask)
+            let mghorz = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.Vertical.mask)
             
-            if (mghorz == TGGravity.horz.center)
+            if (mghorz == TGGravity.Horizontal.center)
             {
                 addXPos = (selfSize.width - maxWidth) / 2
             }
-            else if (mghorz == TGGravity.horz.trailing)
+            else if (mghorz == TGGravity.Horizontal.trailing)
             {
                 addXPos = selfSize.width - maxWidth;
             }
@@ -1592,7 +1592,7 @@ extension TGFloatLayout
                         lineMaxWidth = sbvtgFrame.width
                     }
                     
-                    lineHasAlignment = lineHasAlignment || ((sbvsc.tg_alignment & TGGravity.vert.mask) > TGGravity.horz.left)
+                    lineHasAlignment = lineHasAlignment || ((sbvsc.tg_alignment & TGGravity.Vertical.mask) > TGGravity.Horizontal.left)
                 }
                 
                 //设置列内的对齐
@@ -1603,14 +1603,14 @@ extension TGFloatLayout
                         let sbv = sbs[i]
                         let (sbvtgFrame, sbvsc) = self.tgGetSubviewFrameAndSizeClass(sbv)
                         
-                        switch (self.tgConvertLeftRightGravityToLeadingTrailing(sbvsc.tg_alignment & TGGravity.vert.mask)) {
-                        case TGGravity.horz.center:
+                        switch (self.tgConvertLeftRightGravityToLeadingTrailing(sbvsc.tg_alignment & TGGravity.Vertical.mask)) {
+                        case TGGravity.Horizontal.center:
                             sbvtgFrame.leading += (lineMaxWidth - sbvtgFrame.width) / 2.0
                             break
-                        case TGGravity.horz.trailing:
+                        case TGGravity.Horizontal.trailing:
                             sbvtgFrame.leading += (lineMaxWidth - sbvtgFrame.width)
                             break
-                        case TGGravity.horz.fill:
+                        case TGGravity.Horizontal.fill:
                             sbvtgFrame.width = lineMaxWidth
                             break
                         default:

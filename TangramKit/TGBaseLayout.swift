@@ -1453,16 +1453,16 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
      布局里面的所有子视图的整体停靠方向以及填充，所谓停靠是指布局视图里面的所有子视图整体在布局视图中的位置，系统默认的停靠是在布局视图的左上角。
      
      只有框架布局、线性布局、表格布局、流式布局、浮动布局支持tg_gravity属性，相对布局和路径布局不支持。
-     * TGGravity.vert.top,TGGravity.vert.center,TGGravity.vert.bottom 表示整体垂直居上，居中，居下 (支持：框架布局,线性布局,表格布局,流式布局,垂直浮动布局)
-     * TGGravity.horz.left,TGGravity.horz.center,TGGravity.horz.right 表示整体水平居左，居中，居右 (支持：框架布局,线性布局,表格布局,流式布局,水平浮动布局)
-     * TGGravity.vert.between 表示每行之间的子视图行间距都被拉伸，以便使里面的子视图垂直方向填充满整个布局视图。 (支持：垂直线性布局,垂直表格布局，流式布局)
-     * TGGravity.horz.between 表示每列之间的子视图列间距都被拉伸，以便使里面的子视图水平方向填充满整个布局视图。 (支持：水平线性布局,水平表格布局，流式布局)
-     * TGGravity.vert.around 表示每行之间的视图行间距都被环绕拉伸，以便使里面的子视图垂直方向填充满整个布局视图。 (支持：垂直线性布局,垂直表格布局，流式布局)
-     * TGGravity.horz.around 表示每列之间的视图列间距都被环绕拉伸，以便使里面的子视图水平方向填充满整个布局视图。 (支持：水平线性布局,水平表格布局，流式布局)
-     * TGGravity.vert.among 表示每行之间的视图行间距都被等分拉伸，以便使里面的子视图垂直方向填充满整个布局视图。 (支持：垂直线性布局,垂直表格布局，流式布局)
-     * TGGravity.horz.among 表示每列之间的视图列间距都被等分拉伸，以便使里面的子视图水平方向填充满整个布局视图。 (支持：水平线性布局,水平表格布局，流式布局)
-     * TGGravity.vert.fill 表示布局会拉伸子视图的高度，以便使里面的子视图垂直方向填充满整个布局视图的高度或者子视图平分布局视图的高度。(支持：框架布局，水平线性布局，水平表格布局，流式布局)
-     * TGGravity.horz.fill 表示布局会拉伸子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度或者子视图平分布局视图的宽度。 (支持：框架布局，垂直线性布局，垂直表格布局，流式布局)
+     * TGGravity.Vertical.top,TGGravity.Vertical.center,TGGravity.Vertical.bottom 表示整体垂直居上，居中，居下 (支持：框架布局,线性布局,表格布局,流式布局,垂直浮动布局)
+     * TGGravity.Horizontal.left,TGGravity.Horizontal.center,TGGravity.Horizontal.right 表示整体水平居左，居中，居右 (支持：框架布局,线性布局,表格布局,流式布局,水平浮动布局)
+     * TGGravity.Vertical.between 表示每行之间的子视图行间距都被拉伸，以便使里面的子视图垂直方向填充满整个布局视图。 (支持：垂直线性布局,垂直表格布局，流式布局)
+     * TGGravity.Horizontal.between 表示每列之间的子视图列间距都被拉伸，以便使里面的子视图水平方向填充满整个布局视图。 (支持：水平线性布局,水平表格布局，流式布局)
+     * TGGravity.Vertical.around 表示每行之间的视图行间距都被环绕拉伸，以便使里面的子视图垂直方向填充满整个布局视图。 (支持：垂直线性布局,垂直表格布局，流式布局)
+     * TGGravity.Horizontal.around 表示每列之间的视图列间距都被环绕拉伸，以便使里面的子视图水平方向填充满整个布局视图。 (支持：水平线性布局,水平表格布局，流式布局)
+     * TGGravity.Vertical.among 表示每行之间的视图行间距都被等分拉伸，以便使里面的子视图垂直方向填充满整个布局视图。 (支持：垂直线性布局,垂直表格布局，流式布局)
+     * TGGravity.Horizontal.among 表示每列之间的视图列间距都被等分拉伸，以便使里面的子视图水平方向填充满整个布局视图。 (支持：水平线性布局,水平表格布局，流式布局)
+     * TGGravity.Vertical.fill 表示布局会拉伸子视图的高度，以便使里面的子视图垂直方向填充满整个布局视图的高度或者子视图平分布局视图的高度。(支持：框架布局，水平线性布局，水平表格布局，流式布局)
+     * TGGravity.Horizontal.fill 表示布局会拉伸子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度或者子视图平分布局视图的宽度。 (支持：框架布局，垂直线性布局，垂直表格布局，流式布局)
      */
     public var tg_gravity:TGGravity
         {
@@ -2913,7 +2913,7 @@ extension TGBaseLayout
         {
             if t.view == self
             {
-                if (t.type == TGGravity.horz.fill)
+                if (t.type == TGGravity.Horizontal.fill)
                 {
                     let lsc = self.tgCurrentSizeClass as! TGLayoutViewSizeClassImpl
                     value = selfLayoutSize.width - (t.view == self ? (lsc.tgLeadingPadding + lsc.tgTrailingPadding) : 0);
@@ -2933,7 +2933,7 @@ extension TGBaseLayout
                 }
                 else
                 {
-                    if (t.type ==  TGGravity.horz.fill)
+                    if (t.type ==  TGGravity.Horizontal.fill)
                     {
                         value = sbvSize.width;
                     }
@@ -2945,7 +2945,7 @@ extension TGBaseLayout
             }
             else
             {
-                if (t.type == TGGravity.horz.fill)
+                if (t.type == TGGravity.Horizontal.fill)
                 {
                     
                     value = t.view.tg_estimatedFrame.width
@@ -2960,7 +2960,7 @@ extension TGBaseLayout
         }
         else if (boundDime.isWrap)
         {
-            if dimeType == TGGravity.horz.fill
+            if dimeType == TGGravity.Horizontal.fill
             {
                 value = sbvSize.width
             }
@@ -3030,42 +3030,42 @@ extension TGBaseLayout
             let rect = t.view.tgFrame.frame;
             
             let pos = t.type;
-            if (pos == TGGravity.horz.leading)
+            if (pos == TGGravity.Horizontal.leading)
             {
                 if (rect.origin.x != CGFloat.greatestFiniteMagnitude)
                 {
                     value = rect.minX;
                 }
             }
-            else if (pos == TGGravity.horz.center)
+            else if (pos == TGGravity.Horizontal.center)
             {
                 if (rect.origin.x != CGFloat.greatestFiniteMagnitude)
                 {
                     value = rect.midX;
                 }
             }
-            else if (pos == TGGravity.horz.trailing)
+            else if (pos == TGGravity.Horizontal.trailing)
             {
                 if (rect.origin.x != CGFloat.greatestFiniteMagnitude)
                 {
                     value = rect.maxX;
                 }
             }
-            else if (pos == TGGravity.vert.top)
+            else if (pos == TGGravity.Vertical.top)
             {
                 if (rect.origin.y != CGFloat.greatestFiniteMagnitude)
                 {
                     value = rect.minY;
                 }
             }
-            else if (pos == TGGravity.vert.center)
+            else if (pos == TGGravity.Vertical.center)
             {
                 if (rect.origin.y != CGFloat.greatestFiniteMagnitude)
                 {
                     value = rect.midY;
                 }
             }
-            else if (pos == TGGravity.vert.bottom)
+            else if (pos == TGGravity.Vertical.bottom)
             {
                 if (rect.origin.y != CGFloat.greatestFiniteMagnitude)
                 {
@@ -3130,7 +3130,7 @@ extension TGBaseLayout
             if (lsc.width.sizeVal != nil && lsc.width.sizeVal.view  === newSuperview) || lsc.width.isFill
             {
                 
-                if  lsc.width.isFill || lsc.width.sizeVal.type == TGGravity.horz.fill
+                if  lsc.width.isFill || lsc.width.sizeVal.type == TGGravity.Horizontal.fill
                 {
                     size.width = lsc.width.measure(rectSuper.width)
                 }
@@ -3160,7 +3160,7 @@ extension TGBaseLayout
            
             if  (lsc.height.sizeVal != nil && lsc.height.sizeVal.view  === newSuperview) || lsc.height.isFill
             {
-                if  lsc.height.isFill || lsc.height.sizeVal.type == TGGravity.vert.fill
+                if  lsc.height.isFill || lsc.height.sizeVal.type == TGGravity.Vertical.fill
                 {
                     size.height = lsc.height.measure(rectSuper.height)
                 }
@@ -3231,7 +3231,7 @@ extension TGBaseLayout
             {
                 if t.view === newSuperview
                 {
-                    if t.type == TGGravity.horz.fill
+                    if t.type == TGGravity.Horizontal.fill
                     {
                         rectSelf.size.width = lsc.width.measure(rectSuper.width)
                     }
@@ -3334,7 +3334,7 @@ extension TGBaseLayout
             {
                 if t.view === newSuperview
                 {
-                    if t.type == TGGravity.vert.fill
+                    if t.type == TGGravity.Vertical.fill
                     {
                         rectSelf.size.height = lsc.height.measure(rectSuper.height)
                     }
@@ -3603,8 +3603,8 @@ extension TGBaseLayout
     
     internal func tgGetSubviewVertGravity(_ sbv:UIView, sbvsc:TGViewSizeClassImpl, vertGravity:TGGravity)->TGGravity
     {
-        let sbvVertAlignment = sbvsc.tg_alignment & TGGravity.horz.mask
-        var sbvVertGravity:TGGravity = TGGravity.vert.top
+        let sbvVertAlignment = sbvsc.tg_alignment & TGGravity.Horizontal.mask
+        var sbvVertGravity:TGGravity = TGGravity.Vertical.top
         if vertGravity != TGGravity.none
         {
             sbvVertGravity = vertGravity
@@ -3624,19 +3624,19 @@ extension TGBaseLayout
             
             if sbvsc.isVertMarginHasValue
             {
-                sbvVertGravity = TGGravity.vert.fill;
+                sbvVertGravity = TGGravity.Vertical.fill;
             }
             else if sbvsc.centerY.hasValue
             {
-                sbvVertGravity = TGGravity.vert.center;
+                sbvVertGravity = TGGravity.Vertical.center;
             }
             else if sbvsc.top.hasValue
             {
-                sbvVertGravity = TGGravity.vert.top;
+                sbvVertGravity = TGGravity.Vertical.top;
             }
             else if sbvsc.bottom.hasValue
             {
-                sbvVertGravity = TGGravity.vert.bottom
+                sbvVertGravity = TGGravity.Vertical.bottom
             }
         }
         
@@ -3655,32 +3655,32 @@ extension TGBaseLayout
         var vert = vert
         
         //确保设置基线对齐的视图都是UILabel,UITextField,UITextView
-        if baselinePos == nil && vert == TGGravity.vert.baseline
+        if baselinePos == nil && vert == TGGravity.Vertical.baseline
         {
-            vert = TGGravity.vert.top
+            vert = TGGravity.Vertical.top
         }
         
         var sbvFont:UIFont! = nil
-        if vert == TGGravity.vert.baseline
+        if vert == TGGravity.Vertical.baseline
         {
             sbvFont = self.tgGetSubviewFont(sbv)
         }
         
-        if sbvFont == nil && vert == TGGravity.vert.baseline
+        if sbvFont == nil && vert == TGGravity.Vertical.baseline
         {
-            vert = TGGravity.vert.top
+            vert = TGGravity.Vertical.top
         }
         
-        if vert == TGGravity.vert.fill
+        if vert == TGGravity.Vertical.fill
         {
             rect.origin.y = topPadding + topMargin;
             rect.size.height = self.tgValidMeasure(sbvsc.height, sbv: sbv, calcSize:selfSize.height - fixedHeight - topMargin - bottomMargin , sbvSize: rect.size, selfLayoutSize: selfSize)
         }
-        else if vert == TGGravity.vert.center
+        else if vert == TGGravity.Vertical.center
         {
             rect.origin.y = (selfSize.height - fixedHeight - topMargin - bottomMargin - rect.size.height)/2 + topPadding + topMargin + centerMargin;
         }
-        else if vert == TGGravity.vert.windowCenter
+        else if vert == TGGravity.Vertical.windowCenter
         {
             if let twindow = self.window
             {
@@ -3689,12 +3689,12 @@ extension TGBaseLayout
             }
             
         }
-        else if vert == TGGravity.vert.bottom
+        else if vert == TGGravity.Vertical.bottom
         {
             
             rect.origin.y = selfSize.height - bottomPadding - bottomMargin - rect.size.height;
         }
-        else if vert == TGGravity.vert.baseline
+        else if vert == TGGravity.Vertical.baseline
         {
             //得到基线位置。
             rect.origin.y = baselinePos - sbvFont.ascender - (rect.height - sbvFont.lineHeight) / 2.0
@@ -3708,8 +3708,8 @@ extension TGBaseLayout
     
     internal func tgGetSubviewHorzGravity(_ sbv:UIView, sbvsc:TGViewSizeClassImpl, horzGravity:TGGravity)->TGGravity
     {
-        let sbvHorzAligement = self.tgConvertLeftRightGravityToLeadingTrailing(sbvsc.tg_alignment & TGGravity.vert.mask)
-        var sbvHorzGravity:TGGravity = TGGravity.horz.leading
+        let sbvHorzAligement = self.tgConvertLeftRightGravityToLeadingTrailing(sbvsc.tg_alignment & TGGravity.Vertical.mask)
+        var sbvHorzGravity:TGGravity = TGGravity.Horizontal.leading
         if horzGravity != TGGravity.none
         {
             sbvHorzGravity = horzGravity
@@ -3728,19 +3728,19 @@ extension TGBaseLayout
             
             if sbvsc.isHorzMarginHasValue
             {
-                sbvHorzGravity = TGGravity.horz.fill;
+                sbvHorzGravity = TGGravity.Horizontal.fill;
             }
             else if sbvsc.centerX.hasValue
             {
-                sbvHorzGravity = TGGravity.horz.center
+                sbvHorzGravity = TGGravity.Horizontal.center
             }
             else if sbvsc.leading.hasValue
             {
-                sbvHorzGravity = TGGravity.horz.leading
+                sbvHorzGravity = TGGravity.Horizontal.leading
             }
             else if sbvsc.trailing.hasValue
             {
-                sbvHorzGravity = TGGravity.horz.trailing
+                sbvHorzGravity = TGGravity.Horizontal.trailing
             }
         }
         
@@ -3755,17 +3755,17 @@ extension TGBaseLayout
         let centerMargin = sbvsc.centerX.weightPosIn(selfSize.width - fixedWidth)
         let trailingMargin = sbvsc.trailing.weightPosIn(selfSize.width - fixedWidth)
         
-        if horz == TGGravity.horz.fill
+        if horz == TGGravity.Horizontal.fill
         {
             
             rect.origin.x = leadingPadding + leadingMargin;
             rect.size.width =  self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize:selfSize.width - fixedWidth - leadingMargin - trailingMargin , sbvSize: rect.size, selfLayoutSize: selfSize)
         }
-        else if horz == TGGravity.horz.center
+        else if horz == TGGravity.Horizontal.center
         {
             rect.origin.x = (selfSize.width - fixedWidth - leadingMargin - trailingMargin - rect.size.width)/2 + leadingPadding + leadingMargin + centerMargin;
         }
-        else if horz == TGGravity.horz.windowCenter
+        else if horz == TGGravity.Horizontal.windowCenter
         {
             if let twindow = self.window
             {
@@ -3779,7 +3779,7 @@ extension TGBaseLayout
             }
             
         }
-        else if horz == TGGravity.horz.trailing
+        else if horz == TGGravity.Horizontal.trailing
         {
             rect.origin.x = selfSize.width - trailingPadding - trailingMargin - rect.size.width;
         }
@@ -3852,7 +3852,7 @@ extension TGBaseLayout
         
         var rect = rect
         
-        if dime.realSize!.type == TGGravity.horz.fill
+        if dime.realSize!.type == TGGravity.Horizontal.fill
         {
             
             if t === lsc.width.realSize && !lsc.width.isWrap
@@ -3867,7 +3867,7 @@ extension TGBaseLayout
             {
                 rect.size.width = dime.measure(rect.height)
             }
-            else if t.type == TGGravity.horz.fill
+            else if t.type == TGGravity.Horizontal.fill
             {
                 rect.size.width = dime.measure(t.view.tg_estimatedFrame.width)
             }
@@ -3890,7 +3890,7 @@ extension TGBaseLayout
             {
                 rect.size.height = dime.measure(rect.width)
             }
-            else if (t.type == TGGravity.horz.fill)
+            else if (t.type == TGGravity.Horizontal.fill)
             {
                 rect.size.height = dime.measure(t.view.tg_estimatedFrame.width)
             }
@@ -3946,26 +3946,26 @@ extension TGBaseLayout
     
     internal func tgConvertLeftRightGravityToLeadingTrailing(_ horzGravity:TGGravity) -> TGGravity
     {
-        if horzGravity == TGGravity.horz.left
+        if horzGravity == TGGravity.Horizontal.left
         {
             if TGBaseLayout.tg_isRTL
             {
-                return TGGravity.horz.trailing
+                return TGGravity.Horizontal.trailing
             }
             else
             {
-                return TGGravity.horz.leading
+                return TGGravity.Horizontal.leading
             }
         }
-        else if horzGravity == TGGravity.horz.right
+        else if horzGravity == TGGravity.Horizontal.right
         {
             if TGBaseLayout.tg_isRTL
             {
-                return TGGravity.horz.leading
+                return TGGravity.Horizontal.leading
             }
             else
             {
-                return TGGravity.horz.trailing
+                return TGGravity.Horizontal.trailing
             }
         }
         else
@@ -4217,7 +4217,7 @@ extension TGBaseLayout
             }
             else
             {
-                if (t.type == TGGravity.horz.fill)
+                if (t.type == TGGravity.Horizontal.fill)
                 {
                     retVal = dime.measure(t.view.tgEstimatedWidth)
                 }
@@ -4265,7 +4265,7 @@ extension TGBaseLayout
             }
             else
             {
-                if (t.type == TGGravity.horz.fill)
+                if (t.type == TGGravity.Horizontal.fill)
                 {
                     retVal = dime.measure(t.view.tgEstimatedWidth)
                 }

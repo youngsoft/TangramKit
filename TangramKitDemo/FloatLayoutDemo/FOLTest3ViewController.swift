@@ -96,7 +96,7 @@ extension FOLTest3ViewController
         itemLayout.tg_highlightedBackgroundColor = .lightGray
         itemLayout.tg_backgroundImage = UIImage(named: dataModel.imageName) //将图片作为布局的背景图片
         itemLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10);
-        itemLayout.tg_gravity = TGGravity.vert.bottom //将整个布局中的所有子视图垂直居底部。
+        itemLayout.tg_gravity = TGGravity.Vertical.bottom //将整个布局中的所有子视图垂直居底部。
         itemLayout.tg_height.equal(self.floatLayout.tg_height,multiple:2.0/5)  //布局的高度是父布局的2/5。
         itemLayout.tg_width.equal(self.floatLayout.tg_width); //布局的宽度和父布局相等。
         
@@ -119,7 +119,7 @@ extension FOLTest3ViewController
         itemLayout.tg_setTarget(self, action: #selector(handleItemLayoutClick), for:.touchUpInside)
         itemLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10);
         itemLayout.tg_highlightedBackgroundColor = .lightGray
-        itemLayout.tg_gravity = TGGravity.vert.center //将整个布局中的所有子视图整体垂直居中。
+        itemLayout.tg_gravity = TGGravity.Vertical.center //将整个布局中的所有子视图整体垂直居中。
         itemLayout.tg_height.equal(self.floatLayout.tg_height,multiple:1.0/5)  //布局高度是父布局的1/5
         itemLayout.tg_width.equal(self.floatLayout.tg_width)  //布局宽度和父布局相等。
         
@@ -155,7 +155,7 @@ extension FOLTest3ViewController
         itemLayout.tg_setTarget(self, action: #selector(handleItemLayoutClick), for:.touchUpInside)
         itemLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10);
         itemLayout.tg_highlightedBackgroundColor = .lightGray
-        itemLayout.tg_gravity = TGGravity.vert.center  ////将整个布局中的所有子视图整体垂直居中。
+        itemLayout.tg_gravity = TGGravity.Vertical.center  ////将整个布局中的所有子视图整体垂直居中。
         itemLayout.tg_height.equal(self.floatLayout.tg_height,multiple:1.0/5)
         itemLayout.tg_width.equal(self.floatLayout.tg_width,multiple:0.5)
         

@@ -8,7 +8,124 @@
 
 import UIKit
 
+public extension TypeWrapperProtocol where WrappedType: TGLinearLayout {
+    var orientation: TGOrientation {
+        get { return self.getCheck()?.tg_orientation ?? TGOrientation.vert }
+        set {
+            guard let lsc = self.setCheck() else { return }
+            if lsc.tg_orientation != newValue {
+                lsc.tg_orientation = newValue
+                self.wrappedValue.setNeedsLayout()
+            }
+        }
+    }
 
+    var shrinkType: TGSubviewsShrinkType {
+        get { return self.getCheck()?.tg_shrinkType ?? TGSubviewsShrinkType() }
+        set {
+            guard let lsc = self.setCheck() else { return }
+            if lsc.tg_shrinkType != newValue {
+                lsc.tg_shrinkType = newValue
+                self.wrappedValue.setNeedsLayout()
+            }
+        }
+    }
+
+    var baselineBaseView: UIView {
+        get { return self.wrappedValue.tg_baselineBaseView }
+        set { self.wrappedValue.tg_baselineBaseView = newValue }
+    }
+
+    func equalizeSubviews(centered: Bool, withSpace space: CGFloat! = nil, inSizeClass type: TGSizeClassType = TGSizeClassType.default) {
+        switch type {
+        case TGSizeClassType.default: break
+        default:
+            self.wrappedValue.tgFrame.sizeClass = self.wrappedValue.tg_fetchSizeClass(with:type)
+            for sbv: UIView in self.wrappedValue.subviews {
+                sbv.tgFrame.sizeClass = sbv.tg_fetchSizeClass(with:type)
+            }
+        }
+
+        if self.wrappedValue.tg_orientation == TGOrientation.vert {
+            self.wrappedValue.tgEqualizeSubviewsForVert(centered, withSpace: space)
+        } else {
+            self.wrappedValue.tgEqualizeSubviewsForHorz(centered, withSpace: space)
+        }
+
+        switch type {
+        case TGSizeClassType.default:
+            self.wrappedValue.setNeedsLayout()
+        default:
+            self.wrappedValue.tgFrame.sizeClass = self.wrappedValue.tg_fetchSizeClass(with:TGSizeClassType.default)
+            for sbv:UIView in self.wrappedValue.subviews {
+                sbv.tgFrame.sizeClass = sbv.tg_fetchSizeClass(with:TGSizeClassType.default)
+            }
+        }
+    }
+
+    func equalizeSubviewsSpace(centered: Bool, inSizeClass type: TGSizeClassType = TGSizeClassType.default) {
+        switch type {
+        case TGSizeClassType.default: break
+        default:
+            self.wrappedValue.tgFrame.sizeClass = self.wrappedValue.tg_fetchSizeClass(with:type)
+            for sbv:UIView in self.wrappedValue.subviews {
+                sbv.tgFrame.sizeClass = sbv.tg_fetchSizeClass(with:type)
+            }
+        }
+
+        if self.wrappedValue.tg_orientation == TGOrientation.vert {
+            self.wrappedValue.tgEqualizeSubviewsSpaceForVert(centered)
+        } else {
+            self.wrappedValue.tgEqualizeSubviewsSpaceForHorz(centered)
+        }
+
+        switch type {
+        case TGSizeClassType.default:
+            self.wrappedValue.setNeedsLayout()
+            break
+        default:
+            self.wrappedValue.tgFrame.sizeClass = self.wrappedValue.tg_fetchSizeClass(with:TGSizeClassType.default)
+            for sbv:UIView in self.wrappedValue.subviews {
+                sbv.tgFrame.sizeClass = sbv.tg_fetchSizeClass(with:TGSizeClassType.default)
+            }
+        }
+    }
+
+    func setSubviews(size: CGFloat, minSpace: CGFloat, maxSpace: CGFloat = CGFloat.greatestFiniteMagnitude, centered: Bool = false, inSizeClass type: TGSizeClassType = TGSizeClassType.default) {
+        guard let lsc = self.wrappedValue.tg_fetchSizeClass(with: type) as? TGFlowLayoutViewSizeClassImpl else {
+            debugPrint("\(self.wrappedValue.tg_fetchSizeClass(with: type)) don't conform to the TGFlowLayoutViewSizeClassImpl protocal setting is invalid")
+            return
+        }
+        if size == 0.0 {
+            lsc.tgFlexSpace = nil
+        } else {
+            if lsc.tgFlexSpace == nil {
+                lsc.tgFlexSpace = TGSequentLayoutFlexSpace()
+            }
+            lsc.tgFlexSpace.subviewSize = size
+            lsc.tgFlexSpace.minSpace = minSpace
+            lsc.tgFlexSpace.maxSpace = maxSpace
+            lsc.tgFlexSpace.centered = centered
+        }
+        self.wrappedValue.setNeedsLayout()
+    }
+
+    private func setCheck() -> TGLinearLayoutViewSizeClass? {
+        guard let value: TGLinearLayoutViewSizeClass = self.wrappedValue.tgCurrentSizeClass as? TGLinearLayoutViewSizeClass else {
+            debugPrint("\(self.wrappedValue.tgCurrentSizeClass) don't conform to the TGLinearLayoutViewSizeClass protocal setting is invalid")
+            return nil
+        }
+        return value
+    }
+
+    private func getCheck() -> TGLinearLayoutViewSizeClass? {
+        guard let value: TGLinearLayoutViewSizeClass = self.wrappedValue.tgCurrentSizeClass as? TGLinearLayoutViewSizeClass else {
+            debugPrint("\(self.wrappedValue.tgCurrentSizeClass) don't conform to the TGLinearLayoutViewSizeClass protocal")
+            return nil
+        }
+        return value
+    }
+}
 
 
 /**
@@ -159,7 +276,7 @@ open class TGLinearLayout: TGBaseLayout,TGLinearLayoutViewSizeClass {
     
     /**
      设置水平线性布局里面的基线对齐基准视图，所有其他子视图的基线都以这个为准。
-     这个属性要和tg_gravity属性设置为TGGravity.vert.baseline配合使用。并且要求这个属性所指定的视图，必须具有font属性。
+     这个属性要和tg_gravity属性设置为TGGravity.Vertical.baseline配合使用。并且要求这个属性所指定的视图，必须具有font属性。
      目前支持具有font属性的有UILabel，UITextField,UITextView, UIButton几个系统控件。
      */
     public var tg_baselineBaseView:UIView!
@@ -296,8 +413,8 @@ open class TGLinearLayout: TGBaseLayout,TGLinearLayoutViewSizeClass {
         
         let lsc = self.tgCurrentSizeClass as! TGLinearLayoutViewSizeClassImpl
         
-        let vertGravity = lsc.tg_gravity & TGGravity.horz.mask
-        let horzGravity = lsc.tg_gravity & TGGravity.vert.mask
+        let vertGravity = lsc.tg_gravity & TGGravity.Horizontal.mask
+        let horzGravity = lsc.tg_gravity & TGGravity.Vertical.mask
         
     
             for sbv in sbs
@@ -680,7 +797,7 @@ extension TGLinearLayout {
         var floatingHeight:CGFloat = 0 //浮动的高度。
         var totalWeight:TGWeight = TGWeight.zeroWeight    //剩余部分的总比重
         var selfSize = selfSize
-        let horzGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.vert.mask)
+        let horzGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.Vertical.mask)
         var topPadding = lsc.tgTopPadding
         var bottomPadding = lsc.tgBottomPadding
         let leadingPadding = lsc.tgLeadingPadding
@@ -1023,7 +1140,7 @@ extension TGLinearLayout {
     fileprivate func tgLayoutSubviewsForHorz(_ selfSize:CGSize, sbs:[UIView], lsc:TGLinearLayoutViewSizeClassImpl)->CGSize
     {
         
-        let vertGravity = lsc.tg_gravity & TGGravity.horz.mask
+        let vertGravity = lsc.tg_gravity & TGGravity.Horizontal.mask
         var fixedWidth:CGFloat = 0;   //计算固定部分的高度
         var floatingWidth:CGFloat = 0; //浮动的高度。
         var totalWeight:TGWeight = TGWeight.zeroWeight
@@ -1417,7 +1534,7 @@ extension TGLinearLayout {
                 self.tgCalcTopBottomRect(vertGravity:vertGravity, selfSize: selfSize, topPadding:topPadding, bottomPadding:bottomPadding,baselinePos:baselinePos, sbv: sbv, sbvsc: sbvsc, lsc: lsc, rect: &rect)
                 
                 //如果垂直方向的对齐方式是基线对齐，那么就以第一个具有基线的视图作为标准位置。
-                if vertGravity == TGGravity.vert.baseline && baselinePos == nil && self.tg_baselineBaseView === sbv
+                if vertGravity == TGGravity.Vertical.baseline && baselinePos == nil && self.tg_baselineBaseView === sbv
                 {
                     let sbvFont = sbv.value(forKey: "font") as! UIFont
                     //这里要求baselineBaseView必须要具有font属性。
@@ -1452,7 +1569,7 @@ extension TGLinearLayout {
                 sbvtgFrame.frame = rect
                 
                 //如果垂直方向的对齐方式是基线对齐，那么就以第一个具有基线的视图作为标准位置。
-                if vertGravity == TGGravity.vert.baseline && baselinePos == nil && self.tg_baselineBaseView == sbv
+                if vertGravity == TGGravity.Vertical.baseline && baselinePos == nil && self.tg_baselineBaseView == sbv
                 {
                     let sbvFont = sbv.value(forKey: "font") as! UIFont
                     //这里要求baselineBaseView必须要具有font属性。
@@ -1471,8 +1588,8 @@ extension TGLinearLayout {
     fileprivate func tgLayoutSubviewsForVertGravity(_ selfSize:CGSize, sbs:[UIView], lsc:TGLinearLayoutViewSizeClassImpl) ->CGSize
     {
      
-        let vertGravity = lsc.tg_gravity & TGGravity.horz.mask
-        let horzGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.vert.mask)
+        let vertGravity = lsc.tg_gravity & TGGravity.Horizontal.mask
+        let horzGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.Vertical.mask)
         let topPadding = lsc.tgTopPadding
         let bottomPadding = lsc.tgBottomPadding
         let leadingPadding = lsc.tgLeadingPadding
@@ -1547,7 +1664,7 @@ extension TGLinearLayout {
             
             sbvtgFrame.frame = rect
             
-            if  sbvsc.height.isWrap && vertGravity == TGGravity.vert.fill
+            if  sbvsc.height.isWrap && vertGravity == TGGravity.Vertical.fill
             {
                 canAddToNoWrapSbs = false
             }
@@ -1565,16 +1682,16 @@ extension TGLinearLayout {
         var between:CGFloat = 0
         var fill:CGFloat = 0
         
-        if vertGravity == TGGravity.vert.top
+        if vertGravity == TGGravity.Vertical.top
         {
             pos  = topPadding;
         }
-        else if vertGravity == TGGravity.vert.center
+        else if vertGravity == TGGravity.Vertical.center
         {
             pos = (selfSize.height - totalHeight - bottomPadding - topPadding)/2.0;
             pos += topPadding;
         }
-        else if vertGravity == TGGravity.vert.windowCenter
+        else if vertGravity == TGGravity.Vertical.windowCenter
         {
             if let win = self.window
             {
@@ -1586,11 +1703,11 @@ extension TGLinearLayout {
                 
             }
         }
-        else if vertGravity == TGGravity.vert.bottom
+        else if vertGravity == TGGravity.Vertical.bottom
         {
             pos = selfSize.height - totalHeight - bottomPadding
         }
-        else if vertGravity == TGGravity.vert.between
+        else if vertGravity == TGGravity.Vertical.between
         {
             pos = topPadding;
             
@@ -1599,7 +1716,7 @@ extension TGLinearLayout {
               between = (selfSize.height - totalHeight - topPadding - bottomPadding) / CGFloat(sbs.count - 1)
             }
         }
-        else if vertGravity == TGGravity.vert.around
+        else if vertGravity == TGGravity.Vertical.around
         {
             //around停靠中如果子视图数量大于1则间距均分，并且首尾子视图和父视图的间距为均分的一半，如果子视图数量为1则一个子视图垂直居中。
             if (sbs.count > 1)
@@ -1612,12 +1729,12 @@ extension TGLinearLayout {
                 pos = (selfSize.height - totalHeight - topPadding - bottomPadding)/2.0 + topPadding;
             }
         }
-        else if vertGravity == TGGravity.vert.among
+        else if vertGravity == TGGravity.Vertical.among
         {
             between = (selfSize.height - totalHeight - topPadding - bottomPadding) / CGFloat(sbs.count + 1)
             pos = topPadding + between;
         }
-        else if vertGravity == TGGravity.vert.fill
+        else if vertGravity == TGGravity.Vertical.fill
         {
             pos = topPadding
             if noWrapsbsSet.count > 0
@@ -1665,8 +1782,8 @@ extension TGLinearLayout {
     
     fileprivate func tgLayoutSubviewsForHorzGravity(_ selfSize:CGSize, sbs:[UIView], lsc:TGLinearLayoutViewSizeClassImpl)->CGSize
     {
-        let vertGravity = lsc.tg_gravity & TGGravity.horz.mask
-        let horzGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.vert.mask)
+        let vertGravity = lsc.tg_gravity & TGGravity.Horizontal.mask
+        let horzGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.Vertical.mask)
         let topPadding = lsc.tgTopPadding
         let bottomPadding = lsc.tgBottomPadding
         let leadingPadding = lsc.tgLeadingPadding
@@ -1766,7 +1883,7 @@ extension TGLinearLayout {
             
             sbvtgFrame.frame = rect
             
-            if horzGravity == TGGravity.horz.fill && sbvsc.width.isWrap
+            if horzGravity == TGGravity.Horizontal.fill && sbvsc.width.isWrap
             {
                 canAddToNoWrapSbs = false
             }
@@ -1790,16 +1907,16 @@ extension TGLinearLayout {
         var between:CGFloat = 0
         var fill:CGFloat = 0
         
-        if horzGravity == TGGravity.horz.leading
+        if horzGravity == TGGravity.Horizontal.leading
         {
             pos = leadingPadding
         }
-        else if horzGravity == TGGravity.horz.center
+        else if horzGravity == TGGravity.Horizontal.center
         {
             pos = (selfSize.width - totalWidth - leadingPadding - trailingPadding)/2.0;
             pos += leadingPadding;
         }
-        else if horzGravity == TGGravity.horz.windowCenter
+        else if horzGravity == TGGravity.Horizontal.windowCenter
         {
             if let win = self.window
             {
@@ -1814,11 +1931,11 @@ extension TGLinearLayout {
                 }
             }
         }
-        else if horzGravity == TGGravity.horz.trailing
+        else if horzGravity == TGGravity.Horizontal.trailing
         {
             pos = selfSize.width - totalWidth - trailingPadding;
         }
-        else if horzGravity == TGGravity.horz.between
+        else if horzGravity == TGGravity.Horizontal.between
         {
             pos = leadingPadding
             
@@ -1827,7 +1944,7 @@ extension TGLinearLayout {
                 between = (selfSize.width - totalWidth - leadingPadding - trailingPadding) / CGFloat(sbs.count - 1)
             }
         }
-        else if horzGravity == TGGravity.horz.around
+        else if horzGravity == TGGravity.Horizontal.around
         {
             //around停靠中如果子视图数量大于1则间距均分，并且首尾子视图和父视图的间距为均分的一半，如果子视图数量为1则一个子视图垂直居中。
             if (sbs.count > 1)
@@ -1840,13 +1957,13 @@ extension TGLinearLayout {
                 pos = (selfSize.width - totalWidth - leadingPadding - trailingPadding)/2.0 + leadingPadding;
             }
         }
-        else if horzGravity == TGGravity.horz.among
+        else if horzGravity == TGGravity.Horizontal.among
         {
             //每个子
             between = (selfSize.width - totalWidth - leadingPadding - trailingPadding) / CGFloat(sbs.count + 1)
             pos = leadingPadding + between;
         }
-        else if horzGravity == TGGravity.horz.fill
+        else if horzGravity == TGGravity.Horizontal.fill
         {
             pos = leadingPadding
             
@@ -1896,7 +2013,7 @@ extension TGLinearLayout {
             pos += between  //只有mghorz为between才加这个间距拉伸。
             
             //如果垂直方向的对齐方式是基线对齐，那么就以第一个具有基线的视图作为标准位置。
-            if vertGravity == TGGravity.vert.baseline && baselinePos == nil && self.tg_baselineBaseView == sbv
+            if vertGravity == TGGravity.Vertical.baseline && baselinePos == nil && self.tg_baselineBaseView == sbv
             {
                 let sbvFont = sbv.value(forKey: "font") as! UIFont
                 //这里要求baselineBaseView必须要具有font属性。
@@ -1915,7 +2032,7 @@ extension TGLinearLayout {
         {
             
             if (sbvsc.isHorzMarginHasValue) ||
-                (lsc.tg_gravity & TGGravity.vert.mask) == TGGravity.horz.fill
+                (lsc.tg_gravity & TGGravity.Vertical.mask) == TGGravity.Horizontal.fill
             {
                 sbvsc.width.resetValue()
             }
@@ -1924,7 +2041,7 @@ extension TGLinearLayout {
         {
             
             if (sbvsc.isVertMarginHasValue) ||
-                (lsc.tg_gravity & TGGravity.horz.mask) == TGGravity.vert.fill
+                (lsc.tg_gravity & TGGravity.Horizontal.mask) == TGGravity.Vertical.fill
             {
                 sbvsc.height.resetValue()
             }

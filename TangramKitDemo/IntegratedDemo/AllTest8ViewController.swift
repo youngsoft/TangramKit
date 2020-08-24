@@ -163,7 +163,7 @@ class AllTest8ViewController: UIViewController {
         //设置布局视图的内边距。
         layout.tg_vspace = 5
         //设置视图之间的间距，这样子视图就不再需要单独设置间距了。
-        layout.tg_gravity = TGGravity.horz.fill
+        layout.tg_gravity = TGGravity.Horizontal.fill
         //里面的子视图宽度和自己一样，这样就不再需要设置子视图的宽度了。
         layout.tg_leading.equal(20%)
         layout.tg_trailing.equal(20%)
@@ -195,7 +195,7 @@ class AllTest8ViewController: UIViewController {
         //高度由子视图确定。
         btnContainer.tg_space = 5
         //视图之间的间距设置为5
-        btnContainer.tg_gravity = TGGravity.horz.fill
+        btnContainer.tg_gravity = TGGravity.Horizontal.fill
         //里面的子视图的宽度水平填充，如果是垂直线性布局则里面的所有子视图的宽度都和父视图相等。如果是水平线性布局则会均分所有子视图的宽度。
         layout.addSubview(btnContainer)
 

@@ -104,7 +104,7 @@ public struct TGGravity : OptionSet {
     public static let none = TGGravity(rawValue:0)
     
     /// 水平方向
-    public struct horz {
+    public struct Horizontal {
         /// 左边停靠或者左对齐
         public static let left = TGGravity(rawValue:1)
         /// 水平中心停靠或者水平居中对齐
@@ -122,15 +122,15 @@ public struct TGGravity : OptionSet {
         /// 水平间距环绕拉伸，并且头尾部分为其他部分间距的一半, 如果只有一个子视图则变为水平居中停靠
         public static let around = TGGravity(rawValue: 128)
         /// 水平间距等分拉伸，并且头尾部分和其他部分间距的一样, 如果只有一个子视图则变为水平居中停靠
-        public static let among:TGGravity = [horz.between, horz.around]
+        public static let among:TGGravity = [Horizontal.between, Horizontal.around]
         /// 水平宽度填充
-        public static let fill:TGGravity = [horz.left, horz.center, horz.right]
+        public static let fill:TGGravity = [Horizontal.left, Horizontal.center, Horizontal.right]
         /// 水平掩码，用来获取水平方向的枚举值
         public static let mask = TGGravity(rawValue:0xFF00)
     }
     
     /// 垂直方向
-    public struct vert {
+    public struct Vertical {
         /// 上边停靠或者上对齐
         public static let top = TGGravity(rawValue:1 << 8)
         /// 垂直中心停靠或者垂直居中对齐
@@ -142,25 +142,25 @@ public struct TGGravity : OptionSet {
         /// 垂直间距拉伸，并且头尾部分的间距是0, 如果只有一个子视图则变为上边停靠
         public static let between = TGGravity(rawValue: 16 << 8)
         /// 垂直高度填充
-        public static let fill:TGGravity = [vert.top, vert.center, vert.bottom]
+        public static let fill:TGGravity = [Vertical.top, Vertical.center, Vertical.bottom]
         /// 基线对齐,只支持水平线性布局，指定基线对齐必须要指定出一个基线标准的子视图
         public static let baseline = TGGravity(rawValue: 32 << 8)
         /// 垂直间距环绕拉伸，并且头尾部分为其他部分间距的一半, 如果只有一个子视图则变为垂直居中停靠
         public static let around = TGGravity(rawValue: 64 << 8)
         /// 垂直间距等分拉伸，并且头尾部分和其他部分间距的一样, 如果只有一个子视图则变为垂直居中停靠
-        public static let among:TGGravity = [vert.between, vert.around]
+        public static let among:TGGravity = [Vertical.between, Vertical.around]
         /// 垂直掩码，用来获取垂直方向的枚举值
         public static let mask = TGGravity(rawValue:0x00FF)
     }
     
     /// 整体居中
-    public static let center:TGGravity = [horz.center, vert.center]
+    public static let center:TGGravity = [Horizontal.center, Vertical.center]
     /// 全部填充
-    public static let fill:TGGravity = [horz.fill, vert.fill]
+    public static let fill:TGGravity = [Horizontal.fill, Vertical.fill]
     /// 全部拉伸
-    public static let between:TGGravity = [horz.between, vert.between]
-    public static let around:TGGravity = [horz.around, vert.around]
-    public static let among:TGGravity = [horz.among, vert.among]
+    public static let between:TGGravity = [Horizontal.between, Vertical.between]
+    public static let around:TGGravity = [Horizontal.around, Vertical.around]
+    public static let among:TGGravity = [Horizontal.among, Vertical.among]
 }
 
 

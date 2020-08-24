@@ -52,7 +52,7 @@ class FLLTest8ViewController: UIViewController {
         vertLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 0, bottom: 5, right: 0)
         vertLayout.backgroundColor = CFTool.color(5)
         vertLayout.tg_vspace = 20
-        vertLayout.tg_gravity = TGGravity.vert.fill  //因为上面tg_setSubviews设置了固定宽度，这个属性设置子视图的高度是填充满子布局视图，因此系统内部会自动设置每个子视图的高度，如果你不设置这个属性，那么你就需要在下面分别为每个子视图设置高度。
+        vertLayout.tg_gravity = TGGravity.Vertical.fill  //因为上面tg_setSubviews设置了固定宽度，这个属性设置子视图的高度是填充满子布局视图，因此系统内部会自动设置每个子视图的高度，如果你不设置这个属性，那么你就需要在下面分别为每个子视图设置高度。
         rootLayout.addSubview(vertLayout)
         self.vertLayout = vertLayout
         
@@ -72,7 +72,7 @@ class FLLTest8ViewController: UIViewController {
         horzLayout.tg_padding = UIEdgeInsets.init(top: 0, left: 5, bottom: 0, right: 5)
         horzLayout.backgroundColor = CFTool.color(6)
         horzLayout.tg_hspace = 20
-        horzLayout.tg_gravity = TGGravity.horz.fill //因为上面tg_setSubviews设置了固定高度，这个属性设置子视图的宽度是填充满子布局视图，因此系统内部会自动设置每个子视图的宽度，如果你不设置这个属性，那么你就需要在下面分别为每个子视图设置宽度。
+        horzLayout.tg_gravity = TGGravity.Horizontal.fill //因为上面tg_setSubviews设置了固定高度，这个属性设置子视图的宽度是填充满子布局视图，因此系统内部会自动设置每个子视图的宽度，如果你不设置这个属性，那么你就需要在下面分别为每个子视图设置宽度。
         rootLayout.addSubview(horzLayout)
         self.horzLayout = horzLayout
 
@@ -91,7 +91,7 @@ class FLLTest8ViewController: UIViewController {
         vertLayout2.tg_padding = UIEdgeInsets.init(top: 5, left: 0, bottom: 5, right: 0)
         vertLayout2.backgroundColor = CFTool.color(5)
         vertLayout2.tg_vspace = 20
-        vertLayout2.tg_gravity = TGGravity.vert.fill  //因为上面tg_setSubviews设置了固定宽度，这个属性设置子视图的高度是填充满子布局视图，因此系统内部会自动设置每个子视图的高度，如果你不设置这个属性，那么你就需要在下面分别为每个子视图设置高度。
+        vertLayout2.tg_gravity = TGGravity.Vertical.fill  //因为上面tg_setSubviews设置了固定宽度，这个属性设置子视图的高度是填充满子布局视图，因此系统内部会自动设置每个子视图的高度，如果你不设置这个属性，那么你就需要在下面分别为每个子视图设置高度。
         rootLayout.addSubview(vertLayout2)
         self.vertLayout2 = vertLayout2
         
@@ -111,7 +111,7 @@ class FLLTest8ViewController: UIViewController {
         horzLayout2.tg_padding = UIEdgeInsets.init(top: 0, left: 5, bottom: 0, right: 5)
         horzLayout2.backgroundColor = CFTool.color(6)
         horzLayout2.tg_hspace = 20
-        horzLayout2.tg_gravity = TGGravity.horz.fill //因为上面tg_setSubviews设置了固定高度，这个属性设置子视图的宽度是填充满子布局视图，因此系统内部会自动设置每个子视图的宽度，如果你不设置这个属性，那么你就需要在下面分别为每个子视图设置宽度。
+        horzLayout2.tg_gravity = TGGravity.Horizontal.fill //因为上面tg_setSubviews设置了固定高度，这个属性设置子视图的宽度是填充满子布局视图，因此系统内部会自动设置每个子视图的宽度，如果你不设置这个属性，那么你就需要在下面分别为每个子视图设置宽度。
         rootLayout.addSubview(horzLayout2)
         self.horzLayout2 = horzLayout2
         

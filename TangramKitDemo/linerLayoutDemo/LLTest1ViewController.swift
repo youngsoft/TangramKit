@@ -85,7 +85,7 @@ class LLTest1ViewController: UIViewController {
         
         //iPhoneX设备中具有一个尺寸为44的刘海区域。当您横屏时为了对齐，左右两边的安全缩进区域都是44。但是有些时候我们希望没有刘海的那一边不需要缩进对齐而是延伸到安全区域以外。这时候您可以通过给根布局视图设置tg_insetLandscapeFringePadding属性来达到效果。
         //注意这个属性只有tg_insetsPaddingFromSafeArea设置了左右都缩进时才有效。
-        rootLayout.tg_insetLandscapeFringePadding = false   //您可以在横屏下将这个属性设置为true后，然后尝试一下进行左右旋转后查看运行的效果。
+        rootLayout.tg.insetLandscapeFringePadding = false   //您可以在横屏下将这个属性设置为true后，然后尝试一下进行左右旋转后查看运行的效果。
         
         
                 
@@ -212,8 +212,8 @@ extension LLTest1ViewController
          */
         
         let v1 = self.createLabel(NSLocalizedString("left margin", comment:""), color: CFTool.color(5))
-        v1.tg_origin(x:10, y:10)             //设置左边距和上边距都为10
-        v1.tg_size(width: 200, height: 35)   //设置视图的宽度和高度
+        v1.tg.origin(x:10, y:10)             //设置左边距和上边距都为10
+        v1.tg.size(width: 200, height: 35)   //设置视图的宽度和高度
         //您也可以用如下方式分别设置:
         // v1.tg_top.equal(10)        //上边边距10
         // v1.tg_leading.equal(10)       //左边边距10
@@ -239,7 +239,7 @@ extension LLTest1ViewController
         let v3 = self.createLabel(NSLocalizedString("right margin", comment:""), color: CFTool.color(7))
         v3.tg_top.equal(10)
         v3.tg_trailing.equal(10)  //右边边距10,因为这里只设置了右边边距，所以垂直线性布局会将子视图进行右对齐。
-        v3.tg_size(width: 200, height: 35)   //设置视图的宽度和高度
+        v3.tg.size(width: 200, height: 35)   //设置视图的宽度和高度
         vertLayout.addSubview(v3)
         
         

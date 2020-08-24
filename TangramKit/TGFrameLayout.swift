@@ -35,8 +35,8 @@ open class TGFrameLayout: TGBaseLayout,TGFrameLayoutViewSizeClass {
         
         let lsc = self.tgCurrentSizeClass as! TGFrameLayoutViewSizeClassImpl
         
-        let horzGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.vert.mask)
-        let vertGravity = lsc.tg_gravity & TGGravity.horz.mask
+        let horzGravity = self.tgConvertLeftRightGravityToLeadingTrailing(lsc.tg_gravity & TGGravity.Vertical.mask)
+        let vertGravity = lsc.tg_gravity & TGGravity.Horizontal.mask
         let topPadding = lsc.tgTopPadding
         let bottomPadding = lsc.tgBottomPadding
         let leadingPadding = lsc.tgLeadingPadding
@@ -121,7 +121,7 @@ open class TGFrameLayout: TGBaseLayout,TGFrameLayoutViewSizeClass {
         tgAdjustLayoutSelfSize(selfSize: &selfSize, lsc: lsc)
          
         //因为还存在有部分子视图依赖于布局视图尺寸的情况，所以如果布局视图本身是wrap的则需要更新那部分依赖的子视图的尺寸。
-        if (lsc.width.isWrap && horzGravity != TGGravity.horz.fill) || (lsc.height.isWrap && vertGravity != TGGravity.vert.fill)
+        if (lsc.width.isWrap && horzGravity != TGGravity.Horizontal.fill) || (lsc.height.isWrap && vertGravity != TGGravity.Vertical.fill)
         {
             for  sbv:UIView in sbs
             {
@@ -246,7 +246,7 @@ extension TGFrameLayout
         
         
         //特殊处理宽度等于自身高度的情况。
-        if let t = sbvsc.width.sizeVal, t.view == sbv && t.type == TGGravity.vert.fill
+        if let t = sbvsc.width.sizeVal, t.view == sbv && t.type == TGGravity.Vertical.fill
         {
             rect.size.width =  self.tgValidMeasure(sbvsc.width, sbv: sbv, calcSize: sbvsc.width.measure(rect.size.height), sbvSize: rect.size, selfLayoutSize: selfSize)
             

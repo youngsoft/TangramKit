@@ -28,7 +28,7 @@ class FLLTest5ViewController: UIViewController {
         rootLayout.backgroundColor = .white
         rootLayout.tg_width.equal(.fill)
         rootLayout.tg_height.equal(.wrap)
-        rootLayout.tg_gravity = TGGravity.horz.fill  //里面的所有子视图和布局视图宽度一致。
+        rootLayout.tg_gravity = TGGravity.Horizontal.fill  //里面的所有子视图和布局视图宽度一致。
         scrollView.addSubview(rootLayout)
         
         

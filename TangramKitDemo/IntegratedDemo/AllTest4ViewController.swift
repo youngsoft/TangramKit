@@ -53,7 +53,7 @@ class AllTest4ViewController: UIViewController {
         
         
         rootLayout = TGLinearLayout(.vert)
-        rootLayout.tg_gravity = TGGravity.horz.fill //设置垂直线性布局的水平填充值表明布局视图里面的所有子视图的宽度都和布局视图相等。
+        rootLayout.tg_gravity = TGGravity.Horizontal.fill //设置垂直线性布局的水平填充值表明布局视图里面的所有子视图的宽度都和布局视图相等。
         rootLayout.tg_width.equal(.fill)
         rootLayout.tg_height.equal(.wrap)
         scrollView.addSubview(rootLayout)
@@ -129,7 +129,7 @@ extension AllTest4ViewController
     {
         let containerLayout = TGFlowLayout(.vert, arrangedCount:arrangedCount)
         containerLayout.tg_height.equal(.wrap)
-        containerLayout.tg_gravity = TGGravity.horz.fill //平均分配里面每个子视图的宽度或者拉伸子视图的宽度以便填充满整个布局。
+        containerLayout.tg_gravity = TGGravity.Horizontal.fill //平均分配里面每个子视图的宽度或者拉伸子视图的宽度以便填充满整个布局。
         containerLayout.tg_hspace = 5
         containerLayout.tg_vspace = 5
         containerLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
@@ -140,7 +140,7 @@ extension AllTest4ViewController
     func createCellLayout1(image:String, title:String) -> TGBaseLayout
     {
         let cellLayout = TGLinearLayout(.vert)
-        cellLayout.tg_gravity = TGGravity.horz.fill  //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
+        cellLayout.tg_gravity = TGGravity.Horizontal.fill  //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
         cellLayout.tg_height.equal(100)
         cellLayout.tg_space = 5  //设置布局视图里面子视图之间的间距为5个点。
         cellLayout.backgroundColor = UIColor.white
