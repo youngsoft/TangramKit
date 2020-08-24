@@ -10,10 +10,7 @@ import UIKit
 
 
 //定义行尺寸和列尺寸可以设置的值，对于行列来说可以设置一个具体的值，也可以设置TGLayoutSize中的wrap, fill, average这三个值中的一个。
-public protocol TGTableRowColSizeType:TGLayoutSizeType
-{
-    
-}
+public protocol TGTableRowColSizeType:TGLayoutSizeType {}
 
 extension CGFloat:TGTableRowColSizeType{}
 extension Int:TGTableRowColSizeType{}
@@ -28,6 +25,145 @@ extension TGLayoutSize:TGTableRowColSizeType{}
  *对于垂直表格布局来说，行子视图是从上到下依次排列的，而列子视图则是在行子视图里面从左到右依次排列。
  *对于水平表格布局来说，行子视图是从左到右依次排列的，而列子视图则是在行子视图里面从上到下依次排列。
  */
+
+public extension TypeWrapperProtocol where WrappedType: TGTableLayout {
+    @discardableResult
+    func addRow(size rowSize:TGTableRowColSizeType, colSize:TGTableRowColSizeType) -> TGLinearLayout {
+        return self.wrappedValue.tg_insertRow(size: rowSize, colSize:colSize, rowIndex: self.wrappedValue.tg_rowCount)
+    }
+
+    @discardableResult
+    func addRow(size rowSize:TGTableRowColSizeType, colCount: Int) ->TGLinearLayout {
+        return self.wrappedValue.tg_insertRow(size: rowSize, colSize:TGTableLayout._stgColCountTag - CGFloat(colCount), rowIndex: self.wrappedValue.tg_rowCount)
+    }
+
+    @discardableResult
+    func insertRow(size rowSize: TGTableRowColSizeType, colSize : TGTableRowColSizeType, rowIndex : Int) -> TGLinearLayout {
+        return self.wrappedValue.tg_insertRow(size: rowSize, colSize: colSize, rowIndex: rowIndex)
+    }
+
+    @discardableResult
+    func insertRow(size rowSize: TGTableRowColSizeType, colCount : UInt, rowIndex : Int) -> TGLinearLayout {
+        //这里特殊处理用-100000 - colCount 来表示一个特殊的列尺寸。其实是数量。
+        return self.wrappedValue.tg_insertRow(size: rowSize, colSize: TGTableLayout._stgColCountTag - CGFloat(colCount), rowIndex: rowIndex)
+    }
+
+    func removeRow(_ rowIndex: Int) {
+        self.wrappedValue.tg_rowView(at:rowIndex).removeFromSuperview()
+    }
+
+    func exchangeRow(_ rowIndex1: Int, with rowIndex2: Int) {
+        self.wrappedValue.tg_exchangeRow(rowIndex1, with: rowIndex2)
+    }
+
+
+    @discardableResult
+    func rowView(at rowIndex: Int) -> TGLinearLayout {
+        return self.wrappedValue.subviews[rowIndex] as! TGLinearLayout
+    }
+
+
+    var rowCount: Int {
+        return self.wrappedValue.subviews.count
+    }
+
+    func addColumn(_ colView: UIView, inRow rowIndex : Int) {
+        self.wrappedValue.tg_insertCol(colView, inIndexPath: IndexPath(row: rowIndex, col: self.wrappedValue.tg_colCount(inRow:rowIndex) ))
+    }
+
+    func insertColumn(_ colView: UIView, inIndexPath indexPath: IndexPath) {
+        let rowView:TGTableRowLayout = self.wrappedValue.tg_rowView(at:indexPath.row) as! TGTableRowLayout
+
+        let rowsc = rowView.tgCurrentSizeClass as! TGLinearLayoutViewSizeClassImpl
+        let colsc = colView.tgCurrentSizeClass as! TGViewSizeClassImpl
+
+        //colSize为0表示均分尺寸，为-1表示由子视图决定尺寸，大于0表示固定尺寸。
+        if let v = rowView.colSize as? TGLayoutSize {
+            if v === TGLayoutSize.average {
+                if (rowsc.tg_orientation == TGOrientation.horz) {
+                    colsc.tg_width.equal(v)
+                } else {
+                    colsc.tg_height.equal(v)
+                }
+            }
+        } else {
+            if let v = rowView.colSize as? CGFloat, v < TGTableLayout._stgColCountTag {
+                let colCount = TGTableLayout._stgColCountTag - v
+                if rowsc.tg_orientation == TGOrientation.horz {
+                    colsc.tg_width.equalHelper(val:rowView.tg_width, increment:-1 * rowView.tg_hspace * (colCount - 1.0) / colCount, multiple:1.0 / colCount)
+                } else {
+                    colsc.tg_height.equalHelper(val:rowView.tg_height,increment:-1 * rowView.tg_vspace * (colCount - 1.0) / colCount, multiple:1.0 / colCount)
+                }
+            } else {
+                if (rowsc.tg_orientation == TGOrientation.horz) {
+                    colsc.tg_width.equalHelper(val:rowView.colSize)
+                } else {
+                    colsc.tg_height.equalHelper(val:rowView.colSize)
+                }
+            }
+        }
+
+        if (rowsc.tg_orientation == TGOrientation.horz) {
+            if (colView.bounds.size.height == 0 && !colsc.height.hasValue) {
+                if colView is TGBaseLayout {
+                    if !colsc.height.isWrap {
+                        colsc.tg_height.equal(rowsc.tg_height);
+                    }
+                } else {
+                    colsc.tg_height.equal(rowsc.tg_height);
+                }
+            }
+        } else {
+            if (colView.bounds.size.width == 0 && !colsc.width.hasValue) {
+                if colView is TGBaseLayout {
+                    if !colsc.width.isWrap {
+                        colsc.tg_width.equal(rowsc.tg_width)
+                    }
+                } else {
+                    colsc.tg_width.equal(rowsc.tg_width);
+                }
+            }
+        }
+        rowView.insertSubview(colView, at:indexPath.col)
+    }
+
+    func removeColumn(_ indexPath: IndexPath) {
+        self.wrappedValue.tg_colView(at:indexPath).removeFromSuperview()
+    }
+
+    func exchangeColumn(_ indexPath1: IndexPath, with indexPath2: IndexPath) {
+        let colView1:UIView = self.wrappedValue.tg_colView(at:indexPath1);
+        let colView2:UIView = self.wrappedValue.tg_colView(at:indexPath2);
+
+        if (colView1 == colView2) {
+            return
+        }
+        self.wrappedValue.tg_removeCol(indexPath1);
+        self.wrappedValue.tg_removeCol(indexPath2);
+
+        self.wrappedValue.tg_insertCol(colView1, inIndexPath:indexPath2)
+        self.wrappedValue.tg_insertCol(colView2, inIndexPath:indexPath1)
+    }
+
+    func columnView(at indexPath: IndexPath) -> UIView {
+        return self.wrappedValue.tg_rowView(at:indexPath.row).subviews[indexPath.col];
+    }
+
+    func columnCount(inRow rowIndex: Int) -> Int {
+        return self.wrappedValue.tg_rowView(at:rowIndex).subviews.count;
+    }
+
+    var vspace: CGFloat {
+        get { return self.wrappedValue.tg_vspace }
+        set { self.wrappedValue.tg_vspace = newValue }
+    }
+
+    var hspace: CGFloat {
+        get { return self.wrappedValue.tg_hspace }
+        set { self.wrappedValue.tg_hspace = newValue }
+    }
+}
+
 open class TGTableLayout: TGLinearLayout {
     
     /**

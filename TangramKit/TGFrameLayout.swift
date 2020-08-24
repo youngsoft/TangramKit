@@ -14,8 +14,6 @@ import UIKit
  *框架布局是一种简化的相对布局。也就是里面子视图的TGLayoutPos对象所设置的值都是距离父布局视图的边距值，里面的TGLayoutSize对象所设置的值都是相对于父视图的尺寸来处理的。
  */
 open class TGFrameLayout: TGBaseLayout,TGFrameLayoutViewSizeClass {
-    
-    
     //MARK: override
     internal override func tgCreateInstance() -> AnyObject
     {

@@ -64,91 +64,91 @@ class FLTest1ViewController: UIViewController {
 
         super.loadView()
         
-        let frameLayout = TGFrameLayout()
+        var frameLayout = TGFrameLayout()
         frameLayout.backgroundColor = .white
-        frameLayout.tg_margin(TGLayoutPos.tg_safeAreaMargin)
-        frameLayout.tg_padding = UIEdgeInsets.init(top: 20, left: 20, bottom: 20, right: 20)
+        frameLayout.tg.margin(TGLayoutPos.tg.safeAreaMargin)
+        frameLayout.tg.padding = UIEdgeInsets.init(top: 20, left: 20, bottom: 20, right: 20)
         self.view.addSubview(frameLayout)
         
         //全部填充。 all fill subview
         let fill = self.createLabel("", backgroundColor: CFTool.color(0))
-        fill.tg_width.equal(.fill)
-        fill.tg_height.equal(.fill)  //宽度和高度都填充父视图的全部空间
+        fill.tg.width.equal(.fill)
+        fill.tg.height.equal(.fill)  //宽度和高度都填充父视图的全部空间
         frameLayout.addSubview(fill)
         
         //左右填充。 width fill subview
         let horzFill = self.createLabel("horz fill", backgroundColor: CFTool.color(8))
-        horzFill.tg_top.equal(40)  //这里偏移40为了看清楚一些。
-        horzFill.tg_width.equal(.fill)
-        horzFill.tg_height.equal(.wrap)
+        horzFill.tg.top.equal(40)  //这里偏移40为了看清楚一些。
+        horzFill.tg.width.equal(.fill)
+        horzFill.tg.height.equal(.wrap)
         frameLayout.addSubview(horzFill)
         
         //上下填充。 height fill subview
         let vertFill = self.createLabel("vert fill", backgroundColor: CFTool.color(9))
         vertFill.numberOfLines = 0;
-        vertFill.tg_leading.equal(90)  //这里偏移90为了看清楚一些。
-        vertFill.tg_width.equal(10)
-        vertFill.tg_height.equal(.fill)
+        vertFill.tg.leading.equal(90)  //这里偏移90为了看清楚一些。
+        vertFill.tg.width.equal(10)
+        vertFill.tg.height.equal(.fill)
         frameLayout.addSubview(vertFill)
         
         
         //左上。 top leading subview
         let topLeft = self.createLabel("top leading", backgroundColor: CFTool.color(5))
-        topLeft.tg_top.equal(0)
-        topLeft.tg_leading.equal(0)
+        topLeft.tg.top.equal(0)
+        topLeft.tg.leading.equal(0)
         frameLayout.addSubview(topLeft)
         
         //左中。center leading subview
         let centerLeft = self.createLabel("center leading", backgroundColor: CFTool.color(5))
-        centerLeft.tg_centerY.equal(0)
-        centerLeft.tg_leading.equal(0)
+        centerLeft.tg.centerY.equal(0)
+        centerLeft.tg.leading.equal(0)
         frameLayout.addSubview(centerLeft)
         
         //左下。bottom leading subview
         let bottomLeft = self.createLabel("bottom leading", backgroundColor: CFTool.color(5))
-        bottomLeft.tg_bottom.equal(0)
-        bottomLeft.tg_leading.equal(0)
+        bottomLeft.tg.bottom.equal(0)
+        bottomLeft.tg.leading.equal(0)
         frameLayout.addSubview(bottomLeft)
         
         
         //中上。  top center subview
         let topCenter = self.createLabel("top center", backgroundColor: CFTool.color(6))
-        topCenter.tg_top.equal(0)
-        topCenter.tg_centerX.equal(0)
+        topCenter.tg.top.equal(0)
+        topCenter.tg.centerX.equal(0)
         frameLayout.addSubview(topCenter)
         
         
         //中中。 center center subview
         let centerCenter = self.createLabel("center center", backgroundColor: CFTool.color(6))
-        centerCenter.tg_centerY.equal(0)
-        centerCenter.tg_centerX.equal(0)
+        centerCenter.tg.centerY.equal(0)
+        centerCenter.tg.centerX.equal(0)
         frameLayout.addSubview(centerCenter)
         
         
         //中下。 bottom center subview
         let bottomCenter = self.createLabel("bottom center", backgroundColor: CFTool.color(6))
-        bottomCenter.tg_bottom.equal(0)
-        bottomCenter.tg_centerX.equal(0)
+        bottomCenter.tg.bottom.equal(0)
+        bottomCenter.tg.centerX.equal(0)
         frameLayout.addSubview(bottomCenter)
         
         
         //右上。 top trailing subview
         let topRight = self.createLabel("top trailing", backgroundColor: CFTool.color(7))
-        topRight.tg_top.equal(0)
-        topRight.tg_trailing.equal(0)
+        topRight.tg.top.equal(0)
+        topRight.tg.trailing.equal(0)
         frameLayout.addSubview(topRight)
         
         
         //右中。center trailing subview
         let centerRight = self.createLabel("center trailing", backgroundColor: CFTool.color(7))
-        centerRight.tg_centerY.equal(0)
-        centerRight.tg_trailing.equal(0)
+        centerRight.tg.centerY.equal(0)
+        centerRight.tg.trailing.equal(0)
         frameLayout.addSubview(centerRight)
         
         //右下。 bottom trailing subview
         let bottomRight = self.createLabel("bottom trailing", backgroundColor: CFTool.color(7))
-        bottomRight.tg_bottom.equal(0)
-        bottomRight.tg_trailing.equal(0)
+        bottomRight.tg.bottom.equal(0)
+        bottomRight.tg.trailing.equal(0)
         frameLayout.addSubview(bottomRight)
         
         
