@@ -27,13 +27,13 @@ class AllTest4ViewController: UIViewController {
 
         self.view.backgroundColor = CFTool.color(0)
         
-        var sections:[String] = ["品牌推荐",
+        let sections:[String] = ["品牌推荐",
                                  "时尚风格",
                                  "特价处理",
                                  "这是一段很长很长很长很长很长很长很长很长很长很长很长很长的文字"
                                 ]
         
-        var images:[String] = ["p1-11",
+        let images:[String] = ["p1-11",
                                "p1-12",
                                "p1-21",
                                "p1-31",
@@ -169,8 +169,7 @@ extension AllTest4ViewController
 }
 
 //MARK: - Handle Method
-extension AllTest4ViewController
-{
+extension AllTest4ViewController {
     @objc func handleReverse(_ sender:UIView) -> Void {
         //TGBaseLayout的属性tg_reverseLayout可以将子视图按照添加的顺序逆序布局。
         for layout in self.containerLayouts

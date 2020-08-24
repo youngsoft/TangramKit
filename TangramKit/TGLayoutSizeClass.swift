@@ -162,6 +162,30 @@ public protocol TGLayoutViewSizeClass:TGViewSizeClass
 
 }
 
+extension TGLayoutViewSizeClass {
+    var tg_padding: UIEdgeInsets { get { return UIEdgeInsets.zero } set {} }
+    var tg_topPadding: CGFloat { get { return 0 } set {} }
+    var tg_leadingPadding: CGFloat { get { return 0 } set {} }
+    var tg_bottomPadding: CGFloat { get { return 0 } set {} }
+    var tg_trailingPadding: CGFloat {get { return 0 } set {} }
+    var tg_zeroPadding: Bool { get { return true } set {} }
+    var tg_insetsPaddingFromSafeArea: UIRectEdge { get { return UIRectEdge.all } set {} }
+    var tg_insetLandscapeFringePadding: Bool { get { return true } set {} }
+
+    var tg_leftPadding: CGFloat { get { return 0 } set {} }
+    var tg_rightPadding: CGFloat { get { return 0 } set {} }
+
+
+    var tg_vspace: CGFloat { get { return 0 } set {} }
+    var tg_hspace: CGFloat { get { return 0 } set {} }
+    var tg_space: CGFloat { get { return 0 } set {} }
+    var tg_reverseLayout: Bool { get { return false }  set {} }
+
+    var tg_gravity: TGGravity { get { return TGGravity() } set {} }
+
+    var tg_layoutTransform: CGAffineTransform { get { return CGAffineTransform() } set {} }
+}
+
 /**
  * 定义SizeClass中顺序布局视图的具有的布局属性接口，所谓顺序布局视图就是表明布局中的子视图中的布局会受制于添加的顺序
  */

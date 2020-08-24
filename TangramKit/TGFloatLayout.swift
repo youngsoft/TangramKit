@@ -39,21 +39,13 @@ extension UIView
      ------------
      
      */
-    public var tg_reverseFloat:Bool
-    {
-        get
-        {
-            return self.tgCurrentSizeClass.tg_reverseFloat
-        }
-        set
-        {
+    public var tg_reverseFloat: Bool {
+        get { return self.tgCurrentSizeClass.tg_reverseFloat }
+        set {
             let sc = self.tgCurrentSizeClass
-            if sc.tg_reverseFloat != newValue
-            {
-                
+            if sc.tg_reverseFloat != newValue {
                 sc.tg_reverseFloat = newValue
-                if let sView = self.superview
-                {
+                if let sView = self.superview {
                     sView.setNeedsLayout()
                 }
             }
@@ -76,27 +68,18 @@ extension UIView
      A(正向浮动);B(正向浮动);C(正向浮动);D(正向浮动);E(正向浮动);F(正向浮动);G(正向浮动，清除浮动);H(反向浮动);I(反向浮动);J(反向浮动，清除浮动)
      
      */
-    public var tg_clearFloat:Bool
-    {
-        get
-        {
-            return self.tgCurrentSizeClass.tg_clearFloat
-        }
-        set
-        {
+    public var tg_clearFloat: Bool {
+        get { return self.tgCurrentSizeClass.tg_clearFloat }
+        set {
             let sc = self.tgCurrentSizeClass
-            if sc.tg_clearFloat != newValue
-            {
-                
+            if sc.tg_clearFloat != newValue {
                 sc.tg_clearFloat = newValue
-                if let sView = self.superview
-                {
+                if let sView = self.superview {
                     sView.setNeedsLayout()
                 }
             }
         }
     }
-    
 }
 
 /**
