@@ -242,11 +242,12 @@ extension FOLTest6ViewController
         headImageView.layer.cornerRadius = 5;
         headImageView.layer.borderColor = UIColor.lightGray.cgColor
         headImageView.layer.borderWidth = 1;
+        
         headImageView.tg.width.equal(80)
         headImageView.tg.height.equal(80)
         headImageView.tg.trailing.equal(10)
         contentLayout.addSubview(headImageView)
-        headImageView.tg.layoutCompletedDo{(layout:TGBaseLayout, sbv:UIView) in
+        headImageView.tg.layoutCompleted { (layout: TGBaseLayout, sbv: UIView) in
             //这里我们建立一个特殊的子视图，我们可以在这个block里面建立子视图，不会影响到这次的子视图的布局。
             var label = UILabel()
             label.tg.useFrame = true   //这里我们设置useFrame为YES表示他不会参与布局，这样这个视图就可以摆脱浮动布局视图的约束。
@@ -262,7 +263,6 @@ extension FOLTest6ViewController
             labelRect.origin.y = sbv.frame.minY - label.frame.height / 2;
             label.frame = labelRect;
             layout.addSubview(label)
-            
         }
         
         

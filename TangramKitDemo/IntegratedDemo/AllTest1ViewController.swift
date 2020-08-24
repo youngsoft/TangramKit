@@ -198,7 +198,7 @@ class AllTest1ViewController: UITableViewController {
         //因为tableHeaderViewLayout的高度是通过layoutIfNeed来确定的。因此在屏幕旋转时我们需要手动再次调整tableHeaderViewLayout的frame值。
         //因此您需要实现这个block来实现当布局视图在横竖屏切换时的frame的动态更新。。。
         //注意这个block不会只执行一次，而是长期存在，因此要注意block内对象的引用的问题。
-        tableHeaderViewLayout.tg.rotationToDeviceOrientationDo { (_, isFirst:Bool, _ ) in
+        tableHeaderViewLayout.tg.rotationToDeviceOrientation { (_, isFirst:Bool, _ ) in
             if !isFirst
             {
                 weakTableview?.tableHeaderView?.layoutIfNeeded()

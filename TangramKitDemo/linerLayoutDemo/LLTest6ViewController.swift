@@ -181,7 +181,7 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         
         //这里设置在布局结束后将textView滚动到光标所在的位置了。在布局执行布局完毕后如果设置了tg_endLayoutDo的话可以在这个block里面读取布局里面子视图的真实布局位置和尺寸，也就是可以在block内部读取每个子视图的真实的frame的值。
         //这里我们可以实现tg_endLayoutDo来进行一些布局完成后的特殊处理操作。
-        layout.tg.endLayoutDo {
+        layout.tg.endLayout {
             
             let rg = textView.selectedRange
             textView.scrollRangeToVisible(rg)

@@ -102,64 +102,61 @@ public enum TGSizeClassType
     case comb(Width,Height,Screen?)
 }
 
+public protocol TGSizeClass: class {
+    var tg: TGViewSizeClass { get }
+}
+
 /**
  * 定义SizeClass中普通视图的具有的布局属性接口
  */
-public protocol TGViewSizeClass:class
-{
-    var tg_top:TGLayoutPos{get}
-    var tg_leading:TGLayoutPos{get}
-    var tg_bottom:TGLayoutPos{get}
-    var tg_trailing:TGLayoutPos{get}
-    var tg_centerX:TGLayoutPos{get}
-    var tg_centerY:TGLayoutPos{get}
+public protocol TGViewSizeClass: class {
+    var tg_top: TGLayoutPos { get }
+    var tg_leading: TGLayoutPos { get }
+    var tg_bottom: TGLayoutPos { get }
+    var tg_trailing: TGLayoutPos { get }
+    var tg_centerX: TGLayoutPos { get }
+    var tg_centerY: TGLayoutPos { get }
     
-    var tg_left:TGLayoutPos{get}
-    var tg_right:TGLayoutPos{get}
-    var tg_baseline:TGLayoutPos{get}
+    var tg_left: TGLayoutPos { get }
+    var tg_right: TGLayoutPos { get }
+    var tg_baseline: TGLayoutPos { get }
     
-    var tg_width:TGLayoutSize{get}
-    var tg_height:TGLayoutSize{get}
+    var tg_width: TGLayoutSize { get }
+    var tg_height: TGLayoutSize { get }
     
-    var tg_useFrame:Bool{get set}
-    var tg_noLayout:Bool{get set}
-    var tg_reverseFloat:Bool{get set}
-    var tg_clearFloat:Bool{get set}
+    var tg_useFrame: Bool { get set }
+    var tg_noLayout: Bool { get set }
+    var tg_reverseFloat: Bool { get set }
+    var tg_clearFloat: Bool { get set }
     
-    var tg_visibility:TGVisibility{get set}
-
-    var tg_alignment:TGGravity{get set}
-
-    
+    var tg_visibility: TGVisibility { get set }
+    var tg_alignment: TGGravity { get set }
 }
 
 /**
  * 定义SizeClass中布局视图的具有的布局属性接口
  */
-public protocol TGLayoutViewSizeClass:TGViewSizeClass
-{
-    var tg_padding:UIEdgeInsets{get set}
-    var tg_topPadding:CGFloat{get set}
-    var tg_leadingPadding:CGFloat{get set}
-    var tg_bottomPadding:CGFloat{get set}
-    var tg_trailingPadding:CGFloat{get set}
-    var tg_zeroPadding:Bool{get set}
-    var tg_insetsPaddingFromSafeArea:UIRectEdge{get set}
-    var tg_insetLandscapeFringePadding:Bool {get set}
+public protocol TGLayoutViewSizeClass: TGViewSizeClass {
+    var tg_padding: UIEdgeInsets { get set }
+    var tg_topPadding: CGFloat { get set }
+    var tg_leadingPadding: CGFloat { get set }
+    var tg_bottomPadding: CGFloat { get set }
+    var tg_trailingPadding: CGFloat { get set }
+    var tg_zeroPadding: Bool { get set }
+    var tg_insetsPaddingFromSafeArea: UIRectEdge { get set }
+    var tg_insetLandscapeFringePadding: Bool { get set }
     
-    var tg_leftPadding:CGFloat{get set}
-    var tg_rightPadding:CGFloat{get set}
+    var tg_leftPadding: CGFloat { get set }
+    var tg_rightPadding: CGFloat { get set }
 
     
-    var tg_vspace:CGFloat{get set}
-    var tg_hspace:CGFloat{get set}
-    var tg_space:CGFloat{get set}
-    var tg_reverseLayout: Bool{get set}
+    var tg_vspace: CGFloat { get set }
+    var tg_hspace: CGFloat { get set }
+    var tg_space: CGFloat { get set }
+    var tg_reverseLayout: Bool { get set }
     
-    var tg_gravity:TGGravity{get set}
-    
-    var tg_layoutTransform:CGAffineTransform{get set}
-
+    var tg_gravity: TGGravity { get set }
+    var tg_layoutTransform: CGAffineTransform { get set }
 }
 
 extension TGLayoutViewSizeClass {
@@ -189,73 +186,59 @@ extension TGLayoutViewSizeClass {
 /**
  * 定义SizeClass中顺序布局视图的具有的布局属性接口，所谓顺序布局视图就是表明布局中的子视图中的布局会受制于添加的顺序
  */
-public protocol TGSequentLayoutViewSizeClass:TGLayoutViewSizeClass
-{
-    var tg_orientation:TGOrientation{get set}
+public protocol TGSequentLayoutViewSizeClass: TGLayoutViewSizeClass {
+    var tg_orientation: TGOrientation { get set }
 }
 
 /**
  * 定义SizeClass中线性布局所具有的布局属性接口
  */
-public protocol TGLinearLayoutViewSizeClass:TGSequentLayoutViewSizeClass
-{
-    var tg_shrinkType:TGSubviewsShrinkType{get set}
+public protocol TGLinearLayoutViewSizeClass: TGSequentLayoutViewSizeClass {
+    var tg_shrinkType: TGSubviewsShrinkType { get set }
 }
 
 /**
  * 定义SizeClass中表格布局所具有的布局属性接口
  */
-public protocol TGTableLayoutViewSizeClass:TGLinearLayoutViewSizeClass
-{
-    
-}
+public protocol TGTableLayoutViewSizeClass:TGLinearLayoutViewSizeClass {}
 
 /**
  * 定义SizeClass中流式布局所具有的布局属性接口
  */
-public protocol TGFlowLayoutViewSizeClass:TGSequentLayoutViewSizeClass
-{
-    var tg_arrangedCount:Int {get set}
-    var tg_pagedCount:Int {get set}
-    var tg_arrangedGravity:TGGravity {get set}
-    var tg_lastlineGravityPolicy:TGGravityPolicy {get set}
-    var tg_autoArrange:Bool {get set}
+public protocol TGFlowLayoutViewSizeClass:TGSequentLayoutViewSizeClass {
+    var tg_arrangedCount: Int { get set }
+    var tg_pagedCount: Int { get set }
+    var tg_arrangedGravity: TGGravity { get set }
+    var tg_lastlineGravityPolicy: TGGravityPolicy { get set }
+    var tg_autoArrange: Bool {get set}
 }
 
 
 /**
  * 定义SizeClass中浮动布局所具有的布局属性接口
  */
-public protocol TGFloatLayoutViewSizeClass:TGSequentLayoutViewSizeClass
-{
-    var tg_noBoundaryLimit:Bool{get set}
+public protocol TGFloatLayoutViewSizeClass: TGSequentLayoutViewSizeClass {
+    var tg_noBoundaryLimit: Bool {get set}
 }
 
 /**
  *定义SizeClass中相对布局所具有的布局属性接口
  */
-public protocol TGRelativeLayoutViewSizeClass:TGLayoutViewSizeClass
-{
-}
+public protocol TGRelativeLayoutViewSizeClass: TGLayoutViewSizeClass {}
 
 /**
  *定义SizeClass中框架布局所具有的布局属性接口
  */
-public protocol TGFrameLayoutViewSizeClass:TGLayoutViewSizeClass
-{
-    
-}
+public protocol TGFrameLayoutViewSizeClass: TGLayoutViewSizeClass {}
 
 /**
  * 定义SizeClass中PathLayout所具有的布局属性接口
  */
-public protocol TGPathLayoutViewSizeClass : TGLayoutViewSizeClass{
-
-}
+public protocol TGPathLayoutViewSizeClass : TGLayoutViewSizeClass {}
 
 
 //TGSizeClass Implemention
-internal class TGViewSizeClassImpl:NSCopying,TGViewSizeClass {
+internal class TGViewSizeClassImpl:NSCopying, TGViewSizeClass {
     
     required init(view:UIView) {
      //   super.init()
@@ -464,31 +447,24 @@ internal class TGViewSizeClassImpl:NSCopying,TGViewSizeClass {
         }
     }
     
-    internal var isVertMarginHasValue:Bool
-        {
+    internal var isVertMarginHasValue: Bool {
          return top.hasValue && bottom.hasValue
     }
     
-    internal var isHorzMarginHasValue:Bool
-        {
-        
+    internal var isHorzMarginHasValue: Bool {
         return leading.hasValue && trailing.hasValue
-
     }
     
-    internal var isSomeSizeWrap:Bool
-        {
-            return width.isWrap || height.isWrap
+    internal var isSomeSizeWrap: Bool {
+        return width.isWrap || height.isWrap
     }
     
-    internal var isAllSizeWrap:Bool
-        {
-            return width.isWrap && height.isWrap
+    internal var isAllSizeWrap:Bool {
+        return width.isWrap && height.isWrap
     }
 
     
-    func copy(with zone: NSZone? = nil) -> Any
-    {
+    func copy(with zone: NSZone? = nil) -> Any {
         let tsc:TGViewSizeClassImpl = type(of: self).init(view: self.view)
         
         
@@ -542,15 +518,12 @@ internal class TGViewSizeClassImpl:NSCopying,TGViewSizeClass {
 }
 
 
-internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl,TGLayoutViewSizeClass
-{
-    var tg_padding:UIEdgeInsets
-    {
-        get{
+internal class TGLayoutViewSizeClassImpl:TGViewSizeClassImpl, TGLayoutViewSizeClass {
+    var tg_padding: UIEdgeInsets {
+        get {
             return UIEdgeInsets(top: tg_topPadding, left: tg_leftPadding, bottom: tg_bottomPadding, right: tg_rightPadding)
         }
-        set
-        {
+        set {
             tg_topPadding = newValue.top
             tg_leftPadding = newValue.left
             tg_bottomPadding = newValue.bottom

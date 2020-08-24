@@ -569,7 +569,7 @@ public extension TypeWrapperProtocol where WrappedType: UIView {
         return rect
     }
 
-    func layoutCompletedDo(_ action:((_ layout: TGBaseLayout, _ view: UIView)->Void)?) {
+    func layoutCompleted(_ action:((_ layout: TGBaseLayout, _ view: UIView)->Void)?) {
         guard let value: TGViewSizeClassImpl = self.wrappedValue.tgCurrentSizeClass as? TGViewSizeClassImpl else { return}
         value.layoutCompletedAction = action
     }
@@ -1076,15 +1076,15 @@ public extension TypeWrapperProtocol where WrappedType: TGBaseLayout {
         return subview.tg_estimatedFrame
     }
 
-    func beginLayoutDo(_ action:(()->Void)?) {
+    func beginLayout(_ action:(()->Void)?) {
         self.wrappedValue._tgBeginLayoutAction = action
     }
 
-    func endLayoutDo(_ action:(()->Void)?) {
+    func endLayout(_ action:(()->Void)?) {
         self.wrappedValue._tgEndLayoutAction = action
     }
 
-    func rotationToDeviceOrientationDo(_ action:((_ layout: TGBaseLayout, _ isFirst: Bool, _ isPortrait: Bool)->Void)?) {
+    func rotationToDeviceOrientation(_ action:((_ layout: TGBaseLayout, _ isFirst: Bool, _ isPortrait: Bool)->Void)?) {
         self.wrappedValue._tgRotationToDeviceOrientationAction = action
     }
 

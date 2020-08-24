@@ -124,7 +124,7 @@ class TLTest3ViewController: UIViewController {
         lastRow.tg.topBorderline = TGBorderline(color:.red)
       
         var cellLayout = self.createCellLayout(value: "Total:")
-        cellLayout.tg.width.equal(.fill) //占用剩余宽度您也可以设置为tg_width.equal(100%)
+        cellLayout.tg.width.equal(.fill) //占用剩余宽度您也可以设置为tg.width.equal(100%)
         tableLayout.addSubview(cellLayout)
         
         cellLayout = self.createCellLayout(value: "1234.11")

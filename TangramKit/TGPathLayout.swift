@@ -12,7 +12,7 @@ import UIKit
 /**
  * 定义子视图在路径布局中的距离的类型。
  */
-public enum TGPathSpaceType{
+public enum TGPathSpaceType {
     /// 浮动距离，子视图之间的距离根据路径布局的尺寸和子视图的数量而确定。
     case flexed
     /// 固定距离，就是子视图之间的距离是固定的某个数值。
@@ -24,7 +24,7 @@ public enum TGPathSpaceType{
 /**
  * 实现枚举类TGPathSpaceType的比较接口
  */
-extension TGPathSpaceType : Equatable{
+extension TGPathSpaceType : Equatable {
     public static func ==(lhs: TGPathSpaceType, rhs: TGPathSpaceType) -> Bool {
         switch (lhs,rhs) {
         case ( TGPathSpaceType.flexed , TGPathSpaceType.flexed):
@@ -49,9 +49,8 @@ open class TGCoordinateSetting {
     /**
      * 坐标原点的位置,位置是相对位置，默认是(0,0), 假如设置为(0.5,0.5)则在视图的中间。
      */
-    public var origin : CGPoint = CGPoint.zero {
-        
-        didSet{
+    public var origin: CGPoint = CGPoint.zero {
+        didSet {
             if !_tgCGPointEqual(oldValue, origin){
                 pathLayout?.setNeedsLayout()
             }
@@ -61,8 +60,8 @@ open class TGCoordinateSetting {
     /**
      * 指定是否是数学坐标系，默认为NO，表示绘图坐标系。 数学坐标系y轴向上为正，向下为负；绘图坐标系则反之。
      */
-    public var isMath : Bool = false{
-        didSet{
+    public var isMath: Bool = false {
+        didSet {
             if isMath != oldValue{
                 pathLayout?.setNeedsLayout()
             }
@@ -72,8 +71,8 @@ open class TGCoordinateSetting {
     /**
      * 指定是否是y轴和x轴互换，默认为NO，如果设置为YES则方程提供的变量是y轴的值，方程返回的是x轴的值。
      */
-    public var isReverse : Bool = false{
-        didSet{
+    public var isReverse: Bool = false{
+        didSet {
             if isReverse != oldValue{
                 pathLayout?.setNeedsLayout()
             }
@@ -83,16 +82,16 @@ open class TGCoordinateSetting {
     /**
      * 开始位置和结束位置。如果不设置则根据坐标原点设置以及视图的尺寸自动确定.默认是nil
      */
-    public var start:CGFloat! {
-        didSet{
+    public var start: CGFloat! {
+        didSet {
             if start != oldValue {
                 pathLayout?.setNeedsLayout()
             }
         }
     }
     
-    public var end:CGFloat! {
-        didSet{
+    public var end: CGFloat! {
+        didSet {
             if end != oldValue {
                 pathLayout?.setNeedsLayout()
             }
@@ -108,7 +107,7 @@ open class TGCoordinateSetting {
     /**
      * 恢复默认设置
      */
-    public func reset(){
+    public func reset() {
         start = nil
         end = nil
         isMath = false
