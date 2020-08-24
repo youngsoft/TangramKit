@@ -67,17 +67,17 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         
         let rootLayout = TGLinearLayout(.vert)
         rootLayout.backgroundColor = .white
-        rootLayout.tg_width.equal(.fill)
-        rootLayout.tg_height.equal(.fill).min(568 - 64)
+        rootLayout.tg.width.equal(.fill)
+        rootLayout.tg.height.equal(.fill).min(568 - 64)
         //这个设置可以用运算符来设置： 
-        //rootLayout.tg_height >= 504
+        //rootLayout.tg.height >= 504
         
         //设置布局视图的高度等于父视图的高度，并且最低高度不能低于568-64.这两个数字的意思是iPhone5的高度减去导航条的高度部分。这句话的意思也就是说明最低不能低于iPhone5的高度，因此在iPhone4上就会出现滚动的效果！！！通过min,max方法的应用可以很容易实现各种屏幕的完美适配！！。
         //请您分别测试在iPhone4设备和非iPhone4设备上的情况，看看这个神奇的效果。你不再需要写if条件来做适配处理了。
         scrollView.addSubview(rootLayout)
         
         //可以给布局设置触摸事件。
-        rootLayout.tg_setTarget(self, action: #selector(handleHideKeyboard), for:.touchUpInside)
+        rootLayout.tg.setTarget(self, action: #selector(handleHideKeyboard), for:.touchUpInside)
         
         
         
@@ -88,9 +88,9 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         userInfoLabel.adjustsFontSizeToFitWidth = true
         userInfoLabel.textAlignment = .center
         userInfoLabel.sizeToFit()
-        userInfoLabel.tg_top.equal(10)
-        userInfoLabel.tg_centerX.equal(0)
-        userInfoLabel.tg_width.max(rootLayout.tg_width)
+        userInfoLabel.tg.top.equal(10)
+        userInfoLabel.tg.centerX.equal(0)
+        userInfoLabel.tg.width.max(rootLayout.tg.width)
         rootLayout.addSubview(userInfoLabel)
         
         
@@ -100,8 +100,8 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         headImageView.image = UIImage(named: "head1")
         headImageView.backgroundColor  = CFTool.color(1)
         headImageView.sizeToFit()
-        headImageView.tg_top.equal(25%)
-        headImageView.tg_centerX.equal(0) //距离顶部间隙剩余空间的25%，水平居中对齐。
+        headImageView.tg.top.equal(25%)
+        headImageView.tg.centerX.equal(0) //距离顶部间隙剩余空间的25%，水平居中对齐。
         rootLayout.addSubview(headImageView)
         
         //用户信息
@@ -110,10 +110,10 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         nameField.placeholder = NSLocalizedString("input user name here", comment:"")
         nameField.textAlignment = .center
         nameField.font = CFTool.font(15)
-        nameField.tg_leading.equal(10%)
-        nameField.tg_trailing.equal(10%)
-        nameField.tg_top.equal(10%)
-        nameField.tg_height.equal(40) //高度为40，左右边距为布局的10%, 顶部间距为剩余空间的10%
+        nameField.tg.leading.equal(10%)
+        nameField.tg.trailing.equal(10%)
+        nameField.tg.top.equal(10%)
+        nameField.tg.height.equal(40) //高度为40，左右边距为布局的10%, 顶部间距为剩余空间的10%
         rootLayout.addSubview(nameField)
         
         
@@ -128,10 +128,10 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         userDescLabel.textColor = CFTool.color(4)
         userDescLabel.font = CFTool.font(14)
         userDescLabel.sizeToFit()
-        userDescLabel.tg_top.equal(10)
-        userDescLabel.tg_leading.equal(5%).min(17).max(19)  //最小17最大19
-       // userDescLabel.tg_leading >= 17
-       // userDescLabel.tg_leading <= 19
+        userDescLabel.tg.top.equal(10)
+        userDescLabel.tg.leading.equal(5%).min(17).max(19)  //最小17最大19
+       // userDescLabel.tg.leading >= 17
+       // userDescLabel.tg.leading <= 19
         rootLayout.addSubview(userDescLabel)
         
         
@@ -145,10 +145,10 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         
         //左右边距为布局的10%，距离底部间距为65%,浮动高度，但高度最高为300，最低为60
         //高度为.wrap和min,max的结合能做到一些完美的自动伸缩功能。
-        textView.tg_leading.equal(5%)
-        textView.tg_trailing.equal(5%)
-        textView.tg_bottom.equal(65%)
-        textView.tg_height.equal(.wrap).max(300).min(60)  //虽然高度为.wrap表示高度为动态高度，但是仍然不能超过300的高度以及不能小于60的高度。
+        textView.tg.leading.equal(5%)
+        textView.tg.trailing.equal(5%)
+        textView.tg.bottom.equal(65%)
+        textView.tg.height.equal(.wrap).max(300).min(60)  //虽然高度为.wrap表示高度为动态高度，但是仍然不能超过300的高度以及不能小于60的高度。
         rootLayout.addSubview(textView)
         
         
@@ -157,8 +157,8 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         copyRightLabel.text = NSLocalizedString("copy rights reserved by Youngsoft", comment:"")
         copyRightLabel.textColor = CFTool.color(4)
         copyRightLabel.font = CFTool.font(15)
-        copyRightLabel.tg_bottom.equal(20) //总是固定在底部20的间距,因为上面的textView用了底部相对间距。
-        copyRightLabel.tg_centerX.equal(0)
+        copyRightLabel.tg.bottom.equal(20) //总是固定在底部20的间距,因为上面的textView用了底部相对间距。
+        copyRightLabel.tg.centerX.equal(0)
         copyRightLabel.sizeToFit()
         rootLayout.addSubview(copyRightLabel)
         
@@ -181,7 +181,7 @@ class LLTest6ViewController: UIViewController , UITextViewDelegate  {
         
         //这里设置在布局结束后将textView滚动到光标所在的位置了。在布局执行布局完毕后如果设置了tg_endLayoutDo的话可以在这个block里面读取布局里面子视图的真实布局位置和尺寸，也就是可以在block内部读取每个子视图的真实的frame的值。
         //这里我们可以实现tg_endLayoutDo来进行一些布局完成后的特殊处理操作。
-        layout.tg_endLayoutDo {
+        layout.tg.endLayoutDo {
             
             let rg = textView.selectedRange
             textView.scrollRangeToVisible(rg)

@@ -57,18 +57,18 @@ class LLTest2ViewController: UIViewController {
         
         var contentLayout = TGLinearLayout(.vert)
         contentLayout.tg.padding = UIEdgeInsets(top: 10,left: 10,bottom: 10,right: 10) //设置布局内的子视图离自己的边距.
-        contentLayout.tg_width.equal(.fill);  //设置视图自身的宽度填充父视图的剩余宽度。
+        contentLayout.tg.width.equal(.fill);  //设置视图自身的宽度填充父视图的剩余宽度。
         //您可以用如下的方法设置宽度：
-        //contentLayout.tg_leading.equal(0)
-        //contentLayout.tg_trailing.equal(0)
+        //contentLayout.tg.leading.equal(0)
+        //contentLayout.tg.trailing.equal(0)
         //您还可以用如下的方法设置宽度：
-        //contentLayout.tg_width.equal(scrollView.tg_width)  //contentLayout.tg_width.equal(scrollView)
+        //contentLayout.tg.width.equal(scrollView.tg.width)  //contentLayout.tg.width.equal(scrollView)
         //您还可以用如下的方法设置宽度
-        //contentLayout.tg_width.equal(100%)
+        //contentLayout.tg.width.equal(100%)
         
-        contentLayout.tg_height.equal(.wrap).min(scrollView.tg_height, increment: 10)  //高度由子视图决定，但是布局视图的最低高度等于scrollView的高度+10
+        contentLayout.tg.height.equal(.wrap).min(scrollView.tg.height, increment: 10)  //高度由子视图决定，但是布局视图的最低高度等于scrollView的高度+10
         //您也可以如下的方法设置：
-        //contentLayout.tg_height.min(scrollView, increment: 10)
+        //contentLayout.tg.height.min(scrollView, increment: 10)
         
         scrollView.addSubview(contentLayout)
         self.contentLayout = contentLayout
@@ -145,7 +145,7 @@ extension LLTest2ViewController
         let numTitleLabel = UILabel()
         numTitleLabel.text =  NSLocalizedString("No.:", comment:"")
         numTitleLabel.font = CFTool.font(15)
-        numTitleLabel.tg_leading.equal(5) //左边距为5
+        numTitleLabel.tg.leading.equal(5) //左边距为5
         numTitleLabel.sizeToFit()      //尺寸由内容决定
         contentLayout.addSubview(numTitleLabel)
         
@@ -153,9 +153,9 @@ extension LLTest2ViewController
         numField.borderStyle = .roundedRect
         numField.placeholder = NSLocalizedString("Input the No. here", comment:"")
         numField.font = CFTool.font(15)
-        numField.tg_top.equal(5)
-        numField.tg_width.equal(.fill)
-        numField.tg_height.equal(40)
+        numField.tg.top.equal(5)
+        numField.tg.width.equal(.fill)
+        numField.tg.height.equal(40)
         contentLayout.addSubview(numField)
 
     }
@@ -168,20 +168,20 @@ extension LLTest2ViewController
         userInfoLayout.layer.borderWidth = 0.5
         userInfoLayout.layer.cornerRadius = 4
         userInfoLayout.tg.padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-        userInfoLayout.tg_top.equal(20)
-        userInfoLayout.tg_width.equal(.fill) //这句代码等价于tg_leading.equal(0) tg_trailing.equal(0)，表明宽度和父视图保持一致
-        userInfoLayout.tg_height.equal(.wrap) //高度由子视图决定。
+        userInfoLayout.tg.top.equal(20)
+        userInfoLayout.tg.width.equal(.fill) //这句代码等价于tg_leading.equal(0) tg_trailing.equal(0)，表明宽度和父视图保持一致
+        userInfoLayout.tg.height.equal(.wrap) //高度由子视图决定。
         contentLayout.addSubview(userInfoLayout)
         
         
         let headImageView = UIImageView(image: UIImage(named: "head1")) //UIImageView的构造方法能够算出视图的尺寸。
-        headImageView.tg_centerY.equal(0)  //在父视图中垂直居中。
+        headImageView.tg.centerY.equal(0)  //在父视图中垂直居中。
         userInfoLayout.addSubview(headImageView)
         
         let nameLayout = TGLinearLayout(.vert)
-        nameLayout.tg_leading.equal(10)
-        nameLayout.tg_width.equal(.fill)
-        nameLayout.tg_height.equal(.wrap)
+        nameLayout.tg.leading.equal(10)
+        nameLayout.tg.width.equal(.fill)
+        nameLayout.tg.height.equal(.wrap)
         userInfoLayout.addSubview(nameLayout)
         
         let userNameLabel = UILabel()
@@ -203,12 +203,12 @@ extension LLTest2ViewController
          userInfoLayout.layer.borderColor = UIColor.lightGray.cgColor
          userInfoLayout.layer.borderWidth = 0.5
          userInfoLayout.layer.cornerRadius = 4
-         userInfoLayout.tg_padding = UIEdgeInsetsMake(5, 5, 5, 5)
-         userInfoLayout.tg_top.equal(20)
-         userInfoLayout.tg_width.equal(.fill)
-         userInfoLayout.tg_height.equal(.wrap)
-         userInfoLayout.tg_hspace = 10  //子视图的水平间距为10
-         userInfoLayout.tg_gravity = TGGravity.Vertical.center; //里面的子视图整体垂直居中。
+         userInfoLayout.tg.padding = UIEdgeInsetsMake(5, 5, 5, 5)
+         userInfoLayout.tg.top.equal(20)
+         userInfoLayout.tg.width.equal(.fill)
+         userInfoLayout.tg.height.equal(.wrap)
+         userInfoLayout.tg.hspace = 10  //子视图的水平间距为10
+         userInfoLayout.tg.gravity = TGGravity.Vertical.center; //里面的子视图整体垂直居中。
          contentLayout.addSubview(userInfoLayout)
          
          //第一列： 一个头像视图，一个占位视图。
@@ -242,15 +242,15 @@ extension LLTest2ViewController
     {
         
         //垂直线性布局套垂直线性布局
-        let ageLayout = TGLinearLayout(.vert)
+        var ageLayout = TGLinearLayout(.vert)
         ageLayout.layer.borderColor = UIColor.lightGray.cgColor
         ageLayout.layer.borderWidth = 0.5
         ageLayout.layer.cornerRadius = 4
-        ageLayout.tg_padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-        ageLayout.tg_gravity = TGGravity.Horizontal.fill  //布局视图的gravity设置了里面的所有的子视图都是水平填充的，这样所有的子视图都不需要设置宽度了。
-        ageLayout.tg_top.equal(20)
-        ageLayout.tg_width.equal(.fill)
-        ageLayout.tg_height.equal(.wrap)
+        ageLayout.tg.padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        ageLayout.tg.gravity = TGGravity.Horizontal.fill  //布局视图的gravity设置了里面的所有的子视图都是水平填充的，这样所有的子视图都不需要设置宽度了。
+        ageLayout.tg.top.equal(20)
+        ageLayout.tg.width.equal(.fill)
+        ageLayout.tg.height.equal(.wrap)
         contentLayout.addSubview(ageLayout)
         
         
@@ -261,10 +261,10 @@ extension LLTest2ViewController
         ageLayout.addSubview(ageTitleLabel)
         
         //垂直线性布局套水平线性布局
-        let ageSelectLayout = TGLinearLayout(.horz)
-        ageSelectLayout.tg_hspace = 10  //设置里面所有子视图之间的水平间距都是10，这样里面的子视图就不在需要设置间距了。
-        ageSelectLayout.tg_top.equal(5)
-        ageSelectLayout.tg_height.equal(.wrap)
+        var ageSelectLayout = TGLinearLayout(.horz)
+        ageSelectLayout.tg.hspace = 10  //设置里面所有子视图之间的水平间距都是10，这样里面的子视图就不在需要设置间距了。
+        ageSelectLayout.tg.top.equal(5)
+        ageSelectLayout.tg.height.equal(.wrap)
         ageLayout.addSubview(ageSelectLayout)
         
         for i in 0...2
@@ -276,8 +276,8 @@ extension LLTest2ViewController
             ageLabel.layer.borderColor = CFTool.color(3).cgColor
             ageLabel.layer.borderWidth = 0.5
             ageLabel.font = CFTool.font(13)
-            ageLabel.tg_height.equal(30)
-            ageLabel.tg_width.equal(.average)  //这里面每个子视图的宽度来平均分配父视图的宽度。这样里面所有子视图的宽度都相等。
+            ageLabel.tg.height.equal(30)
+            ageLabel.tg.width.equal(.average)  //这里面每个子视图的宽度来平均分配父视图的宽度。这样里面所有子视图的宽度都相等。
             ageSelectLayout.addSubview(ageLabel)
         }
         
@@ -287,12 +287,12 @@ extension LLTest2ViewController
         ageLayout.layer.borderColor = UIColor.lightGray.cgColor
         ageLayout.layer.borderWidth = 0.5
         ageLayout.layer.cornerRadius = 4
-        ageLayout.tg_padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-        ageLayout.tg_top.equal(20)
-        ageLayout.tg_vspace = 5
-        ageLayout.tg_hspace = 10
-        ageLayout.tg_width.equal(.fill)
-        ageLayout.tg_height.equal(.wrap)
+        ageLayout.tg.padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        ageLayout.tg.top.equal(20)
+        ageLayout.tg.vspace = 5
+        ageLayout.tg.hspace = 10
+        ageLayout.tg.width.equal(.fill)
+        ageLayout.tg.height.equal(.wrap)
         contentLayout.addSubview(ageLayout)
         
         
@@ -300,7 +300,7 @@ extension LLTest2ViewController
         ageTitleLabel.text = NSLocalizedString("Age:", comment:"")
         ageTitleLabel.font = CFTool.font(15)
         ageTitleLabel.sizeToFit()
-        ageTitleLabel.tg_width.equal(.fill)  //占据整行
+        ageTitleLabel.tg.width.equal(.fill)  //占据整行
         ageLayout.addSubview(ageTitleLabel)
 
         
@@ -313,11 +313,11 @@ extension LLTest2ViewController
             ageLabel.layer.borderColor = CFTool.color(3).cgColor
             ageLabel.layer.borderWidth = 0.5
             ageLabel.font = CFTool.font(13)
-            ageLabel.tg_height.equal(30)
+            ageLabel.tg.height.equal(30)
             //宽度这样设置的原因是：3个子视图要平分布局视图的宽度，这里每个子视图的间距是10。
             //因此每个子视图的宽度 = (布局视图宽度 - 2 * 子视图间距)/3 = 布局视图宽度 * 1/3 - 2*子视图间距/3
             //TGLayoutSize中的equal方法设置布局宽度，multiply方法用来设置1/3，add方法用来设置2*子视图间距/3. 因此可以进行如下设置：
-            ageLabel.tg_width.equal(ageLayout.tg_width).multiply(1.0/3).add(-1 * 2 * ageLayout.tg_hspace / 3)
+            ageLabel.tg.width.equal(ageLayout.tg.width).multiply(1.0/3).add(-1 * 2 * ageLayout.tg.hspace / 3)
             ageLayout.addSubview(ageLabel)
         }
       */
@@ -327,14 +327,14 @@ extension LLTest2ViewController
     func createSection4(in contentLayout:TGLinearLayout)
     {
         /*垂直线性布局套水平线性布局*/
-        let addressLayout = TGLinearLayout(.horz)
+        var addressLayout = TGLinearLayout(.horz)
         addressLayout.layer.borderColor = UIColor.lightGray.cgColor
         addressLayout.layer.borderWidth = 0.5
         addressLayout.layer.cornerRadius = 4
-        addressLayout.tg_padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-        addressLayout.tg_top.equal(20)
-        addressLayout.tg_width.equal(.fill)
-        addressLayout.tg_height.equal(.wrap)
+        addressLayout.tg.padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        addressLayout.tg.top.equal(20)
+        addressLayout.tg.width.equal(.fill)
+        addressLayout.tg.height.equal(.wrap)
         contentLayout.addSubview(addressLayout)
         
         
@@ -349,9 +349,9 @@ extension LLTest2ViewController
         addressLabel.text = NSLocalizedString("Winterless Building, West Dawang Road, Chaoyang district CBD, Beijing, People's Republic of China", comment:"")
         addressLabel.textColor = CFTool.color(4)
         addressLabel.font = CFTool.font(14)
-        addressLabel.tg_leading.equal(10)
-        addressLabel.tg_width.equal(.fill)
-        addressLabel.tg_height.equal(.wrap) //这里面的UILabel的宽度和父视图宽度一致，而高度则由内容决定，这种方式可以实现子视图的高度动态决定。
+        addressLabel.tg.leading.equal(10)
+        addressLabel.tg.width.equal(.fill)
+        addressLabel.tg.height.equal(.wrap) //这里面的UILabel的宽度和父视图宽度一致，而高度则由内容决定，这种方式可以实现子视图的高度动态决定。
         addressLayout.addSubview(addressLabel)
         
     }
@@ -360,14 +360,14 @@ extension LLTest2ViewController
     func createSection5(in contentLayout:TGLinearLayout)
     {
         /*垂直线性布局套水平线性布局，水平线性布局利用相对边距实现左右布局*/
-        let sexLayout = TGLinearLayout(.horz)
+        var sexLayout = TGLinearLayout(.horz)
         sexLayout.layer.borderColor = UIColor.lightGray.cgColor
         sexLayout.layer.borderWidth = 0.5
         sexLayout.layer.cornerRadius = 4
-        sexLayout.tg_padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-        sexLayout.tg_top.equal(20)
-        sexLayout.tg_width.equal(.fill)
-        sexLayout.tg_height.equal(.wrap)
+        sexLayout.tg.padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        sexLayout.tg.top.equal(20)
+        sexLayout.tg.width.equal(.fill)
+        sexLayout.tg.height.equal(.wrap)
         contentLayout.addSubview(sexLayout)
         
         
@@ -375,13 +375,13 @@ extension LLTest2ViewController
         sexLabel.text = NSLocalizedString("Sex:", comment:"")
         sexLabel.font = CFTool.font(15)
         sexLabel.sizeToFit()
-        sexLabel.tg_centerY.equal(0)  //垂直居中。
-        sexLabel.tg_trailing.equal(50%)  //右边距离占用剩余空间的一半
+        sexLabel.tg.centerY.equal(0)  //垂直居中。
+        sexLabel.tg.trailing.equal(50%)  //右边距离占用剩余空间的一半
         sexLayout.addSubview(sexLabel)
         
         
         let sexSwitch = UISwitch()
-        sexSwitch.tg_leading.equal(50%) //左边距离占用剩余空间的一半。
+        sexSwitch.tg.leading.equal(50%) //左边距离占用剩余空间的一半。
         sexLayout.addSubview(sexSwitch)
         
         //在水平线性布局视图中的这种子视图左右布局的实现，我们可以将左右的间距设置为比重值！表明间距占用父布局的剩余宽度。
@@ -398,33 +398,33 @@ extension LLTest2ViewController
         //除了指定基线对齐的标准视图外，还需要为线性布局的tg_gravity属性设置上TGGravity.Vertical.baseline才可以完成基线对齐的设置。所有其他的UILabel，UITextField，UITextView都将和标准视图的基线进行对齐，而其他类型的子视图则忽略。
         //基线对齐对于中文来说基本没有什么效果，主要是针对英文以及具有基线的字符集。
         
-        let baselineLayout = TGLinearLayout(.horz)
+        var baselineLayout = TGLinearLayout(.horz)
         baselineLayout.layer.borderColor = UIColor.lightGray.cgColor
         baselineLayout.layer.borderWidth = 0.5
         baselineLayout.layer.cornerRadius = 4
-        baselineLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
-        baselineLayout.tg_top.equal(20)
+        baselineLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
+        baselineLayout.tg.top.equal(20)
         baselineLayout.tg_horzMargin(0)
-        baselineLayout.tg_height.equal(50)
-        baselineLayout.tg_gravity = [TGGravity.Horizontal.center, TGGravity.Vertical.baseline]
+        baselineLayout.tg.height.equal(50)
+        baselineLayout.tg.gravity = [TGGravity.Horizontal.center, TGGravity.Vertical.baseline]
         contentLayout.addSubview(baselineLayout)
         
-        let baselineLabel = UILabel()
+        var baselineLabel = UILabel()
         baselineLabel.text = "Baseline view"
-        baselineLabel.tg_size(width: .wrap, height: .wrap)
+        baselineLabel.tg.size(width: .wrap, height: .wrap)
         baselineLabel.font = CFTool.font(20)
         baselineLabel.backgroundColor = CFTool.color(5)
-        baselineLabel.tg_alignment = TGGravity.Vertical.center  //标准视图垂直居中。
+        baselineLabel.tg.alignment = TGGravity.Vertical.center  //标准视图垂直居中。
         baselineLayout.addSubview(baselineLabel)
         
         let rightLabel = UILabel()
         rightLabel.text = "Right view"
-        rightLabel.tg_size(width: .wrap, height: .wrap)
+        rightLabel.tg.size(width: .wrap, height: .wrap)
         rightLabel.font = CFTool.font(32)
         rightLabel.backgroundColor = CFTool.color(6)
         baselineLayout.addSubview(rightLabel)
         
-        baselineLayout.tg_baselineBaseView = baselineLabel  //这里将左边的视图设置为基线对齐的标准视图。
+        baselineLayout.tg.baselineBaseView = baselineLabel  //这里将左边的视图设置为基线对齐的标准视图。
         
     }
 
@@ -437,9 +437,9 @@ extension LLTest2ViewController
         shrinkLabel.backgroundColor = CFTool.color(2)
         shrinkLabel.font = CFTool.font(14)
         shrinkLabel.clipsToBounds = true  //为了实现文本可缩放，需要将这个标志设置为YES，否则效果无法实现。但要慎重使用这个标志，因为如果设置YES的话会影响性能。
-        shrinkLabel.tg_top.equal(20)
-        shrinkLabel.tg_width.equal(.fill)
-        shrinkLabel.tg_height.equal(.wrap) //在宽度确定的情况下高度动态决定。
+        shrinkLabel.tg.top.equal(20)
+        shrinkLabel.tg.width.equal(.fill)
+        shrinkLabel.tg.height.equal(.wrap) //在宽度确定的情况下高度动态决定。
         contentLayout.addSubview(shrinkLabel)
         self.shrinkLabel = shrinkLabel
         
@@ -447,8 +447,8 @@ extension LLTest2ViewController
         button.addTarget(self, action: #selector(handleLabelShrink), for:.touchUpInside)
         button.setTitle(NSLocalizedString("Show&Hide the Text", comment:""), for:.normal)
         button.titleLabel?.font = CFTool.font(16)
-        button.tg_centerX.equal(0)
-        button.tg_height.equal(60)
+        button.tg.centerX.equal(0)
+        button.tg.height.equal(60)
         button.sizeToFit()
         contentLayout.addSubview(button)
         
@@ -464,18 +464,18 @@ extension LLTest2ViewController
         button.setTitle(NSLocalizedString("Show more》", comment:"") ,for:.normal)
         button.titleLabel?.font = CFTool.font(16)
         button.addTarget(self, action: #selector(handleShowMore), for:.touchUpInside)
-        button.tg_top.equal(50)
-        button.tg_trailing.equal(0)
+        button.tg.top.equal(50)
+        button.tg.trailing.equal(0)
         button.sizeToFit()
         contentLayout.addSubview(button)
 
         
-        let hiddenView = UIView()
+        var hiddenView = UIView()
         hiddenView.backgroundColor = CFTool.color(3)
-        hiddenView.tg_visibility = .gone
-        hiddenView.tg_top.equal(20)
-        hiddenView.tg_width.equal(.fill)
-        hiddenView.tg_height.equal(800)
+        hiddenView.tg.visibility = .gone
+        hiddenView.tg.top.equal(20)
+        hiddenView.tg.width.equal(.fill)
+        hiddenView.tg.height.equal(800)
         contentLayout.addSubview(hiddenView)
         self.hiddenView = hiddenView
 
@@ -491,30 +491,30 @@ extension LLTest2ViewController
     {
     
         //如果当前高度是包裹值，则设置为0让高度变为0，否则再设置为.wrap。这样实现文本的高度伸缩。
-        if self.shrinkLabel.tg_height.isWrap
+        if self.shrinkLabel.tg.height.isWrap
         {
-            self.shrinkLabel.tg_height.equal(0)
+            self.shrinkLabel.tg.height.equal(0)
         }
         else
         {
-            self.shrinkLabel.tg_height.equal(.wrap)
+            self.shrinkLabel.tg.height.equal(.wrap)
         }
     
-        self.contentLayout.tg_layoutAnimationWithDuration(0.3) //设置完成布局中子视图的属性后可以调用布局视图的这个方法来实现动画效果。
+        self.contentLayout.tg.layoutAnimationWithDuration(0.3) //设置完成布局中子视图的属性后可以调用布局视图的这个方法来实现动画效果。
     }
     
     @objc func handleShowMore(_ sender: UIButton)
     {
         //布局里面，如果子视图被隐藏则会引起布局视图的自动布局。
-        if self.hiddenView.tg_visibility == .visible
+        if self.hiddenView.tg.visibility == .visible
         {
             sender.setTitle(NSLocalizedString("Close up《", comment:"") ,for:.normal)
-            self.hiddenView.tg_visibility = .gone
+            self.hiddenView.tg.visibility = .gone
         }
         else
         {
             sender.setTitle(NSLocalizedString("Show more》", comment:"") ,for:.normal)
-            self.hiddenView.tg_visibility = .visible
+            self.hiddenView.tg.visibility = .visible
         }
         
     }

@@ -380,6 +380,113 @@ extension UIView: TGViewSizeClass {
 }
 
 public extension TypeWrapperProtocol where WrappedType: UIView {
+    var top: TGLayoutPos {
+        return self.wrappedValue.tgCurrentSizeClass.tg_top
+    }
+
+    var leading: TGLayoutPos {
+        return self.wrappedValue.tgCurrentSizeClass.tg_leading
+    }
+
+    var bottom: TGLayoutPos {
+        return self.wrappedValue.tgCurrentSizeClass.tg_bottom
+    }
+
+    var trailing: TGLayoutPos {
+        return self.wrappedValue.tgCurrentSizeClass.tg_trailing
+    }
+
+    var centerX: TGLayoutPos {
+        return self.wrappedValue.tgCurrentSizeClass.tg_centerX
+    }
+
+    var centerY: TGLayoutPos {
+        return self.wrappedValue.tgCurrentSizeClass.tg_centerY
+    }
+
+    var left: TGLayoutPos {
+        return self.wrappedValue.tgCurrentSizeClass.tg_left
+    }
+
+    var right: TGLayoutPos {
+        return self.wrappedValue.tgCurrentSizeClass.tg_right
+    }
+
+    var baseline: TGLayoutPos {
+        return self.wrappedValue.tgCurrentSizeClass.tg_baseline
+    }
+
+    var width: TGLayoutSize {
+        return self.wrappedValue.tgCurrentSizeClass.tg_width
+    }
+
+    var height: TGLayoutSize {
+        return self.wrappedValue.tgCurrentSizeClass.tg_height
+    }
+
+    var useFrame: Bool {
+        get { return self.wrappedValue.tgCurrentSizeClass.tg_useFrame }
+        set {
+            let sc = self.wrappedValue.tgCurrentSizeClass
+            if sc.tg_useFrame != newValue {
+                sc.tg_useFrame = newValue
+                if let sView = self.wrappedValue.superview {
+                    sView.setNeedsLayout()
+                }
+            }
+        }
+    }
+
+    var noLayout: Bool {
+        get { return self.wrappedValue.tgCurrentSizeClass.tg_noLayout }
+        set {
+            let sc = self.wrappedValue.tgCurrentSizeClass
+            if sc.tg_noLayout != newValue {
+                sc.tg_noLayout = newValue
+                if let sView = self.wrappedValue.superview {
+                    sView.setNeedsLayout()
+                }
+            }
+        }
+    }
+
+    var visibility: TGVisibility {
+        get { return self.wrappedValue.tgCurrentSizeClass.tg_visibility }
+        set {
+            let sc = self.wrappedValue.tgCurrentSizeClass
+            if sc.tg_visibility != newValue {
+                sc.tg_visibility = newValue
+
+                switch newValue {
+                case TGVisibility.visible:
+                    self.wrappedValue.isHidden = false
+                    break
+                default:
+                    self.wrappedValue.isHidden = true
+                }
+
+                if let sView = self.wrappedValue.superview {
+                    sView.setNeedsLayout()
+                }
+            }
+        }
+    }
+
+    var alignment: TGGravity {
+        get { return self.wrappedValue.tgCurrentSizeClass.tg_alignment }
+        set {
+            let sc = self.wrappedValue.tgCurrentSizeClass
+            if sc.tg_alignment != newValue {
+                sc.tg_alignment = newValue
+                if let sView = self.wrappedValue.superview {
+                    sView.setNeedsLayout()
+                }
+            }
+        }
+    }
+}
+
+public extension TypeWrapperProtocol where WrappedType: UIView {
     func origin(_ point: CGPoint) {
         self.wrappedValue.tg_leading.equal(point.x)
         self.wrappedValue.tg_top.equal(point.y)
@@ -863,7 +970,7 @@ public extension TypeWrapperProtocol where WrappedType: TGBaseLayout {
         }
     }
 
-    var vSpace: CGFloat {
+    var vspace: CGFloat {
         get { return self.getCheck()?.tg_vspace ?? 0 } set {
             guard let value = self.setCheck() else { return }
             if value.tg_vspace != newValue {
@@ -873,7 +980,7 @@ public extension TypeWrapperProtocol where WrappedType: TGBaseLayout {
         }
     }
 
-    var hSpace: CGFloat {
+    var hspace: CGFloat {
         get { return self.getCheck()?.tg_hspace ?? 0 }
         set {
             guard let value = self.setCheck() else { return }
@@ -1081,22 +1188,22 @@ public extension TypeWrapperProtocol where WrappedType: TGBaseLayout {
 
 
     var highlightedBackgroundColor: UIColor {
-        get { self.wrappedValue.tg_highlightedBackgroundColor }
+        get { return self.wrappedValue.tg_highlightedBackgroundColor }
         set { self.wrappedValue.tg_highlightedBackgroundColor = newValue }
     }
 
     var highlightedOpacity: CGFloat {
-        get { self.wrappedValue.tg_highlightedOpacity }
+        get { return self.wrappedValue.tg_highlightedOpacity }
         set { self.wrappedValue.tg_highlightedOpacity = newValue }
     }
 
     var backgroundImage: UIImage {
-        get { self.wrappedValue.tg_backgroundImage }
+        get { return self.wrappedValue.tg_backgroundImage }
         set { self.wrappedValue.tg_backgroundImage = newValue }
     }
 
     var highlightedBackgroundImage: UIImage {
-        get { self.wrappedValue.tg_highlightedBackgroundImage }
+        get { return self.wrappedValue.tg_highlightedBackgroundImage }
         set { self.wrappedValue.tg_highlightedBackgroundImage = newValue }
     }
 

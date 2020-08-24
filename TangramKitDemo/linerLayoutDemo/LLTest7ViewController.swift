@@ -36,43 +36,43 @@ class LLTest7ViewController: UIViewController {
          */
 
         
-        let rootLayout = TGLinearLayout(.vert)
+        var rootLayout = TGLinearLayout(.vert)
         rootLayout.backgroundColor = .white
-        rootLayout.tg_gravity = TGGravity.Horizontal.fill
-        rootLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
+        rootLayout.tg.gravity = TGGravity.Horizontal.fill
+        rootLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         self.view = rootLayout
         
         
         let action1Layout = TGLinearLayout(.horz)
-        action1Layout.tg_height.equal(.wrap)
-        action1Layout.tg_top.equal(self.topLayoutGuide)
+        action1Layout.tg.height.equal(.wrap)
+        action1Layout.tg.top.equal(self.topLayoutGuide)
         rootLayout.addSubview(action1Layout)
         
         action1Layout.addSubview(self.createActionButton(NSLocalizedString("average size&space no centered", comment:"") ,tag:100))
         action1Layout.addSubview(self.createActionButton(NSLocalizedString("average size&space centered", comment:""), tag:200))
         action1Layout.addSubview(self.createActionButton(NSLocalizedString("average size no centered",comment:""), tag:300))
-        action1Layout.tg_equalizeSubviews(centered: false, withSpace: 5) //均分action1Layout中的所有子视图的宽度,视图之间的间距为5
+        action1Layout.tg.equalizeSubviews(centered: false, withSpace: 5) //均分action1Layout中的所有子视图的宽度,视图之间的间距为5
         
         
         let action2Layout = TGLinearLayout(.horz)
-        action2Layout.tg_top.equal(5)
-        action2Layout.tg_height.equal(.wrap)
+        action2Layout.tg.top.equal(5)
+        action2Layout.tg.height.equal(.wrap)
         rootLayout.addSubview(action2Layout)
         
         action2Layout.addSubview(self.createActionButton(NSLocalizedString("average size centered",comment:""), tag:400))
         action2Layout.addSubview(self.createActionButton(NSLocalizedString("average space no centered",comment:""), tag:500))
         action2Layout.addSubview(self.createActionButton(NSLocalizedString("average space centered",comment:""), tag:600))
-        action2Layout.tg_equalizeSubviews(centered: false, withSpace: 5) //均分action1Layout中的所有子视图的宽度
+        action2Layout.tg.equalizeSubviews(centered: false, withSpace: 5) //均分action1Layout中的所有子视图的宽度
         
         
     
-        let testLayout = TGLinearLayout(.vert)
-        testLayout.tg_gravity = TGGravity.Horizontal.fill  //所有子视图水平宽度充满布局，这样就不需要分别设置每个子视图的宽度了。
+        var testLayout = TGLinearLayout(.vert)
+        testLayout.tg.gravity = TGGravity.Horizontal.fill  //所有子视图水平宽度充满布局，这样就不需要分别设置每个子视图的宽度了。
         testLayout.backgroundColor = CFTool.color(0)
-        testLayout.tg_height.equal(.fill)   //高度填充父布局的所有剩余空间。
-        testLayout.tg_leadingPadding = 10
-        testLayout.tg_trailingPadding = 10
-        testLayout.tg_top.equal(5)
+        testLayout.tg.height.equal(.fill)   //高度填充父布局的所有剩余空间。
+        testLayout.tg.leadingPadding = 10
+        testLayout.tg.trailingPadding = 10
+        testLayout.tg.top.equal(5)
         rootLayout.addSubview(testLayout)
         self.testLayout = testLayout
         
@@ -127,7 +127,7 @@ extension LLTest7ViewController
         button.titleLabel!.adjustsFontSizeToFitWidth = true
         button.titleLabel!.font = CFTool.font(14)
         button.sizeToFit()
-        button.tg_height.equal(.wrap, increment:5) //高度等于内容的高度再加5
+        button.tg.height.equal(.wrap, increment:5) //高度等于内容的高度再加5
         button.layer.borderColor = UIColor.lightGray.cgColor
         button.layer.borderWidth = 0.5
         button.layer.cornerRadius = 4
@@ -151,18 +151,18 @@ extension LLTest7ViewController
         let v3 = arr[2];
         
         //清除所有之前的布局
-        v1.tg_clearLayout()
-        v2.tg_clearLayout()
-        v3.tg_clearLayout()
+        v1.tg.clearLayout()
+        v2.tg.clearLayout()
+        v3.tg.clearLayout()
         
-        v1.tg_height.equal(100)
-        v2.tg_height.equal(50)
-        v3.tg_height.equal(70)
+        v1.tg.height.equal(100)
+        v2.tg.height.equal(50)
+        v3.tg.height.equal(70)
         
         //清除所有横屏模式下的布局约束设置。
-        v1.tg_clearLayout(inSizeClass: .landscape)
-        v2.tg_clearLayout(inSizeClass: .landscape)
-        v3.tg_clearLayout(inSizeClass: .landscape)
+        v1.tg.clearLayout(inSizeClass: .landscape)
+        v2.tg.clearLayout(inSizeClass: .landscape)
+        v3.tg.clearLayout(inSizeClass: .landscape)
 
         v1.tg_fetchSizeClass(with: .landscape).tg_width.equal(100) //在横屏下设置宽度为100
         v2.tg_fetchSizeClass(with: .landscape).tg_width.equal(50) //在横屏下设置宽度为50
@@ -172,34 +172,34 @@ extension LLTest7ViewController
         
         switch (sender.tag) {
         case 100:
-            self.testLayout.tg_equalizeSubviews(centered: false) //均分所有子视图尺寸和间距不留最外面间距
-            self.testLayout.tg_equalizeSubviews(centered: false,inSizeClass:.landscape) //均分所有子视图尺寸和间距不留最外面间距,横屏模式
+            self.testLayout.tg.equalizeSubviews(centered: false) //均分所有子视图尺寸和间距不留最外面间距
+            self.testLayout.tg.equalizeSubviews(centered: false,inSizeClass:.landscape) //均分所有子视图尺寸和间距不留最外面间距,横屏模式
             break;
         case 200:
-            self.testLayout.tg_equalizeSubviews(centered: true) //均分所有子视图的尺寸和间距保留最外间距
-            self.testLayout.tg_equalizeSubviews(centered: true,inSizeClass:.landscape) //均分所有子视图的尺寸和间距保留最外间距，横屏模式
+            self.testLayout.tg.equalizeSubviews(centered: true) //均分所有子视图的尺寸和间距保留最外间距
+            self.testLayout.tg.equalizeSubviews(centered: true,inSizeClass:.landscape) //均分所有子视图的尺寸和间距保留最外间距，横屏模式
             break;
         case 300:
-            self.testLayout.tg_equalizeSubviews(centered: false, withSpace: 40) //均分所有子视图尺寸，固定间距，不保留最外间距
-            self.testLayout.tg_equalizeSubviews(centered: false, withSpace: 40,inSizeClass:.landscape) //均分所有子视图尺寸，固定间距，不保留最外间距，横屏模式
+            self.testLayout.tg.equalizeSubviews(centered: false, withSpace: 40) //均分所有子视图尺寸，固定间距，不保留最外间距
+            self.testLayout.tg.equalizeSubviews(centered: false, withSpace: 40,inSizeClass:.landscape) //均分所有子视图尺寸，固定间距，不保留最外间距，横屏模式
             break;
         case 400:
-            self.testLayout.tg_equalizeSubviews(centered:true, withSpace: 40) //均分所有子视图尺寸，固定间距，保留最外间距
-            self.testLayout.tg_equalizeSubviews(centered:true, withSpace: 40, inSizeClass:.landscape) //均分所有子视图尺寸，固定间距，保留最外间距,横屏模式
+            self.testLayout.tg.equalizeSubviews(centered:true, withSpace: 40) //均分所有子视图尺寸，固定间距，保留最外间距
+            self.testLayout.tg.equalizeSubviews(centered:true, withSpace: 40, inSizeClass:.landscape) //均分所有子视图尺寸，固定间距，保留最外间距,横屏模式
             break;
         case 500:
-            self.testLayout.tg_equalizeSubviewsSpace(centered: false) //均分所有间距，子视图尺寸不变，不保留最外间距
-            self.testLayout.tg_equalizeSubviewsSpace(centered: false,inSizeClass:.landscape) //均分所有间距，子视图尺寸不变，不保留最外间距,横屏模式
+            self.testLayout.tg.equalizeSubviewsSpace(centered: false) //均分所有间距，子视图尺寸不变，不保留最外间距
+            self.testLayout.tg.equalizeSubviewsSpace(centered: false,inSizeClass:.landscape) //均分所有间距，子视图尺寸不变，不保留最外间距,横屏模式
             break;
         case 600:
-            self.testLayout.tg_equalizeSubviewsSpace(centered: true) //均分所有间距，子视图尺寸不变，保留最外间距。
-            self.testLayout.tg_equalizeSubviewsSpace(centered: true,inSizeClass:.landscape) //均分所有间距，子视图尺寸不变，保留最外间距。横屏模式
+            self.testLayout.tg.equalizeSubviewsSpace(centered: true) //均分所有间距，子视图尺寸不变，保留最外间距。
+            self.testLayout.tg.equalizeSubviewsSpace(centered: true,inSizeClass:.landscape) //均分所有间距，子视图尺寸不变，保留最外间距。横屏模式
             break;
         default:
             break;
         }
     
-        self.testLayout.tg_layoutAnimationWithDuration(0.2)
+        self.testLayout.tg.layoutAnimationWithDuration(0.2)
         
     }
     
