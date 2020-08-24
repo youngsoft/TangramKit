@@ -34,19 +34,19 @@ class FLLTest1ViewController: UIViewController {
         
         self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
 
-        let rootLayout = TGLinearLayout(.vert)
-        rootLayout.tg_gravity = TGGravity.Horizontal.fill //里面所有子视图的宽度都填充为和父视图一样宽。
+        var rootLayout = TGLinearLayout(.vert)
+        rootLayout.tg.gravity = TGGravity.Horizontal.fill //里面所有子视图的宽度都填充为和父视图一样宽。
         rootLayout.backgroundColor = .white
         self.view = rootLayout
 
         
         //添加操作按钮。
-        let actionLayout = TGFlowLayout(.vert, arrangedCount: 2)
-        actionLayout.tg_height.equal(.wrap)
-        actionLayout.tg_gravity = TGGravity.Horizontal.fill //所有子视图水平填充，也就是所有子视图的宽度相等。
-        actionLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
-        actionLayout.tg_hspace = 5
-        actionLayout.tg_vspace = 5
+        var actionLayout = TGFlowLayout(.vert, arrangedCount: 2)
+        actionLayout.tg.height.equal(.wrap)
+        actionLayout.tg.gravity = TGGravity.Horizontal.fill //所有子视图水平填充，也就是所有子视图的宽度相等。
+        actionLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
+        actionLayout.tg.hspace = 5
+        actionLayout.tg.vspace = 5
         rootLayout.addSubview(actionLayout)
         
         actionLayout.addSubview(self.createActionButton(NSLocalizedString("adjust orientation", comment:""), action:#selector(handleAdjustOrientation)))
@@ -66,7 +66,7 @@ class FLLTest1ViewController: UIViewController {
         flowLayoutSetLabel.font = CFTool.font(13)
         flowLayoutSetLabel.textColor = .red
         flowLayoutSetLabel.adjustsFontSizeToFitWidth = true
-        flowLayoutSetLabel.tg_height.equal(.wrap)
+        flowLayoutSetLabel.tg.height.equal(.wrap)
         flowLayoutSetLabel.numberOfLines = 6
         rootLayout.addSubview(flowLayoutSetLabel)
         self.flowLayoutSetLabel = flowLayoutSetLabel
@@ -74,18 +74,18 @@ class FLLTest1ViewController: UIViewController {
         let scrollView = UIScrollView()
         scrollView.alwaysBounceHorizontal = true
         scrollView.alwaysBounceVertical = true
-        scrollView.tg_height.equal(.fill) //占用剩余的高度。
-        scrollView.tg_top.equal(10)
+        scrollView.tg.height.equal(.fill) //占用剩余的高度。
+        scrollView.tg.top.equal(10)
         rootLayout.addSubview(scrollView)
         
         
-        let flowLayout = TGFlowLayout(.vert,arrangedCount: 3)
+        var flowLayout = TGFlowLayout(.vert,arrangedCount: 3)
         flowLayout.backgroundColor = CFTool.color(0)
-        flowLayout.tg_width.equal(800)
-        flowLayout.tg_height.equal(800)
-        flowLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
-        flowLayout.tg_vspace = 5
-        flowLayout.tg_hspace = 5
+        flowLayout.tg.width.equal(800)
+        flowLayout.tg.height.equal(800)
+        flowLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
+        flowLayout.tg.vspace = 5
+        flowLayout.tg.hspace = 5
         scrollView.addSubview(flowLayout)
         self.flowLayout = flowLayout
         
@@ -115,7 +115,7 @@ extension FLLTest1ViewController
         button.layer.borderColor = UIColor.lightGray.cgColor
         button.layer.borderWidth = 0.5
         button.addTarget(self,action:action, for:.touchUpInside)
-        button.tg_height.equal(30)
+        button.tg.height.equal(30)
         return button
     
     }
@@ -128,16 +128,16 @@ extension FLLTest1ViewController
     @objc func handleAdjustOrientation(_ sender:AnyObject?)
     {
         //调整流式布局的方向。
-        if (self.flowLayout.tg_orientation == .vert)
+        if (self.flowLayout.tg.orientation == .vert)
         {
-          self.flowLayout.tg_orientation = .horz
+          self.flowLayout.tg.orientation = .horz
         }
         else
         {
-          self.flowLayout.tg_orientation = .vert
+          self.flowLayout.tg.orientation = .vert
         }
         
-        self.flowLayout.tg_layoutAnimationWithDuration(0.4)
+        self.flowLayout.tg.layoutAnimationWithDuration(0.4)
         self.flowlayoutInfo()
 
     }
@@ -146,8 +146,8 @@ extension FLLTest1ViewController
     {
         
         //调整流式布局的每行的数量。
-        self.flowLayout.tg_arrangedCount = (self.flowLayout.tg_arrangedCount + 1) % 6
-        self.flowLayout.tg_layoutAnimationWithDuration(0.4)
+        self.flowLayout.tg.arrangedCount = (self.flowLayout.tg.arrangedCount + 1) % 6
+        self.flowLayout.tg.layoutAnimationWithDuration(0.4)
         self.flowlayoutInfo()
 
     }
@@ -156,8 +156,8 @@ extension FLLTest1ViewController
     {
         //调整整体垂直方向的停靠
         
-        var vertGravity = self.flowLayout.tg_gravity & TGGravity.Horizontal.mask
-        let horzGravity = self.flowLayout.tg_gravity & TGGravity.Vertical.mask
+        var vertGravity = self.flowLayout.tg.gravity & TGGravity.Horizontal.mask
+        let horzGravity = self.flowLayout.tg.gravity & TGGravity.Vertical.mask
         
         switch (vertGravity) {
         case TGGravity.none:
@@ -191,8 +191,8 @@ extension FLLTest1ViewController
             break;
         }
         
-        self.flowLayout.tg_gravity = [horzGravity,vertGravity]
-        self.flowLayout.tg_layoutAnimationWithDuration(0.4)
+        self.flowLayout.tg.gravity = [horzGravity,vertGravity]
+        self.flowLayout.tg.layoutAnimationWithDuration(0.4)
         self.flowlayoutInfo()
 
         
@@ -204,8 +204,8 @@ extension FLLTest1ViewController
     {
         //调整整体水平方向的停靠。
         
-        let vertGravity = self.flowLayout.tg_gravity & TGGravity.Horizontal.mask;
-        var horzGravity = self.flowLayout.tg_gravity & TGGravity.Vertical.mask;
+        let vertGravity = self.flowLayout.tg.gravity & TGGravity.Horizontal.mask;
+        var horzGravity = self.flowLayout.tg.gravity & TGGravity.Vertical.mask;
         
         switch (horzGravity) {
         case TGGravity.none:
@@ -239,8 +239,8 @@ extension FLLTest1ViewController
             break;
         }
         
-        self.flowLayout.tg_gravity = [horzGravity,vertGravity]
-        self.flowLayout.tg_layoutAnimationWithDuration(0.4)
+        self.flowLayout.tg.gravity = [horzGravity,vertGravity]
+        self.flowLayout.tg.layoutAnimationWithDuration(0.4)
         self.flowlayoutInfo()
 
 
@@ -249,11 +249,11 @@ extension FLLTest1ViewController
     
     @objc func handleAdjustArrangeGravity(_ sender:AnyObject?)
     {
-        var vertArrangeGravity = self.flowLayout.tg_arrangedGravity & TGGravity.Horizontal.mask
-        var horzArrangeGravity = self.flowLayout.tg_arrangedGravity & TGGravity.Vertical.mask
+        var vertArrangeGravity = self.flowLayout.tg.arrangedGravity & TGGravity.Horizontal.mask
+        var horzArrangeGravity = self.flowLayout.tg.arrangedGravity & TGGravity.Vertical.mask
         
         //每行的对齐方式的调整。
-        if (self.flowLayout.tg_orientation == .vert)
+        if (self.flowLayout.tg.orientation == .vert)
         {
             
             if (vertArrangeGravity == .none || vertArrangeGravity == TGGravity.Vertical.top)
@@ -306,8 +306,8 @@ extension FLLTest1ViewController
             
         }
         
-        self.flowLayout.tg_arrangedGravity = [vertArrangeGravity, horzArrangeGravity]
-        self.flowLayout.tg_layoutAnimationWithDuration(0.4)
+        self.flowLayout.tg.arrangedGravity = [vertArrangeGravity, horzArrangeGravity]
+        self.flowLayout.tg.layoutAnimationWithDuration(0.4)
         self.flowlayoutInfo()
     }
     
@@ -315,39 +315,39 @@ extension FLLTest1ViewController
     {
         //调整子视图之间的间距
         
-        if (self.flowLayout.tg_hspace == 0)
+        if (self.flowLayout.tg.hspace == 0)
         {
-          self.flowLayout.tg_hspace = 5
+          self.flowLayout.tg.hspace = 5
         }
         else
         {
-          self.flowLayout.tg_hspace = 0
+          self.flowLayout.tg.hspace = 0
         }
         
-        if (self.flowLayout.tg_vspace == 0)
+        if (self.flowLayout.tg.vspace == 0)
         {
-            self.flowLayout.tg_vspace = 5
+            self.flowLayout.tg.vspace = 5
         }
         else
         {
-            self.flowLayout.tg_vspace = 0
+            self.flowLayout.tg.vspace = 0
         }
         
-        self.flowLayout.tg_layoutAnimationWithDuration(0.4)
+        self.flowLayout.tg.layoutAnimationWithDuration(0.4)
         self.flowlayoutInfo()
     }
     
     @objc func handleAdjustGravityPolicy(_ sender:AnyObject?) {
         
-        switch self.flowLayout.tg_lastlineGravityPolicy {
+        switch self.flowLayout.tg.lastlineGravityPolicy {
         case TGGravityPolicy.always:
-            self.flowLayout.tg_lastlineGravityPolicy = TGGravityPolicy.auto
+            self.flowLayout.tg.lastlineGravityPolicy = TGGravityPolicy.auto
             break
         case TGGravityPolicy.auto:
-            self.flowLayout.tg_lastlineGravityPolicy = TGGravityPolicy.no
+            self.flowLayout.tg.lastlineGravityPolicy = TGGravityPolicy.no
             break
         case TGGravityPolicy.no:
-            self.flowLayout.tg_lastlineGravityPolicy = TGGravityPolicy.always
+            self.flowLayout.tg.lastlineGravityPolicy = TGGravityPolicy.always
             break
         }
         
@@ -355,7 +355,7 @@ extension FLLTest1ViewController
             v.sizeToFit()
         })
         
-        self.flowLayout.tg_layoutAnimationWithDuration(0.4)
+        self.flowLayout.tg.layoutAnimationWithDuration(0.4)
         self.flowlayoutInfo()
     }
 
@@ -367,7 +367,7 @@ extension FLLTest1ViewController
     func flowlayoutInfo()
     {
         var orientationStr = ""
-        if (self.flowLayout.tg_orientation == .vert)
+        if (self.flowLayout.tg.orientation == .vert)
         {
             orientationStr = "TGOrientation.vert"
         }
@@ -377,15 +377,15 @@ extension FLLTest1ViewController
         }
     
     
-        let arrangeCountStr = "\(self.flowLayout.tg_arrangedCount)"
+        let arrangeCountStr = "\(self.flowLayout.tg.arrangedCount)"
     
-        let gravityStr = self.gravityInfo(self.flowLayout.tg_gravity)
+        let gravityStr = self.gravityInfo(self.flowLayout.tg.gravity)
     
-        let arrangedGravityStr = self.gravityInfo(self.flowLayout.tg_arrangedGravity)
+        let arrangedGravityStr = self.gravityInfo(self.flowLayout.tg.arrangedGravity)
     
-        let subviewSpaceStr = "vert:\(self.flowLayout.tg_vspace), horz:\(self.flowLayout.tg_hspace)"
+        let subviewSpaceStr = "vert:\(self.flowLayout.tg.vspace), horz:\(self.flowLayout.tg.hspace)"
         
-        let gravityPolicyStr = self.gravityPolicyInfo(self.flowLayout.tg_lastlineGravityPolicy)
+        let gravityPolicyStr = self.gravityPolicyInfo(self.flowLayout.tg.lastlineGravityPolicy)
 
     
         self.flowLayoutSetLabel.text = "flowLayout:\norientation=" + orientationStr + ",arrangedCount=" + arrangeCountStr + "\ngravity="+gravityStr + "\narrangedGravity=" + arrangedGravityStr + "\nsubviewMargin=(" + subviewSpaceStr + ")\n " + gravityPolicyStr
@@ -393,7 +393,7 @@ extension FLLTest1ViewController
     
     func gravityPolicyInfo(_ gravityPolicy:TGGravityPolicy) ->String {
         
-        switch self.flowLayout.tg_lastlineGravityPolicy {
+        switch self.flowLayout.tg.lastlineGravityPolicy {
         case TGGravityPolicy.always:
             return "policy:always"
         case TGGravityPolicy.auto:

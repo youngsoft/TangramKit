@@ -80,6 +80,93 @@ import UIKit
  流式布局中排的概念是一个通用的称呼，对于垂直方向的流式布局来说一排就是一行，垂直流式布局每排依次从上到下排列，每排内的子视图则是由左往右依次排列；对于水平方向的流式布局来说一排就是一列，水平流式布局每排依次从左到右排列，每排内的子视图则是由上往下依次排列
  
  */
+
+public extension TypeWrapperProtocol where WrappedType: TGFlowLayout {
+    var orientation: TGOrientation {
+        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_orientation }
+        set {
+            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass
+            if (lsc.tg_orientation != newValue) {
+                lsc.tg_orientation = newValue
+                self.wrappedValue.setNeedsLayout()
+            }
+        }
+    }
+
+    var arrangedCount: Int {
+        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_arrangedCount }
+        set {
+            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass
+            if (lsc.tg_arrangedCount != newValue) {
+                lsc.tg_arrangedCount = newValue
+                self.wrappedValue.setNeedsLayout()
+            }
+        }
+    }
+
+    var pagedCount: Int {
+        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_pagedCount }
+        set {
+            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass
+            if (lsc.tg_pagedCount != newValue) {
+                lsc.tg_pagedCount = newValue
+                self.wrappedValue.setNeedsLayout()
+            }
+        }
+    }
+
+    var autoArrange: Bool {
+        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_autoArrange }
+        set {
+            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass
+            if (lsc.tg_autoArrange != newValue) {
+                lsc.tg_autoArrange = newValue
+                self.wrappedValue.setNeedsLayout()
+            }
+        }
+    }
+
+    var arrangedGravity: TGGravity {
+        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_arrangedGravity }
+        set {
+            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass
+            if (lsc.tg_arrangedGravity != newValue) {
+                lsc.tg_arrangedGravity = newValue
+                self.wrappedValue.setNeedsLayout()
+            }
+        }
+    }
+
+    var lastlineGravityPolicy:TGGravityPolicy {
+        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_lastlineGravityPolicy }
+        set {
+            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass
+            if (lsc.tg_lastlineGravityPolicy != newValue) {
+                lsc.tg_lastlineGravityPolicy = newValue
+                self.wrappedValue.setNeedsLayout()
+            }
+        }
+    }
+
+     func setSubviews(size:CGFloat, minSpace:CGFloat, maxSpace:CGFloat = CGFloat.greatestFiniteMagnitude, centered:Bool = false, inSizeClass type:TGSizeClassType = TGSizeClassType.default) {
+        let lsc = self.wrappedValue.tg_fetchSizeClass(with: type) as! TGFlowLayoutViewSizeClassImpl
+        if size == 0.0 {
+            lsc.tgFlexSpace = nil
+        } else {
+            if lsc.tgFlexSpace == nil {
+                lsc.tgFlexSpace = TGSequentLayoutFlexSpace()
+            }
+            lsc.tgFlexSpace.subviewSize = size
+            lsc.tgFlexSpace.minSpace = minSpace
+            lsc.tgFlexSpace.maxSpace = maxSpace
+            lsc.tgFlexSpace.centered = centered
+        }
+        self.wrappedValue.setNeedsLayout()
+    }
+
+
+}
+
 open class TGFlowLayout:TGBaseLayout,TGFlowLayoutViewSizeClass {
     
     /**

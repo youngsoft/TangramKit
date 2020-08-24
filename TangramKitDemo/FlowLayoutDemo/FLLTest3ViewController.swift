@@ -33,17 +33,17 @@ class FLLTest3ViewController: UIViewController {
          */
 
         
-        let rootLayout = TGLinearLayout(.vert)
+        var rootLayout = TGLinearLayout(.vert)
         rootLayout.backgroundColor = .white
-        rootLayout.tg_gravity = TGGravity.Horizontal.fill
+        rootLayout.tg.gravity = TGGravity.Horizontal.fill
         self.view = rootLayout
         
         let tipLabel = UILabel()
         tipLabel.font = CFTool.font(13)
         tipLabel.text = NSLocalizedString("  You can drag the following tag to adjust location in layout, MyLayout can use subview's useFrame,noLayout property and layout view's autoresizesSubviews propery to complete some position adjustment and the overall animation features: \n useFrame set to YES indicates subview is not controlled by the layout view but use its own frame to set the location and size instead.\n \n autoresizesSubviews set to NO indicate layout view will not do any layout operation, and will remain in the position and size of all subviews.\n \n noLayout set to YES indicate subview in the layout view just only take up the position and size but not real adjust the position and size when layouting.", comment: "")
         tipLabel.textColor = CFTool.color(4)
-        tipLabel.tg_height.equal(.wrap)  //高度动态确定。
-        tipLabel.tg_top.equal(self.topLayoutGuide)
+        tipLabel.tg.height.equal(.wrap)  //高度动态确定。
+        tipLabel.tg.top.equal(self.topLayoutGuide)
         rootLayout.addSubview(tipLabel)
         
         let tip2Label = UILabel()
@@ -52,16 +52,16 @@ class FLLTest3ViewController: UIViewController {
         tip2Label.textColor = CFTool.color(3)
         tip2Label.textAlignment = .center
         tip2Label.sizeToFit()
-        tip2Label.tg_top.equal(3)
+        tip2Label.tg.top.equal(3)
         rootLayout.addSubview(tip2Label)
         
-        let flowLayout = TGFlowLayout.init(.vert, arrangedCount: 4)
+        var flowLayout = TGFlowLayout.init(.vert, arrangedCount: 4)
         flowLayout.backgroundColor = CFTool.color(0)
-        flowLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
-        flowLayout.tg_space = 10  //流式布局里面的子视图的水平和垂直间距设置为10
-        flowLayout.tg_gravity = TGGravity.Horizontal.fill  //流式布局里面的子视图的宽度将平均分配。
-        flowLayout.tg_height.equal(.fill) //占用剩余的高度。
-        flowLayout.tg_top.equal(10)
+        flowLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
+        flowLayout.tg.space = 10  //流式布局里面的子视图的水平和垂直间距设置为10
+        flowLayout.tg.gravity = TGGravity.Horizontal.fill  //流式布局里面的子视图的宽度将平均分配。
+        flowLayout.tg.height.equal(.fill) //占用剩余的高度。
+        flowLayout.tg.top.equal(10)
         rootLayout.addSubview(flowLayout)
         self.flowLayout = flowLayout
     }
@@ -88,7 +88,7 @@ class FLLTest3ViewController: UIViewController {
         tagButton.titleLabel?.font = CFTool.font(14)
         tagButton.layer.cornerRadius = 20
         tagButton.backgroundColor = UIColor(red: CGFloat(arc4random()%256)/255.0, green: CGFloat(arc4random()%256)/255.0, blue: CGFloat(arc4random()%256)/255.0, alpha: 1.0)
-        tagButton.tg_height.equal(44)
+        tagButton.tg.height.equal(44)
         tagButton.addTarget(self, action: #selector(handleTouchDrag(sender:event:)), for: .touchDragInside) //注册拖动事件。
         tagButton.addTarget(self, action: #selector(handleTouchDrag(sender:event:)), for: .touchDragOutside) //注册拖动事件。
         tagButton.addTarget(self, action: #selector(handleTouchDown(sender:event:)), for: .touchDown) //注册按下事件
@@ -108,7 +108,7 @@ class FLLTest3ViewController: UIViewController {
         addButton.layer.cornerRadius = 20
         addButton.layer.borderWidth = 0.5
         addButton.layer.borderColor = UIColor.lightGray.cgColor
-        addButton.tg_height.equal(44)
+        addButton.tg.height.equal(44)
         addButton.addTarget(self, action: #selector(handleAddTagButton(sender:)), for: .touchUpInside)
         return addButton
     }
@@ -123,6 +123,7 @@ extension FLLTest3ViewController {
     }
     
     @objc func handleTouchDrag(sender: UIButton, event: UIEvent) {
+        var sender = sender
         self.hasDrag = true
         
         //取出拖动时当前的位置点。
@@ -133,7 +134,7 @@ extension FLLTest3ViewController {
         //判断当前手指在具体视图的位置。这里要排除self.addButton的位置(因为这个按钮将固定不调整)。
         for sbv: UIView in self.flowLayout.subviews
         {
-            if sbv != sender && sender.tg_useFrame && sbv != self.addButton
+            if sbv != sender && sender.tg.useFrame && sbv != self.addButton
             {
                 let rect1 = sbv.frame
                 if rect1.contains(pt) {
@@ -147,7 +148,7 @@ extension FLLTest3ViewController {
         //如果拖动的控件sender和手指下当前其他的兄弟控件有重合时则意味着需要将当前控件插入到手指下的sbv2所在的位置，并且调整sbv2的位置。
         if sbv2 != nil
         {
-            self.flowLayout.tg_layoutAnimationWithDuration(0.2)
+            self.flowLayout.tg.layoutAnimationWithDuration(0.2)
             
             //得到要移动的视图的位置索引。
             self.currentIndex = self.flowLayout.subviews.firstIndex(of: sbv2)!
@@ -165,8 +166,8 @@ extension FLLTest3ViewController {
             
             //经过上面的sbv2的位置调整完成后，需要重新激发布局视图的布局，因此这里要设置autoresizesSubviews为YES。
             self.flowLayout.autoresizesSubviews = true
-            sender.tg_useFrame = false
-            sender.tg_noLayout = true //这里设置为true表示布局时不会改变sender的真实位置而只是在布局视图中占用一个位置和尺寸，正是因为只是占用位置，因此会调整其他视图的位置。
+            sender.tg.useFrame = false
+            sender.tg.noLayout = true //这里设置为true表示布局时不会改变sender的真实位置而只是在布局视图中占用一个位置和尺寸，正是因为只是占用位置，因此会调整其他视图的位置。
             
             self.flowLayout.layoutIfNeeded()
         }
@@ -180,8 +181,8 @@ extension FLLTest3ViewController {
             self.flowLayout.bringSubview(toFront: sender)
         #endif
         self.flowLayout.autoresizesSubviews = false //在拖动时不要让布局视图激发布局
-        sender.tg_useFrame = true //因为拖动时，拖动的控件需要自己确定位置，不能被布局约束，因此必须要将useFrame设置为YES下面的center设置才会有效。
-        sender.tg_noLayout = false //因为useFrame设置为了YES所有这里可以直接调整center，从而实现了位置的自定义设置。
+        sender.tg.useFrame = true //因为拖动时，拖动的控件需要自己确定位置，不能被布局约束，因此必须要将useFrame设置为YES下面的center设置才会有效。
+        sender.tg.noLayout = false //因为useFrame设置为了YES所有这里可以直接调整center，从而实现了位置的自定义设置。
         sender.center = pt  //因为tg_useFrame设置为了YES所有这里可以直接调整center，从而实现了位置的自定义设置。
     }
     
@@ -194,6 +195,8 @@ extension FLLTest3ViewController {
     }
     
     @objc func handleTouchUp(sender: UIButton, event: UIEvent) {
+        var sender = sender
+
         if !self.hasDrag {
             return
         }
@@ -206,13 +209,13 @@ extension FLLTest3ViewController {
             self.flowLayout.exchangeSubview(at: index, withSubviewAt: index-1)
         }
         
-        sender.tg_useFrame = false  //让拖动的子视图重新参与布局，将tg_useFrame设置为false
+        sender.tg.useFrame = false  //让拖动的子视图重新参与布局，将tg_useFrame设置为false
         self.flowLayout.autoresizesSubviews = true  //让布局视图可以重新激发布局，这里还原为true。
 
     }
     
     @objc func handleTouchDownRepeat(sender: UIButton, event: UIEvent) {
         sender.removeFromSuperview()
-        self.flowLayout.tg_layoutAnimationWithDuration(0.2)
+        self.flowLayout.tg.layoutAnimationWithDuration(0.2)
     }
 }

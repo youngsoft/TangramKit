@@ -27,28 +27,28 @@ class FLLTest2ViewController: UIViewController {
         self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
 
         
-        let rootLayout = TGFlowLayout(.vert,arrangedCount:2)
+        var rootLayout = TGFlowLayout(.vert,arrangedCount:2)
         rootLayout.backgroundColor = .white
-        rootLayout.tg_arrangedGravity = TGGravity.Vertical.center
-        rootLayout.tg_vspace = 4
-        rootLayout.tg_hspace = 4
+        rootLayout.tg.arrangedGravity = TGGravity.Vertical.center
+        rootLayout.tg.vspace = 4
+        rootLayout.tg.hspace = 4
         self.view = rootLayout
         
         //第一行
         let tempTagTextField = UITextField()
         tempTagTextField.placeholder = "input tag here"
         tempTagTextField.borderStyle = .roundedRect
-        tempTagTextField.tg_leading.equal(2)
-        tempTagTextField.tg_top.equal(2)
-        tempTagTextField.tg_height.equal(30)
-        tempTagTextField.tg_width.equal(.fill)  //宽度占用剩余父视图宽度。
+        tempTagTextField.tg.leading.equal(2)
+        tempTagTextField.tg.top.equal(2)
+        tempTagTextField.tg.height.equal(30)
+        tempTagTextField.tg.width.equal(.fill)  //宽度占用剩余父视图宽度。
         rootLayout.addSubview(tempTagTextField)
         self.tagTextField = tempTagTextField
         
         let addTagButton = UIButton(type: .system)
         addTagButton.setTitle("Add Tag", for: .normal)
         addTagButton.addTarget(self, action: #selector(handleAddTag), for: .touchUpInside)
-        addTagButton.tg_trailing.equal(2)
+        addTagButton.tg.trailing.equal(2)
         addTagButton.sizeToFit()             //因为每行2个子视图，这个子视图的宽度是固定的，而上面的兄弟视图占用了剩余的宽度。这样这两个子视图将均分父视图。
         rootLayout.addSubview(addTagButton)
         
@@ -56,9 +56,9 @@ class FLLTest2ViewController: UIViewController {
         let stretchSpacingLabel = UILabel()
         stretchSpacingLabel.text = "Stretch Spacing:"
         stretchSpacingLabel.font = CFTool.font(15)
-        stretchSpacingLabel.tg_leading.equal(2)
-        stretchSpacingLabel.tg_width.equal(140)
-        stretchSpacingLabel.tg_height.equal(.wrap)
+        stretchSpacingLabel.tg.leading.equal(2)
+        stretchSpacingLabel.tg.width.equal(140)
+        stretchSpacingLabel.tg.height.equal(.wrap)
         rootLayout.addSubview(stretchSpacingLabel)
         
         let stretchSpacingSwitch = UISwitch()
@@ -69,9 +69,9 @@ class FLLTest2ViewController: UIViewController {
         let stretchSizeLabel = UILabel()
         stretchSizeLabel.text = "Stretch Size:"
         stretchSizeLabel.font = CFTool.font(15)
-        stretchSizeLabel.tg_leading.equal(2)
-        stretchSizeLabel.tg_width.equal(140)
-        stretchSizeLabel.tg_height.equal(.wrap)
+        stretchSizeLabel.tg.leading.equal(2)
+        stretchSizeLabel.tg.width.equal(140)
+        stretchSizeLabel.tg.height.equal(.wrap)
         rootLayout.addSubview(stretchSizeLabel)
         
         let stretchSizeSwitch = UISwitch()
@@ -82,9 +82,9 @@ class FLLTest2ViewController: UIViewController {
         let autoArrangeLabel = UILabel()
         autoArrangeLabel.text = "Auto Arrange:"
         autoArrangeLabel.font = CFTool.font(15)
-        autoArrangeLabel.tg_leading.equal(2)
-        autoArrangeLabel.tg_width.equal(140)
-        autoArrangeLabel.tg_height.equal(.wrap)
+        autoArrangeLabel.tg.leading.equal(2)
+        autoArrangeLabel.tg.width.equal(140)
+        autoArrangeLabel.tg.height.equal(.wrap)
         rootLayout.addSubview(autoArrangeLabel)
         
         let autoArrangeSwitch = UISwitch()
@@ -92,12 +92,12 @@ class FLLTest2ViewController: UIViewController {
         rootLayout.addSubview(autoArrangeSwitch)
         
         //最后一行。
-        let flowLayout = TGFlowLayout()
+        var flowLayout = TGFlowLayout()
         flowLayout.backgroundColor = CFTool.color(0)
-        flowLayout.tg_space = 10
-        flowLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
-        flowLayout.tg_width.equal(.fill)
-        flowLayout.tg_height.equal(.fill)
+        flowLayout.tg.space = 10
+        flowLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
+        flowLayout.tg.width.equal(.fill)
+        flowLayout.tg.height.equal(.fill)
         rootLayout.addSubview(flowLayout)
         self.flowLayout = flowLayout
         
@@ -134,8 +134,8 @@ extension FLLTest2ViewController
         
         
         //这里可以看到尺寸宽度等于内容宽度并且再增加10，且最小是40，意思是按钮的宽度是等于自身内容的宽度再加10，但最小的宽度是40
-        tagButton.tg_width.equal(.wrap, increment:10).min(40)
-        tagButton.tg_height.equal(.wrap, increment:10) //高度等于自身内容的高度加10
+        tagButton.tg.width.equal(.wrap, increment:10).min(40)
+        tagButton.tg.height.equal(.wrap, increment:10) //高度等于自身内容的高度加10
         tagButton.addTarget(self,action:#selector(handleDelTag), for:.touchUpInside )
         self.flowLayout.addSubview(tagButton)
         
@@ -150,7 +150,7 @@ extension FLLTest2ViewController
             
             self.tagTextField.text = ""
             
-            self.flowLayout.tg_layoutAnimationWithDuration(0.2)
+            self.flowLayout.tg.layoutAnimationWithDuration(0.2)
         }
     }
     
@@ -160,14 +160,14 @@ extension FLLTest2ViewController
         //间距拉伸
         if sender.isOn
         {
-            self.flowLayout.tg_gravity = TGGravity.Horizontal.between //流式布局的tg_gravity如果设置为TGGravity.Horizontal.between表示子视图的间距会被拉伸，以便填充满整个布局。
+            self.flowLayout.tg.gravity = TGGravity.Horizontal.between //流式布局的tg_gravity如果设置为TGGravity.Horizontal.between表示子视图的间距会被拉伸，以便填充满整个布局。
         }
         else
         {
-            self.flowLayout.tg_gravity = .none
+            self.flowLayout.tg.gravity = .none
         }
         
-        self.flowLayout.tg_layoutAnimationWithDuration(0.2)
+        self.flowLayout.tg.layoutAnimationWithDuration(0.2)
     }
     
     @objc func handleStretchContent(sender:UISwitch!)
@@ -176,14 +176,14 @@ extension FLLTest2ViewController
         //内容拉伸
         if sender.isOn
         {
-            self.flowLayout.tg_gravity = TGGravity.Horizontal.fill  //流式布局的gravity如果设置为TGGravity.Horizontal.fill表示子视图的间距会被拉伸，以便填充满整个布局。
+            self.flowLayout.tg.gravity = TGGravity.Horizontal.fill  //流式布局的gravity如果设置为TGGravity.Horizontal.fill表示子视图的间距会被拉伸，以便填充满整个布局。
         }
         else
         {
-            self.flowLayout.tg_gravity = TGGravity.none
+            self.flowLayout.tg.gravity = TGGravity.none
         }
         
-        self.flowLayout.tg_layoutAnimationWithDuration(0.2)
+        self.flowLayout.tg.layoutAnimationWithDuration(0.2)
         
     }
     
@@ -193,21 +193,21 @@ extension FLLTest2ViewController
         //自动调整位置。
         if (sender.isOn)
         {
-            self.flowLayout.tg_autoArrange = true  //tg_autoArrange属性会根据子视图的内容自动调整，以便以最合适的布局来填充布局。
+            self.flowLayout.tg.autoArrange = true  //tg_autoArrange属性会根据子视图的内容自动调整，以便以最合适的布局来填充布局。
         }
         else
         {
-            self.flowLayout.tg_autoArrange = false
+            self.flowLayout.tg.autoArrange = false
         }
         
-        self.flowLayout.tg_layoutAnimationWithDuration(0.2)
+        self.flowLayout.tg.layoutAnimationWithDuration(0.2)
         
     }
     
     @objc func handleDelTag(sender:UIButton!)
     {
         sender.removeFromSuperview()
-        self.flowLayout.tg_layoutAnimationWithDuration(0.2)
+        self.flowLayout.tg.layoutAnimationWithDuration(0.2)
     }
     
     
