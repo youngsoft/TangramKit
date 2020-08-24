@@ -40,11 +40,11 @@ class FOLTest4ViewController: UIViewController {
         self.view.addSubview(scrollView)
         
         
-        let rootLayout = TGLinearLayout(.vert)
+        var rootLayout = TGLinearLayout(.vert)
         rootLayout.backgroundColor = .white
-        rootLayout.tg_width.equal(.fill)
-        rootLayout.tg_height.equal(.wrap)
-        rootLayout.tg_gravity = TGGravity.Horizontal.fill
+        rootLayout.tg.width.equal(.fill)
+        rootLayout.tg.height.equal(.wrap)
+        rootLayout.tg.gravity = TGGravity.Horizontal.fill
         scrollView.addSubview(rootLayout)
         
         //添加操作提示布局
@@ -52,12 +52,12 @@ class FOLTest4ViewController: UIViewController {
         
         
         //添加数据内容布局
-        let contentLayout = TGLinearLayout(.vert)
-        contentLayout.tg_height.equal(.wrap)
+        var contentLayout = TGLinearLayout(.vert)
+        contentLayout.tg.height.equal(.wrap)
         contentLayout.backgroundColor = CFTool.color(0)
-        contentLayout.tg_gravity = TGGravity.Horizontal.fill
-        contentLayout.tg_vspace = 10
-        contentLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 0, bottom: 10, right: 0);
+        contentLayout.tg.gravity = TGGravity.Horizontal.fill
+        contentLayout.tg.vspace = 10
+        contentLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 0, bottom: 10, right: 0);
         rootLayout.addSubview(contentLayout)
         self.contentLayout = contentLayout
         
@@ -83,12 +83,12 @@ extension FOLTest4ViewController
         var  partIndex = 0
         for dict in self.datas
         {
-            let floatLayout = TGFloatLayout(.vert)
+            var floatLayout = TGFloatLayout(.vert)
             floatLayout.backgroundColor = .white
-            floatLayout.tg_padding = UIEdgeInsets.init(top: 20, left: 10, bottom: 20, right: 10);
-            floatLayout.tg_height.equal(.wrap)
-            floatLayout.tg_hspace = 30 //设置浮动布局里面子视图之间的水平间距。
-            floatLayout.tg_vspace = 10 //设置浮动布局里面子视图之间的垂直间距。
+            floatLayout.tg.padding = UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10);
+            floatLayout.tg.height.equal(.wrap)
+            floatLayout.tg.hspace = 30 //设置浮动布局里面子视图之间的水平间距。
+            floatLayout.tg.vspace = 10 //设置浮动布局里面子视图之间的垂直间距。
             contentLayout.addSubview(floatLayout)
             
             //添加标题文本。
@@ -96,8 +96,8 @@ extension FOLTest4ViewController
             titleLabel.text = dict["title"] as? String
             titleLabel.textColor = CFTool.color(4)
             titleLabel.font = CFTool.font(16)
-            titleLabel.tg_width.equal(100%)  //标题部分占据全部的宽度，独占一行。所以
-            titleLabel.tg_bottom.equal(5) //设置底部边距，这样下面的内容都和这个视图距离5个点。
+            titleLabel.tg.width.equal(100%)  //标题部分占据全部的宽度，独占一行。所以
+            titleLabel.tg.bottom.equal(5) //设置底部边距，这样下面的内容都和这个视图距离5个点。
             titleLabel.sizeToFit()
             floatLayout.addSubview(titleLabel)
             
@@ -110,18 +110,18 @@ extension FOLTest4ViewController
                 let sectionTitle = sectionDict["sectionTitle"] as! String
                 if !sectionTitle.isEmpty
                 {
-                    let sectionView = self.createSectionView(title:sectionTitle,image:sectionDict["sectionImage"] as! String)
+                    var sectionView = self.createSectionView(title:sectionTitle,image:sectionDict["sectionImage"] as! String)
                     //宽度是布局视图宽度的1/4，因为视图之间是有间距的，所以这里每个视图的宽度都要再减去3/4的间距值。
-                    sectionView.tg_width.equal(floatLayout.tg_width, increment:-3.0/4.0 * floatLayout.tg_hspace, multiple:1.0/4.0)
+                    sectionView.tg.width.equal(floatLayout.tg.width, increment:-3.0/4.0 * floatLayout.tg.hspace, multiple:1.0/4.0)
                     //高度是标签的2倍，但因为中间还包括了一个垂直间距的高度，所以这里要加上垂直间距的值。
-                    sectionView.tg_height.equal(FOLTest4ViewController.sTagHeight * 2 + floatLayout.tg_vspace)
-                    sectionView.tg_clearFloat = true  //因为每个section总是新的一行开始。所以这里要把clearFloat设置为YES。
+                    sectionView.tg.height.equal(FOLTest4ViewController.sTagHeight * 2 + floatLayout.tg.vspace)
+                    sectionView.tg.clearFloat = true  //因为每个section总是新的一行开始。所以这里要把clearFloat设置为YES。
                     floatLayout.addSubview(sectionView)
                     sectionView.tag = partIndex * 1000 + sectionIndex;
                     
                     if (lastTagView != nil)
                     {
-                        lastTagView.tg_bottom.equal(20) //最后一个tag视图的底部间距是20,这样下一个section的位置就会有一定的偏移。。
+                        lastTagView.tg.bottom.equal(20) //最后一个tag视图的底部间距是20,这样下一个section的位置就会有一定的偏移。。
                     }
                     
                     
@@ -136,9 +136,9 @@ extension FOLTest4ViewController
                 {
                     let tagView = self.createTagView(tagstr)
                     //宽度是布局视图宽度的1/4，因为视图之间是有间距的，所以这里每个视图的宽度都要再减去3/4的间距值。
-                    tagView.tg_width.equal(floatLayout.tg_width, increment:-3.0 / 4.0 * floatLayout.tg_hspace, multiple:1.0/4.0)
+                    tagView.tg.width.equal(floatLayout.tg.width, increment:-3.0 / 4.0 * floatLayout.tg.hspace, multiple:1.0/4.0)
                     //高度是固定的40
-                    tagView.tg_height.equal(FOLTest4ViewController.sTagHeight)
+                    tagView.tg.height.equal(FOLTest4ViewController.sTagHeight)
                     floatLayout.addSubview(tagView)
                     lastTagView = tagView;
                     
@@ -165,27 +165,27 @@ extension FOLTest4ViewController
         var  partIndex = 0
         for dict in self.datas
         {
-            let floatLayout = TGFloatLayout(.vert)
+            var floatLayout = TGFloatLayout(.vert)
             
             floatLayout.backgroundColor = UIColor.white
-            floatLayout.tg_padding = UIEdgeInsets.init(top: 20, left: 10, bottom: 20, right: 10);
-            floatLayout.tg_height.equal(.wrap)
-            floatLayout.tg_vspace = 10 //设置浮动布局里面子视图之间的垂直间距。
-            floatLayout.tg_setSubviews(size:FOLTest4ViewController.sTagWidth, minSpace: 8)
+            floatLayout.tg.padding = UIEdgeInsets.init(top: 20, left: 10, bottom: 20, right: 10);
+            floatLayout.tg.height.equal(.wrap)
+            floatLayout.tg.vspace = 10 //设置浮动布局里面子视图之间的垂直间距。
+            floatLayout.tg.setSubviews(size:FOLTest4ViewController.sTagWidth, minSpace: 8)
             contentLayout.addSubview(floatLayout)
             
             //在学习DEMO时您可以尝试着把下面两句代码解除注释！然后看看横竖屏的区别，这里面用到了SizeClass。表示横屏时的最小间距是不一样的。
             //当然如果您要改变子视图的尺寸的话，则要将下面的子视图也要实现对SIZECLASS的支持！！！
-//            _ = floatLayout.tg_fetchSizeClass(with:.landscape, from: .default)
-//            floatLayout.tg_setSubviews(size: FOLTest4ViewController.sTagWidth, minSpace: 40, inSizeClass:.landscape)
+//            _ = floatLayout.tg.fetchSizeClass(with:.landscape, from: .default)
+//            floatLayout.tg.setSubviews(size: FOLTest4ViewController.sTagWidth, minSpace: 40, inSizeClass:.landscape)
             
             //添加标题文本。
             let titleLabel = UILabel()
             titleLabel.text = dict["title"] as? String
             titleLabel.textColor = CFTool.color(4)
             titleLabel.font = CFTool.font(16)
-            titleLabel.tg_width.equal(100%)  //标题部分占据全部的宽度，独占一行。所以
-            titleLabel.tg_bottom.equal(5) //设置底部边距，这样下面的内容都和这个视图距离5个点。
+            titleLabel.tg.width.equal(100%)  //标题部分占据全部的宽度，独占一行。所以
+            titleLabel.tg.bottom.equal(5) //设置底部边距，这样下面的内容都和这个视图距离5个点。
             titleLabel.sizeToFit()
             floatLayout.addSubview(titleLabel)
             
@@ -198,16 +198,16 @@ extension FOLTest4ViewController
                 let sectionTitle = sectionDict["sectionTitle"] as! String
                 if !sectionTitle.isEmpty
                 {
-                    let sectionView = self.createSectionView(title:sectionTitle,image:sectionDict["sectionImage"] as! String)
-                    sectionView.tg_width.equal(FOLTest4ViewController.sTagWidth) //固定宽度
-                    sectionView.tg_height.equal(FOLTest4ViewController.sTagHeight * 2 + floatLayout.tg_vspace)
-                    sectionView.tg_clearFloat = true  //因为每个section总是新的一行开始。所以这里要把clearFloat设置为YES。
+                    var sectionView = self.createSectionView(title:sectionTitle,image:sectionDict["sectionImage"] as! String)
+                    sectionView.tg.width.equal(FOLTest4ViewController.sTagWidth) //固定宽度
+                    sectionView.tg.height.equal(FOLTest4ViewController.sTagHeight * 2 + floatLayout.tg.vspace)
+                    sectionView.tg.clearFloat = true  //因为每个section总是新的一行开始。所以这里要把clearFloat设置为YES。
                     floatLayout.addSubview(sectionView)
                     sectionView.tag = partIndex * 1000 + sectionIndex;
                     
                     if (lastTagView != nil)
                     {
-                        lastTagView.tg_bottom.equal(20) //最后一个tag视图的底部间距是20,这样下一个section的位置就会有一定的偏移。。
+                        lastTagView.tg.bottom.equal(20) //最后一个tag视图的底部间距是20,这样下一个section的位置就会有一定的偏移。。
                     }
                     
                     
@@ -221,9 +221,9 @@ extension FOLTest4ViewController
                 for tagstr in tagstrs
                 {
                     let tagView = self.createTagView(tagstr)
-                    tagView.tg_width.equal(FOLTest4ViewController.sTagWidth) //固定宽度
+                    tagView.tg.width.equal(FOLTest4ViewController.sTagWidth) //固定宽度
                     //高度是固定的40
-                    tagView.tg_height.equal(FOLTest4ViewController.sTagHeight)
+                    tagView.tg.height.equal(FOLTest4ViewController.sTagHeight)
                     floatLayout.addSubview(tagView)
                     lastTagView = tagView;
                     
@@ -244,12 +244,12 @@ extension FOLTest4ViewController
     //创建操作动作布局。
     func createActionLayout() -> UIView
     {
-        let actionLayout = TGFloatLayout(.vert)
-        actionLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5);
-        actionLayout.tg_hspace = 5;
+        var actionLayout = TGFloatLayout(.vert)
+        actionLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5);
+        actionLayout.tg.hspace = 5;
         
-        actionLayout.tg_height.equal(.wrap)
-        actionLayout.tg_bottomBorderline = TGBorderline(color: UIColor.black)
+        actionLayout.tg.height.equal(.wrap)
+        actionLayout.tg.bottomBorderline = TGBorderline(color: UIColor.black)
         
         let actions = [NSLocalizedString("flexed width, fixed spacing", comment:""),
                        NSLocalizedString("fixed width, flexed spacing", comment:"")]
@@ -264,8 +264,8 @@ extension FOLTest4ViewController
             button.layer.cornerRadius = 5;
             button.layer.borderColor = UIColor.lightGray.cgColor
             button.layer.borderWidth = 0.5;
-            button.tg_height.equal(44)
-            button.tg_width.equal(actionLayout.tg_width, increment:-2.5, multiple:1.0/CGFloat(actions.count))
+            button.tg.height.equal(44)
+            button.tg.width.equal(actionLayout.tg.width, increment:-2.5, multiple:1.0/CGFloat(actions.count))
             button.tag = i + 100;
             button.addTarget(self,action:#selector(handleStyleChange),for:.touchUpInside)
             actionLayout.addSubview(button)
@@ -278,12 +278,12 @@ extension FOLTest4ViewController
     func createSectionView(title:String,image:String) -> UIView
     {
         
-        let sectionLayout = TGLinearLayout(.vert)
+        var sectionLayout = TGLinearLayout(.vert)
         sectionLayout.layer.cornerRadius = 5;
         sectionLayout.layer.borderColor = UIColor.lightGray.cgColor
         sectionLayout.layer.borderWidth = 0.5
-        sectionLayout.tg_gravity = .center
-        sectionLayout.tg_setTarget(self,action:#selector(handleSectionViewTap), for:.touchUpInside)
+        sectionLayout.tg.gravity = .center
+        sectionLayout.tg.setTarget(self,action:#selector(handleSectionViewTap), for:.touchUpInside)
         
         let sectionImageView = UIImageView(image: UIImage(named:image))
         sectionLayout.addSubview(sectionImageView)
@@ -293,8 +293,8 @@ extension FOLTest4ViewController
         sectionLabel.textColor = UIColor.lightGray
         sectionLabel.adjustsFontSizeToFitWidth = true
         sectionLabel.textAlignment = .center
-        sectionLabel.tg_leading.equal(0)
-        sectionLabel.tg_trailing.equal(0)
+        sectionLabel.tg.leading.equal(0)
+        sectionLabel.tg.trailing.equal(0)
         sectionLabel.sizeToFit()
         sectionLayout.addSubview(sectionLabel)
         

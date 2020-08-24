@@ -34,44 +34,44 @@ class FOLTest1ViewController: UIViewController {
         rootLayout.backgroundColor = .white
         self.view = rootLayout
         
-        let adjOriButton = UIButton(type:.system)
+        var adjOriButton = UIButton(type:.system)
         adjOriButton.setTitle("Orien", for: .normal)
         adjOriButton.sizeToFit()
         adjOriButton.addTarget(self, action: #selector(handleChangeOrientation), for: .touchUpInside)
-        adjOriButton.tg_reverseFloat = true //向右浮动。
-        adjOriButton.tg_trailing.equal(10)
-        adjOriButton.tg_leading.equal(10)
+        adjOriButton.tg.reverseFloat = true //向右浮动。
+        adjOriButton.tg.trailing.equal(10)
+        adjOriButton.tg.leading.equal(10)
         rootLayout.addSubview(adjOriButton)
         
-        let addViewButton = UIButton(type:.system)
+        var addViewButton = UIButton(type:.system)
         addViewButton.setTitle("Add View", for: .normal)
         addViewButton.sizeToFit()
         addViewButton.addTarget(self, action: #selector(handleAddSubview), for: .touchUpInside)
-        addViewButton.tg_reverseFloat = true  //向右浮动
-        addViewButton.tg_trailing.equal(10)
-        addViewButton.tg_leading.equal(10)
+        addViewButton.tg.reverseFloat = true  //向右浮动
+        addViewButton.tg.trailing.equal(10)
+        addViewButton.tg.leading.equal(10)
         rootLayout.addSubview(addViewButton)
 
         let tempwhTextField = UITextField()
         tempwhTextField.borderStyle = .roundedRect
         tempwhTextField.placeholder = "input:width,height"
-        tempwhTextField.tg_height.equal(30)
-        tempwhTextField.tg_width.equal(.fill)   //宽度占用剩余空间。
-        tempwhTextField.tg_leading.equal(5)
-        tempwhTextField.tg_top.equal(5)
-        tempwhTextField.tg_bottom.equal(5)
+        tempwhTextField.tg.height.equal(30)
+        tempwhTextField.tg.width.equal(.fill)   //宽度占用剩余空间。
+        tempwhTextField.tg.leading.equal(5)
+        tempwhTextField.tg.top.equal(5)
+        tempwhTextField.tg.bottom.equal(5)
         rootLayout.addSubview(tempwhTextField)
         self.whTextField = tempwhTextField
         
         
-        let reverseFloatTip = UILabel()
+        var reverseFloatTip = UILabel()
         reverseFloatTip.text = "Reverse:"
         reverseFloatTip.font = CFTool.font(13)
         reverseFloatTip.sizeToFit()
-        reverseFloatTip.tg_clearFloat = true  //换行
-        reverseFloatTip.tg_top.equal(3)
-        reverseFloatTip.tg_leading.equal(5)
-        reverseFloatTip.tg_trailing.equal(5)
+        reverseFloatTip.tg.clearFloat = true  //换行
+        reverseFloatTip.tg.top.equal(3)
+        reverseFloatTip.tg.leading.equal(5)
+        reverseFloatTip.tg.trailing.equal(5)
         rootLayout.addSubview(reverseFloatTip)
         
         let reverseFloatSwitch = UISwitch()
@@ -83,21 +83,21 @@ class FOLTest1ViewController: UIViewController {
         clearFloatTip.text = "Clear:"
         clearFloatTip.font = CFTool.font(13)
         clearFloatTip.sizeToFit()
-        clearFloatTip.tg_leading.equal(40)
-        clearFloatTip.tg_top.equal(3)
-        clearFloatTip.tg_trailing.equal(5)
+        clearFloatTip.tg.leading.equal(40)
+        clearFloatTip.tg.top.equal(3)
+        clearFloatTip.tg.trailing.equal(5)
         rootLayout.addSubview(clearFloatTip)
         
         let clearFloatSwitch = UISwitch()
         rootLayout.addSubview(clearFloatSwitch)
         self.clearFloatSwitch = clearFloatSwitch
         
-        let widthWeightStepperTip = UILabel()
+        var widthWeightStepperTip = UILabel()
         widthWeightStepperTip.text = "Width Weight:"
         widthWeightStepperTip.font = CFTool.font(13)
         widthWeightStepperTip.sizeToFit()
-        widthWeightStepperTip.tg_top.equal(8)
-        widthWeightStepperTip.tg_clearFloat = true  //换行
+        widthWeightStepperTip.tg.top.equal(8)
+        widthWeightStepperTip.tg.clearFloat = true  //换行
         rootLayout.addSubview(widthWeightStepperTip)
         
         let widthWeightStepper = UIStepper()
@@ -105,23 +105,23 @@ class FOLTest1ViewController: UIViewController {
         widthWeightStepper.stepValue = 1
         widthWeightStepper.maximumValue = 100
         widthWeightStepper.addTarget(self, action: #selector(handleWeightStepper(_:)), for: .valueChanged)
-        widthWeightStepper.tg_top.equal(5)
+        widthWeightStepper.tg.top.equal(5)
         rootLayout.addSubview(widthWeightStepper)
         self.widthWeightStepper = widthWeightStepper
         
         let widthWeightLabel = UILabel()
         widthWeightLabel.text = "0"
-        widthWeightLabel.tg_top.equal(8)
+        widthWeightLabel.tg.top.equal(8)
         widthWeightLabel.sizeToFit()
         rootLayout.addSubview(widthWeightLabel)
         self.widthWeightLabel = widthWeightLabel
         
-        let heightWeightStepperTip = UILabel()
+        var heightWeightStepperTip = UILabel()
         heightWeightStepperTip.text = "Height Weight:"
         heightWeightStepperTip.font = CFTool.font(13)
         heightWeightStepperTip.sizeToFit()
-        heightWeightStepperTip.tg_top.equal(8)
-        heightWeightStepperTip.tg_clearFloat = true  //换行
+        heightWeightStepperTip.tg.top.equal(8)
+        heightWeightStepperTip.tg.clearFloat = true  //换行
         rootLayout.addSubview(heightWeightStepperTip)
         
         let heightWeightStepper = UIStepper()
@@ -129,23 +129,23 @@ class FOLTest1ViewController: UIViewController {
         heightWeightStepper.stepValue = 1
         heightWeightStepper.maximumValue = 100
         heightWeightStepper.addTarget(self, action: #selector(handleWeightStepper(_:)), for: .valueChanged)
-        heightWeightStepper.tg_top.equal(5)
+        heightWeightStepper.tg.top.equal(5)
         rootLayout.addSubview(heightWeightStepper)
         self.heightWeightStepper = heightWeightStepper
         
         let heightWeightLabel = UILabel()
         heightWeightLabel.text = "0"
         heightWeightLabel.sizeToFit()
-        heightWeightLabel.tg_top.equal(8)
+        heightWeightLabel.tg.top.equal(8)
         rootLayout.addSubview(heightWeightLabel)
         self.heightWeightLabel = heightWeightLabel
         
-        let floatLayout = TGFloatLayout(.vert)
+        var floatLayout = TGFloatLayout(.vert)
         floatLayout.backgroundColor = CFTool.color(0)
-        floatLayout.tg_clearFloat = true  //换行
-        floatLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
-        floatLayout.tg_width.equal(100%)   //高度和宽度都占用剩余空间。
-        floatLayout.tg_height.equal(.fill)
+        floatLayout.tg.clearFloat = true  //换行
+        floatLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
+        floatLayout.tg.width.equal(100%)   //高度和宽度都占用剩余空间。
+        floatLayout.tg.height.equal(.fill)
         rootLayout.addSubview(floatLayout)
         self.floatLayout = floatLayout
         
@@ -167,7 +167,7 @@ class FOLTest1ViewController: UIViewController {
             return
         }
         
-        let tagButton = UIButton(frame: CGRect(x: 0,y: 0,width: CGFloat(atof(arr[0])),height: CGFloat(atof(arr[1]))))
+        var tagButton = UIButton(frame: CGRect(x: 0,y: 0,width: CGFloat(atof(arr[0])),height: CGFloat(atof(arr[1]))))
         tagButton.setTitle(text, for: UIControl.State())
         tagButton.titleLabel?.adjustsFontSizeToFitWidth = true
         tagButton.backgroundColor = UIColor(red: CGFloat(arc4random_uniform(256)) / 255.0, green: CGFloat(arc4random_uniform(256)) / 255.0, blue: CGFloat(arc4random_uniform(256)) / 255.0, alpha: 1)
@@ -178,23 +178,23 @@ class FOLTest1ViewController: UIViewController {
         
         if (arr.count == 6)
         {
-            tagButton.tg_leading.equal(CGFloat(atof(arr[2])))
-            tagButton.tg_top.equal(CGFloat(atof(arr[3])))
-            tagButton.tg_trailing.equal(CGFloat(atof(arr[4])))
-            tagButton.tg_bottom.equal(CGFloat(atof(arr[5])))
+            tagButton.tg.leading.equal(CGFloat(atof(arr[2])))
+            tagButton.tg.top.equal(CGFloat(atof(arr[3])))
+            tagButton.tg.trailing.equal(CGFloat(atof(arr[4])))
+            tagButton.tg.bottom.equal(CGFloat(atof(arr[5])))
 
         }
         
-        tagButton.tg_reverseFloat = self.reverseFloatSwitch.isOn;
-        tagButton.tg_clearFloat = self.clearFloatSwitch.isOn;
+        tagButton.tg.reverseFloat = self.reverseFloatSwitch.isOn;
+        tagButton.tg.clearFloat = self.clearFloatSwitch.isOn;
         if self.widthWeightStepper.value != 0
         {
-           tagButton.tg_width.equal(TGWeight(self.widthWeightStepper.value))
+           tagButton.tg.width.equal(TGWeight(self.widthWeightStepper.value))
         }
         
         if self.heightWeightStepper.value != 0
         {
-            tagButton.tg_height.equal(TGWeight(self.heightWeightStepper.value))
+            tagButton.tg.height.equal(TGWeight(self.heightWeightStepper.value))
 
         }
         
@@ -207,7 +207,7 @@ class FOLTest1ViewController: UIViewController {
         self.reverseFloatSwitch.isOn = false;
         self.clearFloatSwitch.isOn = false;
         
-        self.floatLayout.tg_layoutAnimationWithDuration(0.3)
+        self.floatLayout.tg.layoutAnimationWithDuration(0.3)
     }
     
     @objc func handleAddSubview(_ sender: AnyObject) {
@@ -226,16 +226,16 @@ class FOLTest1ViewController: UIViewController {
     @objc func handleChangeOrientation(_ sender: AnyObject) {
         
         //调整布局方向
-        if (self.floatLayout.tg_orientation == .vert)
+        if (self.floatLayout.tg.orientation == .vert)
         {
-            self.floatLayout.tg_orientation = .horz;
+            self.floatLayout.tg.orientation = .horz;
         }
         else
         {
-            self.floatLayout.tg_orientation = .vert;
+            self.floatLayout.tg.orientation = .vert;
         }
         
-        self.floatLayout.tg_layoutAnimationWithDuration(0.3)
+        self.floatLayout.tg.layoutAnimationWithDuration(0.3)
         
     }
     
@@ -260,7 +260,7 @@ class FOLTest1ViewController: UIViewController {
     {
         sender.removeFromSuperview()
         
-        self.floatLayout.tg_layoutAnimationWithDuration(0.3)
+        self.floatLayout.tg.layoutAnimationWithDuration(0.3)
     }
 
 }

@@ -8,8 +8,76 @@
 
 import UIKit
 
-extension UIView
-{
+public extension TypeWrapperProtocol where WrappedType: UIView {
+    var reverseFloat: Bool {
+        get { return self.wrappedValue.tgCurrentSizeClass.tg_reverseFloat }
+        set {
+            let sc = self.wrappedValue.tgCurrentSizeClass
+            if sc.tg_reverseFloat != newValue {
+                sc.tg_reverseFloat = newValue
+                if let sView = self.wrappedValue.superview {
+                    sView.setNeedsLayout()
+                }
+            }
+        }
+    }
+
+    var clearFloat: Bool {
+        get { return self.wrappedValue.tgCurrentSizeClass.tg_clearFloat }
+        set {
+            let sc = self.wrappedValue.tgCurrentSizeClass
+            if sc.tg_clearFloat != newValue {
+                sc.tg_clearFloat = newValue
+                if let sView = self.wrappedValue.superview {
+                    sView.setNeedsLayout()
+                }
+            }
+        }
+    }
+}
+
+public extension TypeWrapperProtocol where WrappedType: TGFloatLayout {
+    var orientation: TGOrientation {
+        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass).tg_orientation }
+        set {
+            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass
+            if lsc.tg_orientation != newValue {
+                lsc.tg_orientation = newValue
+                self.wrappedValue.setNeedsLayout()
+            }
+        }
+    }
+
+    var noBoundaryLimit: Bool {
+        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass).tg_noBoundaryLimit }
+        set {
+            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass
+            if lsc.tg_noBoundaryLimit != newValue {
+                lsc.tg_noBoundaryLimit = newValue
+                self.wrappedValue.setNeedsLayout()
+            }
+        }
+    }
+
+    func setSubviews(size:CGFloat, minSpace:CGFloat, maxSpace:CGFloat = CGFloat.greatestFiniteMagnitude, centered:Bool = false, inSizeClass type:TGSizeClassType = TGSizeClassType.default) {
+        let lsc = self.wrappedValue.tg_fetchSizeClass(with: type) as! TGFloatLayoutViewSizeClassImpl
+
+        if size == 0.0 {
+            lsc.tgFlexSpace = nil
+        } else {
+            if lsc.tgFlexSpace == nil {
+                lsc.tgFlexSpace = TGSequentLayoutFlexSpace()
+            }
+            lsc.tgFlexSpace.subviewSize = size
+            lsc.tgFlexSpace.minSpace = minSpace
+            lsc.tgFlexSpace.maxSpace = maxSpace
+            lsc.tgFlexSpace.centered = centered
+        }
+        self.wrappedValue.setNeedsLayout()
+    }
+}
+
+extension UIView {
     /**
      是否反方向浮动，默认是false表示正向浮动，正向浮动和反向浮动的意义根据所在的父浮动布局视图的方向的不同而不同：
      1.如果父视图是垂直浮动布局则默认正向浮动是向左浮动的，而反向浮动则是向右浮动。

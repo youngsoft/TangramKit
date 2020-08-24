@@ -102,6 +102,17 @@ extension UIView:TGLayoutPosType{}
  min.posVal,min.offset是通过min方法设置。
  max.posVal,max.offset是通过max方法设置。
  */
+
+extension TGLayoutPos: NameSpaceWrappable {}
+
+public extension TypeWrapperProtocol where WrappedType: TGLayoutPos {
+    static var safeAreaMargin: CGFloat {
+        //在2017年10月3号定义的一个数字，没有其他特殊意义。
+        return -20171003.0;
+    }
+}
+
+
 final public class TGLayoutPos:TGLayoutPosValue
 {
     

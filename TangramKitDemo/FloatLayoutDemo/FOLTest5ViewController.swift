@@ -51,10 +51,10 @@ class FOLTest5ViewController: UIViewController {
         
         
 
-        let rootLayout = TGFloatLayout(.vert)
-        rootLayout.tg_width.equal(.fill)
-        rootLayout.tg_height.equal(.wrap)
-        rootLayout.tg_vspace = 5
+        var rootLayout = TGFloatLayout(.vert)
+        rootLayout.tg.width.equal(.fill)
+        rootLayout.tg.height.equal(.wrap)
+        rootLayout.tg.vspace = 5
         scrollView.addSubview(rootLayout)
         
         
@@ -65,32 +65,32 @@ class FOLTest5ViewController: UIViewController {
         label.sizeToFit()
         rootLayout.addSubview(label)
         
-        let label2 = UILabel()
+        var label2 = UILabel()
         label2.text = NSLocalizedString("TangramKit is a powerful view layout library, it support 6 kinds of layout views and SIZECLASS.", comment: "")
         label2.textColor = CFTool.color(3)
         label2.font = CFTool.font(15)
-        label2.tg_width.equal(.fill)
-        label2.tg_height.equal(.wrap)
-        label2.tg_clearFloat = true
+        label2.tg.width.equal(.fill)
+        label2.tg.height.equal(.wrap)
+        label2.tg.clearFloat = true
         rootLayout.addSubview(label2)
 
         let images = ["image1", "image2", "image3", "image4"]
         for i in 0..<images.count {
             let imageView = UIImageView(image: UIImage(named: images[i]))
-            imageView.tg_width.equal(rootLayout.tg_width, multiple: 1.0 / CGFloat(images.count))
-            imageView.tg_height.equal(imageView.tg_width)
+            imageView.tg.width.equal(rootLayout.tg.width, multiple: 1.0 / CGFloat(images.count))
+            imageView.tg.height.equal(imageView.tg.width)
             rootLayout.addSubview(imageView)
         }
 
         for i in 0 ..< titles.count
         {
-            let titleLabel = UILabel()
+            var titleLabel = UILabel()
             titleLabel.text = titles[i];
             titleLabel.textColor = CFTool.color(i + 1)
             titleLabel.font = CFTool.font(15)
             titleLabel.adjustsFontSizeToFitWidth = true
-            titleLabel.tg_clearFloat = true;     //换行重新布局。
-            titleLabel.tg_width.equal(25%) //宽度是父视图宽度的1/4
+            titleLabel.tg.clearFloat = true;     //换行重新布局。
+            titleLabel.tg.width.equal(25%) //宽度是父视图宽度的1/4
             titleLabel.sizeToFit()
             rootLayout.addSubview(titleLabel)
             
@@ -98,8 +98,8 @@ class FOLTest5ViewController: UIViewController {
             descLabel.text = descs[i];
             descLabel.textColor = CFTool.color(4)
             descLabel.font = CFTool.font(13)
-            descLabel.tg_width.equal(100%)      //占用剩余的宽度
-            descLabel.tg_height.equal(.wrap)
+            descLabel.tg.width.equal(100%)      //占用剩余的宽度
+            descLabel.tg.height.equal(.wrap)
             rootLayout.addSubview(descLabel)
         }
         

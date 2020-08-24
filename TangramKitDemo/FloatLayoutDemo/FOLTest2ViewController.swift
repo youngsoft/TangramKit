@@ -170,12 +170,12 @@ class FOLTest2ViewController: UIViewController {
         let scrollView = UIScrollView()
         self.view = scrollView;
 
-        let rootLayout = TGLinearLayout(.vert)
-        rootLayout.tg_width.equal(.fill)
-        rootLayout.tg_height.equal(.wrap)
-        rootLayout.tg_gravity = TGGravity.Horizontal.fill
+        var rootLayout = TGLinearLayout(.vert)
+        rootLayout.tg.width.equal(.fill)
+        rootLayout.tg.height.equal(.wrap)
+        rootLayout.tg.gravity = TGGravity.Horizontal.fill
         rootLayout.backgroundColor =  UIColor(white:0xe7/255.0, alpha:1)
-        rootLayout.tg_intelligentBorderline =  TGBorderline(color: .lightGray) //设置智能边界线，布局里面的子视图会根据布局自动产生边界线。
+        rootLayout.tg.intelligentBorderline =  TGBorderline(color: .lightGray) //设置智能边界线，布局里面的子视图会根据布局自动产生边界线。
         scrollView.addSubview(rootLayout)
         self.rootLayout = rootLayout
     }
@@ -228,16 +228,16 @@ extension FOLTest2ViewController
             sectionTitleLabel.text = sectionModel.title;
             sectionTitleLabel.font =  .boldSystemFont(ofSize: 15)
             sectionTitleLabel.backgroundColor = .white
-            sectionTitleLabel.tg_height.equal(30)
-            sectionTitleLabel.tg_top.equal(10)
+            sectionTitleLabel.tg.height.equal(30)
+            sectionTitleLabel.tg.top.equal(10)
             self.rootLayout.addSubview(sectionTitleLabel)
         }
         
         //创建条目容器布局。
-        let itemContainerLayout = TGFloatLayout(.vert)
+        var itemContainerLayout = TGFloatLayout(.vert)
         itemContainerLayout.backgroundColor = .white
-        itemContainerLayout.tg_height.equal(.wrap)
-        itemContainerLayout.tg_intelligentBorderline = TGBorderline(color: .lightGray)
+        itemContainerLayout.tg.height.equal(.wrap)
+        itemContainerLayout.tg.intelligentBorderline = TGBorderline(color: .lightGray)
         self.rootLayout.addSubview(itemContainerLayout)
         
         //创建条目布局，并加入到容器布局中去。
@@ -250,22 +250,22 @@ extension FOLTest2ViewController
             
             //布局模型对象的layoutSelector负责建立布局，并返回一个布局条目布局视图。
             
-            let itemLayout = self.perform(layoutTemplate.layoutSelector,with:model).takeUnretainedValue() as! TGBaseLayout
+            var itemLayout = self.perform(layoutTemplate.layoutSelector,with:model).takeUnretainedValue() as! TGBaseLayout
             
             itemLayout.tag = sectionIndex * FOLTest2ViewController.sBaseTag + i;
-            itemLayout.tg_setTarget(self,action:#selector(handleItemLayoutTap), for:.touchUpInside)
-            itemLayout.tg_highlightedOpacity = 0.4
+            itemLayout.tg.setTarget(self,action:#selector(handleItemLayoutTap), for:.touchUpInside)
+            itemLayout.tg.highlightedOpacity = 0.4
             
             
             //根据上面布局模型对高度和宽度的定义指定条目布局的尺寸。如果小于等于1则用相对尺寸，否则用绝对尺寸。
             if layoutTemplate.width <= 1
             {
-                itemLayout.tg_width.equal(itemContainerLayout.tg_width, multiple:layoutTemplate.width)
+                itemLayout.tg.width.equal(itemContainerLayout.tg.width, multiple:layoutTemplate.width)
                 
             }
             else
             {
-                itemLayout.tg_width.equal(layoutTemplate.width)
+                itemLayout.tg.width.equal(layoutTemplate.width)
                 
             }
             
@@ -273,12 +273,12 @@ extension FOLTest2ViewController
             if layoutTemplate.height <= 1
             {
                 
-                itemLayout.tg_height.equal(itemContainerLayout.tg_height, multiple:layoutTemplate.height)
+                itemLayout.tg.height.equal(itemContainerLayout.tg.height, multiple:layoutTemplate.height)
                 
             }
             else
             {
-                itemLayout.tg_height.equal(layoutTemplate.height)
+                itemLayout.tg.height.equal(layoutTemplate.height)
             }
             
             itemContainerLayout.addSubview(itemLayout)
@@ -303,24 +303,24 @@ extension FOLTest2ViewController
         let titleLabel = UILabel()
         titleLabel.text = dataModel.title;
         titleLabel.font = .boldSystemFont(ofSize: 15)
-        titleLabel.tg_leading.equal(5)
-        titleLabel.tg_top.equal(5)
+        titleLabel.tg.leading.equal(5)
+        titleLabel.tg.top.equal(5)
         titleLabel.sizeToFit()
         itemLayout.addSubview(titleLabel)
         
         //向上浮动，左边顶部边距为5，高度为20
         let subImageView = UIImageView(image:UIImage(named:dataModel.subImage))
-        subImageView.tg_leading.equal(5)
-        subImageView.tg_top.equal(5)
-        subImageView.tg_height.equal(20)
+        subImageView.tg.leading.equal(5)
+        subImageView.tg.top.equal(5)
+        subImageView.tg.height.equal(20)
         subImageView.sizeToFit()
         itemLayout.addSubview(subImageView)
         
         
         //向上浮动，高度占用剩余的高度，宽度和父布局保持一致。
         let imageView = UIImageView(image:UIImage(named:dataModel.image))
-        imageView.tg_height.equal(.fill)
-        imageView.tg_width.equal(itemLayout.tg_width)
+        imageView.tg.height.equal(.fill)
+        imageView.tg.width.equal(itemLayout.tg.width)
         itemLayout.addSubview(imageView)
         
         return itemLayout;
@@ -336,9 +336,9 @@ extension FOLTest2ViewController
         let titleLabel = UILabel()
         titleLabel.text = dataModel.title;
         titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
-        titleLabel.tg_width.equal(itemLayout.tg_width)
-        titleLabel.tg_leading.equal(5)
-        titleLabel.tg_top.equal(5)
+        titleLabel.tg.width.equal(itemLayout.tg.width)
+        titleLabel.tg.leading.equal(5)
+        titleLabel.tg.top.equal(5)
         titleLabel.sizeToFit()
         itemLayout.addSubview(titleLabel)
 
@@ -347,15 +347,15 @@ extension FOLTest2ViewController
         subTitleLabel.text = dataModel.subTitle;
         subTitleLabel.font = UIFont.systemFont(ofSize: 12)
         subTitleLabel.textColor = .lightGray
-        subTitleLabel.tg_width.equal(itemLayout.tg_width)
-        subTitleLabel.tg_leading.equal(5)
+        subTitleLabel.tg.width.equal(itemLayout.tg.width)
+        subTitleLabel.tg.leading.equal(5)
         subTitleLabel.sizeToFit()
         itemLayout.addSubview(subTitleLabel)
         
         //图片向右浮动，并且右边距为5，上面因为占据了全宽，因此这里会另起一行向右浮动。
-        let imageView = UIImageView(image:UIImage(named:dataModel.image))
-        imageView.tg_reverseFloat = true
-        imageView.tg_trailing.equal(5)
+        var imageView = UIImageView(image:UIImage(named:dataModel.image))
+        imageView.tg.reverseFloat = true
+        imageView.tg.trailing.equal(5)
         imageView.sizeToFit()
         itemLayout.addSubview(imageView)
         
@@ -369,9 +369,9 @@ extension FOLTest2ViewController
         let itemLayout = TGFloatLayout(.vert)
         
         //因为图片要占据全高，所以必须优先向右浮动。
-        let imageView = UIImageView(image:UIImage(named:dataModel.image))
-        imageView.tg_height.equal(itemLayout.tg_height)
-        imageView.tg_reverseFloat = true;
+        var imageView = UIImageView(image:UIImage(named:dataModel.image))
+        imageView.tg.height.equal(itemLayout.tg.height)
+        imageView.tg.reverseFloat = true;
         imageView.sizeToFit()
         itemLayout.addSubview(imageView)
         
@@ -379,29 +379,29 @@ extension FOLTest2ViewController
         let titleLabel = UILabel()
         titleLabel.text = dataModel.title;
         titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
-        titleLabel.tg_leading.equal(5)
-        titleLabel.tg_top.equal(5)
-        titleLabel.tg_width.equal(.fill)
+        titleLabel.tg.leading.equal(5)
+        titleLabel.tg.top.equal(5)
+        titleLabel.tg.width.equal(.fill)
         titleLabel.sizeToFit()
         itemLayout.addSubview(titleLabel)
         
         //向左浮动，直接另起一行，占据剩余宽度，内容高度动态。
-        let subTitleLabel = UILabel()
+        var subTitleLabel = UILabel()
         subTitleLabel.text = dataModel.subTitle;
         subTitleLabel.font = UIFont.systemFont(ofSize: 12)
         subTitleLabel.textColor = UIColor.lightGray;
-        subTitleLabel.tg_leading.equal(5)
-        subTitleLabel.tg_clearFloat = true;
-        subTitleLabel.tg_width.equal(.fill)
-        subTitleLabel.tg_height.equal(.wrap)
+        subTitleLabel.tg.leading.equal(5)
+        subTitleLabel.tg.clearFloat = true;
+        subTitleLabel.tg.width.equal(.fill)
+        subTitleLabel.tg.height.equal(.wrap)
         itemLayout.addSubview(subTitleLabel)
         
         //如果有小图片则图片另起一行，向左浮动。
         if (dataModel.subImage != nil)
         {
-            let subImageView = UIImageView(image:UIImage(named:dataModel.subImage))
-            subImageView.tg_clearFloat = true;
-            subImageView.tg_leading.equal(5)
+            var subImageView = UIImageView(image:UIImage(named:dataModel.subImage))
+            subImageView.tg.clearFloat = true;
+            subImageView.tg.leading.equal(5)
             subImageView.sizeToFit()
             itemLayout.addSubview(subImageView)
         }
@@ -413,9 +413,9 @@ extension FOLTest2ViewController
     //建立超级品牌日布局，这里因为就只有一张图，所以设置布局的背景图片即可。
     @objc func createItemLayout2_1(_ dataModel:FOLTest2DataModel) ->TGFloatLayout
     {
-        let itemLayout = TGFloatLayout(.vert)
+        var itemLayout = TGFloatLayout(.vert)
         //直接设置背景图片。
-        itemLayout.tg_backgroundImage = UIImage(named:dataModel.image)
+        itemLayout.tg.backgroundImage = UIImage(named:dataModel.image) ?? UIImage()
         
         return itemLayout;
     }
@@ -430,8 +430,8 @@ extension FOLTest2ViewController
         let titleLabel = UILabel()
         titleLabel.text = dataModel.title;
         titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
-        titleLabel.tg_leading.equal(5)
-        titleLabel.tg_top.equal(5)
+        titleLabel.tg.leading.equal(5)
+        titleLabel.tg.top.equal(5)
         titleLabel.sizeToFit()
         itemLayout.addSubview(titleLabel)
 
@@ -439,36 +439,36 @@ extension FOLTest2ViewController
         let subTitleLabel = UILabel()
         subTitleLabel.text = dataModel.title;
         subTitleLabel.font = UIFont.systemFont(ofSize: 11)
-        subTitleLabel.tg_leading.equal(5)
-        subTitleLabel.tg_top.equal(5)
+        subTitleLabel.tg.leading.equal(5)
+        subTitleLabel.tg.top.equal(5)
         subTitleLabel.sizeToFit()
         itemLayout.addSubview(subTitleLabel)
         
         //价格部分在底部，因此改为向下浮动。
-        let priceLabel = UILabel()
+        var priceLabel = UILabel()
         priceLabel.text = dataModel.price;
         priceLabel.font = UIFont.systemFont(ofSize: 11)
         priceLabel.textColor = UIColor.red
-        priceLabel.tg_leading.equal(5)
-        priceLabel.tg_bottom.equal(5)
-        priceLabel.tg_reverseFloat = true
+        priceLabel.tg.leading.equal(5)
+        priceLabel.tg.bottom.equal(5)
+        priceLabel.tg.reverseFloat = true
         priceLabel.sizeToFit()
         itemLayout.addSubview(priceLabel)
         
         //描述部分在价格的上面，因此改为向下浮动。
-        let descLabel = UILabel()
+        var descLabel = UILabel()
         descLabel.text = dataModel.desc;
         descLabel.font = UIFont.systemFont(ofSize: 11)
         descLabel.textColor = UIColor.lightGray
-        descLabel.tg_leading.equal(5)
-        descLabel.tg_reverseFloat = true
+        descLabel.tg.leading.equal(5)
+        descLabel.tg.reverseFloat = true
         descLabel.sizeToFit()
         itemLayout.addSubview(descLabel)
         
         //向上浮动，并占用剩余的空间高度。
         let imageView = UIImageView(image:UIImage(named:dataModel.image))
-        imageView.tg_width.equal(itemLayout.tg_width);
-        imageView.tg_height.equal(100%)
+        imageView.tg.width.equal(itemLayout.tg.width);
+        imageView.tg.height.equal(100%)
         itemLayout.addSubview(imageView)
         
         return itemLayout;
@@ -483,9 +483,9 @@ extension FOLTest2ViewController
         let titleLabel = UILabel()
         titleLabel.text = dataModel.title;
         titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
-        titleLabel.tg_leading.equal(5)
-        titleLabel.tg_top.equal(5)
-        titleLabel.tg_width.equal(itemLayout.tg_width,increment:-2.5, multiple:0.5)
+        titleLabel.tg.leading.equal(5)
+        titleLabel.tg.top.equal(5)
+        titleLabel.tg.width.equal(itemLayout.tg.width,increment:-2.5, multiple:0.5)
         titleLabel.sizeToFit()
         itemLayout.addSubview(titleLabel)
         
@@ -493,39 +493,39 @@ extension FOLTest2ViewController
         let subTitleLabel = UILabel()
         subTitleLabel.text = dataModel.subTitle;
         subTitleLabel.font = UIFont.systemFont(ofSize: 11)
-        subTitleLabel.tg_leading.equal(5)
-        subTitleLabel.tg_top.equal(5)
-        subTitleLabel.tg_width.equal(itemLayout.tg_width,increment:-2.5,multiple:0.5)
+        subTitleLabel.tg.leading.equal(5)
+        subTitleLabel.tg.top.equal(5)
+        subTitleLabel.tg.width.equal(itemLayout.tg.width,increment:-2.5,multiple:0.5)
         subTitleLabel.sizeToFit()
         itemLayout.addSubview(subTitleLabel)
         
         //价格向下浮动
-        let priceLabel = UILabel()
+        var priceLabel = UILabel()
         priceLabel.text = dataModel.price;
         priceLabel.font = UIFont.systemFont(ofSize: 11)
         priceLabel.textColor = UIColor.red
-        priceLabel.tg_leading.equal(5)
-        priceLabel.tg_bottom.equal(5)
-        priceLabel.tg_reverseFloat = true
-        priceLabel.tg_width.equal(itemLayout.tg_width,increment:-2.5,multiple:0.5)
+        priceLabel.tg.leading.equal(5)
+        priceLabel.tg.bottom.equal(5)
+        priceLabel.tg.reverseFloat = true
+        priceLabel.tg.width.equal(itemLayout.tg.width,increment:-2.5,multiple:0.5)
         priceLabel.sizeToFit()
         itemLayout.addSubview(priceLabel)
         
         //描述向下浮动
-        let descLabel = UILabel()
+        var descLabel = UILabel()
         descLabel.text = dataModel.desc;
         descLabel.font = UIFont.systemFont(ofSize: 11)
         descLabel.textColor = UIColor.lightGray
-        descLabel.tg_leading.equal(5)
-        descLabel.tg_reverseFloat = true
-        descLabel.tg_width.equal(itemLayout.tg_width,increment:-2.5,multiple:0.5)
+        descLabel.tg.leading.equal(5)
+        descLabel.tg.reverseFloat = true
+        descLabel.tg.width.equal(itemLayout.tg.width,increment:-2.5,multiple:0.5)
         descLabel.sizeToFit()
         itemLayout.addSubview(descLabel)
         
         //向上浮动，因为宽度无法再容纳，所以这里会换列继续向上浮动。
         let imageView = UIImageView(image:UIImage(named:dataModel.image))
-        imageView.tg_width.equal(itemLayout.tg_width,increment:-2.5,multiple:0.5)
-        imageView.tg_height.equal(itemLayout.tg_height);
+        imageView.tg.width.equal(itemLayout.tg.width,increment:-2.5,multiple:0.5)
+        imageView.tg.height.equal(itemLayout.tg.height);
         itemLayout.addSubview(imageView)
         
         
@@ -541,9 +541,9 @@ extension FOLTest2ViewController
         let titleLabel = UILabel()
         titleLabel.text = dataModel.title;
         titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
-        titleLabel.tg_leading.equal(5)
-        titleLabel.tg_top.equal(5)
-        titleLabel.tg_width.equal(itemLayout.tg_width,increment:-2.5,multiple:0.5)
+        titleLabel.tg.leading.equal(5)
+        titleLabel.tg.top.equal(5)
+        titleLabel.tg.width.equal(itemLayout.tg.width,increment:-2.5,multiple:0.5)
         titleLabel.sizeToFit()
         itemLayout.addSubview(titleLabel)
 
@@ -551,16 +551,16 @@ extension FOLTest2ViewController
         let subTitleLabel = UILabel()
         subTitleLabel.text = dataModel.subTitle;
         subTitleLabel.font = UIFont.systemFont(ofSize: 11)
-        subTitleLabel.tg_leading.equal(5)
-        subTitleLabel.tg_top.equal(5)
-        subTitleLabel.tg_width.equal(itemLayout.tg_width,increment:-2.5,multiple:0.5)
+        subTitleLabel.tg.leading.equal(5)
+        subTitleLabel.tg.top.equal(5)
+        subTitleLabel.tg.width.equal(itemLayout.tg.width,increment:-2.5,multiple:0.5)
         subTitleLabel.sizeToFit()
         itemLayout.addSubview(subTitleLabel)
         
         //继续向上浮动，这里因为高度和父布局高度一致，因此会换列浮动。
         let imageView = UIImageView(image:UIImage(named:dataModel.image))
-        imageView.tg_width.equal(itemLayout.tg_width,increment:-2.5,multiple:0.5)
-        imageView.tg_height.equal(itemLayout.tg_height);
+        imageView.tg.width.equal(itemLayout.tg.width,increment:-2.5,multiple:0.5)
+        imageView.tg.height.equal(itemLayout.tg.height);
         itemLayout.addSubview(imageView)
         
         return itemLayout;
@@ -574,23 +574,23 @@ extension FOLTest2ViewController
         let titleLabel = UILabel()
         titleLabel.text = dataModel.title;
         titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
-        titleLabel.tg_leading.equal(5)
-        titleLabel.tg_top.equal(5)
+        titleLabel.tg.leading.equal(5)
+        titleLabel.tg.top.equal(5)
         titleLabel.sizeToFit()
         itemLayout.addSubview(titleLabel)
         
         let subTitleLabel = UILabel()
         subTitleLabel.text = dataModel.subTitle;
         subTitleLabel.font = UIFont.systemFont(ofSize: 11)
-        subTitleLabel.tg_leading.equal(5)
-        subTitleLabel.tg_top.equal(5)
+        subTitleLabel.tg.leading.equal(5)
+        subTitleLabel.tg.top.equal(5)
         subTitleLabel.sizeToFit()
         itemLayout.addSubview(subTitleLabel)
         
         //继续向上浮动，占据剩余高度。
         let imageView = UIImageView(image:UIImage(named:dataModel.image))
-        imageView.tg_width.equal(itemLayout.tg_width)
-        imageView.tg_height.equal(100%)
+        imageView.tg.width.equal(itemLayout.tg.width)
+        imageView.tg.height.equal(100%)
         itemLayout.addSubview(imageView)
         
         return itemLayout;
@@ -606,8 +606,8 @@ extension FOLTest2ViewController
         let titleLabel = UILabel()
         titleLabel.text = dataModel.title;
         titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
-        titleLabel.tg_leading.equal(5)
-        titleLabel.tg_top.equal(5)
+        titleLabel.tg.leading.equal(5)
+        titleLabel.tg.top.equal(5)
         titleLabel.sizeToFit()
         itemLayout.addSubview(titleLabel)
 
@@ -616,15 +616,15 @@ extension FOLTest2ViewController
         subTitleLabel.text = dataModel.subTitle;
         subTitleLabel.font = UIFont.systemFont(ofSize: 11)
         subTitleLabel.textColor = UIColor.red
-        subTitleLabel.tg_leading.equal(5)
-        subTitleLabel.tg_top.equal(5)
+        subTitleLabel.tg.leading.equal(5)
+        subTitleLabel.tg.top.equal(5)
         subTitleLabel.sizeToFit()
         itemLayout.addSubview(subTitleLabel)
 
         
         let imageView = UIImageView(image:UIImage(named:dataModel.image))
-        imageView.tg_width.equal(itemLayout.tg_width)
-        imageView.tg_height.equal(100%)   //图片占用剩余的全部高度
+        imageView.tg.width.equal(itemLayout.tg.width)
+        imageView.tg.height.equal(100%)   //图片占用剩余的全部高度
         itemLayout.addSubview(imageView)
         
         return itemLayout;

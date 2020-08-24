@@ -61,11 +61,11 @@ class FOLTest3ViewController: UIViewController {
         
         super.viewDidLoad()
         
-        let floatLayout = TGFloatLayout(.vert)
+        var floatLayout = TGFloatLayout(.vert)
         floatLayout.backgroundColor = .white
-        floatLayout.tg_margin(TGLayoutPos.tg_safeAreaMargin) ////浮动布局和父视图四周的边界是安全区，也就是说浮动布局的宽度和高度和父视图的安全区相等。 您可以将tg_margin设置为0并在iPhoneX上看看效果和区别。
+        floatLayout.tg.margin(TGLayoutPos.tg.safeAreaMargin) ////浮动布局和父视图四周的边界是安全区，也就是说浮动布局的宽度和高度和父视图的安全区相等。 您可以将tg_margin设置为0并在iPhoneX上看看效果和区别。
         //通过智能分界线的使用，浮动布局里面的所有子布局视图的分割线都会进行智能的设置，从而解决了我们需求中需要提供边界线的问题。
-        floatLayout.tg_intelligentBorderline = TGBorderline(color: UIColor.lightGray.withAlphaComponent(0.2))
+        floatLayout.tg.intelligentBorderline = TGBorderline(color: UIColor.lightGray.withAlphaComponent(0.2))
         self.view.addSubview(floatLayout)
         self.floatLayout = floatLayout
         
@@ -90,21 +90,21 @@ extension FOLTest3ViewController
     func createPictureNewsItemLayout(_ dataModel:FOLTest3DataModel, tag:Int) ->TGBaseLayout
     {
         //创建一个左右浮动布局。这个DEMO是为了介绍浮动布局,在实践中你可以用其他布局来创建条目布局
-        let itemLayout = TGFloatLayout(.vert)
+        var itemLayout = TGFloatLayout(.vert)
         itemLayout.tag = tag
-        itemLayout.tg_setTarget(self, action: #selector(handleItemLayoutClick), for:.touchUpInside)  //这里可以设置布局的点击事件
-        itemLayout.tg_highlightedBackgroundColor = .lightGray
-        itemLayout.tg_backgroundImage = UIImage(named: dataModel.imageName) //将图片作为布局的背景图片
-        itemLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10);
-        itemLayout.tg_gravity = TGGravity.Vertical.bottom //将整个布局中的所有子视图垂直居底部。
-        itemLayout.tg_height.equal(self.floatLayout.tg_height,multiple:2.0/5)  //布局的高度是父布局的2/5。
-        itemLayout.tg_width.equal(self.floatLayout.tg_width); //布局的宽度和父布局相等。
+        itemLayout.tg.setTarget(self, action: #selector(handleItemLayoutClick), for:.touchUpInside)  //这里可以设置布局的点击事件
+        itemLayout.tg.highlightedBackgroundColor = .lightGray
+        itemLayout.tg.backgroundImage = UIImage(named: dataModel.imageName) ?? UIImage() //将图片作为布局的背景图片
+        itemLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10);
+        itemLayout.tg.gravity = TGGravity.Vertical.bottom //将整个布局中的所有子视图垂直居底部。
+        itemLayout.tg.height.equal(self.floatLayout.tg.height,multiple:2.0/5)  //布局的高度是父布局的2/5。
+        itemLayout.tg.width.equal(self.floatLayout.tg.width); //布局的宽度和父布局相等。
         
         let titleLabel = UILabel()
         titleLabel.text = dataModel.title;
         titleLabel.textColor = .white
-        titleLabel.tg_height.equal(.wrap)
-        titleLabel.tg_width.equal(.fill)
+        titleLabel.tg.height.equal(.wrap)
+        titleLabel.tg.width.equal(.fill)
         itemLayout.addSubview(titleLabel)
         
         return itemLayout;
@@ -114,31 +114,31 @@ extension FOLTest3ViewController
     func createWholeWidthTextNewsItemLayout(_ dataModel:FOLTest3DataModel, tag:Int) ->TGBaseLayout
     {
         //里面每个元素可以是各种布局，这里为了突出浮动布局，因此条目布局也做成了浮动布局。
-        let itemLayout = TGFloatLayout(.vert)
+        var itemLayout = TGFloatLayout(.vert)
         itemLayout.tag = tag
-        itemLayout.tg_setTarget(self, action: #selector(handleItemLayoutClick), for:.touchUpInside)
-        itemLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10);
-        itemLayout.tg_highlightedBackgroundColor = .lightGray
-        itemLayout.tg_gravity = TGGravity.Vertical.center //将整个布局中的所有子视图整体垂直居中。
-        itemLayout.tg_height.equal(self.floatLayout.tg_height,multiple:1.0/5)  //布局高度是父布局的1/5
-        itemLayout.tg_width.equal(self.floatLayout.tg_width)  //布局宽度和父布局相等。
+        itemLayout.tg.setTarget(self, action: #selector(handleItemLayoutClick), for:.touchUpInside)
+        itemLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10);
+        itemLayout.tg.highlightedBackgroundColor = .lightGray
+        itemLayout.tg.gravity = TGGravity.Vertical.center //将整个布局中的所有子视图整体垂直居中。
+        itemLayout.tg.height.equal(self.floatLayout.tg.height,multiple:1.0/5)  //布局高度是父布局的1/5
+        itemLayout.tg.width.equal(self.floatLayout.tg.width)  //布局宽度和父布局相等。
         
         //标题文本部分
         let titleLabel = UILabel()
         titleLabel.text = dataModel.title;
         titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
-        titleLabel.tg_height.equal(.wrap)
-        titleLabel.tg_width.equal(.fill)
+        titleLabel.tg.height.equal(.wrap)
+        titleLabel.tg.width.equal(.fill)
         itemLayout.addSubview(titleLabel)
         
         //来源部分
-        let sourceLabel = UILabel()
+        var sourceLabel = UILabel()
         sourceLabel.text = dataModel.source;
         sourceLabel.font = UIFont.systemFont(ofSize: 11)
         sourceLabel.textColor = UIColor.lightGray
         sourceLabel.sizeToFit()
-        sourceLabel.tg_clearFloat = true; //换行
-        sourceLabel.tg_top.equal(5)
+        sourceLabel.tg.clearFloat = true; //换行
+        sourceLabel.tg.top.equal(5)
         itemLayout.addSubview(sourceLabel)
         
         
@@ -150,28 +150,28 @@ extension FOLTest3ViewController
     func createHalfWidthTextNewsItemLayout(_ dataModel:FOLTest3DataModel,tag:Int) ->TGBaseLayout
     {
         //里面每个元素可以是各种布局，这里为了突出浮动布局，因此条目布局也做成了浮动布局。
-        let itemLayout = TGFloatLayout(.vert)
+        var itemLayout = TGFloatLayout(.vert)
         itemLayout.tag = tag
-        itemLayout.tg_setTarget(self, action: #selector(handleItemLayoutClick), for:.touchUpInside)
-        itemLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10);
-        itemLayout.tg_highlightedBackgroundColor = .lightGray
-        itemLayout.tg_gravity = TGGravity.Vertical.center  ////将整个布局中的所有子视图整体垂直居中。
-        itemLayout.tg_height.equal(self.floatLayout.tg_height,multiple:1.0/5)
-        itemLayout.tg_width.equal(self.floatLayout.tg_width,multiple:0.5)
+        itemLayout.tg.setTarget(self, action: #selector(handleItemLayoutClick), for:.touchUpInside)
+        itemLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10);
+        itemLayout.tg.highlightedBackgroundColor = .lightGray
+        itemLayout.tg.gravity = TGGravity.Vertical.center  ////将整个布局中的所有子视图整体垂直居中。
+        itemLayout.tg.height.equal(self.floatLayout.tg.height,multiple:1.0/5)
+        itemLayout.tg.width.equal(self.floatLayout.tg.width,multiple:0.5)
         
         let titleLabel = UILabel()
         titleLabel.text = dataModel.title;
-        titleLabel.tg_height.equal(.wrap)
-        titleLabel.tg_width.equal(.fill)
+        titleLabel.tg.height.equal(.wrap)
+        titleLabel.tg.width.equal(.fill)
         itemLayout.addSubview(titleLabel)
         
-        let sourceLabel = UILabel()
+        var sourceLabel = UILabel()
         sourceLabel.text = dataModel.source;
         sourceLabel.font = UIFont.systemFont(ofSize: 11)
         sourceLabel.textColor = UIColor.lightGray
         sourceLabel.sizeToFit()
-        sourceLabel.tg_clearFloat = true;
-        sourceLabel.tg_top.equal(5)
+        sourceLabel.tg.clearFloat = true;
+        sourceLabel.tg.top.equal(5)
         itemLayout.addSubview(sourceLabel)
         
         
