@@ -30,19 +30,19 @@ class AllTest9ViewController: UIViewController {
         
         self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
         
-        let rootLayout = TGLinearLayout(.vert)
-        rootLayout.tg_gravity = TGGravity.Horizontal.fill //里面所有子视图的宽度都填充为和父视图一样宽。
+        var rootLayout = TGLinearLayout(.vert)
+        rootLayout.tg.gravity = TGGravity.Horizontal.fill //里面所有子视图的宽度都填充为和父视图一样宽。
         rootLayout.backgroundColor = .white
         self.view = rootLayout
         
         
         //添加操作按钮。
-        let actionLayout = TGFlowLayout(.vert, arrangedCount: 2)
-        actionLayout.tg_height.equal(.wrap)
-        actionLayout.tg_gravity = TGGravity.Horizontal.fill //所有子视图水平填充，也就是所有子视图的宽度相等。
-        actionLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
-        actionLayout.tg_hspace = 5
-        actionLayout.tg_vspace = 5
+        var actionLayout = TGFlowLayout(.vert, arrangedCount: 2)
+        actionLayout.tg.height.equal(.wrap)
+        actionLayout.tg.gravity = TGGravity.Horizontal.fill //所有子视图水平填充，也就是所有子视图的宽度相等。
+        actionLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
+        actionLayout.tg.hspace = 5
+        actionLayout.tg.vspace = 5
         rootLayout.addSubview(actionLayout)
         
         actionLayout.addSubview(self.createActionButton(NSLocalizedString("Identity", comment:""), action:#selector(handleIdentityTransform)))
@@ -59,10 +59,10 @@ class AllTest9ViewController: UIViewController {
         
         
         //下面是用于测试的layoutTransform属性的布局视图，本系统中的所有布局视图都支持layoutTransform属性。
-        let contentLayout = TGFlowLayout(.vert, arrangedCount: 4)
+        var contentLayout = TGFlowLayout(.vert, arrangedCount: 4)
         contentLayout.backgroundColor = CFTool.color(5)
-        contentLayout.tg_height.equal(.fill)
-        contentLayout.tg_space = 10
+        contentLayout.tg.height.equal(.fill)
+        contentLayout.tg.space = 10
         rootLayout.addSubview(contentLayout)
         self.contentLayout = contentLayout
         
@@ -71,7 +71,7 @@ class AllTest9ViewController: UIViewController {
             let label = UILabel()
             label.text = "\(i)"
             label.backgroundColor = .red
-            label.tg_size(CGSize(width:40,height:40))
+            label.tg.size(CGSize(width:40,height:40))
             label.textAlignment = .center
             contentLayout.addSubview(label)
         }
@@ -115,7 +115,7 @@ extension AllTest9ViewController
         button.layer.borderColor = UIColor.lightGray.cgColor
         button.layer.borderWidth = 0.5
         button.addTarget(self,action:action, for:.touchUpInside)
-        button.tg_height.equal(30)
+        button.tg.height.equal(30)
         return button
         
     }
@@ -129,27 +129,27 @@ extension AllTest9ViewController
     @objc func handleIdentityTransform(_ sender:AnyObject?)
     {
         //还原位置的坐标变换，这也是默认值。
-        self.contentLayout.tg_layoutTransform = .identity
-        self.contentLayout.tg_layoutAnimationWithDuration(0.3)
+        self.contentLayout.tg.layoutTransform = .identity
+        self.contentLayout.tg.layoutAnimationWithDuration(0.3)
        
     }
     
     @objc func handleTranslationTransform(_ sender:AnyObject?)
     {
-        if self.contentLayout.tg_layoutTransform.isIdentity
+        if self.contentLayout.tg.layoutTransform.isIdentity
         {
-            self.contentLayout.tg_layoutTransform = CGAffineTransform(translationX: 100, y: 0)
+            self.contentLayout.tg.layoutTransform = CGAffineTransform(translationX: 100, y: 0)
         }
-        else if self.contentLayout.tg_layoutTransform == CGAffineTransform(translationX: 100, y: 0)
+        else if self.contentLayout.tg.layoutTransform == CGAffineTransform(translationX: 100, y: 0)
         {
-            self.contentLayout.tg_layoutTransform = CGAffineTransform(translationX: 100, y: 100)
+            self.contentLayout.tg.layoutTransform = CGAffineTransform(translationX: 100, y: 100)
         }
         else
         {
-            self.contentLayout.tg_layoutTransform = CGAffineTransform.identity
+            self.contentLayout.tg.layoutTransform = CGAffineTransform.identity
         }
         
-        self.contentLayout.tg_layoutAnimationWithDuration(0.3)
+        self.contentLayout.tg.layoutAnimationWithDuration(0.3)
         
     }
     
@@ -167,9 +167,9 @@ extension AllTest9ViewController
         //缩放因子。
         let factor:CGFloat = 2.0  //你可以试试0.9看看效果。
         
-        self.contentLayout.tg_layoutTransform = CGAffineTransform(a:factor, b:0, c:0, d:factor, tx:(1 - factor) * (20 - size.width / 2.0), ty:(1 - factor) * (20 - size.height / 2));   //这里因为要让第一个子视图的位置保持不变，所以tx,ty参数需要进行特殊设置。
+        self.contentLayout.tg.layoutTransform = CGAffineTransform(a:factor, b:0, c:0, d:factor, tx:(1 - factor) * (20 - size.width / 2.0), ty:(1 - factor) * (20 - size.height / 2));   //这里因为要让第一个子视图的位置保持不变，所以tx,ty参数需要进行特殊设置。
         
-        self.contentLayout.tg_layoutAnimationWithDuration(0.3)
+        self.contentLayout.tg.layoutAnimationWithDuration(0.3)
 
         
     }
@@ -179,23 +179,23 @@ extension AllTest9ViewController
     @objc func handleHorzReflectionTransform(_ sender:AnyObject?)
     {
         //布局内所有子视图都进行水平翻转排列，也就是水平镜像的效果。
-        self.contentLayout.tg_layoutTransform = CGAffineTransform(a:-1,b:0,c:0,d:1,tx:0,ty:0)
-        self.contentLayout.tg_layoutAnimationWithDuration(0.3)
+        self.contentLayout.tg.layoutTransform = CGAffineTransform(a:-1,b:0,c:0,d:1,tx:0,ty:0)
+        self.contentLayout.tg.layoutAnimationWithDuration(0.3)
     }
     
     @objc func handleVertReflectionTransform(_ sender:AnyObject?)
     {
         //布局内所有子视图都进行垂直翻转排列，也就是垂直镜像的效果。
-        self.contentLayout.tg_layoutTransform = CGAffineTransform(a:1,b:0,c:0,d:-1,tx:0,ty:0)
-        self.contentLayout.tg_layoutAnimationWithDuration(0.3)
+        self.contentLayout.tg.layoutTransform = CGAffineTransform(a:1,b:0,c:0,d:-1,tx:0,ty:0)
+        self.contentLayout.tg.layoutAnimationWithDuration(0.3)
     }
     
     @objc func handleReverseTransform(_ sender:AnyObject?)
     {
        
         //布局内所有子视图整体翻转180度的效果。
-        self.contentLayout.tg_layoutTransform = CGAffineTransform(a:-1,b:0,c:0,d:-1,tx:0,ty:0)
-        self.contentLayout.tg_layoutAnimationWithDuration(0.3)
+        self.contentLayout.tg.layoutTransform = CGAffineTransform(a:-1,b:0,c:0,d:-1,tx:0,ty:0)
+        self.contentLayout.tg.layoutAnimationWithDuration(0.3)
     }
     
 }

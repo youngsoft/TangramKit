@@ -13,7 +13,7 @@ import UIKit
 class AllTest1TableViewCellForAutoLayout: UITableViewCell,AllTest1Cell {
     
     //对于需要动态评估高度的UITableViewCell来说可以把布局视图暴露出来。用于高度评估和边界线处理。以及事件处理的设置。
-    fileprivate(set) var rootLayout:TGBaseLayout!
+    var rootLayout:TGBaseLayout!
 
     
     weak var headImageView:UIImageView!
@@ -76,7 +76,7 @@ class AllTest1TableViewCellForAutoLayout: UITableViewCell,AllTest1Cell {
         self.textMessageLabel.text = model.textMessage
         if model.imageMessage.isEmpty
         {
-            self.imageMessageImageView.tg_visibility = .gone
+            self.imageMessageImageView.tg.visibility = .gone
         }
         else
         {
@@ -85,11 +85,11 @@ class AllTest1TableViewCellForAutoLayout: UITableViewCell,AllTest1Cell {
             
             if isImageMessageHidden
             {
-                self.imageMessageImageView.tg_visibility = .gone
+                self.imageMessageImageView.tg.visibility = .gone
             }
             else
             {
-                self.imageMessageImageView.tg_visibility = .visible
+                self.imageMessageImageView.tg.visibility = .visible
             }
         }
     }
@@ -104,10 +104,10 @@ extension AllTest1TableViewCellForAutoLayout
     func createLinearRootLayout()
     {
         self.rootLayout = TGLinearLayout(.horz)
-        self.rootLayout.tg_topPadding = 5
-        self.rootLayout.tg_bottomPadding = 5
-        self.rootLayout.tg_height.equal(.wrap)
-        self.rootLayout.tg_cacheEstimatedRect = true //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
+        self.rootLayout.tg.topPadding = 5
+        self.rootLayout.tg.bottomPadding = 5
+        self.rootLayout.tg.height.equal(.wrap)
+        self.rootLayout.tg.cacheEstimatedRect = true //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
         self.contentView.addSubview(self.rootLayout)
         
         //如果您将布局视图作为子视图添加到UITableViewCell本身，并且同时设置了布局视图的宽度等于父布局的情况下，那么有可能最终展示的宽度会不正确。经过试验是因为对UITableViewCell本身的KVO监控所得到的新老尺寸的问题导致的这应该是iOS的一个BUG。所以这里建议最好是把布局视图添加到UITableViewCell的子视图contentView里面去。
@@ -124,11 +124,11 @@ extension AllTest1TableViewCellForAutoLayout
         self.rootLayout.addSubview(headImageView)
         self.headImageView = headImageView
         
-        let messageLayout = TGLinearLayout(.vert)
-        messageLayout.tg_width.equal(.fill)  //等价于tg_width.equal(100%)
-        messageLayout.tg_height.equal(.wrap)
-        messageLayout.tg_leading.equal(5)
-        messageLayout.tg_vspace = 5 //前面4行代码描述的是垂直布局占用除头像外的所有宽度，并和头像保持5个点的间距。
+        var messageLayout = TGLinearLayout(.vert)
+        messageLayout.tg.width.equal(.fill)  //等价于tg_width.equal(100%)
+        messageLayout.tg.height.equal(.wrap)
+        messageLayout.tg.leading.equal(5)
+        messageLayout.tg.vspace = 5 //前面4行代码描述的是垂直布局占用除头像外的所有宽度，并和头像保持5个点的间距。
         self.rootLayout.addSubview(messageLayout)
         
         
@@ -142,13 +142,13 @@ extension AllTest1TableViewCellForAutoLayout
         let textMessageLabel = UILabel()
         textMessageLabel.font = CFTool.font(15)
         textMessageLabel.textColor = CFTool.color(4)
-        textMessageLabel.tg_width.equal(.fill)
-        textMessageLabel.tg_height.equal(.wrap)  //高度为包裹，也就是动态高度。
+        textMessageLabel.tg.width.equal(.fill)
+        textMessageLabel.tg.height.equal(.wrap)  //高度为包裹，也就是动态高度。
         messageLayout.addSubview(textMessageLabel)
         self.textMessageLabel = textMessageLabel
         
         let imageMessageImageView = UIImageView()
-        imageMessageImageView.tg_centerX.equal(0)  //图片视图在父布局视图中水平居中。
+        imageMessageImageView.tg.centerX.equal(0)  //图片视图在父布局视图中水平居中。
         messageLayout.addSubview(imageMessageImageView)
         self.imageMessageImageView = imageMessageImageView
     }
@@ -158,10 +158,10 @@ extension AllTest1TableViewCellForAutoLayout
         
        
         self.rootLayout = TGRelativeLayout()
-        self.rootLayout.tg_topPadding = 5
-        self.rootLayout.tg_bottomPadding = 5
-        self.rootLayout.tg_height.equal(.wrap)
-        self.rootLayout.tg_cacheEstimatedRect = true //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
+        self.rootLayout.tg.topPadding = 5
+        self.rootLayout.tg.bottomPadding = 5
+        self.rootLayout.tg.height.equal(.wrap)
+        self.rootLayout.tg.cacheEstimatedRect = true //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
         self.contentView.addSubview(self.rootLayout)
         
         /*
@@ -174,7 +174,7 @@ extension AllTest1TableViewCellForAutoLayout
         let nickNameLabel = UILabel()
         nickNameLabel.textColor = CFTool.color(3)
         nickNameLabel.font = CFTool.font(17)
-        nickNameLabel.tg_leading.equal(self.headImageView.tg_trailing, offset:5) //昵称文本的左边在头像视图的右边并偏移5个点。
+        nickNameLabel.tg.leading.equal(self.headImageView.tg.trailing, offset:5) //昵称文本的左边在头像视图的右边并偏移5个点。
         rootLayout.addSubview(nickNameLabel)
         self.nickNameLabel = nickNameLabel
         
@@ -182,17 +182,17 @@ extension AllTest1TableViewCellForAutoLayout
         let textMessageLabel = UILabel()
         textMessageLabel.font = CFTool.font(15)
         textMessageLabel.textColor = CFTool.color(4)
-        textMessageLabel.tg_leading.equal(self.headImageView.tg_trailing, offset:5) //文本消息的左边在头像视图的右边并偏移5个点。
-        textMessageLabel.tg_trailing.equal(rootLayout.tg_trailing) //文本消息的右边和父布局的右边对齐。上面2行代码也同时确定了文本消息的宽度。
-        textMessageLabel.tg_top.equal(self.nickNameLabel.tg_bottom,offset:5) //文本消息的顶部在昵称文本的底部并偏移5个点
-        textMessageLabel.tg_height.equal(.wrap)
+        textMessageLabel.tg.leading.equal(self.headImageView.tg.trailing, offset:5) //文本消息的左边在头像视图的右边并偏移5个点。
+        textMessageLabel.tg.trailing.equal(rootLayout.tg.trailing) //文本消息的右边和父布局的右边对齐。上面2行代码也同时确定了文本消息的宽度。
+        textMessageLabel.tg.top.equal(self.nickNameLabel.tg.bottom,offset:5) //文本消息的顶部在昵称文本的底部并偏移5个点
+        textMessageLabel.tg.height.equal(.wrap)
         rootLayout.addSubview(textMessageLabel)
         self.textMessageLabel = textMessageLabel
 
         
         let imageMessageImageView = UIImageView()
-        imageMessageImageView.tg_centerX.equal(5) //图片消息的水平中心点等于父布局的水平中心点并偏移5个点的位置,这里要偏移5的原因是头像和消息之间需要5个点的间距。
-        imageMessageImageView.tg_top.equal(self.textMessageLabel.tg_bottom, offset:5) //图片消息的顶部在文本消息的底部并偏移5个点。
+        imageMessageImageView.tg.centerX.equal(5) //图片消息的水平中心点等于父布局的水平中心点并偏移5个点的位置,这里要偏移5的原因是头像和消息之间需要5个点的间距。
+        imageMessageImageView.tg.top.equal(self.textMessageLabel.tg.bottom, offset:5) //图片消息的顶部在文本消息的底部并偏移5个点。
         rootLayout.addSubview(imageMessageImageView)
         self.imageMessageImageView = imageMessageImageView
     }
@@ -202,10 +202,10 @@ extension AllTest1TableViewCellForAutoLayout
     {
         
         self.rootLayout = TGFloatLayout(.vert)
-        self.rootLayout.tg_topPadding = 5
-        self.rootLayout.tg_bottomPadding = 5
-        self.rootLayout.tg_height.equal(.wrap)
-        self.rootLayout.tg_cacheEstimatedRect = true //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
+        self.rootLayout.tg.topPadding = 5
+        self.rootLayout.tg.bottomPadding = 5
+        self.rootLayout.tg.height.equal(.wrap)
+        self.rootLayout.tg.cacheEstimatedRect = true //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
         self.contentView.addSubview(self.rootLayout)
  
         /*
@@ -213,30 +213,30 @@ extension AllTest1TableViewCellForAutoLayout
          要想了解浮动布局的原理，请参考文章：http://www.jianshu.com/p/0c075f2fdab2 中的介绍。
          */
         let headImageView = UIImageView()
-        headImageView.tg_trailing.equal(5) //右边保留出5个点的视图间距。
+        headImageView.tg.trailing.equal(5) //右边保留出5个点的视图间距。
         rootLayout.addSubview(headImageView)
         self.headImageView = headImageView
         
         let nickNameLabel = UILabel()
         nickNameLabel.textColor = CFTool.color(3)
         nickNameLabel.font = CFTool.font(17)
-        nickNameLabel.tg_bottom.equal(5)  //下边保留出5个点的视图间距。
-        nickNameLabel.tg_width.equal(.fill) //占用剩余宽度。
+        nickNameLabel.tg.bottom.equal(5)  //下边保留出5个点的视图间距。
+        nickNameLabel.tg.width.equal(.fill) //占用剩余宽度。
         rootLayout.addSubview(nickNameLabel)
         self.nickNameLabel = nickNameLabel
         
         let textMessageLabel = UILabel()
         textMessageLabel.font = CFTool.font(15)
         textMessageLabel.textColor = CFTool.color(4)
-        textMessageLabel.tg_width.equal(.fill)  //占用剩余宽度。
-        textMessageLabel.tg_height.equal(.wrap) //高度包裹
+        textMessageLabel.tg.width.equal(.fill)  //占用剩余宽度。
+        textMessageLabel.tg.height.equal(.wrap) //高度包裹
         rootLayout.addSubview(textMessageLabel)
         self.textMessageLabel = textMessageLabel
         
-        let imageMessageImageView = UIImageView()
-        imageMessageImageView.tg_top.equal(5)
-        imageMessageImageView.tg_reverseFloat = true  //反向浮动
-        imageMessageImageView.tg_width.equal(.fill)    //占用剩余空间
+        var imageMessageImageView = UIImageView()
+        imageMessageImageView.tg.top.equal(5)
+        imageMessageImageView.tg.reverseFloat = true  //反向浮动
+        imageMessageImageView.tg.width.equal(.fill)    //占用剩余空间
         imageMessageImageView.contentMode = .center
         rootLayout.addSubview(imageMessageImageView)
         self.imageMessageImageView = imageMessageImageView

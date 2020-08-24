@@ -53,9 +53,9 @@ class AllTest4ViewController: UIViewController {
         
         
         rootLayout = TGLinearLayout(.vert)
-        rootLayout.tg_gravity = TGGravity.Horizontal.fill //设置垂直线性布局的水平填充值表明布局视图里面的所有子视图的宽度都和布局视图相等。
-        rootLayout.tg_width.equal(.fill)
-        rootLayout.tg_height.equal(.wrap)
+        rootLayout.tg.gravity = TGGravity.Horizontal.fill //设置垂直线性布局的水平填充值表明布局视图里面的所有子视图的宽度都和布局视图相等。
+        rootLayout.tg.width.equal(.fill)
+        rootLayout.tg.height.equal(.wrap)
         scrollView.addSubview(rootLayout)
         
         
@@ -66,7 +66,7 @@ class AllTest4ViewController: UIViewController {
 
             //添加单元格容器视图
             let cellContainerLayout = self.createCellContainerLayout(arrangedCount: index + 2)
-            cellContainerLayout.tg_bottom.equal(10)
+            cellContainerLayout.tg.bottom.equal(10)
             self.containerLayouts.append(cellContainerLayout)
             rootLayout.addSubview(cellContainerLayout)
             
@@ -97,15 +97,15 @@ extension AllTest4ViewController
     //创建辅助布局视图
     func createSupplementaryLayout(sectionTitle: String) -> TGRelativeLayout {
         //建立一个相对布局
-        let supplementaryLayout = TGRelativeLayout()
-        supplementaryLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
-        supplementaryLayout.tg_height.equal(40)
-        supplementaryLayout.tg_boundBorderline = TGBorderline(color: UIColor.lightGray) //设置底部边界线。
+        var supplementaryLayout = TGRelativeLayout()
+        supplementaryLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
+        supplementaryLayout.tg.height.equal(40)
+        supplementaryLayout.tg.boundBorderline = TGBorderline(color: UIColor.lightGray) //设置底部边界线。
         supplementaryLayout.backgroundColor = UIColor.white
         
         let imageView = UIImageView(image:UIImage(named:"next"))
-        imageView.tg_centerY.equal(supplementaryLayout.tg_centerY)  //垂直居中
-        imageView.tg_trailing.equal(supplementaryLayout.tg_trailing)     //和父视图右对齐。
+        imageView.tg.centerY.equal(supplementaryLayout.tg.centerY)  //垂直居中
+        imageView.tg.trailing.equal(supplementaryLayout.tg.trailing)     //和父视图右对齐。
         supplementaryLayout.addSubview(imageView);
         
         let sectionTitleLabel = UILabel()
@@ -115,9 +115,9 @@ extension AllTest4ViewController
         sectionTitleLabel.font = CFTool.font(17)
         sectionTitleLabel.minimumScaleFactor = 0.7
         sectionTitleLabel.lineBreakMode = .byTruncatingMiddle
-        sectionTitleLabel.tg_centerY.equal(supplementaryLayout.tg_centerY)  //垂直居中
-        sectionTitleLabel.tg_leading.equal(supplementaryLayout.tg_leading)       //左边和父视图左对齐
-        sectionTitleLabel.tg_trailing.equal(imageView.tg_trailing)                //右边是图标的左边。
+        sectionTitleLabel.tg.centerY.equal(supplementaryLayout.tg.centerY)  //垂直居中
+        sectionTitleLabel.tg.leading.equal(supplementaryLayout.tg.leading)       //左边和父视图左对齐
+        sectionTitleLabel.tg.trailing.equal(imageView.tg.trailing)                //右边是图标的左边。
         sectionTitleLabel.sizeToFit()
         supplementaryLayout.addSubview(sectionTitleLabel)
         
@@ -127,30 +127,30 @@ extension AllTest4ViewController
     //创建单元格容器布局视图，并指定每行的数量。
     func createCellContainerLayout(arrangedCount:NSInteger) -> TGFlowLayout
     {
-        let containerLayout = TGFlowLayout(.vert, arrangedCount:arrangedCount)
-        containerLayout.tg_height.equal(.wrap)
-        containerLayout.tg_gravity = TGGravity.Horizontal.fill //平均分配里面每个子视图的宽度或者拉伸子视图的宽度以便填充满整个布局。
-        containerLayout.tg_hspace = 5
-        containerLayout.tg_vspace = 5
-        containerLayout.tg_padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
+        var containerLayout = TGFlowLayout(.vert, arrangedCount:arrangedCount)
+        containerLayout.tg.height.equal(.wrap)
+        containerLayout.tg.gravity = TGGravity.Horizontal.fill //平均分配里面每个子视图的宽度或者拉伸子视图的宽度以便填充满整个布局。
+        containerLayout.tg.hspace = 5
+        containerLayout.tg.vspace = 5
+        containerLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         
         return containerLayout
     }
     
     func createCellLayout1(image:String, title:String) -> TGBaseLayout
     {
-        let cellLayout = TGLinearLayout(.vert)
-        cellLayout.tg_gravity = TGGravity.Horizontal.fill  //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
-        cellLayout.tg_height.equal(100)
-        cellLayout.tg_space = 5  //设置布局视图里面子视图之间的间距为5个点。
+        var cellLayout = TGLinearLayout(.vert)
+        cellLayout.tg.gravity = TGGravity.Horizontal.fill  //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
+        cellLayout.tg.height.equal(100)
+        cellLayout.tg.space = 5  //设置布局视图里面子视图之间的间距为5个点。
         cellLayout.backgroundColor = UIColor.white
-        cellLayout.tg_setTarget(self, action:#selector(handleCellLayoutTap(_:)), for:.touchUpInside)
-        cellLayout.tg_highlightedOpacity = 0.3; //设置触摸事件按下时的不透明度，来响应按下状态。
+        cellLayout.tg.setTarget(self, action:#selector(handleCellLayoutTap(_:)), for:.touchUpInside)
+        cellLayout.tg.highlightedOpacity = 0.3; //设置触摸事件按下时的不透明度，来响应按下状态。
         
         
         
         let imageView = UIImageView(image:UIImage(named:image))
-        imageView.tg_height.equal(100%)   //图片视图占用剩余的高度。
+        imageView.tg.height.equal(100%)   //图片视图占用剩余的高度。
         cellLayout.addSubview(imageView)
         
         let titleLabel = UILabel()
@@ -159,7 +159,7 @@ extension AllTest4ViewController
         titleLabel.textColor = CFTool.color(4)
         titleLabel.textAlignment = NSTextAlignment.center
         titleLabel.adjustsFontSizeToFitWidth = true
-        titleLabel.tg_bottom.equal(2)
+        titleLabel.tg.bottom.equal(2)
         titleLabel.sizeToFit()
         cellLayout.addSubview(titleLabel)
         
@@ -172,10 +172,10 @@ extension AllTest4ViewController
 extension AllTest4ViewController {
     @objc func handleReverse(_ sender:UIView) -> Void {
         //TGBaseLayout的属性tg_reverseLayout可以将子视图按照添加的顺序逆序布局。
-        for layout in self.containerLayouts
-        {
-            layout.tg_reverseLayout = !layout.tg_reverseLayout
-            layout.tg_layoutAnimationWithDuration(0.3)
+        for layout in self.containerLayouts {
+            var layout = layout
+            layout.tg.reverseLayout = !layout.tg.reverseLayout
+            layout.tg.layoutAnimationWithDuration(0.3)
         }
 
     }
@@ -204,27 +204,28 @@ extension AllTest4ViewController {
         let rectOld = fromLayout.convert(sender.frame, to: self.view)
         
         //得到将sender加入到toLayout后的评估的frame值，注意这时候sender还没有加入到toLayout。因为是加入到最后面，因此只能用这个方法来评估加入后的值，如果不是添加到最后则是可以很简单的得到应该插入的位置的。
-        var rectNew = toLayout.tg_estimatedFrame(of: sender)
+        var rectNew = toLayout.tg.estimatedFrame(of: sender)
         rectNew = toLayout.convert(rectNew, to: self.view) //将新位置的评估的frame值，进行坐标转换。
+
+        var sender = sender
         
         //在动画的过程中，我们将sender作为self.view的子视图来实现移动的效果。
         fromLayout.autoresizesSubviews = false
         sender.removeFromSuperview()
         sender.frame = rectOld
-        sender.tg_useFrame = true  //设置为true表示sender不再受到布局视图的约束，而是可以自由设置frame值。
+        sender.tg.useFrame = true  //设置为true表示sender不再受到布局视图的约束，而是可以自由设置frame值。
         self.view.addSubview(sender)
         
         UIView.animate(withDuration: 0.3, animations: { 
             sender.frame = rectNew
         }) { _ in
-            
             //恢复重新布局。
             fromLayout.autoresizesSubviews = true
             fromLayout.setNeedsLayout()
             
             //动画结束后再将sender移植到toLayout中。
             sender.removeFromSuperview()
-            sender.tg_useFrame = false  //还原tg_useFrame，因为加入到toLayout后将受到布局视图的约束。
+            sender.tg.useFrame = false  //还原tg_useFrame，因为加入到toLayout后将受到布局视图的约束。
             toLayout.addSubview(sender)
         }
         

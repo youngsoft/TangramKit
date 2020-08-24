@@ -27,7 +27,7 @@ class AllTest1ViewController: UITableViewController {
         let textMessages = ["",
                             NSLocalizedString("a single line text", comment:""),
                             NSLocalizedString("This Demo is used to introduce the solution when use layout view to realize the UITableViewCell's dynamic height. We only need to use the layout view's tg_sizeThatFits method to evaluate the size of the layout view. and you can touch the Cell to shrink the height when the Cell has a picture.", comment:""),
-                            NSLocalizedString("Through layout view's tg_sizeThatFits method can assess a UITableViewCell dynamic height.tg_sizeThatFits just to evaluate layout size but not set the size of the layout. here don't preach the width of 0 is the cause of the above UITableViewCell set the default width is 320 (regardless of any screen), so if we pass the width of 0 will be according to the width of 320 to evaluate UITableViewCell dynamic height, so when in 375 and 375 the width of the assessment of height will not be right, so here you need to specify the real width dimension;And the height is set to 0 mean height is not a fixed value need to evaluate. you can use all type layout view to realize UITableViewCell.", comment:""),
+                            NSLocalizedString("Through layout view's tg_sizeThatFits method can assess a UITableViewCell dynamic height.tg.sizeThatFits just to evaluate layout size but not set the size of the layout. here don't preach the width of 0 is the cause of the above UITableViewCell set the default width is 320 (regardless of any screen), so if we pass the width of 0 will be according to the width of 320 to evaluate UITableViewCell dynamic height, so when in 375 and 375 the width of the assessment of height will not be right, so here you need to specify the real width dimension;And the height is set to 0 mean height is not a fixed value need to evaluate. you can use all type layout view to realize UITableViewCell.", comment:""),
                             NSLocalizedString("This section not only has text but also hav picture. and picture below at text, text will wrap", comment:"")
         ]
         
@@ -158,15 +158,15 @@ class AllTest1ViewController: UITableViewController {
     
     func createTableHeaderView() {
         //这个例子用来构建一个自适应高度的头部布局视图。
-        let tableHeaderViewLayout = TGLinearLayout(.vert)
-        tableHeaderViewLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
+        var tableHeaderViewLayout = TGLinearLayout(.vert)
+        tableHeaderViewLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
         tableHeaderViewLayout.frame = CGRect(x: 0, y: 0, width: self.tableView.bounds.width, height: 0) //这里没有设置高度，但设置了明确的宽度
         //高度不确定可以设置为0。尽量不要在代码中使用kScreenWidth,kScreenHeight，SCREEN_WIDTH。之类这样的宏来设定视图的宽度和高度。要充分利用Tangram的特性，减少常数的使用。
-        tableHeaderViewLayout.tg_width.equal(.fill) //这里注意设置宽度和父布局保持一致。
-        tableHeaderViewLayout.tg_height.equal(.wrap)
-        tableHeaderViewLayout.tg_backgroundImage = UIImage(named: "bk1")
+        tableHeaderViewLayout.tg.width.equal(.fill) //这里注意设置宽度和父布局保持一致。
+        tableHeaderViewLayout.tg.height.equal(.wrap)
+        tableHeaderViewLayout.tg.backgroundImage = UIImage(named: "bk1") ?? UIImage()
         //为布局添加触摸事件。
-        tableHeaderViewLayout.tg_setTarget(self, action: #selector(handleTableHeaderViewLayoutClick), for:.touchUpInside)
+        tableHeaderViewLayout.tg.setTarget(self, action: #selector(handleTableHeaderViewLayoutClick), for:.touchUpInside)
         
         let label1 = UILabel()
         label1.text = NSLocalizedString("add tableHeaderView(please touch me)", comment: "")
@@ -175,7 +175,7 @@ class AllTest1ViewController: UITableViewController {
         label1.tag = 1000
         label1.textColor = UIColor.white
         label1.font = UIFont.systemFont(ofSize: 17)
-        label1.tg_centerX.equal(0)
+        label1.tg.centerX.equal(0)
         label1.sizeToFit()
         tableHeaderViewLayout.addSubview(label1)
         
@@ -183,10 +183,10 @@ class AllTest1ViewController: UITableViewController {
         label2.text = NSLocalizedString(" if you use layout view to realize the dynamic height tableHeaderView, please use frame to set view's width and use wrapContentHeight to set view's height. the layoutIfNeeded method is needed to call before the layout view assignment to the UITableview's tableHeaderView.", comment: "")
         label2.textColor = CFTool.color(4)
         label2.font = CFTool.font(15)
-        label2.tg_leading.equal(5)
-        label2.tg_trailing.equal(5)
-        label2.tg_height.equal(.wrap)
-        label2.tg_top.equal(10)
+        label2.tg.leading.equal(5)
+        label2.tg.trailing.equal(5)
+        label2.tg.height.equal(.wrap)
+        label2.tg.top.equal(10)
         
         tableHeaderViewLayout.addSubview(label2)
         tableHeaderViewLayout.layoutIfNeeded() //因为高度是.wrap的，所以这里必须要在加入前执行这句！！！ 原因是tableHeaderView必须要明确的指定frame。所以通过layoutIfNeeded来算出真实视图真实的frame值。因为tableHeaderViewLayout这时候并没有父视图，所以这里必须要明确的通过frame指定宽度，这样最终的计算结果才正确。
@@ -198,7 +198,7 @@ class AllTest1ViewController: UITableViewController {
         //因为tableHeaderViewLayout的高度是通过layoutIfNeed来确定的。因此在屏幕旋转时我们需要手动再次调整tableHeaderViewLayout的frame值。
         //因此您需要实现这个block来实现当布局视图在横竖屏切换时的frame的动态更新。。。
         //注意这个block不会只执行一次，而是长期存在，因此要注意block内对象的引用的问题。
-        tableHeaderViewLayout.tg_rotationToDeviceOrientationDo { (_, isFirst:Bool, _ ) in
+        tableHeaderViewLayout.tg.rotationToDeviceOrientationDo { (_, isFirst:Bool, _ ) in
             if !isFirst
             {
                 weakTableview?.tableHeaderView?.layoutIfNeeded()
@@ -210,12 +210,12 @@ class AllTest1ViewController: UITableViewController {
     
     func createTableFooterView() {
         //这个例子用来构建一个固定高度的尾部布局视图。
-        let tableFooterViewLayout = TGLinearLayout(.vert)
-        tableFooterViewLayout.tg_padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
+        var tableFooterViewLayout = TGLinearLayout(.vert)
+        tableFooterViewLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
         tableFooterViewLayout.frame = CGRect(x: 0, y: 0, width: self.tableView.bounds.width, height: 80) ////这里明确设定高度。
-        tableFooterViewLayout.tg_width.equal(.fill) //这里注意设置宽度和父布局保持一致。
+        tableFooterViewLayout.tg.width.equal(.fill) //这里注意设置宽度和父布局保持一致。
         tableFooterViewLayout.backgroundColor = CFTool.color(6)
-        tableFooterViewLayout.tg_gravity = [TGGravity.Vertical.center, TGGravity.Horizontal.fill]
+        tableFooterViewLayout.tg.gravity = [TGGravity.Vertical.center, TGGravity.Horizontal.fill]
         
         let label3 = UILabel()
         label3.text = NSLocalizedString("add tableFooterView", comment: "")
@@ -230,7 +230,7 @@ class AllTest1ViewController: UITableViewController {
         label4.textColor = CFTool.color(3)
         label4.font = CFTool.font(14)
         label4.textAlignment = .center
-        label4.tg_top.equal(10)
+        label4.tg.top.equal(10)
         label4.adjustsFontSizeToFitWidth = true
         label4.sizeToFit()
         tableFooterViewLayout.addSubview(label4)
@@ -288,19 +288,19 @@ class AllTest1ViewController: UITableViewController {
         
         let model = self.datas[indexPath.row]
         
-        let all1cell = cell as! AllTest1Cell
+        var all1cell = cell as! AllTest1Cell
         
         all1cell.setModel(model: model,isImageMessageHidden:self.imageHiddenFlags[indexPath.row])
         
         //这里设置其他位置有间隔线而最后一行没有下划线。我们可以借助布局视图本身所提供的边界线来代替掉系统默认的cell之间的间隔线，因为布局视图的边界线所提供的能力要大于默认的间隔线。
         if (indexPath.row  == self.datas.count - 1)
         {
-            all1cell.rootLayout.tg_bottomBorderline = nil;
+            all1cell.rootLayout.tg.bottomBorderline = nil;
         }
         else
         {
             let bld = TGBorderline(color:UIColor.red)
-            all1cell.rootLayout.tg_bottomBorderline = bld;
+            all1cell.rootLayout.tg.bottomBorderline = bld;
         }
         
         
@@ -327,15 +327,15 @@ class AllTest1ViewController: UITableViewController {
     
     @objc func handleTableHeaderViewLayoutClick(sender:TGBaseLayout!)
     {
-        if  let label1 = sender.viewWithTag(1000)
+        if  var label1 = sender.viewWithTag(1000)
         {
-            if label1.tg_visibility == .visible
+            if label1.tg.visibility == .visible
             {
-                label1.tg_visibility = .gone
+                label1.tg.visibility = .gone
             }
             else
             {
-                label1.tg_visibility = .visible
+                label1.tg.visibility = .visible
             }
             
             UIView.animate(withDuration: 0.3) {

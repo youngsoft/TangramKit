@@ -46,65 +46,65 @@ class TLTest4ViewController: UIViewController {
         }
         
         
-        let tableLayout = TGTableLayout(.vert)
-        tableLayout.tg_height.equal(.wrap)
-        //这里设置表格的左边和右边以及顶部的边距都是在父视图的安全区域外再缩进10个点的位置。你会注意到这里面定义了一个特殊的位置TGLayoutPos.tg_safeAreaMargin。
-        //TGLayoutPos.tg_safeAreaMargin表示视图的边距不是一个固定的值而是所在的父视图的安全区域。这样布局视图就不会延伸到安全区域以外去了。
-        //TGLayoutPos.tg_safeAreaMargin是同时支持iOS11和以下的版本的，对于iOS11以下的版本则顶部安全区域是状态栏以下的位置。
+        var tableLayout = TGTableLayout(.vert)
+        tableLayout.tg.height.equal(.wrap)
+        //这里设置表格的左边和右边以及顶部的边距都是在父视图的安全区域外再缩进10个点的位置。你会注意到这里面定义了一个特殊的位置TGLayoutPos.tg.safeAreaMargin。
+        //TGLayoutPos.tg.safeAreaMargin表示视图的边距不是一个固定的值而是所在的父视图的安全区域。这样布局视图就不会延伸到安全区域以外去了。
+        //TGLayoutPos.tg.safeAreaMargin是同时支持iOS11和以下的版本的，对于iOS11以下的版本则顶部安全区域是状态栏以下的位置。
         //因此只要你设置边距为MyLayoutPos.safeAreaMargin则可以同时兼容所有iOS的版本。。
-        tableLayout.tg_leading.equal(TGLayoutPos.tg_safeAreaMargin, offset: 10)
-        tableLayout.tg_trailing.equal(TGLayoutPos.tg_safeAreaMargin, offset: 10)
-        tableLayout.tg_top.equal(TGLayoutPos.tg_safeAreaMargin, offset: 10)
+        tableLayout.tg.leading.equal(TGLayoutPos.tg.safeAreaMargin, offset: 10)
+        tableLayout.tg.trailing.equal(TGLayoutPos.tg.safeAreaMargin, offset: 10)
+        tableLayout.tg.top.equal(TGLayoutPos.tg.safeAreaMargin, offset: 10)
         scrollView.addSubview(tableLayout)
         
         //建立一个表格外边界的边界线。颜色为黑色，粗细为3.
-        tableLayout.tg_boundBorderline = TGBorderline(color:CFTool.color(4), thick: 3)
+        tableLayout.tg.boundBorderline = TGBorderline(color:CFTool.color(4), thick: 3)
         //建立智能边界线。所谓智能边界线就是布局里面的如果有子布局视图，则子布局视图会根据自身的布局位置智能的设置边界线。
         //智能边界线只支持表格布局、线性布局、流式布局、浮动布局。
         //如果要想完美使用智能分界线，则请将cellview建立为一个布局视图。
-        tableLayout.tg_intelligentBorderline = TGBorderline(color:CFTool.color(5))
+        tableLayout.tg.intelligentBorderline = TGBorderline(color:CFTool.color(5))
         
         
          let titles = ["身高(Height)(cm)", "体重(Weight)(kg)", "胸围(Bust)(cm)","腰围(Waist)(cm)","臀围(Hip)(cm)","鞋码(Shoes Size)(欧码)"]
          let values = ["177","54","88","88","88","43"]
         
         //第一行
-        let row1 = tableLayout.tg_addRow(size:TGLayoutSize.wrap, colCount:titles.count)
-        row1.tg_gravity = TGGravity.Vertical.top
+        var row1 = tableLayout.tg.addRow(size:TGLayoutSize.wrap, colCount:titles.count)
+        row1.tg.gravity = TGGravity.Vertical.top
         row1.backgroundColor = CFTool.color(8)
         titles.forEach({tableLayout.addSubview(self.itemFrom(text: $0, alignment: .center)) })
         
     
         
         //第二行
-        let row2 = tableLayout.tg_addRow(size:TGLayoutSize.wrap, colCount:titles.count)
-        row2.tg_gravity = TGGravity.Vertical.center
+        var row2 = tableLayout.tg.addRow(size:TGLayoutSize.wrap, colCount:titles.count)
+        row2.tg.gravity = TGGravity.Vertical.center
         titles.forEach({tableLayout.addSubview(self.itemFrom(text: $0, alignment: .center)) })
 
         
         //第三行
-        let row3 = tableLayout.tg_addRow(size:TGLayoutSize.wrap, colCount:titles.count)
-        row3.tg_gravity = TGGravity.Vertical.bottom
+        var row3 = tableLayout.tg.addRow(size:TGLayoutSize.wrap, colCount:titles.count)
+        row3.tg.gravity = TGGravity.Vertical.bottom
         titles.forEach({tableLayout.addSubview(self.itemFrom(text: $0, alignment: .center)) })
 
         
         //第四行
-        _ = tableLayout.tg_addRow(size:50, colCount:titles.count)
+        _ = tableLayout.tg.addRow(size:50, colCount:titles.count)
         titles.forEach({tableLayout.addSubview(self.itemFrom(text: $0, alignment: .center, isFitWidth:true)) })
         
         
         //第五行
-        _ = tableLayout.tg_addRow(size:TGLayoutSize.wrap, colCount:values.count)
+        _ = tableLayout.tg.addRow(size:TGLayoutSize.wrap, colCount:values.count)
         values.forEach({tableLayout.addSubview(self.itemFrom(text: $0, alignment: .left)) })
 
         
         //第六行
-        _ = tableLayout.tg_addRow(size:TGLayoutSize.wrap, colCount:values.count)
+        _ = tableLayout.tg.addRow(size:TGLayoutSize.wrap, colCount:values.count)
         values.forEach({tableLayout.addSubview(self.itemFrom(text: $0, alignment: .center)) })
 
         
         //第7行
-        _ = tableLayout.tg_addRow(size:TGLayoutSize.wrap, colCount:values.count)
+        _ = tableLayout.tg.addRow(size:TGLayoutSize.wrap, colCount:values.count)
         values.forEach({tableLayout.addSubview(self.itemFrom(text: $0, alignment: .right)) })
         
     
@@ -127,11 +127,11 @@ extension TLTest4ViewController
   
     func itemFrom(text:String, alignment:NSTextAlignment, isFitWidth:Bool = false) -> TGBaseLayout
     {
-        let  itemLayout = TGFrameLayout()
-        itemLayout.tg_topPadding = 10
-        itemLayout.tg_bottomPadding = 10
-        itemLayout.tg_leadingPadding = 10
-        itemLayout.tg_trailingPadding = 5
+        var  itemLayout = TGFrameLayout()
+        itemLayout.tg.topPadding = 10
+        itemLayout.tg.bottomPadding = 10
+        itemLayout.tg.leadingPadding = 10
+        itemLayout.tg.trailingPadding = 5
         
         let label = UILabel()
         label.text = text
@@ -141,15 +141,15 @@ extension TLTest4ViewController
         
         if isFitWidth
         {
-            itemLayout.tg_gravity = TGGravity.fill
+            itemLayout.tg.gravity = TGGravity.fill
             label.adjustsFontSizeToFitWidth = true
             label.numberOfLines = 0
         }
         else
         {
-            itemLayout.tg_gravity = TGGravity.Horizontal.fill
-            itemLayout.tg_height.equal(.wrap)
-            label.tg_height.equal(.wrap)
+            itemLayout.tg.gravity = TGGravity.Horizontal.fill
+            itemLayout.tg.height.equal(.wrap)
+            label.tg.height.equal(.wrap)
         }
         
         

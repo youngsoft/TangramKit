@@ -231,7 +231,7 @@ class ViewController: UITableViewController {
     @objc func handleRTL(_ sender:UIBarButtonItem)
     {
      
-        if TGBaseLayout.tg_isRTL
+        if TGBaseLayout.tg.isRTL
         {
             sender.title = "RTL"
             UILabel.appearance().textAlignment = .left
@@ -242,7 +242,7 @@ class ViewController: UITableViewController {
             UILabel.appearance().textAlignment = .right
         }
         
-        TGBaseLayout.tg_isRTL = !TGBaseLayout.tg_isRTL
+        TGBaseLayout.tg.isRTL = !TGBaseLayout.tg.isRTL
         self.tableView.reloadData()
     }
 
@@ -265,7 +265,7 @@ class ViewController: UITableViewController {
         cell.textLabel?.font = CFTool.font(15)
         cell.textLabel?.textColor = CFTool.color(4)
         cell.textLabel?.text = self.demoTypeList[indexPath.row]["type_title"] as? String
-        cell.textLabel?.textAlignment = TGBaseLayout.tg_isRTL ? .right : .left
+        cell.textLabel?.textAlignment = TGBaseLayout.tg.isRTL ? .right : .left
         cell.imageView?.image = UIImage(named: self.demoTypeList[indexPath.row]["type_desc"] as! String)
         
         return cell

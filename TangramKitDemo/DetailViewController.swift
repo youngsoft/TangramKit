@@ -72,7 +72,7 @@ class DetailViewController: UITableViewController {
         cell.textLabel?.font = CFTool.font(15)
         cell.textLabel?.textColor = CFTool.color(4)
         cell.textLabel?.text = self.demoVCList[indexPath.row]["title"] as? String
-        cell.textLabel?.textAlignment = TGBaseLayout.tg_isRTL ? .right : .left
+        cell.textLabel?.textAlignment = TGBaseLayout.tg.isRTL ? .right : .left
         
         return cell
     }

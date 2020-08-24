@@ -404,7 +404,7 @@ extension LLTest2ViewController
         baselineLayout.layer.cornerRadius = 4
         baselineLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         baselineLayout.tg.top.equal(20)
-        baselineLayout.tg_horzMargin(0)
+        baselineLayout.tg.hMargin(0)
         baselineLayout.tg.height.equal(50)
         baselineLayout.tg.gravity = [TGGravity.Horizontal.center, TGGravity.Vertical.baseline]
         contentLayout.addSubview(baselineLayout)

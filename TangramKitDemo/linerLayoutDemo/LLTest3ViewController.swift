@@ -424,9 +424,9 @@ extension LLTest3ViewController
     
     @objc func handleNavigationTitleCentre(_ sender: AnyObject!)
     {
-        let navigationItemLayout = TGLinearLayout(.vert)
+        var navigationItemLayout = TGLinearLayout(.vert)
         //通过TGGravity.Horizontal.windowCenter的设置总是保证在窗口的中间而不是布局视图的中间。
-        navigationItemLayout.tg_gravity = [TGGravity.Horizontal.windowCenter , TGGravity.Vertical.center]
+        navigationItemLayout.tg.gravity = [TGGravity.Horizontal.windowCenter , TGGravity.Vertical.center]
         navigationItemLayout.frame = self.navigationController!.navigationBar.bounds
         
         let topLabel = UILabel()
