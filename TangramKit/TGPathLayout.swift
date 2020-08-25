@@ -120,6 +120,85 @@ open class TGCoordinateSetting {
 /**
  *路径布局类。路径布局通过坐标轴的设置，曲线路径函数方程，子视图中心点之间的距离三个要素来确定其中子视图的位置。因此通过路径布局可以实现一些非常酷炫的布局效果。
  */
+
+public extension TGTypeWrapperProtocol where TGWrappedType: TGPathLayout {
+    var coordinateSetting: TGCoordinateSetting {
+        return self.wrappedValue.tg_coordinateSetting
+    }
+
+    func rectangularEquation(value: ((CGFloat) -> CGFloat?)?) {
+        self.wrappedValue.tg_rectangularEquation = value
+    }
+
+    func rectangularEquation() -> ((CGFloat) -> CGFloat?)? {
+        return self.wrappedValue.tg_rectangularEquation
+    }
+
+    func parametricEquation(value: ((CGFloat) -> CGPoint?)?) {
+        self.wrappedValue.tg_parametricEquation = value
+    }
+
+    func parametricEquation() -> ((CGFloat)->CGPoint?)? {
+        return self.wrappedValue.tg_parametricEquation
+    }
+
+    func polarEquation(value: ((TGRadian)->CGFloat?)?) {
+        self.wrappedValue.tg_polarEquation = value
+    }
+
+    func polarEquation() -> ((TGRadian)->CGFloat?)? {
+        return self.wrappedValue.tg_polarEquation
+    }
+
+    func spaceType(value:TGPathSpaceType) {
+        self.wrappedValue.tg_spaceType = value
+    }
+
+    func spaceType() -> TGPathSpaceType {
+        return self.wrappedValue.tg_spaceType
+    }
+
+    func originView(value: UIView?) {
+        self.wrappedValue.tg_originView = value
+    }
+
+    func originView() -> UIView? {
+        return self.wrappedValue.tg_originView
+    }
+
+    var pathSubviews: [UIView] {
+        return self.wrappedValue.tg_pathSubviews
+    }
+
+    func distanceError(value: CGFloat) {
+        self.wrappedValue.tg_distanceError = value
+    }
+
+    func distanceError() -> CGFloat {
+        return self.wrappedValue.tg_distanceError
+    }
+
+    func argumentFrom(subview: UIView) -> CGFloat? {
+        return self.wrappedValue.tg_argumentFrom(subview: subview)
+    }
+
+    func beginSubviewPathPoint(full: Bool) {
+        self.wrappedValue.tg_beginSubviewPathPoint(full: full)
+    }
+
+    func endSubviewPathPoint() {
+        self.wrappedValue.tg_endSubviewPathPoint()
+    }
+
+    func getSubviewPathPoint(fromIndex: Int, toIndex: Int) -> [CGPoint]? {
+        return self.wrappedValue.tg_getSubviewPathPoint(fromIndex: fromIndex, toIndex: toIndex)
+    }
+
+    func createPath(subviewCount: Int) -> CGPath {
+        return self.wrappedValue.tg_createPath(subviewCount: subviewCount)
+    }
+}
+
 open class TGPathLayout : TGBaseLayout,TGPathLayoutViewSizeClass {
     
     

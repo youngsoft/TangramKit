@@ -52,8 +52,8 @@ class PLTest2ViewController: UIViewController {
         
         myPathLayout = TGLocusPathLayout()
         myPathLayout.backgroundColor = .white
-        myPathLayout.tg_height.equal(.wrap).min(scrollView).and().tg_width.equal(.wrap).min(scrollView) // 这里用了 and() 用于链式语法
-        myPathLayout.tg_padding = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        myPathLayout.tg.height.equal(.wrap).min(scrollView).and().tg.width.equal(.wrap).min(scrollView) // 这里用了 and() 用于链式语法
+        myPathLayout.tg.padding(value: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
         scrollView.addSubview(myPathLayout)
     }
 
@@ -70,8 +70,8 @@ class PLTest2ViewController: UIViewController {
     }
     
     @objc func handleRevrse(sender: UIBarButtonItem) {
-        myPathLayout.tg_coordinateSetting.isReverse = !myPathLayout.tg_coordinateSetting.isReverse
-        myPathLayout.tg_layoutAnimationWithDuration(0.3)
+        myPathLayout.tg.coordinateSetting.isReverse = !myPathLayout.tg.coordinateSetting.isReverse
+        myPathLayout.tg.layoutAnimationWithDuration(0.3)
     }
     
     enum CurveType: String {
@@ -132,91 +132,90 @@ class PLTest2ViewController: UIViewController {
     @objc func handleAdd(sender: UIBarButtonItem) {
         
         var pt = CGPoint.zero
-        if myPathLayout.tg_pathSubviews.count > 0 {
+        if myPathLayout.tg.pathSubviews.count > 0 {
             //这里不取subviews的原因是，有可能会出现设置了原点视图的情况。
-            pt = myPathLayout.tg_pathSubviews.last!.frame.origin
+            pt = myPathLayout.tg.pathSubviews.last!.frame.origin
         }
         
         let btn = UIButton(type: .custom)
         btn.layer.cornerRadius = 20
         btn.layer.masksToBounds = true
         btn.center = pt
-        btn.tg_width.equal(40)
-        btn.tg_height.equal(40)
+        btn.tg.width.equal(40)
+        btn.tg.height.equal(40)
         btn.backgroundColor = randomColor
         btn.addTarget(self, action: #selector(PLTest2ViewController.handleDel(sender:)), for: .touchUpInside)
         
         myPathLayout.addSubview(btn)
         
-        myPathLayout.tg_layoutAnimationWithDuration(0.3)
+        myPathLayout.tg.layoutAnimationWithDuration(0.3)
     }
     
     @objc func handleDel(sender: UIButton) {
         sender.removeFromSuperview()
-        myPathLayout.tg_layoutAnimationWithDuration(0.3)
+        myPathLayout.tg.layoutAnimationWithDuration(0.3)
     }
     
     func actionSheetAction(type: CurveType) {
         changeFunc(index: type)
         myPathLayout.setNeedsLayout()
-        myPathLayout.tg_layoutAnimationWithDuration(0.5)
+        myPathLayout.tg.layoutAnimationWithDuration(0.5)
     }
     
     func changeFunc(index of: CurveType) {
         
         switch of {
         case .straight_line: //直线函数 y = a * x + b;
-            myPathLayout.tg_coordinateSetting.origin = CGPoint(x: 0, y: 0)
-            myPathLayout.tg_coordinateSetting.isMath = false
-            myPathLayout.tg_coordinateSetting.start = nil
-            myPathLayout.tg_coordinateSetting.end = nil
-            myPathLayout.tg_spaceType = .fixed(60)
-            myPathLayout.tg_rectangularEquation = { $0 * 2 }
+            myPathLayout.tg.coordinateSetting.origin = CGPoint(x: 0, y: 0)
+            myPathLayout.tg.coordinateSetting.isMath = false
+            myPathLayout.tg.coordinateSetting.start = nil
+            myPathLayout.tg.coordinateSetting.end = nil
+            myPathLayout.tg.spaceType(value: .fixed(60))
+            myPathLayout.tg.rectangularEquation(value: { $0 * 2 })
             
         case .sin: //正玄函数 y = sin(x);
-            myPathLayout.tg_coordinateSetting.origin = CGPoint(x: 0, y: 0.5)
-            myPathLayout.tg_coordinateSetting.isMath = true
-            myPathLayout.tg_coordinateSetting.start = nil
-            myPathLayout.tg_coordinateSetting.end = nil
-            myPathLayout.tg_spaceType = .fixed(60)
-            myPathLayout.tg_rectangularEquation = { 100 * sin(TGRadian(angle:$0).value) }  //TGRadian是角度转化为弧度的类
+            myPathLayout.tg.coordinateSetting.origin = CGPoint(x: 0, y: 0.5)
+            myPathLayout.tg.coordinateSetting.isMath = true
+            myPathLayout.tg.coordinateSetting.start = nil
+            myPathLayout.tg.coordinateSetting.end = nil
+            myPathLayout.tg.spaceType(value: .fixed(60))
+            myPathLayout.tg.rectangularEquation(value:  { 100 * sin(TGRadian(angle:$0).value) })  //TGRadian是角度转化为弧度的类
             
         case .cycloid: //摆线函数, 用参数方程： x = a * (t - sin(t); y = a *(1 - cos(t));
-            myPathLayout.tg_coordinateSetting.origin = CGPoint(x: 0, y: 0.5)
-            myPathLayout.tg_coordinateSetting.isMath = true
-            myPathLayout.tg_coordinateSetting.start = nil
-            myPathLayout.tg_coordinateSetting.end = nil
-            myPathLayout.tg_spaceType = .fixed(100)
-            myPathLayout.tg_parametricEquation = {
+            myPathLayout.tg.coordinateSetting.origin = CGPoint(x: 0, y: 0.5)
+            myPathLayout.tg.coordinateSetting.isMath = true
+            myPathLayout.tg.coordinateSetting.start = nil
+            myPathLayout.tg.coordinateSetting.end = nil
+            myPathLayout.tg.spaceType(value: .fixed(100))
+            myPathLayout.tg.parametricEquation(value: {
                 let t = TGRadian(angle:$0).value
                 let a: CGFloat = 50
                 return CGPoint(x: a * (t - sin(t)), y: a * (1 - cos(t)))
-            }
+            })
             
         case .spiral_like: //阿基米德螺旋线函数: r = a * θ   用的是极坐标。
-            myPathLayout.tg_coordinateSetting.origin = CGPoint(x: 0.5, y: 0.5)
-            myPathLayout.tg_coordinateSetting.isMath = false
-            myPathLayout.tg_coordinateSetting.start = nil
-            myPathLayout.tg_coordinateSetting.end = nil
-            myPathLayout.tg_spaceType = .fixed(60)
-            myPathLayout.tg_polarEquation = { 20 * $0 }
+            myPathLayout.tg.coordinateSetting.origin = CGPoint(x: 0.5, y: 0.5)
+            myPathLayout.tg.coordinateSetting.isMath = false
+            myPathLayout.tg.coordinateSetting.start = nil
+            myPathLayout.tg.coordinateSetting.end = nil
+            myPathLayout.tg.spaceType(value: .fixed(60))
+            myPathLayout.tg.polarEquation(value: { 20 * $0 })
             
         case .cardioid: //心形线 r = a *(1 + cos(θ)
-            myPathLayout.tg_coordinateSetting.origin = CGPoint(x: 0.2, y: 0.5)
-            myPathLayout.tg_coordinateSetting.isMath = true
-            myPathLayout.tg_coordinateSetting.start = nil
-            myPathLayout.tg_coordinateSetting.end = nil
-            myPathLayout.tg_spaceType = .flexed
-            myPathLayout.tg_polarEquation = { 120 * (1 + cos(CGFloat($0))) }
+            myPathLayout.tg.coordinateSetting.origin = CGPoint(x: 0.2, y: 0.5)
+            myPathLayout.tg.coordinateSetting.isMath = true
+            myPathLayout.tg.coordinateSetting.start = nil
+            myPathLayout.tg.coordinateSetting.end = nil
+            myPathLayout.tg.spaceType(value: .flexed)
+            myPathLayout.tg.polarEquation(value: { 120 * (1 + cos(CGFloat($0))) })
             
         case .astroid: //星型线 x = a * cos^3(θ); y =a * sin^3(θ);
-            myPathLayout.tg_coordinateSetting.origin = CGPoint(x: 0.5, y: 0.5)
-            myPathLayout.tg_coordinateSetting.isMath = true
-            myPathLayout.tg_coordinateSetting.start = 0
-            myPathLayout.tg_coordinateSetting.end = 360
-            myPathLayout.tg_spaceType = .flexed
-            myPathLayout.tg_parametricEquation = { CGPoint(x: 150 * pow(cos(TGRadian(angle:$0).value), 3), y: 150 * pow(sin(TGRadian(angle:$0).value), 3)) }
-            
+            myPathLayout.tg.coordinateSetting.origin = CGPoint(x: 0.5, y: 0.5)
+            myPathLayout.tg.coordinateSetting.isMath = true
+            myPathLayout.tg.coordinateSetting.start = 0
+            myPathLayout.tg.coordinateSetting.end = 360
+            myPathLayout.tg.spaceType(value: .flexed)
+            myPathLayout.tg.parametricEquation(value: { CGPoint(x: 150 * pow(cos(TGRadian(angle:$0).value), 3), y: 150 * pow(sin(TGRadian(angle:$0).value), 3)) })
         default: break
             
         }
