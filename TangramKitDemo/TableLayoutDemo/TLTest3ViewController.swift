@@ -48,7 +48,7 @@ class TLTest3ViewController: UIViewController {
         }
         
         
-        var tableLayout = TGTableLayout(.vert)
+        let tableLayout = TGTableLayout(.vert)
         tableLayout.tg.height.equal(.wrap)
         //这里设置表格的左边和右边以及顶部的边距都是在父视图的安全区域外再缩进10个点的位置。你会注意到这里面定义了一个特殊的位置TGLayoutPos.tg.safeAreaMargin。
         //TGLayoutPos.tg.safeAreaMargin表示视图的边距不是一个固定的值而是所在的父视图的安全区域。这样布局视图就不会延伸到安全区域以外去了。
@@ -63,18 +63,18 @@ class TLTest3ViewController: UIViewController {
         self.rootLayout = tableLayout
         
         //建立一个表格外边界的边界线。颜色为黑色，粗细为3.
-        tableLayout.tg.boundBorderline = TGBorderline(color:CFTool.color(4), thick: 3)
+        tableLayout.tg.boundBorderline(value: TGBorderline(color:CFTool.color(4), thick: 3))
         
         //建立智能边界线。所谓智能边界线就是布局里面的如果有子布局视图，则子布局视图会根据自身的布局位置智能的设置边界线。
         //智能边界线只支持表格布局、线性布局、流式布局、浮动布局。
         //如果要想完美使用智能分界线，则请将cellview建立为一个布局视图，比如本例子中的createCellLayout。
-        tableLayout.tg.intelligentBorderline = TGBorderline(color:CFTool.color(5))
+        tableLayout.tg.intelligentBorderline(value: TGBorderline(color:CFTool.color(5)))
         
         //添加第一行。行高为50，每列宽由自己确定。
         let firstRowTitles = ["Name","Mon.","Tues.","Wed.","Thur.","Fri.","Sat.","Sun."];
-        var firstRow:TGLinearLayout = tableLayout.tg.addRow(size:50, colSize: TGLayoutSize.fill)
-        firstRow.tg.notUseIntelligentBorderline = true ////因为智能边界线会影响到里面的所有子布局，包括每行，但是这里我们希望这行不受智能边界线的影响而想自己定义边界线，则将这个属性设置为true。
-        firstRow.tg.bottomBorderline = TGBorderline(color:CFTool.color(7)) //我们自定义第一行的底部边界线为蓝色边界线。
+        let firstRow:TGLinearLayout = tableLayout.tg.addRow(size:50, colSize: TGLayoutSize.fill)
+        firstRow.tg.notUseIntelligentBorderline(value: true) ////因为智能边界线会影响到里面的所有子布局，包括每行，但是这里我们希望这行不受智能边界线的影响而想自己定义边界线，则将这个属性设置为true。
+        firstRow.tg.bottomBorderline(value: TGBorderline(color:CFTool.color(7)))  //我们自定义第一行的底部边界线为蓝色边界线。
         for i in 0 ..< firstRowTitles.count
         {
             let cellView = self.createCellLayout(value: firstRowTitles[i])
@@ -119,9 +119,9 @@ class TLTest3ViewController: UIViewController {
         }
         
         //最后一行
-        var lastRow = tableLayout.tg.addRow(size:60, colSize: TGLayoutSize.fill)
-        lastRow.tg.notUseIntelligentBorderline = true
-        lastRow.tg.topBorderline = TGBorderline(color:.red)
+        let lastRow = tableLayout.tg.addRow(size:60, colSize: TGLayoutSize.fill)
+        lastRow.tg.notUseIntelligentBorderline(value: true)
+        lastRow.tg.topBorderline(value: TGBorderline(color:.red))
       
         var cellLayout = self.createCellLayout(value: "Total:")
         cellLayout.tg.width.equal(.fill) //占用剩余宽度您也可以设置为tg.width.equal(100%)
@@ -149,9 +149,9 @@ extension TLTest3ViewController
 {
     func createCellLayout(value:String) -> UIView
     {
-        var cellLayout = TGFrameLayout()
+        let cellLayout = TGFrameLayout()
         cellLayout.tg.setTarget(self,action:#selector(handleCellTap), for:.touchUpInside)
-        cellLayout.tg.highlightedBackgroundColor = CFTool.color(8)
+        cellLayout.tg.highlightedBackgroundColor(value: CFTool.color(8))
         
         let label = UILabel()
         label.text = value
@@ -186,18 +186,18 @@ extension TLTest3ViewController
     @objc func handleSpace(sender:Any?)
     {
         //执行间距调整的逻辑。
-        if self.rootLayout.tg.vspace == 0
+        if self.rootLayout.tg.vspace() == 0
         {
-            self.rootLayout.tg.vspace = 5
+            self.rootLayout.tg.vspace(value: 5)
         }
-        else if self.rootLayout.tg.hspace == 0
+        else if self.rootLayout.tg.hspace() == 0
         {
-            self.rootLayout.tg.hspace = 5
+            self.rootLayout.tg.hspace(value: 5)
         }
         else
         {
-            self.rootLayout.tg.vspace = 0
-            self.rootLayout.tg.hspace = 0
+            self.rootLayout.tg.vspace(value: 0)
+            self.rootLayout.tg.hspace(value: 0)
         }
         
         self.rootLayout.tg.layoutAnimationWithDuration(0.3)

@@ -25,11 +25,11 @@ class FOLTest6ViewController: UIViewController {
         let scrollView = UIScrollView()
         self.view = scrollView
         
-        var rootLayout = TGLinearLayout(.vert)
+        let rootLayout = TGLinearLayout(.vert)
         rootLayout.backgroundColor = .lightGray
         rootLayout.tg.width.equal(.fill)
         rootLayout.tg.height.equal(.wrap).min(scrollView.tg.height) //默认虽然高度包裹，但是最小的高度要和滚动视图相等。
-        rootLayout.tg.vspace = 10
+        rootLayout.tg.vspace(value: 10)
         scrollView.addSubview(rootLayout)
         
         //Create First User Profile type。
@@ -65,17 +65,17 @@ extension FOLTest6ViewController
         //在常规情况下，如果使用左右浮动布局时，要求必须有明确的宽度，宽度不能.wrap。同样使用上下浮动布局时，要求必须要有明确的高度，也就是高度不能.wrap。这样设置明确宽度或者高度的原因是浮动布局需要根据这些宽度或者高度的约束自动换行浮动。但是在实践的场景中，有时候我们在浮动方向上没有尺寸约束限制，而是人为的来控制子视图的换行，并且还要布局视图的宽度和高度具有包裹属性，那么这时候我们就可以用浮动布局的tg_noBoundaryLimit属性来进行控制了。
         //设置tg_noBoundaryLimit为true时必要同时设置包裹属性。具体情况见属性tg_noBoundaryLimit的说明。
         
-        var contentLayout = TGFloatLayout(.horz)
+        let contentLayout = TGFloatLayout(.horz)
         contentLayout.backgroundColor = UIColor.white
-        contentLayout.tg.noBoundaryLimit = true
+        contentLayout.tg.noBoundaryLimit(value: true)
         contentLayout.tg.height.equal(.wrap) //对于上下浮动布局来说，如果只想向上浮动，而高度又希望是由子视图决定，则必须要设置tg_noBoundaryLimit的值为true。
         
         
         contentLayout.tg.leading.equal(0)
         contentLayout.tg.trailing.equal(0)
-        contentLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5);
-        contentLayout.tg.hspace = 5
-        contentLayout.tg.vspace = 5
+        contentLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
+        contentLayout.tg.hspace(value: 5)
+        contentLayout.tg.vspace(value: 5)
         rootLayout.addSubview(contentLayout)
         
         
@@ -84,11 +84,11 @@ extension FOLTest6ViewController
         headImageView.tg.height.equal(40) //头像部分固定尺寸。。
         contentLayout.addSubview(headImageView)
         
-        var nameLabel = UILabel()
+        let nameLabel = UILabel()
         nameLabel.text = "欧阳大哥"
         nameLabel.font = CFTool.font(17)
         nameLabel.textColor = CFTool.color(4)
-        nameLabel.tg.clearFloat = true; //注意这里要另外起一行。
+        nameLabel.tg.clearFloat(value: true) //注意这里要另外起一行。
         nameLabel.tg.width.equal(contentLayout.tg.width, increment:-45) //40的头像宽度外加5的左右间距。
         nameLabel.sizeToFit()
         contentLayout.addSubview(nameLabel)
@@ -139,12 +139,12 @@ extension FOLTest6ViewController
     {
         //浮动布局的一个缺点是居中对齐难以实现，所以这里需要对子视图做一些特殊处理。
         
-        var contentLayout = TGFloatLayout(.vert)
+        let contentLayout = TGFloatLayout(.vert)
         contentLayout.backgroundColor = .white
         contentLayout.tg.height.equal(.wrap)
         contentLayout.tg.leading.equal(0)
         contentLayout.tg.trailing.equal(0)
-        contentLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5);
+        contentLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
         rootLayout.addSubview(contentLayout)
         
         let headImageView = UIImageView(image:UIImage(named:"minions4"))
@@ -229,12 +229,12 @@ extension FOLTest6ViewController
     {
         //这个例子里面上下浮动布局还是可以设置高度为.wrap，并且这里用了tg_layoutCompletedDo来实现一些特殊化处理。
         
-        var contentLayout = TGFloatLayout(.horz)
+        let contentLayout = TGFloatLayout(.horz)
         contentLayout.backgroundColor = .white
         contentLayout.tg.height.equal(.wrap)
         contentLayout.tg.leading.equal(0)
         contentLayout.tg.trailing.equal(0)
-        contentLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5);
+        contentLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
         rootLayout.addSubview(contentLayout)
         
         
@@ -249,8 +249,8 @@ extension FOLTest6ViewController
         contentLayout.addSubview(headImageView)
         headImageView.tg.layoutCompleted { (layout: TGBaseLayout, sbv: UIView) in
             //这里我们建立一个特殊的子视图，我们可以在这个block里面建立子视图，不会影响到这次的子视图的布局。
-            var label = UILabel()
-            label.tg.useFrame = true   //这里我们设置useFrame为YES表示他不会参与布局，这样这个视图就可以摆脱浮动布局视图的约束。
+            let label = UILabel()
+            label.tg.useFrame(value: true)   //这里我们设置useFrame为YES表示他不会参与布局，这样这个视图就可以摆脱浮动布局视图的约束。
             label.text = "99";
             label.font = CFTool.font(12)
             label.textColor = .white
@@ -281,12 +281,12 @@ extension FOLTest6ViewController
         contentLayout.addSubview(nickNameLabel)
         
         
-        var detailLabel =  UILabel()
+        let detailLabel =  UILabel()
         detailLabel.text = "坚持原创，以造轮子为乐!";
         detailLabel.font = CFTool.font(20)
         detailLabel.textColor = CFTool.color(2)
         detailLabel.adjustsFontSizeToFitWidth = true
-        detailLabel.tg.reverseFloat = true
+        detailLabel.tg.reverseFloat(value: true)
         detailLabel.sizeToFit()
         contentLayout.addSubview(detailLabel)
         
@@ -295,12 +295,12 @@ extension FOLTest6ViewController
     
     func createUserProfile4Layout(_ rootLayout:TGLinearLayout)
     {
-        var contentLayout = TGFloatLayout(.vert)
+        let contentLayout = TGFloatLayout(.vert)
         contentLayout.backgroundColor = .white
         contentLayout.tg.height.equal(.wrap)
         contentLayout.tg.leading.equal(0)
         contentLayout.tg.trailing.equal(0)
-        contentLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
+        contentLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
         rootLayout.addSubview(contentLayout)
         
         let headImageView = UIImageView(image:UIImage(named:"minions4"))
@@ -313,7 +313,7 @@ extension FOLTest6ViewController
         contentLayout.addSubview(headImageView)
         
         
-        var editButton = UILabel()
+        let editButton = UILabel()
         editButton.text = "Edit"
         editButton.textAlignment = .center
         editButton.backgroundColor = .green
@@ -322,7 +322,7 @@ extension FOLTest6ViewController
         editButton.layer.masksToBounds = true
         editButton.tg.width.equal(.wrap, increment:20)
         editButton.tg.height.equal(.wrap, increment:4)
-        editButton.tg.reverseFloat = true
+        editButton.tg.reverseFloat(value: true)
         contentLayout.addSubview(editButton)
         
         let nameLabel = UILabel()
@@ -347,14 +347,14 @@ extension FOLTest6ViewController
         contentLayout.addSubview(nickNameLabel)
         
         
-        var detailLabel = UILabel()
+        let detailLabel = UILabel()
         detailLabel.text = "坚持原创，以造轮子为乐!";
         detailLabel.font = CFTool.font(20)
         detailLabel.textColor = CFTool.color(2)
         detailLabel.adjustsFontSizeToFitWidth = true
         detailLabel.sizeToFit()
         detailLabel.tg.width.equal(.fill)  //等价于tg_width.equal(100%)
-        detailLabel.tg.clearFloat = true
+        detailLabel.tg.clearFloat(value: true)
         detailLabel.tg.top.equal(5)
         contentLayout.addSubview(detailLabel)
     }

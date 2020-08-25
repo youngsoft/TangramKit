@@ -51,10 +51,10 @@ class FOLTest5ViewController: UIViewController {
         
         
 
-        var rootLayout = TGFloatLayout(.vert)
+        let rootLayout = TGFloatLayout(.vert)
         rootLayout.tg.width.equal(.fill)
         rootLayout.tg.height.equal(.wrap)
-        rootLayout.tg.vspace = 5
+        rootLayout.tg.vspace(value: 5)
         scrollView.addSubview(rootLayout)
         
         
@@ -65,13 +65,13 @@ class FOLTest5ViewController: UIViewController {
         label.sizeToFit()
         rootLayout.addSubview(label)
         
-        var label2 = UILabel()
+        let label2 = UILabel()
         label2.text = NSLocalizedString("TangramKit is a powerful view layout library, it support 6 kinds of layout views and SIZECLASS.", comment: "")
         label2.textColor = CFTool.color(3)
         label2.font = CFTool.font(15)
         label2.tg.width.equal(.fill)
         label2.tg.height.equal(.wrap)
-        label2.tg.clearFloat = true
+        label2.tg.clearFloat(value: true)
         rootLayout.addSubview(label2)
 
         let images = ["image1", "image2", "image3", "image4"]
@@ -84,12 +84,12 @@ class FOLTest5ViewController: UIViewController {
 
         for i in 0 ..< titles.count
         {
-            var titleLabel = UILabel()
+            let titleLabel = UILabel()
             titleLabel.text = titles[i];
             titleLabel.textColor = CFTool.color(i + 1)
             titleLabel.font = CFTool.font(15)
             titleLabel.adjustsFontSizeToFitWidth = true
-            titleLabel.tg.clearFloat = true;     //换行重新布局。
+            titleLabel.tg.clearFloat(value: true)     //换行重新布局。
             titleLabel.tg.width.equal(25%) //宽度是父视图宽度的1/4
             titleLabel.sizeToFit()
             rootLayout.addSubview(titleLabel)

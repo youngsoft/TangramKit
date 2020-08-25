@@ -30,10 +30,10 @@ class FOLTest7ViewController: UIViewController {
         self.edgesForExtendedLayout = UIRectEdge(rawValue:0)
         
         
-        var rootLayout = TGLinearLayout(.vert)
+        let rootLayout = TGLinearLayout(.vert)
         rootLayout.backgroundColor = UIColor.lightGray
-        rootLayout.tg.gravity = TGGravity.Horizontal.fill  //所有子视图的宽度都和自己相等。
-        rootLayout.tg.vspace = 10
+        rootLayout.tg.gravity(value: TGGravity.Horizontal.fill)  //所有子视图的宽度都和自己相等。
+        rootLayout.tg.vspace(value: 10)
         self.view = rootLayout
         
         let vertLayout = self.createVertFloatLayout(rootLayout)
@@ -67,27 +67,27 @@ extension FOLTest7ViewController
         
         let floatLayout = TGFloatLayout(.vert)
         
-        var logoImageView = UIImageView(image: UIImage(named:"p1-12"))
+        let logoImageView = UIImageView(image: UIImage(named:"p1-12"))
         logoImageView.layer.borderColor = CFTool.color(4).cgColor
         logoImageView.layer.borderWidth = 1
-        logoImageView.tg.alignment = TGGravity.Vertical.center  //在浮动的一行内垂直居中对齐。
+        logoImageView.tg.alignment(value: TGGravity.Vertical.center) //在浮动的一行内垂直居中对齐。
         logoImageView.tg.margin(10)  //四周的边距都设置为10.
         logoImageView.tg.size(width: 80, height: 36)
         floatLayout.addSubview(logoImageView)
         
-        var brandLabel = UILabel()
+        let brandLabel = UILabel()
         brandLabel.text = "千奈美官方旗舰店"
         brandLabel.sizeToFit()
-        brandLabel.tg.alignment = TGGravity.Vertical.center //在浮动的一行内垂直居中对齐。
+        brandLabel.tg.alignment(value: TGGravity.Vertical.center)  //在浮动的一行内垂直居中对齐。
         brandLabel.tg.vMargin(10)
         floatLayout.addSubview(brandLabel)
         
-        var attentionButton = UIButton(type:.system)
+        let attentionButton = UIButton(type:.system)
         attentionButton.setTitle("关注", for:.normal)
         attentionButton.sizeToFit()
-        attentionButton.tg.reverseFloat = true   //关注放在右边，所以浮动到右边。
+        attentionButton.tg.reverseFloat(value: true)   //关注放在右边，所以浮动到右边。
         attentionButton.tg.margin(10)
-        attentionButton.tg.alignment = TGGravity.Vertical.center  //在浮动的一行内垂直居中对齐。
+        attentionButton.tg.alignment(value: TGGravity.Vertical.center)   //在浮动的一行内垂直居中对齐。
         floatLayout.addSubview(attentionButton)
 
         //单独一行。
@@ -142,27 +142,27 @@ extension FOLTest7ViewController
         floatLayout.addSubview(line4)
 
         
-        var signatureLabel = UILabel()
+        let signatureLabel = UILabel()
         signatureLabel.text = "今日已有137人签到获得好礼"
         signatureLabel.font = CFTool.font(14)
         signatureLabel.textColor = CFTool.color(4)
         signatureLabel.sizeToFit()
         signatureLabel.tg.hMargin(10)
-        signatureLabel.tg.alignment = TGGravity.Vertical.center
+        signatureLabel.tg.alignment(value: TGGravity.Vertical.center)
         floatLayout.addSubview(signatureLabel)
 
-        var moreImageView = UIImageView(image: UIImage(named:"next"))
-        moreImageView.tg.reverseFloat = true
+        let moreImageView = UIImageView(image: UIImage(named:"next"))
+        moreImageView.tg.reverseFloat(value: true)
         moreImageView.tg.hMargin(10)
-        moreImageView.tg.alignment = TGGravity.Vertical.center
+        moreImageView.tg.alignment(value: TGGravity.Vertical.center)
         floatLayout.addSubview(moreImageView)
 
         
-        var moreLabel = UILabel()
+        let moreLabel = UILabel()
         moreLabel.text = "进店看看"
         moreLabel.sizeToFit()
-        moreLabel.tg.reverseFloat = true
-        moreLabel.tg.alignment = TGGravity.Vertical.center
+        moreLabel.tg.reverseFloat(value: true)
+        moreLabel.tg.alignment(value: TGGravity.Vertical.center) 
         floatLayout.addSubview(moreLabel)
 
         
@@ -175,13 +175,13 @@ extension FOLTest7ViewController
 
         
         //
-        var commentImageView1 = UIImageView(image: UIImage(named:"minions4"))
-        commentImageView1.tg.alignment = TGGravity.Vertical.fill  //这里使用填充对齐，表明会和这行里面高度最高的那个子视图的高度保持一致。
+        let commentImageView1 = UIImageView(image: UIImage(named:"minions4"))
+        commentImageView1.tg.alignment(value: TGGravity.Vertical.fill)  //这里使用填充对齐，表明会和这行里面高度最高的那个子视图的高度保持一致。
         commentImageView1.tg.left.equal(10)
         floatLayout.addSubview(commentImageView1)
 
-        var commentImageView2 = UIImageView(image: UIImage(named:"minions3"))
-        commentImageView2.tg.alignment = TGGravity.Vertical.fill  //这里使用填充对齐，表明会和这行里面高度最高的那个子视图的高度保持一致。
+        let commentImageView2 = UIImageView(image: UIImage(named:"minions3"))
+        commentImageView2.tg.alignment(value: TGGravity.Vertical.fill)  //这里使用填充对齐，表明会和这行里面高度最高的那个子视图的高度保持一致。
         commentImageView2.tg.left.equal(10)
         floatLayout.addSubview(commentImageView2)
 
@@ -192,9 +192,9 @@ extension FOLTest7ViewController
         
         for _ in 0 ..< 4
         {
-            var starImageView = UIImageView(image: UIImage(named:"section2"))
+            let starImageView = UIImageView(image: UIImage(named:"section2"))
             starImageView.tg.size(width: 20, height: 20)
-            starImageView.tg.alignment = TGGravity.Vertical.bottom  //这里底部对齐，表明子视图和一行内最高的子视图保持底部对齐。
+            starImageView.tg.alignment(value: TGGravity.Vertical.bottom)   //这里底部对齐，表明子视图和一行内最高的子视图保持底部对齐。
             starImageView.tg.left.equal(5)
             floatLayout.addSubview(starImageView)
         }
@@ -213,32 +213,32 @@ extension FOLTest7ViewController
     
     func createHorzFloatLayout(_ rootLayout:TGLinearLayout) -> TGFloatLayout {
         
-        var floatLayout = TGFloatLayout(.horz)
-        floatLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
-        floatLayout.tg.space = 10
+        let floatLayout = TGFloatLayout(.horz)
+        floatLayout.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
+        floatLayout.tg.space(value: 10)
         
         let names = ["minions1","minions3","minions2","minions4","p4-23","p4-11"]
         for i in 0 ..< 6
         {
-            var imageView = UIImageView(image: UIImage(named:names[i]))
+            let imageView = UIImageView(image: UIImage(named: names[i]))
             imageView.layer.borderWidth = 0.5;
             imageView.layer.borderColor = CFTool.color(6).cgColor
             imageView.tg.height.equal(floatLayout.tg.height, increment: -5, multiple: 0.5) //高度等于父视图的高度的一半，因为设置了每个子视图的间距为10，所以这里要减去5。
             if i % 2 == 0
             {//这句话的意思一列显示两个子视图，所以当索引下标为偶数时就是换列处理。
-                imageView.tg.clearFloat = true
+                imageView.tg.clearFloat(value: true)
             }
             
             //水平填充,每列两个子视图，每列的对齐方式都不一样。
             switch (i) {
             case 0 ... 1:
-                imageView.tg.alignment = TGGravity.Horizontal.center
+                imageView.tg.alignment(value: TGGravity.Horizontal.center)
                 break;
             case 2 ... 3:
-                imageView.tg.alignment = TGGravity.Horizontal.trailing
+                imageView.tg.alignment(value: TGGravity.Horizontal.trailing)
                 break;
             case 4 ... 5:
-                imageView.tg.alignment = TGGravity.Horizontal.fill
+                imageView.tg.alignment(value: TGGravity.Horizontal.fill)
             default:
                 break;
             }

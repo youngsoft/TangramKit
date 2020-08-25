@@ -66,11 +66,11 @@ class AllTest3ViewController: UIViewController {
         frameLayout.addSubview(button)
         
         //滚动视图内整体一个线性布局，实现各种片段。
-        var  contentLayout = TGLinearLayout(.vert)
+        let  contentLayout = TGLinearLayout(.vert)
         contentLayout.tg.width.equal(.fill)
         contentLayout.tg.height.equal(.wrap)
-        contentLayout.tg.gravity = TGGravity.Horizontal.fill; //子视图里面的内容的宽度跟布局视图相等，这样子视图就不需要设置宽度了。
-        contentLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 60, right: 10) //这里bottom设置为60的原因是底部有一个50高度的按钮，因此保留这部分空间。
+        contentLayout.tg.gravity(value: TGGravity.Horizontal.fill) //子视图里面的内容的宽度跟布局视图相等，这样子视图就不需要设置宽度了。
+        contentLayout.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 60, right: 10)) //这里bottom设置为60的原因是底部有一个50高度的按钮，因此保留这部分空间。
         scrollView.addSubview(contentLayout)
         
         //头部布局。
@@ -120,8 +120,9 @@ extension AllTest3ViewController
     //添加头部布局。里面用的相对布局实现。
     func addHeaderLayout(_ contentLayout: TGLinearLayout) {
         
-        var headerLayout = TGRelativeLayout()
-        headerLayout.tg.backgroundImage = UIImage(named: "bk1") ?? UIImage()  //可以为布局直接设备背景图片。
+        let headerLayout = TGRelativeLayout()
+         //可以为布局直接设备背景图片。
+        headerLayout.tg.backgroundImage(value: UIImage(named: "bk1"))
         headerLayout.tg.height.equal(.wrap)
         contentLayout.addSubview(headerLayout)
         
@@ -142,10 +143,10 @@ extension AllTest3ViewController
         headerLayout.addSubview(headerNameLabel)
         
         //将tg_useFrame属性设置为true后，布局里面的子视图不会受到布局视图的约束和控制了，因此可以通过设置frame的值来进行位置定位和尺寸的确定。
-        var imageView2 = UIImageView(image: UIImage(named: "user"))
+        let imageView2 = UIImageView(image: UIImage(named: "user"))
         imageView2.backgroundColor = .white
         imageView2.frame = CGRect(x:5, y:5, width:30, height:30)
-        imageView2.tg.useFrame = true  //设置了这个属性后，这个子视图将不会被布局控制，而是直接用frame设置的为准。
+        imageView2.tg.useFrame(value: true)  //设置了这个属性后，这个子视图将不会被布局控制，而是直接用frame设置的为准。
         contentLayout.addSubview(imageView2)
     }
     
@@ -154,16 +155,16 @@ extension AllTest3ViewController
     {
         //如果您只想要高亮效果而不想处理事件则将方法：setTarget中的action为nil即可。
         //具有事件处理的layout,以及边界线效果的layout
-        var layout1 = self.createActionLayout(title: NSLocalizedString("please touch here(no highlighted)", comment:""), action: #selector(handleTap))
+        let layout1 = self.createActionLayout(title: NSLocalizedString("please touch here(no highlighted)", comment:""), action: #selector(handleTap))
         layout1.tg.top.equal(10)
-        layout1.tg.topBorderline = TGBorderline(color: .yellow, headIndent:-10, tailIndent:-10) //底部边界线如果为负数则外部缩进
-        layout1.tg.bottomBorderline = TGBorderline(color: .red) //设置底部和顶部都有红色的线
+        layout1.tg.topBorderline(value: TGBorderline(color: .yellow, headIndent:-10, tailIndent:-10))  //底部边界线如果为负数则外部缩进
+        layout1.tg.bottomBorderline(value: TGBorderline(color: .red))  //设置底部和顶部都有红色的线
         contentLayout.addSubview(layout1)
         
         //具有事件处理的layout,高亮背景色的设置。
-        var layout2 = self.createActionLayout(title:NSLocalizedString("please touch here(highlighted background)", comment:""), action: #selector(handleTap))
-        layout2.tg.highlightedBackgroundColor = .lightGray //可以设置高亮的背景色用于单击事件
-        layout2.tg.bottomBorderline = TGBorderline(color: .red, thick:4) //设置底部有红色的线，并且粗细为4
+        let layout2 = self.createActionLayout(title:NSLocalizedString("please touch here(highlighted background)", comment:""), action: #selector(handleTap))
+        layout2.tg.highlightedBackgroundColor(value: .lightGray) //可以设置高亮的背景色用于单击事件
+        layout2.tg.bottomBorderline(value: TGBorderline(color: .red, thick:4))  //设置底部有红色的线，并且粗细为4
         //您还可以为布局视图设置按下、按下取消的事件处理逻辑。
         layout2.tg.setTarget(self, action: #selector(handleTouchDown), for:.touchDown)
         layout2.tg.setTarget(self, action: #selector(handleTouchCancel), for:.touchCancel)
@@ -171,18 +172,18 @@ extension AllTest3ViewController
         
         
         //具有事件处理的layout, 可以设置触摸时的高亮背景图。虚线边界线。
-        var layout3 = self.createActionLayout(title:NSLocalizedString("please touch here(highlighted background image)", comment:""), action: #selector(handleTap))
-        layout3.tg.highlightedBackgroundImage = UIImage(named: "image2") ?? UIImage() //设置单击时的高亮背景图片。
+        let layout3 = self.createActionLayout(title:NSLocalizedString("please touch here(highlighted background image)", comment:""), action: #selector(handleTap))
+        layout3.tg.highlightedBackgroundImage(value: UIImage(named: "image2")) //设置单击时的高亮背景图片。
         let dashLine = TGBorderline(color: .green, dash:3) //设置为非0表示虚线边界线。
-        layout3.tg.leadingBorderline = dashLine
-        layout3.tg.trailingBorderline = dashLine //设置左右边绿色的虚线
+        layout3.tg.leadingBorderline(value: dashLine)
+        layout3.tg.trailingBorderline(value: dashLine) //设置左右边绿色的虚线
         contentLayout.addSubview(layout3)
     }
     
     func addPopmenuLayout(_ contentLayout: TGLinearLayout)
     {
-        var layout = self.createActionLayout(title: NSLocalizedString("please touch here(will pop menu)", comment:""), action: #selector(handleShowPopMenu))
-        layout.tg.highlightedOpacity = 0.2 //按下时的高亮透明度。为1全部透明。
+        let layout = self.createActionLayout(title: NSLocalizedString("please touch here(will pop menu)", comment:""), action: #selector(handleShowPopMenu))
+        layout.tg.highlightedOpacity(value: 0.2) //按下时的高亮透明度。为1全部透明。
         layout.tg.top.equal(10)
         contentLayout.addSubview(layout)
     }
@@ -190,13 +191,13 @@ extension AllTest3ViewController
     //添加可视化设置的布局
     func addVisibilityTestLayout(_ contentLayout: TGLinearLayout)
     {
-        var testLayout = TGLinearLayout(.horz)
+        let testLayout = TGLinearLayout(.horz)
         testLayout.backgroundColor = .white
-        testLayout.tg.leadingPadding = 10
-        testLayout.tg.trailingPadding = 10
+        testLayout.tg.leadingPadding(value: 1)
+        testLayout.tg.trailingPadding(value: 10)
         testLayout.tg.height.equal(50)
-        testLayout.tg.gravity = TGGravity.Vertical.fill
-        testLayout.tg.hspace = 10
+        testLayout.tg.gravity(value: TGGravity.Vertical.fill)
+        testLayout.tg.hspace(value: 10)
         testLayout.tg.top.equal(10)
         contentLayout.addSubview(testLayout)
         
@@ -234,18 +235,18 @@ extension AllTest3ViewController
     //添加一个左右视图的内容宽度自适应的水平线性布局。
     func addFlexedWidthLayout(_ contentLayout: TGLinearLayout)
     {
-        var operatorLayout = self.createSegmentedLayout(leftAction: #selector(self.handleLeftFlexed), rightAction: #selector(self.handleRightFlexed))
-        operatorLayout.tg.bottomBorderline = TGBorderline(color: .red, headIndent:10, tailIndent:10)  //底部边界线设置可以缩进
+        let operatorLayout = self.createSegmentedLayout(leftAction: #selector(self.handleLeftFlexed), rightAction: #selector(self.handleRightFlexed))
+        operatorLayout.tg.bottomBorderline(value: TGBorderline(color: .red, headIndent:10, tailIndent:10))   //底部边界线设置可以缩进
         operatorLayout.tg.top.equal(10)
         contentLayout.addSubview(operatorLayout)
         
-        var testLayout = TGLinearLayout(.horz)
+        let testLayout = TGLinearLayout(.horz)
         testLayout.backgroundColor = .white
-        testLayout.tg.leadingPadding = 10
-        testLayout.tg.trailingPadding = 10
+        testLayout.tg.leadingPadding(value: 10)
+        testLayout.tg.trailingPadding(value: 10)
         testLayout.tg.height.equal(50)
-        testLayout.tg.gravity = TGGravity.Vertical.fill
-        testLayout.tg.shrinkType = .auto  //左右2个子视图会根据自身的宽度自动调整。不会产生覆盖和重叠。
+        testLayout.tg.gravity(value: TGGravity.Vertical.fill)
+        testLayout.tg.shrinkType(value: .auto)  //左右2个子视图会根据自身的宽度自动调整。不会产生覆盖和重叠。
         contentLayout.addSubview(testLayout)
         self.flexedLayout = testLayout
         
@@ -277,16 +278,16 @@ extension AllTest3ViewController
     //添加一个能伸缩的布局
     func addShrinkLayout(_ contentLayout: TGLinearLayout)
     {
-        var switchLayout = self.createSwitchLayout(title: NSLocalizedString("show all switch", comment:""), action: #selector(self.handleShrinkSwitch))
-        switchLayout.tg.bottomBorderline = TGBorderline(color: UIColor.red, headIndent:10, tailIndent:10)  //底部边界线设置可以缩进
+        let switchLayout = self.createSwitchLayout(title: NSLocalizedString("show all switch", comment:""), action: #selector(self.handleShrinkSwitch))
+        switchLayout.tg.bottomBorderline(value:  TGBorderline(color: UIColor.red, headIndent:10, tailIndent:10))  //底部边界线设置可以缩进
         switchLayout.tg.top.equal(10)
         contentLayout.addSubview(switchLayout)
         
-        var testLayout = TGFlowLayout(.vert, arrangedCount:3)
+        let testLayout = TGFlowLayout(.vert, arrangedCount:3)
         testLayout.backgroundColor = .white
-        testLayout.tg.gravity = TGGravity.Horizontal.fill   //尺寸相等
-        testLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
-        testLayout.tg.space = 10
+        testLayout.tg.gravity(value:  TGGravity.Horizontal.fill)  //尺寸相等
+        testLayout.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
+        testLayout.tg.space(value: 10)
         testLayout.tg.height.equal(50)
         testLayout.clipsToBounds = true
         contentLayout.addSubview(testLayout)
@@ -307,10 +308,10 @@ extension AllTest3ViewController
         /*
          这个例子提供了TGLayoutSize和TGLayoutPos类新加入的属性isActive属性的使用方法。默认情况下这个属性的值都是true表示指定的位置或者尺寸的设置是有效的，如果设置为false则这个位置或者这个尺寸的设置将无效，不会对布局产生影响。因此你可以通过为位置对象或者尺寸对象设置是否为isActive来在运行中进行界面布局的动态调整。
          */
-        var testLayout = TGLinearLayout(.vert)
+        let testLayout = TGLinearLayout(.vert)
         testLayout.backgroundColor = .white
         testLayout.tg.height.equal(.wrap)
-        testLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
+        testLayout.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
         testLayout.tg.top.equal(10)
         contentLayout.addSubview(testLayout)
         
@@ -330,13 +331,13 @@ extension AllTest3ViewController
     
     //创建可执动作事件的布局
     func createActionLayout(title: String, action: Selector) -> TGLinearLayout {
-        var actionLayout = TGLinearLayout(.horz)
+        let actionLayout = TGLinearLayout(.horz)
         actionLayout.backgroundColor = .white
         actionLayout.tg.setTarget(self, action: action, for:.touchUpInside) //这里设置布局的触摸事件处理。
-        actionLayout.tg.leadingPadding = 10
-        actionLayout.tg.trailingPadding = 10
+        actionLayout.tg.leadingPadding(value: 10)
+        actionLayout.tg.trailingPadding(value: 10)
         actionLayout.tg.height.equal(50)
-        actionLayout.tg.gravity = TGGravity.Vertical.center //左右内边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
+        actionLayout.tg.gravity(value: TGGravity.Vertical.center)  //左右内边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
         
         let label = UILabel()
         label.text = title
@@ -356,12 +357,12 @@ extension AllTest3ViewController
     //创建具有开关的布局
     func createSwitchLayout(title: String, action: Selector) -> TGLinearLayout
     {
-        var switchLayout = TGLinearLayout(.horz)
+        let switchLayout = TGLinearLayout(.horz)
         switchLayout.backgroundColor = .white
-        switchLayout.tg.leadingPadding = 10
-        switchLayout.tg.trailingPadding = 10
+        switchLayout.tg.leadingPadding(value: 10)
+        switchLayout.tg.trailingPadding(value: 10)
         switchLayout.tg.height.equal(50)
-        switchLayout.tg.gravity = TGGravity.Vertical.center //左右边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
+        switchLayout.tg.gravity(value: TGGravity.Vertical.center) //左右边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
         
         let label = UILabel()
         label.text = title
@@ -382,23 +383,23 @@ extension AllTest3ViewController
     func createSegmentedLayout(leftAction: Selector, rightAction: Selector) -> TGFloatLayout
     {
         //建立一个左右浮动布局(注意左右浮动布局的orientation是.vert)
-        var segmentedLayout = TGFloatLayout(.vert)
+        let segmentedLayout = TGFloatLayout(.vert)
         segmentedLayout.backgroundColor = .white
-        segmentedLayout.tg.leadingPadding = 10
-        segmentedLayout.tg.trailingPadding = 10
+        segmentedLayout.tg.leadingPadding(value: 10)
+        segmentedLayout.tg.trailingPadding(value: 10)
         segmentedLayout.tg.height.equal(50)
-        segmentedLayout.tg.gravity = TGGravity.Vertical.center //左右边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
+        segmentedLayout.tg.gravity(value:  TGGravity.Vertical.center) //左右边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
         //向左浮动
         let leftSegmented = UISegmentedControl(items: ["  -  ", "  +  "])
         leftSegmented.isMomentary = true
         leftSegmented.addTarget(self, action: leftAction, for: .valueChanged)
         segmentedLayout.addSubview(leftSegmented)
         
-        var rightSegmented = UISegmentedControl(items: ["  +  ", "  -  "])
+        let rightSegmented = UISegmentedControl(items: ["  +  ", "  -  "])
         rightSegmented.isMomentary = true
         rightSegmented.addTarget(self, action: rightAction, for: .valueChanged)
         segmentedLayout.addSubview(rightSegmented)
-        rightSegmented.tg.reverseFloat = true  //反向浮动也就是向右浮动。
+        rightSegmented.tg.reverseFloat(value: true)  //反向浮动也就是向右浮动。
         return segmentedLayout
     }
 }
@@ -427,20 +428,18 @@ extension AllTest3ViewController
     
     @objc func handleResetShow(sender:UIButton)
     {
-        self.invisibleButton.tg.visibility = .visible
-        self.goneButton.tg.visibility = .visible
+        self.invisibleButton.tg.visibility(value: .visible)
+        self.goneButton.tg.visibility(value: .visible)
     }
     
     @objc func handleInvisible(sender:UIButton)
     {
-        var sender = sender
-        sender.tg.visibility = .invisible
+        sender.tg.visibility(value: .invisible)
     }
     
     @objc func handleGone(sender:UIButton)
     {
-        var sender = sender
-        sender.tg.visibility = .gone
+        sender.tg.visibility(value: .gone)
     }
     
     @objc func handleLeftFlexed(segmented: UISegmentedControl)
@@ -521,7 +520,7 @@ extension AllTest3ViewController
         arrowImageView.tg.centerX.equal(0)
         menuLayout.addSubview(arrowImageView)
         
-        var containerLayout = TGLinearLayout(.vert)
+        let containerLayout = TGLinearLayout(.vert)
         containerLayout.backgroundColor = UIColor(red: 0xBF / 255.0, green: 0xBD / 255.0, blue: 0xBF / 255.0, alpha: 1)
         containerLayout.layer.cornerRadius = 4
         containerLayout.layer.shadowRadius = 5
@@ -530,8 +529,8 @@ extension AllTest3ViewController
         containerLayout.layer.shadowColor = CFTool.color(4).cgColor
         containerLayout.tg.width.equal(.fill)
         containerLayout.tg.height.equal(.wrap);
-        containerLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
-        containerLayout.tg.gravity = TGGravity.Horizontal.fill
+        containerLayout.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
+        containerLayout.tg.gravity(value: TGGravity.Horizontal.fill)
         menuLayout.addSubview(containerLayout)
         self.popmenuContainerLayout = containerLayout
         
@@ -539,11 +538,11 @@ extension AllTest3ViewController
         containerLayout.addSubview(scrollView)
         self.popmenuScrollView = scrollView
         
-        var itemLayout = TGFlowLayout(.vert, arrangedCount:3)
+        let itemLayout = TGFlowLayout(.vert, arrangedCount:3)
         itemLayout.tg.width.equal(.fill)
         itemLayout.tg.height.equal(.wrap)
-        itemLayout.tg.gravity = TGGravity.Horizontal.fill
-        itemLayout.tg.space = 10
+        itemLayout.tg.gravity(value: TGGravity.Horizontal.fill)
+        itemLayout.tg.space(value: 10)
         scrollView.addSubview(itemLayout)
         self.popmenuItemLayout = itemLayout
         

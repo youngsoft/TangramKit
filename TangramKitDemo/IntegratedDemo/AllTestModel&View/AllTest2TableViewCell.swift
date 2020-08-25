@@ -78,14 +78,14 @@ extension AllTest2TableViewCell
          rootLayout.tg.width.equal(.fill)
          rootLayout.tg.height.equal(.fill)
          */
-        var rootLayout = TGLinearLayout(.horz)
+        let rootLayout = TGLinearLayout(.horz)
         rootLayout.tg.width.equal(.fill)
         rootLayout.tg.height.equal(.fill)
         self.contentView.addSubview(rootLayout)
-        rootLayout.tg.bottomBorderline = TGBorderline(color: UIColor.lightGray,headIndent: 10, tailIndent: 10)
-        rootLayout.tg.leadingPadding = 10
-        rootLayout.tg.trailingPadding = 10  //两边保留10的内边距。
-        rootLayout.tg.gravity = TGGravity.Vertical.center //整个布局内容垂直居中。
+        rootLayout.tg.bottomBorderline(value: TGBorderline(color: UIColor.lightGray,headIndent: 10, tailIndent: 10))
+        rootLayout.tg.leadingPadding(value: 10)
+        rootLayout.tg.trailingPadding(value: 10)  //两边保留10的内边距。
+        rootLayout.tg.gravity(value: TGGravity.Vertical.center) //整个布局内容垂直居中。
 
         /*
          如果用线性布局的话，分为左中右三段，因此用水平线性布局：左边头像，中间用户信息，右边价格。中间用户信息在用一个垂直线性布局分为上下两部分：上面是用户名称和几个图标，下面是个人介绍。而用户名称和图标部分右通过建立一个水平线性布局来实现。
@@ -96,18 +96,18 @@ extension AllTest2TableViewCell
         self.headImageView = headImageView
         
         //中间用户信息是一个垂直线性布局：上部分是姓名，以及一些小图标这部分组成一个水平线性布局。下面是一行长的描述文字。
-        var userInfoLayout = TGLinearLayout(.vert)
+        let userInfoLayout = TGLinearLayout(.vert)
         userInfoLayout.tg.height.equal(.wrap)
         userInfoLayout.tg.width.equal(.fill)
-        userInfoLayout.tg.gravity = TGGravity.Horizontal.fill
-        userInfoLayout.tg.vspace = 5
+        userInfoLayout.tg.gravity(value: TGGravity.Horizontal.fill)
+        userInfoLayout.tg.vspace(value: 5)
         rootLayout.addSubview(userInfoLayout)
         
         //姓名信息部分，一个水平线性布局：左边名称，后面两个操作按钮，整体底部对齐。
-        var userNameLayout = TGLinearLayout(.horz)
+        let userNameLayout = TGLinearLayout(.horz)
         userNameLayout.tg.height.equal(.wrap)
-        userNameLayout.tg.hspace = 5
-        userNameLayout.tg.gravity = TGGravity.Vertical.bottom //整体垂直底部对齐。
+        userNameLayout.tg.hspace(value: 5)
+        userNameLayout.tg.gravity(value: TGGravity.Vertical.bottom) //整体垂直底部对齐。
         userInfoLayout.addSubview(userNameLayout)
         
         
@@ -159,12 +159,12 @@ extension AllTest2TableViewCell
          rootLayout.tg.width.equal(.fill)
          rootLayout.tg.height.equal(.fill)
          */
-        var rootLayout = TGRelativeLayout()
+        let rootLayout = TGRelativeLayout()
         rootLayout.tg.width.equal(.fill)
         rootLayout.tg.height.equal(.fill)
-        rootLayout.tg.bottomBorderline = TGBorderline(color: UIColor.lightGray,headIndent: 10, tailIndent: 10)
-        rootLayout.tg.leadingPadding = 10
-        rootLayout.tg.trailingPadding = 10
+        rootLayout.tg.bottomBorderline(value: TGBorderline(color: UIColor.lightGray,headIndent: 10, tailIndent: 10)) 
+        rootLayout.tg.leadingPadding(value: 10)
+        rootLayout.tg.trailingPadding(value: 10)
         self.contentView.addSubview(rootLayout)
 
         
@@ -238,12 +238,12 @@ extension AllTest2TableViewCell
          rootLayout.tg.width.equal(.fill)
          rootLayout.tg.height.equal(.fill)
          */
-        var rootLayout = TGFloatLayout()
+        let rootLayout = TGFloatLayout()
         rootLayout.tg.width.equal(.fill)
         rootLayout.tg.height.equal(.fill)
-        rootLayout.tg.bottomBorderline = TGBorderline(color: UIColor.lightGray,headIndent: 10, tailIndent: 10)
-        rootLayout.tg.leadingPadding = 10
-        rootLayout.tg.trailingPadding = 10 //两边保留10的内边距。
+        rootLayout.tg.bottomBorderline(value: TGBorderline(color: UIColor.lightGray,headIndent: 10, tailIndent: 10)) 
+        rootLayout.tg.leadingPadding(value: 10)
+        rootLayout.tg.trailingPadding(value: 10) //两边保留10的内边距。
         self.contentView.addSubview(rootLayout)
         
         
@@ -254,12 +254,12 @@ extension AllTest2TableViewCell
         rootLayout.addSubview(headImageView)
         self.headImageView = headImageView
         
-        var priceLabel = UILabel()
+        let priceLabel = UILabel()
         priceLabel.textColor = CFTool.color(4)
         priceLabel.font = CFTool.font(14)
         priceLabel.textAlignment = .right
         priceLabel.adjustsFontSizeToFitWidth = true
-        priceLabel.tg.reverseFloat = true
+        priceLabel.tg.reverseFloat(value: true)
         priceLabel.tg.leading.equal(10)
         
         //priceLabel的宽度根据内容自适应，但是最大的宽度是100，最小的宽度是50。注意到这里使用了类TGDimeAdapter表示会根据屏幕的宽度来对100进行缩放。这个100是在DEMO中是按iPhone6为标准设置的。具体请参考TGDimeAdapter类的介绍。
@@ -268,11 +268,11 @@ extension AllTest2TableViewCell
         rootLayout.addSubview(priceLabel)
         self.priceLabel = priceLabel
         
-        var userInfoLayout = TGFloatLayout()
+        let userInfoLayout = TGFloatLayout()
         userInfoLayout.tg.height.equal(.fill)
         userInfoLayout.tg.width.equal(.fill)
-        userInfoLayout.tg.gravity = TGGravity.Vertical.center
-        userInfoLayout.tg.space = 5
+        userInfoLayout.tg.gravity(value: TGGravity.Vertical.center)
+        userInfoLayout.tg.space(value: 5)
         rootLayout.addSubview(userInfoLayout)
         
         let nameLabel = UILabel()
@@ -291,14 +291,14 @@ extension AllTest2TableViewCell
         let delImageView = UIImageView(image: UIImage(named: "del"))
         userInfoLayout.addSubview(delImageView)
         
-        var descLabel = UILabel()
+        let descLabel = UILabel()
         descLabel.textColor = CFTool.color(4)
         descLabel.font = CFTool.font(15);
         descLabel.adjustsFontSizeToFitWidth = true
         descLabel.numberOfLines = 2
         descLabel.tg.height.equal(.wrap)
         descLabel.tg.width.equal(.fill) //2行高度，高度根据内容确定。
-        descLabel.tg.clearFloat = true
+        descLabel.tg.clearFloat(value: true)
         userInfoLayout.addSubview(descLabel)
         self.descLabel = descLabel
     }

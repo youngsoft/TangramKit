@@ -45,10 +45,10 @@ class TLTest2ViewController: UIViewController {
          创建一个水平的表格布局，水平表格布局主要用于建立瀑布流视图。需要注意的是水平表格中row也就是行是从左到右排列的，而每行中的col也就是列是从上到下排列的。
          */
         
-        var rootLayout = TGTableLayout(.horz)
-        rootLayout.tg.hspace = 5
-        rootLayout.tg.vspace = 10  //指定表格中的行间距和列间距。
-        rootLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
+        let rootLayout = TGTableLayout(.horz)
+        rootLayout.tg.hspace(value: 5)
+        rootLayout.tg.vspace(value: 10)  //指定表格中的行间距和列间距。
+        rootLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
         rootLayout.tg.width.equal(.fill)
         rootLayout.tg.height.equal(.wrap)
         scrollView.addSubview(rootLayout)
@@ -68,13 +68,13 @@ extension TLTest2ViewController
 {
     func createColLayout(image:String, title:String) ->UIView
     {
-        var colLayout = TGLinearLayout(.vert)
+        let colLayout = TGLinearLayout(.vert)
         colLayout.backgroundColor = CFTool.color(0)
-        colLayout.tg.gravity = TGGravity.Horizontal.fill  //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
+        colLayout.tg.gravity(value: TGGravity.Horizontal.fill)   //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
         colLayout.tg.height.equal(.wrap)
-        colLayout.tg.vspace = 5 //设置布局视图里面子视图之间的垂直间距为5个点。
+        colLayout.tg.vspace(value: 5) //设置布局视图里面子视图之间的垂直间距为5个点。
         colLayout.tg.setTarget(self,action:#selector(handleColLayoutTap), for:.touchUpInside)
-        colLayout.tg.highlightedOpacity = 0.3 //设置触摸事件按下时的不透明度，来响应按下状态。
+        colLayout.tg.highlightedOpacity(value: 0.3) //设置触摸事件按下时的不透明度，来响应按下状态。
         
         
         let imageView = UIImageView(image:UIImage(named:image))

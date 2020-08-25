@@ -190,6 +190,10 @@ public protocol TGSequentLayoutViewSizeClass: TGLayoutViewSizeClass {
     var tg_orientation: TGOrientation { get set }
 }
 
+extension TGSequentLayoutViewSizeClass {
+    var tg_orientation: TGOrientation { get { return TGOrientation.vert } set {} }
+}
+
 /**
  * 定义SizeClass中线性布局所具有的布局属性接口
  */
@@ -197,10 +201,16 @@ public protocol TGLinearLayoutViewSizeClass: TGSequentLayoutViewSizeClass {
     var tg_shrinkType: TGSubviewsShrinkType { get set }
 }
 
+extension TGLinearLayoutViewSizeClass {
+    var tg_shrinkType: TGSubviewsShrinkType { get { return TGSubviewsShrinkType() } set {} }
+}
+
 /**
  * 定义SizeClass中表格布局所具有的布局属性接口
  */
 public protocol TGTableLayoutViewSizeClass:TGLinearLayoutViewSizeClass {}
+
+extension TGTableLayoutViewSizeClass {}
 
 /**
  * 定义SizeClass中流式布局所具有的布局属性接口
@@ -210,7 +220,15 @@ public protocol TGFlowLayoutViewSizeClass:TGSequentLayoutViewSizeClass {
     var tg_pagedCount: Int { get set }
     var tg_arrangedGravity: TGGravity { get set }
     var tg_lastlineGravityPolicy: TGGravityPolicy { get set }
-    var tg_autoArrange: Bool {get set}
+    var tg_autoArrange: Bool { get set }
+}
+
+extension TGFlowLayoutViewSizeClass {
+    var tg_arrangedCount: Int { get { return 0 } set {} }
+    var tg_pagedCount: Int { get { return 0 } set {} }
+    var tg_arrangedGravity: TGGravity { get { return TGGravity() } set {} }
+    var tg_lastlineGravityPolicy: TGGravityPolicy { get { return TGGravityPolicy.no } set {} }
+    var tg_autoArrange: Bool { get { return false } set {} }
 }
 
 
@@ -221,20 +239,30 @@ public protocol TGFloatLayoutViewSizeClass: TGSequentLayoutViewSizeClass {
     var tg_noBoundaryLimit: Bool {get set}
 }
 
+extension TGFloatLayoutViewSizeClass {
+    var tg_noBoundaryLimit: Bool { get { return false } set {} }
+}
+
 /**
  *定义SizeClass中相对布局所具有的布局属性接口
  */
 public protocol TGRelativeLayoutViewSizeClass: TGLayoutViewSizeClass {}
+
+extension TGRelativeLayoutViewSizeClass {}
 
 /**
  *定义SizeClass中框架布局所具有的布局属性接口
  */
 public protocol TGFrameLayoutViewSizeClass: TGLayoutViewSizeClass {}
 
+extension TGFrameLayoutViewSizeClass {}
+
 /**
  * 定义SizeClass中PathLayout所具有的布局属性接口
  */
 public protocol TGPathLayoutViewSizeClass : TGLayoutViewSizeClass {}
+
+extension TGPathLayoutViewSizeClass {}
 
 
 //TGSizeClass Implemention

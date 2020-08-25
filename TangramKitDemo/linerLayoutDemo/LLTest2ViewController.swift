@@ -55,8 +55,8 @@ class LLTest2ViewController: UIViewController {
         scrollView.backgroundColor = .white
         self.view = scrollView
         
-        var contentLayout = TGLinearLayout(.vert)
-        contentLayout.tg.padding = UIEdgeInsets(top: 10,left: 10,bottom: 10,right: 10) //设置布局内的子视图离自己的边距.
+        let contentLayout = TGLinearLayout(.vert)
+        contentLayout.tg.padding(value: UIEdgeInsets(top: 10,left: 10,bottom: 10,right: 10)) //设置布局内的子视图离自己的边距.
         contentLayout.tg.width.equal(.fill);  //设置视图自身的宽度填充父视图的剩余宽度。
         //您可以用如下的方法设置宽度：
         //contentLayout.tg.leading.equal(0)
@@ -163,11 +163,11 @@ extension LLTest2ViewController
     //线性布局片段2：垂直线性布局套水平线性布局
     func createSection2(in contentLayout:TGLinearLayout)
     {
-        var userInfoLayout = TGLinearLayout(.horz)
+        let userInfoLayout = TGLinearLayout(.horz)
         userInfoLayout.layer.borderColor = UIColor.lightGray.cgColor
         userInfoLayout.layer.borderWidth = 0.5
         userInfoLayout.layer.cornerRadius = 4
-        userInfoLayout.tg.padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        userInfoLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
         userInfoLayout.tg.top.equal(20)
         userInfoLayout.tg.width.equal(.fill) //这句代码等价于tg_leading.equal(0) tg_trailing.equal(0)，表明宽度和父视图保持一致
         userInfoLayout.tg.height.equal(.wrap) //高度由子视图决定。
@@ -242,12 +242,12 @@ extension LLTest2ViewController
     {
         
         //垂直线性布局套垂直线性布局
-        var ageLayout = TGLinearLayout(.vert)
+        let ageLayout = TGLinearLayout(.vert)
         ageLayout.layer.borderColor = UIColor.lightGray.cgColor
         ageLayout.layer.borderWidth = 0.5
         ageLayout.layer.cornerRadius = 4
-        ageLayout.tg.padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-        ageLayout.tg.gravity = TGGravity.Horizontal.fill  //布局视图的gravity设置了里面的所有的子视图都是水平填充的，这样所有的子视图都不需要设置宽度了。
+        ageLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
+        ageLayout.tg.gravity(value: TGGravity.Horizontal.fill)  //布局视图的gravity设置了里面的所有的子视图都是水平填充的，这样所有的子视图都不需要设置宽度了。
         ageLayout.tg.top.equal(20)
         ageLayout.tg.width.equal(.fill)
         ageLayout.tg.height.equal(.wrap)
@@ -261,8 +261,8 @@ extension LLTest2ViewController
         ageLayout.addSubview(ageTitleLabel)
         
         //垂直线性布局套水平线性布局
-        var ageSelectLayout = TGLinearLayout(.horz)
-        ageSelectLayout.tg.hspace = 10  //设置里面所有子视图之间的水平间距都是10，这样里面的子视图就不在需要设置间距了。
+        let ageSelectLayout = TGLinearLayout(.horz)
+        ageSelectLayout.tg.hspace(value: 10)  //设置里面所有子视图之间的水平间距都是10，这样里面的子视图就不在需要设置间距了。
         ageSelectLayout.tg.top.equal(5)
         ageSelectLayout.tg.height.equal(.wrap)
         ageLayout.addSubview(ageSelectLayout)
@@ -327,11 +327,11 @@ extension LLTest2ViewController
     func createSection4(in contentLayout:TGLinearLayout)
     {
         /*垂直线性布局套水平线性布局*/
-        var addressLayout = TGLinearLayout(.horz)
+        let addressLayout = TGLinearLayout(.horz)
         addressLayout.layer.borderColor = UIColor.lightGray.cgColor
         addressLayout.layer.borderWidth = 0.5
         addressLayout.layer.cornerRadius = 4
-        addressLayout.tg.padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        addressLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
         addressLayout.tg.top.equal(20)
         addressLayout.tg.width.equal(.fill)
         addressLayout.tg.height.equal(.wrap)
@@ -360,11 +360,11 @@ extension LLTest2ViewController
     func createSection5(in contentLayout:TGLinearLayout)
     {
         /*垂直线性布局套水平线性布局，水平线性布局利用相对边距实现左右布局*/
-        var sexLayout = TGLinearLayout(.horz)
+        let sexLayout = TGLinearLayout(.horz)
         sexLayout.layer.borderColor = UIColor.lightGray.cgColor
         sexLayout.layer.borderWidth = 0.5
         sexLayout.layer.cornerRadius = 4
-        sexLayout.tg.padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        sexLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
         sexLayout.tg.top.equal(20)
         sexLayout.tg.width.equal(.fill)
         sexLayout.tg.height.equal(.wrap)
@@ -398,23 +398,23 @@ extension LLTest2ViewController
         //除了指定基线对齐的标准视图外，还需要为线性布局的tg_gravity属性设置上TGGravity.Vertical.baseline才可以完成基线对齐的设置。所有其他的UILabel，UITextField，UITextView都将和标准视图的基线进行对齐，而其他类型的子视图则忽略。
         //基线对齐对于中文来说基本没有什么效果，主要是针对英文以及具有基线的字符集。
         
-        var baselineLayout = TGLinearLayout(.horz)
+        let baselineLayout = TGLinearLayout(.horz)
         baselineLayout.layer.borderColor = UIColor.lightGray.cgColor
         baselineLayout.layer.borderWidth = 0.5
         baselineLayout.layer.cornerRadius = 4
-        baselineLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
+        baselineLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
         baselineLayout.tg.top.equal(20)
         baselineLayout.tg.hMargin(0)
         baselineLayout.tg.height.equal(50)
-        baselineLayout.tg.gravity = [TGGravity.Horizontal.center, TGGravity.Vertical.baseline]
+        baselineLayout.tg.gravity(value: [TGGravity.Horizontal.center, TGGravity.Vertical.baseline])
         contentLayout.addSubview(baselineLayout)
         
-        var baselineLabel = UILabel()
+        let baselineLabel = UILabel()
         baselineLabel.text = "Baseline view"
         baselineLabel.tg.size(width: .wrap, height: .wrap)
         baselineLabel.font = CFTool.font(20)
         baselineLabel.backgroundColor = CFTool.color(5)
-        baselineLabel.tg.alignment = TGGravity.Vertical.center  //标准视图垂直居中。
+        baselineLabel.tg.alignment(value: TGGravity.Vertical.center)   //标准视图垂直居中。
         baselineLayout.addSubview(baselineLabel)
         
         let rightLabel = UILabel()
@@ -424,7 +424,7 @@ extension LLTest2ViewController
         rightLabel.backgroundColor = CFTool.color(6)
         baselineLayout.addSubview(rightLabel)
         
-        baselineLayout.tg.baselineBaseView = baselineLabel  //这里将左边的视图设置为基线对齐的标准视图。
+        baselineLayout.tg.baselineBaseView(value: baselineLabel)  //这里将左边的视图设置为基线对齐的标准视图。
         
     }
 
@@ -470,9 +470,9 @@ extension LLTest2ViewController
         contentLayout.addSubview(button)
 
         
-        var hiddenView = UIView()
+        let hiddenView = UIView()
         hiddenView.backgroundColor = CFTool.color(3)
-        hiddenView.tg.visibility = .gone
+        hiddenView.tg.visibility(value: .gone)
         hiddenView.tg.top.equal(20)
         hiddenView.tg.width.equal(.fill)
         hiddenView.tg.height.equal(800)
@@ -506,15 +506,15 @@ extension LLTest2ViewController
     @objc func handleShowMore(_ sender: UIButton)
     {
         //布局里面，如果子视图被隐藏则会引起布局视图的自动布局。
-        if self.hiddenView.tg.visibility == .visible
+        if self.hiddenView.tg.visibility() == .visible
         {
             sender.setTitle(NSLocalizedString("Close up《", comment:"") ,for:.normal)
-            self.hiddenView.tg.visibility = .gone
+            self.hiddenView.tg.visibility(value: .gone)
         }
         else
         {
             sender.setTitle(NSLocalizedString("Show more》", comment:"") ,for:.normal)
-            self.hiddenView.tg.visibility = .visible
+            self.hiddenView.tg.visibility(value: .visible)
         }
         
     }

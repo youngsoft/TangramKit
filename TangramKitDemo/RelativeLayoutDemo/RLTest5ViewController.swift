@@ -22,10 +22,10 @@ class RLTest5ViewController: UIViewController {
         scrollView.backgroundColor = .white
         self.view = scrollView
         
-        var rootLayout = TGLinearLayout(.vert)
+        let rootLayout = TGLinearLayout(.vert)
         rootLayout.tg.width.equal(.fill)
         rootLayout.tg.height.equal(.wrap)
-        rootLayout.tg.vspace = 10
+        rootLayout.tg.vspace(value: 10)
         scrollView.addSubview(rootLayout)
         
         //最小最大间距限制例子。segment的简易实现。
@@ -71,10 +71,10 @@ class RLTest5ViewController: UIViewController {
          本例子实现一个带动画效果的segment的简单实现。只有在相对布局中的子视图才支持使用MyLayoutPos中的lBound和uBound方法。
          通过这个方法能设置视图的最小和最大的边距。
          */
-        var containerLayout = TGRelativeLayout()
+        let containerLayout = TGRelativeLayout()
         containerLayout.tg.width.equal(.fill).and().tg.height.equal(.wrap)
-        containerLayout.tg.topPadding = 6
-        containerLayout.tg.bottomPadding = 6
+        containerLayout.tg.topPadding(value: 6)
+        containerLayout.tg.bottomPadding(value: 6)
         containerLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(containerLayout)
         
@@ -125,10 +125,10 @@ class RLTest5ViewController: UIViewController {
          这个例子通常用于UITableViewCell中的某些元素的最大尺寸的限制，您可以横竖屏切换，看看效果。
          对于某些布局场景中，某个子视图的尺寸是不确定的，因此你不能设置一个固定的值，同时这个尺寸又不能无限制的延生而会受到某些边界的约束控制。因此可以用如下的方法来进行视图的尺寸设置。
          */
-        var containerLayout = TGRelativeLayout()
+        let containerLayout = TGRelativeLayout()
         containerLayout.tg.width.equal(.fill).and().tg.height.equal(.wrap)
-        containerLayout.tg.topPadding = 6
-        containerLayout.tg.bottomPadding = 6
+        containerLayout.tg.topPadding(value: 6)
+        containerLayout.tg.bottomPadding(value: 6)
         containerLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(containerLayout)
         
@@ -193,10 +193,10 @@ class RLTest5ViewController: UIViewController {
         /*
          这个例子用来了解上下边距的约束和左边边距的约束的场景。这些约束的设置特别适合那些有尺寸依赖以及位置依赖的UITableViewCell的场景。
          */
-        var containerLayout = TGRelativeLayout()
+        let containerLayout = TGRelativeLayout()
         containerLayout.tg.width.equal(.fill)
         containerLayout.tg.height.equal(150)
-        containerLayout.tg.padding = UIEdgeInsets.init(top: 6, left: 6, bottom: 6, right: 6)
+        containerLayout.tg.padding(value: UIEdgeInsets.init(top: 6, left: 6, bottom: 6, right: 6))
         containerLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(containerLayout)
         

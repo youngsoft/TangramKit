@@ -34,18 +34,18 @@ class AllTest6ViewController: UIViewController {
         self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
 
         
-        var rootLayout = TGLinearLayout(.vert)
+        let rootLayout = TGLinearLayout(.vert)
         rootLayout.backgroundColor = .white
-        rootLayout.tg.gravity = TGGravity.Horizontal.fill
-        self.view = rootLayout;
+        rootLayout.tg.gravity(value: TGGravity.Horizontal.fill)
+        self.view = rootLayout
         
         
         //创建顶部的菜单布局部分。
-        var menuLayout = TGFlowLayout(.vert, arrangedCount:3)
-        menuLayout.tg.gravity = TGGravity.fill
+        let menuLayout = TGFlowLayout(.vert, arrangedCount:3)
+        menuLayout.tg.gravity(value: TGGravity.fill)
         menuLayout.tg.height.equal(.wrap)
-        menuLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
-        menuLayout.tg.space = 10
+        menuLayout.tg.padding(value: UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10))
+        menuLayout.tg.space(value: 10)
         rootLayout.addSubview(menuLayout)
         
         let menu1Label = UILabel()
@@ -77,11 +77,11 @@ class AllTest6ViewController: UIViewController {
         
         
         //下面创建内容部分。
-        var contentLayout = TGRelativeLayout()
+        let contentLayout = TGRelativeLayout()
         contentLayout.backgroundColor = CFTool.color(0)
         contentLayout.tg.height.equal(.fill)
         contentLayout.tg.width.equal(.fill)
-        contentLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
+        contentLayout.tg.padding(value: UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10))
         rootLayout.addSubview(contentLayout)
         
         

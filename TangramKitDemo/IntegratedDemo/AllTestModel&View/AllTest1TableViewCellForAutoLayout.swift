@@ -76,7 +76,7 @@ class AllTest1TableViewCellForAutoLayout: UITableViewCell,AllTest1Cell {
         self.textMessageLabel.text = model.textMessage
         if model.imageMessage.isEmpty
         {
-            self.imageMessageImageView.tg.visibility = .gone
+            self.imageMessageImageView.tg.visibility(value: .gone)
         }
         else
         {
@@ -85,11 +85,11 @@ class AllTest1TableViewCellForAutoLayout: UITableViewCell,AllTest1Cell {
             
             if isImageMessageHidden
             {
-                self.imageMessageImageView.tg.visibility = .gone
+                self.imageMessageImageView.tg.visibility(value: .gone)
             }
             else
             {
-                self.imageMessageImageView.tg.visibility = .visible
+                self.imageMessageImageView.tg.visibility(value: .visible)
             }
         }
     }
@@ -104,10 +104,10 @@ extension AllTest1TableViewCellForAutoLayout
     func createLinearRootLayout()
     {
         self.rootLayout = TGLinearLayout(.horz)
-        self.rootLayout.tg.topPadding = 5
-        self.rootLayout.tg.bottomPadding = 5
+        self.rootLayout.tg.topPadding(value: 5)
+        self.rootLayout.tg.bottomPadding(value: 5)
         self.rootLayout.tg.height.equal(.wrap)
-        self.rootLayout.tg.cacheEstimatedRect = true //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
+        self.rootLayout.tg.cacheEstimatedRect(value: true) //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
         self.contentView.addSubview(self.rootLayout)
         
         //如果您将布局视图作为子视图添加到UITableViewCell本身，并且同时设置了布局视图的宽度等于父布局的情况下，那么有可能最终展示的宽度会不正确。经过试验是因为对UITableViewCell本身的KVO监控所得到的新老尺寸的问题导致的这应该是iOS的一个BUG。所以这里建议最好是把布局视图添加到UITableViewCell的子视图contentView里面去。
@@ -124,11 +124,11 @@ extension AllTest1TableViewCellForAutoLayout
         self.rootLayout.addSubview(headImageView)
         self.headImageView = headImageView
         
-        var messageLayout = TGLinearLayout(.vert)
+        let messageLayout = TGLinearLayout(.vert)
         messageLayout.tg.width.equal(.fill)  //等价于tg_width.equal(100%)
         messageLayout.tg.height.equal(.wrap)
         messageLayout.tg.leading.equal(5)
-        messageLayout.tg.vspace = 5 //前面4行代码描述的是垂直布局占用除头像外的所有宽度，并和头像保持5个点的间距。
+        messageLayout.tg.vspace(value: 5) //前面4行代码描述的是垂直布局占用除头像外的所有宽度，并和头像保持5个点的间距。
         self.rootLayout.addSubview(messageLayout)
         
         
@@ -158,10 +158,10 @@ extension AllTest1TableViewCellForAutoLayout
         
        
         self.rootLayout = TGRelativeLayout()
-        self.rootLayout.tg.topPadding = 5
-        self.rootLayout.tg.bottomPadding = 5
+        self.rootLayout.tg.topPadding(value: 5)
+        self.rootLayout.tg.bottomPadding(value: 5)
         self.rootLayout.tg.height.equal(.wrap)
-        self.rootLayout.tg.cacheEstimatedRect = true //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
+        self.rootLayout.tg.cacheEstimatedRect(value: true) //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
         self.contentView.addSubview(self.rootLayout)
         
         /*
@@ -202,10 +202,10 @@ extension AllTest1TableViewCellForAutoLayout
     {
         
         self.rootLayout = TGFloatLayout(.vert)
-        self.rootLayout.tg.topPadding = 5
-        self.rootLayout.tg.bottomPadding = 5
+        self.rootLayout.tg.topPadding(value: 5)
+        self.rootLayout.tg.bottomPadding(value: 5)
         self.rootLayout.tg.height.equal(.wrap)
-        self.rootLayout.tg.cacheEstimatedRect = true //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
+        self.rootLayout.tg.cacheEstimatedRect(value: true) //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
         self.contentView.addSubview(self.rootLayout)
  
         /*
@@ -233,9 +233,9 @@ extension AllTest1TableViewCellForAutoLayout
         rootLayout.addSubview(textMessageLabel)
         self.textMessageLabel = textMessageLabel
         
-        var imageMessageImageView = UIImageView()
+        let imageMessageImageView = UIImageView()
         imageMessageImageView.tg.top.equal(5)
-        imageMessageImageView.tg.reverseFloat = true  //反向浮动
+        imageMessageImageView.tg.reverseFloat(value: true) //反向浮动
         imageMessageImageView.tg.width.equal(.fill)    //占用剩余空间
         imageMessageImageView.contentMode = .center
         rootLayout.addSubview(imageMessageImageView)

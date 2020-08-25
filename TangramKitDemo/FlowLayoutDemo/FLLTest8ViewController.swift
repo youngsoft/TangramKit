@@ -40,19 +40,20 @@ class FLLTest8ViewController: UIViewController {
         self.edgesForExtendedLayout = UIRectEdge(rawValue:0)  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
         
         //这里的根视图是一个每列只有一个子视图的垂直流式布局，效果就相当于垂直线性布局了。
-        var rootLayout = TGFlowLayout(.vert, arrangedCount: 1)
-        rootLayout.tg.gravity = .fill  //这里将tg_gravity设置为.fill表明子视图的宽度和高度都将平分这个流式布局，可见一个简单的属性设置就可以很容易的实现子视图的尺寸的设置，而不需要编写太复杂的约束。
-        rootLayout.tg.space = 10
+        let rootLayout = TGFlowLayout(.vert, arrangedCount: 1)
+        rootLayout.tg.gravity(value: .fill)  //这里将tg_gravity设置为.fill表明子视图的宽度和高度都将平分这个流式布局，可见一个简单的属性设置就可以很容易的实现子视图的尺寸的设置，而不需要编写太复杂的约束。
+        rootLayout.tg.space(value: 10)
         rootLayout.backgroundColor = .white
         self.view = rootLayout
         
         
         //数量约束流式布局
-        var vertLayout = TGFlowLayout(.vert, arrangedCount: 4)
-        vertLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 0, bottom: 5, right: 0)
+        let vertLayout = TGFlowLayout(.vert, arrangedCount: 4)
+        vertLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0))
         vertLayout.backgroundColor = CFTool.color(5)
-        vertLayout.tg.vspace = 20
-        vertLayout.tg.gravity = TGGravity.Vertical.fill  //因为上面tg_setSubviews设置了固定宽度，这个属性设置子视图的高度是填充满子布局视图，因此系统内部会自动设置每个子视图的高度，如果你不设置这个属性，那么你就需要在下面分别为每个子视图设置高度。
+        vertLayout.tg.vspace(value: 20)
+        //因为上面tg_setSubviews设置了固定宽度，这个属性设置子视图的高度是填充满子布局视图，因此系统内部会自动设置每个子视图的高度，如果你不设置这个属性，那么你就需要在下面分别为每个子视图设置高度。
+        vertLayout.tg.gravity(value: TGGravity.Vertical.fill)
         rootLayout.addSubview(vertLayout)
         self.vertLayout = vertLayout
         
@@ -68,11 +69,11 @@ class FLLTest8ViewController: UIViewController {
         
         
         
-        var horzLayout = TGFlowLayout(.horz, arrangedCount: 4)
-        horzLayout.tg.padding = UIEdgeInsets.init(top: 0, left: 5, bottom: 0, right: 5)
+        let horzLayout = TGFlowLayout(.horz, arrangedCount: 4)
+        horzLayout.tg.padding(value: UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5))
         horzLayout.backgroundColor = CFTool.color(6)
-        horzLayout.tg.hspace = 20
-        horzLayout.tg.gravity = TGGravity.Horizontal.fill //因为上面tg_setSubviews设置了固定高度，这个属性设置子视图的宽度是填充满子布局视图，因此系统内部会自动设置每个子视图的宽度，如果你不设置这个属性，那么你就需要在下面分别为每个子视图设置宽度。
+        horzLayout.tg.hspace(value: 20)
+        horzLayout.tg.gravity(value: TGGravity.Horizontal.fill) //因为上面tg_setSubviews设置了固定高度，这个属性设置子视图的宽度是填充满子布局视图，因此系统内部会自动设置每个子视图的宽度，如果你不设置这个属性，那么你就需要在下面分别为每个子视图设置宽度。
         rootLayout.addSubview(horzLayout)
         self.horzLayout = horzLayout
 
@@ -87,11 +88,11 @@ class FLLTest8ViewController: UIViewController {
         }
         
         //内容约束流式布局
-        var vertLayout2 = TGFlowLayout(.vert, arrangedCount: 0)
-        vertLayout2.tg.padding = UIEdgeInsets.init(top: 5, left: 0, bottom: 5, right: 0)
+        let vertLayout2 = TGFlowLayout(.vert, arrangedCount: 0)
+        vertLayout2.tg.padding(value: UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0))
         vertLayout2.backgroundColor = CFTool.color(5)
-        vertLayout2.tg.vspace = 20
-        vertLayout2.tg.gravity = TGGravity.Vertical.fill  //因为上面tg_setSubviews设置了固定宽度，这个属性设置子视图的高度是填充满子布局视图，因此系统内部会自动设置每个子视图的高度，如果你不设置这个属性，那么你就需要在下面分别为每个子视图设置高度。
+        vertLayout2.tg.vspace(value: 20)
+        vertLayout2.tg.gravity(value: TGGravity.Vertical.fill)  //因为上面tg_setSubviews设置了固定宽度，这个属性设置子视图的高度是填充满子布局视图，因此系统内部会自动设置每个子视图的高度，如果你不设置这个属性，那么你就需要在下面分别为每个子视图设置高度。
         rootLayout.addSubview(vertLayout2)
         self.vertLayout2 = vertLayout2
         
@@ -107,11 +108,11 @@ class FLLTest8ViewController: UIViewController {
         
         
         
-        var horzLayout2 = TGFlowLayout(.horz, arrangedCount: 0)
-        horzLayout2.tg.padding = UIEdgeInsets.init(top: 0, left: 5, bottom: 0, right: 5)
+        let horzLayout2 = TGFlowLayout(.horz, arrangedCount: 0)
+        horzLayout2.tg.padding(value: UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5))
         horzLayout2.backgroundColor = CFTool.color(6)
-        horzLayout2.tg.hspace = 20
-        horzLayout2.tg.gravity = TGGravity.Horizontal.fill //因为上面tg_setSubviews设置了固定高度，这个属性设置子视图的宽度是填充满子布局视图，因此系统内部会自动设置每个子视图的宽度，如果你不设置这个属性，那么你就需要在下面分别为每个子视图设置宽度。
+        horzLayout2.tg.hspace(value: 20)
+        horzLayout2.tg.gravity(value: TGGravity.Horizontal.fill) //因为上面tg_setSubviews设置了固定高度，这个属性设置子视图的宽度是填充满子布局视图，因此系统内部会自动设置每个子视图的宽度，如果你不设置这个属性，那么你就需要在下面分别为每个子视图设置宽度。
         rootLayout.addSubview(horzLayout2)
         self.horzLayout2 = horzLayout2
         

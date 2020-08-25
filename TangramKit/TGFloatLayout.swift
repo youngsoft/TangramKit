@@ -9,54 +9,86 @@
 import UIKit
 
 public extension TGTypeWrapperProtocol where TGWrappedType: UIView {
-    var reverseFloat: Bool {
-        get { return self.wrappedValue.tgCurrentSizeClass.tg_reverseFloat }
-        set {
-            let sc = self.wrappedValue.tgCurrentSizeClass
-            if sc.tg_reverseFloat != newValue {
-                sc.tg_reverseFloat = newValue
-                if let sView = self.wrappedValue.superview {
-                    sView.setNeedsLayout()
-                }
-            }
-        }
+//    var reverseFloat: Bool {
+//        get { return self.wrappedValue.tgCurrentSizeClass.tg_reverseFloat }
+//        set {
+//            let sc = self.wrappedValue.tgCurrentSizeClass
+//            if sc.tg_reverseFloat != newValue {
+//                sc.tg_reverseFloat = newValue
+//                if let sView = self.wrappedValue.superview {
+//                    sView.setNeedsLayout()
+//                }
+//            }
+//        }
+//    }
+
+    func reverseFloat(value: Bool)  {
+        self.wrappedValue.tg_reverseFloat = value
     }
 
-    var clearFloat: Bool {
-        get { return self.wrappedValue.tgCurrentSizeClass.tg_clearFloat }
-        set {
-            let sc = self.wrappedValue.tgCurrentSizeClass
-            if sc.tg_clearFloat != newValue {
-                sc.tg_clearFloat = newValue
-                if let sView = self.wrappedValue.superview {
-                    sView.setNeedsLayout()
-                }
-            }
-        }
+    func reverseFloat() -> Bool {
+        return self.wrappedValue.tg_reverseFloat
+    }
+
+//    var clearFloat: Bool {
+//        get { return self.wrappedValue.tgCurrentSizeClass.tg_clearFloat }
+//        set {
+//            let sc = self.wrappedValue.tgCurrentSizeClass
+//            if sc.tg_clearFloat != newValue {
+//                sc.tg_clearFloat = newValue
+//                if let sView = self.wrappedValue.superview {
+//                    sView.setNeedsLayout()
+//                }
+//            }
+//        }
+//    }
+
+    func clearFloat(value: Bool)  {
+        self.wrappedValue.tg_clearFloat = value
+    }
+
+    func clearFloat() -> Bool {
+        return self.wrappedValue.tg_clearFloat
     }
 }
 
 public extension TGTypeWrapperProtocol where TGWrappedType: TGFloatLayout {
-    var orientation: TGOrientation {
-        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass).tg_orientation }
-        set {
-            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass
-            if lsc.tg_orientation != newValue {
-                lsc.tg_orientation = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
-        }
+//    var orientation: TGOrientation {
+//        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass).tg_orientation }
+//        set {
+//            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass
+//            if lsc.tg_orientation != newValue {
+//                lsc.tg_orientation = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func orientation(value: TGOrientation)  {
+        self.wrappedValue.tg_orientation = value
     }
 
-    var noBoundaryLimit: Bool {
-        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass).tg_noBoundaryLimit }
-        set {
-            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass
-            if lsc.tg_noBoundaryLimit != newValue {
-                lsc.tg_noBoundaryLimit = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
-        }
+    func orientation() -> TGOrientation {
+        return self.wrappedValue.tg_orientation
+    }
+
+//    var noBoundaryLimit: Bool {
+//        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass).tg_noBoundaryLimit }
+//        set {
+//            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass
+//            if lsc.tg_noBoundaryLimit != newValue {
+//                lsc.tg_noBoundaryLimit = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func noBoundaryLimit(value: Bool)  {
+        self.wrappedValue.tg_noBoundaryLimit = value
+    }
+
+    func noBoundaryLimit() -> Bool {
+        return self.wrappedValue.tg_noBoundaryLimit
     }
 
     func setSubviews(size:CGFloat, minSpace:CGFloat, maxSpace:CGFloat = CGFloat.greatestFiniteMagnitude, centered:Bool = false, inSizeClass type:TGSizeClassType = TGSizeClassType.default) {

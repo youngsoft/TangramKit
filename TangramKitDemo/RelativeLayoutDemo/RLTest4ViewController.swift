@@ -48,9 +48,9 @@ class RLTest4ViewController: UIViewController {
             // Fallback on earlier versions
         }
         
-        var rootLayout = TGRelativeLayout()
-        rootLayout.tg.insetsPaddingFromSafeArea = [.left, .right, .top] //为了防止拉到底部时iPhoneX设备的抖动发生，不能将底部安全区叠加到padding中去。
-        rootLayout.tg.padding = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        let rootLayout = TGRelativeLayout()
+        rootLayout.tg.insetsPaddingFromSafeArea(value: [.left, .right, .top])  //为了防止拉到底部时iPhoneX设备的抖动发生，不能将底部安全区叠加到padding中去。
+        rootLayout.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
         rootLayout.tg.height.equal(.wrap)
         rootLayout.tg.width.equal(.fill)
         scrollView.addSubview(rootLayout)
@@ -121,7 +121,7 @@ extension RLTest4ViewController:UIScrollViewDelegate
              ***需要注意的是这个特定的子视图一定要最后加入到布局视图中去。***
              */
            
-                self.testTopDockView.tg.noLayout = true
+                self.testTopDockView.tg.noLayout(value: true)
             
                 let rect = self.testTopDockView.frame;
                 self.testTopDockView.frame = CGRect(x:rect.origin.x, y:scrollView.contentOffset.y, width:rect.size.width, height:rect.size.height)
@@ -129,7 +129,7 @@ extension RLTest4ViewController:UIScrollViewDelegate
         }
         else
         {
-            self.testTopDockView.tg.noLayout = false
+            self.testTopDockView.tg.noLayout(value: false)
         }
 
     }

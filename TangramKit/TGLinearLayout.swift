@@ -9,32 +9,57 @@
 import UIKit
 
 public extension TGTypeWrapperProtocol where TGWrappedType: TGLinearLayout {
-    var orientation: TGOrientation {
-        get { return self.getCheck()?.tg_orientation ?? TGOrientation.vert }
-        set {
-            guard let lsc = self.setCheck() else { return }
-            if lsc.tg_orientation != newValue {
-                lsc.tg_orientation = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
-        }
+//    var orientation: TGOrientation {
+//        get { return self.getCheck()?.tg_orientation ?? TGOrientation.vert }
+//        set {
+//            guard let lsc = self.setCheck() else { return }
+//            if lsc.tg_orientation != newValue {
+//                lsc.tg_orientation = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func orientation(value: TGOrientation)  {
+        self.wrappedValue.tg_orientation = value
     }
 
-    var shrinkType: TGSubviewsShrinkType {
-        get { return self.getCheck()?.tg_shrinkType ?? TGSubviewsShrinkType() }
-        set {
-            guard let lsc = self.setCheck() else { return }
-            if lsc.tg_shrinkType != newValue {
-                lsc.tg_shrinkType = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
-        }
+    func orientation() -> TGOrientation {
+        return self.wrappedValue.tg_orientation
     }
 
-    var baselineBaseView: UIView {
-        get { return self.wrappedValue.tg_baselineBaseView }
-        set { self.wrappedValue.tg_baselineBaseView = newValue }
+//    var shrinkType: TGSubviewsShrinkType {
+//        get { return self.getCheck()?.tg_shrinkType ?? TGSubviewsShrinkType() }
+//        set {
+//            guard let lsc = self.setCheck() else { return }
+//            if lsc.tg_shrinkType != newValue {
+//                lsc.tg_shrinkType = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func shrinkType(value: TGSubviewsShrinkType)  {
+        self.wrappedValue.tg_shrinkType = value
     }
+
+    func shrinkType() -> TGSubviewsShrinkType {
+        return self.wrappedValue.tg_shrinkType
+    }
+
+//    var baselineBaseView: UIView {
+//        get { return self.wrappedValue.tg_baselineBaseView }
+//        set { self.wrappedValue.tg_baselineBaseView = newValue }
+//    }
+
+    func baselineBaseView(value: UIView)  {
+        self.wrappedValue.tg_baselineBaseView = value
+    }
+
+    func baselineBaseView() -> UIView {
+        return self.wrappedValue.tg_baselineBaseView
+    }
+
 
     func equalizeSubviews(centered: Bool, withSpace space: CGFloat! = nil, inSizeClass type: TGSizeClassType = TGSizeClassType.default) {
         switch type {

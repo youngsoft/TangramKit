@@ -43,8 +43,8 @@ class RLTest2ViewController: UIViewController {
         self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
 
         
-        var rootLayout = TGRelativeLayout()
-        rootLayout.tg.trailingPadding = 10
+        let rootLayout = TGRelativeLayout()
+        rootLayout.tg.trailingPadding(value: 10)
         rootLayout.backgroundColor = .white
         self.view = rootLayout
         
@@ -198,18 +198,18 @@ extension RLTest2ViewController
         
         if self.visibilitySwitch.isOn
         {
-            self.visibilityButton.tg.visibility = .gone
+            self.visibilityButton.tg.visibility(value: .gone)
         }
         else
         {
-            self.visibilityButton.tg.visibility = .invisible
+            self.visibilityButton.tg.visibility(value: .invisible)
         }
         
     }
     
     @objc func handleShow(_ sender: UIButton) {
-        
-        self.visibilityButton.tg.visibility = .visible
+
+        self.visibilityButton.tg.visibility(value: .visible)
     }
 
 }

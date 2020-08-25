@@ -96,15 +96,15 @@ class AllTest8ViewController: UIViewController {
          */
         
         //建立一个浮动布局,这个浮动布局不会控制父视图UIScrollView的contentSize。
-        var floatLayout = TGFloatLayout(.horz)
+        let floatLayout = TGFloatLayout(.horz)
         floatLayout.backgroundColor = CFTool.color(0)
-        floatLayout.tg.space = 10
+        floatLayout.tg.space(value: 10)
         floatLayout.tg.leading.equal(10)
         floatLayout.tg.trailing.equal(10) //同时设定了左边和右边边距，布局视图的宽度就决定了。
-        floatLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10);  //设置内边距。
+        floatLayout.tg.padding(value: UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10))  //设置内边距。
         floatLayout.tg.top.equal(60)
         floatLayout.tg.bottom.equal(10) //底部边距为10，这样同样设置了顶部和底部边距后布局的高度就决定了。
-        floatLayout.tg.adjustScrollViewContentSizeMode = .no  //布局视图不控制滚动视图的contentSize。
+        floatLayout.tg.adjustScrollViewContentSizeMode(value: .no)  //布局视图不控制滚动视图的contentSize。
         /*这里面把布局视图加入到滚动视图时不会自动调整滚动视图的contentSize，如果不设置这个属性则当布局视图加入滚动视图时会自动调整滚动视图的contentSize。您可以把tg_adjustScrollViewContentSizeMode属性设置这句话注释掉，可以看到当使用默认设置时，UIScrollView的contentSize的值会完全受到布局视图的尺寸和边距控制，这时候：
          
          contentSize.height = 布局视图的高度+布局视图的tg_top设置的上边距值 + 布局视图的tg_bottom设置的下边距值。
@@ -155,15 +155,15 @@ class AllTest8ViewController: UIViewController {
     @objc func handleDemo1(sener:UIButton!)
     {
         //布局视图用来实现弹框，这里把一个布局视图放入一个非布局视图里面。
-        var layout = TGLinearLayout(.vert)
+        let layout = TGLinearLayout(.vert)
         layout.backgroundColor = CFTool.color(14)
         layout.layer.cornerRadius = 5
         layout.tg.height.equal(.wrap)
-        layout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
+        layout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
         //设置布局视图的内边距。
-        layout.tg.vspace = 5
+        layout.tg.vspace(value: 5)
         //设置视图之间的间距，这样子视图就不再需要单独设置间距了。
-        layout.tg.gravity = TGGravity.Horizontal.fill
+        layout.tg.gravity(value: TGGravity.Horizontal.fill)
         //里面的子视图宽度和自己一样，这样就不再需要设置子视图的宽度了。
         layout.tg.leading.equal(20%)
         layout.tg.trailing.equal(20%)
@@ -190,12 +190,12 @@ class AllTest8ViewController: UIViewController {
         layout.addSubview(label)
         
         //按钮容器。如果您想让两个按钮水平排列则只需在btnContainer初始化中把方向改为：.horz 。您可以尝试看看效果。
-        var btnContainer = TGLinearLayout(.vert)
+        let btnContainer = TGLinearLayout(.vert)
         btnContainer.tg.height.equal(.wrap)
         //高度由子视图确定。
-        btnContainer.tg.space = 5
+        btnContainer.tg.space(value: 5)
         //视图之间的间距设置为5
-        btnContainer.tg.gravity = TGGravity.Horizontal.fill
+        btnContainer.tg.gravity(value: TGGravity.Horizontal.fill)
         //里面的子视图的宽度水平填充，如果是垂直线性布局则里面的所有子视图的宽度都和父视图相等。如果是水平线性布局则会均分所有子视图的宽度。
         layout.addSubview(btnContainer)
 

@@ -64,10 +64,11 @@ class LLTest3ViewController: UIViewController {
         scrollView.backgroundColor = .white
         self.view = scrollView;
         
-        var rootLayout = TGLinearLayout(.vert)
+        let rootLayout = TGLinearLayout(.vert)
         rootLayout.tg.width.equal(.fill)
         rootLayout.tg.height.equal(.wrap)
-        rootLayout.tg.gravity = TGGravity.Horizontal.fill  //设置这个属性后rootLayout的所有子视图都不需要指定宽度了，这个值的意义是所有子视图的宽度都填充满布局。也就是说设置了这个值后不需要为每个子视图设置tg_leading, tg_trailing来指定宽度了。
+        //设置这个属性后rootLayout的所有子视图都不需要指定宽度了，这个值的意义是所有子视图的宽度都填充满布局。也就是说设置了这个值后不需要为每个子视图设置tg_leading, tg_trailing来指定宽度了。
+        rootLayout.tg.gravity(value: TGGravity.Horizontal.fill)
         scrollView.addSubview(rootLayout)
         
         //创建垂直布局停靠操作动作布局。
@@ -129,12 +130,13 @@ extension LLTest3ViewController
         ]
         
         //用流式布局创建动作菜单。
-        var actionLayout = TGFlowLayout(.vert, arrangedCount: 3) //每行3个子视图
-        actionLayout.tg.padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        let actionLayout = TGFlowLayout(.vert, arrangedCount: 3) //每行3个子视图
+        actionLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
         actionLayout.tg.height.equal(.wrap)
-        actionLayout.tg.gravity = TGGravity.Horizontal.fill //里面的子视图的宽度平均分配。
-        actionLayout.tg.hspace = 5
-        actionLayout.tg.vspace = 5   //设置子视图之间的水平和垂直间距。
+        //里面的子视图的宽度平均分配
+        actionLayout.tg.gravity(value: TGGravity.Horizontal.fill)
+        actionLayout.tg.hspace(value: 5)
+        actionLayout.tg.vspace(value: 5)   //设置子视图之间的水平和垂直间距。
         contentLayout.addSubview(actionLayout)
         
         for i in 0..<actions.count
@@ -160,12 +162,12 @@ extension LLTest3ViewController
         self.vertGravitySetLabel = vertGravitySetLabel
 
     
-        var vertGravityLayout = TGLinearLayout(.vert)
+        let vertGravityLayout = TGLinearLayout(.vert)
         vertGravityLayout.backgroundColor = CFTool.color(0)
         vertGravityLayout.tg.top.equal(10)
         vertGravityLayout.tg.leading.equal(20)
         vertGravityLayout.tg.height.equal(200)
-        vertGravityLayout.tg.vspace = 10  //设置每个子视图之间的垂直间距为10，这样子视图就不再需要设置间距了。
+        vertGravityLayout.tg.vspace(value: 10)  //设置每个子视图之间的垂直间距为10，这样子视图就不再需要设置间距了。
         contentLayout.addSubview(vertGravityLayout)
         self.vertGravityLayout = vertGravityLayout
         
@@ -174,9 +176,9 @@ extension LLTest3ViewController
         v1.tg.height.equal(20)
         vertGravityLayout.addSubview(v1)
         
-        var v2 = self.createLabel(NSLocalizedString("always alignment to left", comment:""), color: CFTool.color(6))
+        let v2 = self.createLabel(NSLocalizedString("always alignment to left", comment:""), color: CFTool.color(6))
         v2.tg.height.equal(20)
-        v2.tg.alignment = TGGravity.Horizontal.left  //对于垂直布局里面的子视图可以通过这个属性来设置水平对齐的方位，这样即使布局视图设置了gravity属性，这个视图的对齐都不会受到影响
+        v2.tg.alignment(value: TGGravity.Horizontal.left) //对于垂直布局里面的子视图可以通过这个属性来设置水平对齐的方位，这样即使布局视图设置了gravity属性，这个视图的对齐都不会受到影响
         vertGravityLayout.addSubview(v2)
         
         
@@ -222,12 +224,12 @@ extension LLTest3ViewController
         ]
         
 
-        var actionLayout = TGFlowLayout(.vert, arrangedCount: 3)
-        actionLayout.tg.gravity = TGGravity.Horizontal.fill  //平均分配里面所有子视图的宽度
+        let actionLayout = TGFlowLayout(.vert, arrangedCount: 3)
+        actionLayout.tg.gravity(value: TGGravity.Horizontal.fill)   //平均分配里面所有子视图的宽度
         actionLayout.tg.height.equal(.wrap)
-        actionLayout.tg.hspace = 5
-        actionLayout.tg.vspace = 5
-        actionLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
+        actionLayout.tg.hspace(value: 5)
+        actionLayout.tg.vspace(value: 5)
+        actionLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
         contentLayout.addSubview(actionLayout)
 
         for i:Int in 0..<actions.count
@@ -249,12 +251,12 @@ extension LLTest3ViewController
         contentLayout.addSubview(horzGravitySetLabel)
         self.horzGravitySetLabel = horzGravitySetLabel
         
-        var horzGravityLayout = TGLinearLayout(.horz)
+        let horzGravityLayout = TGLinearLayout(.horz)
         horzGravityLayout.backgroundColor = CFTool.color(0)
         horzGravityLayout.tg.height.equal(200)
         horzGravityLayout.tg.top.equal(10)
         horzGravityLayout.tg.leading.equal(20)
-        horzGravityLayout.tg.hspace = 5  //设置子视图之间的水平间距为5
+        horzGravityLayout.tg.hspace(value: 5)  //设置子视图之间的水平间距为5
         contentLayout.addSubview(horzGravityLayout)
         self.horzGravityLayout = horzGravityLayout
         
@@ -263,10 +265,10 @@ extension LLTest3ViewController
         v1.tg.width.equal(60)
         horzGravityLayout.addSubview(v1)
         
-        var v2 = self.createLabel(NSLocalizedString("always alignment to top", comment:""), color: CFTool.color(6))
+        let v2 = self.createLabel(NSLocalizedString("always alignment to top", comment:""), color: CFTool.color(6))
         v2.tg.height.equal(.wrap)
         v2.tg.width.equal(60)
-        v2.tg.alignment = TGGravity.Vertical.top  //对于水平布局里面的子视图可以通过这个属性来设置垂直对齐的方位，这样即使布局视图设置了gravity属性，这个视图的对齐都不会受到影响。
+        v2.tg.alignment(value: TGGravity.Vertical.top)  //对于水平布局里面的子视图可以通过这个属性来设置垂直对齐的方位，这样即使布局视图设置了gravity属性，这个视图的对齐都不会受到影响。
         horzGravityLayout.addSubview(v2)
         
         
@@ -307,8 +309,8 @@ extension LLTest3ViewController
     @objc func handleVertLayoutGravity(_ button:UIButton)
     {
         //分别取出垂直和水平方向的停靠设置。
-        var vertGravity = self.vertGravityLayout.tg.gravity & TGGravity.Horizontal.mask
-        var horzGravity = self.vertGravityLayout.tg.gravity & TGGravity.Vertical.mask
+        var vertGravity = self.vertGravityLayout.tg.gravity() & TGGravity.Horizontal.mask
+        var horzGravity = self.vertGravityLayout.tg.gravity() & TGGravity.Vertical.mask
         
         switch (button.tag) {
         case 1:  //上
@@ -354,10 +356,10 @@ extension LLTest3ViewController
             break;
         }
         
-        self.vertGravityLayout.tg.gravity = [vertGravity,horzGravity]
+        self.vertGravityLayout.tg.gravity(value: [vertGravity,horzGravity])
         
         self.vertGravityLayout.tg.layoutAnimationWithDuration(0.2)
-        self.vertGravitySetLabel.text = self.gravityText(gravity: self.vertGravityLayout.tg.gravity, prefixText: "vertGravityLayout.tg.gravity")
+        self.vertGravitySetLabel.text = self.gravityText(gravity: self.vertGravityLayout.tg.gravity(), prefixText: "vertGravityLayout.tg.gravity")
         self.vertGravitySetLabel.sizeToFit()
         
     }
@@ -365,8 +367,8 @@ extension LLTest3ViewController
     @objc func handleHorzLayoutGravity(_ button:UIButton)
     {
         //分别取出垂直和水平方向的停靠设置。
-        var vertGravity = self.horzGravityLayout.tg.gravity & TGGravity.Horizontal.mask
-        var horzGravity = self.horzGravityLayout.tg.gravity & TGGravity.Vertical.mask
+        var vertGravity = self.horzGravityLayout.tg.gravity() & TGGravity.Horizontal.mask
+        var horzGravity = self.horzGravityLayout.tg.gravity() & TGGravity.Vertical.mask
         
         switch (button.tag) {
         case 1:  //上
@@ -412,11 +414,11 @@ extension LLTest3ViewController
             break;
         }
         
-        self.horzGravityLayout.tg.gravity = [vertGravity, horzGravity]
+        self.horzGravityLayout.tg.gravity(value: [vertGravity, horzGravity])
         
         self.horzGravityLayout.tg.layoutAnimationWithDuration(0.2)
         
-        self.horzGravitySetLabel.text = self.gravityText(gravity: self.horzGravityLayout.tg.gravity, prefixText: "horzGravityLayout.tg.gravity")
+        self.horzGravitySetLabel.text = self.gravityText(gravity: self.horzGravityLayout.tg.gravity(), prefixText: "horzGravityLayout.tg.gravity")
         self.horzGravitySetLabel.sizeToFit()
         
     }
@@ -424,9 +426,9 @@ extension LLTest3ViewController
     
     @objc func handleNavigationTitleCentre(_ sender: AnyObject!)
     {
-        var navigationItemLayout = TGLinearLayout(.vert)
+        let navigationItemLayout = TGLinearLayout(.vert)
         //通过TGGravity.Horizontal.windowCenter的设置总是保证在窗口的中间而不是布局视图的中间。
-        navigationItemLayout.tg.gravity = [TGGravity.Horizontal.windowCenter , TGGravity.Vertical.center]
+        navigationItemLayout.tg.gravity(value: [TGGravity.Horizontal.windowCenter, TGGravity.Vertical.center])
         navigationItemLayout.frame = self.navigationController!.navigationBar.bounds
         
         let topLabel = UILabel()

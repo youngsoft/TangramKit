@@ -170,12 +170,12 @@ class FOLTest2ViewController: UIViewController {
         let scrollView = UIScrollView()
         self.view = scrollView;
 
-        var rootLayout = TGLinearLayout(.vert)
+        let rootLayout = TGLinearLayout(.vert)
         rootLayout.tg.width.equal(.fill)
         rootLayout.tg.height.equal(.wrap)
-        rootLayout.tg.gravity = TGGravity.Horizontal.fill
+        rootLayout.tg.gravity(value: TGGravity.Horizontal.fill)
         rootLayout.backgroundColor =  UIColor(white:0xe7/255.0, alpha:1)
-        rootLayout.tg.intelligentBorderline =  TGBorderline(color: .lightGray) //设置智能边界线，布局里面的子视图会根据布局自动产生边界线。
+        rootLayout.tg.intelligentBorderline(value: TGBorderline(color: .lightGray))   //设置智能边界线，布局里面的子视图会根据布局自动产生边界线。
         scrollView.addSubview(rootLayout)
         self.rootLayout = rootLayout
     }
@@ -234,10 +234,10 @@ extension FOLTest2ViewController
         }
         
         //创建条目容器布局。
-        var itemContainerLayout = TGFloatLayout(.vert)
+        let itemContainerLayout = TGFloatLayout(.vert)
         itemContainerLayout.backgroundColor = .white
         itemContainerLayout.tg.height.equal(.wrap)
-        itemContainerLayout.tg.intelligentBorderline = TGBorderline(color: .lightGray)
+        itemContainerLayout.tg.intelligentBorderline(value: TGBorderline(color: .lightGray))
         self.rootLayout.addSubview(itemContainerLayout)
         
         //创建条目布局，并加入到容器布局中去。
@@ -250,11 +250,11 @@ extension FOLTest2ViewController
             
             //布局模型对象的layoutSelector负责建立布局，并返回一个布局条目布局视图。
             
-            var itemLayout = self.perform(layoutTemplate.layoutSelector,with:model).takeUnretainedValue() as! TGBaseLayout
+            let itemLayout = self.perform(layoutTemplate.layoutSelector,with:model).takeUnretainedValue() as! TGBaseLayout
             
             itemLayout.tag = sectionIndex * FOLTest2ViewController.sBaseTag + i;
             itemLayout.tg.setTarget(self,action:#selector(handleItemLayoutTap), for:.touchUpInside)
-            itemLayout.tg.highlightedOpacity = 0.4
+            itemLayout.tg.highlightedOpacity(value: 0.4)
             
             
             //根据上面布局模型对高度和宽度的定义指定条目布局的尺寸。如果小于等于1则用相对尺寸，否则用绝对尺寸。
@@ -353,8 +353,8 @@ extension FOLTest2ViewController
         itemLayout.addSubview(subTitleLabel)
         
         //图片向右浮动，并且右边距为5，上面因为占据了全宽，因此这里会另起一行向右浮动。
-        var imageView = UIImageView(image:UIImage(named:dataModel.image))
-        imageView.tg.reverseFloat = true
+        let imageView = UIImageView(image:UIImage(named:dataModel.image))
+        imageView.tg.reverseFloat(value: true)
         imageView.tg.trailing.equal(5)
         imageView.sizeToFit()
         itemLayout.addSubview(imageView)
@@ -369,9 +369,9 @@ extension FOLTest2ViewController
         let itemLayout = TGFloatLayout(.vert)
         
         //因为图片要占据全高，所以必须优先向右浮动。
-        var imageView = UIImageView(image:UIImage(named:dataModel.image))
+        let imageView = UIImageView(image:UIImage(named:dataModel.image))
         imageView.tg.height.equal(itemLayout.tg.height)
-        imageView.tg.reverseFloat = true;
+        imageView.tg.reverseFloat(value: true)
         imageView.sizeToFit()
         itemLayout.addSubview(imageView)
         
@@ -386,12 +386,12 @@ extension FOLTest2ViewController
         itemLayout.addSubview(titleLabel)
         
         //向左浮动，直接另起一行，占据剩余宽度，内容高度动态。
-        var subTitleLabel = UILabel()
+        let subTitleLabel = UILabel()
         subTitleLabel.text = dataModel.subTitle;
         subTitleLabel.font = UIFont.systemFont(ofSize: 12)
         subTitleLabel.textColor = UIColor.lightGray;
         subTitleLabel.tg.leading.equal(5)
-        subTitleLabel.tg.clearFloat = true;
+        subTitleLabel.tg.clearFloat(value: true)
         subTitleLabel.tg.width.equal(.fill)
         subTitleLabel.tg.height.equal(.wrap)
         itemLayout.addSubview(subTitleLabel)
@@ -399,8 +399,8 @@ extension FOLTest2ViewController
         //如果有小图片则图片另起一行，向左浮动。
         if (dataModel.subImage != nil)
         {
-            var subImageView = UIImageView(image:UIImage(named:dataModel.subImage))
-            subImageView.tg.clearFloat = true;
+            let subImageView = UIImageView(image:UIImage(named:dataModel.subImage))
+            subImageView.tg.clearFloat(value: true)
             subImageView.tg.leading.equal(5)
             subImageView.sizeToFit()
             itemLayout.addSubview(subImageView)
@@ -413,9 +413,9 @@ extension FOLTest2ViewController
     //建立超级品牌日布局，这里因为就只有一张图，所以设置布局的背景图片即可。
     @objc func createItemLayout2_1(_ dataModel:FOLTest2DataModel) ->TGFloatLayout
     {
-        var itemLayout = TGFloatLayout(.vert)
+        let itemLayout = TGFloatLayout(.vert)
         //直接设置背景图片。
-        itemLayout.tg.backgroundImage = UIImage(named:dataModel.image) ?? UIImage()
+        itemLayout.tg.backgroundImage(value: UIImage(named:dataModel.image)) 
         
         return itemLayout;
     }
@@ -445,23 +445,23 @@ extension FOLTest2ViewController
         itemLayout.addSubview(subTitleLabel)
         
         //价格部分在底部，因此改为向下浮动。
-        var priceLabel = UILabel()
+        let priceLabel = UILabel()
         priceLabel.text = dataModel.price;
         priceLabel.font = UIFont.systemFont(ofSize: 11)
         priceLabel.textColor = UIColor.red
         priceLabel.tg.leading.equal(5)
         priceLabel.tg.bottom.equal(5)
-        priceLabel.tg.reverseFloat = true
+        priceLabel.tg.reverseFloat(value: true)
         priceLabel.sizeToFit()
         itemLayout.addSubview(priceLabel)
         
         //描述部分在价格的上面，因此改为向下浮动。
-        var descLabel = UILabel()
+        let descLabel = UILabel()
         descLabel.text = dataModel.desc;
         descLabel.font = UIFont.systemFont(ofSize: 11)
         descLabel.textColor = UIColor.lightGray
         descLabel.tg.leading.equal(5)
-        descLabel.tg.reverseFloat = true
+        descLabel.tg.reverseFloat(value: true)
         descLabel.sizeToFit()
         itemLayout.addSubview(descLabel)
         
@@ -500,24 +500,24 @@ extension FOLTest2ViewController
         itemLayout.addSubview(subTitleLabel)
         
         //价格向下浮动
-        var priceLabel = UILabel()
+        let priceLabel = UILabel()
         priceLabel.text = dataModel.price;
         priceLabel.font = UIFont.systemFont(ofSize: 11)
         priceLabel.textColor = UIColor.red
         priceLabel.tg.leading.equal(5)
         priceLabel.tg.bottom.equal(5)
-        priceLabel.tg.reverseFloat = true
+        priceLabel.tg.reverseFloat(value: true)
         priceLabel.tg.width.equal(itemLayout.tg.width,increment:-2.5,multiple:0.5)
         priceLabel.sizeToFit()
         itemLayout.addSubview(priceLabel)
         
         //描述向下浮动
-        var descLabel = UILabel()
+        let descLabel = UILabel()
         descLabel.text = dataModel.desc;
         descLabel.font = UIFont.systemFont(ofSize: 11)
         descLabel.textColor = UIColor.lightGray
         descLabel.tg.leading.equal(5)
-        descLabel.tg.reverseFloat = true
+        descLabel.tg.reverseFloat(value: true)
         descLabel.tg.width.equal(itemLayout.tg.width,increment:-2.5,multiple:0.5)
         descLabel.sizeToFit()
         itemLayout.addSubview(descLabel)

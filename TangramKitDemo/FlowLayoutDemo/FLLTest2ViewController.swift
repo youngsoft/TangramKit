@@ -30,8 +30,8 @@ class FLLTest2ViewController: UIViewController {
         var rootLayout = TGFlowLayout(.vert,arrangedCount:2)
         rootLayout.backgroundColor = .white
         rootLayout.tg.arrangedGravity = TGGravity.Vertical.center
-        rootLayout.tg.vspace = 4
-        rootLayout.tg.hspace = 4
+        rootLayout.tg.vspace(value: 4)
+        rootLayout.tg.hspace(value: 4)
         self.view = rootLayout
         
         //第一行
@@ -92,10 +92,10 @@ class FLLTest2ViewController: UIViewController {
         rootLayout.addSubview(autoArrangeSwitch)
         
         //最后一行。
-        var flowLayout = TGFlowLayout()
+        let flowLayout = TGFlowLayout()
         flowLayout.backgroundColor = CFTool.color(0)
-        flowLayout.tg.space = 10
-        flowLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
+        flowLayout.tg.space(value: 10)
+        flowLayout.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
         flowLayout.tg.width.equal(.fill)
         flowLayout.tg.height.equal(.fill)
         rootLayout.addSubview(flowLayout)
@@ -160,11 +160,11 @@ extension FLLTest2ViewController
         //间距拉伸
         if sender.isOn
         {
-            self.flowLayout.tg.gravity = TGGravity.Horizontal.between //流式布局的tg_gravity如果设置为TGGravity.Horizontal.between表示子视图的间距会被拉伸，以便填充满整个布局。
+            self.flowLayout.tg.gravity(value: TGGravity.Horizontal.between) //流式布局的tg_gravity如果设置为TGGravity.Horizontal.between表示子视图的间距会被拉伸，以便填充满整个布局。
         }
         else
         {
-            self.flowLayout.tg.gravity = .none
+            self.flowLayout.tg.gravity(value: .none)
         }
         
         self.flowLayout.tg.layoutAnimationWithDuration(0.2)
@@ -176,11 +176,12 @@ extension FLLTest2ViewController
         //内容拉伸
         if sender.isOn
         {
-            self.flowLayout.tg.gravity = TGGravity.Horizontal.fill  //流式布局的gravity如果设置为TGGravity.Horizontal.fill表示子视图的间距会被拉伸，以便填充满整个布局。
+            //流式布局的gravity如果设置为TGGravity.Horizontal.fill表示子视图的间距会被拉伸，以便填充满整个布局。
+            self.flowLayout.tg.gravity(value: TGGravity.Horizontal.fill)
         }
         else
         {
-            self.flowLayout.tg.gravity = TGGravity.none
+            self.flowLayout.tg.gravity(value: TGGravity.none)
         }
         
         self.flowLayout.tg.layoutAnimationWithDuration(0.2)

@@ -424,65 +424,97 @@ public extension TGTypeWrapperProtocol where TGWrappedType: UIView {
         return self.wrappedValue.tgCurrentSizeClass.tg_height
     }
 
-    var useFrame: Bool {
-        get { return self.wrappedValue.tgCurrentSizeClass.tg_useFrame }
-        set {
-            let sc = self.wrappedValue.tgCurrentSizeClass
-            if sc.tg_useFrame != newValue {
-                sc.tg_useFrame = newValue
-                if let sView = self.wrappedValue.superview {
-                    sView.setNeedsLayout()
-                }
-            }
-        }
+//    var useFrame: Bool {
+//        get { return self.wrappedValue.tgCurrentSizeClass.tg_useFrame }
+//        set {
+//            let sc = self.wrappedValue.tgCurrentSizeClass
+//            if sc.tg_useFrame != newValue {
+//                sc.tg_useFrame = newValue
+//                if let sView = self.wrappedValue.superview {
+//                    sView.setNeedsLayout()
+//                }
+//            }
+//        }
+//    }
+
+    func useFrame(value: Bool)  {
+        self.wrappedValue.tg_useFrame = value
     }
 
-    var noLayout: Bool {
-        get { return self.wrappedValue.tgCurrentSizeClass.tg_noLayout }
-        set {
-            let sc = self.wrappedValue.tgCurrentSizeClass
-            if sc.tg_noLayout != newValue {
-                sc.tg_noLayout = newValue
-                if let sView = self.wrappedValue.superview {
-                    sView.setNeedsLayout()
-                }
-            }
-        }
+    func useFrame() -> Bool {
+        return self.wrappedValue.tg_useFrame
     }
 
-    var visibility: TGVisibility {
-        get { return self.wrappedValue.tgCurrentSizeClass.tg_visibility }
-        set {
-            let sc = self.wrappedValue.tgCurrentSizeClass
-            if sc.tg_visibility != newValue {
-                sc.tg_visibility = newValue
+//    var noLayout: Bool {
+//        get { return self.wrappedValue.tgCurrentSizeClass.tg_noLayout }
+//        set {
+//            let sc = self.wrappedValue.tgCurrentSizeClass
+//            if sc.tg_noLayout != newValue {
+//                sc.tg_noLayout = newValue
+//                if let sView = self.wrappedValue.superview {
+//                    sView.setNeedsLayout()
+//                }
+//            }
+//        }
+//    }
 
-                switch newValue {
-                case TGVisibility.visible:
-                    self.wrappedValue.isHidden = false
-                    break
-                default:
-                    self.wrappedValue.isHidden = true
-                }
-
-                if let sView = self.wrappedValue.superview {
-                    sView.setNeedsLayout()
-                }
-            }
-        }
+    func noLayout(value: Bool)  {
+        self.wrappedValue.tg_noLayout = value
     }
 
-    var alignment: TGGravity {
-        get { return self.wrappedValue.tgCurrentSizeClass.tg_alignment }
-        set {
-            let sc = self.wrappedValue.tgCurrentSizeClass
-            if sc.tg_alignment != newValue {
-                sc.tg_alignment = newValue
-                if let sView = self.wrappedValue.superview {
-                    sView.setNeedsLayout()
-                }
-            }
-        }
+    func noLayout() -> Bool {
+        return self.wrappedValue.tg_noLayout
+    }
+
+//    var visibility: TGVisibility {
+//        get { return self.wrappedValue.tgCurrentSizeClass.tg_visibility }
+//        set {
+//            let sc = self.wrappedValue.tgCurrentSizeClass
+//            if sc.tg_visibility != newValue {
+//                sc.tg_visibility = newValue
+//
+//                switch newValue {
+//                case TGVisibility.visible:
+//                    self.wrappedValue.isHidden = false
+//                    break
+//                default:
+//                    self.wrappedValue.isHidden = true
+//                }
+//
+//                if let sView = self.wrappedValue.superview {
+//                    sView.setNeedsLayout()
+//                }
+//            }
+//        }
+//    }
+
+    func visibility(value: TGVisibility)  {
+        self.wrappedValue.tg_visibility = value
+    }
+
+    func visibility() -> TGVisibility {
+        return self.wrappedValue.tg_visibility
+    }
+
+//    var alignment: TGGravity {
+//        get { return self.wrappedValue.tgCurrentSizeClass.tg_alignment }
+//        set {
+//            let sc = self.wrappedValue.tgCurrentSizeClass
+//            if sc.tg_alignment != newValue {
+//                sc.tg_alignment = newValue
+//                if let sView = self.wrappedValue.superview {
+//                    sView.setNeedsLayout()
+//                }
+//            }
+//        }
+//    }
+
+    func alignment(value: TGGravity)  {
+        self.wrappedValue.tg_alignment = value
+    }
+
+    func alignment() -> TGGravity {
+        return self.wrappedValue.tg_alignment
     }
 }
 
@@ -849,196 +881,416 @@ public extension TGTypeWrapperProtocol where TGWrappedType: TGBaseLayout {
         window.tgUpdateRTL(isRTL)
     }
 
-    var padding: UIEdgeInsets {
-        get { return self.getCheck()?.tg_padding ?? UIEdgeInsets.zero }
-        set {
-            guard let value = self.setCheck() else { return }
-            if value.tg_padding != newValue {
-                value.tg_padding = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
+//    var padding: UIEdgeInsets {
+//        get { return self.getCheck()?.tg_padding ?? UIEdgeInsets.zero }
+//        set {
+//            guard let value = self.setCheck() else { return }
+//            if value.tg_padding != newValue {
+//                value.tg_padding = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func padding(value: UIEdgeInsets) {
+        guard let instance = self.setCheck() else { return }
+        if instance.tg_padding != value {
+            instance.tg_padding = value
+            self.wrappedValue.setNeedsLayout()
         }
     }
 
-    var topPadding: CGFloat {
-        get { return self.getCheck()?.tg_topPadding ?? 0 }
-        set {
-            guard let value = self.setCheck() else { return }
-            if value.tg_topPadding != newValue {
-                value.tg_topPadding = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
+    func padding() -> UIEdgeInsets {
+        return self.getCheck()?.tg_padding ?? UIEdgeInsets.zero
+    }
+
+//    var topPadding: CGFloat {
+//        get { return self.getCheck()?.tg_topPadding ?? 0 }
+//        set {
+//            guard let value = self.setCheck() else { return }
+//            if value.tg_topPadding != newValue {
+//                value.tg_topPadding = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func topPadding(value: CGFloat) {
+        guard let instance = self.setCheck() else { return }
+        if instance.tg_topPadding != value {
+            instance.tg_topPadding = value
+            self.wrappedValue.setNeedsLayout()
         }
     }
 
-    var leadingPadding: CGFloat {
-        get { return self.getCheck()?.tg_leadingPadding ?? 0 }
-        set {
-            guard let value = self.setCheck() else { return }
-            if value.tg_leadingPadding != newValue {
-                value.tg_leadingPadding = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
+    func topPadding() -> CGFloat {
+        return self.getCheck()?.tg_topPadding ?? 0
+    }
+
+
+//    var leadingPadding: CGFloat {
+//        get { return self.getCheck()?.tg_leadingPadding ?? 0 }
+//        set {
+//            guard let value = self.setCheck() else { return }
+//            if value.tg_leadingPadding != newValue {
+//                value.tg_leadingPadding = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func leadingPadding(value: CGFloat) {
+        guard let instance = self.setCheck() else { return }
+        if instance.tg_leadingPadding != value {
+            instance.tg_leadingPadding = value
+            self.wrappedValue.setNeedsLayout()
         }
     }
 
-    var bottomPadding: CGFloat {
-        get { return self.getCheck()?.tg_bottomPadding ?? 0 }
-        set {
-            guard let value = self.setCheck() else { return }
-            if value.tg_bottomPadding != newValue {
-                value.tg_bottomPadding = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
+    func leadingPadding() -> CGFloat {
+        return self.getCheck()?.tg_leadingPadding ?? 0
+    }
+
+//    var bottomPadding: CGFloat {
+//        get { return self.getCheck()?.tg_bottomPadding ?? 0 }
+//        set {
+//            guard let value = self.setCheck() else { return }
+//            if value.tg_bottomPadding != newValue {
+//                value.tg_bottomPadding = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func bottomPadding(value: CGFloat) {
+        guard let instance = self.setCheck() else { return }
+        if instance.tg_bottomPadding != value {
+            instance.tg_bottomPadding = value
+            self.wrappedValue.setNeedsLayout()
         }
     }
 
-    var trailingPadding: CGFloat {
-        get { return self.getCheck()?.tg_trailingPadding ?? 0 }
-        set {
-            guard let value = self.setCheck() else { return }
-            if value.tg_trailingPadding != newValue {
-                value.tg_trailingPadding = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
+    func bottomPadding() -> CGFloat {
+        return self.getCheck()?.tg_bottomPadding ?? 0
+    }
+
+//    var trailingPadding: CGFloat {
+//        get { return self.getCheck()?.tg_trailingPadding ?? 0 }
+//        set {
+//            guard let value = self.setCheck() else { return }
+//            if value.tg_trailingPadding != newValue {
+//                value.tg_trailingPadding = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func trailingPadding(value: CGFloat) {
+        guard let instance = self.setCheck() else { return }
+        if instance.tg_trailingPadding != value {
+            instance.tg_trailingPadding = value
+            self.wrappedValue.setNeedsLayout()
         }
     }
 
-    var leftPadding: CGFloat {
-        get { return self.getCheck()?.tg_leftPadding ?? 0 }
-        set {
-            guard let value = self.setCheck() else { return }
-            if value.tg_leftPadding != newValue {
-                value.tg_leftPadding = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
+    func trailingPadding() -> CGFloat {
+        return self.getCheck()?.tg_trailingPadding ?? 0
+    }
+
+//    var leftPadding: CGFloat {
+//        get { return self.getCheck()?.tg_leftPadding ?? 0 }
+//        set {
+//            guard let value = self.setCheck() else { return }
+//            if value.tg_leftPadding != newValue {
+//                value.tg_leftPadding = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func leftPadding(value: CGFloat)  {
+        guard let instance = self.setCheck() else { return }
+        if instance.tg_leftPadding != value {
+            instance.tg_leftPadding = value
+            self.wrappedValue.setNeedsLayout()
         }
     }
 
-    var rightPadding: CGFloat {
-        get { return self.getCheck()?.tg_rightPadding ?? 0 }
-        set {
-            guard let value = self.setCheck() else { return }
-            if value.tg_rightPadding != newValue {
-                value.tg_rightPadding = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
+    func leftPadding() -> CGFloat {
+        return self.getCheck()?.tg_leftPadding ?? 0
+    }
+
+
+//    var rightPadding: CGFloat {
+//        get { return self.getCheck()?.tg_rightPadding ?? 0 }
+//        set {
+//            guard let value = self.setCheck() else { return }
+//            if value.tg_rightPadding != newValue {
+//                value.tg_rightPadding = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func rightPadding(value: CGFloat)  {
+        guard let instance = self.setCheck() else { return }
+        if instance.tg_rightPadding != value {
+            instance.tg_rightPadding = value
+            self.wrappedValue.setNeedsLayout()
         }
     }
 
-    var zeroPadding: Bool {
-        get { return self.getCheck()?.tg_zeroPadding ?? false }
-        set {
-            guard let value = self.setCheck() else { return }
-            if value.tg_zeroPadding != newValue {
-                value.tg_zeroPadding = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
+    func rightPadding() -> CGFloat {
+        return self.getCheck()?.tg_rightPadding ?? 0
+    }
+
+
+//    var zeroPadding: Bool {
+//        get { return self.getCheck()?.tg_zeroPadding ?? false }
+//        set {
+//            guard let value = self.setCheck() else { return }
+//            if value.tg_zeroPadding != newValue {
+//                value.tg_zeroPadding = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func zeroPadding(value: Bool)  {
+        guard let instance = self.setCheck() else { return }
+        if instance.tg_zeroPadding != value {
+            instance.tg_zeroPadding = value
+            self.wrappedValue.setNeedsLayout()
         }
     }
 
-    var insetsPaddingFromSafeArea: UIRectEdge {
-        get { return self.getCheck()?.tg_insetsPaddingFromSafeArea ?? UIRectEdge.all }
-        set {
-            guard let value = self.setCheck() else { return }
-            if value.tg_insetsPaddingFromSafeArea != newValue {
-                value.tg_insetsPaddingFromSafeArea = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
+    func zeroPadding() -> Bool {
+        return self.getCheck()?.tg_zeroPadding ?? false
+    }
+
+//    var insetsPaddingFromSafeArea: UIRectEdge {
+//        get { return self.getCheck()?.tg_insetsPaddingFromSafeArea ?? UIRectEdge.all }
+//        set {
+//            guard let value = self.setCheck() else { return }
+//            if value.tg_insetsPaddingFromSafeArea != newValue {
+//                value.tg_insetsPaddingFromSafeArea = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func insetsPaddingFromSafeArea(value: UIRectEdge)  {
+        guard let instance = self.setCheck() else { return }
+        if instance.tg_insetsPaddingFromSafeArea != value {
+            instance.tg_insetsPaddingFromSafeArea = value
+            self.wrappedValue.setNeedsLayout()
         }
     }
 
-    var insetLandscapeFringePadding: Bool {
-        get { return self.getCheck()?.tg_insetLandscapeFringePadding ?? false }
-        set {
-            guard let value = self.setCheck() else { return }
-            if value.tg_insetLandscapeFringePadding != newValue {
-                value.tg_insetLandscapeFringePadding = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
+    func insetsPaddingFromSafeArea() -> UIRectEdge {
+        return self.getCheck()?.tg_insetsPaddingFromSafeArea ?? UIRectEdge.all
+    }
+
+//    var insetLandscapeFringePadding: Bool {
+//        get { return self.getCheck()?.tg_insetLandscapeFringePadding ?? false }
+//        set {
+//            guard let value = self.setCheck() else { return }
+//            if value.tg_insetLandscapeFringePadding != newValue {
+//                value.tg_insetLandscapeFringePadding = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+    
+
+    func insetLandscapeFringePadding(value: Bool)  {
+        guard let instance = self.setCheck() else { return }
+        if instance.tg_insetLandscapeFringePadding != value {
+            instance.tg_insetLandscapeFringePadding = value
+            self.wrappedValue.setNeedsLayout()
         }
     }
 
-    var space: CGFloat {
-        get { return self.getCheck()?.tg_space ?? 0 }
-        set {
-            guard let value = self.setCheck() else { return }
-            if value.tg_space != newValue {
-                value.tg_space = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
+    func insetLandscapeFringePadding() -> Bool {
+        return self.getCheck()?.tg_insetLandscapeFringePadding ?? false
+    }
+
+//    var space: CGFloat {
+//        get { return self.getCheck()?.tg_space ?? 0 }
+//        set {
+//            guard let value = self.setCheck() else { return }
+//            if value.tg_space != newValue {
+//                value.tg_space = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func space(value: CGFloat)  {
+        guard let instance = self.setCheck() else { return }
+        if instance.tg_space != value {
+            instance.tg_space = value
+            self.wrappedValue.setNeedsLayout()
         }
     }
 
-    var vspace: CGFloat {
-        get { return self.getCheck()?.tg_vspace ?? 0 } set {
-            guard let value = self.setCheck() else { return }
-            if value.tg_vspace != newValue {
-                value.tg_vspace = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
+    func space() -> CGFloat {
+        return self.getCheck()?.tg_space ?? 0
+    }
+
+//    var vspace: CGFloat {
+//        get { return self.getCheck()?.tg_vspace ?? 0 } set {
+//            guard let value = self.setCheck() else { return }
+//            if value.tg_vspace != newValue {
+//                value.tg_vspace = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func vspace(value: CGFloat)  {
+        guard let instance = self.setCheck() else { return }
+        if instance.tg_vspace != value {
+            instance.tg_vspace = value
+            self.wrappedValue.setNeedsLayout()
         }
     }
 
-    var hspace: CGFloat {
-        get { return self.getCheck()?.tg_hspace ?? 0 }
-        set {
-            guard let value = self.setCheck() else { return }
-            if value.tg_hspace != newValue {
-                value.tg_hspace = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
+    func vspace() -> CGFloat {
+        return self.getCheck()?.tg_vspace ?? 0
+    }
+
+//    var hspace: CGFloat {
+//        get { return self.getCheck()?.tg_hspace ?? 0 }
+//        set {
+//            guard let value = self.setCheck() else { return }
+//            if value.tg_hspace != newValue {
+//                value.tg_hspace = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func hspace(value: CGFloat)  {
+        guard let instance = self.setCheck() else { return }
+        if instance.tg_hspace != value {
+            instance.tg_hspace = value
+            self.wrappedValue.setNeedsLayout()
         }
     }
 
-    var reverseLayout: Bool {
-        get { return self.getCheck()?.tg_reverseLayout ?? false }
-        set {
-            guard let value = self.setCheck() else { return }
-            if value.tg_reverseLayout != newValue {
-                value.tg_reverseLayout = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
+    func hspace() -> CGFloat {
+        return self.getCheck()?.tg_hspace ?? 0
+    }
+
+//    var reverseLayout: Bool {
+//        get { return self.getCheck()?.tg_reverseLayout ?? false }
+//        set {
+//            guard let value = self.setCheck() else { return }
+//            if value.tg_reverseLayout != newValue {
+//                value.tg_reverseLayout = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func reverseLayout(value: Bool)  {
+        guard let instance = self.setCheck() else { return }
+        if instance.tg_reverseLayout != value {
+            instance.tg_reverseLayout = value
+            self.wrappedValue.setNeedsLayout()
         }
     }
 
-    var gravity: TGGravity { get { return self.getCheck()?.tg_gravity ?? TGGravity() }
-        set {
-            guard let value = self.setCheck() else { return }
-            if value.tg_gravity != newValue {
-                value.tg_gravity = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
+    func reverseLayout() -> Bool {
+        return self.getCheck()?.tg_reverseLayout ?? false
+    }
+
+//    var gravity: TGGravity { get { return self.getCheck()?.tg_gravity ?? TGGravity() }
+//        set {
+//            guard let value = self.setCheck() else { return }
+//            if value.tg_gravity != newValue {
+//                value.tg_gravity = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func gravity(value: TGGravity)  {
+        guard let instance = self.setCheck() else { return }
+        if instance.tg_gravity != value {
+            instance.tg_gravity = value
+            self.wrappedValue.setNeedsLayout()
         }
     }
 
-    var layoutTransform: CGAffineTransform {
-        get { return self.getCheck()?.tg_layoutTransform ?? CGAffineTransform() } set {
-            guard let value = self.setCheck() else { return }
-            if value.tg_layoutTransform != newValue {
-                value.tg_layoutTransform = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
+    func gravity() -> TGGravity {
+        return self.getCheck()?.tg_gravity ?? TGGravity()
+    }
+
+//    var layoutTransform: CGAffineTransform {
+//        get { return self.getCheck()?.tg_layoutTransform ?? CGAffineTransform() } set {
+//            guard let value = self.setCheck() else { return }
+//            if value.tg_layoutTransform != newValue {
+//                value.tg_layoutTransform = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func layoutTransform(value: CGAffineTransform)  {
+        guard let instance = self.setCheck() else { return }
+        if instance.tg_layoutTransform != value {
+            instance.tg_layoutTransform = value
+            self.wrappedValue.setNeedsLayout()
         }
     }
 
-    var adjustScrollViewContentSizeMode: TGAdjustScrollViewContentSizeMode {
-        get { return self.wrappedValue.tg_adjustScrollViewContentSizeMode }
-        set { self.wrappedValue.tg_adjustScrollViewContentSizeMode = newValue }
+    func layoutTransform() -> CGAffineTransform {
+        return self.getCheck()?.tg_layoutTransform ?? CGAffineTransform()
     }
 
-    var priorAutoresizingMask: Bool  {
-        get { return self.wrappedValue.tg_priorAutoresizingMask }
-        set { self.wrappedValue.tg_priorAutoresizingMask = newValue }
+//    var adjustScrollViewContentSizeMode: TGAdjustScrollViewContentSizeMode {
+//        get { return self.wrappedValue.tg_adjustScrollViewContentSizeMode }
+//        set { self.wrappedValue.tg_adjustScrollViewContentSizeMode = newValue }
+//    }
+
+    func adjustScrollViewContentSizeMode(value: TGAdjustScrollViewContentSizeMode)  {
+        self.wrappedValue.tg_adjustScrollViewContentSizeMode = value
+    }
+
+    func adjustScrollViewContentSizeMode() -> TGAdjustScrollViewContentSizeMode {
+        return self.wrappedValue.tg_adjustScrollViewContentSizeMode
+    }
+
+//    var priorAutoresizingMask: Bool  {
+//        get { return self.wrappedValue.tg_priorAutoresizingMask }
+//        set { self.wrappedValue.tg_priorAutoresizingMask = newValue }
+//    }
+
+    func priorAutoresizingMask(value: Bool)  {
+        self.wrappedValue.tg_priorAutoresizingMask = value
+    }
+
+    func priorAutoresizingMask() -> Bool {
+        return self.wrappedValue.tg_priorAutoresizingMask
     }
 
     var isLayouting: Bool {
         return self.wrappedValue.tg_isLayouting
     }
 
-    var isSelected: Bool {
-        get { return self.wrappedValue.isSelected }
-        set { self.wrappedValue.isSelected = newValue }
+//    var isSelected: Bool {
+//        get { return self.wrappedValue.isSelected }
+//        set { self.wrappedValue.isSelected = newValue }
+//    }
+
+    func isSelected(value: Bool)  {
+        self.wrappedValue.isSelected = value
+    }
+
+    func isSelected() -> Bool {
+        return self.wrappedValue.isSelected
     }
 
     func removeAllSubviews() {
@@ -1061,10 +1313,19 @@ public extension TGTypeWrapperProtocol where TGWrappedType: TGBaseLayout {
         return self.wrappedValue.tgSizeThatFits(size:size,sbs:nil, inSizeClass: type)
     }
 
-    var cacheEstimatedRect: Bool {
-        get { self.wrappedValue.tg_cacheEstimatedRect }
-        set { self.wrappedValue.tg_cacheEstimatedRect = newValue }
+//    var cacheEstimatedRect: Bool {
+//        get { self.wrappedValue.tg_cacheEstimatedRect }
+//        set { self.wrappedValue.tg_cacheEstimatedRect = newValue }
+//    }
+
+    func cacheEstimatedRect(value: Bool)  {
+        self.wrappedValue.tg_cacheEstimatedRect = value
     }
+
+    func cacheEstimatedRect() -> Bool {
+        return self.wrappedValue.tg_cacheEstimatedRect
+    }
+
 
     func estimatedFrame(of subview: UIView, inLayoutSize size: CGSize = CGSize.zero) -> CGRect {
         if subview.superview != nil && subview.superview! === self.wrappedValue {
@@ -1088,86 +1349,158 @@ public extension TGTypeWrapperProtocol where TGWrappedType: TGBaseLayout {
         self.wrappedValue._tgRotationToDeviceOrientationAction = action
     }
 
-    var topBorderline: TGBorderline! {
-        get { return self.wrappedValue._tgBorderlineLayerDelegate?.topBorderline }
-        set {
-            if self.wrappedValue._tgBorderlineLayerDelegate == nil {
-                self.wrappedValue._tgBorderlineLayerDelegate = TGBorderlineLayerDelegate(self.wrappedValue.layer)
-            }
-            self.wrappedValue._tgBorderlineLayerDelegate?.topBorderline = newValue
-        }
+//    var topBorderline: TGBorderline? {
+//        get { return self.wrappedValue._tgBorderlineLayerDelegate?.topBorderline }
+//        set {
+//            if self.wrappedValue._tgBorderlineLayerDelegate == nil {
+//                self.wrappedValue._tgBorderlineLayerDelegate = TGBorderlineLayerDelegate(self.wrappedValue.layer)
+//            }
+//            self.wrappedValue._tgBorderlineLayerDelegate?.topBorderline = newValue
+//        }
+//    }
+
+    func topBorderline(value: TGBorderline?)  {
+        self.wrappedValue.tg_topBorderline = value
     }
 
-    var leadingBorderline: TGBorderline! {
-        get { return self.wrappedValue._tgBorderlineLayerDelegate?.leadingBorderline }
-        set {
-            if self.wrappedValue._tgBorderlineLayerDelegate == nil {
-                self.wrappedValue._tgBorderlineLayerDelegate = TGBorderlineLayerDelegate(self.wrappedValue.layer)
-            }
-            self.wrappedValue._tgBorderlineLayerDelegate?.leadingBorderline = newValue
-        }
+    func topBorderline() -> TGBorderline? {
+        return self.wrappedValue.tg_topBorderline
     }
 
-    var bottomBorderline: TGBorderline! {
-        get { return self.wrappedValue._tgBorderlineLayerDelegate?.bottomBorderline }
-        set {
-            if self.wrappedValue._tgBorderlineLayerDelegate == nil {
-                self.wrappedValue._tgBorderlineLayerDelegate = TGBorderlineLayerDelegate(self.wrappedValue.layer)
-            }
-            self.wrappedValue._tgBorderlineLayerDelegate?.bottomBorderline = newValue
-        }
+//    var leadingBorderline: TGBorderline? {
+//        get { return self.wrappedValue._tgBorderlineLayerDelegate?.leadingBorderline }
+//        set {
+//            if self.wrappedValue._tgBorderlineLayerDelegate == nil {
+//                self.wrappedValue._tgBorderlineLayerDelegate = TGBorderlineLayerDelegate(self.wrappedValue.layer)
+//            }
+//            self.wrappedValue._tgBorderlineLayerDelegate?.leadingBorderline = newValue
+//        }
+//    }
+
+    func leadingBorderline(value: TGBorderline?)  {
+        self.wrappedValue.tg_leadingBorderline = value
     }
 
-    var trailingBorderline: TGBorderline! {
-        get { return self.wrappedValue._tgBorderlineLayerDelegate?.trailingBorderline }
-        set {
-            if self.wrappedValue._tgBorderlineLayerDelegate == nil {
-                self.wrappedValue._tgBorderlineLayerDelegate = TGBorderlineLayerDelegate(self.wrappedValue.layer)
-            }
-            self.wrappedValue._tgBorderlineLayerDelegate?.trailingBorderline = newValue
-        }
+    func leadingBorderline() -> TGBorderline? {
+        return self.wrappedValue.tg_leadingBorderline
     }
 
-    var leftBorderline: TGBorderline! {
-        get { return self.wrappedValue._tgBorderlineLayerDelegate?.leftBorderline }
-        set {
-            if self.wrappedValue._tgBorderlineLayerDelegate == nil {
-                self.wrappedValue._tgBorderlineLayerDelegate = TGBorderlineLayerDelegate(self.wrappedValue.layer)
-            }
-            self.wrappedValue._tgBorderlineLayerDelegate?.leftBorderline = newValue
-        }
+//    var bottomBorderline: TGBorderline? {
+//        get { return self.wrappedValue._tgBorderlineLayerDelegate?.bottomBorderline }
+//        set {
+//            if self.wrappedValue._tgBorderlineLayerDelegate == nil {
+//                self.wrappedValue._tgBorderlineLayerDelegate = TGBorderlineLayerDelegate(self.wrappedValue.layer)
+//            }
+//            self.wrappedValue._tgBorderlineLayerDelegate?.bottomBorderline = newValue
+//        }
+//    }
+
+    func bottomBorderline(value: TGBorderline?) {
+        self.wrappedValue.tg_bottomBorderline = value
+    }
+
+    func bottomBorderline() -> TGBorderline? {
+        return self.wrappedValue.tg_bottomBorderline
+    }
+
+//    var trailingBorderline: TGBorderline? {
+//        get { return self.wrappedValue._tgBorderlineLayerDelegate?.trailingBorderline }
+//        set {
+//            if self.wrappedValue._tgBorderlineLayerDelegate == nil {
+//                self.wrappedValue._tgBorderlineLayerDelegate = TGBorderlineLayerDelegate(self.wrappedValue.layer)
+//            }
+//            self.wrappedValue._tgBorderlineLayerDelegate?.trailingBorderline = newValue
+//        }
+//    }
+
+    func trailingBorderline(value: TGBorderline?) {
+        self.wrappedValue.tg_trailingBorderline = value
+    }
+
+    func trailingBorderline() -> TGBorderline? {
+        return self.wrappedValue.tg_trailingBorderline
+    }
+
+//    var leftBorderline: TGBorderline? {
+//        get { return self.wrappedValue._tgBorderlineLayerDelegate?.leftBorderline }
+//        set {
+//            if self.wrappedValue._tgBorderlineLayerDelegate == nil {
+//                self.wrappedValue._tgBorderlineLayerDelegate = TGBorderlineLayerDelegate(self.wrappedValue.layer)
+//            }
+//            self.wrappedValue._tgBorderlineLayerDelegate?.leftBorderline = newValue
+//        }
+//    }
+
+    func leftBorderline(value: TGBorderline?) {
+        self.wrappedValue.tg_leftBorderline = value
+    }
+
+    func leftBorderline() -> TGBorderline? {
+        return self.wrappedValue.tg_leftBorderline
     }
 
 
-    var rightBorderline:TGBorderline! {
-        get { return self.wrappedValue._tgBorderlineLayerDelegate?.rightBorderline }
-        set {
-            if self.wrappedValue._tgBorderlineLayerDelegate == nil {
-                self.wrappedValue._tgBorderlineLayerDelegate = TGBorderlineLayerDelegate(self.wrappedValue.layer)
-            }
-            self.wrappedValue._tgBorderlineLayerDelegate?.rightBorderline = newValue
-        }
+//    var rightBorderline: TGBorderline? {
+//        get { return self.wrappedValue._tgBorderlineLayerDelegate?.rightBorderline }
+//        set {
+//            if self.wrappedValue._tgBorderlineLayerDelegate == nil {
+//                self.wrappedValue._tgBorderlineLayerDelegate = TGBorderlineLayerDelegate(self.wrappedValue.layer)
+//            }
+//            self.wrappedValue._tgBorderlineLayerDelegate?.rightBorderline = newValue
+//        }
+//    }
+
+    func rightBorderline(value: TGBorderline?) {
+        self.wrappedValue.tg_rightBorderline = value
+    }
+
+    func rightBorderline() -> TGBorderline? {
+        return self.wrappedValue.tg_rightBorderline
     }
 
 
-    var boundBorderline:TGBorderline! {
-        get { return self.wrappedValue.tg_bottomBorderline }
-        set {
-            self.wrappedValue.tg_leadingBorderline = newValue
-            self.wrappedValue.tg_topBorderline = newValue
-            self.wrappedValue.tg_trailingBorderline = newValue
-            self.wrappedValue.tg_bottomBorderline = newValue
-        }
+//    var boundBorderline:TGBorderline? {
+//        get { return self.wrappedValue.tg_bottomBorderline }
+//        set {
+//            self.wrappedValue.tg_leadingBorderline = newValue
+//            self.wrappedValue.tg_topBorderline = newValue
+//            self.wrappedValue.tg_trailingBorderline = newValue
+//            self.wrappedValue.tg_bottomBorderline = newValue
+//        }
+//    }
+
+    func boundBorderline(value: TGBorderline?) {
+        self.wrappedValue.tg_boundBorderline = value
     }
 
-    var intelligentBorderline: TGBorderline {
-        get { self.wrappedValue.tg_intelligentBorderline }
-        set { self.wrappedValue.tg_intelligentBorderline = newValue }
+    func boundBorderline() -> TGBorderline? {
+        return self.wrappedValue.tg_boundBorderline
     }
 
-    var notUseIntelligentBorderline: Bool {
-        get { self.wrappedValue.tg_notUseIntelligentBorderline }
-        set { self.wrappedValue.tg_notUseIntelligentBorderline = newValue }
+//    var intelligentBorderline: TGBorderline? {
+//        get { self.wrappedValue.tg_intelligentBorderline }
+//        set { self.wrappedValue.tg_intelligentBorderline = newValue }
+//    }
+
+    func intelligentBorderline(value: TGBorderline?) {
+        self.wrappedValue.tg_intelligentBorderline = value
+    }
+
+    func intelligentBorderline() -> TGBorderline? {
+        return self.wrappedValue.tg_intelligentBorderline
+    }
+
+//    var notUseIntelligentBorderline: Bool {
+//        get { self.wrappedValue.tg_notUseIntelligentBorderline }
+//        set { self.wrappedValue.tg_notUseIntelligentBorderline = newValue }
+//    }
+
+    func notUseIntelligentBorderline(value: Bool) {
+        self.wrappedValue.tg_notUseIntelligentBorderline = value
+    }
+
+    func notUseIntelligentBorderline() -> Bool {
+        return self.wrappedValue.tg_notUseIntelligentBorderline
     }
 
     #if swift(>=4.2)
@@ -1187,24 +1520,56 @@ public extension TGTypeWrapperProtocol where TGWrappedType: TGBaseLayout {
     #endif
 
 
-    var highlightedBackgroundColor: UIColor {
-        get { return self.wrappedValue.tg_highlightedBackgroundColor }
-        set { self.wrappedValue.tg_highlightedBackgroundColor = newValue }
+//    var highlightedBackgroundColor: UIColor {
+//        get { return self.wrappedValue.tg_highlightedBackgroundColor }
+//        set { self.wrappedValue.tg_highlightedBackgroundColor = newValue }
+//    }
+
+    func highlightedBackgroundColor(value: UIColor) {
+        self.wrappedValue.tg_highlightedBackgroundColor = value
     }
 
-    var highlightedOpacity: CGFloat {
-        get { return self.wrappedValue.tg_highlightedOpacity }
-        set { self.wrappedValue.tg_highlightedOpacity = newValue }
+    func highlightedBackgroundColor() -> UIColor {
+        return self.wrappedValue.tg_highlightedBackgroundColor
     }
 
-    var backgroundImage: UIImage {
-        get { return self.wrappedValue.tg_backgroundImage }
-        set { self.wrappedValue.tg_backgroundImage = newValue }
+//    var highlightedOpacity: CGFloat {
+//        get { return self.wrappedValue.tg_highlightedOpacity }
+//        set { self.wrappedValue.tg_highlightedOpacity = newValue }
+//    }
+
+    func highlightedOpacity(value: CGFloat) {
+        self.wrappedValue.tg_highlightedOpacity = value
     }
 
-    var highlightedBackgroundImage: UIImage {
-        get { return self.wrappedValue.tg_highlightedBackgroundImage }
-        set { self.wrappedValue.tg_highlightedBackgroundImage = newValue }
+    func highlightedOpacity() -> CGFloat {
+        return self.wrappedValue.tg_highlightedOpacity
+    }
+
+//    var backgroundImage: UIImage? {
+//        get { return self.wrappedValue.tg_backgroundImage }
+//        set { self.wrappedValue.tg_backgroundImage = newValue }
+//    }
+
+    func backgroundImage(value: UIImage?) {
+        self.wrappedValue.tg_backgroundImage = value
+    }
+
+    func backgroundImage() -> UIImage? {
+        return self.wrappedValue.tg_backgroundImage
+    }
+
+//    var highlightedBackgroundImage: UIImage? {
+//        get { return self.wrappedValue.tg_highlightedBackgroundImage }
+//        set { self.wrappedValue.tg_highlightedBackgroundImage = newValue }
+//    }
+
+    func highlightedBackgroundImage(value: UIImage?) {
+        self.wrappedValue.tg_highlightedBackgroundImage = value
+    }
+
+    func highlightedBackgroundImage() -> UIImage? {
+        return self.wrappedValue.tg_highlightedBackgroundImage
     }
 
     // MARK: - 校验检查
@@ -1783,7 +2148,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
 
     
     /// 设置布局视图的顶部边界线对象,默认是nil。
-    public var tg_topBorderline:TGBorderline!
+    public var tg_topBorderline: TGBorderline?
     {
         get {
             return _tgBorderlineLayerDelegate?.topBorderline
@@ -1800,7 +2165,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     }
     
     /// 设置布局视图的头部边界线对象，默认是nil。
-    public var tg_leadingBorderline:TGBorderline!
+    public var tg_leadingBorderline: TGBorderline?
     {
         get {
             return _tgBorderlineLayerDelegate?.leadingBorderline
@@ -1817,7 +2182,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     }
 
     /// 设置布局视图的底部边界线对象，默认是nil。
-    public var tg_bottomBorderline:TGBorderline!
+    public var tg_bottomBorderline:TGBorderline?
     {
         get {
             return _tgBorderlineLayerDelegate?.bottomBorderline
@@ -1914,7 +2279,7 @@ open class TGBaseLayout: UIView,TGLayoutViewSizeClass {
     /**
      不使用父布局视图提供的智能边界线功能。当布局视图的父布局视图设置了tg_intelligentBorderline时但是布局视图又想自己定义边界线时则将这个属性设置为true
      */
-    public var tg_notUseIntelligentBorderline:Bool = false
+    public var tg_notUseIntelligentBorderline: Bool = false
     
     
     

@@ -25,11 +25,11 @@ class AllTest5ViewController: UIViewController {
 
         
         //默认设置为垂直布局
-        var rootLayout = TGLinearLayout(.vert)
+        let rootLayout = TGLinearLayout(.vert)
         rootLayout.backgroundColor = .white
-        rootLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10);
-        rootLayout.tg.vspace = 10
-        rootLayout.tg.hspace = 10
+        rootLayout.tg.padding(value: UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10))
+        rootLayout.tg.vspace(value: 10)
+        rootLayout.tg.hspace(value: 10)
         self.view = rootLayout;
         
         

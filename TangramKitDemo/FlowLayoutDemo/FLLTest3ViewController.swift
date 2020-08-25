@@ -33,9 +33,9 @@ class FLLTest3ViewController: UIViewController {
          */
 
         
-        var rootLayout = TGLinearLayout(.vert)
+        let rootLayout = TGLinearLayout(.vert)
         rootLayout.backgroundColor = .white
-        rootLayout.tg.gravity = TGGravity.Horizontal.fill
+        rootLayout.tg.gravity(value: TGGravity.Horizontal.fill)
         self.view = rootLayout
         
         let tipLabel = UILabel()
@@ -55,11 +55,11 @@ class FLLTest3ViewController: UIViewController {
         tip2Label.tg.top.equal(3)
         rootLayout.addSubview(tip2Label)
         
-        var flowLayout = TGFlowLayout.init(.vert, arrangedCount: 4)
+        let flowLayout = TGFlowLayout.init(.vert, arrangedCount: 4)
         flowLayout.backgroundColor = CFTool.color(0)
-        flowLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
-        flowLayout.tg.space = 10  //流式布局里面的子视图的水平和垂直间距设置为10
-        flowLayout.tg.gravity = TGGravity.Horizontal.fill  //流式布局里面的子视图的宽度将平均分配。
+        flowLayout.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
+        flowLayout.tg.space(value: 10)  //流式布局里面的子视图的水平和垂直间距设置为10
+        flowLayout.tg.gravity(value: TGGravity.Horizontal.fill)  //流式布局里面的子视图的宽度将平均分配。
         flowLayout.tg.height.equal(.fill) //占用剩余的高度。
         flowLayout.tg.top.equal(10)
         rootLayout.addSubview(flowLayout)
@@ -123,7 +123,7 @@ extension FLLTest3ViewController {
     }
     
     @objc func handleTouchDrag(sender: UIButton, event: UIEvent) {
-        var sender = sender
+        let sender = sender
         self.hasDrag = true
         
         //取出拖动时当前的位置点。
@@ -134,7 +134,7 @@ extension FLLTest3ViewController {
         //判断当前手指在具体视图的位置。这里要排除self.addButton的位置(因为这个按钮将固定不调整)。
         for sbv: UIView in self.flowLayout.subviews
         {
-            if sbv != sender && sender.tg.useFrame && sbv != self.addButton
+            if sbv != sender && sender.tg.useFrame() && sbv != self.addButton
             {
                 let rect1 = sbv.frame
                 if rect1.contains(pt) {
@@ -166,8 +166,8 @@ extension FLLTest3ViewController {
             
             //经过上面的sbv2的位置调整完成后，需要重新激发布局视图的布局，因此这里要设置autoresizesSubviews为YES。
             self.flowLayout.autoresizesSubviews = true
-            sender.tg.useFrame = false
-            sender.tg.noLayout = true //这里设置为true表示布局时不会改变sender的真实位置而只是在布局视图中占用一个位置和尺寸，正是因为只是占用位置，因此会调整其他视图的位置。
+            sender.tg.useFrame(value: false)
+            sender.tg.noLayout(value: true) //这里设置为true表示布局时不会改变sender的真实位置而只是在布局视图中占用一个位置和尺寸，正是因为只是占用位置，因此会调整其他视图的位置。
             
             self.flowLayout.layoutIfNeeded()
         }
@@ -181,8 +181,8 @@ extension FLLTest3ViewController {
             self.flowLayout.bringSubview(toFront: sender)
         #endif
         self.flowLayout.autoresizesSubviews = false //在拖动时不要让布局视图激发布局
-        sender.tg.useFrame = true //因为拖动时，拖动的控件需要自己确定位置，不能被布局约束，因此必须要将useFrame设置为YES下面的center设置才会有效。
-        sender.tg.noLayout = false //因为useFrame设置为了YES所有这里可以直接调整center，从而实现了位置的自定义设置。
+        sender.tg.useFrame(value: true) //因为拖动时，拖动的控件需要自己确定位置，不能被布局约束，因此必须要将useFrame设置为YES下面的center设置才会有效。
+        sender.tg.noLayout(value: false) //因为useFrame设置为了YES所有这里可以直接调整center，从而实现了位置的自定义设置。
         sender.center = pt  //因为tg_useFrame设置为了YES所有这里可以直接调整center，从而实现了位置的自定义设置。
     }
     
@@ -195,8 +195,6 @@ extension FLLTest3ViewController {
     }
     
     @objc func handleTouchUp(sender: UIButton, event: UIEvent) {
-        var sender = sender
-
         if !self.hasDrag {
             return
         }
@@ -209,7 +207,7 @@ extension FLLTest3ViewController {
             self.flowLayout.exchangeSubview(at: index, withSubviewAt: index-1)
         }
         
-        sender.tg.useFrame = false  //让拖动的子视图重新参与布局，将tg_useFrame设置为false
+        sender.tg.useFrame(value: false)  //让拖动的子视图重新参与布局，将tg_useFrame设置为false
         self.flowLayout.autoresizesSubviews = true  //让布局视图可以重新激发布局，这里还原为true。
 
     }

@@ -40,11 +40,13 @@ class RLTest1ViewController: UIViewController {
         self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
 
         
-        var rootLayout: TGRelativeLayout = TGRelativeLayout()
-        rootLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
+        let rootLayout: TGRelativeLayout = TGRelativeLayout()
+        rootLayout.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
         rootLayout.backgroundColor = .white
-        
-        rootLayout.tg.insetsPaddingFromSafeArea = [.top, .left, .right]  //默认情况下底部的安全区会和布局视图的底部padding进行叠加，当这样设置后底部安全区将不会叠加到底部的padding上去。您可以注释这句代码看看效果。
+
+        //默认情况下底部的安全区会和布局视图的底部padding进行叠加，当这样设置后底部安全区将不会叠加到底部的padding上去。您可以注释这句代码看看效果。
+//        rootLayout.tg.insetsPaddingFromSafeArea = [.top, .left, .right]
+        rootLayout.tg.insetsPaddingFromSafeArea(value: [.top, .left, .right])
         self.view = rootLayout
         
         /*

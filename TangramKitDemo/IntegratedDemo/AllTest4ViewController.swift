@@ -53,7 +53,7 @@ class AllTest4ViewController: UIViewController {
         
         
         rootLayout = TGLinearLayout(.vert)
-        rootLayout.tg.gravity = TGGravity.Horizontal.fill //设置垂直线性布局的水平填充值表明布局视图里面的所有子视图的宽度都和布局视图相等。
+        rootLayout.tg.gravity(value: TGGravity.Horizontal.fill) //设置垂直线性布局的水平填充值表明布局视图里面的所有子视图的宽度都和布局视图相等。
         rootLayout.tg.width.equal(.fill)
         rootLayout.tg.height.equal(.wrap)
         scrollView.addSubview(rootLayout)
@@ -97,10 +97,10 @@ extension AllTest4ViewController
     //创建辅助布局视图
     func createSupplementaryLayout(sectionTitle: String) -> TGRelativeLayout {
         //建立一个相对布局
-        var supplementaryLayout = TGRelativeLayout()
-        supplementaryLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
+        let supplementaryLayout = TGRelativeLayout()
+        supplementaryLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
         supplementaryLayout.tg.height.equal(40)
-        supplementaryLayout.tg.boundBorderline = TGBorderline(color: UIColor.lightGray) //设置底部边界线。
+        supplementaryLayout.tg.boundBorderline(value: TGBorderline(color: UIColor.lightGray))  //设置底部边界线。
         supplementaryLayout.backgroundColor = UIColor.white
         
         let imageView = UIImageView(image:UIImage(named:"next"))
@@ -127,25 +127,25 @@ extension AllTest4ViewController
     //创建单元格容器布局视图，并指定每行的数量。
     func createCellContainerLayout(arrangedCount:NSInteger) -> TGFlowLayout
     {
-        var containerLayout = TGFlowLayout(.vert, arrangedCount:arrangedCount)
+        let containerLayout = TGFlowLayout(.vert, arrangedCount:arrangedCount)
         containerLayout.tg.height.equal(.wrap)
-        containerLayout.tg.gravity = TGGravity.Horizontal.fill //平均分配里面每个子视图的宽度或者拉伸子视图的宽度以便填充满整个布局。
-        containerLayout.tg.hspace = 5
-        containerLayout.tg.vspace = 5
-        containerLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
+        containerLayout.tg.gravity(value: TGGravity.Horizontal.fill)  //平均分配里面每个子视图的宽度或者拉伸子视图的宽度以便填充满整个布局。
+        containerLayout.tg.hspace(value: 5)
+        containerLayout.tg.vspace(value: 5)
+        containerLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
         
         return containerLayout
     }
     
     func createCellLayout1(image:String, title:String) -> TGBaseLayout
     {
-        var cellLayout = TGLinearLayout(.vert)
-        cellLayout.tg.gravity = TGGravity.Horizontal.fill  //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
+        let cellLayout = TGLinearLayout(.vert)
+        cellLayout.tg.gravity(value: TGGravity.Horizontal.fill)   //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
         cellLayout.tg.height.equal(100)
-        cellLayout.tg.space = 5  //设置布局视图里面子视图之间的间距为5个点。
+        cellLayout.tg.space(value: 5)  //设置布局视图里面子视图之间的间距为5个点。
         cellLayout.backgroundColor = UIColor.white
         cellLayout.tg.setTarget(self, action:#selector(handleCellLayoutTap(_:)), for:.touchUpInside)
-        cellLayout.tg.highlightedOpacity = 0.3; //设置触摸事件按下时的不透明度，来响应按下状态。
+        cellLayout.tg.highlightedOpacity(value: 0.3) //设置触摸事件按下时的不透明度，来响应按下状态。
         
         
         
@@ -173,8 +173,7 @@ extension AllTest4ViewController {
     @objc func handleReverse(_ sender:UIView) -> Void {
         //TGBaseLayout的属性tg_reverseLayout可以将子视图按照添加的顺序逆序布局。
         for layout in self.containerLayouts {
-            var layout = layout
-            layout.tg.reverseLayout = !layout.tg.reverseLayout
+            layout.tg.reverseLayout(value: !layout.tg.reverseLayout())
             layout.tg.layoutAnimationWithDuration(0.3)
         }
 
@@ -206,14 +205,12 @@ extension AllTest4ViewController {
         //得到将sender加入到toLayout后的评估的frame值，注意这时候sender还没有加入到toLayout。因为是加入到最后面，因此只能用这个方法来评估加入后的值，如果不是添加到最后则是可以很简单的得到应该插入的位置的。
         var rectNew = toLayout.tg.estimatedFrame(of: sender)
         rectNew = toLayout.convert(rectNew, to: self.view) //将新位置的评估的frame值，进行坐标转换。
-
-        var sender = sender
         
         //在动画的过程中，我们将sender作为self.view的子视图来实现移动的效果。
         fromLayout.autoresizesSubviews = false
         sender.removeFromSuperview()
         sender.frame = rectOld
-        sender.tg.useFrame = true  //设置为true表示sender不再受到布局视图的约束，而是可以自由设置frame值。
+        sender.tg.useFrame(value: true)  //设置为true表示sender不再受到布局视图的约束，而是可以自由设置frame值。
         self.view.addSubview(sender)
         
         UIView.animate(withDuration: 0.3, animations: { 
@@ -225,7 +222,7 @@ extension AllTest4ViewController {
             
             //动画结束后再将sender移植到toLayout中。
             sender.removeFromSuperview()
-            sender.tg.useFrame = false  //还原tg_useFrame，因为加入到toLayout后将受到布局视图的约束。
+            sender.tg.useFrame(value: false)  //还原tg_useFrame，因为加入到toLayout后将受到布局视图的约束。
             toLayout.addSubview(sender)
         }
         

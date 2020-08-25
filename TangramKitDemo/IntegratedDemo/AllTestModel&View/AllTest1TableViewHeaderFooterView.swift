@@ -27,34 +27,34 @@ class AllTest1TableViewHeaderFooterView: UITableViewHeaderFooterView {
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         
-        var rootLayout = TGFrameLayout()
+        let rootLayout = TGFrameLayout()
         rootLayout.tg.height.equal(.fill)
         rootLayout.tg.width.equal(.fill)
         self.contentView.addSubview(rootLayout)
         
-        var leftItemLayout = self.createItemLayout(NSLocalizedString("Show", comment: ""), withTag: 0)
+        let leftItemLayout = self.createItemLayout(NSLocalizedString("Show", comment: ""), withTag: 0)
         leftItemLayout.tg.leading.equal(0)
         leftItemLayout.tg.height.equal(.fill)
         leftItemLayout.tg.width.equal(TGWeight(100.0/3))
-        leftItemLayout.tg.highlightedOpacity = 0.5
+        leftItemLayout.tg.highlightedOpacity(value: 0.5)
         rootLayout.addSubview(leftItemLayout)
         
         let bld = TGBorderline(color: UIColor.lightGray, headIndent:5, tailIndent:5)
         
-        var centerItemLayout = self.createItemLayout(NSLocalizedString("Topic", comment: ""), withTag: 1)
+        let centerItemLayout = self.createItemLayout(NSLocalizedString("Topic", comment: ""), withTag: 1)
         centerItemLayout.tg.centerX.equal(0)
         centerItemLayout.tg.height.equal(.fill)
         centerItemLayout.tg.width.equal(TGWeight(100.0/3))
-        centerItemLayout.tg.leadingBorderline = bld
-        centerItemLayout.tg.highlightedOpacity = 0.5
+        centerItemLayout.tg.leadingBorderline(value: bld)
+        centerItemLayout.tg.highlightedOpacity(value: 0.5)
         rootLayout.addSubview(centerItemLayout)
         
-        var rightItemLayout = self.createItemLayout(NSLocalizedString("Follow", comment: ""), withTag: 2)
+        let rightItemLayout = self.createItemLayout(NSLocalizedString("Follow", comment: ""), withTag: 2)
         rightItemLayout.tg.trailing.equal(0)
         rightItemLayout.tg.height.equal(.fill)
         rightItemLayout.tg.width.equal(TGWeight(100.0/3))
-        rightItemLayout.tg.leadingBorderline = bld
-        rightItemLayout.tg.highlightedOpacity = 0.5
+        rightItemLayout.tg.leadingBorderline(value: bld)
+        rightItemLayout.tg.highlightedOpacity(value: 0.5)
         rootLayout.addSubview(rightItemLayout)
         
         //底部的横线
@@ -68,8 +68,8 @@ class AllTest1TableViewHeaderFooterView: UITableViewHeaderFooterView {
         self.underLineView = underLineView
         
         let rootLayoutBld = TGBorderline(color: .lightGray)
-        rootLayout.tg.bottomBorderline = rootLayoutBld
-        rootLayout.tg.topBorderline = rootLayoutBld
+        rootLayout.tg.bottomBorderline(value: rootLayoutBld)
+        rootLayout.tg.topBorderline(value: rootLayoutBld)
 
     }
     

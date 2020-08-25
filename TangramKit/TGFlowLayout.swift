@@ -82,15 +82,23 @@ import UIKit
  */
 
 public extension TGTypeWrapperProtocol where TGWrappedType: TGFlowLayout {
-    var orientation: TGOrientation {
-        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_orientation }
-        set {
-            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass
-            if (lsc.tg_orientation != newValue) {
-                lsc.tg_orientation = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
-        }
+//    var orientation: TGOrientation {
+//        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_orientation }
+//        set {
+//            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass
+//            if (lsc.tg_orientation != newValue) {
+//                lsc.tg_orientation = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func orientation(value: TGOrientation)  {
+        self.wrappedValue.tg_orientation = value
+    }
+
+    func orientation() -> TGOrientation {
+        return self.wrappedValue.tg_orientation
     }
 
     var arrangedCount: Int {

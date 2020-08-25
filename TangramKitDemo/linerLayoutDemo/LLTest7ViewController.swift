@@ -36,10 +36,10 @@ class LLTest7ViewController: UIViewController {
          */
 
         
-        var rootLayout = TGLinearLayout(.vert)
+        let rootLayout = TGLinearLayout(.vert)
         rootLayout.backgroundColor = .white
-        rootLayout.tg.gravity = TGGravity.Horizontal.fill
-        rootLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
+        rootLayout.tg.gravity(value: TGGravity.Horizontal.fill)
+        rootLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
         self.view = rootLayout
         
         
@@ -66,12 +66,12 @@ class LLTest7ViewController: UIViewController {
         
         
     
-        var testLayout = TGLinearLayout(.vert)
-        testLayout.tg.gravity = TGGravity.Horizontal.fill  //所有子视图水平宽度充满布局，这样就不需要分别设置每个子视图的宽度了。
+        let testLayout = TGLinearLayout(.vert)
+        testLayout.tg.gravity(value: TGGravity.Horizontal.fill) //所有子视图水平宽度充满布局，这样就不需要分别设置每个子视图的宽度了。
         testLayout.backgroundColor = CFTool.color(0)
         testLayout.tg.height.equal(.fill)   //高度填充父布局的所有剩余空间。
-        testLayout.tg.leadingPadding = 10
-        testLayout.tg.trailingPadding = 10
+        testLayout.tg.leadingPadding(value: 10)
+        testLayout.tg.trailingPadding(value: 10)
         testLayout.tg.top.equal(5)
         rootLayout.addSubview(testLayout)
         self.testLayout = testLayout

@@ -37,10 +37,10 @@ class TLTest1ViewController: UIViewController {
 
         super.loadView()
         
-        var tableLayout = TGTableLayout(.vert)
+        let tableLayout = TGTableLayout(.vert)
         tableLayout.backgroundColor = CFTool.color(0)
-        tableLayout.tg.hspace = 2
-        tableLayout.tg.vspace = 2
+        tableLayout.tg.hspace(value: 2)
+        tableLayout.tg.vspace(value: 2)
         tableLayout.tg.margin(TGLayoutPos.tg.safeAreaMargin)   //和父视图的安全区域保持一致的尺寸，因为这里和父视图四周的边距都是安全区边距。你可以设置为0看看效果。
         self.view.addSubview(tableLayout)
         
@@ -101,10 +101,10 @@ class TLTest1ViewController: UIViewController {
         tableLayout.tg.addColumn(colView, inRow:3)
         
         //第五行剩余高度均分。每列的宽度均分,
-        var row4 = tableLayout.tg.addRow(size:TGLayoutSize.average, colSize:TGLayoutSize.average)
+        let row4 = tableLayout.tg.addRow(size:TGLayoutSize.average, colSize:TGLayoutSize.average)
         //可以设置行的属性.比如padding, 线条颜色，
-        row4.tg.padding = UIEdgeInsets.init(top: 3, left: 3, bottom: 3, right: 3);
-        row4.tg.topBorderline = TGBorderline(color: UIColor.black, thick: 2)
+        row4.tg.padding(value: UIEdgeInsets(top: 3, left: 3, bottom: 3, right: 3))
+        row4.tg.topBorderline(value: TGBorderline(color: UIColor.black, thick: 2))
         row4.backgroundColor = UIColor(white: 0.5, alpha: 1)
         
         

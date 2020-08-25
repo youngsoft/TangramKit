@@ -24,11 +24,11 @@ class FLLTest5ViewController: UIViewController {
         scrollView.delaysContentTouches = false  //因为里面也有滚动视图，优先处理子滚动视图的事件。
         self.view = scrollView
         
-        var rootLayout = TGFlowLayout(.vert, arrangedCount:1)
+        let rootLayout = TGFlowLayout(.vert, arrangedCount:1)
         rootLayout.backgroundColor = .white
         rootLayout.tg.width.equal(.fill)
         rootLayout.tg.height.equal(.wrap)
-        rootLayout.tg.gravity = TGGravity.Horizontal.fill  //里面的所有子视图和布局视图宽度一致。
+        rootLayout.tg.gravity(value: TGGravity.Horizontal.fill) //里面的所有子视图和布局视图宽度一致。
         scrollView.addSubview(rootLayout)
         
         
@@ -101,9 +101,9 @@ extension FLLTest5ViewController {
          */
         
         
-        flowLayout.tg.hspace = 10
-        flowLayout.tg.vspace = 10  //设置子视图的水平和垂直间距。
-        flowLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5) //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
+        flowLayout.tg.hspace(value: 10)
+        flowLayout.tg.vspace(value: 10)  //设置子视图的水平和垂直间距。
+        flowLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)) //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
         scrollView.addSubview(flowLayout)
         flowLayout.backgroundColor = CFTool.color(0)
         
@@ -146,9 +146,9 @@ extension FLLTest5ViewController {
          */
         
         
-        flowLayout.tg.hspace = 10
-        flowLayout.tg.vspace = 10  //设置子视图的水平和垂直间距。
-        flowLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5) //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
+        flowLayout.tg.hspace(value: 10)
+        flowLayout.tg.vspace(value: 10)  //设置子视图的水平和垂直间距。
+        flowLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)) //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
         scrollView.addSubview(flowLayout)
         flowLayout.backgroundColor = CFTool.color(0)
         
@@ -191,9 +191,9 @@ extension FLLTest5ViewController {
          */
         
         
-        flowLayout.tg.hspace = 10
-        flowLayout.tg.vspace = 10  //设置子视图的水平和垂直间距。
-        flowLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5) //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
+        flowLayout.tg.hspace(value: 10)
+        flowLayout.tg.vspace(value: 10)  //设置子视图的水平和垂直间距。
+        flowLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)) //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
         scrollView.addSubview(flowLayout)
         flowLayout.backgroundColor = CFTool.color(0)
         
@@ -238,9 +238,9 @@ extension FLLTest5ViewController {
          */
         
         
-        flowLayout.tg.hspace = 10
-        flowLayout.tg.vspace = 10  //设置子视图的水平和垂直间距。
-        flowLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5) //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
+        flowLayout.tg.hspace(value: 10)
+        flowLayout.tg.vspace(value: 10)  //设置子视图的水平和垂直间距。
+        flowLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)) //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
         scrollView.addSubview(flowLayout)
         flowLayout.backgroundColor = CFTool.color(0)
         

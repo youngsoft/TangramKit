@@ -34,20 +34,20 @@ class FOLTest1ViewController: UIViewController {
         rootLayout.backgroundColor = .white
         self.view = rootLayout
         
-        var adjOriButton = UIButton(type:.system)
+        let adjOriButton = UIButton(type:.system)
         adjOriButton.setTitle("Orien", for: .normal)
         adjOriButton.sizeToFit()
         adjOriButton.addTarget(self, action: #selector(handleChangeOrientation), for: .touchUpInside)
-        adjOriButton.tg.reverseFloat = true //向右浮动。
+        adjOriButton.tg.reverseFloat(value: true) //向右浮动。
         adjOriButton.tg.trailing.equal(10)
         adjOriButton.tg.leading.equal(10)
         rootLayout.addSubview(adjOriButton)
         
-        var addViewButton = UIButton(type:.system)
+        let addViewButton = UIButton(type:.system)
         addViewButton.setTitle("Add View", for: .normal)
         addViewButton.sizeToFit()
         addViewButton.addTarget(self, action: #selector(handleAddSubview), for: .touchUpInside)
-        addViewButton.tg.reverseFloat = true  //向右浮动
+        addViewButton.tg.reverseFloat(value: true)  //向右浮动
         addViewButton.tg.trailing.equal(10)
         addViewButton.tg.leading.equal(10)
         rootLayout.addSubview(addViewButton)
@@ -64,11 +64,11 @@ class FOLTest1ViewController: UIViewController {
         self.whTextField = tempwhTextField
         
         
-        var reverseFloatTip = UILabel()
+        let reverseFloatTip = UILabel()
         reverseFloatTip.text = "Reverse:"
         reverseFloatTip.font = CFTool.font(13)
         reverseFloatTip.sizeToFit()
-        reverseFloatTip.tg.clearFloat = true  //换行
+        reverseFloatTip.tg.clearFloat(value: true)  //换行
         reverseFloatTip.tg.top.equal(3)
         reverseFloatTip.tg.leading.equal(5)
         reverseFloatTip.tg.trailing.equal(5)
@@ -92,12 +92,12 @@ class FOLTest1ViewController: UIViewController {
         rootLayout.addSubview(clearFloatSwitch)
         self.clearFloatSwitch = clearFloatSwitch
         
-        var widthWeightStepperTip = UILabel()
+        let widthWeightStepperTip = UILabel()
         widthWeightStepperTip.text = "Width Weight:"
         widthWeightStepperTip.font = CFTool.font(13)
         widthWeightStepperTip.sizeToFit()
         widthWeightStepperTip.tg.top.equal(8)
-        widthWeightStepperTip.tg.clearFloat = true  //换行
+        widthWeightStepperTip.tg.clearFloat(value: true)  //换行
         rootLayout.addSubview(widthWeightStepperTip)
         
         let widthWeightStepper = UIStepper()
@@ -116,12 +116,12 @@ class FOLTest1ViewController: UIViewController {
         rootLayout.addSubview(widthWeightLabel)
         self.widthWeightLabel = widthWeightLabel
         
-        var heightWeightStepperTip = UILabel()
+        let heightWeightStepperTip = UILabel()
         heightWeightStepperTip.text = "Height Weight:"
         heightWeightStepperTip.font = CFTool.font(13)
         heightWeightStepperTip.sizeToFit()
         heightWeightStepperTip.tg.top.equal(8)
-        heightWeightStepperTip.tg.clearFloat = true  //换行
+        heightWeightStepperTip.tg.clearFloat(value: true)  //换行
         rootLayout.addSubview(heightWeightStepperTip)
         
         let heightWeightStepper = UIStepper()
@@ -140,10 +140,10 @@ class FOLTest1ViewController: UIViewController {
         rootLayout.addSubview(heightWeightLabel)
         self.heightWeightLabel = heightWeightLabel
         
-        var floatLayout = TGFloatLayout(.vert)
+        let floatLayout = TGFloatLayout(.vert)
         floatLayout.backgroundColor = CFTool.color(0)
-        floatLayout.tg.clearFloat = true  //换行
-        floatLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
+        floatLayout.tg.clearFloat(value: true)  //换行
+        floatLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
         floatLayout.tg.width.equal(100%)   //高度和宽度都占用剩余空间。
         floatLayout.tg.height.equal(.fill)
         rootLayout.addSubview(floatLayout)
@@ -167,7 +167,7 @@ class FOLTest1ViewController: UIViewController {
             return
         }
         
-        var tagButton = UIButton(frame: CGRect(x: 0,y: 0,width: CGFloat(atof(arr[0])),height: CGFloat(atof(arr[1]))))
+        let tagButton = UIButton(frame: CGRect(x: 0,y: 0,width: CGFloat(atof(arr[0])),height: CGFloat(atof(arr[1]))))
         tagButton.setTitle(text, for: UIControl.State())
         tagButton.titleLabel?.adjustsFontSizeToFitWidth = true
         tagButton.backgroundColor = UIColor(red: CGFloat(arc4random_uniform(256)) / 255.0, green: CGFloat(arc4random_uniform(256)) / 255.0, blue: CGFloat(arc4random_uniform(256)) / 255.0, alpha: 1)
@@ -185,8 +185,8 @@ class FOLTest1ViewController: UIViewController {
 
         }
         
-        tagButton.tg.reverseFloat = self.reverseFloatSwitch.isOn;
-        tagButton.tg.clearFloat = self.clearFloatSwitch.isOn;
+        tagButton.tg.reverseFloat(value: self.reverseFloatSwitch.isOn)
+        tagButton.tg.clearFloat(value: self.clearFloatSwitch.isOn)
         if self.widthWeightStepper.value != 0
         {
            tagButton.tg.width.equal(TGWeight(self.widthWeightStepper.value))
@@ -226,13 +226,13 @@ class FOLTest1ViewController: UIViewController {
     @objc func handleChangeOrientation(_ sender: AnyObject) {
         
         //调整布局方向
-        if (self.floatLayout.tg.orientation == .vert)
+        if (self.floatLayout.tg.orientation() == .vert)
         {
-            self.floatLayout.tg.orientation = .horz;
+            self.floatLayout.tg.orientation(value: .horz)
         }
         else
         {
-            self.floatLayout.tg.orientation = .vert;
+            self.floatLayout.tg.orientation(value: .vert)
         }
         
         self.floatLayout.tg.layoutAnimationWithDuration(0.3)

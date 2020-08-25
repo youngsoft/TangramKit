@@ -153,14 +153,30 @@ public extension TGTypeWrapperProtocol where TGWrappedType: TGTableLayout {
         return self.wrappedValue.tg_rowView(at:rowIndex).subviews.count;
     }
 
-    var vspace: CGFloat {
-        get { return self.wrappedValue.tg_vspace }
-        set { self.wrappedValue.tg_vspace = newValue }
+//    var vspace: CGFloat {
+//        get { return self.wrappedValue.tg_vspace }
+//        set { self.wrappedValue.tg_vspace = newValue }
+//    }
+
+    func vspace(value: CGFloat)  {
+        self.wrappedValue.tg_vspace = value
     }
 
-    var hspace: CGFloat {
-        get { return self.wrappedValue.tg_hspace }
-        set { self.wrappedValue.tg_hspace = newValue }
+    func vspace() -> CGFloat {
+        return self.wrappedValue.tg_vspace
+    }
+
+//    var hspace: CGFloat {
+//        get { return self.wrappedValue.tg_hspace }
+//        set { self.wrappedValue.tg_hspace = newValue }
+//    }
+
+    func hspace(value: CGFloat)  {
+        self.wrappedValue.tg_hspace = value
+    }
+
+    func hspace() -> CGFloat {
+        return self.wrappedValue.tg_hspace
     }
 }
 

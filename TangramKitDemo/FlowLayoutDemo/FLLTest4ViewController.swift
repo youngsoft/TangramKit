@@ -29,12 +29,12 @@ class FLLTest4ViewController: UIViewController {
         let scrollView = UIScrollView()
         self.view = scrollView;
         
-        var rootLayout = TGLinearLayout(.vert)
+        let rootLayout = TGLinearLayout(.vert)
         rootLayout.backgroundColor = CFTool.color(11)
         rootLayout.tg.width.equal(.fill)
         rootLayout.tg.height.equal(.wrap)
-        rootLayout.tg.vspace = 10
-        rootLayout.tg.gravity = TGGravity.Horizontal.fill
+        rootLayout.tg.vspace(value: 10)
+        rootLayout.tg.gravity(value: TGGravity.Horizontal.fill)
         scrollView.addSubview(rootLayout)
         
         //这里一个模拟的用户登录界面，用垂直流式布局来实现。
@@ -65,9 +65,9 @@ extension FLLTest4ViewController {
         var flowLayout = TGFlowLayout(.vert, arrangedCount: 2)
         flowLayout.backgroundColor = .white
         flowLayout.tg.height.equal(.wrap)
-        flowLayout.tg.gravity = TGGravity.Horizontal.center  //所有子视图整体水平居中
+        flowLayout.tg.gravity(value: TGGravity.Horizontal.center)  //所有子视图整体水平居中
         flowLayout.tg.arrangedGravity = TGGravity.Vertical.center  //每行子视图垂直居中对齐。您可以这里尝试设置为：TGGravity.Vertical.top, TGGravity.Vertical.bottom的效果。
-        flowLayout.tg.padding = UIEdgeInsets.init(top: 20, left: 20, bottom: 20, right: 20)  //四周内边距设置为20
+        flowLayout.tg.padding(value: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))  //四周内边距设置为20
         rootLayout.addSubview(flowLayout)
         
         //the first line: head image
@@ -123,12 +123,12 @@ extension FLLTest4ViewController {
         flowLayout.addSubview(forgetPasswordButton)
         
         //the fifth line: remember me
-        var rememberLabel = UILabel()
+        let rememberLabel = UILabel()
         rememberLabel.text = "Remember me:"
         rememberLabel.textColor = CFTool.color(4)
         rememberLabel.font = CFTool.font(15)
         rememberLabel.tg.width.equal(.fill)
-        rememberLabel.tg.alignment = TGGravity.Vertical.bottom   //流式布局通过tg_arrangedGravity设置每行的对齐方式，如果某个子视图不想使用默认的对齐方式则可以通过tg_alignment属性来单独设置对齐方式，这个例子中所有都是居中对齐，但是这个标题则是底部对齐。
+        rememberLabel.tg.alignment(value: TGGravity.Vertical.bottom)    //流式布局通过tg_arrangedGravity设置每行的对齐方式，如果某个子视图不想使用默认的对齐方式则可以通过tg_alignment属性来单独设置对齐方式，这个例子中所有都是居中对齐，但是这个标题则是底部对齐。
         rememberLabel.sizeToFit()
         flowLayout.addSubview(rememberLabel)
         
@@ -164,9 +164,9 @@ extension FLLTest4ViewController {
         var flowLayout = TGFlowLayout(.horz, arrangedCount: 3)
         flowLayout.backgroundColor = CFTool.color(7)
         flowLayout.tg.height.equal(240)
-        flowLayout.tg.gravity = [TGGravity.Horizontal.center,TGGravity.Vertical.bottom]  //子视图整体垂直底部对齐，水平居中对齐。
+        flowLayout.tg.gravity(value:  [TGGravity.Horizontal.center,TGGravity.Vertical.bottom]) //子视图整体垂直底部对齐，水平居中对齐。
         flowLayout.tg.arrangedGravity = TGGravity.Horizontal.center //每列子视图水平居中对齐。
-        flowLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 5, right: 10)
+        flowLayout.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 5, right: 10))
         rootLayout.addSubview(flowLayout)
 
         //the first col
@@ -211,11 +211,11 @@ extension FLLTest4ViewController {
     
     func createFlowLayout3(rootLayout: TGLinearLayout)
     {
-        var flowLayout = TGFlowLayout(.vert, arrangedCount: 0)
+        let flowLayout = TGFlowLayout(.vert, arrangedCount: 0)
         flowLayout.backgroundColor = CFTool.color(0)
         flowLayout.tg.height.equal(.wrap)
-        flowLayout.tg.space = 10
-        flowLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
+        flowLayout.tg.space(value: 10)
+        flowLayout.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
         rootLayout.addSubview(flowLayout)
         
         //第一行占据全部
@@ -268,13 +268,13 @@ extension FLLTest4ViewController {
         flowLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(flowLayout)
         flowLayout.tg.height.equal(.wrap)
-        flowLayout.tg.space = 10
+        flowLayout.tg.space(value: 10)
         flowLayout.tg.arrangedGravity = TGGravity.Vertical.center
-        flowLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
+        flowLayout.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
         
         
         //边界线：下面的边界线往上偏移45，头部缩进10，尾部缩进30
-        flowLayout.tg.bottomBorderline = TGBorderline(color:CFTool.color(5),headIndent:10, tailIndent:30, offset:45)
+        flowLayout.tg.bottomBorderline(value: TGBorderline(color:CFTool.color(5),headIndent:10, tailIndent:30, offset:45)) 
         
         //第一行占据全部
         let titleLabel = UILabel()

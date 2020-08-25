@@ -34,10 +34,10 @@ class AllTest7ViewController: UIViewController {
         scrollView.backgroundColor = .white
         self.view = scrollView
         
-        var  rootLayout = TGLinearLayout(.vert)
+        let  rootLayout = TGLinearLayout(.vert)
         rootLayout.tg.width.equal(.fill)
         rootLayout.tg.height.equal(.wrap)
-        rootLayout.tg.gravity = TGGravity.Horizontal.fill
+        rootLayout.tg.gravity(value: TGGravity.Horizontal.fill)
         scrollView.addSubview(rootLayout)
         
         let tipLabel = UILabel()
@@ -86,11 +86,11 @@ extension AllTest7ViewController
         tipLabel.tg.height.equal(.wrap)
         rootLayout.addSubview(tipLabel)
         
-        var contentLayout = TGLinearLayout(.horz)
+        let contentLayout = TGLinearLayout(.horz)
         contentLayout.tg.height.equal(.wrap)
-        contentLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
-        contentLayout.tg.hspace = 5
-        contentLayout.tg.shrinkType = .weight
+        contentLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
+        contentLayout.tg.hspace(value: 5)
+        contentLayout.tg.shrinkType(value: .weight)
         //这个属性用来设置当子视图的总尺寸大于布局视图的尺寸时如何压缩这些具有固定尺寸的方法为按比例缩小。您可以分别试试设置为：.weight,.average,.auto,.none四种值的效果。
         contentLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(contentLayout)
@@ -139,10 +139,10 @@ extension AllTest7ViewController
         tipLabel.tg.height.equal(.wrap)
         rootLayout.addSubview(tipLabel)
         
-        var contentLayout = TGLinearLayout(.horz)
+        let contentLayout = TGLinearLayout(.horz)
         contentLayout.tg.height.equal(.wrap)
-        contentLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
-        contentLayout.tg.hspace = 5
+        contentLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
+        contentLayout.tg.hspace(value: 5)
         contentLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(contentLayout)
         
@@ -197,10 +197,10 @@ extension AllTest7ViewController
         tipLabel.sizeToFit()
         rootLayout.addSubview(tipLabel)
         
-        var contentLayout = TGLinearLayout(.horz)
+        let contentLayout = TGLinearLayout(.horz)
         contentLayout.tg.height.equal(.wrap)
-        contentLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
-        contentLayout.tg.hspace = 5
+        contentLayout.tg.padding(value: UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5))
+        contentLayout.tg.hspace(value: 5)
         contentLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(contentLayout)
         
@@ -236,7 +236,7 @@ extension AllTest7ViewController
         button3.addTarget(self, action: #selector(self.handleDel), for: .touchUpInside)
         //因为button2,和button3的宽度是固定的，因此这里面label1的最大宽是父视图的宽度减去2个按钮的宽度之和，外加上所有子视图的间距的和。
         
-        label1.tg.width.max(contentLayout.tg.width, increment: -1*(button2.bounds.width + button3.bounds.width + 2 * contentLayout.tg.hspace))
+        label1.tg.width.max(contentLayout.tg.width, increment: -1*(button2.bounds.width + button3.bounds.width + 2 * contentLayout.tg.hspace()))
         
     }
     
@@ -274,11 +274,11 @@ extension AllTest7ViewController
         changeButton.addTarget(self,action:#selector(handleChangeText),for:.touchUpInside)
 
         
-        var contentLayout = TGLinearLayout(.horz)
+        let contentLayout = TGLinearLayout(.horz)
         contentLayout.tg.height.equal(.wrap)
-        contentLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
-        contentLayout.tg.hspace = 20
-        contentLayout.tg.shrinkType = .auto
+        contentLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
+        contentLayout.tg.hspace(value: 20)
+        contentLayout.tg.shrinkType(value: .auto)
         //为了实现左右两边文本的自动缩放调整，必须要将线性布局的属性设置.auto。当设置为.auto属性时，必要要满足当前子视图中只有2个子视图的宽度设置为等于自身内容，否则无效。这个属性用来实现左右2个子视图根据内容来占用最佳的空间的例子。
         contentLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(contentLayout)
@@ -352,11 +352,11 @@ extension AllTest7ViewController
         rootLayout.addSubview(tipLabel)
         
         let  subviewWidth: CGFloat = 60 //您可以修改这个宽度值，可以看出不管宽度设置多大都能完美的填充整个屏幕，因为系统会自动调整子视图之间的间距。
-        var contentLayout = TGFlowLayout(.vert, arrangedCount:0)
+        let contentLayout = TGFlowLayout(.vert, arrangedCount:0)
         contentLayout.backgroundColor = CFTool.color(0)
-        contentLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
+        contentLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
         contentLayout.tg.height.equal(.wrap)
-        contentLayout.tg.vspace = 5 //设置流式布局里面子视图之间的垂直间距。
+        contentLayout.tg.vspace(value: 5) //设置流式布局里面子视图之间的垂直间距。
         contentLayout.tg.setSubviews(size: subviewWidth, minSpace: 5, maxSpace:10) //这里面水平间距用浮动间距，浮动间距设置为子视图固定宽度为60，最小的间距为5,最大间距为10。注意这里要求所有子视图的宽度都是60。
         rootLayout.addSubview(contentLayout)
         
@@ -380,7 +380,7 @@ extension AllTest7ViewController
     
     @objc func handleAddCell(_ sender: UIButton) {
         //在创建时指定了6000.所以这里为了方便使用。
-        var tableLayout = sender.superview!.viewWithTag(6000) as! TGTableLayout
+        let tableLayout = sender.superview!.viewWithTag(6000) as! TGTableLayout
         let cellLabel = UILabel()
         cellLabel.text = "测试文本"
         cellLabel.adjustsFontSizeToFitWidth = true
@@ -393,8 +393,8 @@ extension AllTest7ViewController
         //如果还没有行则建立第一行，这里的行高是由子视图决定，而列宽则是和表格视图保持一致，但是子视图还需要设置单元格的宽度。
         if tableLayout.tg.rowCount == 0 {
 //            tableLayout.tg.addRow(size: TGLayoutSize.wrap, colSize: TGLayoutSize.fill).tg.shrinkType = .average
-            var value: TGLinearLayout = tableLayout.tg.addRow(size: TGLayoutSize.wrap, colSize: TGLayoutSize.fill)
-            value.tg.shrinkType = .average
+            let value: TGLinearLayout = tableLayout.tg.addRow(size: TGLayoutSize.wrap, colSize: TGLayoutSize.fill)
+            value.tg.shrinkType(value: .average)
         }
         
         /*
@@ -409,8 +409,8 @@ extension AllTest7ViewController
         if lastView != nil {
             if lastView!.bounds.width <= 60 {
 //                tableLayout.tg.addRow(size:TGLayoutSize.wrap, colSize: TGLayoutSize.fill).tg.shrinkType = .average
-                var value: TGLinearLayout = tableLayout.tg.addRow(size: TGLayoutSize.wrap, colSize: TGLayoutSize.fill)
-                value.tg.shrinkType = .average
+                let value: TGLinearLayout = tableLayout.tg.addRow(size: TGLayoutSize.wrap, colSize: TGLayoutSize.fill)
+                value.tg.shrinkType(value: .average)
             }
             else {
                 lastView!.tg.trailing.equal(nil)
@@ -437,11 +437,11 @@ extension AllTest7ViewController
         rootLayout.addSubview(addButton)
         addButton.addTarget(self, action: #selector(self.handleAddCell), for: .touchUpInside)
         
-        var contentLayout = TGTableLayout(.vert)
+        let contentLayout = TGTableLayout(.vert)
         contentLayout.tg.height.equal(.wrap)
-        contentLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
-        contentLayout.tg.hspace = 5
-        contentLayout.tg.vspace = 5
+        contentLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
+        contentLayout.tg.hspace(value: 5)
+        contentLayout.tg.vspace(value: 5)
         //设置行间距和列间距都为5.
         contentLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(contentLayout)
@@ -461,12 +461,12 @@ extension AllTest7ViewController
         rootLayout.addSubview(tipLabel)
         var contentLayout = TGFlowLayout(.vert, arrangedCount: 0)
         contentLayout.tg.height.equal(.wrap)
-        contentLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
-        contentLayout.tg.space = 5
+        contentLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
+        contentLayout.tg.space(value: 5)
         contentLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(contentLayout)
         contentLayout.tg.autoArrange = true //自动排列，布局视图会根据里面子视图的尺寸进行智能的排列。
-        contentLayout.tg.gravity = TGGravity.Horizontal.fill //对于内容填充流式布局来说会拉升所有子视图的尺寸，以便铺满整个布局视图。
+        contentLayout.tg.gravity(value: TGGravity.Horizontal.fill)  //对于内容填充流式布局来说会拉升所有子视图的尺寸，以便铺满整个布局视图。
         //添加N个长短不一的子视图。
         for i in 0..<15 {
             let label = UILabel()
@@ -495,13 +495,13 @@ extension AllTest7ViewController
         scrollView.tg.height.equal(60)
         rootLayout.addSubview(scrollView)
         
-        var contentLayout = TGLinearLayout(.horz)
+        let contentLayout = TGLinearLayout(.horz)
         contentLayout.tg.width.equal(.wrap).min(scrollView.tg.width) //默认水平线性布局的宽度是wrap的但是最小的宽度和父视图相等，这样对于一些大尺寸屏幕因为能够容纳内容而不会产生滚动。
         contentLayout.backgroundColor = CFTool.color(0)
         contentLayout.tg.height.equal(.fill)
-        contentLayout.tg.gravity = TGGravity.Vertical.fill
-        contentLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
-        contentLayout.tg.space = 5
+        contentLayout.tg.gravity(value: TGGravity.Vertical.fill) 
+        contentLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
+        contentLayout.tg.space(value: 5)
         scrollView.addSubview(contentLayout)
         
         //第一个子视图。
@@ -547,13 +547,13 @@ extension AllTest7ViewController
         scrollView.tg.height.equal(60)
         rootLayout.addSubview(scrollView)
         
-        var contentLayout = TGLinearLayout(.horz)
+        let contentLayout = TGLinearLayout(.horz)
         contentLayout.backgroundColor = CFTool.color(0)
         contentLayout.tg.height.equal(.fill)
         contentLayout.tg.width.equal(.wrap).min(scrollView.tg.width) //默认水平线性布局的宽度是wrap的但是最小的宽度和父视图相等，这样对于一些大尺寸屏幕因为能够容纳内容而不会产生滚动。
-        contentLayout.tg.gravity = TGGravity.Vertical.fill
-        contentLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
-        contentLayout.tg.hspace = 5
+        contentLayout.tg.gravity(value: TGGravity.Vertical.fill)
+        contentLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
+        contentLayout.tg.hspace(value: 5)
         scrollView.addSubview(contentLayout)
       
         //第一个子视图。
@@ -610,10 +610,10 @@ extension AllTest7ViewController
         rootLayout.addSubview(tipLabel)
         
         
-        var contentLayout = TGLinearLayout(.horz)
-        contentLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
+        let contentLayout = TGLinearLayout(.horz)
+        contentLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
         contentLayout.tg.height.equal(60)
-        contentLayout.tg.gravity = TGGravity.Vertical.center
+        contentLayout.tg.gravity(value: TGGravity.Vertical.center)
         
         contentLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(contentLayout)
@@ -684,17 +684,17 @@ extension AllTest7ViewController
         rootLayout.addSubview(tipLabel)
         
         
-        var contentLayout = TGLinearLayout(.horz)
-        contentLayout.tg.padding = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
+        let contentLayout = TGLinearLayout(.horz)
+        contentLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
         contentLayout.tg.height.equal(60)
-        contentLayout.tg.gravity = TGGravity.Vertical.center
+        contentLayout.tg.gravity(value: TGGravity.Vertical.center)
         
         contentLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(contentLayout)
         
         
-        contentLayout.tg.hspace = 50;  //默认设定固定间距为50
-        contentLayout.tg.shrinkType = [.space, .average]  //当整体内容的总宽度不超过布局视图的宽度时则正常布局，当布局视图的宽度不能容纳总体宽度时，则会平均缩小子视图之间的间距以保证一行内能容纳下所有的内容。shrinkType支持压缩尺寸和压缩间距两种压缩方法，默认是压缩尺寸。你可以选择.size或者.space来指定当布局尺寸不能容纳内容时是压缩所有子视图之间的间距还是尺寸来实现完美适配。
+        contentLayout.tg.hspace(value: 50) //默认设定固定间距为50
+        contentLayout.tg.shrinkType(value: [.space, .average])  //当整体内容的总宽度不超过布局视图的宽度时则正常布局，当布局视图的宽度不能容纳总体宽度时，则会平均缩小子视图之间的间距以保证一行内能容纳下所有的内容。shrinkType支持压缩尺寸和压缩间距两种压缩方法，默认是压缩尺寸。你可以选择.size或者.space来指定当布局尺寸不能容纳内容时是压缩所有子视图之间的间距还是尺寸来实现完美适配。
         
                
         let A = self.createLabel("Objective-C", color:5)

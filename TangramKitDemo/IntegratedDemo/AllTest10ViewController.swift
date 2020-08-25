@@ -74,7 +74,7 @@ extension AllTest10ViewController
         self.view.addSubview(containerView)
         
         
-        var linelayout = TGLinearLayout(.vert)
+        let linelayout = TGLinearLayout(.vert)
         linelayout.translatesAutoresizingMaskIntoConstraints = false
         linelayout.backgroundColor = .red
         containerView.addSubview(linelayout)
@@ -91,8 +91,8 @@ extension AllTest10ViewController
         
         //TangramKit中的约束设置方法
         linelayout.tg.size(width: .wrap, height: .wrap)
-        linelayout.tg.padding = UIEdgeInsets(top:10, left:10, bottom:10, right:10)
-        linelayout.tg.space = 10
+        linelayout.tg.padding(value: UIEdgeInsets(top:10, left:10, bottom:10, right:10))
+        linelayout.tg.space(value: 10)
         
         sbv1.tg.size(width: 100, height: 40)
         sbv2.tg.size(width: 150, height: 50)
@@ -121,7 +121,7 @@ extension AllTest10ViewController
         
         //一个线性布局视图的宽度为某个具体的约束值，高度由子视图决定。另外一个兄弟视图在线性布局视图的下面，一个兄弟视图在线性布局的右边。
         
-        var linelayout = TGLinearLayout(.vert)
+        let linelayout = TGLinearLayout(.vert)
         linelayout.translatesAutoresizingMaskIntoConstraints = false
         linelayout.backgroundColor = .red
         self.view.addSubview(linelayout)
@@ -148,8 +148,8 @@ extension AllTest10ViewController
         
         //TangramKit中的约束设置方法
         linelayout.tg.height.equal(.wrap)
-        linelayout.tg.padding = UIEdgeInsets(top:10, left:10, bottom:10, right:10)
-        linelayout.tg.space = 10
+        linelayout.tg.padding(value: UIEdgeInsets(top:10, left:10, bottom:10, right:10))
+        linelayout.tg.space(value: 10)
         
         sbv1.tg.size(width: 100, height: 40)
         sbv2.tg.size(width: 150, height: 50)
@@ -187,7 +187,7 @@ extension AllTest10ViewController
     
     func demo3() {
         
-        var linelayout = TGLinearLayout(.horz)
+        let linelayout = TGLinearLayout(.horz)
         linelayout.translatesAutoresizingMaskIntoConstraints = false
         linelayout.backgroundColor = .red
         self.view.addSubview(linelayout)
@@ -209,9 +209,9 @@ extension AllTest10ViewController
         
         //MyLayout中的约束设置
         linelayout.tg.width.equal(.wrap)
-        linelayout.tg.padding = UIEdgeInsets(top:10, left:10, bottom:10, right:10)
-        linelayout.tg.space = 10
-        linelayout.tg.gravity = TGGravity.Vertical.fill
+        linelayout.tg.padding(value: UIEdgeInsets(top:10, left:10, bottom:10, right:10))
+        linelayout.tg.space(value: 10)
+        linelayout.tg.gravity(value: TGGravity.Vertical.fill)
         
         sbv1.tg.width.equal(50)
         sbv2.tg.width.equal(60)

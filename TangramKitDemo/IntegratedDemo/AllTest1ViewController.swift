@@ -158,13 +158,13 @@ class AllTest1ViewController: UITableViewController {
     
     func createTableHeaderView() {
         //这个例子用来构建一个自适应高度的头部布局视图。
-        var tableHeaderViewLayout = TGLinearLayout(.vert)
-        tableHeaderViewLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
+        let tableHeaderViewLayout = TGLinearLayout(.vert)
+        tableHeaderViewLayout.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
         tableHeaderViewLayout.frame = CGRect(x: 0, y: 0, width: self.tableView.bounds.width, height: 0) //这里没有设置高度，但设置了明确的宽度
         //高度不确定可以设置为0。尽量不要在代码中使用kScreenWidth,kScreenHeight，SCREEN_WIDTH。之类这样的宏来设定视图的宽度和高度。要充分利用Tangram的特性，减少常数的使用。
         tableHeaderViewLayout.tg.width.equal(.fill) //这里注意设置宽度和父布局保持一致。
         tableHeaderViewLayout.tg.height.equal(.wrap)
-        tableHeaderViewLayout.tg.backgroundImage = UIImage(named: "bk1") ?? UIImage()
+        tableHeaderViewLayout.tg.backgroundImage(value: UIImage(named: "bk1"))
         //为布局添加触摸事件。
         tableHeaderViewLayout.tg.setTarget(self, action: #selector(handleTableHeaderViewLayoutClick), for:.touchUpInside)
         
@@ -210,12 +210,12 @@ class AllTest1ViewController: UITableViewController {
     
     func createTableFooterView() {
         //这个例子用来构建一个固定高度的尾部布局视图。
-        var tableFooterViewLayout = TGLinearLayout(.vert)
-        tableFooterViewLayout.tg.padding = UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10)
+        let tableFooterViewLayout = TGLinearLayout(.vert)
+        tableFooterViewLayout.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
         tableFooterViewLayout.frame = CGRect(x: 0, y: 0, width: self.tableView.bounds.width, height: 80) ////这里明确设定高度。
         tableFooterViewLayout.tg.width.equal(.fill) //这里注意设置宽度和父布局保持一致。
         tableFooterViewLayout.backgroundColor = CFTool.color(6)
-        tableFooterViewLayout.tg.gravity = [TGGravity.Vertical.center, TGGravity.Horizontal.fill]
+        tableFooterViewLayout.tg.gravity(value: [TGGravity.Vertical.center, TGGravity.Horizontal.fill]) 
         
         let label3 = UILabel()
         label3.text = NSLocalizedString("add tableFooterView", comment: "")
@@ -288,24 +288,23 @@ class AllTest1ViewController: UITableViewController {
         
         let model = self.datas[indexPath.row]
         
-        var all1cell = cell as! AllTest1Cell
+        let all1cell = cell as! AllTest1Cell
         
         all1cell.setModel(model: model,isImageMessageHidden:self.imageHiddenFlags[indexPath.row])
         
         //这里设置其他位置有间隔线而最后一行没有下划线。我们可以借助布局视图本身所提供的边界线来代替掉系统默认的cell之间的间隔线，因为布局视图的边界线所提供的能力要大于默认的间隔线。
         if (indexPath.row  == self.datas.count - 1)
         {
-            all1cell.rootLayout.tg.bottomBorderline = nil;
+            all1cell.rootLayout.tg.bottomBorderline(value: nil)
         }
         else
         {
             let bld = TGBorderline(color:UIColor.red)
-            all1cell.rootLayout.tg.bottomBorderline = bld;
+            all1cell.rootLayout.tg.bottomBorderline(value: bld)
         }
         
         
-        return cell;
-        
+        return cell
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -327,15 +326,15 @@ class AllTest1ViewController: UITableViewController {
     
     @objc func handleTableHeaderViewLayoutClick(sender:TGBaseLayout!)
     {
-        if  var label1 = sender.viewWithTag(1000)
+        if  let label1 = sender.viewWithTag(1000)
         {
-            if label1.tg.visibility == .visible
+            if label1.tg.visibility() == .visible
             {
-                label1.tg.visibility = .gone
+                label1.tg.visibility(value: .gone)
             }
             else
             {
-                label1.tg.visibility = .visible
+                label1.tg.visibility(value: .visible)
             }
             
             UIView.animate(withDuration: 0.3) {
