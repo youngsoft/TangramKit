@@ -26,7 +26,7 @@ extension TGLayoutSize:TGTableRowColSizeType{}
  *对于水平表格布局来说，行子视图是从左到右依次排列的，而列子视图则是在行子视图里面从上到下依次排列。
  */
 
-public extension TypeWrapperProtocol where WrappedType: TGTableLayout {
+public extension TGTypeWrapperProtocol where TGWrappedType: TGTableLayout {
     @discardableResult
     func addRow(size rowSize:TGTableRowColSizeType, colSize:TGTableRowColSizeType) -> TGLinearLayout {
         return self.wrappedValue.tg_insertRow(size: rowSize, colSize:colSize, rowIndex: self.wrappedValue.tg_rowCount)

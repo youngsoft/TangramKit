@@ -81,7 +81,7 @@ import UIKit
  
  */
 
-public extension TypeWrapperProtocol where WrappedType: TGFlowLayout {
+public extension TGTypeWrapperProtocol where TGWrappedType: TGFlowLayout {
     var orientation: TGOrientation {
         get { return (self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_orientation }
         set {

@@ -8,7 +8,7 @@
 
 import UIKit
 
-public extension TypeWrapperProtocol where WrappedType: UIView {
+public extension TGTypeWrapperProtocol where TGWrappedType: UIView {
     var reverseFloat: Bool {
         get { return self.wrappedValue.tgCurrentSizeClass.tg_reverseFloat }
         set {
@@ -36,7 +36,7 @@ public extension TypeWrapperProtocol where WrappedType: UIView {
     }
 }
 
-public extension TypeWrapperProtocol where WrappedType: TGFloatLayout {
+public extension TGTypeWrapperProtocol where TGWrappedType: TGFloatLayout {
     var orientation: TGOrientation {
         get { return (self.wrappedValue.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass).tg_orientation }
         set {

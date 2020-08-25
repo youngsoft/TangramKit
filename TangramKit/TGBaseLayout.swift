@@ -379,7 +379,7 @@ extension UIView: TGViewSizeClass {
     }
 }
 
-public extension TypeWrapperProtocol where WrappedType: UIView {
+public extension TGTypeWrapperProtocol where TGWrappedType: UIView {
     var top: TGLayoutPos {
         return self.wrappedValue.tgCurrentSizeClass.tg_top
     }
@@ -486,7 +486,7 @@ public extension TypeWrapperProtocol where WrappedType: UIView {
     }
 }
 
-public extension TypeWrapperProtocol where WrappedType: UIView {
+public extension TGTypeWrapperProtocol where TGWrappedType: UIView {
     func origin(_ point: CGPoint) {
         self.wrappedValue.tg_leading.equal(point.x)
         self.wrappedValue.tg_top.equal(point.y)
@@ -837,9 +837,9 @@ public class TGBorderline {
     
 }
 
-extension UIView: NameSpaceWrappable {}
+extension UIView: TGNameSpaceWrappable {}
 
-public extension TypeWrapperProtocol where WrappedType: TGBaseLayout {
+public extension TGTypeWrapperProtocol where TGWrappedType: TGBaseLayout {
     static var isRTL: Bool {
         get { return TGViewSizeClassImpl.IsRTL }
         set { TGViewSizeClassImpl.IsRTL = newValue }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-public extension TypeWrapperProtocol where WrappedType: TGLinearLayout {
+public extension TGTypeWrapperProtocol where TGWrappedType: TGLinearLayout {
     var orientation: TGOrientation {
         get { return self.getCheck()?.tg_orientation ?? TGOrientation.vert }
         set {

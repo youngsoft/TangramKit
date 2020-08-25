@@ -2,35 +2,35 @@ import Foundation
 
 ///命名空间
 
-public protocol NameSpaceWrappable {
-    associatedtype WrapperType
-    var tg: WrapperType { set get }
-    static var tg: WrapperType.Type { set get }
+public protocol TGNameSpaceWrappable {
+    associatedtype TGWrapperType
+    var tg: TGWrapperType { set get }
+    static var tg: TGWrapperType.Type { set get }
 }
 
-public extension NameSpaceWrappable {
-    var tg: NameSpaceWrapper<Self> {
+public extension TGNameSpaceWrappable {
+    var tg: TGNameSpaceWrapper<Self> {
         set {}
         get {
-            return NameSpaceWrapper(value: self)
+            return TGNameSpaceWrapper(value: self)
         }
     }
 
-    static var tg: NameSpaceWrapper<Self>.Type {
+    static var tg: TGNameSpaceWrapper<Self>.Type {
         set {}
         get {
-            return NameSpaceWrapper.self
+            return TGNameSpaceWrapper.self
         }
     }
 }
 
-public protocol TypeWrapperProtocol {
-    associatedtype WrappedType
-    var wrappedValue: WrappedType { get }
-    init(value: WrappedType)
+public protocol TGTypeWrapperProtocol {
+    associatedtype TGWrappedType
+    var wrappedValue: TGWrappedType { get }
+    init(value: TGWrappedType)
 }
 
-public struct NameSpaceWrapper<T>: TypeWrapperProtocol {
+public struct TGNameSpaceWrapper<T>: TGTypeWrapperProtocol {
     public var wrappedValue: T
     public init(value: T) {
         self.wrappedValue = value

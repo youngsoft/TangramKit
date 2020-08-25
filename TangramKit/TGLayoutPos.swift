@@ -103,9 +103,9 @@ extension UIView:TGLayoutPosType{}
  max.posVal,max.offset是通过max方法设置。
  */
 
-extension TGLayoutPos: NameSpaceWrappable {}
+extension TGLayoutPos: TGNameSpaceWrappable {}
 
-public extension TypeWrapperProtocol where WrappedType: TGLayoutPos {
+public extension TGTypeWrapperProtocol where TGWrappedType: TGLayoutPos {
     static var safeAreaMargin: CGFloat {
         //在2017年10月3号定义的一个数字，没有其他特殊意义。
         return -20171003.0;
