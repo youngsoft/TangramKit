@@ -26,8 +26,8 @@ class AllTest1ViewController: UITableViewController {
         
         let textMessages = ["",
                             NSLocalizedString("a single line text", comment:""),
-                            NSLocalizedString("This Demo is used to introduce the solution when use layout view to realize the UITableViewCell's dynamic height. We only need to use the layout view's tg_sizeThatFits method to evaluate the size of the layout view. and you can touch the Cell to shrink the height when the Cell has a picture.", comment:""),
-                            NSLocalizedString("Through layout view's tg_sizeThatFits method can assess a UITableViewCell dynamic height.tg.sizeThatFits just to evaluate layout size but not set the size of the layout. here don't preach the width of 0 is the cause of the above UITableViewCell set the default width is 320 (regardless of any screen), so if we pass the width of 0 will be according to the width of 320 to evaluate UITableViewCell dynamic height, so when in 375 and 375 the width of the assessment of height will not be right, so here you need to specify the real width dimension;And the height is set to 0 mean height is not a fixed value need to evaluate. you can use all type layout view to realize UITableViewCell.", comment:""),
+                            NSLocalizedString("This Demo is used to introduce the solution when use layout view to realize the UITableViewCell's dynamic height. We only need to use the layout view's tg.sizeThatFits method to evaluate the size of the layout view. and you can touch the Cell to shrink the height when the Cell has a picture.", comment:""),
+                            NSLocalizedString("Through layout view's tg.sizeThatFits method can assess a UITableViewCell dynamic height.tg.sizeThatFits just to evaluate layout size but not set the size of the layout. here don't preach the width of 0 is the cause of the above UITableViewCell set the default width is 320 (regardless of any screen), so if we pass the width of 0 will be according to the width of 320 to evaluate UITableViewCell dynamic height, so when in 375 and 375 the width of the assessment of height will not be right, so here you need to specify the real width dimension;And the height is set to 0 mean height is not a fixed value need to evaluate. you can use all type layout view to realize UITableViewCell.", comment:""),
                             NSLocalizedString("This section not only has text but also hav picture. and picture below at text, text will wrap", comment:"")
         ]
         
@@ -140,7 +140,7 @@ class AllTest1ViewController: UITableViewController {
          
          tableHeaderViewLayout.frame = CGRect(x: 0, y: 0, width: self.tableView.bounds.width, height: 100)
          
-         而如果某个布局视图的高度有可能是动态的高度，也就是用了tg_height为.wrap时，可以不用指定明确的指定高度，但要指定宽度。而且在布局视图添加到self.tableView.tableHeaderView 之前一定要记得调用：
+         而如果某个布局视图的高度有可能是动态的高度，也就是用了tg.height为.wrap时，可以不用指定明确的指定高度，但要指定宽度。而且在布局视图添加到self.tableView.tableHeaderView 之前一定要记得调用：
          tableHeaderViewLayout.layoutIfNeeded()
          
          */

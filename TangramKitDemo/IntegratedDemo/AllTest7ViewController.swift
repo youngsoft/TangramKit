@@ -459,13 +459,13 @@ extension AllTest7ViewController
         tipLabel.tg.height.equal(.wrap)
         
         rootLayout.addSubview(tipLabel)
-        var contentLayout = TGFlowLayout(.vert, arrangedCount: 0)
+        let contentLayout = TGFlowLayout(.vert, arrangedCount: 0)
         contentLayout.tg.height.equal(.wrap)
         contentLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
         contentLayout.tg.space(value: 5)
         contentLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(contentLayout)
-        contentLayout.tg.autoArrange = true //自动排列，布局视图会根据里面子视图的尺寸进行智能的排列。
+        contentLayout.tg.autoArrange(value: true) //自动排列，布局视图会根据里面子视图的尺寸进行智能的排列。
         contentLayout.tg.gravity(value: TGGravity.Horizontal.fill)  //对于内容填充流式布局来说会拉升所有子视图的尺寸，以便铺满整个布局视图。
         //添加N个长短不一的子视图。
         for i in 0..<15 {

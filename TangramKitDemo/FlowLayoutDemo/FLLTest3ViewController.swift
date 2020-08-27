@@ -24,11 +24,11 @@ class FLLTest3ViewController: UIViewController {
     override func loadView() {
         
         /*
-         这个例子用来介绍布局视图对动画的支持，以及通过布局视图的autoresizesSubviews属性，以及子视图的扩展属性tg_useFrame和tg_noLayout来实现子视图布局的个性化设置。
+         这个例子用来介绍布局视图对动画的支持，以及通过布局视图的autoresizesSubviews属性，以及子视图的扩展属性tg.useFrame和tg.noLayout来实现子视图布局的个性化设置。
          
          布局视图的autoresizesSubviews属性用来设置当布局视图被激发要求重新布局时，是否会对里面的所有子视图进行重新布局。
-         子视图的扩展属性tg_useFrame表示某个子视图不受布局视图的布局控制，而是用最原始的frame属性设置来实现自定义的位置和尺寸的设定。
-         子视图的扩展属性tg_noLayout表示某个子视图会参与布局，但是并不会正真的调整布局后的frame值。
+         子视图的扩展属性tg.useFrame表示某个子视图不受布局视图的布局控制，而是用最原始的frame属性设置来实现自定义的位置和尺寸的设定。
+         子视图的扩展属性tg.noLayout表示某个子视图会参与布局，但是并不会正真的调整布局后的frame值。
          
          */
 
@@ -174,7 +174,7 @@ extension FLLTest3ViewController {
         
         
         //在进行sender的位置调整时，要把sender移动到最顶端，也就子视图数组的的最后，这时候布局视图不能布局，因此要把autoresizesSubviews设置为false，同时因为要自定义
-        //sender的位置，因此要把tg_useFrame设置为true，并且恢复tg_noLayout为false。
+        //sender的位置，因此要把tg.useFrame设置为true，并且恢复tg.noLayout为false。
         #if swift(>=4.2)
             self.flowLayout.bringSubviewToFront(sender)   //把拖动的子视图放在最后，这样这个子视图在移动时就会在所有兄弟视图的上面。
         #else
@@ -183,7 +183,7 @@ extension FLLTest3ViewController {
         self.flowLayout.autoresizesSubviews = false //在拖动时不要让布局视图激发布局
         sender.tg.useFrame(value: true) //因为拖动时，拖动的控件需要自己确定位置，不能被布局约束，因此必须要将useFrame设置为YES下面的center设置才会有效。
         sender.tg.noLayout(value: false) //因为useFrame设置为了YES所有这里可以直接调整center，从而实现了位置的自定义设置。
-        sender.center = pt  //因为tg_useFrame设置为了YES所有这里可以直接调整center，从而实现了位置的自定义设置。
+        sender.center = pt  //因为tg.useFrame设置为了YES所有这里可以直接调整center，从而实现了位置的自定义设置。
     }
     
     @objc func handleTouchDown(sender: UIButton, event: UIEvent)
@@ -199,7 +199,7 @@ extension FLLTest3ViewController {
             return
         }
         
-        //当抬起时，需要让拖动的子视图调整到正确的顺序，并重新参与布局，因此这里要把拖动的子视图的tg_useFrame设置为false，同时把布局视图的autoresizesSubviews还原为YES。
+        //当抬起时，需要让拖动的子视图调整到正确的顺序，并重新参与布局，因此这里要把拖动的子视图的tg.useFrame设置为false，同时把布局视图的autoresizesSubviews还原为YES。
         
         //调整索引。
         
@@ -207,7 +207,7 @@ extension FLLTest3ViewController {
             self.flowLayout.exchangeSubview(at: index, withSubviewAt: index-1)
         }
         
-        sender.tg.useFrame(value: false)  //让拖动的子视图重新参与布局，将tg_useFrame设置为false
+        sender.tg.useFrame(value: false)  //让拖动的子视图重新参与布局，将tg.useFrame设置为false
         self.flowLayout.autoresizesSubviews = true  //让布局视图可以重新激发布局，这里还原为true。
 
     }

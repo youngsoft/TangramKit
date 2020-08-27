@@ -27,9 +27,9 @@ class FLLTest2ViewController: UIViewController {
         self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
 
         
-        var rootLayout = TGFlowLayout(.vert,arrangedCount:2)
+        let rootLayout = TGFlowLayout(.vert,arrangedCount:2)
         rootLayout.backgroundColor = .white
-        rootLayout.tg.arrangedGravity = TGGravity.Vertical.center
+        rootLayout.tg.arrangedGravity(value: TGGravity.Vertical.center)
         rootLayout.tg.vspace(value: 4)
         rootLayout.tg.hspace(value: 4)
         self.view = rootLayout
@@ -160,7 +160,7 @@ extension FLLTest2ViewController
         //间距拉伸
         if sender.isOn
         {
-            self.flowLayout.tg.gravity(value: TGGravity.Horizontal.between) //流式布局的tg_gravity如果设置为TGGravity.Horizontal.between表示子视图的间距会被拉伸，以便填充满整个布局。
+            self.flowLayout.tg.gravity(value: TGGravity.Horizontal.between) //流式布局的tg.gravity如果设置为TGGravity.Horizontal.between表示子视图的间距会被拉伸，以便填充满整个布局。
         }
         else
         {
@@ -194,11 +194,11 @@ extension FLLTest2ViewController
         //自动调整位置。
         if (sender.isOn)
         {
-            self.flowLayout.tg.autoArrange = true  //tg_autoArrange属性会根据子视图的内容自动调整，以便以最合适的布局来填充布局。
+            self.flowLayout.tg.autoArrange(value: true)  //tg.autoArrange属性会根据子视图的内容自动调整，以便以最合适的布局来填充布局。
         }
         else
         {
-            self.flowLayout.tg.autoArrange = false
+            self.flowLayout.tg.autoArrange(value: false)
         }
         
         self.flowLayout.tg.layoutAnimationWithDuration(0.2)

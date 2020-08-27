@@ -47,7 +47,7 @@ class AllTest8ViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         /*
-         本例子演示当把一个布局视图加入到非布局视图时的各种场景。当把一个布局视图加入到非布局父视图时，因为无法完全对非布局父视图进行控制。所以一些布局视图的属性将不再起作用了，但是基本的视图扩展属性： tg_leading,tg_trailing,tg_top,tg_bottom,tg_centerX,tg_centerY，tg_width,tg_height这几个属性仍然有意义，只不过这些属性的equal方法能设置的类型有限，而且这些设置都只是基于父视图的。
+         本例子演示当把一个布局视图加入到非布局视图时的各种场景。当把一个布局视图加入到非布局父视图时，因为无法完全对非布局父视图进行控制。所以一些布局视图的属性将不再起作用了，但是基本的视图扩展属性： tg.leading,tg.trailing,tg.top,tg.bottom,tg.centerX,tg.centerY，tg.width,tg.height这几个属性仍然有意义，只不过这些属性的equal方法能设置的类型有限，而且这些设置都只是基于父视图的。
          */
 
         let scrollView = UIScrollView(frame: self.view.bounds)
@@ -105,10 +105,10 @@ class AllTest8ViewController: UIViewController {
         floatLayout.tg.top.equal(60)
         floatLayout.tg.bottom.equal(10) //底部边距为10，这样同样设置了顶部和底部边距后布局的高度就决定了。
         floatLayout.tg.adjustScrollViewContentSizeMode(value: .no)  //布局视图不控制滚动视图的contentSize。
-        /*这里面把布局视图加入到滚动视图时不会自动调整滚动视图的contentSize，如果不设置这个属性则当布局视图加入滚动视图时会自动调整滚动视图的contentSize。您可以把tg_adjustScrollViewContentSizeMode属性设置这句话注释掉，可以看到当使用默认设置时，UIScrollView的contentSize的值会完全受到布局视图的尺寸和边距控制，这时候：
+        /*这里面把布局视图加入到滚动视图时不会自动调整滚动视图的contentSize，如果不设置这个属性则当布局视图加入滚动视图时会自动调整滚动视图的contentSize。您可以把tg.adjustScrollViewContentSizeMode属性设置这句话注释掉，可以看到当使用默认设置时，UIScrollView的contentSize的值会完全受到布局视图的尺寸和边距控制，这时候：
          
-         contentSize.height = 布局视图的高度+布局视图的tg_top设置的上边距值 + 布局视图的tg_bottom设置的下边距值。
-         contentSize.width = 布局视图的宽度+布局视图的tg_leading设置的左距值 + 布局视图的tg_trailing设置的右边距值。
+         contentSize.height = 布局视图的高度+布局视图的tg.top设置的上边距值 + 布局视图的tg.bottom设置的下边距值。
+         contentSize.width = 布局视图的宽度+布局视图的tg.leading设置的左距值 + 布局视图的tg.trailing设置的右边距值。
          
          */
         
@@ -208,8 +208,8 @@ class AllTest8ViewController: UIViewController {
          您可以将下面两句代码注释掉看看横竖屏切换的结果。
          */
         
-        let btnContainerSC = btnContainer.tg_fetchSizeClass(with: .landscape, from: .default) as! TGLinearLayoutViewSizeClass
-        btnContainerSC.tg_orientation = .horz
+        let btnContainerSC = btnContainer.tg.fetchSizeClass(with: .landscape, from: .default)
+        btnContainerSC.tg.orientation(value: .horz)
 
         //您可以看到下面的两个按钮没有出现任何的需要进行布局的属性设置，直接添加到父视图就能达到想要的效果，这样就简化了程序的开发。
         btnContainer.addSubview(self.createDemoButton("Add Text", action:#selector(handleDemo1AddTest)))

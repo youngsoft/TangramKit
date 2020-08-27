@@ -53,6 +53,13 @@ public extension TGTypeWrapperProtocol where TGWrappedType: UIView {
 }
 
 public extension TGTypeWrapperProtocol where TGWrappedType: TGFloatLayout {
+    func fetchSizeClass(with targetType: TGSizeClassType, from sourceType: TGSizeClassType! = nil) -> TGFlowLayoutViewSizeClassImpl {
+        guard let currentSizeClass = self.wrappedValue.tg_fetchSizeClass(with: targetType, from: sourceType) as? TGFlowLayoutViewSizeClassImpl else {
+            debugPrint("\(self.wrappedValue.tg_fetchSizeClass(with: targetType, from: sourceType)) don't translate into TGViewSizeClassImpl instance setting is invalid")
+            return TGFlowLayoutViewSizeClassImpl(view: self.wrappedValue)
+        }
+        return currentSizeClass
+    }
 //    var orientation: TGOrientation {
 //        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFloatLayoutViewSizeClass).tg_orientation }
 //        set {

@@ -9,6 +9,13 @@
 import UIKit
 
 public extension TGTypeWrapperProtocol where TGWrappedType: TGLinearLayout {
+    func fetchSizeClass(with targetType: TGSizeClassType, from sourceType: TGSizeClassType! = nil) -> TGLinearLayoutViewSizeClassImpl {
+        guard let currentSizeClass = self.wrappedValue.tg_fetchSizeClass(with: targetType, from: sourceType) as? TGLinearLayoutViewSizeClassImpl else {
+            debugPrint("\(self.wrappedValue.tg_fetchSizeClass(with: targetType, from: sourceType)) don't translate into TGViewSizeClassImpl instance setting is invalid")
+            return TGLinearLayoutViewSizeClassImpl(view: self.wrappedValue)
+        }
+        return currentSizeClass
+    }
 //    var orientation: TGOrientation {
 //        get { return self.getCheck()?.tg_orientation ?? TGOrientation.vert }
 //        set {

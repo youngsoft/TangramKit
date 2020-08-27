@@ -82,6 +82,13 @@ import UIKit
  */
 
 public extension TGTypeWrapperProtocol where TGWrappedType: TGFlowLayout {
+    func fetchSizeClass(with targetType: TGSizeClassType, from sourceType: TGSizeClassType! = nil) -> TGFlowLayoutViewSizeClassImpl {
+        guard let currentSizeClass = self.wrappedValue.tg_fetchSizeClass(with: targetType, from: sourceType) as? TGFlowLayoutViewSizeClassImpl else {
+            debugPrint("\(self.wrappedValue.tg_fetchSizeClass(with: targetType, from: sourceType)) don't translate into TGFlowLayoutViewSizeClassImpl instance setting is invalid")
+            return TGFlowLayoutViewSizeClassImpl(view: self.wrappedValue)
+        }
+        return currentSizeClass
+    }
 //    var orientation: TGOrientation {
 //        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_orientation }
 //        set {
@@ -101,60 +108,101 @@ public extension TGTypeWrapperProtocol where TGWrappedType: TGFlowLayout {
         return self.wrappedValue.tg_orientation
     }
 
-    var arrangedCount: Int {
-        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_arrangedCount }
-        set {
-            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass
-            if (lsc.tg_arrangedCount != newValue) {
-                lsc.tg_arrangedCount = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
-        }
+//    var arrangedCount: Int {
+//        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_arrangedCount }
+//        set {
+//            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass
+//            if (lsc.tg_arrangedCount != newValue) {
+//                lsc.tg_arrangedCount = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func arrangedCount(value: Int)  {
+        self.wrappedValue.tg_arrangedCount = value
     }
 
-    var pagedCount: Int {
-        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_pagedCount }
-        set {
-            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass
-            if (lsc.tg_pagedCount != newValue) {
-                lsc.tg_pagedCount = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
-        }
+    func arrangedCount() -> Int {
+        return self.wrappedValue.tg_arrangedCount
     }
 
-    var autoArrange: Bool {
-        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_autoArrange }
-        set {
-            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass
-            if (lsc.tg_autoArrange != newValue) {
-                lsc.tg_autoArrange = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
-        }
+//    var pagedCount: Int {
+//        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_pagedCount }
+//        set {
+//            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass
+//            if (lsc.tg_pagedCount != newValue) {
+//                lsc.tg_pagedCount = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func pagedCount(value: Int)  {
+        self.wrappedValue.tg_pagedCount = value
     }
 
-    var arrangedGravity: TGGravity {
-        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_arrangedGravity }
-        set {
-            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass
-            if (lsc.tg_arrangedGravity != newValue) {
-                lsc.tg_arrangedGravity = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
-        }
+    func pagedCount() -> Int {
+        return self.wrappedValue.tg_pagedCount
     }
 
-    var lastlineGravityPolicy:TGGravityPolicy {
-        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_lastlineGravityPolicy }
-        set {
-            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass
-            if (lsc.tg_lastlineGravityPolicy != newValue) {
-                lsc.tg_lastlineGravityPolicy = newValue
-                self.wrappedValue.setNeedsLayout()
-            }
-        }
+//    var autoArrange: Bool {
+//        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_autoArrange }
+//        set {
+//            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass
+//            if (lsc.tg_autoArrange != newValue) {
+//                lsc.tg_autoArrange = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func autoArrange(value: Bool)  {
+        self.wrappedValue.tg_autoArrange = value
     }
+
+    func autoArrange() -> Bool {
+        return self.wrappedValue.tg_autoArrange
+    }
+
+//    var arrangedGravity: TGGravity {
+//        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_arrangedGravity }
+//        set {
+//            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass
+//            if (lsc.tg_arrangedGravity != newValue) {
+//                lsc.tg_arrangedGravity = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func arrangedGravity(value: TGGravity)  {
+        self.wrappedValue.tg_arrangedGravity = value
+    }
+
+    func arrangedGravity() -> TGGravity {
+        return self.wrappedValue.tg_arrangedGravity
+    }
+
+//    var lastlineGravityPolicy:TGGravityPolicy {
+//        get { return (self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass).tg_lastlineGravityPolicy }
+//        set {
+//            let lsc = self.wrappedValue.tgCurrentSizeClass as! TGFlowLayoutViewSizeClass
+//            if (lsc.tg_lastlineGravityPolicy != newValue) {
+//                lsc.tg_lastlineGravityPolicy = newValue
+//                self.wrappedValue.setNeedsLayout()
+//            }
+//        }
+//    }
+
+    func lastlineGravityPolicy(value: TGGravityPolicy)  {
+        self.wrappedValue.tg_lastlineGravityPolicy = value
+    }
+
+    func lastlineGravityPolicy() -> TGGravityPolicy {
+        return self.wrappedValue.tg_lastlineGravityPolicy
+    }
+
 
      func setSubviews(size:CGFloat, minSpace:CGFloat, maxSpace:CGFloat = CGFloat.greatestFiniteMagnitude, centered:Bool = false, inSizeClass type:TGSizeClassType = TGSizeClassType.default) {
         let lsc = self.wrappedValue.tg_fetchSizeClass(with: type) as! TGFlowLayoutViewSizeClassImpl

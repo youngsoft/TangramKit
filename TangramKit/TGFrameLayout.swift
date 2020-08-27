@@ -13,7 +13,18 @@ import UIKit
  *框架布局是一种里面的子视图停靠在父视图特定方位并且可以重叠的布局视图。框架布局里面的子视图的布局位置和添加的顺序无关，只跟父视图建立布局约束依赖关系。
  *框架布局是一种简化的相对布局。也就是里面子视图的TGLayoutPos对象所设置的值都是距离父布局视图的边距值，里面的TGLayoutSize对象所设置的值都是相对于父视图的尺寸来处理的。
  */
-open class TGFrameLayout: TGBaseLayout,TGFrameLayoutViewSizeClass {
+
+public extension TGTypeWrapperProtocol where TGWrappedType: TGFrameLayout {
+    func fetchSizeClass(with targetType: TGSizeClassType, from sourceType: TGSizeClassType! = nil) -> TGFrameLayoutViewSizeClassImpl {
+        guard let currentSizeClass = self.wrappedValue.tg_fetchSizeClass(with: targetType, from: sourceType) as? TGFrameLayoutViewSizeClassImpl else {
+            debugPrint("\(self.wrappedValue.tg_fetchSizeClass(with: targetType, from: sourceType)) don't translate into TGFrameLayoutViewSizeClassImpl instance setting is invalid")
+            return TGFrameLayoutViewSizeClassImpl(view: self.wrappedValue)
+        }
+        return currentSizeClass
+    }
+}
+
+open class TGFrameLayout: TGBaseLayout, TGFrameLayoutViewSizeClass {
     //MARK: override
     internal override func tgCreateInstance() -> AnyObject
     {

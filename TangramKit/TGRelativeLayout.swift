@@ -13,6 +13,17 @@ import UIKit
  *相对布局里面的子视图的布局位置和添加的顺序无关，而是通过设置子视图的相对依赖关系来进行定位和布局的。
  *相对布局提供和AutoLayout等价的功能。
  */
+
+public extension TGTypeWrapperProtocol where TGWrappedType: TGRelativeLayout {
+    func fetchSizeClass(with targetType: TGSizeClassType, from sourceType: TGSizeClassType! = nil) -> TGRelativeLayoutViewSizeClassImpl {
+        guard let currentSizeClass = self.wrappedValue.tg_fetchSizeClass(with: targetType, from: sourceType) as? TGRelativeLayoutViewSizeClassImpl else {
+            debugPrint("\(self.wrappedValue.tg_fetchSizeClass(with: targetType, from: sourceType)) don't translate into TGRelativeLayoutViewSizeClassImpl instance setting is invalid")
+            return TGRelativeLayoutViewSizeClassImpl(view: self.wrappedValue)
+        }
+        return currentSizeClass
+    }
+}
+
 open class TGRelativeLayout: TGBaseLayout,TGRelativeLayoutViewSizeClass {
     
     

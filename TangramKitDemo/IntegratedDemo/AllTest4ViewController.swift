@@ -171,7 +171,7 @@ extension AllTest4ViewController
 //MARK: - Handle Method
 extension AllTest4ViewController {
     @objc func handleReverse(_ sender:UIView) -> Void {
-        //TGBaseLayout的属性tg_reverseLayout可以将子视图按照添加的顺序逆序布局。
+        //TGBaseLayout的属性tg.reverseLayout可以将子视图按照添加的顺序逆序布局。
         for layout in self.containerLayouts {
             layout.tg.reverseLayout(value: !layout.tg.reverseLayout())
             layout.tg.layoutAnimationWithDuration(0.3)
@@ -222,7 +222,7 @@ extension AllTest4ViewController {
             
             //动画结束后再将sender移植到toLayout中。
             sender.removeFromSuperview()
-            sender.tg.useFrame(value: false)  //还原tg_useFrame，因为加入到toLayout后将受到布局视图的约束。
+            sender.tg.useFrame(value: false)  //还原tg.useFrame，因为加入到toLayout后将受到布局视图的约束。
             toLayout.addSubview(sender)
         }
         

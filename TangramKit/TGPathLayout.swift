@@ -122,6 +122,14 @@ open class TGCoordinateSetting {
  */
 
 public extension TGTypeWrapperProtocol where TGWrappedType: TGPathLayout {
+    func fetchSizeClass(with targetType: TGSizeClassType, from sourceType: TGSizeClassType! = nil) -> TGPathLayoutViewSizeClassImpl {
+        guard let currentSizeClass = self.wrappedValue.tg_fetchSizeClass(with: targetType, from: sourceType) as? TGPathLayoutViewSizeClassImpl else {
+            debugPrint("\(self.wrappedValue.tg_fetchSizeClass(with: targetType, from: sourceType)) don't translate into TGPathLayoutViewSizeClassImpl instance setting is invalid")
+            return TGPathLayoutViewSizeClassImpl(view: self.wrappedValue)
+        }
+        return currentSizeClass
+    }
+
     var coordinateSetting: TGCoordinateSetting {
         return self.wrappedValue.tg_coordinateSetting
     }

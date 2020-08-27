@@ -148,7 +148,7 @@ extension FLLTest1ViewController
     {
         
         //调整流式布局的每行的数量。
-        self.flowLayout.tg.arrangedCount = (self.flowLayout.tg.arrangedCount + 1) % 6
+        self.flowLayout.tg.arrangedCount(value: (self.flowLayout.tg.arrangedCount() + 1) % 6)
         self.flowLayout.tg.layoutAnimationWithDuration(0.4)
         self.flowlayoutInfo()
 
@@ -251,8 +251,8 @@ extension FLLTest1ViewController
     
     @objc func handleAdjustArrangeGravity(_ sender:AnyObject?)
     {
-        var vertArrangeGravity = self.flowLayout.tg.arrangedGravity & TGGravity.Horizontal.mask
-        var horzArrangeGravity = self.flowLayout.tg.arrangedGravity & TGGravity.Vertical.mask
+        var vertArrangeGravity = self.flowLayout.tg.arrangedGravity() & TGGravity.Horizontal.mask
+        var horzArrangeGravity = self.flowLayout.tg.arrangedGravity() & TGGravity.Vertical.mask
         
         //每行的对齐方式的调整。
         if (self.flowLayout.tg.orientation() == .vert)
@@ -308,7 +308,7 @@ extension FLLTest1ViewController
             
         }
         
-        self.flowLayout.tg.arrangedGravity = [vertArrangeGravity, horzArrangeGravity]
+        self.flowLayout.tg.arrangedGravity(value: [vertArrangeGravity, horzArrangeGravity])
         self.flowLayout.tg.layoutAnimationWithDuration(0.4)
         self.flowlayoutInfo()
     }
@@ -341,15 +341,15 @@ extension FLLTest1ViewController
     
     @objc func handleAdjustGravityPolicy(_ sender:AnyObject?) {
         
-        switch self.flowLayout.tg.lastlineGravityPolicy {
+        switch self.flowLayout.tg.lastlineGravityPolicy() {
         case TGGravityPolicy.always:
-            self.flowLayout.tg.lastlineGravityPolicy = TGGravityPolicy.auto
+            self.flowLayout.tg.lastlineGravityPolicy(value: TGGravityPolicy.auto)
             break
         case TGGravityPolicy.auto:
-            self.flowLayout.tg.lastlineGravityPolicy = TGGravityPolicy.no
+            self.flowLayout.tg.lastlineGravityPolicy(value: TGGravityPolicy.no)
             break
         case TGGravityPolicy.no:
-            self.flowLayout.tg.lastlineGravityPolicy = TGGravityPolicy.always
+            self.flowLayout.tg.lastlineGravityPolicy(value: TGGravityPolicy.always)
             break
         }
         
@@ -379,15 +379,15 @@ extension FLLTest1ViewController
         }
     
     
-        let arrangeCountStr = "\(self.flowLayout.tg.arrangedCount)"
+        let arrangeCountStr = "\(self.flowLayout.tg.arrangedCount())"
     
         let gravityStr = self.gravityInfo(self.flowLayout.tg.gravity())
     
-        let arrangedGravityStr = self.gravityInfo(self.flowLayout.tg.arrangedGravity)
+        let arrangedGravityStr = self.gravityInfo(self.flowLayout.tg.arrangedGravity())
     
         let subviewSpaceStr = "vert:\(self.flowLayout.tg.vspace()), horz:\(self.flowLayout.tg.hspace())"
         
-        let gravityPolicyStr = self.gravityPolicyInfo(self.flowLayout.tg.lastlineGravityPolicy)
+        let gravityPolicyStr = self.gravityPolicyInfo(self.flowLayout.tg.lastlineGravityPolicy())
 
     
         self.flowLayoutSetLabel.text = "flowLayout:\norientation=" + orientationStr + ",arrangedCount=" + arrangeCountStr + "\ngravity="+gravityStr + "\narrangedGravity=" + arrangedGravityStr + "\nsubviewMargin=(" + subviewSpaceStr + ")\n " + gravityPolicyStr
@@ -395,7 +395,7 @@ extension FLLTest1ViewController
     
     func gravityPolicyInfo(_ gravityPolicy:TGGravityPolicy) ->String {
         
-        switch self.flowLayout.tg.lastlineGravityPolicy {
+        switch self.flowLayout.tg.lastlineGravityPolicy() {
         case TGGravityPolicy.always:
             return "policy:always"
         case TGGravityPolicy.auto:

@@ -19,12 +19,12 @@ class AllTest9ViewController: UIViewController {
         
         /*
          
-         这个DEMO主要用来演示布局视图的tg_layoutTransform属性的使用和设置方法，这个属性用来对布局视图内所有子视图的位置进行坐标变换。只要你了解CGAffineTransform的设置和使用
+         这个DEMO主要用来演示布局视图的tg.layoutTransform属性的使用和设置方法，这个属性用来对布局视图内所有子视图的位置进行坐标变换。只要你了解CGAffineTransform的设置和使用
          方法，就可以用他来进行各种布局视图内子视图的整体的坐标变换，比如：平移、缩放、水平反转、垂直反转、旋转等以及一些复合的坐标变换。在下面的例子里面我分别列举了一些常见的布局位置
          坐标变换的设置方法以及参数。
          
          
-         当你的布局内所有视图都需要有统一的变换的动画时，你可以借助tg_layoutTransform属性并且配合tg_layoutAnimationWithDuration方法来实现动画效果。
+         当你的布局内所有视图都需要有统一的变换的动画时，你可以借助tg.layoutTransform属性并且配合tg.layoutAnimationWithDuration方法来实现动画效果。
          
          */
         

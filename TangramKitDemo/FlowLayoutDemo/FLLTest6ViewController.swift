@@ -28,9 +28,9 @@ class FLLTest6ViewController: UIViewController {
         self.view = scrollView
         self.scrollView = scrollView
         
-        var rootLayout = TGFlowLayout(.vert,arrangedCount:3)
+        let rootLayout = TGFlowLayout(.vert,arrangedCount:3)
         rootLayout.backgroundColor = CFTool.color(0)
-        rootLayout.tg.pagedCount = 9
+        rootLayout.tg.pagedCount(value: 9)
         rootLayout.tg.height.equal(.wrap)  //上下滚动，每页9个。
         rootLayout.tg.space(value: 10)
         rootLayout.tg.padding(value: UIEdgeInsets(top: 10, left: 5, bottom: 10, right: 5))
@@ -73,8 +73,8 @@ class FLLTest6ViewController: UIViewController {
         if (self.rootLayout.tg.height.isWrap)
         {
             //换成单行单列
-            self.rootLayout.tg.arrangedCount = 1
-            self.rootLayout.tg.pagedCount = 1
+            self.rootLayout.tg.arrangedCount(value: 1)
+            self.rootLayout.tg.pagedCount(value: 1)
             self.rootLayout.tg.padding(value: .zero)
             self.rootLayout.tg.space(value: 0)
             
@@ -82,8 +82,8 @@ class FLLTest6ViewController: UIViewController {
         else
         {
             //恢复为多行多列
-            self.rootLayout.tg.arrangedCount = 3
-            self.rootLayout.tg.pagedCount = 9
+            self.rootLayout.tg.arrangedCount(value: 3)
+            self.rootLayout.tg.pagedCount(value: 9)
             self.rootLayout.tg.padding(value: UIEdgeInsets(top: 10, left: 5, bottom: 10, right: 5))
             self.rootLayout.tg.space(value: 10)
             

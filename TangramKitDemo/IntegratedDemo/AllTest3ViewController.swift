@@ -142,7 +142,7 @@ extension AllTest3ViewController
         headerNameLabel.tg.top.equal(headerImageView.tg.bottom, offset:10)
         headerLayout.addSubview(headerNameLabel)
         
-        //将tg_useFrame属性设置为true后，布局里面的子视图不会受到布局视图的约束和控制了，因此可以通过设置frame的值来进行位置定位和尺寸的确定。
+        //将tg.useFrame属性设置为true后，布局里面的子视图不会受到布局视图的约束和控制了，因此可以通过设置frame的值来进行位置定位和尺寸的确定。
         let imageView2 = UIImageView(image: UIImage(named: "user"))
         imageView2.backgroundColor = .white
         imageView2.frame = CGRect(x:5, y:5, width:30, height:30)

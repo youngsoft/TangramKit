@@ -227,7 +227,7 @@ extension AllTest2TableViewCell
         
         descLabel.tg.centerY.offset(5)
         nameLabel.tg.centerY.equal([descLabel.tg.centerY])
-        //_nameLabel,_descLabel整体垂直居中。这里通过将tg_centerY设置为一个数组的值来表示。具体参考关于相对布局的介绍和DEMO。
+        //_nameLabel,_descLabel整体垂直居中。这里通过将tg.centerY设置为一个数组的值来表示。具体参考关于相对布局的介绍和DEMO。
     }
     
     

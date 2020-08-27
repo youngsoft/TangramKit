@@ -25,7 +25,7 @@ class AllTest2ViewController: UITableViewController {
         let names = ["欧阳大哥","醉里挑灯看键","张三","尼古拉・阿列克赛耶维奇・奥斯特洛夫斯基"]
         let descs = ["只有一行文本",
         "这个例子是用于测试自动布局在UITableView中实现静态高度的解决方案。",
-        "通过布局视图的tg_sizeThatFits函数能够评估出UITableViewCell的动态高度",
+        "通过布局视图的tg.sizeThatFits函数能够评估出UITableViewCell的动态高度",
         "这是一段既有文本也有图片，文本在上面，图片在下面"
         ]
         

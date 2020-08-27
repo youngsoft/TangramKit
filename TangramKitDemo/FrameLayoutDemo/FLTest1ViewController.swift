@@ -33,18 +33,18 @@ class FLTest1ViewController: UIViewController {
          
          
          这要区分一下边距和间距和概念，所谓边距是指子视图距离父视图的距离；而间距则是指子视图距离兄弟视图的距离。
-         当tg_leading,tg_trailing,tg_top,tg_bottom这四个属性的equal方法设置的值为CGFloat类型或者TGWeight类型时即可用来表示边距也可以用来表示间距，这个要根据子视图所归属的父布局视图的类型而确定：
+         当tg.leading,tg.trailing,tg.top,tg.bottom这四个属性的equal方法设置的值为CGFloat类型或者TGWeight类型时即可用来表示边距也可以用来表示间距，这个要根据子视图所归属的父布局视图的类型而确定：
          
-         1.垂直线性布局TGLinearLayout中的子视图： tg_leading,tg_trailing表示边距，而tg_top,tg_bottom则表示间距。
-         2.水平线性布局TGLinearLayout中的子视图： tg_leading,tg_trailing表示间距，而tg_top,tg_bottom则表示边距。
-         3.表格布局中的子视图：                  tg_leading,tg_trailing,tg_top,tg_bottom的定义和线性布局是一致的。
-         4.框架布局TGFrameLayout中的子视图：     tg_leading,tg_trailing,tg_top,tg_bottom都表示边距。
-         5.相对布局TGRelativeLayout中的子视图：  tg_leading,tg_trailing,tg_top,tg_bottom都表示边距。
-         6.流式布局TGFlowLayout中的子视图：      tg_leading,tg_trailing,tg_top,tg_bottom都表示间距。
-         7.浮动布局TGFloatLayout中的子视图：     tg_leading,tg_trailing,tg_top,tg_bottom都表示间距。
-         8.路径布局TGPathLayout中的子视图：      tg_leading,tg_trailing,tg_top,tg_bottom即不表示间距也不表示边距，它表示自己中心位置的偏移量。
-         9.非布局父视图中的布局子视图：           tg_leading,tg_trailing,tg_top,tg_bottom都表示边距。
-         10.非布局父视图中的非布局子视图：         tg_leading,tg_trailing,tg_top,tg_bottom的设置不会起任何作用，因为TangramKit已经无法控制了。
+         1.垂直线性布局TGLinearLayout中的子视图： tg.leading,tg.trailing表示边距，而tg.top,tg.bottom则表示间距。
+         2.水平线性布局TGLinearLayout中的子视图： tg.leading,tg.trailing表示间距，而tg.top,tg.bottom则表示边距。
+         3.表格布局中的子视图：                  tg.leading,tg.trailing,tg.top,tg.bottom的定义和线性布局是一致的。
+         4.框架布局TGFrameLayout中的子视图：     tg.leading,tg.trailing,tg.top,tg.bottom都表示边距。
+         5.相对布局TGRelativeLayout中的子视图：  tg.leading,tg.trailing,tg.top,tg.bottom都表示边距。
+         6.流式布局TGFlowLayout中的子视图：      tg.leading,tg.trailing,tg.top,tg.bottom都表示间距。
+         7.浮动布局TGFloatLayout中的子视图：     tg.leading,tg.trailing,tg.top,tg.bottom都表示间距。
+         8.路径布局TGPathLayout中的子视图：      tg.leading,tg.trailing,tg.top,tg.bottom即不表示间距也不表示边距，它表示自己中心位置的偏移量。
+         9.非布局父视图中的布局子视图：           tg.leading,tg.trailing,tg.top,tg.bottom都表示边距。
+         10.非布局父视图中的非布局子视图：         tg.leading,tg.trailing,tg.top,tg.bottom的设置不会起任何作用，因为TangramKit已经无法控制了。
          
          再次强调的是：
          1. 如果同时设置了左右边距就能决定自己的宽度，同时设置左右间距不能决定自己的宽度！

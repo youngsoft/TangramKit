@@ -63,11 +63,11 @@ class FLLTest7ViewController: UIViewController {
         scrollView1.tg.height.equal(.wrap)  //这里可以设置滚动视图的高度为包裹属性，表示他的高度依赖于布局视图的高度。
         rootLayout.addSubview(scrollView1)
         
-        var flowLayout1 = TGFlowLayout(.horz,arrangedCount:3)
+        let flowLayout1 = TGFlowLayout(.horz,arrangedCount:3)
         flowLayout1.backgroundColor = CFTool.color(5)
         flowLayout1.tg.height.equal(.wrap)   //流式布局的尺寸由里面的子视图的整体尺寸决定。
         flowLayout1.tg.width.equal(.wrap).min(scrollView1.tg.width) //虽然尺寸是包裹的，但是最小宽度不能小于父视图的宽度
-        flowLayout1.tg.autoArrange = true  //通过将流式布局的autoArrange属性设置为YES可以实现里面的子视图进行紧凑的自动排列。
+        flowLayout1.tg.autoArrange(value: true)  //通过将流式布局的autoArrange属性设置为YES可以实现里面的子视图进行紧凑的自动排列。
         flowLayout1.tg.space(value: 10)
         flowLayout1.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
         scrollView1.addSubview(flowLayout1)
@@ -79,11 +79,11 @@ class FLLTest7ViewController: UIViewController {
         scrollView2.tg.height.equal(.wrap)  //这里可以设置滚动视图的高度为包裹属性，表示他的高度依赖于布局视图的高度。
         rootLayout.addSubview(scrollView2)
         
-        var flowLayout2 = TGFlowLayout(.horz,arrangedCount:3)
+        let flowLayout2 = TGFlowLayout(.horz,arrangedCount:3)
         flowLayout2.backgroundColor = CFTool.color(5)
         flowLayout2.tg.height.equal(.wrap)   //流式布局的尺寸由里面的子视图的整体尺寸决定。
         flowLayout2.tg.width.equal(.wrap).min(scrollView2.tg.width) //虽然尺寸是包裹的，但是最小宽度不能小于父视图的宽度
-        flowLayout2.tg.arrangedGravity = TGGravity.Horizontal.between //通过将水平流式布局的tg_arrangeGravity属性设置为TGGravity.Vertical.between，我们将得到里面的子视图在每行都会被紧凑的排列。大家可以看到和上面的将tg_autoArrange设置为true的不同的效果。
+        flowLayout2.tg.arrangedGravity(value: TGGravity.Horizontal.between) //通过将水平流式布局的tg_arrangeGravity属性设置为TGGravity.Vertical.between，我们将得到里面的子视图在每行都会被紧凑的排列。大家可以看到和上面的将tg_autoArrange设置为true的不同的效果。
         flowLayout2.tg.space(value: 10)
         flowLayout2.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
         scrollView2.addSubview(flowLayout2)
@@ -95,12 +95,12 @@ class FLLTest7ViewController: UIViewController {
         scrollView3.tg.height.equal(50%)  //这里可以设置滚动视图的高度为包裹属性，表示他的高度依赖于布局视图的高度。
         rootLayout.addSubview(scrollView3)
         
-        var flowLayout3 = TGFlowLayout(.vert,arrangedCount:3)
+        let flowLayout3 = TGFlowLayout(.vert,arrangedCount:3)
         flowLayout3.backgroundColor = CFTool.color(5)
         flowLayout3.tg.height.equal(.wrap).min(scrollView3.tg.height) //虽然是包裹尺寸，但是最小不能小于父视图的高度。
         flowLayout3.tg.width.equal(.fill)
         flowLayout3.tg.gravity(value: TGGravity.Horizontal.fill) //均分宽度。
-        flowLayout3.tg.autoArrange = true  //通过将流式布局的autoArrange属性设置为YES可以实现里面的子视图进行紧凑的自动排列。
+        flowLayout3.tg.autoArrange(value: true)  //通过将流式布局的autoArrange属性设置为YES可以实现里面的子视图进行紧凑的自动排列。
         flowLayout3.tg.space(value: 10)
         flowLayout3.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
         scrollView3.addSubview(flowLayout3)
@@ -112,12 +112,12 @@ class FLLTest7ViewController: UIViewController {
         scrollView4.tg.height.equal(50%)  //这里可以设置滚动视图的高度为包裹属性，表示他的高度依赖于布局视图的高度。
         rootLayout.addSubview(scrollView4)
         
-        var flowLayout4 = TGFlowLayout(.vert,arrangedCount:3)
+        let flowLayout4 = TGFlowLayout(.vert,arrangedCount:3)
         flowLayout4.backgroundColor = CFTool.color(5)
         flowLayout4.tg.height.equal(.wrap).min(scrollView4.tg.height) //虽然是包裹尺寸，但是最小不能小于父视图的高度。
         flowLayout4.tg.width.equal(.fill)
         flowLayout4.tg.gravity(value: TGGravity.Horizontal.fill) //均分宽度。
-        flowLayout4.tg.arrangedGravity = TGGravity.Vertical.between
+        flowLayout4.tg.arrangedGravity(value: TGGravity.Vertical.between) 
         flowLayout4.tg.space(value: 10)
         flowLayout4.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
         scrollView4.addSubview(flowLayout4)

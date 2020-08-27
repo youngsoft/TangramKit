@@ -125,7 +125,7 @@ extension AllTest1TableViewCellForAutoLayout
         self.headImageView = headImageView
         
         let messageLayout = TGLinearLayout(.vert)
-        messageLayout.tg.width.equal(.fill)  //等价于tg_width.equal(100%)
+        messageLayout.tg.width.equal(.fill)  //等价于tg.width.equal(100%)
         messageLayout.tg.height.equal(.wrap)
         messageLayout.tg.leading.equal(5)
         messageLayout.tg.vspace(value: 5) //前面4行代码描述的是垂直布局占用除头像外的所有宽度，并和头像保持5个点的间距。

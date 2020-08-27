@@ -117,40 +117,40 @@ class AllTest6ViewController: UIViewController {
         
         
         //下面定义iPhone设备横屏时的界面布局。
-        let rootLayoutSC = rootLayout.tg_fetchSizeClass(with: .comb(.any,.compact,nil)) as! TGLinearLayoutViewSizeClass
-        rootLayoutSC.tg_orientation = .horz
-        rootLayoutSC.tg_gravity = TGGravity.Vertical.fill;
+        let rootLayoutSC = rootLayout.tg.fetchSizeClass(with: .comb(.any,.compact,nil))
+        rootLayoutSC.tg.orientation(value: .horz)
+        rootLayoutSC.tg.gravity(value: TGGravity.Vertical.fill)
 
 
-        let menuLayoutSC = menuLayout.tg_fetchSizeClass(with: .comb(.any,.compact,nil), from:.default) as! TGFlowLayoutViewSizeClass
-        menuLayoutSC.tg_orientation = .horz
-        menuLayoutSC.tg_width.equal(.wrap)
+        let menuLayoutSC = menuLayout.tg.fetchSizeClass(with: .comb(.any,.compact,nil), from:.default)
+        menuLayoutSC.tg.orientation(value: .horz)
+        menuLayoutSC.tg.width.equal(.wrap)
 
-        let contentLayoutSC = contentLayout.tg_fetchSizeClass(with: .comb(.any,.compact,nil), from:.default)
-        contentLayoutSC.tg_height.equal(.fill)
-        contentLayoutSC.tg_width.equal(.fill)
+        let contentLayoutSC = contentLayout.tg.fetchSizeClass(with: .comb(.any,.compact,nil), from:.default)
+        contentLayoutSC.tg.height.equal(.fill)
+        contentLayoutSC.tg.width.equal(.fill)
 
 
-        let func1LabelSC = func1Label.tg_fetchSizeClass(with: .comb(.any,.compact,nil))
-        let func2LabelSC = func2Label.tg_fetchSizeClass(with: .comb(.any,.compact,nil))
-        let func3LabelSC = func3Label.tg_fetchSizeClass(with: .comb(.any,.compact,nil))
+        let func1LabelSC = func1Label.tg.fetchSizeClass(with: .comb(.any,.compact,nil))
+        let func2LabelSC = func2Label.tg.fetchSizeClass(with: .comb(.any,.compact,nil))
+        let func3LabelSC = func3Label.tg.fetchSizeClass(with: .comb(.any,.compact,nil))
 
-        func1LabelSC.tg_width.equal([func2LabelSC.tg_width, func3LabelSC.tg_width])
-        func2LabelSC.tg_leading.equal(func1LabelSC.tg_trailing)
-        func3LabelSC.tg_leading.equal(func2LabelSC.tg_trailing)
-        func1LabelSC.tg_height.equal(contentLayout.tg_height)
-        func2LabelSC.tg_height.equal(contentLayout.tg_height)
-        func3LabelSC.tg_height.equal(contentLayout.tg_height)
+        func1LabelSC.tg.width.equal([func2LabelSC.tg.width, func3LabelSC.tg.width])
+        func2LabelSC.tg.leading.equal(func1LabelSC.tg.trailing)
+        func3LabelSC.tg.leading.equal(func2LabelSC.tg.trailing)
+        func1LabelSC.tg.height.equal(contentLayout.tg.height)
+        func2LabelSC.tg.height.equal(contentLayout.tg.height)
+        func3LabelSC.tg.height.equal(contentLayout.tg.height)
 
        // 下面是定义在iPad上设备的横屏的界面布局，因为iPad上的SizeClass都是regular，所以这里要区分横竖屏的方法是使用.portrait和.landscape
-        let menu1LabelSC = menu1Label.tg_fetchSizeClass(with: .comb(.regular, .regular, .landscape), from: .default)
-        menu1LabelSC.tg_height.max(200)
+        let menu1LabelSC = menu1Label.tg.fetchSizeClass(with: .comb(.regular, .regular, .landscape), from: .default)
+        menu1LabelSC.tg.height.max(200)
 
-        let menu2LabelSC = menu2Label.tg_fetchSizeClass(with: .comb(.regular, .regular, .landscape), from: .default)
-        menu2LabelSC.tg_height.max(200)
+        let menu2LabelSC = menu2Label.tg.fetchSizeClass(with: .comb(.regular, .regular, .landscape), from: .default)
+        menu2LabelSC.tg.height.max(200)
 
-        let menu3LabelSC = menu3Label.tg_fetchSizeClass(with: .comb(.regular, .regular, .landscape), from: .default)
-        menu3LabelSC.tg_height.max(200)
+        let menu3LabelSC = menu3Label.tg.fetchSizeClass(with: .comb(.regular, .regular, .landscape), from: .default)
+        menu3LabelSC.tg.height.max(200)
 
     }
 

@@ -27,6 +27,14 @@ extension TGLayoutSize:TGTableRowColSizeType{}
  */
 
 public extension TGTypeWrapperProtocol where TGWrappedType: TGTableLayout {
+    func fetchSizeClass(with targetType: TGSizeClassType, from sourceType: TGSizeClassType! = nil) -> TGTableLayoutViewSizeClassImpl {
+        guard let currentSizeClass = self.wrappedValue.tg_fetchSizeClass(with: targetType, from: sourceType) as? TGTableLayoutViewSizeClassImpl else {
+            debugPrint("\(self.wrappedValue.tg_fetchSizeClass(with: targetType, from: sourceType)) don't translate into TGTableLayoutViewSizeClassImpl instance setting is invalid")
+            return TGTableLayoutViewSizeClassImpl(view: self.wrappedValue)
+        }
+        return currentSizeClass
+    }
+
     @discardableResult
     func addRow(size rowSize:TGTableRowColSizeType, colSize:TGTableRowColSizeType) -> TGLinearLayout {
         return self.wrappedValue.tg_insertRow(size: rowSize, colSize:colSize, rowIndex: self.wrappedValue.tg_rowCount)

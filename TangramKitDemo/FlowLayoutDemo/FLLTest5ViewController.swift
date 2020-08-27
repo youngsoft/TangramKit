@@ -92,8 +92,8 @@ extension FLLTest5ViewController {
         
         
         //建立一个水平数量约束流式布局:每列展示3个子视图,每页展示9个子视图，整体从左往右滚动。
-        var flowLayout = TGFlowLayout(.horz, arrangedCount:3)
-        flowLayout.tg.pagedCount = 9 //tg_pagedCount设置为非0时表示开始分页展示的功能，这里表示每页展示9个子视图，这个数量必须是tg_arrangedCount的倍数。
+        let flowLayout = TGFlowLayout(.horz, arrangedCount:3)
+        flowLayout.tg.pagedCount(value: 9) //tg.pagedCount设置为非0时表示开始分页展示的功能，这里表示每页展示9个子视图，这个数量必须是tg.arrangedCount的倍数。
         flowLayout.tg.width.equal(.wrap) //设置布局视图的宽度由子视图包裹，当水平流式布局的这个属性设置为YES，并和pagedCount搭配使用会产生分页从左到右滚动的效果。
         flowLayout.tg.height.equal(scrollView) //因为是分页从左到右滚动，因此布局视图的高度必须设置为和父滚动视图相等。
         /*
@@ -111,8 +111,8 @@ extension FLLTest5ViewController {
         self.addAllItemSubviews(flowLayout)
         
         //获取流式布局的横屏size classes，并且设置当设备处于横屏时每页的数量由9个变为了18个。您可以注释掉这段代码，然后横竖屏切换看看效果。
-        let flowLayoutSC = flowLayout.tg_fetchSizeClass(with:.landscape, from:.default) as! TGFlowLayoutViewSizeClass
-        flowLayoutSC.tg_pagedCount = 18
+        let flowLayoutSC = flowLayout.tg.fetchSizeClass(with:.landscape, from:.default)
+        flowLayoutSC.tg.pagedCount(value: 18)
     }
     
     /**
@@ -137,8 +137,8 @@ extension FLLTest5ViewController {
         
         
         //建立一个水平数量约束流式布局:每列展示3个子视图,每页展示9个子视图，整体从上往下滚动。
-        var flowLayout = TGFlowLayout(.horz, arrangedCount:3)
-        flowLayout.tg.pagedCount = 9; //pagedCount设置为非0时表示开始分页展示的功能，这里表示每页展示9个子视图，这个数量必须是arrangedCount的倍数。
+        let flowLayout = TGFlowLayout(.horz, arrangedCount:3)
+        flowLayout.tg.pagedCount(value: 9) //pagedCount设置为非0时表示开始分页展示的功能，这里表示每页展示9个子视图，这个数量必须是arrangedCount的倍数。
         flowLayout.tg.height.equal(.wrap) //设置布局视图的高度由子视图包裹，当水平流式布局的高度设置为.wrap，并和pagedCount搭配使用会产生分页从上到下滚动的效果。
         flowLayout.tg.width.equal(scrollView) //因为是分页从左到右滚动，因此布局视图的宽度必须设置为和父滚动视图相等。
         /*
@@ -156,8 +156,8 @@ extension FLLTest5ViewController {
         self.addAllItemSubviews(flowLayout)
         
         //获取流式布局的横屏size classes，并且设置当设备处于横屏时每页的数量由9个变为了18个。您可以注释掉这段代码，然后横竖屏切换看看效果。
-        let flowLayoutSC = flowLayout.tg_fetchSizeClass(with:.landscape, from:.default) as! TGFlowLayoutViewSizeClass
-        flowLayoutSC.tg_pagedCount = 18
+        let flowLayoutSC = flowLayout.tg.fetchSizeClass(with:.landscape, from:.default)
+        flowLayoutSC.tg.pagedCount(value: 18)
 
     }
     
@@ -182,8 +182,8 @@ extension FLLTest5ViewController {
         
         
         //建立一个垂直数量约束流式布局:每列展示3个子视图,每页展示9个子视图，整体从上往下滚动。
-        var flowLayout = TGFlowLayout(.vert, arrangedCount:3)
-        flowLayout.tg.pagedCount = 9 //pagedCount设置为非0时表示开始分页展示的功能，这里表示每页展示9个子视图，这个数量必须是arrangedCount的倍数。
+        let flowLayout = TGFlowLayout(.vert, arrangedCount:3)
+        flowLayout.tg.pagedCount(value: 9) //pagedCount设置为非0时表示开始分页展示的功能，这里表示每页展示9个子视图，这个数量必须是arrangedCount的倍数。
         flowLayout.tg.height.equal(.wrap) //设置布局视图的高度由子视图包裹，当垂直流式布局高度设置为.wrap，并和pagedCount搭配使用会产生分页从上到下滚动的效果。
         flowLayout.tg.width.equal(scrollView)
         /*
@@ -201,9 +201,9 @@ extension FLLTest5ViewController {
         self.addAllItemSubviews(flowLayout)
         
         //获取流式布局的横屏size classes，并且设置当设备处于横屏时每页的数量由9个变为了18个。您可以注释掉这段代码，然后横竖屏切换看看效果。
-        let flowLayoutSC = flowLayout.tg_fetchSizeClass(with:.landscape, from:.default) as! TGFlowLayoutViewSizeClass
-        flowLayoutSC.tg_arrangedCount = 6
-        flowLayoutSC.tg_pagedCount = 18
+        let flowLayoutSC = flowLayout.tg.fetchSizeClass(with:.landscape, from:.default)
+        flowLayoutSC.tg.arrangedCount(value: 6)
+        flowLayoutSC.tg.pagedCount(value: 18)
 
         
         
@@ -229,8 +229,8 @@ extension FLLTest5ViewController {
         
         
         //建立一个垂直数量约束流式布局:每列展示3个子视图,每页展示9个子视图，整体从左往右滚动。
-        var flowLayout = TGFlowLayout(.vert, arrangedCount:3)
-        flowLayout.tg.pagedCount = 9 //pagedCount设置为非0时表示开始分页展示的功能，这里表示每页展示9个子视图，这个数量必须是arrangedCount的倍数。
+        let flowLayout = TGFlowLayout(.vert, arrangedCount:3)
+        flowLayout.tg.pagedCount(value: 9) //pagedCount设置为非0时表示开始分页展示的功能，这里表示每页展示9个子视图，这个数量必须是arrangedCount的倍数。
         flowLayout.tg.width.equal(.wrap) //设置布局视图的宽度由子视图包裹，当垂直流式布局的宽度设置为.wrap，并和pagedCount搭配使用会产生分页从左到右滚动的效果。
         flowLayout.tg.height.equal(scrollView)
         /*
@@ -248,9 +248,9 @@ extension FLLTest5ViewController {
         self.addAllItemSubviews(flowLayout)
         
         //获取流式布局的横屏size classes，并且设置当设备处于横屏时每页的数量由9个变为了18个。您可以注释掉这段代码，然后横竖屏切换看看效果。
-        let flowLayoutSC = flowLayout.tg_fetchSizeClass(with:.landscape, from:.default) as! TGFlowLayoutViewSizeClass
-        flowLayoutSC.tg_arrangedCount = 6
-        flowLayoutSC.tg_pagedCount = 18
+        let flowLayoutSC = flowLayout.tg.fetchSizeClass(with:.landscape, from:.default)
+        flowLayoutSC.tg.arrangedCount(value: 6)
+        flowLayoutSC.tg.pagedCount(value: 18)
     }
     
     

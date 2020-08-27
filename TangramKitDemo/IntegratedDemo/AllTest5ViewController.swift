@@ -58,15 +58,15 @@ class AllTest5ViewController: UIViewController {
         rootLayout.addSubview(v3)
         
         //v3视图在其他任何iPhone设备横屏都不参与布局
-        v3.tg_fetchSizeClass(with: .comb(.any, .compact, nil)).tg_visibility = .gone
+        v3.tg.fetchSizeClass(with: .comb(.any, .compact, nil)).tg.visibility(value: .gone)
         //只有iphone6Plus的横屏才参与布局
-        v3.tg_fetchSizeClass(with: .comb(.regular, .compact, nil), from: .default).tg_visibility = .visible
+        v3.tg.fetchSizeClass(with: .comb(.regular, .compact, nil), from: .default).tg.visibility(value: .visible)
         
         //针对iPhone设备的所有横屏的高度都是Compact的，而宽度则是任意，因此下面的设置横屏情况下布局变为水平布局。
-        let lsc = rootLayout.tg_fetchSizeClass(with: .comb(.any, .compact, nil), from:.default) as! TGLinearLayoutViewSizeClass
-        lsc.tg_orientation = .horz
-        
-        
+//        let lsc = rootLayout.tg.fetchSizeClass(with: .comb(.any, .compact, nil), from:.default)
+//        lsc.tg.orientation = .horz
+//        rootLayout.tg.fetchSizeClass(with: .comb(.any, .compact, nil), from: .default).tg.orientation = .horz
+        rootLayout.tg.fetchSizeClass(with: .comb(.any, .compact, nil), from: .default).tg.orientation(value: .horz)
     }
     
     override func viewDidLoad() {

@@ -612,26 +612,12 @@ public extension TGTypeWrapperProtocol where TGWrappedType: UIView {
         }
     }
 
-    func fetchSizeClass(with type: TGSizeClassType, from srcType: TGSizeClassType! = nil) -> TGViewSizeClass {
-        let tgFrame = self.wrappedValue.tgFrame
-        if tgFrame.sizeClasses == nil {
-            tgFrame.sizeClasses = NSMutableDictionary()
+    func fetchSizeClass(with targetType: TGSizeClassType, from sourceType: TGSizeClassType! = nil) -> TGViewSizeClassImpl {
+        guard let currentSizeClass = self.wrappedValue.tg_fetchSizeClass(with: targetType, from: sourceType) as? TGViewSizeClassImpl else {
+            debugPrint("\(self.wrappedValue.tg_fetchSizeClass(with: targetType, from: sourceType)) don't translate into TGViewSizeClassImpl instance setting is invalid")
+            return TGViewSizeClassImpl(view: self.wrappedValue)
         }
-
-        let typeInt = self.wrappedValue.tgIntFromSizeClassType(type)
-        let srcTypeInt = self.wrappedValue.tgIntFromSizeClassType(srcType)
-
-        var sizeClass: TGViewSizeClass! = tgFrame.sizeClasses?.object(forKey: typeInt) as? TGViewSizeClass
-        if sizeClass == nil {
-            let srcSizeClass = tgFrame.sizeClasses?.object(forKey: srcTypeInt) as? TGViewSizeClassImpl
-            if srcSizeClass == nil {
-                sizeClass = (self.wrappedValue.tgCreateInstance() as! TGViewSizeClass)
-            } else {
-                sizeClass = (srcSizeClass!.copy() as! TGViewSizeClass)
-            }
-            tgFrame.sizeClasses?.setObject(sizeClass!, forKey: typeInt as NSCopying)
-        }
-        return sizeClass!
+        return currentSizeClass
     }
 }
 
@@ -5399,7 +5385,7 @@ extension UIView
     }
     
     
-    fileprivate func tgIntFromSizeClassType(_ type:TGSizeClassType?) -> Int
+    func tgIntFromSizeClassType(_ type:TGSizeClassType?) -> Int
     {
         if type == nil
         {

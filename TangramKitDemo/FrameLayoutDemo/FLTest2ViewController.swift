@@ -29,7 +29,7 @@ class FLTest2ViewController: UIViewController {
     override func loadView() {
 
         /*
-         这个例子里面我们可以用框架布局来实现一些复杂的界面布局。框架布局中的子视图还可以利用tg_width和tg_height属性来确定自己的尺寸，其中的equal方法的值可以是一个确定的数字，也可以是父布局视图，也可以是自己,也可以是一个比重值TGWeight
+         这个例子里面我们可以用框架布局来实现一些复杂的界面布局。框架布局中的子视图还可以利用tg.width和tg.height属性来确定自己的尺寸，其中的equal方法的值可以是一个确定的数字，也可以是父布局视图，也可以是自己,也可以是一个比重值TGWeight
          */
         
         self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。

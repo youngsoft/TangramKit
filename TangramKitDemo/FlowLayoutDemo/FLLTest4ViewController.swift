@@ -18,8 +18,8 @@ class FLLTest4ViewController: UIViewController {
     override func loadView() {
         
         /*
-         这个例子主要展示流式布局对子视图的TGLayoutSize设置为TGWeight类型的值的支持。对于垂直流式布局来说，子视图的tg_width值设置为TGWeight时用来指定子视图的宽度在当前行剩余空间所占用的比例值，比如某个流式布局的宽度是100，而每行的数量为2个，且假如第一个子视图的宽度为20，则如果第二个子视图的tg_width设置为100%的话则第二个子视图的真实宽度 = （100-20）*1 = 80。而假如第二个子视图的tg_width设置为50%的话则第二个子视图的真实宽度 = (100 - 20) * 0.5 = 40。
-         对于水平流式布局来说tg_height设置为TGWeight类型的值用来指定一列内的剩余高度的比重值。
+         这个例子主要展示流式布局对子视图的TGLayoutSize设置为TGWeight类型的值的支持。对于垂直流式布局来说，子视图的tg.width值设置为TGWeight时用来指定子视图的宽度在当前行剩余空间所占用的比例值，比如某个流式布局的宽度是100，而每行的数量为2个，且假如第一个子视图的宽度为20，则如果第二个子视图的tg.width设置为100%的话则第二个子视图的真实宽度 = （100-20）*1 = 80。而假如第二个子视图的tg.width设置为50%的话则第二个子视图的真实宽度 = (100 - 20) * 0.5 = 40。
+         对于水平流式布局来说tg.height设置为TGWeight类型的值用来指定一列内的剩余高度的比重值。
          通过对子视图的尺寸设置为TGWeight类型的值的合理使用，可以很方便的替换掉需要用线性布局来实现的嵌套布局的能力。
          
          
@@ -66,7 +66,7 @@ extension FLLTest4ViewController {
         flowLayout.backgroundColor = .white
         flowLayout.tg.height.equal(.wrap)
         flowLayout.tg.gravity(value: TGGravity.Horizontal.center)  //所有子视图整体水平居中
-        flowLayout.tg.arrangedGravity = TGGravity.Vertical.center  //每行子视图垂直居中对齐。您可以这里尝试设置为：TGGravity.Vertical.top, TGGravity.Vertical.bottom的效果。
+        flowLayout.tg.arrangedGravity(value: TGGravity.Vertical.center)   //每行子视图垂直居中对齐。您可以这里尝试设置为：TGGravity.Vertical.top, TGGravity.Vertical.bottom的效果。
         flowLayout.tg.padding(value: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))  //四周内边距设置为20
         rootLayout.addSubview(flowLayout)
         
@@ -128,7 +128,7 @@ extension FLLTest4ViewController {
         rememberLabel.textColor = CFTool.color(4)
         rememberLabel.font = CFTool.font(15)
         rememberLabel.tg.width.equal(.fill)
-        rememberLabel.tg.alignment(value: TGGravity.Vertical.bottom)    //流式布局通过tg_arrangedGravity设置每行的对齐方式，如果某个子视图不想使用默认的对齐方式则可以通过tg_alignment属性来单独设置对齐方式，这个例子中所有都是居中对齐，但是这个标题则是底部对齐。
+        rememberLabel.tg.alignment(value: TGGravity.Vertical.bottom)    //流式布局通过tg.arrangedGravity设置每行的对齐方式，如果某个子视图不想使用默认的对齐方式则可以通过tg.alignment属性来单独设置对齐方式，这个例子中所有都是居中对齐，但是这个标题则是底部对齐。
         rememberLabel.sizeToFit()
         flowLayout.addSubview(rememberLabel)
         
@@ -161,11 +161,11 @@ extension FLLTest4ViewController {
     func createFlowLayout2(rootLayout: TGLinearLayout)
     {
         //这个例子建立一个水平流式布局来
-        var flowLayout = TGFlowLayout(.horz, arrangedCount: 3)
+        let flowLayout = TGFlowLayout(.horz, arrangedCount: 3)
         flowLayout.backgroundColor = CFTool.color(7)
         flowLayout.tg.height.equal(240)
         flowLayout.tg.gravity(value:  [TGGravity.Horizontal.center,TGGravity.Vertical.bottom]) //子视图整体垂直底部对齐，水平居中对齐。
-        flowLayout.tg.arrangedGravity = TGGravity.Horizontal.center //每列子视图水平居中对齐。
+        flowLayout.tg.arrangedGravity(value: TGGravity.Horizontal.center)  //每列子视图水平居中对齐。
         flowLayout.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 5, right: 10))
         rootLayout.addSubview(flowLayout)
 
@@ -197,7 +197,7 @@ extension FLLTest4ViewController {
             imageView.tg.top.equal(10)
             imageView.tg.height.equal(.average)  //每个子视图的高度都一样，也就是意味着均分处理。
             imageView.tg.width.equal(imageView.tg.height) //宽度等于高度，对于水平流式布局来说，子视图的宽度可以等于高度，反之不可以；而对于垂直流式布局来说则高度可以等于宽度，反之则不可以。
-            if i % flowLayout.tg.arrangedCount == 0 {
+            if i % flowLayout.tg.arrangedCount() == 0 {
                 imageView.tg.top.equal(60)  //每列的第一个增加缩进量。。
             }
             flowLayout.addSubview(imageView)
@@ -264,12 +264,12 @@ extension FLLTest4ViewController {
          这个例子中有2行，每行2列，这个符合流式布局的规律。因此你不需要用一个垂直布局套两个水平线性布局来实现，而是一个流式布局就好了。另外这个例子里面还展示了边界线的功能，你可以设置边界线的首尾缩进，还可以设置边界线的偏移。这样在一些场合您可以用边界线来代替横线的视图。
          */
         
-        var flowLayout = TGFlowLayout(.vert, arrangedCount:2)
+        let flowLayout = TGFlowLayout(.vert, arrangedCount:2)
         flowLayout.backgroundColor = CFTool.color(0)
         rootLayout.addSubview(flowLayout)
         flowLayout.tg.height.equal(.wrap)
         flowLayout.tg.space(value: 10)
-        flowLayout.tg.arrangedGravity = TGGravity.Vertical.center
+        flowLayout.tg.arrangedGravity(value: TGGravity.Vertical.center)
         flowLayout.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
         
         
