@@ -4,8 +4,8 @@ import Foundation
 
 public protocol TGNameSpaceWrappable {
     associatedtype TGWrapperType
-    var tg: TGWrapperType { set get }
-    static var tg: TGWrapperType.Type { set get }
+    var tg: TGWrapperType { get set }
+    static var tg: TGWrapperType.Type { get set }
 }
 
 public extension TGNameSpaceWrappable {

@@ -8,32 +8,28 @@
 
 import UIKit
 
-
-
-private let sBaseTag:NSInteger = 100000
+private let sBaseTag: NSInteger = 100000
 
 /**
  *  4.Replacement of UICollectionView
  */
 class AllTest4ViewController: UIViewController {
 
-    var rootLayout : TGLinearLayout!
-    var containerLayouts : [TGFlowLayout]!
-    
-    
-    
+    var rootLayout: TGLinearLayout!
+    var containerLayouts: [TGFlowLayout]!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.view.backgroundColor = CFTool.color(0)
-        
-        let sections:[String] = ["品牌推荐",
+
+        let sections: [String] = ["品牌推荐",
                                  "时尚风格",
                                  "特价处理",
                                  "这是一段很长很长很长很长很长很长很长很长很长很长很长很长的文字"
                                 ]
-        
-        let images:[String] = ["p1-11",
+
+        let images: [String] = ["p1-11",
                                "p1-12",
                                "p1-21",
                                "p1-31",
@@ -46,19 +42,17 @@ class AllTest4ViewController: UIViewController {
                                "image2",
                                "image3"
                                 ]
-        
+
         let scrollView = UIScrollView(frame: self.view.bounds)
         scrollView.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight] //让uiscrollView的尺寸总是保持和父视图一致。
         self.view.addSubview(scrollView)
-        
-        
+
         rootLayout = TGLinearLayout(.vert)
         rootLayout.tg.gravity(value: TGGravity.Horizontal.fill) //设置垂直线性布局的水平填充值表明布局视图里面的所有子视图的宽度都和布局视图相等。
         rootLayout.tg.width.equal(.fill)
         rootLayout.tg.height.equal(.wrap)
         scrollView.addSubview(rootLayout)
-        
-        
+
         self.containerLayouts = [TGFlowLayout]()
         for index in 0..<sections.count {
             //添加辅助视图
@@ -69,21 +63,19 @@ class AllTest4ViewController: UIViewController {
             cellContainerLayout.tg.bottom.equal(10)
             self.containerLayouts.append(cellContainerLayout)
             rootLayout.addSubview(cellContainerLayout)
-            
+
             //添加单元格视图
             let cellCount = arc4random_uniform(8) + 8 //随机数量，最少8个最多16个
-            for index2 in 0..<cellCount
-            {
-                let cellLayout = self.createCellLayout1(image: images[(NSInteger)(arc4random_uniform((UInt32)(images.count)))], title:String.init(format: NSLocalizedString("cell title:%03ld",comment: ""), index2))
+            for index2 in 0..<cellCount {
+                let cellLayout = self.createCellLayout1(image: images[(NSInteger)(arc4random_uniform((UInt32)(images.count)))], title: String.init(format: NSLocalizedString("cell title:%03ld", comment: ""), index2))
                 cellLayout.tag = (sBaseTag * index) + (NSInteger)(index2) //用于确定所在的辅助编号和单元格编号。
-                
+
                 cellContainerLayout.addSubview(cellLayout)
             }
         }
-        
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title:"Reverse",style:UIBarButtonItem.Style.done, target:self, action:#selector(AllTest4ViewController.handleReverse(_:)));
-    }
 
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Reverse", style: UIBarButtonItem.Style.done, target: self, action: #selector(AllTest4ViewController.handleReverse(_:)))
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -91,9 +83,8 @@ class AllTest4ViewController: UIViewController {
     }
 }
 
-//MARK: - Layout Construction
-extension AllTest4ViewController
-{
+// MARK: - Layout Construction
+extension AllTest4ViewController {
     //创建辅助布局视图
     func createSupplementaryLayout(sectionTitle: String) -> TGRelativeLayout {
         //建立一个相对布局
@@ -102,12 +93,12 @@ extension AllTest4ViewController
         supplementaryLayout.tg.height.equal(40)
         supplementaryLayout.tg.boundBorderline(value: TGBorderline(color: UIColor.lightGray))  //设置底部边界线。
         supplementaryLayout.backgroundColor = UIColor.white
-        
-        let imageView = UIImageView(image:UIImage(named:"next"))
+
+        let imageView = UIImageView(image: UIImage(named: "next"))
         imageView.tg.centerY.equal(supplementaryLayout.tg.centerY)  //垂直居中
         imageView.tg.trailing.equal(supplementaryLayout.tg.trailing)     //和父视图右对齐。
-        supplementaryLayout.addSubview(imageView);
-        
+        supplementaryLayout.addSubview(imageView)
+
         let sectionTitleLabel = UILabel()
         sectionTitleLabel.text = sectionTitle
         sectionTitleLabel.adjustsFontSizeToFitWidth = true
@@ -120,39 +111,35 @@ extension AllTest4ViewController
         sectionTitleLabel.tg.trailing.equal(imageView.tg.trailing)                //右边是图标的左边。
         sectionTitleLabel.sizeToFit()
         supplementaryLayout.addSubview(sectionTitleLabel)
-        
+
         return supplementaryLayout
     }
-    
+
     //创建单元格容器布局视图，并指定每行的数量。
-    func createCellContainerLayout(arrangedCount:NSInteger) -> TGFlowLayout
-    {
-        let containerLayout = TGFlowLayout(.vert, arrangedCount:arrangedCount)
+    func createCellContainerLayout(arrangedCount: NSInteger) -> TGFlowLayout {
+        let containerLayout = TGFlowLayout(.vert, arrangedCount: arrangedCount)
         containerLayout.tg.height.equal(.wrap)
         containerLayout.tg.gravity(value: TGGravity.Horizontal.fill)  //平均分配里面每个子视图的宽度或者拉伸子视图的宽度以便填充满整个布局。
         containerLayout.tg.hspace(value: 5)
         containerLayout.tg.vspace(value: 5)
         containerLayout.tg.padding(value: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
-        
+
         return containerLayout
     }
-    
-    func createCellLayout1(image:String, title:String) -> TGBaseLayout
-    {
+
+    func createCellLayout1(image: String, title: String) -> TGBaseLayout {
         let cellLayout = TGLinearLayout(.vert)
         cellLayout.tg.gravity(value: TGGravity.Horizontal.fill)   //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
         cellLayout.tg.height.equal(100)
         cellLayout.tg.space(value: 5)  //设置布局视图里面子视图之间的间距为5个点。
         cellLayout.backgroundColor = UIColor.white
-        cellLayout.tg.setTarget(self, action:#selector(handleCellLayoutTap(_:)), for:.touchUpInside)
+        cellLayout.tg.setTarget(self, action: #selector(handleCellLayoutTap(_:)), for: .touchUpInside)
         cellLayout.tg.highlightedOpacity(value: 0.3) //设置触摸事件按下时的不透明度，来响应按下状态。
-        
-        
-        
-        let imageView = UIImageView(image:UIImage(named:image))
+
+        let imageView = UIImageView(image: UIImage(named: image))
         imageView.tg.height.equal(100%)   //图片视图占用剩余的高度。
         cellLayout.addSubview(imageView)
-        
+
         let titleLabel = UILabel()
         titleLabel.text = title
         titleLabel.font = CFTool.font(14)
@@ -162,15 +149,15 @@ extension AllTest4ViewController
         titleLabel.tg.bottom.equal(2)
         titleLabel.sizeToFit()
         cellLayout.addSubview(titleLabel)
-        
+
         return cellLayout
     }
 
 }
 
-//MARK: - Handle Method
+// MARK: - Handle Method
 extension AllTest4ViewController {
-    @objc func handleReverse(_ sender:UIView) -> Void {
+    @objc func handleReverse(_ sender: UIView) {
         //TGBaseLayout的属性tg.reverseLayout可以将子视图按照添加的顺序逆序布局。
         for layout in self.containerLayouts {
             layout.tg.reverseLayout(value: !layout.tg.reverseLayout())
@@ -178,85 +165,72 @@ extension AllTest4ViewController {
         }
 
     }
-    
-    
-    func showClickAlert(_ sender:UIView)
-    {
+
+    func showClickAlert(_ sender: UIView) {
         let supplementaryIndex = sender.tag / sBaseTag
         let cellIndex = sender.tag % sBaseTag
-        
-        let message = String(format:"You have select:\nSupplementaryIndex:%ld CellIndex:%ld",supplementaryIndex, cellIndex)
-        
-        let alertView = UIAlertView(title:"", message:message, delegate:nil ,cancelButtonTitle:"OK")
-        
+
+        let message = String(format: "You have select:\nSupplementaryIndex:%ld CellIndex:%ld", supplementaryIndex, cellIndex)
+
+        let alertView = UIAlertView(title: "", message: message, delegate: nil, cancelButtonTitle: "OK")
+
         alertView.show()
     }
-    
-    func exchangeSubview(_ sender:UIView, from fromLayout:TGBaseLayout, to toLayout:TGBaseLayout)
-    {
+
+    func exchangeSubview(_ sender: UIView, from fromLayout: TGBaseLayout, to toLayout: TGBaseLayout) {
         //往下移动时，有可能会上面缩小而下面整体往上移动,结束位置不正确。 也就是移动的视图开始位置正确，结束位置不正确。
         //往上移动时，有可能会上面撑大而下面整体往下移动,开始位置不正确。 也就是移动的视图开始位置不正确，结束位置正确。
         //因此为了解决这个问题，我们在删除子视图时不让布局视图进行布局，这可以通过设置布局视图的autoresizesSubviews为NO。
-        
-        
+
         //得到当前的sender在self.view中的frame，这里进行坐标的转换。
         let rectOld = fromLayout.convert(sender.frame, to: self.view)
-        
+
         //得到将sender加入到toLayout后的评估的frame值，注意这时候sender还没有加入到toLayout。因为是加入到最后面，因此只能用这个方法来评估加入后的值，如果不是添加到最后则是可以很简单的得到应该插入的位置的。
         var rectNew = toLayout.tg.estimatedFrame(of: sender)
         rectNew = toLayout.convert(rectNew, to: self.view) //将新位置的评估的frame值，进行坐标转换。
-        
+
         //在动画的过程中，我们将sender作为self.view的子视图来实现移动的效果。
         fromLayout.autoresizesSubviews = false
         sender.removeFromSuperview()
         sender.frame = rectOld
         sender.tg.useFrame(value: true)  //设置为true表示sender不再受到布局视图的约束，而是可以自由设置frame值。
         self.view.addSubview(sender)
-        
-        UIView.animate(withDuration: 0.3, animations: { 
+
+        UIView.animate(withDuration: 0.3, animations: {
             sender.frame = rectNew
         }) { _ in
             //恢复重新布局。
             fromLayout.autoresizesSubviews = true
             fromLayout.setNeedsLayout()
-            
+
             //动画结束后再将sender移植到toLayout中。
             sender.removeFromSuperview()
             sender.tg.useFrame(value: false)  //还原tg.useFrame，因为加入到toLayout后将受到布局视图的约束。
             toLayout.addSubview(sender)
         }
-        
+
     }
-    
-    @objc func handleCellLayoutTap(_ sender:UIView) -> Void {
-        
+
+    @objc func handleCellLayoutTap(_ sender: UIView) {
+
         //这里是为了节省，所以将两个不同的功能放在一起。。。
-        
+
         let superFlowLayout = sender.superview as! TGFlowLayout
-        
+
         //第一个和第二个里面的子视图点击后弹出当前点击的cell的提示信息。
-        if (superFlowLayout == self.containerLayouts[0] || superFlowLayout == self.containerLayouts[1])
-        {
+        if superFlowLayout == self.containerLayouts[0] || superFlowLayout == self.containerLayouts[1] {
             self.showClickAlert(sender)
-        }
-        else
-        {
+        } else {
             //第三个第四个里面的子视图点击后进行互相移动的场景。
             let flowLayout2 = self.containerLayouts[2]
             let flowLayout3 = self.containerLayouts[3]
-            if (superFlowLayout == flowLayout2)
-            {
-                self.exchangeSubview(sender,from:flowLayout2,to:flowLayout3)
-            }
-            else
-            {
-                self.exchangeSubview(sender,from:flowLayout3,to:flowLayout2)
+            if superFlowLayout == flowLayout2 {
+                self.exchangeSubview(sender, from: flowLayout2, to: flowLayout3)
+            } else {
+                self.exchangeSubview(sender, from: flowLayout3, to: flowLayout2)
             }
         }
-        
-        
+
     }
-    
+
 }
-
-

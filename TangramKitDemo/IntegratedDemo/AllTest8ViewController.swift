@@ -8,16 +8,12 @@
 
 import UIKit
 
-
-
 /**
  * ❁2.Screen perfect fit - Demo2
  */
 class AllTest8ViewController: UIViewController {
-    
-    
-    func createDemoButton(_ title: String, action: Selector) -> UIButton
-    {
+
+    func createDemoButton(_ title: String, action: Selector) -> UIButton {
         let btn = UIButton(type: .system)
         btn.layer.borderWidth = 0.5
         btn.layer.cornerRadius = 5
@@ -28,22 +24,17 @@ class AllTest8ViewController: UIViewController {
         btn.addTarget(self, action: action, for: .touchUpInside)
         return btn
     }
-    
 
     override func viewDidLoad() {
-        
-        if #available(iOS 11.0, *)
-        {
-        }
-        else
-        {
-          self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
-        }
-        
-        super.viewDidLoad()
-        
-        self.view.backgroundColor = .white
 
+        if #available(iOS 11.0, *) {
+        } else {
+          self.edgesForExtendedLayout = UIRectEdge(rawValue: 0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+        }
+
+        super.viewDidLoad()
+
+        self.view.backgroundColor = .white
 
         // Do any additional setup after loading the view.
         /*
@@ -54,33 +45,31 @@ class AllTest8ViewController: UIViewController {
         scrollView.contentSize = self.view.bounds.size
         scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.view.addSubview(scrollView)
-        
+
         //按钮用AutoLayout来实现，本例子说明AutoLayout是可以和TangramKit混合使用的。
         let button = self.createDemoButton(NSLocalizedString("Pop layoutview at center", comment: ""), action: #selector(handleDemo1))
         button.translatesAutoresizingMaskIntoConstraints = false  //button使用AutoLayout设置约束
         scrollView.addSubview(button)
-        
+
         //下面的代码是iOS6以来自带的约束布局写法，可以看出代码量较大。
         scrollView.addConstraint(NSLayoutConstraint(item: button, attribute: .centerX, relatedBy: .equal, toItem: scrollView, attribute: .centerX, multiplier: 1, constant: 0))
         scrollView.addConstraint(NSLayoutConstraint(item: button, attribute: .top, relatedBy: .equal, toItem: scrollView, attribute: .top, multiplier: 1, constant: 10))
         scrollView.addConstraint(NSLayoutConstraint(item: button, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 40))
         scrollView.addConstraint(NSLayoutConstraint(item: button, attribute: .width, relatedBy: .equal, toItem: scrollView, attribute: .width, multiplier: 1, constant: -20))
-        
-        
+
         //下面的代码是iOS9以后提供的一种简便的约束设置方法。可以看出其中各种属性设置方式和MyLayout是相似的。
         //在iOS9提供的NSLayoutXAxisAnchor，NSLayoutYAxisAnchor，NSLayoutDimension这三个类提供了和TangramKit中的TGLayoutPos,TGLayoutSize类等价的功能。
-        
+
             if #available(iOS 9.0, *) {
                 button.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
-                button.topAnchor.constraint(equalTo: scrollView.topAnchor, constant:10).isActive = true
+                button.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 10).isActive = true
                 button.heightAnchor.constraint(equalToConstant: 40).isActive = true
-                button.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier:1, constant:-20).isActive = true
+                button.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 1, constant: -20).isActive = true
 
             } else {
                 // Fallback on earlier versions
             }
 
-        
         //如果您用TangramKit布局。并且button在一个垂直线性布局下那么可以写成如下：
         /*
          button.tg.top.equal(10)
@@ -89,12 +78,10 @@ class AllTest8ViewController: UIViewController {
          button.tg.trailing.equal(10)
         */
 
-        
-        
         /*
          下面例子用来建立一个不规则的功能区块。
          */
-        
+
         //建立一个浮动布局,这个浮动布局不会控制父视图UIScrollView的contentSize。
         let floatLayout = TGFloatLayout(.horz)
         floatLayout.backgroundColor = CFTool.color(0)
@@ -111,22 +98,20 @@ class AllTest8ViewController: UIViewController {
          contentSize.width = 布局视图的宽度+布局视图的tg.leading设置的左距值 + 布局视图的tg.trailing设置的右边距值。
          
          */
-        
+
         scrollView.addSubview(floatLayout)
-        
-        
+
         //这里定义高度占父视图的比例，每列分为5份，下面数组定义每个子视图的高度占比。
-        let heightscale:[CGFloat] = [0.4, 0.2, 0.2, 0.2, 0.2, 0.4, 0.4]
+        let heightscale: [CGFloat] = [0.4, 0.2, 0.2, 0.2, 0.2, 0.4, 0.4]
         //因为分为左右2列，而要求每个视图之间的垂直间距为10，左边列的总间距是30，一共有4个，因此前4个都要减去-30/4的间距高度；右边列总间距为20，一共有3个，因此后3个都要减去-20/3的间距高度。
-        let heightinc:[CGFloat] = [-30.0/4, -30.0/4, -30.0/4, -30.0/4, -20.0/3, -20.0/3, -20.0/3]
-        for i in 0 ..< 7
-        {
-            let buttonTag = self.createDemoButton("不规则功能块", action:#selector(handleDemo1))
+        let heightinc: [CGFloat] = [-30.0/4, -30.0/4, -30.0/4, -30.0/4, -20.0/3, -20.0/3, -20.0/3]
+        for i in 0 ..< 7 {
+            let buttonTag = self.createDemoButton("不规则功能块", action: #selector(handleDemo1))
             buttonTag.contentVerticalAlignment = .top
             buttonTag.contentHorizontalAlignment = .left  //按钮内容左上角对齐。
             buttonTag.backgroundColor = CFTool.color(i + 5)
-            buttonTag.tg.width.equal(floatLayout.tg.width, increment:-5, multiple: 0.5) //因为宽度都是父视图的一半，并且水平间距是10，所以这里比例是0.5，分别减去5个间距宽度。
-            buttonTag.tg.height.equal(floatLayout.tg.height, increment:heightinc[i], multiple:heightscale[i]) //高度占比和所减的间距在上面数组里面定义。
+            buttonTag.tg.width.equal(floatLayout.tg.width, increment: -5, multiple: 0.5) //因为宽度都是父视图的一半，并且水平间距是10，所以这里比例是0.5，分别减去5个间距宽度。
+            buttonTag.tg.height.equal(floatLayout.tg.height, increment: heightinc[i], multiple: heightscale[i]) //高度占比和所减的间距在上面数组里面定义。
             floatLayout.addSubview(buttonTag)
         }
     }
@@ -135,25 +120,19 @@ class AllTest8ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    @objc func handleDemo1AddTest(sender:UIButton!)
-    {
-        if let label = sender.superview?.superview?.subviews[1] as? UILabel
-        {
+
+    @objc func handleDemo1AddTest(sender: UIButton!) {
+        if let label = sender.superview?.superview?.subviews[1] as? UILabel {
             label.text = label.text?.appending("添加文字。")
         }
-        
+
     }
-    
-    @objc func handleDemo1RemoveLayout(sender:UIButton!)
-    {
+
+    @objc func handleDemo1RemoveLayout(sender: UIButton!) {
        UIView.perform(.delete, on: [sender.superview!.superview!], options: .curveLinear, animations: nil, completion: nil)
     }
 
-    
-    
-    @objc func handleDemo1(sener:UIButton!)
-    {
+    @objc func handleDemo1(sener: UIButton!) {
         //布局视图用来实现弹框，这里把一个布局视图放入一个非布局视图里面。
         let layout = TGLinearLayout(.vert)
         layout.backgroundColor = CFTool.color(14)
@@ -172,7 +151,7 @@ class AllTest8ViewController: UIViewController {
         //布局视图在父视图中垂直居中出现。
         //layout.tg.bottom.equal(0)  //布局视图在父视图中底部出现。您可以注释上面居中的代码并解开这句看看效果。
         self.view.addSubview(layout)
-        
+
         //标题
         let titleLabel = UILabel()
         titleLabel.text = NSLocalizedString("Title", comment: "")
@@ -181,14 +160,14 @@ class AllTest8ViewController: UIViewController {
         titleLabel.font = CFTool.font(17)
         titleLabel.sizeToFit()
         layout.addSubview(titleLabel)
-        
+
         //文本
         let label = UILabel()
         label.font = CFTool.font(14)
         label.text = "这是一段具有动态高度的文本，同时他也会影响着布局视图的高度。您可以单击下面的按钮来添加文本来查看效果："
         label.tg.height.equal(.wrap)
         layout.addSubview(label)
-        
+
         //按钮容器。如果您想让两个按钮水平排列则只需在btnContainer初始化中把方向改为：.horz 。您可以尝试看看效果。
         let btnContainer = TGLinearLayout(.vert)
         btnContainer.tg.height.equal(.wrap)
@@ -207,29 +186,27 @@ class AllTest8ViewController: UIViewController {
          
          您可以将下面两句代码注释掉看看横竖屏切换的结果。
          */
-        
+
         let btnContainerSC = btnContainer.tg.fetchSizeClass(with: .landscape, from: .default)
         btnContainerSC.tg.orientation(value: .horz)
 
         //您可以看到下面的两个按钮没有出现任何的需要进行布局的属性设置，直接添加到父视图就能达到想要的效果，这样就简化了程序的开发。
-        btnContainer.addSubview(self.createDemoButton("Add Text", action:#selector(handleDemo1AddTest)))
-        btnContainer.addSubview(self.createDemoButton("Remove Layout",action:#selector(handleDemo1RemoveLayout)))
-        
-        
+        btnContainer.addSubview(self.createDemoButton("Add Text", action: #selector(handleDemo1AddTest)))
+        btnContainer.addSubview(self.createDemoButton("Remove Layout", action: #selector(handleDemo1RemoveLayout)))
+
         //这里把一个布局视图加入到非布局父视图。
         self.view.addSubview(layout)
-    
-        
+
         //如果您要移动出现的动画效果则解开如下注释。
          layout.transform = CGAffineTransform(translationX: 0, y: self.view.bounds.height/2)
          layout.alpha = 0.5
-        
+
         UIView.animate(withDuration: 0.3, animations: {
-        
+
             layout.transform = .identity
             layout.alpha = 1
-        
+
         })
-        
+
     }
 }

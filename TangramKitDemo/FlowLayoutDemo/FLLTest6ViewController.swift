@@ -8,27 +8,25 @@
 
 import UIKit
 
-
-
 /**
  *6.FlowLayout - Scroll
  */
 class FLLTest6ViewController: UIViewController {
-    
-    weak var scrollView:UIScrollView!
-    weak var rootLayout:TGFlowLayout!
-    
+
+    weak var scrollView: UIScrollView!
+    weak var rootLayout: TGFlowLayout!
+
     override func loadView() {
-        
+
         /*
          这个例子用于介绍流式布局来实现2种风格的切换，多行多列到单行单列的切换,以及滚动方向的切换。
          */
-        
+
         let scrollView = UIScrollView()
         self.view = scrollView
         self.scrollView = scrollView
-        
-        let rootLayout = TGFlowLayout(.vert,arrangedCount:3)
+
+        let rootLayout = TGFlowLayout(.vert, arrangedCount: 3)
         rootLayout.backgroundColor = CFTool.color(0)
         rootLayout.tg.pagedCount(value: 9)
         rootLayout.tg.height.equal(.wrap)  //上下滚动，每页9个。
@@ -40,90 +38,73 @@ class FLLTest6ViewController: UIViewController {
         rootLayout.tg.bottom.equal(0).isActive = false  //这里设置上下边距是0但是不生效，这时候高度是不能生效的。
         scrollView.addSubview(rootLayout)
         self.rootLayout = rootLayout
-        
-        
-        let images = ["image1","image2","image3","image4"];
-        for i in 0 ..< 28
-        {
-            //因为使用了分页技术，系统默认会设置布局视图里面子控件的高度和宽度，因此一般情况下你不需要单独指定。
-            let button = UIButton(type:.custom)
-            button.setBackgroundImage(UIImage(named:images[Int(arc4random_uniform(UInt32(images.count)))]),for:.normal)
-            self.rootLayout.addSubview(button)
-            
-            button.tag = i + 100;
-            button.addTarget(self, action:#selector(handleTap),for:.touchUpInside)
-            
-        }
-        
 
-        
+        let images = ["image1", "image2", "image3", "image4"]
+        for i in 0 ..< 28 {
+            //因为使用了分页技术，系统默认会设置布局视图里面子控件的高度和宽度，因此一般情况下你不需要单独指定。
+            let button = UIButton(type: .custom)
+            button.setBackgroundImage(UIImage(named: images[Int(arc4random_uniform(UInt32(images.count)))]), for: .normal)
+            self.rootLayout.addSubview(button)
+
+            button.tag = i + 100
+            button.addTarget(self, action: #selector(handleTap), for: .touchUpInside)
+
+        }
+
     }
-    
-    
-    @objc func handleTap(sender:UIButton!)
-    {
+
+    @objc func handleTap(sender: UIButton!) {
         //这里实现单击里面控件按钮来实现多行多列到单行单列的切换。多行多列时布局视图的宽度和父视图相等，而单行单列时布局视图的高度和父视图的高度相等。
         //下面这段话就是用来设置每次切换时的布局尺寸的处理。
-        self.rootLayout.tg.leading.isActive = !self.rootLayout.tg.leading.isActive;
-        self.rootLayout.tg.trailing.isActive = !self.rootLayout.tg.trailing.isActive;
-        self.rootLayout.tg.top.isActive = !self.rootLayout.tg.top.isActive;
-        self.rootLayout.tg.bottom.isActive = !self.rootLayout.tg.bottom.isActive;
-        
+        self.rootLayout.tg.leading.isActive = !self.rootLayout.tg.leading.isActive
+        self.rootLayout.tg.trailing.isActive = !self.rootLayout.tg.trailing.isActive
+        self.rootLayout.tg.top.isActive = !self.rootLayout.tg.top.isActive
+        self.rootLayout.tg.bottom.isActive = !self.rootLayout.tg.bottom.isActive
+
         //当前是多行多列。
-        if (self.rootLayout.tg.height.isWrap)
-        {
+        if self.rootLayout.tg.height.isWrap {
             //换成单行单列
             self.rootLayout.tg.arrangedCount(value: 1)
             self.rootLayout.tg.pagedCount(value: 1)
             self.rootLayout.tg.padding(value: .zero)
             self.rootLayout.tg.space(value: 0)
-            
-        }
-        else
-        {
+
+        } else {
             //恢复为多行多列
             self.rootLayout.tg.arrangedCount(value: 3)
             self.rootLayout.tg.pagedCount(value: 9)
             self.rootLayout.tg.padding(value: UIEdgeInsets(top: 10, left: 5, bottom: 10, right: 5))
             self.rootLayout.tg.space(value: 10)
-            
+
         }
-        
+
         //这里切换水平滚动还是垂直滚动。
         self.rootLayout.tg.height.equal(self.rootLayout.tg.height.isWrap ? nil : .wrap)
         self.rootLayout.tg.width.equal(self.rootLayout.tg.width.isWrap ? nil : .wrap)
-                
+
         let isHorzScroll = self.rootLayout.tg.width.isWrap
-        
-        
+
         UIView.animate(withDuration: 0.3) {
-            
+
             self.rootLayout.layoutIfNeeded()  //上面因为进行布局属性的设置变更，必定会激发重新布局，因此如果想要应用动画时可以在动画块内调用layoutIfNeeded来实现
-            
-            if (isHorzScroll)
-            {
+
+            if isHorzScroll {
                 self.scrollView.contentOffset = sender.frame.origin
-            }
-            else
-            {
-                var offsetPoint = CGPoint(x:0, y:sender.frame.origin.y)
-                if (offsetPoint.y > self.scrollView.contentSize.height - self.scrollView.bounds.height)
-                {
+            } else {
+                var offsetPoint = CGPoint(x: 0, y: sender.frame.origin.y)
+                if offsetPoint.y > self.scrollView.contentSize.height - self.scrollView.bounds.height {
                     offsetPoint.y = self.scrollView.contentSize.height - self.scrollView.bounds.height
                 }
-                
+
                 self.scrollView.contentOffset = offsetPoint
             }
-            
-            
-            
+
         }
-        
+
     }
 
- 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
     }
 }

@@ -8,59 +8,52 @@
 
 import UIKit
 
+protocol TGLayoutPosValue {
+    var hasValue: Bool {get}
 
-protocol TGLayoutPosValue
-{    
-    var hasValue:Bool {get}
-    
-    var numberVal:CGFloat! {get}
-    
-    var weightVal:TGWeight! {get}
-    
-    var posVal:TGLayoutPos! {get}
-    
-    var arrayVal:[TGLayoutPos]! {get}
-    
-    var offset:CGFloat {get}
-    
-    var minVal:TGLayoutPos? {get}
-    
-    var maxVal:TGLayoutPos? {get}
-    
-    var absPos:CGFloat {get}
-    
-    var isSafeAreaPos:Bool{get}
-    
-    func weightPosIn(_ contentSize:CGFloat) -> CGFloat
-    
-    
+    var numberVal: CGFloat! {get}
+
+    var weightVal: TGWeight! {get}
+
+    var posVal: TGLayoutPos! {get}
+
+    var arrayVal: [TGLayoutPos]! {get}
+
+    var offset: CGFloat {get}
+
+    var minVal: TGLayoutPos? {get}
+
+    var maxVal: TGLayoutPos? {get}
+
+    var absPos: CGFloat {get}
+
+    var isSafeAreaPos: Bool {get}
+
+    func weightPosIn(_ contentSize: CGFloat) -> CGFloat
 
 }
-
 
 //定义TGLayoutPosType对象可以设置的值类型。
-public protocol TGLayoutPosType
-{
+public protocol TGLayoutPosType {
 }
 
-extension CGFloat:TGLayoutPosType{}
-extension Double:TGLayoutPosType{}
-extension Float:TGLayoutPosType{}
-extension Int:TGLayoutPosType{}
-extension Int8:TGLayoutPosType{}
-extension Int16:TGLayoutPosType{}
-extension Int32:TGLayoutPosType{}
-extension Int64:TGLayoutPosType{}
-extension UInt:TGLayoutPosType{}
-extension UInt8:TGLayoutPosType{}
-extension UInt16:TGLayoutPosType{}
-extension UInt32:TGLayoutPosType{}
-extension UInt64:TGLayoutPosType{}
-extension TGWeight:TGLayoutPosType{}
-extension Array:TGLayoutPosType{}
-extension TGLayoutPos:TGLayoutPosType{}   //因为TGLayoutPos的equal方法本身就可以设置自身类型，所以这里也实现了这个协议
-extension UIView:TGLayoutPosType{}
-
+extension CGFloat: TGLayoutPosType {}
+extension Double: TGLayoutPosType {}
+extension Float: TGLayoutPosType {}
+extension Int: TGLayoutPosType {}
+extension Int8: TGLayoutPosType {}
+extension Int16: TGLayoutPosType {}
+extension Int32: TGLayoutPosType {}
+extension Int64: TGLayoutPosType {}
+extension UInt: TGLayoutPosType {}
+extension UInt8: TGLayoutPosType {}
+extension UInt16: TGLayoutPosType {}
+extension UInt32: TGLayoutPosType {}
+extension UInt64: TGLayoutPosType {}
+extension TGWeight: TGLayoutPosType {}
+extension Array: TGLayoutPosType {}
+extension TGLayoutPos: TGLayoutPosType {}   //因为TGLayoutPos的equal方法本身就可以设置自身类型，所以这里也实现了这个协议
+extension UIView: TGLayoutPosType {}
 
 /**
  *视图的布局位置类，用于定位视图在布局视图中的位置。位置可分为水平方向的位置和垂直方向的位置，在视图定位时必要同时指定水平方向的位置和垂直方向的位置。水平方向的位置可以分为左，水平居中，右三种位置，垂直方向的位置可以分为上，垂直居中，下三种位置。
@@ -88,8 +81,6 @@ extension UIView:TGLayoutPosType{}
  
  */
 
-
-
 /**
  视图的布局位置类是用来描述视图与其他视图之间的位置关系的类。视图在进行定位时需要明确的指出其在父视图坐标轴上的水平位置(x轴上的位置）和垂直位置(y轴上的位置）。
  视图的水平位置可以用左、水平中、右三个方位的值来描述，垂直位置则可以用上、垂直中、下三个方位的值来描述。
@@ -108,14 +99,12 @@ extension TGLayoutPos: TGNameSpaceWrappable {}
 public extension TGTypeWrapperProtocol where TGWrappedType: TGLayoutPos {
     static var safeAreaMargin: CGFloat {
         //在2017年10月3号定义的一个数字，没有其他特殊意义。
-        return -20171003.0;
+        return -20171003.0
     }
 }
 
+final public class TGLayoutPos: TGLayoutPosValue {
 
-final public class TGLayoutPos:TGLayoutPosValue
-{
-    
     /**
      特殊的位置。只用在布局视图和非布局父视图之间的位置约束和没有导航条时的布局视图内子视图的padding设置上。
      iOS11以后提出了安全区域的概念，因此对于iOS11以下的版本就需要兼容处理，尤其是在那些没有导航条的情况下。通过将布局视图的边距设置为这个特殊值就可以实现在任何版本中都能完美的实现位置的偏移而且各版本保持统一。比如下面的例子：
@@ -151,60 +140,52 @@ final public class TGLayoutPos:TGLayoutPosValue
      需要注意的是这个值并不是一个真值，只是一个特殊值，不能用于读取。而且只能用于在TGLayoutPos的equal方法和布局视图上的tg_padding属性上使用，其他地方使用后果未可知。
      
      */
-    public static var tg_safeAreaMargin:CGFloat
-    {
+    public static var tg_safeAreaMargin: CGFloat {
         //在2017年10月3号定义的一个数字，没有其他特殊意义。
-        return -20171003.0;
+        return -20171003.0
     }
 
     //设置位置的值为数值类型，offset是在设置值的基础上的偏移量。
     @discardableResult
-    public func equal(_ origin:Int, offset:CGFloat = 0) ->TGLayoutPos
-    {        
-        
-        return self.equal(CGFloat(origin), offset:offset)
+    public func equal(_ origin: Int, offset: CGFloat = 0) -> TGLayoutPos {
+
+        return self.equal(CGFloat(origin), offset: offset)
     }
-    
+
     @discardableResult
-    public func equal(_ origin:CGFloat, offset:CGFloat = 0) ->TGLayoutPos
-    {
+    public func equal(_ origin: CGFloat, offset: CGFloat = 0) -> TGLayoutPos {
         return self.equalHelper(val: origin, offset: offset)
     }
-    
+
     //设置位置的值为比重或者相对数值，具体这个相对或者比重值所表示的意义是根据视图在不同的父布局视图中的不同而不同的。
     @discardableResult
-    public func equal(_ weight:TGWeight, offset:CGFloat = 0) ->TGLayoutPos
-    {
+    public func equal(_ weight: TGWeight, offset: CGFloat = 0) -> TGLayoutPos {
         return self.equalHelper(val: weight, offset: offset)
     }
-    
+
     //设置位置的值为数组对象。表示这个位置和数组中的位置整体居中，这个方法只有对视图的扩展属性tg_centerX,tg_centerY并且父布局是相对布局时才有意义。
     @discardableResult
-    public func equal(_ array:[TGLayoutPos], offset:CGFloat = 0) ->TGLayoutPos
-    {
+    public func equal(_ array: [TGLayoutPos], offset: CGFloat = 0) -> TGLayoutPos {
         return self.equalHelper(val: array, offset: offset)
     }
-    
+
     //设置位置的值为视图的对应的位置，如果当前是tg_left则等价于 tg_left.equal(view.tg_left)
     @discardableResult
-    public func equal(_ view: UIView, offset:CGFloat = 0) ->TGLayoutPos
-    {
+    public func equal(_ view: UIView, offset: CGFloat = 0) -> TGLayoutPos {
         return self.equalHelper(val: view, offset: offset)
     }
-    
+
     //设置位置的值为位置对象，表示相对于其他位置。如果设置为nil则表示清除位置的值的设定。
     @discardableResult
-    public func equal(_ pos:TGLayoutPos!, offset:CGFloat = 0) ->TGLayoutPos
-    {
+    public func equal(_ pos: TGLayoutPos!, offset: CGFloat = 0) -> TGLayoutPos {
         return self.equalHelper(val: pos, offset: offset)
     }
-    
+
     @discardableResult
-    public func equal(_ pos:UILayoutSupport, offset:CGFloat = 0) ->TGLayoutPos
-    {
+    public func equal(_ pos: UILayoutSupport, offset: CGFloat = 0) -> TGLayoutPos {
         return self.equalHelper(val: pos, offset: offset)
     }
-    
+
     /**
      *设置布局位置值的偏移量，和equal中的offset等价。 所谓偏移量是指布局位置在设置了某种值后增加或减少的偏移值。
      *这里偏移值的正负值所表示的意义是根据位置的不同而不同的：
@@ -218,17 +199,15 @@ final public class TGLayoutPos:TGLayoutPosValue
      2.比如：A.tg_right.equal(B.rightPos).offset(5)表示A视图的右边位置等于B视图的右边位置再往左偏移5。
      */
     @discardableResult
-    public func offset(_ val:CGFloat) ->TGLayoutPos
-    {
-        if _offset != val
-        {
+    public func offset(_ val: CGFloat) -> TGLayoutPos {
+        if _offset != val {
             _offset = val
             setNeedsLayout()
         }
-        
+
         return self
     }
-    
+
     /**
      *设置布局位置的最小边界值。 如果位置对象没有设置最小边界值，那么最小边界默认就是无穷小-CGFloat.greatestFiniteMagnitude。min方法除了能设置为CGFloat外，还可以设置为TGLayoutPos值，并且还可以指定最小位置的偏移量值。只有在相对布局中的子视图的位置对象才能设置最小边界值为TGLayoutPos类型的值，其他类型布局中的子视图只支持CGFloat类型的最小边界值。
      @val指定位置边界值。可设置的类型有CGFloat和TGLayoutPos类型，前者表示最小位置不能小于某个常量值，而后者表示最小位置不能小于另外一个位置对象所表示的位置值。
@@ -241,21 +220,19 @@ final public class TGLayoutPos:TGLayoutPosValue
      
      */
     @discardableResult
-    public func min(_ val:CGFloat, offset:CGFloat = 0) ->TGLayoutPos
-    {
-        self.min.equal(val, offset:offset)
+    public func min(_ val: CGFloat, offset: CGFloat = 0) -> TGLayoutPos {
+        self.min.equal(val, offset: offset)
         setNeedsLayout()
         return self
     }
-    
+
     @discardableResult
-    public func min(_ val:TGLayoutPos!, offset:CGFloat = 0) ->TGLayoutPos
-    {
-        self.min.equal(val, offset:offset)
+    public func min(_ val: TGLayoutPos!, offset: CGFloat = 0) -> TGLayoutPos {
+        self.min.equal(val, offset: offset)
         setNeedsLayout()
         return self
     }
-    
+
     /**
      *设置布局位置的最大边界值。 如果位置对象没有设置最大边界值，那么最大边界默认就是无穷大CGFloat.greatestFiniteMagnitude。max方法除了能设置为CGFloat外，还可以设置为TGLayoutPos值，并且还可以指定最大位置的偏移量值。只有在相对布局中的子视图的位置对象才能设置最大边界值为TGLayoutPos类型的值，其他类型布局中的子视图只支持CGFloat类型的最大边界值。
      @val指定位置边界值。可设置的类型有CGFloat和TGLayoutPos类型，前者表示最大位置不能大于某个常量值，而后者表示最大位置不能大于另外一个位置对象所表示的位置值。
@@ -270,36 +247,31 @@ final public class TGLayoutPos:TGLayoutPosValue
      
      */
     @discardableResult
-    public func max(_ val:CGFloat, offset:CGFloat = 0) ->TGLayoutPos
-    {
-        self.max.equal(val, offset:offset)
+    public func max(_ val: CGFloat, offset: CGFloat = 0) -> TGLayoutPos {
+        self.max.equal(val, offset: offset)
         setNeedsLayout()
-        
-        return self
-    }
-    
-    @discardableResult
-    public func max(_ val:TGLayoutPos!, offset:CGFloat = 0) ->TGLayoutPos
-    {
-        self.max.equal(val, offset:offset)
-        setNeedsLayout()
-        
+
         return self
     }
 
-    
+    @discardableResult
+    public func max(_ val: TGLayoutPos!, offset: CGFloat = 0) -> TGLayoutPos {
+        self.max.equal(val, offset: offset)
+        setNeedsLayout()
+
+        return self
+    }
+
     //返回视图，用于链式语法
     @discardableResult
-    public func and() -> UIView
-    {
+    public func and() -> UIView {
         return _view
     }
-    
+
     /**
      *清除所有设置的约束值，这样位置对象将不会再生效了。
      */
-    public func clear()
-    {
+    public func clear() {
         _active = true
         _val = nil
         _offset = 0
@@ -307,72 +279,59 @@ final public class TGLayoutPos:TGLayoutPosValue
         _max = nil
         setNeedsLayout()
     }
-    
+
     /**
      *设置布局位置是否是活动的,默认是true表示活动的，如果设置为false则表示这个布局位置对象设置的约束值将不会起作用。
      *active设置为true和clear的相同点是位置对象设置的约束值都不会生效了，区别是前者不会清除所有设置的约束，而后者则会清除所有设置的约束。
      */
-    public var isActive:Bool
-    {
-        get
-        {
+    public var isActive: Bool {
+        get {
             return _active
         }
-        set
-        {
-            if _active != newValue
-            {
+        set {
+            if _active != newValue {
                 _active = newValue
-                if _min != nil
-                {
+                if _min != nil {
                     _min._active = newValue
                 }
-                if _max != nil
-                {
+                if _max != nil {
                     _max._active = newValue
                 }
                 setNeedsLayout()
             }
         }
     }
-    
+
     //判断是否设置了位置值。
-    public var hasValue:Bool
-    {
-        
+    public var hasValue: Bool {
+
         return _active &&  _val != nil
     }
-    
+
     //返回设置的数值类型的值。
-    public var numberVal:CGFloat!
-    {
-        
-        if (!_active || _val == nil)
-        {
+    public var numberVal: CGFloat! {
+
+        if !_active || _val == nil {
             return nil
         }
-        
+
         switch _val! {
         case ValueType.floatV(let v):
             return v
         case ValueType.layoutSupport(let v):
             //只有在11以后并且是设置了safearea缩进才忽略UILayoutSupport。
-            if let superlayout = self.view.superview as? TGBaseLayout, #available(iOS 11.0, *)
-            {
+            if let superlayout = self.view.superview as? TGBaseLayout, #available(iOS 11.0, *) {
                 let edge = superlayout.tg_insetsPaddingFromSafeArea.rawValue
-                if ((_type == TGGravity.Vertical.top && (edge & UIRectEdge.top.rawValue) == UIRectEdge.top.rawValue) ||
-                    (_type == TGGravity.Vertical.bottom && (edge & UIRectEdge.bottom.rawValue) == UIRectEdge.bottom.rawValue))
-                {
+                if (_type == TGGravity.Vertical.top && (edge & UIRectEdge.top.rawValue) == UIRectEdge.top.rawValue) ||
+                    (_type == TGGravity.Vertical.bottom && (edge & UIRectEdge.bottom.rawValue) == UIRectEdge.bottom.rawValue) {
                     return 0
                 }
             }
             return v.length
         case ValueType.safePosV(_):
-            if #available(iOS 11.0, *)
-            {
-                if let superView = _view.superview
-                {
-                    switch (_type) {
+            if #available(iOS 11.0, *) {
+                if let superView = _view.superview {
+                    switch _type {
                     case TGGravity.Horizontal.leading:
                         return  TGBaseLayout.tg_isRTL ? superView.safeAreaInsets.right : superView.safeAreaInsets.left
                     case TGGravity.Horizontal.trailing:
@@ -385,120 +344,101 @@ final public class TGLayoutPos:TGLayoutPosValue
                         return 0.0
                     }
                 }
-            }
-            else
-            {
-                if let vc = self.findContainerVC()
-                {
-                    if _type == TGGravity.Vertical.top
-                    {
+            } else {
+                if let vc = self.findContainerVC() {
+                    if _type == TGGravity.Vertical.top {
                         return vc.topLayoutGuide.length
-                    }
-                    else if _type == TGGravity.Vertical.bottom
-                    {
+                    } else if _type == TGGravity.Vertical.bottom {
                         return vc.bottomLayoutGuide.length
                     }
                 }
             }
-            
+
             return 0
-            
+
         default:
             return nil
         }
-        
+
     }
-    
+
     //返回设定的比重类型的值。
-    public var weightVal:TGWeight!
-    {
-        
-        if (!_active || _val == nil){
+    public var weightVal: TGWeight! {
+
+        if !_active || _val == nil {
             return nil
         }
-        
+
         switch _val! {
         case ValueType.weightV(let v):
             return v
         default:
             return nil
         }
-        
+
     }
-    
+
     //返回设定的相对位置的值。
-    public var posVal:TGLayoutPos!
-    {
-        
-        if (!_active || _val == nil){
+    public var posVal: TGLayoutPos! {
+
+        if !_active || _val == nil {
             return nil
         }
-        
+
         switch _val! {
         case ValueType.posV(let v):
             return v
         default:
             return nil
         }
-        
+
     }
-    
+
     //返回设定的数值类型的值。
-    public var arrayVal:[TGLayoutPos]!
-    {
-        
-        if (!_active ||  _val == nil){
+    public var arrayVal: [TGLayoutPos]! {
+
+        if !_active ||  _val == nil {
             return nil
         }
-        
+
         switch _val! {
         case ValueType.arrayV(let v):
             return v
         default:
             return nil
         }
-        
+
     }
-    
+
     //返回偏移量值。
-    public var offset:CGFloat
-    {
-        if _active
-        {
+    public var offset: CGFloat {
+        if _active {
             return _offset
-        }
-        else
-        {
+        } else {
             return 0
         }
     }
-    
+
     //返回设置的下边界值。
-    public var min:TGLayoutPos
-    {
-        if _min == nil
-        {
+    public var min: TGLayoutPos {
+        if _min == nil {
             _min = TGLayoutPos(_type, view: nil).equal(-CGFloat.greatestFiniteMagnitude)
             _min._active = _active
         }
         return _min
     }
-    
+
     //返回设置的上边界值。
-    public var max:TGLayoutPos
-    {
-        if _max === nil
-        {
-            _max = TGLayoutPos(_type, view:nil).equal(CGFloat.greatestFiniteMagnitude)
+    public var max: TGLayoutPos {
+        if _max === nil {
+            _max = TGLayoutPos(_type, view: nil).equal(CGFloat.greatestFiniteMagnitude)
             _max._active = _active
         }
-        
+
         return _max
     }
-    
-    
-    internal enum ValueType
-    {
+
+    internal enum ValueType {
         case floatV(CGFloat)
         case posV(TGLayoutPos)
         case arrayV([TGLayoutPos])
@@ -506,73 +446,52 @@ final public class TGLayoutPos:TGLayoutPosValue
         case safePosV(CGFloat)
         case layoutSupport(UILayoutSupport)
     }
-    
-    fileprivate weak var _view:UIView! = nil
-    fileprivate let _type:TGGravity
-    fileprivate var _active:Bool = true
-    fileprivate var _val:ValueType!
-    fileprivate var _offset:CGFloat = 0
-    fileprivate var _min:TGLayoutPos! = nil
-    fileprivate var _max:TGLayoutPos! = nil
-    
-    public init(_ type:TGGravity, view: UIView!)
-    {
+
+    fileprivate weak var _view: UIView! = nil
+    fileprivate let _type: TGGravity
+    fileprivate var _active: Bool = true
+    fileprivate var _val: ValueType!
+    fileprivate var _offset: CGFloat = 0
+    fileprivate var _min: TGLayoutPos! = nil
+    fileprivate var _max: TGLayoutPos! = nil
+
+    public init(_ type: TGGravity, view: UIView!) {
         _type = type
         _view = view
     }
 
 }
 
-extension TGLayoutPos
-{
+extension TGLayoutPos {
     @discardableResult
-    internal func equalHelper(val:TGLayoutPosType!, offset:CGFloat = 0)  ->TGLayoutPos
-    {
+    internal func equalHelper(val: TGLayoutPosType!, offset: CGFloat = 0) -> TGLayoutPos {
         _offset = offset
-        
-        if let v = val as? CGFloat
-        {
-            if v == TGLayoutPos.tg_safeAreaMargin
-            {
+
+        if let v = val as? CGFloat {
+            if v == TGLayoutPos.tg_safeAreaMargin {
                 _val = ValueType.safePosV(v)
-            }
-            else
-            {
+            } else {
                 _val = ValueType.floatV(v)
             }
-        }
-        else if let v = val as? Double
-        {
+        } else if let v = val as? Double {
             _val = ValueType.floatV(CGFloat(v))
-        }
-        else if let v = val as? Float
-        {
+        } else if let v = val as? Float {
             _val = ValueType.floatV(CGFloat(v))
-        }
-        else if let v = val as? Int
-        {
+        } else if let v = val as? Int {
             _val = ValueType.floatV(CGFloat(v))
-        }
-        else if let v = val as? TGWeight
-        {
+        } else if let v = val as? TGWeight {
             _val = ValueType.weightV(v)
-        }
-        else if let v = val as? [TGLayoutPos]
-        {
-            if _type != TGGravity.Vertical.center && _type != TGGravity.Horizontal.center
-            {
-                assert(false, "oops! ");
+        } else if let v = val as? [TGLayoutPos] {
+            if _type != TGGravity.Vertical.center && _type != TGGravity.Horizontal.center {
+                assert(false, "oops! ")
             }
-            
+
             _val = ValueType.arrayV(v)
-        }
-        else if let v = val as? UIView
-        {
-            if v === _view
-            {
-                assert(false , "oops!");
+        } else if let v = val as? UIView {
+            if v === _view {
+                assert(false, "oops!")
             }
-            
+
             switch _type {
             case TGGravity.Vertical.top:
                 _val = ValueType.posV(v.tg_top)
@@ -593,107 +512,83 @@ extension TGLayoutPos
                 _val = ValueType.posV(v.tg_trailing)
                 break
             default:
-                assert(false, "oops!");
-            }
-        }
-        else if let v = val as? TGLayoutPos
-        {
-            if v === self
-            {
                 assert(false, "oops!")
             }
-            
+        } else if let v = val as? TGLayoutPos {
+            if v === self {
+                assert(false, "oops!")
+            }
+
             _val = ValueType.posV(v)
-            
-        }
-        else if val == nil
-        {
+
+        } else if val == nil {
              _val = nil
+        } else {
+            assert(false, "oops")
         }
-        else
-        {
-            assert(false , "oops");
-        }
-        
-        
+
         setNeedsLayout()
-        
+
         return self
     }
-    
+
     @discardableResult
-    internal func equalHelper(val:UILayoutSupport, offset:CGFloat = 0)  ->TGLayoutPos
-    {
-        
-        if (_type != TGGravity.Vertical.top && _type != TGGravity.Vertical.bottom)
-        {
+    internal func equalHelper(val: UILayoutSupport, offset: CGFloat = 0) -> TGLayoutPos {
+
+        if _type != TGGravity.Vertical.top && _type != TGGravity.Vertical.bottom {
             assert(false, "oops! only topPos or bottomPos can set to UILayoutSupport")
         }
 
         _offset = offset
         _val = ValueType.layoutSupport(val)
-        
+
         setNeedsLayout()
 
         return self
     }
 
-    internal var type:TGGravity
-    {
+    internal var type: TGGravity {
         return _type
     }
 
-    internal var view:UIView
-    {
+    internal var view: UIView {
         return _view
     }
 
-    
-    internal var minVal:TGLayoutPos?
-    {
+    internal var minVal: TGLayoutPos? {
         return _min
     }
 
-    internal var maxVal:TGLayoutPos?
-    {
+    internal var maxVal: TGLayoutPos? {
         return _max
     }
 
-
-    internal var absPos:CGFloat
-    {
-        if _active
-        {
+    internal var absPos: CGFloat {
+        if _active {
             var retVal = _offset
-            if self.numberVal != nil
-            {
+            if self.numberVal != nil {
                 retVal += self.numberVal
             }
-            
-            if _max != nil && _max.numberVal != nil
-            {
+
+            if _max != nil && _max.numberVal != nil {
                 retVal = Swift.min(_max.numberVal!, retVal)
             }
-            if _min != nil && _min.numberVal != nil
-            {
+            if _min != nil && _min.numberVal != nil {
                 retVal = Swift.max(_min.numberVal!, retVal)
             }
             return retVal
-        }
-        else
-        {
+        } else {
             return 0
         }
     }
-    
-    internal var isSafeAreaPos:Bool
-    {
-        
+
+    internal var isSafeAreaPos: Bool {
+
         guard _active && _val != nil else {
-            
+
             return false
         }
-        
+
         switch _val! {
         case ValueType.safePosV(_):
             return true
@@ -703,69 +598,50 @@ extension TGLayoutPos
             return false
         }
     }
-    
-        
-    internal func weightPosIn(_ contentSize:CGFloat) -> CGFloat
-    {
-    
-        var retVal:CGFloat = 0
-        if _active
-        {
-            if let t = self.weightVal
-            {
+
+    internal func weightPosIn(_ contentSize: CGFloat) -> CGFloat {
+
+        var retVal: CGFloat = 0
+        if _active {
+            if let t = self.weightVal {
                 retVal = t.rawValue/100 * contentSize + self.offset
-            }
-            else if let t = self.numberVal
-            {
+            } else if let t = self.numberVal {
                 retVal = t + self.offset
-            }
-            else
-            {
+            } else {
                 retVal = self.offset
             }
-            
-            if let t = _max?.numberVal
-            {
+
+            if let t = _max?.numberVal {
                 retVal = Swift.min(t, retVal)
             }
-            
-            if let t = _min?.numberVal
-            {
+
+            if let t = _min?.numberVal {
                 retVal = Swift.max(t, retVal)
             }
         }
         return retVal
-        
-    }
-    
 
- 
-    internal func setNeedsLayout()
-    {
-        if (_view == nil)
-        {
+    }
+
+    internal func setNeedsLayout() {
+        if _view == nil {
             return
         }
-        
-        
-        if let baseLayout:TGBaseLayout = _view.superview as? TGBaseLayout , !baseLayout.tg_isLayouting
-        {
+
+        if let baseLayout: TGBaseLayout = _view.superview as? TGBaseLayout, !baseLayout.tg_isLayouting {
             baseLayout.setNeedsLayout()
         }
     }
-    
-    internal func findContainerVC() -> UIViewController!
-    {
-        var vc:UIViewController! = nil;
-        var v:UIView! = self.view;
-        while v != nil
-        {
+
+    internal func findContainerVC() -> UIViewController! {
+        var vc: UIViewController! = nil
+        var v: UIView! = self.view
+        while v != nil {
             vc = v.value(forKey: "viewDelegate") as? UIViewController
-            if (vc != nil)
-            {
+            if vc != nil {
                 break
             }
-            
+
             v = v.superview
         }
         return vc
@@ -773,85 +649,63 @@ extension TGLayoutPos
 
 }
 
-extension TGLayoutPos:NSCopying
-{
-    public func copy(with zone: NSZone? = nil) -> Any
-    {
-        let ls:TGLayoutPos = Swift.type(of: self).init(_type, view:_view)
+extension TGLayoutPos: NSCopying {
+    public func copy(with zone: NSZone? = nil) -> Any {
+        let ls: TGLayoutPos = Swift.type(of: self).init(_type, view: _view)
         ls._active = self._active
         ls._val = self._val
         ls._offset = self._offset
-        if _min != nil
-        {
-            ls._min = TGLayoutPos(_type, view:nil)
+        if _min != nil {
+            ls._min = TGLayoutPos(_type, view: nil)
             ls._min._val = _min._val
             ls._min._offset = _min._offset
             ls._min._active = _min._active
         }
-        
-        if _max != nil
-        {
-            ls._max = TGLayoutPos(_type, view:nil)
+
+        if _max != nil {
+            ls._max = TGLayoutPos(_type, view: nil)
             ls._max._val = _max._val
             ls._max._offset = _max._offset
             ls._max._active = _max._active
         }
 
         return ls
-        
+
     }
 }
 
-
 //TGLayoutPos的equal方法的快捷方法。比如a.tg_left.equal(10) <==> a.tg_left ~= 10
-public func ~=(oprPos:TGLayoutPos, origin:CGFloat)
-{
+public func ~=(oprPos: TGLayoutPos, origin: CGFloat) {
     oprPos.equal(origin)
 }
 
-public func ~=(oprPos:TGLayoutPos, weight:TGWeight)
-{
+public func ~=(oprPos: TGLayoutPos, weight: TGWeight) {
     oprPos.equal(weight)
 }
 
-public func ~=(oprPos:TGLayoutPos, array:[TGLayoutPos])
-{
+public func ~=(oprPos: TGLayoutPos, array: [TGLayoutPos]) {
     oprPos.equal(array)
 }
 
-public func ~=(oprPos:TGLayoutPos, pos:TGLayoutPos!)
-{
+public func ~=(oprPos: TGLayoutPos, pos: TGLayoutPos!) {
     oprPos.equal(pos)
 }
 
 //TGLayoutPos的offset方法的快捷方法。比如a.tg_left.offset(10) <==> a.tg_left += 10
-public func +=(oprPos:TGLayoutPos, val:CGFloat)
-{
+public func +=(oprPos: TGLayoutPos, val: CGFloat) {
     oprPos.offset(val)
 }
 
-public func -=(oprPos:TGLayoutPos, val:CGFloat)
-{
+public func -=(oprPos: TGLayoutPos, val: CGFloat) {
     oprPos.offset(-1 * val)
 }
 
 //TGLayoutPos的min方法的快捷方法。比如a.tg_left.min(10) <==> a.tg_left >= 10
-public func >=(oprPos:TGLayoutPos, size:CGFloat)
-{
+public func >=(oprPos: TGLayoutPos, size: CGFloat) {
     oprPos.min(size)
 }
 
 //TGLayoutPos的max方法的快捷方法。比如a.tg_left.max(10) <==> a.tg_left <= 10
-public func <=(oprPos:TGLayoutPos, size:CGFloat)
-{
+public func <=(oprPos: TGLayoutPos, size: CGFloat) {
     oprPos.max(size)
 }
-
-
-
-
-
-
-
-
-

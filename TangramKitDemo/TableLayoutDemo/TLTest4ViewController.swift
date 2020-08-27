@@ -8,10 +8,7 @@
 
 import UIKit
 
-
-
 class TLTest4ViewController: UIViewController {
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,29 +20,27 @@ class TLTest4ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
     override func loadView() {
-        
+
         /*
          这个例子是将表格布局和智能边界线的应用结合，实现一个表格界面。
          
          */
-        
+
         let scrollView = UIScrollView()
         scrollView.backgroundColor = .white
         scrollView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 10, right: 0)
         self.view = scrollView
-        
-        
-        if #available(iOS 11.0, *) {            
+
+        if #available(iOS 11.0, *) {
         } else {
             // Fallback on earlier versions
-            
-            self.edgesForExtendedLayout = UIRectEdge(rawValue:0)
+
+            self.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
 
         }
-        
-        
+
         let tableLayout = TGTableLayout(.vert)
         tableLayout.tg.height.equal(.wrap)
         //这里设置表格的左边和右边以及顶部的边距都是在父视图的安全区域外再缩进10个点的位置。你会注意到这里面定义了一个特殊的位置TGLayoutPos.tg.safeAreaMargin。
@@ -56,58 +51,49 @@ class TLTest4ViewController: UIViewController {
         tableLayout.tg.trailing.equal(TGLayoutPos.tg.safeAreaMargin, offset: 10)
         tableLayout.tg.top.equal(TGLayoutPos.tg.safeAreaMargin, offset: 10)
         scrollView.addSubview(tableLayout)
-        
+
         //建立一个表格外边界的边界线。颜色为黑色，粗细为3.
-        tableLayout.tg.boundBorderline(value: TGBorderline(color:CFTool.color(4), thick: 3))
+        tableLayout.tg.boundBorderline(value: TGBorderline(color: CFTool.color(4), thick: 3))
         //建立智能边界线。所谓智能边界线就是布局里面的如果有子布局视图，则子布局视图会根据自身的布局位置智能的设置边界线。
         //智能边界线只支持表格布局、线性布局、流式布局、浮动布局。
         //如果要想完美使用智能分界线，则请将cellview建立为一个布局视图。
-        tableLayout.tg.intelligentBorderline(value: TGBorderline(color:CFTool.color(5)))
-        
-        
-         let titles = ["身高(Height)(cm)", "体重(Weight)(kg)", "胸围(Bust)(cm)","腰围(Waist)(cm)","臀围(Hip)(cm)","鞋码(Shoes Size)(欧码)"]
-         let values = ["177","54","88","88","88","43"]
-        
+        tableLayout.tg.intelligentBorderline(value: TGBorderline(color: CFTool.color(5)))
+
+         let titles = ["身高(Height)(cm)", "体重(Weight)(kg)", "胸围(Bust)(cm)", "腰围(Waist)(cm)", "臀围(Hip)(cm)", "鞋码(Shoes Size)(欧码)"]
+         let values = ["177", "54", "88", "88", "88", "43"]
+
         //第一行
-        let row1 = tableLayout.tg.addRow(size:TGLayoutSize.wrap, colCount:titles.count)
+        let row1 = tableLayout.tg.addRow(size: TGLayoutSize.wrap, colCount: titles.count)
         row1.tg.gravity(value: TGGravity.Vertical.top)
         row1.backgroundColor = CFTool.color(8)
         titles.forEach({tableLayout.addSubview(self.itemFrom(text: $0, alignment: .center)) })
-        
-    
-        
+
         //第二行
-        let row2 = tableLayout.tg.addRow(size:TGLayoutSize.wrap, colCount:titles.count)
+        let row2 = tableLayout.tg.addRow(size: TGLayoutSize.wrap, colCount: titles.count)
         row2.tg.gravity(value: TGGravity.Vertical.center)
         titles.forEach({tableLayout.addSubview(self.itemFrom(text: $0, alignment: .center)) })
 
-        
         //第三行
-        let row3 = tableLayout.tg.addRow(size:TGLayoutSize.wrap, colCount:titles.count)
+        let row3 = tableLayout.tg.addRow(size: TGLayoutSize.wrap, colCount: titles.count)
         row3.tg.gravity(value: TGGravity.Vertical.bottom)
         titles.forEach({tableLayout.addSubview(self.itemFrom(text: $0, alignment: .center)) })
 
-        
         //第四行
-        _ = tableLayout.tg.addRow(size:50, colCount:titles.count)
-        titles.forEach({tableLayout.addSubview(self.itemFrom(text: $0, alignment: .center, isFitWidth:true)) })
-        
-        
+        _ = tableLayout.tg.addRow(size: 50, colCount: titles.count)
+        titles.forEach({tableLayout.addSubview(self.itemFrom(text: $0, alignment: .center, isFitWidth: true)) })
+
         //第五行
-        _ = tableLayout.tg.addRow(size:TGLayoutSize.wrap, colCount:values.count)
+        _ = tableLayout.tg.addRow(size: TGLayoutSize.wrap, colCount: values.count)
         values.forEach({tableLayout.addSubview(self.itemFrom(text: $0, alignment: .left)) })
 
-        
         //第六行
-        _ = tableLayout.tg.addRow(size:TGLayoutSize.wrap, colCount:values.count)
+        _ = tableLayout.tg.addRow(size: TGLayoutSize.wrap, colCount: values.count)
         values.forEach({tableLayout.addSubview(self.itemFrom(text: $0, alignment: .center)) })
 
-        
         //第7行
-        _ = tableLayout.tg.addRow(size:TGLayoutSize.wrap, colCount:values.count)
+        _ = tableLayout.tg.addRow(size: TGLayoutSize.wrap, colCount: values.count)
         values.forEach({tableLayout.addSubview(self.itemFrom(text: $0, alignment: .right)) })
-        
-    
+
     }
 
     /*
@@ -122,39 +108,32 @@ class TLTest4ViewController: UIViewController {
 
 }
 
-extension TLTest4ViewController
-{
-  
-    func itemFrom(text:String, alignment:NSTextAlignment, isFitWidth:Bool = false) -> TGBaseLayout
-    {
+extension TLTest4ViewController {
+
+    func itemFrom(text: String, alignment: NSTextAlignment, isFitWidth: Bool = false) -> TGBaseLayout {
         let  itemLayout = TGFrameLayout()
         itemLayout.tg.topPadding(value: 10)
         itemLayout.tg.bottomPadding(value: 10)
         itemLayout.tg.leadingPadding(value: 10)
         itemLayout.tg.trailingPadding(value: 5)
-        
+
         let label = UILabel()
         label.text = text
         label.textAlignment = alignment
         label.textColor = CFTool.color(4)
         itemLayout.addSubview(label)
-        
-        if isFitWidth
-        {
+
+        if isFitWidth {
             itemLayout.tg.gravity(value: TGGravity.fill)
             label.adjustsFontSizeToFitWidth = true
             label.numberOfLines = 0
-        }
-        else
-        {
+        } else {
             itemLayout.tg.gravity(value: TGGravity.Horizontal.fill)
             itemLayout.tg.height.equal(.wrap)
             label.tg.height.equal(.wrap)
         }
-        
-        
+
         return itemLayout
     }
-
 
 }

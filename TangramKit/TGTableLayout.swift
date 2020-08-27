@@ -8,16 +8,14 @@
 
 import UIKit
 
-
 //定义行尺寸和列尺寸可以设置的值，对于行列来说可以设置一个具体的值，也可以设置TGLayoutSize中的wrap, fill, average这三个值中的一个。
-public protocol TGTableRowColSizeType:TGLayoutSizeType {}
+public protocol TGTableRowColSizeType: TGLayoutSizeType {}
 
-extension CGFloat:TGTableRowColSizeType{}
-extension Int:TGTableRowColSizeType{}
-extension Double:TGTableRowColSizeType{}
-extension Float:TGTableRowColSizeType{}
-extension TGLayoutSize:TGTableRowColSizeType{}
-
+extension CGFloat: TGTableRowColSizeType {}
+extension Int: TGTableRowColSizeType {}
+extension Double: TGTableRowColSizeType {}
+extension Float: TGTableRowColSizeType {}
+extension TGLayoutSize: TGTableRowColSizeType {}
 
 /**
  *表格布局是一种里面的子视图可以像表格一样进行多行多列排列的布局视图。子视图添加到表格布局视图前必须先要建立并添加行子视图，然后再将列子视图添加到行子视图里面。
@@ -27,7 +25,7 @@ extension TGLayoutSize:TGTableRowColSizeType{}
  */
 
 public extension TGTypeWrapperProtocol where TGWrappedType: TGTableLayout {
-    func fetchSizeClass(with targetType: TGSizeClassType, from sourceType: TGSizeClassType! = nil) -> TGTableLayoutViewSizeClassImpl {
+    func fetchSizeClass(with targetType: TGSizeClassType, from sourceType: TGSizeClassType? = nil) -> TGTableLayoutViewSizeClassImpl {
         guard let currentSizeClass = self.wrappedValue.tg_fetchSizeClass(with: targetType, from: sourceType) as? TGTableLayoutViewSizeClassImpl else {
             debugPrint("\(self.wrappedValue.tg_fetchSizeClass(with: targetType, from: sourceType)) don't translate into TGTableLayoutViewSizeClassImpl instance setting is invalid")
             return TGTableLayoutViewSizeClassImpl(view: self.wrappedValue)
@@ -36,51 +34,49 @@ public extension TGTypeWrapperProtocol where TGWrappedType: TGTableLayout {
     }
 
     @discardableResult
-    func addRow(size rowSize:TGTableRowColSizeType, colSize:TGTableRowColSizeType) -> TGLinearLayout {
-        return self.wrappedValue.tg_insertRow(size: rowSize, colSize:colSize, rowIndex: self.wrappedValue.tg_rowCount)
+    func addRow(size rowSize: TGTableRowColSizeType, colSize: TGTableRowColSizeType) -> TGLinearLayout {
+        return self.wrappedValue.tg_insertRow(size: rowSize, colSize: colSize, rowIndex: self.wrappedValue.tg_rowCount)
     }
 
     @discardableResult
-    func addRow(size rowSize:TGTableRowColSizeType, colCount: Int) ->TGLinearLayout {
-        return self.wrappedValue.tg_insertRow(size: rowSize, colSize:TGTableLayout._stgColCountTag - CGFloat(colCount), rowIndex: self.wrappedValue.tg_rowCount)
+    func addRow(size rowSize: TGTableRowColSizeType, colCount: Int) -> TGLinearLayout {
+        return self.wrappedValue.tg_insertRow(size: rowSize, colSize: TGTableLayout._stgColCountTag - CGFloat(colCount), rowIndex: self.wrappedValue.tg_rowCount)
     }
 
     @discardableResult
-    func insertRow(size rowSize: TGTableRowColSizeType, colSize : TGTableRowColSizeType, rowIndex : Int) -> TGLinearLayout {
+    func insertRow(size rowSize: TGTableRowColSizeType, colSize: TGTableRowColSizeType, rowIndex: Int) -> TGLinearLayout {
         return self.wrappedValue.tg_insertRow(size: rowSize, colSize: colSize, rowIndex: rowIndex)
     }
 
     @discardableResult
-    func insertRow(size rowSize: TGTableRowColSizeType, colCount : UInt, rowIndex : Int) -> TGLinearLayout {
+    func insertRow(size rowSize: TGTableRowColSizeType, colCount: UInt, rowIndex: Int) -> TGLinearLayout {
         //这里特殊处理用-100000 - colCount 来表示一个特殊的列尺寸。其实是数量。
         return self.wrappedValue.tg_insertRow(size: rowSize, colSize: TGTableLayout._stgColCountTag - CGFloat(colCount), rowIndex: rowIndex)
     }
 
     func removeRow(_ rowIndex: Int) {
-        self.wrappedValue.tg_rowView(at:rowIndex).removeFromSuperview()
+        self.wrappedValue.tg_rowView(at: rowIndex).removeFromSuperview()
     }
 
     func exchangeRow(_ rowIndex1: Int, with rowIndex2: Int) {
         self.wrappedValue.tg_exchangeRow(rowIndex1, with: rowIndex2)
     }
 
-
     @discardableResult
     func rowView(at rowIndex: Int) -> TGLinearLayout {
         return self.wrappedValue.subviews[rowIndex] as! TGLinearLayout
     }
 
-
     var rowCount: Int {
         return self.wrappedValue.subviews.count
     }
 
-    func addColumn(_ colView: UIView, inRow rowIndex : Int) {
-        self.wrappedValue.tg_insertCol(colView, inIndexPath: IndexPath(row: rowIndex, col: self.wrappedValue.tg_colCount(inRow:rowIndex) ))
+    func addColumn(_ colView: UIView, inRow rowIndex: Int) {
+        self.wrappedValue.tg_insertCol(colView, inIndexPath: IndexPath(row: rowIndex, col: self.wrappedValue.tg_colCount(inRow: rowIndex) ))
     }
 
     func insertColumn(_ colView: UIView, inIndexPath indexPath: IndexPath) {
-        let rowView:TGTableRowLayout = self.wrappedValue.tg_rowView(at:indexPath.row) as! TGTableRowLayout
+        let rowView: TGTableRowLayout = self.wrappedValue.tg_rowView(at: indexPath.row) as! TGTableRowLayout
 
         let rowsc = rowView.tgCurrentSizeClass as! TGLinearLayoutViewSizeClassImpl
         let colsc = colView.tgCurrentSizeClass as! TGViewSizeClassImpl
@@ -88,7 +84,7 @@ public extension TGTypeWrapperProtocol where TGWrappedType: TGTableLayout {
         //colSize为0表示均分尺寸，为-1表示由子视图决定尺寸，大于0表示固定尺寸。
         if let v = rowView.colSize as? TGLayoutSize {
             if v === TGLayoutSize.average {
-                if (rowsc.tg_orientation == TGOrientation.horz) {
+                if rowsc.tg_orientation == TGOrientation.horz {
                     colsc.tg_width.equal(v)
                 } else {
                     colsc.tg_height.equal(v)
@@ -98,67 +94,67 @@ public extension TGTypeWrapperProtocol where TGWrappedType: TGTableLayout {
             if let v = rowView.colSize as? CGFloat, v < TGTableLayout._stgColCountTag {
                 let colCount = TGTableLayout._stgColCountTag - v
                 if rowsc.tg_orientation == TGOrientation.horz {
-                    colsc.tg_width.equalHelper(val:rowView.tg_width, increment:-1 * rowView.tg_hspace * (colCount - 1.0) / colCount, multiple:1.0 / colCount)
+                    colsc.tg_width.equalHelper(val: rowView.tg_width, increment: -1 * rowView.tg_hspace * (colCount - 1.0) / colCount, multiple: 1.0 / colCount)
                 } else {
-                    colsc.tg_height.equalHelper(val:rowView.tg_height,increment:-1 * rowView.tg_vspace * (colCount - 1.0) / colCount, multiple:1.0 / colCount)
+                    colsc.tg_height.equalHelper(val: rowView.tg_height, increment: -1 * rowView.tg_vspace * (colCount - 1.0) / colCount, multiple: 1.0 / colCount)
                 }
             } else {
-                if (rowsc.tg_orientation == TGOrientation.horz) {
-                    colsc.tg_width.equalHelper(val:rowView.colSize)
+                if rowsc.tg_orientation == TGOrientation.horz {
+                    colsc.tg_width.equalHelper(val: rowView.colSize)
                 } else {
-                    colsc.tg_height.equalHelper(val:rowView.colSize)
+                    colsc.tg_height.equalHelper(val: rowView.colSize)
                 }
             }
         }
 
-        if (rowsc.tg_orientation == TGOrientation.horz) {
-            if (colView.bounds.size.height == 0 && !colsc.height.hasValue) {
+        if rowsc.tg_orientation == TGOrientation.horz {
+            if colView.bounds.size.height == 0 && !colsc.height.hasValue {
                 if colView is TGBaseLayout {
                     if !colsc.height.isWrap {
-                        colsc.tg_height.equal(rowsc.tg_height);
+                        colsc.tg_height.equal(rowsc.tg_height)
                     }
                 } else {
-                    colsc.tg_height.equal(rowsc.tg_height);
+                    colsc.tg_height.equal(rowsc.tg_height)
                 }
             }
         } else {
-            if (colView.bounds.size.width == 0 && !colsc.width.hasValue) {
+            if colView.bounds.size.width == 0 && !colsc.width.hasValue {
                 if colView is TGBaseLayout {
                     if !colsc.width.isWrap {
                         colsc.tg_width.equal(rowsc.tg_width)
                     }
                 } else {
-                    colsc.tg_width.equal(rowsc.tg_width);
+                    colsc.tg_width.equal(rowsc.tg_width)
                 }
             }
         }
-        rowView.insertSubview(colView, at:indexPath.col)
+        rowView.insertSubview(colView, at: indexPath.col)
     }
 
     func removeColumn(_ indexPath: IndexPath) {
-        self.wrappedValue.tg_colView(at:indexPath).removeFromSuperview()
+        self.wrappedValue.tg_colView(at: indexPath).removeFromSuperview()
     }
 
     func exchangeColumn(_ indexPath1: IndexPath, with indexPath2: IndexPath) {
-        let colView1:UIView = self.wrappedValue.tg_colView(at:indexPath1);
-        let colView2:UIView = self.wrappedValue.tg_colView(at:indexPath2);
+        let colView1: UIView = self.wrappedValue.tg_colView(at: indexPath1)
+        let colView2: UIView = self.wrappedValue.tg_colView(at: indexPath2)
 
-        if (colView1 == colView2) {
+        if colView1 == colView2 {
             return
         }
-        self.wrappedValue.tg_removeCol(indexPath1);
-        self.wrappedValue.tg_removeCol(indexPath2);
+        self.wrappedValue.tg_removeCol(indexPath1)
+        self.wrappedValue.tg_removeCol(indexPath2)
 
-        self.wrappedValue.tg_insertCol(colView1, inIndexPath:indexPath2)
-        self.wrappedValue.tg_insertCol(colView2, inIndexPath:indexPath1)
+        self.wrappedValue.tg_insertCol(colView1, inIndexPath: indexPath2)
+        self.wrappedValue.tg_insertCol(colView2, inIndexPath: indexPath1)
     }
 
     func columnView(at indexPath: IndexPath) -> UIView {
-        return self.wrappedValue.tg_rowView(at:indexPath.row).subviews[indexPath.col];
+        return self.wrappedValue.tg_rowView(at: indexPath.row).subviews[indexPath.col]
     }
 
     func columnCount(inRow rowIndex: Int) -> Int {
-        return self.wrappedValue.tg_rowView(at:rowIndex).subviews.count;
+        return self.wrappedValue.tg_rowView(at: rowIndex).subviews.count
     }
 
 //    var vspace: CGFloat {
@@ -166,7 +162,7 @@ public extension TGTypeWrapperProtocol where TGWrappedType: TGTableLayout {
 //        set { self.wrappedValue.tg_vspace = newValue }
 //    }
 
-    func vspace(value: CGFloat)  {
+    func vspace(value: CGFloat) {
         self.wrappedValue.tg_vspace = value
     }
 
@@ -179,7 +175,7 @@ public extension TGTypeWrapperProtocol where TGWrappedType: TGTableLayout {
 //        set { self.wrappedValue.tg_hspace = newValue }
 //    }
 
-    func hspace(value: CGFloat)  {
+    func hspace(value: CGFloat) {
         self.wrappedValue.tg_hspace = value
     }
 
@@ -189,7 +185,7 @@ public extension TGTypeWrapperProtocol where TGWrappedType: TGTableLayout {
 }
 
 open class TGTableLayout: TGLinearLayout {
-    
+
     /**
      *  添加一个新行。对于垂直表格来说每一行是从上往下排列的，而水平表格则每一行是从左往右排列的。
      *
@@ -205,448 +201,359 @@ open class TGTableLayout: TGLinearLayout {
      4 大于0表示列内每个子视图都具有固定尺寸(垂直表格为宽度，水平表格为高度)，这时候子视图可以不必设置尺寸。
      */
     @discardableResult
-    public func tg_addRow(size rowSize:TGTableRowColSizeType, colSize:TGTableRowColSizeType) ->TGLinearLayout
-    {
-        return tg_insertRow(size: rowSize, colSize:colSize, rowIndex: self.tg_rowCount)
+    public func tg_addRow(size rowSize: TGTableRowColSizeType, colSize: TGTableRowColSizeType) -> TGLinearLayout {
+        return tg_insertRow(size: rowSize, colSize: colSize, rowIndex: self.tg_rowCount)
     }
-    
-    public func tg_addRow(size rowSize:TGTableRowColSizeType, colCount:Int) ->TGLinearLayout
-    {
-        return tg_insertRow(size: rowSize, colSize:TGTableLayout._stgColCountTag - CGFloat(colCount), rowIndex: self.tg_rowCount)
+
+    public func tg_addRow(size rowSize: TGTableRowColSizeType, colCount: Int) -> TGLinearLayout {
+        return tg_insertRow(size: rowSize, colSize: TGTableLayout._stgColCountTag - CGFloat(colCount), rowIndex: self.tg_rowCount)
     }
-    
+
     /**
      * 在指定的位置插入一个新行
      */
     @discardableResult
-    public func tg_insertRow(size rowSize: TGTableRowColSizeType, colSize : TGTableRowColSizeType, rowIndex : Int) ->TGLinearLayout
-    {
+    public func tg_insertRow(size rowSize: TGTableRowColSizeType, colSize: TGTableRowColSizeType, rowIndex: Int) -> TGLinearLayout {
         let lsc = self.tgCurrentSizeClass as! TGTableLayoutViewSizeClass
-        var ori:TGOrientation = TGOrientation.vert
-        if (lsc.tg_orientation == TGOrientation.vert)
-        {
+        var ori: TGOrientation = TGOrientation.vert
+        if lsc.tg_orientation == TGOrientation.vert {
             ori = TGOrientation.horz
-        }
-        else
-        {
+        } else {
             ori = TGOrientation.vert
         }
-        
+
         let rowView = TGTableRowLayout(orientation: ori, rowSize: rowSize, colSize: colSize)
-        if ori == TGOrientation.horz
-        {
+        if ori == TGOrientation.horz {
             rowView.tg_hspace = lsc.tg_hspace
-        }
-        else
-        {
+        } else {
             rowView.tg_vspace = lsc.tg_vspace
         }
-        
+
         rowView.tg_intelligentBorderline = self.tg_intelligentBorderline
-        super.insertSubview(rowView,at:rowIndex)
+        super.insertSubview(rowView, at: rowIndex)
         return rowView
-        
+
     }
-    
-    public func tg_insertRow(size rowSize: TGTableRowColSizeType, colCount : UInt, rowIndex : Int) ->TGLinearLayout
-    {
+
+    public func tg_insertRow(size rowSize: TGTableRowColSizeType, colCount: UInt, rowIndex: Int) -> TGLinearLayout {
         //这里特殊处理用-100000 - colCount 来表示一个特殊的列尺寸。其实是数量。
         return tg_insertRow(size: rowSize, colSize: TGTableLayout._stgColCountTag - CGFloat(colCount), rowIndex: rowIndex)
     }
 
-    
     /**
      * 删除一行
      */
     public func tg_removeRow(_ rowIndex: Int) {
-        
-        self.tg_rowView(at:rowIndex).removeFromSuperview()
+
+        self.tg_rowView(at: rowIndex).removeFromSuperview()
     }
-    
+
     /**
      * 交换两行的位置
      */
     public func tg_exchangeRow(_ rowIndex1: Int, with rowIndex2: Int) {
-        
-        super.exchangeSubview(at: rowIndex1, withSubviewAt:rowIndex2)
+
+        super.exchangeSubview(at: rowIndex1, withSubviewAt: rowIndex2)
     }
-    
+
     /**
      *返回行对象
      */
     public func tg_rowView(at rowIndex: Int) -> TGLinearLayout {
-        
-        return self.subviews[rowIndex] as! TGLinearLayout;
+
+        return self.subviews[rowIndex] as! TGLinearLayout
     }
-    
+
     /**
      *返回行的数量
      */
-    public var tg_rowCount:Int {
+    public var tg_rowCount: Int {
         return self.subviews.count
     }
-    
+
     /**
      * 添加一个新的列。再添加一个新的列前必须要先添加行，对于垂直表格来说每一列是从左到右排列的，而对于水平表格来说每一列是从上到下排列的。
      * @colView:  列视图
      * @rowIndex: 指定要添加列的行的索引
      */
-    public func tg_addCol(_ colView: UIView, inRow rowIndex : Int) {
-        
-        self.tg_insertCol(colView, inIndexPath: IndexPath(row: rowIndex, col: self.tg_colCount(inRow:rowIndex) ))
+    public func tg_addCol(_ colView: UIView, inRow rowIndex: Int) {
+
+        self.tg_insertCol(colView, inIndexPath: IndexPath(row: rowIndex, col: self.tg_colCount(inRow: rowIndex) ))
     }
-    
+
     /**
      * 在指定的indexPath下插入一个新的列 IndexPath(row:1, col:1)
      */
     public func tg_insertCol(_ colView: UIView, inIndexPath indexPath: IndexPath) {
-        
-        let rowView:TGTableRowLayout = self.tg_rowView(at:indexPath.row) as! TGTableRowLayout
-        
+        let rowView: TGTableRowLayout = self.tg_rowView(at: indexPath.row) as! TGTableRowLayout
+
         let rowsc = rowView.tgCurrentSizeClass as! TGLinearLayoutViewSizeClassImpl
         let colsc = colView.tgCurrentSizeClass as! TGViewSizeClassImpl
-        
+
         //colSize为0表示均分尺寸，为-1表示由子视图决定尺寸，大于0表示固定尺寸。
-        if let v = rowView.colSize as? TGLayoutSize
-        {
-            if v === TGLayoutSize.average
-            {
-                if (rowsc.tg_orientation == TGOrientation.horz)
-                {
+        if let v = rowView.colSize as? TGLayoutSize {
+            if v === TGLayoutSize.average {
+                if rowsc.tg_orientation == TGOrientation.horz {
                     colsc.tg_width.equal(v)
-                }
-                else
-                {
+                } else {
                     colsc.tg_height.equal(v)
                 }
             }
-        }
-        else
-        {
-            if let v = rowView.colSize as? CGFloat, v < TGTableLayout._stgColCountTag
-            {
-                
+        } else {
+            if let v = rowView.colSize as? CGFloat, v < TGTableLayout._stgColCountTag {
                 let colCount = TGTableLayout._stgColCountTag - v
-                if rowsc.tg_orientation == TGOrientation.horz
-                {
-                    colsc.tg_width.equalHelper(val:rowView.tg_width, increment:-1 * rowView.tg_hspace * (colCount - 1.0) / colCount, multiple:1.0 / colCount)
+                if rowsc.tg_orientation == TGOrientation.horz {
+                    colsc.tg_width.equalHelper(val: rowView.tg_width, increment: -1 * rowView.tg_hspace * (colCount - 1.0) / colCount, multiple: 1.0 / colCount)
+                } else {
+                    colsc.tg_height.equalHelper(val: rowView.tg_height, increment: -1 * rowView.tg_vspace * (colCount - 1.0) / colCount, multiple: 1.0 / colCount)
                 }
-                else
-                {
-                    colsc.tg_height.equalHelper(val:rowView.tg_height,increment:-1 * rowView.tg_vspace * (colCount - 1.0) / colCount, multiple:1.0 / colCount)
-                }
-            }
-            else
-            {
-                if (rowsc.tg_orientation == TGOrientation.horz)
-                {
-                    colsc.tg_width.equalHelper(val:rowView.colSize)
-                }
-                else
-                {
-                    colsc.tg_height.equalHelper(val:rowView.colSize)
+            } else {
+                if rowsc.tg_orientation == TGOrientation.horz {
+                    colsc.tg_width.equalHelper(val: rowView.colSize)
+                } else {
+                    colsc.tg_height.equalHelper(val: rowView.colSize)
                 }
             }
         }
-        
-        if (rowsc.tg_orientation == TGOrientation.horz)
-        {
-            if (colView.bounds.size.height == 0 && !colsc.height.hasValue)
-            {
-                if colView is TGBaseLayout
-                {
-                    if !colsc.height.isWrap
-                    {
-                        colsc.tg_height.equal(rowsc.tg_height);
+
+        if rowsc.tg_orientation == TGOrientation.horz {
+            if colView.bounds.size.height == 0 && !colsc.height.hasValue {
+                if colView is TGBaseLayout {
+                    if !colsc.height.isWrap {
+                        colsc.tg_height.equal(rowsc.tg_height)
                     }
-                }
-                else
-                {
-                    colsc.tg_height.equal(rowsc.tg_height);
+                } else {
+                    colsc.tg_height.equal(rowsc.tg_height)
                 }
             }
-        }
-        else
-        {
-            if (colView.bounds.size.width == 0 && !colsc.width.hasValue)
-            {
-                
-                if colView is TGBaseLayout
-                {
-                    if !colsc.width.isWrap
-                    {
+        } else {
+            if colView.bounds.size.width == 0 && !colsc.width.hasValue {
+
+                if colView is TGBaseLayout {
+                    if !colsc.width.isWrap {
                         colsc.tg_width.equal(rowsc.tg_width)
                     }
-                }
-                else
-                {
-                    colsc.tg_width.equal(rowsc.tg_width);
+                } else {
+                    colsc.tg_width.equal(rowsc.tg_width)
                 }
             }
-            
+
         }
-        
-        
-        rowView.insertSubview(colView, at:indexPath.col)
+
+        rowView.insertSubview(colView, at: indexPath.col)
     }
-    
+
     /**
      * 删除一列
      */
     public func tg_removeCol(_ indexPath: IndexPath) {
-        
-        self.tg_colView(at:indexPath).removeFromSuperview()
+
+        self.tg_colView(at: indexPath).removeFromSuperview()
     }
-    
+
     /**
      * 交换两个列视图，这两个列视图是可以跨行的
      */
     public func tg_exchangeCol(_ indexPath1: IndexPath, with indexPath2: IndexPath) {
-        
-        let colView1:UIView = self.tg_colView(at:indexPath1);
-        let colView2:UIView = self.tg_colView(at:indexPath2);
-        
-        if (colView1 == colView2)
-        {
-            return;
+
+        let colView1: UIView = self.tg_colView(at: indexPath1)
+        let colView2: UIView = self.tg_colView(at: indexPath2)
+
+        if colView1 == colView2 {
+            return
         }
-        
-        
-        self.tg_removeCol(indexPath1);
-        self.tg_removeCol(indexPath2);
-        
-        self.tg_insertCol(colView1, inIndexPath:indexPath2)
-        self.tg_insertCol(colView2, inIndexPath:indexPath1)
-        
+
+        self.tg_removeCol(indexPath1)
+        self.tg_removeCol(indexPath2)
+
+        self.tg_insertCol(colView1, inIndexPath: indexPath2)
+        self.tg_insertCol(colView2, inIndexPath: indexPath1)
+
     }
-    
+
     /**
      * 返回列视图
      */
     public func tg_colView(at indexPath: IndexPath) -> UIView {
-        
-        return self.tg_rowView(at:indexPath.row).subviews[indexPath.col];
+
+        return self.tg_rowView(at: indexPath.row).subviews[indexPath.col]
     }
-    
+
     /**
      * 返回某行的列的数量
      */
     public func tg_colCount(inRow rowIndex: Int) -> Int {
-        
-        return self.tg_rowView(at:rowIndex).subviews.count;
+
+        return self.tg_rowView(at: rowIndex).subviews.count
     }
-    
-    //MARK: override method
-    
-    public override var tg_vspace:CGFloat {
+
+    // MARK: override method
+
+    public override var tg_vspace: CGFloat {
         get {
             return super.tg_vspace
         }
         set {
             super.tg_vspace = newValue
-            if self.tg_orientation == TGOrientation.horz
-            {
-                for i in 0 ..< self.tg_rowCount
-                {
+            if self.tg_orientation == TGOrientation.horz {
+                for i in 0 ..< self.tg_rowCount {
                     self.tg_rowView(at: i).tg_vspace = newValue
                 }
             }
         }
     }
-    
-    public override var tg_hspace:CGFloat {
+
+    public override var tg_hspace: CGFloat {
         get {
             return super.tg_hspace
         }
         set {
             super.tg_hspace = newValue
-            if self.tg_orientation == TGOrientation.vert
-            {
-                for i in 0 ..< self.tg_rowCount
-                {
+            if self.tg_orientation == TGOrientation.vert {
+                for i in 0 ..< self.tg_rowCount {
                     self.tg_rowView(at: i).tg_hspace = newValue
                 }
             }
         }
     }
-    
+
     /**
      *表格布局的addSubView被重新定义，是addCol:atRow的精简版本，表示插入当前行的最后一列
      */
     open override func addSubview(_ view: UIView) {
-        
+
         self.tg_addCol(view, inRow: self.tg_rowCount - 1)
     }
-    
+
     //不能直接调用如下的函数，否则会崩溃。
     open override func insertSubview(_ view: UIView, at index: Int) {
-        
+
         assert(false, "Constraint exception!! Can't call insertSubview")
     }
-    
+
     open override func exchangeSubview(at index1: Int, withSubviewAt index2: Int) {
-        
+
         assert(false, "Constraint exception!! Can't call exchangeSubviewAtIndex")
     }
-    
-    
-    open override func insertSubview(_ view: UIView, belowSubview siblingSubview: UIView)
-    {
+
+    open override func insertSubview(_ view: UIView, belowSubview siblingSubview: UIView) {
         assert(false, "Constraint exception!! Can't call insertSubview")
-        
+
     }
-    
-    open override func insertSubview(_ view: UIView, aboveSubview siblingSubview: UIView)
-    {
+
+    open override func insertSubview(_ view: UIView, aboveSubview siblingSubview: UIView) {
         assert(false, "Constraint exception!! Can't call insertSubview")
-        
+
     }
-    
-    internal override func tgCreateInstance() -> AnyObject
-    {
-        return TGTableLayoutViewSizeClassImpl(view:self)
+
+    internal override func tgCreateInstance() -> AnyObject {
+        return TGTableLayoutViewSizeClassImpl(view: self)
     }
-    
-    static fileprivate let _stgColCountTag:CGFloat = -100000
+
+    static fileprivate let _stgColCountTag: CGFloat = -100000
 }
 
 /**
  *  行列描述扩展对象。
  */
 extension IndexPath {
-    
-    public init(row:Int, col:Int)
-    {
-        self.init(row:row, section:col)
+
+    public init(row: Int, col: Int) {
+        self.init(row: row, section: col)
     }
-    
+
     var col: Int {
-        get{
+        get {
             return self.section
         }
-        set
-        {
+        set {
             self.section = newValue
         }
-        
+
     }
 }
 
+private class TGTableRowLayout: TGLinearLayout, TGTableLayoutViewSizeClass {
 
-
-private class TGTableRowLayout: TGLinearLayout,TGTableLayoutViewSizeClass {
-    
-
-    
     var rowSize: TGTableRowColSizeType
-    var colSize:TGTableRowColSizeType
-    
-    init(orientation:TGOrientation,rowSize:TGTableRowColSizeType, colSize:TGTableRowColSizeType)
-    {
+    var colSize: TGTableRowColSizeType
+
+    init(orientation: TGOrientation, rowSize: TGTableRowColSizeType, colSize: TGTableRowColSizeType) {
         self.rowSize = rowSize
         self.colSize = colSize
-        super.init(frame:CGRect.zero, orientation:orientation)
-        
+        super.init(frame: CGRect.zero, orientation: orientation)
+
         let lsc = self.tgCurrentSizeClass as! TGLinearLayoutViewSizeClassImpl
-        
-        if let v = rowSize as? TGLayoutSize
-        {
-            if v === TGLayoutSize.average || v === TGLayoutSize.wrap
-            {
-                if (orientation == TGOrientation.horz)
-                {
+
+        if let v = rowSize as? TGLayoutSize {
+            if v === TGLayoutSize.average || v === TGLayoutSize.wrap {
+                if orientation == TGOrientation.horz {
                     lsc.tg_height.equal(v)
-                }
-                else
-                {
+                } else {
                     lsc.tg_width.equal(v)
                 }
-            }
-            else
-            {
+            } else {
                 assert(false, "Constraint exception !! rowSize can not set to fill or other TGLayoutSize")
             }
-            
-        }
-        else
-        {
-            if (orientation == TGOrientation.horz)
-            {
-                lsc.tg_height.equalHelper(val:rowSize)
-            }
-            else
-            {
-                lsc.tg_width.equalHelper(val:rowSize)
+
+        } else {
+            if orientation == TGOrientation.horz {
+                lsc.tg_height.equalHelper(val: rowSize)
+            } else {
+                lsc.tg_width.equalHelper(val: rowSize)
             }
         }
-        
-        
+
         var isNoWrap = false
-        if let v = colSize as? TGLayoutSize, v === TGLayoutSize.average || v === TGLayoutSize.fill
-        {
+        if let v = colSize as? TGLayoutSize, v === TGLayoutSize.average || v === TGLayoutSize.fill {
             isNoWrap = true
         }
-        
-        if let v = colSize as? CGFloat, v < TGTableLayout._stgColCountTag
-        {
+
+        if let v = colSize as? CGFloat, v < TGTableLayout._stgColCountTag {
             isNoWrap = true
         }
-        
-        if isNoWrap
-        {
-            if (orientation == TGOrientation.horz)
-            {
+
+        if isNoWrap {
+            if orientation == TGOrientation.horz {
                 lsc.width.realSize?.equal(nil)
-                lsc.tg_leading.equal(0);
-                lsc.tg_trailing.equal(0);
-            }
-            else
-            {
+                lsc.tg_leading.equal(0)
+                lsc.tg_trailing.equal(0)
+            } else {
                 lsc.height.realSize?.equal(nil)
-                lsc.tg_top.equal(0);
-                lsc.tg_bottom.equal(0);
+                lsc.tg_top.equal(0)
+                lsc.tg_bottom.equal(0)
             }
-            
-        }
-        else
-        {
-            if (orientation == TGOrientation.horz)
-            {
+
+        } else {
+            if orientation == TGOrientation.horz {
                 lsc.tg_width.equal(TGLayoutSize.wrap)
-            }
-            else
-            {
+            } else {
                 lsc.tg_height.equal(TGLayoutSize.wrap)
             }
-            
+
         }
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         self.rowSize = 0
         self.colSize = 0
-        super.init(coder:aDecoder)
+        super.init(coder: aDecoder)
         //fatalError("init(coder:) has not been implemented")
     }
-    
-    override internal func tgHook(sublayout:TGBaseLayout, borderlineRect: inout CGRect)
-    {
+
+    override internal func tgHook(sublayout: TGBaseLayout, borderlineRect: inout CGRect) {
         /*
          如果行布局是包裹的，那么意味着里面的列子视图都需要自己指定行的尺寸，这样列子视图就会有不同的尺寸，如果是有智能边界线时就会出现每个列子视图的边界线的长度不一致的情况。
          有时候我们希望列子视图的边界线能够布满整个行(比如垂直表格中，所有列子视图的的高度都和所在行的行高是一致的）因此我们需要将列子视图的边界线的可显示范围进行调整。
          因此我们重载这个方法来解决这个问题，这个方法可以将列子视图的边界线的区域进行扩充和调整，目的是为了让列子视图的边界线能够布满整个行布局上。
          */
-        if let v = rowSize as? TGLayoutSize, v === TGLayoutSize.wrap
-        {
-            if self.tg_orientation == TGOrientation.horz
-            {
+        if let v = rowSize as? TGLayoutSize, v === TGLayoutSize.wrap {
+            if self.tg_orientation == TGOrientation.horz {
                 //垂直表格下，行是水平的，所以这里需要将列子视图的y轴的位置和行对齐。
                 borderlineRect.origin.y = 0 - sublayout.frame.origin.y
                 //垂直表格下，行是水平的，所以这里需要将子视图的边界线的高度和行的高度保持一致。
                 borderlineRect.size.height = self.bounds.size.height
-            }
-            else
-            {
+            } else {
                 //水平表格下，行是垂直的，所以这里需要将列子视图的x轴的位置和行对齐。
                 borderlineRect.origin.x = 0 - sublayout.frame.origin.x
                 //水平表格下，行是垂直的，所以这里需要将子视图的边界线的宽度和行的宽度保持一致。
@@ -655,5 +562,3 @@ private class TGTableRowLayout: TGLinearLayout,TGTableLayoutViewSizeClass {
         }
     }
 }
-
-

@@ -8,47 +8,44 @@
 
 import UIKit
 
-
-
 /**
  *4.PathLayout - Fan
  */
 class PLTest4ViewController: UIViewController {
-    
+
     /*
        这个DEMO介绍路径布局中的视图和transform的结合的情况。因为一旦一个视图用transform后那么frame的值将受到这个变换的影响，因此在整个TangramKit中都是通过center和bounds的改变来进行位置和尺寸的调整的。
     */
-    
+
     var myPathLayout: TGPathLayout!
 
     override func loadView() {
-        
-        self.edgesForExtendedLayout = UIRectEdge(rawValue:0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
 
-        
+        self.edgesForExtendedLayout = UIRectEdge(rawValue: 0) //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
         myPathLayout = TGPathLayout()
         view = myPathLayout
-        
+
         myPathLayout.backgroundColor = .lightGray
         myPathLayout.tg.leftPadding(value: 20)
         myPathLayout.tg.coordinateSetting.origin = CGPoint(x: 0, y: 0.5)
-        myPathLayout.tg.coordinateSetting.start = TGRadian(angle:-60).value
-        myPathLayout.tg.coordinateSetting.end = TGRadian(angle:60).value
+        myPathLayout.tg.coordinateSetting.start = TGRadian(angle: -60).value
+        myPathLayout.tg.coordinateSetting.end = TGRadian(angle: 60).value
         myPathLayout.tg.distanceError(value: 0.01) //因为曲线半径非常的小，为了要求高精度的距离间距，所以要把距离误差调整的非常的小。
         myPathLayout.tg.polarEquation(value: { _ in 1.0 })
-        
+
         let btn = UIButton(type: .contactAdd)
         btn.backgroundColor = .darkGray
         btn.layer.cornerRadius = 10
         btn.addTarget(self, action: #selector(PLTest4ViewController.handleAction(sender:)), for: .touchUpInside)
         myPathLayout.tg.originView(value: btn)
-        
+
         for i in 0..<9 {
             let label = UILabel()
             label.layer.anchorPoint = CGPoint(x: 0.05, y: 0.5) //设置子视图布局点所在的子视图的位置。这个位置是相对位置。
             label.tg.left.equal(-1)
             label.tg.width.equal(200).and().tg.height.equal(30)
-            
+
             label.text = "Text: \(i)"
             label.textAlignment = .right
             label.backgroundColor = .white
@@ -57,57 +54,57 @@ class PLTest4ViewController: UIViewController {
             label.layer.shadowOffset = .zero
             label.layer.shadowRadius = 3
             label.layer.shadowOpacity = 0.5
-            
+
             label.tg.layoutCompleted({ (layout, v) in
                 let pLayout = layout as! TGPathLayout
                 let _angle = pLayout.tg.argumentFrom(subview: v)!//TGPathLayout的argumentFrom方法能够取得子视图在曲线上的点的方程函数的自变量的输入的值。
                 print("angle = \(_angle)")
-                
+
                 v.transform = CGAffineTransform(rotationAngle: -1 * _angle)
             })
-            
+
             myPathLayout.addSubview(label)
         }
-        
+
     }
-    
+
     @objc func handleAction(sender: UIButton) {
-        
+
         if sender.isSelected {
-            
+
             for (i, sbv) in myPathLayout.tg.pathSubviews.enumerated() {
-                
+
                 let duration: TimeInterval = 0.9 / 9.0 * Double(myPathLayout.tg.pathSubviews.count - i)
                 let delay: TimeInterval = 0.9 / 9.0 * Double(i)
-                
+
                 UIView.animate(withDuration: duration, delay: delay, options: .curveEaseInOut, animations: {
 
                     sbv.transform = CGAffineTransform(rotationAngle: -1 * self.myPathLayout.tg.argumentFrom(subview: sbv)!)
-                    
+
                 }, completion: { (_) in
                     sbv.tg.useFrame(value: false)
                 })
             }
-            
+
         } else {
-            
+
             for (i, sbv) in myPathLayout.tg.pathSubviews.enumerated().reversed() {
-                
+
                 sbv.tg.useFrame(value: true)  //动画前防止调整可能引起重新布局，因此这里要设置为YES，不让这个子视图重新布局。
-                
+
                 let duration: TimeInterval = 0.9 / 9.0 * Double(myPathLayout.tg.pathSubviews.count - i)
                 let delay: TimeInterval = 0.9 / 9.0
-                
+
                 UIView.animate(withDuration: duration, delay: delay, options: .curveEaseInOut, animations: {
                     sbv.transform = CGAffineTransform(rotationAngle: -.pi/2)
-                    
+
                 })
             }
         }
-        
+
         sender.isSelected = !sender.isSelected
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
     }
