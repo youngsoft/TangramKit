@@ -182,15 +182,14 @@ class AllTest1ViewController: UITableViewController {
 
         self.tableView.tableHeaderView = tableHeaderViewLayout
 
-        weak var weakTableview = self.tableView
-
         //因为tableHeaderViewLayout的高度是通过layoutIfNeed来确定的。因此在屏幕旋转时我们需要手动再次调整tableHeaderViewLayout的frame值。
         //因此您需要实现这个block来实现当布局视图在横竖屏切换时的frame的动态更新。。。
         //注意这个block不会只执行一次，而是长期存在，因此要注意block内对象的引用的问题。
-        tableHeaderViewLayout.tg.rotationToDeviceOrientation { (_, isFirst: Bool, _ ) in
+        tableHeaderViewLayout.tg.rotationToDeviceOrientation { [weak self](_, isFirst: Bool, _ ) in
+            guard let `self` = self else { return }
             if !isFirst {
-                weakTableview?.tableHeaderView?.layoutIfNeeded()
-                weakTableview?.tableHeaderView = weakTableview?.tableHeaderView
+                self.tableView.tableHeaderView?.layoutIfNeeded()
+                self.tableView.tableFooterView = self.tableView.tableHeaderView
             }
         }
     }
