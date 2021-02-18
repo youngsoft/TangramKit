@@ -6,6 +6,8 @@
 //  Copyright © 2016年 youngsoft. All rights reserved.
 //
 
+#if os(watchOS) || os(iOS) || os(tvOS)
+
 import UIKit
 
 public extension TGTypeWrapperProtocol where TGWrappedType: TGLinearLayout {
@@ -1804,3 +1806,5 @@ extension TGLinearLayout {
     }
 
 }
+
+#endif

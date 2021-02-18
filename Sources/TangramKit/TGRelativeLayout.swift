@@ -5,6 +5,7 @@
 //  Created by apple on 16/3/13.
 //  Copyright © 2016年 youngsoft. All rights reserved.
 //
+#if os(watchOS) || os(iOS) || os(tvOS)
 
 import UIKit
 
@@ -1087,3 +1088,5 @@ extension TGRelativeLayout {
     }
 
 }
+
+#endif

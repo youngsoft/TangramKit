@@ -6,6 +6,8 @@
 //  Copyright © 2016年 youngsoft. All rights reserved.
 //
 
+#if os(watchOS) || os(iOS) || os(tvOS)
+
 import UIKit
 
 //定义行尺寸和列尺寸可以设置的值，对于行列来说可以设置一个具体的值，也可以设置TGLayoutSize中的wrap, fill, average这三个值中的一个。
@@ -562,3 +564,5 @@ private class TGTableRowLayout: TGLinearLayout, TGTableLayoutViewSizeClass {
         }
     }
 }
+
+#endif

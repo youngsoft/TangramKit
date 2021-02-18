@@ -6,6 +6,8 @@
 //  Copyright © 2016年 youngsoft. All rights reserved.
 //
 
+#if os(watchOS) || os(iOS) || os(tvOS)
+
 import UIKit
 
 /**
@@ -797,8 +799,7 @@ extension TGPathLayout {
                 endArg = tg_coordinateSetting.end
             }
 
-            tgCalcPathPointsHelper(pathPointArray: &pathPointArray, showPath: showPath, pPathLen: &pPathLen, subviewCount: subviewCount, pointIndexArray: &pointIndexArray, viewSpace: viewSpace, startArg: startArg, endArg: endArg) {
-                arg in
+            tgCalcPathPointsHelper(pathPointArray: &pathPointArray, showPath: showPath, pPathLen: &pPathLen, subviewCount: subviewCount, pointIndexArray: &pointIndexArray, viewSpace: viewSpace, startArg: startArg, endArg: endArg) { arg in
                 if let val = rectangularEquation(arg) {
                     if tg_coordinateSetting.isReverse {
                         let x = val + selfWidth * tg_coordinateSetting.origin.x + lsc.tgLeftPadding
@@ -840,8 +841,7 @@ extension TGPathLayout {
                 endArg = tg_coordinateSetting.end
             }
 
-            tgCalcPathPointsHelper(pathPointArray: &pathPointArray, showPath: showPath, pPathLen: &pPathLen, subviewCount: subviewCount, pointIndexArray: &pointIndexArray, viewSpace: viewSpace, startArg: startArg, endArg: endArg) {
-                arg in
+            tgCalcPathPointsHelper(pathPointArray: &pathPointArray, showPath: showPath, pPathLen: &pPathLen, subviewCount: subviewCount, pointIndexArray: &pointIndexArray, viewSpace: viewSpace, startArg: startArg, endArg: endArg) { arg in
                 if let val = parametricEquation(arg) {
                     if tg_coordinateSetting.isReverse {
                         let x = val.y + selfWidth * tg_coordinateSetting.origin.x + lsc.tgLeftPadding
@@ -869,8 +869,7 @@ extension TGPathLayout {
             if tg_coordinateSetting.end != nil {
                 endArg = TGRadian(value: tg_coordinateSetting.end).angle
             }
-            tgCalcPathPointsHelper(pathPointArray: &pathPointArray, showPath: showPath, pPathLen: &pPathLen, subviewCount: subviewCount, pointIndexArray: &pointIndexArray, viewSpace: viewSpace, startArg: startArg, endArg: endArg) {
-                arg in
+            tgCalcPathPointsHelper(pathPointArray: &pathPointArray, showPath: showPath, pPathLen: &pPathLen, subviewCount: subviewCount, pointIndexArray: &pointIndexArray, viewSpace: viewSpace, startArg: startArg, endArg: endArg) { arg in
                 //计算用弧度
                 let rad = TGRadian(angle: arg)
                 if let r = polarEquation(rad) {
@@ -1247,3 +1246,5 @@ public postfix func °(_ angle: Int) -> TGRadian {
 public postfix func °(_ angle: UInt) -> TGRadian {
     return TGRadian(angle: angle)
 }
+
+#endif

@@ -55,6 +55,8 @@
 
 //Current version is 1.4.2, please open: https://github.com/youngsoft/TangramKit/blob/master/CHANGELOG.md to show the changes.
 
+#if os(watchOS) || os(iOS) || os(tvOS)
+
 import Foundation
 import UIKit
 
@@ -313,3 +315,5 @@ public enum TGAdjustScrollViewContentSizeMode {
     /// 一定会调整contentSize
     case yes
 }
+
+#endif

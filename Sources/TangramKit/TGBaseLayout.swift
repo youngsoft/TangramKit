@@ -6,6 +6,8 @@
 //  Copyright © 2016年 youngsoft. All rights reserved.
 //
 
+#if os(watchOS) || os(iOS) || os(tvOS)
+
 import UIKit
 
 extension UIView: TGViewSizeClass {
@@ -4878,3 +4880,5 @@ internal func _tgRoundPoint(_ point: CGPoint) -> CGPoint {
 
     return point
 }
+
+#endif

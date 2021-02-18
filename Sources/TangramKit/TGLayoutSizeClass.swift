@@ -6,6 +6,7 @@
 //  Copyright © 2016年 youngsoft. All rights reserved.
 //
 
+#if os(watchOS) || os(iOS) || os(tvOS)
 import UIKit
 
 /*
@@ -1427,3 +1428,5 @@ internal class TGLayoutSizeWrapper: TGLayoutSizeValue2 {
     }
 
 }
+
+#endif

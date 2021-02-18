@@ -6,6 +6,8 @@
 //  Copyright © 2016年 youngsoft. All rights reserved.
 //
 
+#if os(watchOS) || os(iOS) || os(tvOS)
+
 import UIKit
 
 protocol TGLayoutPosValue {
@@ -709,3 +711,5 @@ public func >=(oprPos: TGLayoutPos, size: CGFloat) {
 public func <=(oprPos: TGLayoutPos, size: CGFloat) {
     oprPos.max(size)
 }
+
+#endif
