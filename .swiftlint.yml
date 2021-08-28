@@ -22,3 +22,7 @@ disabled_rules:
 - force_cast
 - shorthand_operator
 - large_tuple
+- comment_spacing
+- weak_delegate
+- trailing_comma
+- comma
