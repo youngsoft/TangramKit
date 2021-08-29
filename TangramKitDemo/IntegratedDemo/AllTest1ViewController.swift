@@ -148,8 +148,17 @@ class AllTest1ViewController: UITableViewController {
     func createTableHeaderView() {
         //这个例子用来构建一个自适应高度的头部布局视图。
         let tableHeaderViewLayout = TGLinearLayout(.vert)
-        tableHeaderViewLayout.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
-        tableHeaderViewLayout.frame = CGRect(x: 0, y: 0, width: self.tableView.bounds.width, height: 0) //这里没有设置高度，但设置了明确的宽度
+        
+        if #available(iOS 14, *) {
+            tableHeaderViewLayout.tg.padding(value: UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10))
+            /*在iOS14以前的viewDidLoad中self.view或者self.tableView的frame属性是有值的，但是到了iOS14以后其中的frame值就变为了CGRectZero了
+            所以这里要想取到正确的宽度，从iOS14以后起改为了获取self.navigationController.view.bounds。以前的历史版本是self.tableView.bounds
+             */
+            tableHeaderViewLayout.frame = CGRect(x: 0, y: 0, width: self.navigationController!.view.bounds.width, height: 0) //这里没有设置高度，但设置了明确的宽度
+        } else {
+            tableHeaderViewLayout.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
+            tableHeaderViewLayout.frame = CGRect(x: 0, y: 0, width: self.tableView.bounds.width, height: 0) //这里没有设置高度，但设置了明确的宽度
+        }
         //高度不确定可以设置为0。尽量不要在代码中使用kScreenWidth,kScreenHeight，SCREEN_WIDTH。之类这样的宏来设定视图的宽度和高度。要充分利用Tangram的特性，减少常数的使用。
         tableHeaderViewLayout.tg.width.equal(.fill) //这里注意设置宽度和父布局保持一致。
         tableHeaderViewLayout.tg.height.equal(.wrap)
@@ -197,9 +206,18 @@ class AllTest1ViewController: UITableViewController {
     func createTableFooterView() {
         //这个例子用来构建一个固定高度的尾部布局视图。
         let tableFooterViewLayout = TGLinearLayout(.vert)
-        tableFooterViewLayout.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
-        tableFooterViewLayout.frame = CGRect(x: 0, y: 0, width: self.tableView.bounds.width, height: 80) ////这里明确设定高度。
-        tableFooterViewLayout.tg.width.equal(.fill) //这里注意设置宽度和父布局保持一致。
+        if #available(iOS 14, *) {
+            tableFooterViewLayout.tg.padding(value: UIEdgeInsets.init(top: 10, left: 10, bottom: 10, right: 10))
+            /*在iOS14以前的viewDidLoad中self.view或者self.tableView的frame属性是有值的，但是到了iOS14以后其中的frame值就变为了CGRectZero了
+            所以这里要想取到正确的宽度，从iOS14以后起改为了获取self.navigationController.view.bounds。以前的历史版本是self.tableView.bounds
+             */
+            tableFooterViewLayout.frame = CGRect(x: 0, y: 0, width: self.navigationController!.view.bounds.width, height: 80) ////这里明确设定高度。
+            tableFooterViewLayout.tg.width.equal(.fill) //这里注意设置宽度和父布局保持一致。
+        } else {
+            tableFooterViewLayout.tg.padding(value: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
+            tableFooterViewLayout.frame = CGRect(x: 0, y: 0, width: self.tableView.bounds.width, height: 80) ////这里明确设定高度。
+            tableFooterViewLayout.tg.width.equal(.fill) //这里注意设置宽度和父布局保持一致。
+        }
         tableFooterViewLayout.backgroundColor = CFTool.color(6)
         tableFooterViewLayout.tg.gravity(value: [TGGravity.Vertical.center, TGGravity.Horizontal.fill])
 
