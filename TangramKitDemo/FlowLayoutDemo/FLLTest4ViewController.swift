@@ -58,7 +58,7 @@ extension FLLTest4ViewController {
         //如果是我们用线性布局来实现这个登录界面，一般用法是建立一个垂直线性布局，然后其中的用户和密码部分则通过建立2个子的水平线性布局来实现。但是如果我们用流式布局的话则不再需要用嵌套子布局来实现了。
 
         //每行2列的垂直流式布局。
-        var flowLayout = TGFlowLayout(.vert, arrangedCount: 2)
+        let flowLayout = TGFlowLayout(.vert, arrangedCount: 2)
         flowLayout.backgroundColor = .white
         flowLayout.tg.height.equal(.wrap)
         flowLayout.tg.gravity(value: TGGravity.Horizontal.center)  //所有子视图整体水平居中

@@ -2173,6 +2173,9 @@ open class TGBaseLayout: UIView, TGLayoutViewSizeClass {
 
     // MARK: override Method
 
+    var debugLayout: Bool = true
+    let borderLayer = CAShapeLayer()
+
     deinit {
         _tgEndLayoutAction = nil
         _tgBeginLayoutAction = nil
@@ -2305,6 +2308,21 @@ open class TGBaseLayout: UIView, TGLayoutViewSizeClass {
     }
 
     override open func layoutSubviews() {
+        if self.debugLayout {
+            borderLayer.opacity = 0
+            borderLayer.bounds = self.bounds
+            borderLayer.position = CGPoint(x: self.bounds.midX, y: self.bounds.midY)
+            borderLayer.path = UIBezierPath(roundedRect: borderLayer.bounds, cornerRadius: 0).cgPath
+            borderLayer.lineWidth = 1.0 / UIScreen.main.scale
+            borderLayer.lineDashPattern = [3.0, 3.0]
+            borderLayer.lineDashPhase = 0.1
+            borderLayer.fillColor = UIColor.clear.cgColor
+            borderLayer.strokeColor = UIColor.black.cgColor
+            self.layer.addSublayer(borderLayer)
+            borderLayer.opacity = 1
+        } else {
+            borderLayer.opacity = 0
+        }
         if !self.autoresizesSubviews {
             return
         }
@@ -4445,10 +4463,10 @@ internal class TGFrame {
     weak var sizeClass: TGViewSizeClass! = nil
 
     var multiple: Bool {
-            if sizeClasses == nil {
-                return false
+        if sizeClasses == nil {
+            return false
         } else {
-                return sizeClasses.count > 1
+            return sizeClasses.count > 1
         }
     }
 
