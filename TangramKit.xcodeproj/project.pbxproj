@@ -9,19 +9,6 @@
 /* Begin PBXBuildFile section */
 		18058AAF1E63B4EA00EAECDC /* FLLTest6ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18058AAE1E63B4EA00EAECDC /* FLLTest6ViewController.swift */; };
 		184243081E327F0800E2CCE1 /* FLLTest5ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184243071E327F0800E2CCE1 /* FLLTest5ViewController.swift */; };
-		1890A21A1EDF96C800D61C1A /* TangramKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9011E0B92E100403A1F /* TangramKit.swift */; };
-		1890A21B1EDF96C800D61C1A /* TGBaseLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9021E0B92E100403A1F /* TGBaseLayout.swift */; };
-		1890A21C1EDF96C800D61C1A /* TGDimeAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9031E0B92E100403A1F /* TGDimeAdapter.swift */; };
-		1890A21D1EDF96C800D61C1A /* TGFloatLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9041E0B92E100403A1F /* TGFloatLayout.swift */; };
-		1890A21E1EDF96C800D61C1A /* TGFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9051E0B92E100403A1F /* TGFlowLayout.swift */; };
-		1890A21F1EDF96C800D61C1A /* TGFrameLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9061E0B92E100403A1F /* TGFrameLayout.swift */; };
-		1890A2201EDF96C800D61C1A /* TGLayoutPos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9071E0B92E100403A1F /* TGLayoutPos.swift */; };
-		1890A2211EDF96C800D61C1A /* TGLayoutSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9081E0B92E100403A1F /* TGLayoutSize.swift */; };
-		1890A2221EDF96C800D61C1A /* TGLayoutSizeClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9091E0B92E100403A1F /* TGLayoutSizeClass.swift */; };
-		1890A2231EDF96C800D61C1A /* TGLinearLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD90A1E0B92E100403A1F /* TGLinearLayout.swift */; };
-		1890A2241EDF96C800D61C1A /* TGPathLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD90B1E0B92E100403A1F /* TGPathLayout.swift */; };
-		1890A2251EDF96C800D61C1A /* TGRelativeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD90C1E0B92E100403A1F /* TGRelativeLayout.swift */; };
-		1890A2261EDF96C800D61C1A /* TGTableLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD90D1E0B92E100403A1F /* TGTableLayout.swift */; };
 		18BCBD461E1336D900AC7766 /* AllTest8ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BCBD451E1336D900AC7766 /* AllTest8ViewController.swift */; };
 		204DC323209E0BC000F6CB57 /* TLTest4ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204DC322209E0BC000F6CB57 /* TLTest4ViewController.swift */; };
 		20B6C6E71FA40AEC001D51C7 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B6C6E61FA40AEC001D51C7 /* DetailViewController.swift */; };
@@ -31,20 +18,6 @@
 		467E63D3228DB27D0065D080 /* AllTest10ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 467E63D2228DB27D0065D080 /* AllTest10ViewController.swift */; };
 		4680F8FD211583FF00BFB765 /* FLLTest8ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4680F8FC211583FF00BFB765 /* FLLTest8ViewController.swift */; };
 		4680F8FF2115891600BFB765 /* AllTest9ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4680F8FE2115891600BFB765 /* AllTest9ViewController.swift */; };
-		681BD8DF1E0B91A500403A1F /* TangramKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 681BD8DD1E0B91A500403A1F /* TangramKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		681BD90F1E0B92E100403A1F /* TangramKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9011E0B92E100403A1F /* TangramKit.swift */; };
-		681BD9111E0B92E100403A1F /* TGBaseLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9021E0B92E100403A1F /* TGBaseLayout.swift */; };
-		681BD9131E0B92E100403A1F /* TGDimeAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9031E0B92E100403A1F /* TGDimeAdapter.swift */; };
-		681BD9151E0B92E100403A1F /* TGFloatLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9041E0B92E100403A1F /* TGFloatLayout.swift */; };
-		681BD9171E0B92E100403A1F /* TGFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9051E0B92E100403A1F /* TGFlowLayout.swift */; };
-		681BD9191E0B92E100403A1F /* TGFrameLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9061E0B92E100403A1F /* TGFrameLayout.swift */; };
-		681BD91B1E0B92E100403A1F /* TGLayoutPos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9071E0B92E100403A1F /* TGLayoutPos.swift */; };
-		681BD91D1E0B92E100403A1F /* TGLayoutSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9081E0B92E100403A1F /* TGLayoutSize.swift */; };
-		681BD91F1E0B92E100403A1F /* TGLayoutSizeClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD9091E0B92E100403A1F /* TGLayoutSizeClass.swift */; };
-		681BD9211E0B92E100403A1F /* TGLinearLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD90A1E0B92E100403A1F /* TGLinearLayout.swift */; };
-		681BD9231E0B92E100403A1F /* TGPathLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD90B1E0B92E100403A1F /* TGPathLayout.swift */; };
-		681BD9251E0B92E100403A1F /* TGRelativeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD90C1E0B92E100403A1F /* TGRelativeLayout.swift */; };
-		681BD9271E0B92E100403A1F /* TGTableLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681BD90D1E0B92E100403A1F /* TGTableLayout.swift */; };
 		68F0363C1E0B7D2700CEBAEF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F035E71E0B7D2700CEBAEF /* AppDelegate.swift */; };
 		68F0363D1E0B7D2700CEBAEF /* CFTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F035E81E0B7D2700CEBAEF /* CFTool.swift */; };
 		68F0363E1E0B7D2700CEBAEF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 68F035E91E0B7D2700CEBAEF /* LaunchScreen.storyboard */; };
@@ -101,7 +74,50 @@
 		68F0367F1E0B7D2700CEBAEF /* TLTest2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F036391E0B7D2700CEBAEF /* TLTest2ViewController.swift */; };
 		68F036801E0B7D2700CEBAEF /* TLTest3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F0363A1E0B7D2700CEBAEF /* TLTest3ViewController.swift */; };
 		68F036811E0B7D2700CEBAEF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F0363B1E0B7D2700CEBAEF /* ViewController.swift */; };
+		6F9D642124FB7EC70039865A /* TGFrameLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641124FB7EC60039865A /* TGFrameLayout.swift */; };
+		6F9D642224FB7EC70039865A /* TGFrameLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641124FB7EC60039865A /* TGFrameLayout.swift */; };
+		6F9D642324FB7EC70039865A /* TGPathLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641224FB7EC60039865A /* TGPathLayout.swift */; };
+		6F9D642424FB7EC70039865A /* TGPathLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641224FB7EC60039865A /* TGPathLayout.swift */; };
+		6F9D642524FB7EC70039865A /* TGLayoutPos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641324FB7EC60039865A /* TGLayoutPos.swift */; };
+		6F9D642624FB7EC70039865A /* TGLayoutPos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641324FB7EC60039865A /* TGLayoutPos.swift */; };
+		6F9D642724FB7EC70039865A /* TGFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641424FB7EC60039865A /* TGFlowLayout.swift */; };
+		6F9D642824FB7EC70039865A /* TGFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641424FB7EC60039865A /* TGFlowLayout.swift */; };
+		6F9D642924FB7EC70039865A /* TGLinearLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641524FB7EC60039865A /* TGLinearLayout.swift */; };
+		6F9D642A24FB7EC70039865A /* TGLinearLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641524FB7EC60039865A /* TGLinearLayout.swift */; };
+		6F9D642B24FB7EC70039865A /* TGFloatLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641624FB7EC60039865A /* TGFloatLayout.swift */; };
+		6F9D642C24FB7EC70039865A /* TGFloatLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641624FB7EC60039865A /* TGFloatLayout.swift */; };
+		6F9D642D24FB7EC70039865A /* TGBaseLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641724FB7EC60039865A /* TGBaseLayout.swift */; };
+		6F9D642E24FB7EC70039865A /* TGBaseLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641724FB7EC60039865A /* TGBaseLayout.swift */; };
+		6F9D642F24FB7EC70039865A /* TGLayoutSizeClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641824FB7EC60039865A /* TGLayoutSizeClass.swift */; };
+		6F9D643024FB7EC70039865A /* TGLayoutSizeClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641824FB7EC60039865A /* TGLayoutSizeClass.swift */; };
+		6F9D643124FB7EC70039865A /* TangramKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F9D641924FB7EC60039865A /* TangramKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6F9D643224FB7EC70039865A /* TGRelativeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641A24FB7EC60039865A /* TGRelativeLayout.swift */; };
+		6F9D643324FB7EC70039865A /* TGRelativeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641A24FB7EC60039865A /* TGRelativeLayout.swift */; };
+		6F9D643424FB7EC70039865A /* TGNameSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641B24FB7EC60039865A /* TGNameSpace.swift */; };
+		6F9D643524FB7EC70039865A /* TGNameSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641B24FB7EC60039865A /* TGNameSpace.swift */; };
+		6F9D643624FB7EC70039865A /* TangramKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641C24FB7EC70039865A /* TangramKit.swift */; };
+		6F9D643724FB7EC70039865A /* TangramKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641C24FB7EC70039865A /* TangramKit.swift */; };
+		6F9D643824FB7EC70039865A /* TGLayoutSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641D24FB7EC70039865A /* TGLayoutSize.swift */; };
+		6F9D643924FB7EC70039865A /* TGLayoutSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641D24FB7EC70039865A /* TGLayoutSize.swift */; };
+		6F9D643A24FB7EC70039865A /* TGTableLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641E24FB7EC70039865A /* TGTableLayout.swift */; };
+		6F9D643B24FB7EC70039865A /* TGTableLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D641E24FB7EC70039865A /* TGTableLayout.swift */; };
+		6F9D643E24FB7EC70039865A /* TGDimeAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D642024FB7EC70039865A /* TGDimeAdapter.swift */; };
+		6F9D643F24FB7EC70039865A /* TGDimeAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9D642024FB7EC70039865A /* TGDimeAdapter.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXBuildRule section */
+		6F9D644024FB837C0039865A /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = sourcecode.metal;
+			inputFiles = (
+			);
+			isEditable = 1;
+			outputFiles = (
+			);
+			script = "# metal\n";
+		};
+/* End PBXBuildRule section */
 
 /* Begin PBXFileReference section */
 		18058AAE1E63B4EA00EAECDC /* FLLTest6ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLLTest6ViewController.swift; sourceTree = "<group>"; };
@@ -117,21 +133,6 @@
 		4680F8FC211583FF00BFB765 /* FLLTest8ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FLLTest8ViewController.swift; sourceTree = "<group>"; };
 		4680F8FE2115891600BFB765 /* AllTest9ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTest9ViewController.swift; sourceTree = "<group>"; };
 		681BD8DB1E0B91A500403A1F /* TangramKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TangramKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		681BD8DD1E0B91A500403A1F /* TangramKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TangramKit.h; sourceTree = "<group>"; };
-		681BD8DE1E0B91A500403A1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		681BD9011E0B92E100403A1F /* TangramKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TangramKit.swift; sourceTree = "<group>"; };
-		681BD9021E0B92E100403A1F /* TGBaseLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TGBaseLayout.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		681BD9031E0B92E100403A1F /* TGDimeAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGDimeAdapter.swift; sourceTree = "<group>"; };
-		681BD9041E0B92E100403A1F /* TGFloatLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TGFloatLayout.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		681BD9051E0B92E100403A1F /* TGFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TGFlowLayout.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		681BD9061E0B92E100403A1F /* TGFrameLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TGFrameLayout.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		681BD9071E0B92E100403A1F /* TGLayoutPos.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TGLayoutPos.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		681BD9081E0B92E100403A1F /* TGLayoutSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGLayoutSize.swift; sourceTree = "<group>"; };
-		681BD9091E0B92E100403A1F /* TGLayoutSizeClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TGLayoutSizeClass.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		681BD90A1E0B92E100403A1F /* TGLinearLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TGLinearLayout.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		681BD90B1E0B92E100403A1F /* TGPathLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TGPathLayout.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		681BD90C1E0B92E100403A1F /* TGRelativeLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TGRelativeLayout.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		681BD90D1E0B92E100403A1F /* TGTableLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGTableLayout.swift; sourceTree = "<group>"; };
 		68F035E71E0B7D2700CEBAEF /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		68F035E81E0B7D2700CEBAEF /* CFTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CFTool.swift; sourceTree = "<group>"; };
 		68F035EA1E0B7D2700CEBAEF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -190,6 +191,22 @@
 		68F0363A1E0B7D2700CEBAEF /* TLTest3ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TLTest3ViewController.swift; sourceTree = "<group>"; };
 		68F0363B1E0B7D2700CEBAEF /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		68F036AE1E0B800000CEBAEF /* TangramKitPrefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TangramKitPrefix.pch; sourceTree = "<group>"; };
+		6F9D641124FB7EC60039865A /* TGFrameLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGFrameLayout.swift; sourceTree = "<group>"; };
+		6F9D641224FB7EC60039865A /* TGPathLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGPathLayout.swift; sourceTree = "<group>"; };
+		6F9D641324FB7EC60039865A /* TGLayoutPos.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGLayoutPos.swift; sourceTree = "<group>"; };
+		6F9D641424FB7EC60039865A /* TGFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGFlowLayout.swift; sourceTree = "<group>"; };
+		6F9D641524FB7EC60039865A /* TGLinearLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGLinearLayout.swift; sourceTree = "<group>"; };
+		6F9D641624FB7EC60039865A /* TGFloatLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGFloatLayout.swift; sourceTree = "<group>"; };
+		6F9D641724FB7EC60039865A /* TGBaseLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGBaseLayout.swift; sourceTree = "<group>"; };
+		6F9D641824FB7EC60039865A /* TGLayoutSizeClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGLayoutSizeClass.swift; sourceTree = "<group>"; };
+		6F9D641924FB7EC60039865A /* TangramKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TangramKit.h; sourceTree = "<group>"; };
+		6F9D641A24FB7EC60039865A /* TGRelativeLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGRelativeLayout.swift; sourceTree = "<group>"; };
+		6F9D641B24FB7EC60039865A /* TGNameSpace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGNameSpace.swift; sourceTree = "<group>"; };
+		6F9D641C24FB7EC70039865A /* TangramKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TangramKit.swift; sourceTree = "<group>"; };
+		6F9D641D24FB7EC70039865A /* TGLayoutSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGLayoutSize.swift; sourceTree = "<group>"; };
+		6F9D641E24FB7EC70039865A /* TGTableLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGTableLayout.swift; sourceTree = "<group>"; };
+		6F9D642024FB7EC70039865A /* TGDimeAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TGDimeAdapter.swift; sourceTree = "<group>"; };
+		6F9D644824FB8FC40039865A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,8 +230,8 @@
 		18270C1B1C954B3C00CBCC92 = {
 			isa = PBXGroup;
 			children = (
+				6F9D640F24FB7EC60039865A /* Sources */,
 				68F035E61E0B7D2700CEBAEF /* TangramKitDemo */,
-				681BD8DC1E0B91A500403A1F /* TangramKit */,
 				18270C251C954B3C00CBCC92 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -226,28 +243,6 @@
 				681BD8DB1E0B91A500403A1F /* TangramKit.framework */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		681BD8DC1E0B91A500403A1F /* TangramKit */ = {
-			isa = PBXGroup;
-			children = (
-				681BD9011E0B92E100403A1F /* TangramKit.swift */,
-				681BD9021E0B92E100403A1F /* TGBaseLayout.swift */,
-				681BD9031E0B92E100403A1F /* TGDimeAdapter.swift */,
-				681BD9041E0B92E100403A1F /* TGFloatLayout.swift */,
-				681BD9051E0B92E100403A1F /* TGFlowLayout.swift */,
-				681BD9061E0B92E100403A1F /* TGFrameLayout.swift */,
-				681BD9071E0B92E100403A1F /* TGLayoutPos.swift */,
-				681BD9081E0B92E100403A1F /* TGLayoutSize.swift */,
-				681BD9091E0B92E100403A1F /* TGLayoutSizeClass.swift */,
-				681BD90A1E0B92E100403A1F /* TGLinearLayout.swift */,
-				681BD90B1E0B92E100403A1F /* TGPathLayout.swift */,
-				681BD90C1E0B92E100403A1F /* TGRelativeLayout.swift */,
-				681BD90D1E0B92E100403A1F /* TGTableLayout.swift */,
-				681BD8DD1E0B91A500403A1F /* TangramKit.h */,
-				681BD8DE1E0B91A500403A1F /* Info.plist */,
-			);
-			path = TangramKit;
 			sourceTree = "<group>";
 		};
 		68F035E61E0B7D2700CEBAEF /* TangramKitDemo */ = {
@@ -407,6 +402,37 @@
 			path = TableLayoutDemo;
 			sourceTree = "<group>";
 		};
+		6F9D640F24FB7EC60039865A /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				6F9D641024FB7EC60039865A /* TangramKit */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		6F9D641024FB7EC60039865A /* TangramKit */ = {
+			isa = PBXGroup;
+			children = (
+				6F9D644824FB8FC40039865A /* Info.plist */,
+				6F9D641924FB7EC60039865A /* TangramKit.h */,
+				6F9D641124FB7EC60039865A /* TGFrameLayout.swift */,
+				6F9D641224FB7EC60039865A /* TGPathLayout.swift */,
+				6F9D641324FB7EC60039865A /* TGLayoutPos.swift */,
+				6F9D641424FB7EC60039865A /* TGFlowLayout.swift */,
+				6F9D641524FB7EC60039865A /* TGLinearLayout.swift */,
+				6F9D641624FB7EC60039865A /* TGFloatLayout.swift */,
+				6F9D641724FB7EC60039865A /* TGBaseLayout.swift */,
+				6F9D641824FB7EC60039865A /* TGLayoutSizeClass.swift */,
+				6F9D641A24FB7EC60039865A /* TGRelativeLayout.swift */,
+				6F9D641B24FB7EC60039865A /* TGNameSpace.swift */,
+				6F9D641C24FB7EC70039865A /* TangramKit.swift */,
+				6F9D641D24FB7EC70039865A /* TGLayoutSize.swift */,
+				6F9D641E24FB7EC70039865A /* TGTableLayout.swift */,
+				6F9D642024FB7EC70039865A /* TGDimeAdapter.swift */,
+			);
+			path = TangramKit;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -414,7 +440,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				681BD8DF1E0B91A500403A1F /* TangramKit.h in Headers */,
+				6F9D643124FB7EC70039865A /* TangramKit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -446,8 +472,10 @@
 				681BD8D71E0B91A500403A1F /* Frameworks */,
 				681BD8D81E0B91A500403A1F /* Headers */,
 				681BD8D91E0B91A500403A1F /* Resources */,
+				6F03F28424F9008900EE96E8 /* ShellScript */,
 			);
 			buildRules = (
+				6F9D644024FB837C0039865A /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
@@ -463,7 +491,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0810;
-				LastUpgradeCheck = 1000;
+				LastUpgradeCheck = 1240;
 				ORGANIZATIONNAME = youngsoft;
 				TargetAttributes = {
 					18270C231C954B3C00CBCC92 = {
@@ -531,57 +559,75 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		6F03F28424F9008900EE96E8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		18270C201C954B3C00CBCC92 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1890A21A1EDF96C800D61C1A /* TangramKit.swift in Sources */,
-				1890A21B1EDF96C800D61C1A /* TGBaseLayout.swift in Sources */,
-				1890A21C1EDF96C800D61C1A /* TGDimeAdapter.swift in Sources */,
-				1890A21D1EDF96C800D61C1A /* TGFloatLayout.swift in Sources */,
-				1890A21E1EDF96C800D61C1A /* TGFlowLayout.swift in Sources */,
-				1890A21F1EDF96C800D61C1A /* TGFrameLayout.swift in Sources */,
-				1890A2201EDF96C800D61C1A /* TGLayoutPos.swift in Sources */,
-				1890A2211EDF96C800D61C1A /* TGLayoutSize.swift in Sources */,
-				1890A2221EDF96C800D61C1A /* TGLayoutSizeClass.swift in Sources */,
-				1890A2231EDF96C800D61C1A /* TGLinearLayout.swift in Sources */,
 				467E63D1228DAE460065D080 /* AllTest1TableViewCellForAutoLayout.swift in Sources */,
-				1890A2241EDF96C800D61C1A /* TGPathLayout.swift in Sources */,
-				1890A2251EDF96C800D61C1A /* TGRelativeLayout.swift in Sources */,
-				1890A2261EDF96C800D61C1A /* TGTableLayout.swift in Sources */,
+				6F9D643224FB7EC70039865A /* TGRelativeLayout.swift in Sources */,
 				68F0366E1E0B7D2700CEBAEF /* PLTest1ViewController.swift in Sources */,
 				68F0364A1E0B7D2700CEBAEF /* FLLTest4ViewController.swift in Sources */,
 				68F036561E0B7D2700CEBAEF /* AllTest1TableViewCell.swift in Sources */,
 				68F036731E0B7D2700CEBAEF /* RLTest2ViewController.swift in Sources */,
+				6F9D642524FB7EC70039865A /* TGLayoutPos.swift in Sources */,
 				18058AAF1E63B4EA00EAECDC /* FLLTest6ViewController.swift in Sources */,
 				68F036501E0B7D2700CEBAEF /* AllTest2ViewController.swift in Sources */,
 				20B6C6E71FA40AEC001D51C7 /* DetailViewController.swift in Sources */,
 				4680F8FD211583FF00BFB765 /* FLLTest8ViewController.swift in Sources */,
+				6F9D642124FB7EC70039865A /* TGFrameLayout.swift in Sources */,
 				184243081E327F0800E2CCE1 /* FLLTest5ViewController.swift in Sources */,
+				6F9D642324FB7EC70039865A /* TGPathLayout.swift in Sources */,
 				68F0363D1E0B7D2700CEBAEF /* CFTool.swift in Sources */,
 				68F036581E0B7D2700CEBAEF /* AllTest2TableViewCell.swift in Sources */,
 				68F0364F1E0B7D2700CEBAEF /* AllTest1ViewController.swift in Sources */,
 				20DCF335208CD022007A879B /* FOLTest7ViewController.swift in Sources */,
 				68F0366D1E0B7D2700CEBAEF /* LLTest7ViewController.swift in Sources */,
+				6F9D642724FB7EC70039865A /* TGFlowLayout.swift in Sources */,
 				68F036741E0B7D2700CEBAEF /* RLTest3ViewController.swift in Sources */,
 				68F036681E0B7D2700CEBAEF /* LLTest2ViewController.swift in Sources */,
 				68F036591E0B7D2700CEBAEF /* AllTestDataModel.swift in Sources */,
+				6F9D643E24FB7EC70039865A /* TGDimeAdapter.swift in Sources */,
 				68F036441E0B7D2700CEBAEF /* FOLTest4ViewController.swift in Sources */,
 				68F0366C1E0B7D2700CEBAEF /* LLTest6ViewController.swift in Sources */,
 				467E63D3228DB27D0065D080 /* AllTest10ViewController.swift in Sources */,
 				18BCBD461E1336D900AC7766 /* AllTest8ViewController.swift in Sources */,
 				20FC8FE220A4241D0029DE31 /* FLLTest7ViewController.swift in Sources */,
 				68F036541E0B7D2700CEBAEF /* AllTest6ViewController.swift in Sources */,
+				6F9D642F24FB7EC70039865A /* TGLayoutSizeClass.swift in Sources */,
 				68F036801E0B7D2700CEBAEF /* TLTest3ViewController.swift in Sources */,
 				68F036811E0B7D2700CEBAEF /* ViewController.swift in Sources */,
+				6F9D642D24FB7EC70039865A /* TGBaseLayout.swift in Sources */,
 				68F036451E0B7D2700CEBAEF /* FOLTest5ViewController.swift in Sources */,
+				6F9D642924FB7EC70039865A /* TGLinearLayout.swift in Sources */,
 				68F036421E0B7D2700CEBAEF /* FOLTest3ViewController.swift in Sources */,
+				6F9D643A24FB7EC70039865A /* TGTableLayout.swift in Sources */,
 				68F036701E0B7D2700CEBAEF /* PLTest3ViewController.swift in Sources */,
 				68F0366A1E0B7D2700CEBAEF /* LLTest4ViewController.swift in Sources */,
 				68F036521E0B7D2700CEBAEF /* AllTest4ViewController.swift in Sources */,
 				68F036411E0B7D2700CEBAEF /* FOLTest2ViewController.swift in Sources */,
 				204DC323209E0BC000F6CB57 /* TLTest4ViewController.swift in Sources */,
+				6F9D643824FB7EC70039865A /* TGLayoutSize.swift in Sources */,
 				68F036531E0B7D2700CEBAEF /* AllTest5ViewController.swift in Sources */,
 				68F036671E0B7D2700CEBAEF /* LLTest1ViewController.swift in Sources */,
 				68F036461E0B7D2700CEBAEF /* FOLTest6ViewController.swift in Sources */,
@@ -590,6 +636,7 @@
 				68F0366F1E0B7D2700CEBAEF /* PLTest2ViewController.swift in Sources */,
 				68F036721E0B7D2700CEBAEF /* RLTest1ViewController.swift in Sources */,
 				68F036761E0B7D2700CEBAEF /* RLTest5ViewController.swift in Sources */,
+				6F9D643624FB7EC70039865A /* TangramKit.swift in Sources */,
 				68F0366B1E0B7D2700CEBAEF /* LLTest5ViewController.swift in Sources */,
 				68F036711E0B7D2700CEBAEF /* PLTest4ViewController.swift in Sources */,
 				68F0364C1E0B7D2700CEBAEF /* FLTest2ViewController.swift in Sources */,
@@ -599,7 +646,9 @@
 				68F036511E0B7D2700CEBAEF /* AllTest3ViewController.swift in Sources */,
 				68F0364B1E0B7D2700CEBAEF /* FLTest1ViewController.swift in Sources */,
 				68F0363C1E0B7D2700CEBAEF /* AppDelegate.swift in Sources */,
+				6F9D642B24FB7EC70039865A /* TGFloatLayout.swift in Sources */,
 				68F036571E0B7D2700CEBAEF /* AllTest1TableViewHeaderFooterView.swift in Sources */,
+				6F9D643424FB7EC70039865A /* TGNameSpace.swift in Sources */,
 				68F036481E0B7D2700CEBAEF /* FLLTest2ViewController.swift in Sources */,
 				68F0367E1E0B7D2700CEBAEF /* TLTest1ViewController.swift in Sources */,
 				68F0363F1E0B7D2700CEBAEF /* FOLTest1ViewController.swift in Sources */,
@@ -612,19 +661,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				681BD9191E0B92E100403A1F /* TGFrameLayout.swift in Sources */,
-				681BD91F1E0B92E100403A1F /* TGLayoutSizeClass.swift in Sources */,
-				681BD9251E0B92E100403A1F /* TGRelativeLayout.swift in Sources */,
-				681BD91D1E0B92E100403A1F /* TGLayoutSize.swift in Sources */,
-				681BD9211E0B92E100403A1F /* TGLinearLayout.swift in Sources */,
-				681BD90F1E0B92E100403A1F /* TangramKit.swift in Sources */,
-				681BD9151E0B92E100403A1F /* TGFloatLayout.swift in Sources */,
-				681BD9271E0B92E100403A1F /* TGTableLayout.swift in Sources */,
-				681BD9111E0B92E100403A1F /* TGBaseLayout.swift in Sources */,
-				681BD9171E0B92E100403A1F /* TGFlowLayout.swift in Sources */,
-				681BD91B1E0B92E100403A1F /* TGLayoutPos.swift in Sources */,
-				681BD9131E0B92E100403A1F /* TGDimeAdapter.swift in Sources */,
-				681BD9231E0B92E100403A1F /* TGPathLayout.swift in Sources */,
+				6F9D642224FB7EC70039865A /* TGFrameLayout.swift in Sources */,
+				6F9D643924FB7EC70039865A /* TGLayoutSize.swift in Sources */,
+				6F9D643724FB7EC70039865A /* TangramKit.swift in Sources */,
+				6F9D642424FB7EC70039865A /* TGPathLayout.swift in Sources */,
+				6F9D642E24FB7EC70039865A /* TGBaseLayout.swift in Sources */,
+				6F9D642824FB7EC70039865A /* TGFlowLayout.swift in Sources */,
+				6F9D643524FB7EC70039865A /* TGNameSpace.swift in Sources */,
+				6F9D643B24FB7EC70039865A /* TGTableLayout.swift in Sources */,
+				6F9D643024FB7EC70039865A /* TGLayoutSizeClass.swift in Sources */,
+				6F9D643F24FB7EC70039865A /* TGDimeAdapter.swift in Sources */,
+				6F9D642C24FB7EC70039865A /* TGFloatLayout.swift in Sources */,
+				6F9D642A24FB7EC70039865A /* TGLinearLayout.swift in Sources */,
+				6F9D642624FB7EC70039865A /* TGLayoutPos.swift in Sources */,
+				6F9D643324FB7EC70039865A /* TGRelativeLayout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -689,6 +739,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -713,7 +764,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				INFOPLIST_OUTPUT_FORMAT = binary;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -746,6 +798,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -764,7 +817,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				INFOPLIST_OUTPUT_FORMAT = binary;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 3.0.1;
@@ -783,7 +837,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = TangramKit/TangramKitDemo/TangramKitPrefix.pch;
 				INFOPLIST_FILE = "$(SRCROOT)/TangramKitDemo/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.youngsoft.TangramKit.demo;
 				PRODUCT_NAME = TangramKitDemo;
@@ -803,7 +857,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = TangramKit/TangramKitDemo/TangramKitPrefix.pch;
 				INFOPLIST_FILE = "$(SRCROOT)/TangramKitDemo/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.youngsoft.TangramKit.demo;
 				PRODUCT_NAME = TangramKitDemo;
@@ -819,7 +873,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -827,9 +881,9 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = TangramKit/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/TangramKit/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = mh_dylib;
 				PRODUCT_BUNDLE_IDENTIFIER = com.youngsoft.TangramKit;
@@ -850,7 +904,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -858,9 +912,9 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = TangramKit/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/TangramKit/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = mh_dylib;
 				PRODUCT_BUNDLE_IDENTIFIER = com.youngsoft.TangramKit;
